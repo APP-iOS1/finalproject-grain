@@ -14,21 +14,78 @@ import UIKit
 
 
 struct MapView: View {
+    
+    @State private var searchText = ""
     var body: some View {
         NavigationStack{
+            // MARK: 지도 탭의 상단
             VStack{
                 
+                // MARK: 지도 카테고리 버튼
+                // TODO: 포토스팟, 현상소, 수리점 셀뷰로 만들기
+                HStack{
+                    Button {
+                        
+                    } label: {
+                        Text("포토스팟")
+                    }
+                    Button {
+                        
+                    } label: {
+                        Text("현상소")
+                    }
+                    Button {
+                        
+                    } label: {
+                        Text("수리점")
+                    }
+
+                }
+               
+
+            }
+            // MARK: 지도 뷰에서 검색 란
+            /// https://ios-development.tistory.com/1124 참고 자료 <- 리팩토링 할때 다시 읽어보기
+            .searchable(
+              text: $searchText,
+              placement: .navigationBarDrawer(displayMode: .always),
+              prompt: "검색 placholder..."
+            )
+            // searchable에서 완료 버튼을 누를시 액션
+            .onSubmit(of: .search) {
+              print("검색 완료: \(searchText)")
+            }
+            
+            ZStack{
                 // MARK: 지도 뷰
                 // 네이버 지도를 띄워주는 역할
-                UIMapView().ignoresSafeArea(.all, edges: .top)
-                // MARK: 지도 뷰에서 검색 란
-                //
-                // MARK: 지도 카테고리 버튼
-                //
+                UIMapView()
                 
             }
+            // MARK: 상단 클릭 가능 버튼
+            .toolbar {  //MARK: 홈으로 돌아가기?? <- 회의 필요
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        print("Grain Button Clicked")
+                    } label: {
+                        Text("Grain")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                    }
+                }
+            }
+            .toolbar {  //MARK: 제보하기 <- 회의 필요
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        print("플러스 Button Clicked")
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundColor(.black)
+                    }
+                }
+            }
         }
-        
         
     }
 }
@@ -59,7 +116,7 @@ struct UIMapView: UIViewRepresentable {
         view.showZoomControls = false
         view.mapView.positionMode = .direction
         view.mapView.zoomLevel = 17
-//        view.mapView.mapType = .hybrid
+        //        view.mapView.mapType = .hybrid
         view.mapView.touchDelegate = context.coordinator
         
         
@@ -71,10 +128,10 @@ struct UIMapView: UIViewRepresentable {
         view.showLocationButton = true
         
         
-       
+        
         let image = UIImage(named: "testImage")
         let newSize = CGSize(width: 100, height: 100)
-
+        
         
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
         image?.draw(in: CGRect(origin: .zero, size: newSize))
@@ -87,13 +144,13 @@ struct UIMapView: UIViewRepresentable {
     
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {}
     
-   
+    
     
     func makeCoordinator() -> Coordinator {
         return Coordinator(viewModel: self.viewModel)
     }
     
-
+    
 }
 
 class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate {

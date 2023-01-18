@@ -10,6 +10,7 @@ import SwiftUI
 struct MapCategoryCellView: View {
     
     // MARK: 카테고리 종류 리스트
+    // category -> 0: 포토스팟 / 1: 현상소 / 2: 수리점
     let categoryList : [String] = ["포토스팟", "현상소", "수리점"]
     
     // MARK: 오버레이

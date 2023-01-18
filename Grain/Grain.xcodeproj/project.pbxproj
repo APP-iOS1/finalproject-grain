@@ -57,6 +57,7 @@
 		A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */; };
 		A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */; };
 		A7BAD3D229783BE6009C4ECB /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3D129783BE6009C4ECB /* FirebaseService.swift */; };
+		A7BAD3D429784FC9009C4ECB /* est.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3D329784FC9009C4ECB /* est.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +113,7 @@
 		A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDTO.swift; sourceTree = "<group>"; };
 		A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineQuery.swift; sourceTree = "<group>"; };
 		A7BAD3D129783BE6009C4ECB /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		A7BAD3D329784FC9009C4ECB /* est.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = est.swift; sourceTree = "<group>"; };
 		B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.release.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.release.xcconfig"; sourceTree = "<group>"; };
 		D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Grain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -344,6 +346,7 @@
 			isa = PBXGroup;
 			children = (
 				A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */,
+				A7BAD3D329784FC9009C4ECB /* est.swift */,
 			);
 			path = Query;
 			sourceTree = "<group>";
@@ -500,6 +503,7 @@
 				9958AF9329777D7700A51DA9 /* Community.swift in Sources */,
 				9958AFB52977B0C500A51DA9 /* AuthenticationView.swift in Sources */,
 				9958AFA129777F8100A51DA9 /* CommunityStore.swift in Sources */,
+				A7BAD3D429784FC9009C4ECB /* est.swift in Sources */,
 				9958AFA82977804700A51DA9 /* BtnModifier.swift in Sources */,
 				8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */,
 				0C535C2B2977AB7300E20BD9 /* Top10View.swift in Sources */,

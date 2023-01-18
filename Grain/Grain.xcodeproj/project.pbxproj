@@ -53,6 +53,10 @@
 		9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB62977BB5500A51DA9 /* CurrentUser.swift */; };
 		9958AFBA2977D80200A51DA9 /* AuthenticationTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB92977D80200A51DA9 /* AuthenticationTestView.swift */; };
 		A7442A9C2977ACCF0009A82F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */; };
+		A7BAD3C82978339A009C4ECB /* Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C72978339A009C4ECB /* Fields.swift */; };
+		A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */; };
+		A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */; };
+		A7BAD3D229783BE6009C4ECB /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3D129783BE6009C4ECB /* FirebaseService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +108,10 @@
 		9958AFB82977D56000A51DA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9958AFB92977D80200A51DA9 /* AuthenticationTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTestView.swift; sourceTree = "<group>"; };
 		A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A7BAD3C72978339A009C4ECB /* Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fields.swift; sourceTree = "<group>"; };
+		A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDTO.swift; sourceTree = "<group>"; };
+		A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineQuery.swift; sourceTree = "<group>"; };
+		A7BAD3D129783BE6009C4ECB /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.release.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.release.xcconfig"; sourceTree = "<group>"; };
 		D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Grain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -215,6 +223,7 @@
 		9958AF80297778FD00A51DA9 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				A7BAD3C429782D83009C4ECB /* Network */,
 				9958AF872977798900A51DA9 /* Views */,
 				9958AF862977798000A51DA9 /* Stores */,
 				9958AF852977797600A51DA9 /* Models */,
@@ -310,6 +319,33 @@
 				9958AFB92977D80200A51DA9 /* AuthenticationTestView.swift */,
 			);
 			path = AuthenticationViews;
+			sourceTree = "<group>";
+		};
+		A7BAD3C429782D83009C4ECB /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				A7BAD3C62978335E009C4ECB /* Query */,
+				A7BAD3C529783358009C4ECB /* DTO */,
+				A7BAD3D129783BE6009C4ECB /* FirebaseService.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		A7BAD3C529783358009C4ECB /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				A7BAD3C72978339A009C4ECB /* Fields.swift */,
+				A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */,
+			);
+			path = DTO;
+			sourceTree = "<group>";
+		};
+		A7BAD3C62978335E009C4ECB /* Query */ = {
+			isa = PBXGroup;
+			children = (
+				A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */,
+			);
+			path = Query;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -437,8 +473,10 @@
 				0CE64A5C2977CCFD00983266 /* ContentViewModel.swift in Sources */,
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,
 				9958AFA329777F9C00A51DA9 /* CommentStore.swift in Sources */,
+				A7BAD3D229783BE6009C4ECB /* FirebaseService.swift in Sources */,
 				99233D4E2977F36000A875B1 /* Map.swift in Sources */,
 				9958AF8F29777D3F00A51DA9 /* Magazine.swift in Sources */,
+				A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */,
 				9958AF9D29777F3A00A51DA9 /* MagazineStore.swift in Sources */,
 				9958AFAA2977809E00A51DA9 /* TextFieldModifier.swift in Sources */,
 				9958AFA529777FAF00A51DA9 /* ReCommentStore.swift in Sources */,
@@ -450,10 +488,12 @@
 				9958AF9129777D5A00A51DA9 /* Place.swift in Sources */,
 				9958AF9929777E4D00A51DA9 /* AuthenticationStore.swift in Sources */,
 				06FD6AB72977AF2C00B4A859 /* CommunityDetailView.swift in Sources */,
+				A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */,
 				06FD6AB92977AF7100B4A859 /* CommunitySearchView.swift in Sources */,
 				06FD6AB52977AF1900B4A859 /* CommunityRowView.swift in Sources */,
 				9958AF75297778D800A51DA9 /* ContentView.swift in Sources */,
 				9958AFBA2977D80200A51DA9 /* AuthenticationTestView.swift in Sources */,
+				A7BAD3C82978339A009C4ECB /* Fields.swift in Sources */,
 				0CE64A5A2977CAE600983266 /* SnapCarousel.swift in Sources */,
 				99233D4C2977F34200A875B1 /* MapStore.swift in Sources */,
 				99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */,

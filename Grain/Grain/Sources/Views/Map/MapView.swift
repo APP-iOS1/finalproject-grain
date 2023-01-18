@@ -59,7 +59,7 @@ struct MapView: View {
             .toolbar {  //MARK: 홈으로 돌아가기?? <- 회의 필요
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        print("Grain Button Clicked")
+                        FirebaseService.insertMagazine()
                     } label: {
                         Text("Grain")
                             .font(.title)
@@ -75,6 +75,7 @@ struct MapView: View {
                         Task{
                             await mapStore.fetchMapData()
                         }
+                        
                     } label: {
                         Image(systemName: "plus")
                             .foregroundColor(.black)

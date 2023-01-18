@@ -24,7 +24,6 @@ class MapStore : ObservableObject{
 //            self.mapData.removeAll()
 //            for document in documents.documents{
 //                let docData = document.data()
-//
 //                let category = docData["category"] as? Int ?? 0
 //                let latitude = docData["latitude"] as? Double ?? 0.0
 //                let longitude = docData["longitude"] as? Double ?? 0.0

@@ -24,22 +24,7 @@ struct MapView: View {
                 // MARK: 지도 카테고리 버튼
                 // TODO: 포토스팟, 현상소, 수리점 셀뷰로 만들기
                 HStack{
-                    Button {
-                        
-                    } label: {
-                        Text("포토스팟")
-                    }
-                    Button {
-                        
-                    } label: {
-                        Text("현상소")
-                    }
-                    Button {
-                        
-                    } label: {
-                        Text("수리점")
-                    }
-
+                    MapCategoryCellView()
                 }
                
 

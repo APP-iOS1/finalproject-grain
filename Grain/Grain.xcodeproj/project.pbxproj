@@ -35,6 +35,7 @@
 		A7442A9C2977ACCF0009A82F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */; };
 		A7442A9E2977AE5E0009A82F /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7442A9D2977AE5E0009A82F /* MapView.swift */; };
 		A7442AA12977AEAC0009A82F /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7442AA02977AEAC0009A82F /* LocationManager.swift */; };
+		A7442AA42977BDCB0009A82F /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7442AA32977BDCB0009A82F /* MapCategoryCellView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		A7442A9D2977AE5E0009A82F /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		A7442AA02977AEAC0009A82F /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		A7442AA22977AFF70009A82F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A7442AA32977BDCB0009A82F /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
 		B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.release.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.release.xcconfig"; sourceTree = "<group>"; };
 		D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Grain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -230,6 +232,7 @@
 			children = (
 				A7442A9D2977AE5E0009A82F /* MapView.swift */,
 				A7442AA02977AEAC0009A82F /* LocationManager.swift */,
+				A7442AA32977BDCB0009A82F /* MapCategoryCellView.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 				9958AF9B29777E5B00A51DA9 /* UserStore.swift in Sources */,
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,
 				9958AFA329777F9C00A51DA9 /* CommentStore.swift in Sources */,
+				A7442AA42977BDCB0009A82F /* MapCategoryCellView.swift in Sources */,
 				9958AF8F29777D3F00A51DA9 /* Magazine.swift in Sources */,
 				9958AF9D29777F3A00A51DA9 /* MagazineStore.swift in Sources */,
 				A7442A9E2977AE5E0009A82F /* MapView.swift in Sources */,

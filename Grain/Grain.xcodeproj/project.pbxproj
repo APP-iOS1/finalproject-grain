@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C535C2B2977AB7300E20BD9 /* Top10View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2A2977AB7300E20BD9 /* Top10View.swift */; };
+		0C535C2D2977B68600E20BD9 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2C2977B68600E20BD9 /* EditorView.swift */; };
+		0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */; };
 		5265C1181BDD56B8E8B1F897 /* Pods_Grain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */; };
 		9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AF72297778D800A51DA9 /* GrainApp.swift */; };
 		9958AF75297778D800A51DA9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AF74297778D800A51DA9 /* ContentView.swift */; };
@@ -37,6 +40,9 @@
 
 /* Begin PBXFileReference section */
 		067EFC70AEB61514D2E02FD7 /* Pods-Grain.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.debug.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.debug.xcconfig"; sourceTree = "<group>"; };
+		0C535C2A2977AB7300E20BD9 /* Top10View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Top10View.swift; sourceTree = "<group>"; };
+		0C535C2C2977B68600E20BD9 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineBestView.swift; sourceTree = "<group>"; };
 		9958AF6F297778D800A51DA9 /* Grain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9958AF72297778D800A51DA9 /* GrainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrainApp.swift; sourceTree = "<group>"; };
 		9958AF74297778D800A51DA9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -86,6 +92,16 @@
 				B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		0C535C292977A91600E20BD9 /* Magazine */ = {
+			isa = PBXGroup;
+			children = (
+				0C535C2A2977AB7300E20BD9 /* Top10View.swift */,
+				0C535C2C2977B68600E20BD9 /* EditorView.swift */,
+				0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */,
+			);
+			path = Magazine;
 			sourceTree = "<group>";
 		};
 		33FBFCE5803AD110CB6FC1B1 /* Frameworks */ = {
@@ -214,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				9958AF74297778D800A51DA9 /* ContentView.swift */,
+				0C535C292977A91600E20BD9 /* Magazine */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -353,8 +370,11 @@
 				9958AF9329777D7700A51DA9 /* Community.swift in Sources */,
 				9958AFA129777F8100A51DA9 /* CommunityStore.swift in Sources */,
 				9958AFA82977804700A51DA9 /* BtnModifier.swift in Sources */,
+				0C535C2B2977AB7300E20BD9 /* Top10View.swift in Sources */,
+				0C535C2D2977B68600E20BD9 /* EditorView.swift in Sources */,
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
 				9958AF9729777DF700A51DA9 /* ReComment.swift in Sources */,
+				0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

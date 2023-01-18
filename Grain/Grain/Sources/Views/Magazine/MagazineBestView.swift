@@ -9,10 +9,23 @@ import SwiftUI
 
 struct MagazineBestView: View {
     var body: some View {
-        VStack{
-            EditorView()
-            Top10View()
-                .padding(.horizontal)
+        NavigationView{
+            VStack{
+                EditorView()
+                Top10View()
+                    .padding(.horizontal)
+            }
+            .background(Color(hex: "#fefaf7"))
+            .toolbar{
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        
+                    } label: {
+                        Image(systemName: "plus")
+                            .foregroundColor(.white)
+                    }
+                }
+            }
         }
     }
 }

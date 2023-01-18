@@ -33,6 +33,11 @@
 		9958AFB02977817C00A51DA9 /* Ex+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFAF2977817C00A51DA9 /* Ex+Color.swift */; };
 		9958AFB2297781F400A51DA9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB1297781F400A51DA9 /* Constants.swift */; };
 		A7442A9C2977ACCF0009A82F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */; };
+		A7442A9E2977AE5E0009A82F /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7442A9D2977AE5E0009A82F /* MapView.swift */; };
+		A7442AA12977AEAC0009A82F /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7442AA02977AEAC0009A82F /* LocationManager.swift */; };
+		A7442AA42977BDCB0009A82F /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7442AA32977BDCB0009A82F /* MapCategoryCellView.swift */; };
+		A7442AA62977C9060009A82F /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7442AA52977C9060009A82F /* Map.swift */; };
+		A7442AA82977C9F50009A82F /* MapStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7442AA72977C9F50009A82F /* MapStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +68,12 @@
 		9958AFAF2977817C00A51DA9 /* Ex+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Color.swift"; sourceTree = "<group>"; };
 		9958AFB1297781F400A51DA9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A7442A9D2977AE5E0009A82F /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		A7442AA02977AEAC0009A82F /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		A7442AA22977AFF70009A82F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A7442AA32977BDCB0009A82F /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
+		A7442AA52977C9060009A82F /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
+		A7442AA72977C9F50009A82F /* MapStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStore.swift; sourceTree = "<group>"; };
 		B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.release.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.release.xcconfig"; sourceTree = "<group>"; };
 		D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Grain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -117,6 +128,7 @@
 		9958AF71297778D800A51DA9 /* Grain */ = {
 			isa = PBXGroup;
 			children = (
+				A7442AA22977AFF70009A82F /* Info.plist */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
 				A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */,
 				9958AF812977793700A51DA9 /* Configuration */,
@@ -192,6 +204,7 @@
 				9958AF9229777D7700A51DA9 /* Community.swift */,
 				9958AF9429777DE900A51DA9 /* Comment.swift */,
 				9958AF9629777DF700A51DA9 /* ReComment.swift */,
+				A7442AA52977C9060009A82F /* Map.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -206,6 +219,7 @@
 				9958AFA029777F8100A51DA9 /* CommunityStore.swift */,
 				9958AFA229777F9C00A51DA9 /* CommentStore.swift */,
 				9958AFA429777FAF00A51DA9 /* ReCommentStore.swift */,
+				A7442AA72977C9F50009A82F /* MapStore.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -214,8 +228,19 @@
 			isa = PBXGroup;
 			children = (
 				9958AF74297778D800A51DA9 /* ContentView.swift */,
+				A7442A9F2977AE9B0009A82F /* Map */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A7442A9F2977AE9B0009A82F /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				A7442A9D2977AE5E0009A82F /* MapView.swift */,
+				A7442AA02977AEAC0009A82F /* LocationManager.swift */,
+				A7442AA32977BDCB0009A82F /* MapCategoryCellView.swift */,
+			);
+			path = Map;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -335,13 +360,17 @@
 			files = (
 				9958AF9F29777F5100A51DA9 /* PlaceStore.swift in Sources */,
 				9958AFB2297781F400A51DA9 /* Constants.swift in Sources */,
+				A7442AA62977C9060009A82F /* Map.swift in Sources */,
 				9958AF8D297779D700A51DA9 /* User.swift in Sources */,
 				9958AFAE2977811300A51DA9 /* Ex+Date.swift in Sources */,
 				9958AF9B29777E5B00A51DA9 /* UserStore.swift in Sources */,
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,
 				9958AFA329777F9C00A51DA9 /* CommentStore.swift in Sources */,
+				A7442AA42977BDCB0009A82F /* MapCategoryCellView.swift in Sources */,
 				9958AF8F29777D3F00A51DA9 /* Magazine.swift in Sources */,
 				9958AF9D29777F3A00A51DA9 /* MagazineStore.swift in Sources */,
+				A7442A9E2977AE5E0009A82F /* MapView.swift in Sources */,
+				A7442AA82977C9F50009A82F /* MapStore.swift in Sources */,
 				9958AFAA2977809E00A51DA9 /* TextFieldModifier.swift in Sources */,
 				9958AFA529777FAF00A51DA9 /* ReCommentStore.swift in Sources */,
 				9958AFB02977817C00A51DA9 /* Ex+Color.swift in Sources */,
@@ -352,6 +381,7 @@
 				9958AF75297778D800A51DA9 /* ContentView.swift in Sources */,
 				9958AF9329777D7700A51DA9 /* Community.swift in Sources */,
 				9958AFA129777F8100A51DA9 /* CommunityStore.swift in Sources */,
+				A7442AA12977AEAC0009A82F /* LocationManager.swift in Sources */,
 				9958AFA82977804700A51DA9 /* BtnModifier.swift in Sources */,
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
 				9958AF9729777DF700A51DA9 /* ReComment.swift in Sources */,
@@ -486,6 +516,9 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Grain/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Grain/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "사용자의 위치를 받습니다";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "사용자의 위치를 받습니다";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -515,6 +548,9 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Grain/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Grain/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "사용자의 위치를 받습니다";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "사용자의 위치를 받습니다";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

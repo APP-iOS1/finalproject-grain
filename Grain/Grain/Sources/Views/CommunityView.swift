@@ -16,38 +16,46 @@ struct CommunityView: View {
     var community: Community = Community(id: "123123", category: 0, userID: "12341234", image: ["camera"], title: "title입니다", profileImage: "person", nickName: "희경 센세", location: "방구석", content: "testing...", createdAt: Date())
     
     var body: some View {
-        VStack{
-            SegmentedPicker(
-                titles,
-                selectedIndex: Binding(
-                    get: { selectedIndex },
-                    set: { selectedIndex = $0 ?? 0 }),
-                content: { item, isSelected in
-                    Text(item)
-                        .foregroundColor(isSelected ? Color.black : Color.gray )
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .font(.title)
-                        .bold()
-                },
-                selection: {
-                    VStack(spacing: 0) {
-                        Spacer()
-                        Rectangle()
-                            .fill(Color.black)
-                            .frame(height: 1)
+        NavigationStack{
+            VStack{
+                SegmentedPicker(
+                    titles,
+                    selectedIndex: Binding(
+                        get: { selectedIndex },
+                        set: { selectedIndex = $0 ?? 0 }),
+                    content: { item, isSelected in
+                        Text(item)
+                            .foregroundColor(isSelected ? Color.black : Color.gray )
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .font(.title)
+                            .bold()
+                    },
+                    selection: {
+                        VStack(spacing: 0) {
+                            Spacer()
+                            Rectangle()
+                                .fill(Color.black)
+                                .frame(height: 1)
+                        }
+                    })
+                .animation(.easeInOut(duration: 0.3))
+                
+                ScrollView{
+                    ForEach(0...5, id: \.self) {idx in
+                        NavigationLink(value: community){
+                            CommunityRowView(community: community)
+                        }
                     }
-                })
-            .animation(.easeInOut(duration: 0.3))
-            
-//            ScrollView{
-//                ForEach(communityStore.communities, id: \.self) {community in
-//                    CommunityRowView(community: community)
-//                }
-//            }
-//            .onAppear{
-//                communityStore.fetchCommunities()
-//            }
+                }
+                .navigationDestination(for: Community.self) { Community in
+                    CommunityDetailView(community: Community)
+                }
+                //            .onAppear{
+                //                communityStore.fetchCommunities()
+                //            }
+            }
+            .navigationTitle("Grain")
         }
     }
 }

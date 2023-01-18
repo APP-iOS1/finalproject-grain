@@ -64,6 +64,8 @@ struct CommunityRowView: View {
 
                 }
             }
+            Rectangle()
+                .frame(width: 360, height: 1)
         }
     }
 }

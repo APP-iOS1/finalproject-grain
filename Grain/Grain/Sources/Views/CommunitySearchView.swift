@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct CommunitySearchView: View {
-  
-    var body: some View {
-       
-    }
-}
+//struct CommunitySearchView: View {
+//  
+//    var body: some View {
+//       
+//    }
+//}
 
 //struct CommunitySearchView_Previews: PreviewProvider {
 //    static var previews: some View {

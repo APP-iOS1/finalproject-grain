@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CommunityView: View {
-    let titles: [String] = ["전체", "매칭", "마켓", "클래스"]
+    let titles: [String] = ["전체", "매칭", "마켓", "수업"]
     @State var selectedIndex: Int = 0
     
     var body: some View {
@@ -22,6 +22,8 @@ struct CommunityView: View {
                     .foregroundColor(isSelected ? Color.black : Color.gray )
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
+                    .font(.title)
+                    .bold()
             },
             selection: {
                 VStack(spacing: 0) {

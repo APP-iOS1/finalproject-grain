@@ -7,20 +7,50 @@
 
 import SwiftUI
 
+import FirebaseAuth
+
+
 struct ContentView: View {
+    @EnvironmentObject var authenticationStore: AuthenticationStore
+    
+    @State private var tabSelection: Int = 0
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        switch authenticationStore.authenticationStatus {
+        case .unAuthenticated:
+            NavigationStack{
+                AuthenticationView()
+            }
+            
+        case.authenticated(let user):
+            TabView(selection: $tabSelection) {
+                
+                MagazineBestView()
+                    .tabItem {
+                        Text("매거진뷰")
+                    }.tag(0)
+                
+                CommunityView()
+                    .tabItem {
+                        Text("커뮤니티뷰")
+                    }.tag(1)
+                MapView()
+                    .tabItem {
+                        Text("맵뷰")
+                    }.tag(2)
+            }
         }
-        .padding()
     }
 }
+
+
+
+
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(AuthenticationStore())
     }
 }

@@ -23,21 +23,45 @@ struct CommunityRowView: View {
     var community: Community
     
     var body: some View {
-        HStack{
-            Image(systemName: community.image.first ?? "camera")
-                .resizable()
-                .frame(width: 100, height: 100)
-            
-            VStack{
-                HStack{
-                    Image(systemName:community.profileImage)
-                    Text("\(community.nickName)")
-//                    Label{
-//                        Text("마켓")
-//                    } icon: {
-//                        Cap
-//                    }
+        VStack{
+            HStack{
+                Image(systemName: community.image.first ?? "camera")
+                    .resizable()
+                    .frame(width: 120, height: 100)
+                    .padding()
+                
+                VStack(alignment: .leading){
+                    HStack{
+                        Image(systemName:community.profileImage)
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                        
+                        Text("\(community.nickName)")
+                        
+                        RoundedRectangle(cornerRadius: 20)
+                            .frame(width: 45, height: 25)
+                            .foregroundColor(.green)
+                            .overlay{
+                                Text("마켓")
+                                    .font(.caption)
+                            }
+                    }
                     
+                    Text("\(community.title)")
+                        .font(.title)
+                    
+                    HStack{
+                        Text("\(community.location)") //??
+                        Text(".")
+                        Text("n시간 전")
+                    }
+                    .font(.caption)
+                    
+                    Text("\(community.createdDate)")
+                        .font(.caption)
+                        .padding(.leading, 50)
+                        .padding(.top, 10)
+
                 }
             }
         }
@@ -46,9 +70,7 @@ struct CommunityRowView: View {
 
 struct CommunityRowView_Previews: PreviewProvider {
     static var previews: some View {
-        CommunityRowView(community: Community(id: "123123", category: 0, userID: "12341234", image: ["camera"], title: "title입니다", profileImage: "person", nickName: "희경 센세", location: "방구석ㅅTEST", content: "testing...", createdAt: Date()))
+        CommunityRowView(community: Community(id: "123123", category: 0, userID: "12341234", image: ["camera"], title: "title입니다", profileImage: "person", nickName: "희경 센세", location: "방구석", content: "testing...", createdAt: Date()))
     }
 }
-/*
- community: Community(id: "123131", category: 0, userID: "1231334", image: ["camera"], title: "title입니다", locatiprofileImage에서 test 중", content: "Testing nickNamerofileImage: "person", location경 센세" createcontente()))
- */
+

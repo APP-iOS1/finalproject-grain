@@ -19,5 +19,16 @@ struct Community: Hashable, Identifiable, Codable {
     var location: String
     var content: String
     var createdAt: Date
+    
+    var createdDate: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko_kr")
+        dateFormatter.timeZone = TimeZone(abbreviation: "KST")
+        dateFormatter.dateFormat = "yyyy-MM-dd" // "yyyy-MM-dd HH:mm:ss"
+        
+        let dateCreatedAt = createdAt
+        
+        return dateFormatter.string(from: dateCreatedAt)
+    }
 }
 

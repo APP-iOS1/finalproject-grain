@@ -25,7 +25,6 @@
 
 @class GIDConfiguration;
 @class GIDGoogleUser;
-@class GIDSignInResult;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,26 +44,30 @@ typedef NS_ERROR_ENUM(kGIDSignInErrorDomain, GIDSignInErrorCode) {
   kGIDSignInErrorCodeCanceled = -5,
   /// Indicates an Enterprise Mobility Management related error has occurred.
   kGIDSignInErrorCodeEMM = -6,
+  /// Indicates there is no `currentUser`.
+  kGIDSignInErrorCodeNoCurrentUser = -7,
   /// Indicates the requested scopes have already been granted to the `currentUser`.
   kGIDSignInErrorCodeScopesAlreadyGranted = -8,
-  /// Indicates there is an operation on a previous user.
-  kGIDSignInErrorCodeMismatchWithCurrentUser = -9,
 };
 
-/// This class is used to sign in users with their Google account and manage their session.
+/// Represents a callback block that takes a `GIDGoogleUser` on success or an error if the operation
+/// was unsuccessful.
+typedef void (^GIDSignInCallback)(GIDGoogleUser *_Nullable user, NSError *_Nullable error);
+
+/// Represents a callback block that takes an error if the operation was unsuccessful.
+typedef void (^GIDDisconnectCallback)(NSError *_Nullable error);
+
+/// This class signs the user in with Google.
 ///
-/// For reference, please see "Google Sign-In for iOS and macOS" at
+/// For reference, please see "Google Sign-In for iOS" at
 /// https://developers.google.com/identity/sign-in/ios
 @interface GIDSignIn : NSObject
 
-/// The shared `GIDSignIn` instance.
+/// A shared `GIDSignIn` instance.
 @property(class, nonatomic, readonly) GIDSignIn *sharedInstance;
 
 /// The `GIDGoogleUser` object representing the current user or `nil` if there is no signed-in user.
 @property(nonatomic, readonly, nullable) GIDGoogleUser *currentUser;
-
-/// The active configuration for this instance of `GIDSignIn`.
-@property(nonatomic, nullable) GIDConfiguration *configuration;
 
 /// Unavailable. Use the `sharedInstance` property to instantiate `GIDSignIn`.
 /// :nodoc:
@@ -81,141 +84,172 @@ typedef NS_ERROR_ENUM(kGIDSignInErrorDomain, GIDSignInErrorCode) {
 /// @return `YES` if `GIDSignIn` handled this URL.
 - (BOOL)handleURL:(NSURL *)url;
 
-/// Checks if there is a previous user sign-in saved in keychain.
+/// Checks if there is a previously authenticated user saved in keychain.
 ///
-/// @return `YES` if there is a previous user sign-in saved in keychain.
+/// @return `YES` if there is a previously authenticated user saved in keychain.
 - (BOOL)hasPreviousSignIn;
 
-/// Attempts to restore a previous user sign-in without interaction.
+/// Attempts to restore a previously authenticated user without interaction.
 ///
-/// @param completion The block that is called on completion.  This block will be called asynchronously
-///     on the main queue.
-- (void)restorePreviousSignInWithCompletion:(nullable void (^)(GIDGoogleUser *_Nullable user,
-                                                               NSError *_Nullable error))completion;
+/// @param callback The `GIDSignInCallback` block that is called on completion.  This block will be
+///     called asynchronously on the main queue.
+- (void)restorePreviousSignInWithCallback:(nullable GIDSignInCallback)callback;
 
-/// Signs out the `currentUser`, removing it from the keychain.
+/// Marks current user as being in the signed out state.
 - (void)signOut;
 
-/// Disconnects the `currentUser` by signing them out and revoking all OAuth2 scope grants made to the app.
+/// Disconnects the current user from the app and revokes previous authentication. If the operation
+/// succeeds, the OAuth 2.0 token is also removed from keychain.
 ///
-/// @param completion The optional block that is called on completion.
-///     This block will be called asynchronously on the main queue.
-- (void)disconnectWithCompletion:(nullable void (^)(NSError *_Nullable error))completion;
+/// @param callback The optional `GIDDisconnectCallback` block that is called on completion.  This
+///     block will be called asynchronously on the main queue.
+- (void)disconnectWithCallback:(nullable GIDDisconnectCallback)callback;
 
 #if TARGET_OS_IOS || TARGET_OS_MACCATALYST
-
-/// Starts an interactive sign-in flow on iOS.
+/// Starts an interactive sign-in flow on iOS using the provided configuration.
 ///
-/// The completion will be called at the end of this process.  Any saved sign-in state will be
+/// The callback will be called at the end of this process.  Any saved sign-in state will be
 /// replaced by the result of this flow.  Note that this method should not be called when the app is
 /// starting up, (e.g in `application:didFinishLaunchingWithOptions:`); instead use the
-/// `restorePreviousSignInWithCompletion:` method to restore a previous sign-in.
+/// `restorePreviousSignInWithCallback:` method to restore a previous sign-in.
 ///
+/// @param configuration The configuration properties to be used for this flow.
 /// @param presentingViewController The view controller used to present `SFSafariViewContoller` on
 ///     iOS 9 and 10 and to supply `presentationContextProvider` for `ASWebAuthenticationSession` on
 ///     iOS 13+.
-/// @param completion The optional block that is called on completion.  This block will
-///     be called asynchronously on the main queue.
-- (void)signInWithPresentingViewController:(UIViewController *)presentingViewController
-                                completion:
-    (nullable void (^)(GIDSignInResult *_Nullable signInResult,
-                       NSError *_Nullable error))completion
+/// @param callback The `GIDSignInCallback` block that is called on completion.  This block will be
+///     called asynchronously on the main queue.
+- (void)signInWithConfiguration:(GIDConfiguration *)configuration
+       presentingViewController:(UIViewController *)presentingViewController
+                       callback:(nullable GIDSignInCallback)callback
     NS_EXTENSION_UNAVAILABLE("The sign-in flow is not supported in App Extensions.");
 
-/// Starts an interactive sign-in flow on iOS using the provided hint.
+/// Starts an interactive sign-in flow  on iOS using the provided configuration and a login hint.
 ///
-/// The completion will be called at the end of this process.  Any saved sign-in state will be
+/// The callback will be called at the end of this process.  Any saved sign-in state will be
 /// replaced by the result of this flow.  Note that this method should not be called when the app is
 /// starting up, (e.g in `application:didFinishLaunchingWithOptions:`); instead use the
-/// `restorePreviousSignInWithCompletion:` method to restore a previous sign-in.
+/// `restorePreviousSignInWithCallback:` method to restore a previous sign-in.
 ///
+/// @param configuration The configuration properties to be used for this flow.
 /// @param presentingViewController The view controller used to present `SFSafariViewContoller` on
 ///     iOS 9 and 10 and to supply `presentationContextProvider` for `ASWebAuthenticationSession` on
 ///     iOS 13+.
 /// @param hint An optional hint for the authorization server, for example the user's ID or email
 ///     address, to be prefilled if possible.
-/// @param completion The optional block that is called on completion.  This block will
-///     be called asynchronously on the main queue.
-- (void)signInWithPresentingViewController:(UIViewController *)presentingViewController
-                                      hint:(nullable NSString *)hint
-                                completion:
-    (nullable void (^)(GIDSignInResult *_Nullable signInResult,
-                       NSError *_Nullable error))completion
+/// @param callback The `GIDSignInCallback` block that is called on completion.  This block will be
+///     called asynchronously on the main queue.
+- (void)signInWithConfiguration:(GIDConfiguration *)configuration
+       presentingViewController:(UIViewController *)presentingViewController
+                           hint:(nullable NSString *)hint
+                       callback:(nullable GIDSignInCallback)callback
     NS_EXTENSION_UNAVAILABLE("The sign-in flow is not supported in App Extensions.");
 
-/// Starts an interactive sign-in flow on iOS using the provided hint and additional scopes.
+/// Starts an interactive sign-in flow on iOS using the provided configuration and a login hint.
 ///
-/// The completion will be called at the end of this process.  Any saved sign-in state will be
+/// The callback will be called at the end of this process.  Any saved sign-in state will be
 /// replaced by the result of this flow.  Note that this method should not be called when the app is
 /// starting up, (e.g in `application:didFinishLaunchingWithOptions:`); instead use the
-/// `restorePreviousSignInWithCompletion:` method to restore a previous sign-in.
+/// `restorePreviousSignInWithCallback:` method to restore a previous sign-in.
 ///
+/// @param configuration The configuration properties to be used for this flow.
 /// @param presentingViewController The view controller used to present `SFSafariViewContoller` on
 ///     iOS 9 and 10.
 /// @param hint An optional hint for the authorization server, for example the user's ID or email
 ///     address, to be prefilled if possible.
 /// @param additionalScopes An optional array of scopes to request in addition to the basic profile scopes.
-/// @param completion The optional block that is called on completion.  This block will
-///     be called asynchronously on the main queue.
-- (void)signInWithPresentingViewController:(UIViewController *)presentingViewController
-                                      hint:(nullable NSString *)hint
-                          additionalScopes:(nullable NSArray<NSString *> *)additionalScopes
-                                completion:
-    (nullable void (^)(GIDSignInResult *_Nullable signInResult,
-                       NSError *_Nullable error))completion
-    NS_EXTENSION_UNAVAILABLE("The sign-in flow is not supported in App Extensions.");
+/// @param callback The `GIDSignInCallback` block that is called on completion.  This block will be
+///     called asynchronously on the main queue.
+
+- (void)signInWithConfiguration:(GIDConfiguration *)configuration
+       presentingViewController:(UIViewController *)presentingViewController
+                           hint:(nullable NSString *)hint
+               additionalScopes:(nullable NSArray<NSString *> *)additionalScopes
+                       callback:(nullable GIDSignInCallback)callback;
+
+/// Starts an interactive consent flow on iOS to add scopes to the current user's grants.
+///
+/// The callback will be called at the end of this process.  If successful, a new `GIDGoogleUser`
+/// instance will be returned reflecting the new scopes and saved sign-in state will be updated.
+///
+/// @param scopes The scopes to ask the user to consent to.
+/// @param presentingViewController The view controller used to present `SFSafariViewContoller` on
+///     iOS 9 and 10 and to supply `presentationContextProvider` for `ASWebAuthenticationSession` on
+///     iOS 13+.
+/// @param callback The `GIDSignInCallback` block that is called on completion.  This block will be
+///     called asynchronously on the main queue.
+- (void)addScopes:(NSArray<NSString *> *)scopes
+    presentingViewController:(UIViewController *)presentingViewController
+                    callback:(nullable GIDSignInCallback)callback
+    NS_EXTENSION_UNAVAILABLE("The add scopes flow is not supported in App Extensions."); 
 
 #elif TARGET_OS_OSX
-
-/// Starts an interactive sign-in flow on macOS.
+/// Starts an interactive sign-in flow on macOS using the provided configuration.
 ///
-/// The completion will be called at the end of this process.  Any saved sign-in state will be
+/// The callback will be called at the end of this process.  Any saved sign-in state will be
 /// replaced by the result of this flow.  Note that this method should not be called when the app is
 /// starting up, (e.g in `application:didFinishLaunchingWithOptions:`); instead use the
-/// `restorePreviousSignInWithCompletion:` method to restore a previous sign-in.
+/// `restorePreviousSignInWithCallback:` method to restore a previous sign-in.
 ///
+/// @param configuration The configuration properties to be used for this flow.
 /// @param presentingWindow The window used to supply `presentationContextProvider` for `ASWebAuthenticationSession`.
-/// @param completion The optional block that is called on completion.  This block will
-///     be called asynchronously on the main queue.
-- (void)signInWithPresentingWindow:(NSWindow *)presentingWindow
-                        completion:(nullable void (^)(GIDSignInResult *_Nullable signInResult,
-                                                      NSError *_Nullable error))completion;
+/// @param callback The `GIDSignInCallback` block that is called on completion.  This block will be
+///     called asynchronously on the main queue.
+- (void)signInWithConfiguration:(GIDConfiguration *)configuration
+               presentingWindow:(NSWindow *)presentingWindow
+                       callback:(nullable GIDSignInCallback)callback;
 
-/// Starts an interactive sign-in flow on macOS using the provided hint.
+/// Starts an interactive sign-in flow on macOS using the provided configuration and a login hint.
 ///
-/// The completion will be called at the end of this process.  Any saved sign-in state will be
+/// The callback will be called at the end of this process.  Any saved sign-in state will be
 /// replaced by the result of this flow.  Note that this method should not be called when the app is
 /// starting up, (e.g in `application:didFinishLaunchingWithOptions:`); instead use the
-/// `restorePreviousSignInWithCompletion:` method to restore a previous sign-in.
+/// `restorePreviousSignInWithCallback:` method to restore a previous sign-in.
 ///
+/// @param configuration The configuration properties to be used for this flow.
 /// @param presentingWindow The window used to supply `presentationContextProvider` for `ASWebAuthenticationSession`.
 /// @param hint An optional hint for the authorization server, for example the user's ID or email
 ///     address, to be prefilled if possible.
-/// @param completion The optional block that is called on completion.  This block will
-///     be called asynchronously on the main queue.
-- (void)signInWithPresentingWindow:(NSWindow *)presentingWindow
-                              hint:(nullable NSString *)hint
-                        completion:(nullable void (^)(GIDSignInResult *_Nullable signInResult,
-                                                      NSError *_Nullable error))completion;
+/// @param callback The `GIDSignInCallback` block that is called on completion.  This block will be
+///     called asynchronously on the main queue.
+- (void)signInWithConfiguration:(GIDConfiguration *)configuration
+               presentingWindow:(NSWindow *)presentingWindow
+                           hint:(nullable NSString *)hint
+                       callback:(nullable GIDSignInCallback)callback;
 
-/// Starts an interactive sign-in flow on macOS using the provided hint.
+/// Starts an interactive sign-in flow on macOS using the provided configuration and a login hint.
 ///
-/// The completion will be called at the end of this process.  Any saved sign-in state will be
+/// The callback will be called at the end of this process.  Any saved sign-in state will be
 /// replaced by the result of this flow.  Note that this method should not be called when the app is
 /// starting up, (e.g in `application:didFinishLaunchingWithOptions:`); instead use the
-/// `restorePreviousSignInWithCompletion:` method to restore a previous sign-in.
+/// `restorePreviousSignInWithCallback:` method to restore a previous sign-in.
 ///
+/// @param configuration The configuration properties to be used for this flow.
 /// @param presentingWindow The window used to supply `presentationContextProvider` for `ASWebAuthenticationSession`.
 /// @param hint An optional hint for the authorization server, for example the user's ID or email
 ///     address, to be prefilled if possible.
 /// @param additionalScopes An optional array of scopes to request in addition to the basic profile scopes.
-/// @param completion The optional block that is called on completion.  This block will
-///     be called asynchronously on the main queue.
-- (void)signInWithPresentingWindow:(NSWindow *)presentingWindow
-                              hint:(nullable NSString *)hint
-                  additionalScopes:(nullable NSArray<NSString *> *)additionalScopes
-                        completion:(nullable void (^)(GIDSignInResult *_Nullable signInResult,
-                                                      NSError *_Nullable error))completion;
+/// @param callback The `GIDSignInCallback` block that is called on completion.  This block will be
+///     called asynchronously on the main queue.
+
+- (void)signInWithConfiguration:(GIDConfiguration *)configuration
+               presentingWindow:(NSWindow *)presentingWindow
+                           hint:(nullable NSString *)hint
+               additionalScopes:(nullable NSArray<NSString *> *)additionalScopes
+                       callback:(nullable GIDSignInCallback)callback;
+
+/// Starts an interactive consent flow on macOS to add scopes to the current user's grants.
+///
+/// The callback will be called at the end of this process.  If successful, a new `GIDGoogleUser`
+/// instance will be returned reflecting the new scopes and saved sign-in state will be updated.
+///
+/// @param scopes An array of scopes to ask the user to consent to.
+/// @param presentingWindow The window used to supply `presentationContextProvider` for `ASWebAuthenticationSession`.
+/// @param callback The `GIDSignInCallback` block that is called on completion.  This block will be
+///     called asynchronously on the main queue.
+- (void)addScopes:(NSArray<NSString *> *)scopes
+       presentingWindow:(NSWindow *)presentingWindow
+               callback:(nullable GIDSignInCallback)callback;
 
 #endif
 

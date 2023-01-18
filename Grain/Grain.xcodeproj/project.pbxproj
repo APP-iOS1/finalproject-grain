@@ -47,6 +47,9 @@
 		9958AFAE2977811300A51DA9 /* Ex+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFAD2977811300A51DA9 /* Ex+Date.swift */; };
 		9958AFB02977817C00A51DA9 /* Ex+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFAF2977817C00A51DA9 /* Ex+Color.swift */; };
 		9958AFB2297781F400A51DA9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB1297781F400A51DA9 /* Constants.swift */; };
+		9958AFB52977B0C500A51DA9 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB42977B0C500A51DA9 /* AuthenticationView.swift */; };
+		9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB62977BB5500A51DA9 /* CurrentUser.swift */; };
+		9958AFBA2977D80200A51DA9 /* AuthenticationTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB92977D80200A51DA9 /* AuthenticationTestView.swift */; };
 		A7442A9C2977ACCF0009A82F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -92,6 +95,10 @@
 		9958AFAD2977811300A51DA9 /* Ex+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Date.swift"; sourceTree = "<group>"; };
 		9958AFAF2977817C00A51DA9 /* Ex+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Color.swift"; sourceTree = "<group>"; };
 		9958AFB1297781F400A51DA9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9958AFB42977B0C500A51DA9 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		9958AFB62977BB5500A51DA9 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
+		9958AFB82977D56000A51DA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9958AFB92977D80200A51DA9 /* AuthenticationTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTestView.swift; sourceTree = "<group>"; };
 		A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.release.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.release.xcconfig"; sourceTree = "<group>"; };
 		D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Grain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,6 +166,7 @@
 		9958AF71297778D800A51DA9 /* Grain */ = {
 			isa = PBXGroup;
 			children = (
+				9958AFB82977D56000A51DA9 /* Info.plist */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
 				A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */,
 				9958AF812977793700A51DA9 /* Configuration */,
@@ -235,6 +243,7 @@
 				9958AF9229777D7700A51DA9 /* Community.swift */,
 				9958AF9429777DE900A51DA9 /* Comment.swift */,
 				9958AF9629777DF700A51DA9 /* ReComment.swift */,
+				9958AFB62977BB5500A51DA9 /* CurrentUser.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -257,7 +266,7 @@
 			isa = PBXGroup;
 			children = (
 				9958AF74297778D800A51DA9 /* ContentView.swift */,
-
+				9958AFB32977B09F00A51DA9 /* AuthenticationViews */,
 				06FD6AB22977AECE00B4A859 /* CommunityView.swift */,
 				06FD6AB42977AF1900B4A859 /* CommunityRowView.swift */,
 				06FD6AB62977AF2C00B4A859 /* CommunityDetailView.swift */,
@@ -271,6 +280,15 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		9958AFB32977B09F00A51DA9 /* AuthenticationViews */ = {
+			isa = PBXGroup;
+			children = (
+				9958AFB42977B0C500A51DA9 /* AuthenticationView.swift */,
+				9958AFB92977D80200A51DA9 /* AuthenticationTestView.swift */,
+			);
+			path = AuthenticationViews;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -282,7 +300,7 @@
 				9958AF6B297778D800A51DA9 /* Sources */,
 				9958AF6C297778D800A51DA9 /* Frameworks */,
 				9958AF6D297778D800A51DA9 /* Resources */,
-				F746787B63AD8B4342B41BB6 /* [CP] Embed Pods Frameworks */,
+				9254256E887FBD503D6D3144 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -340,6 +358,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		9254256E887FBD503D6D3144 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Grain/Pods-Grain-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Grain/Pods-Grain-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Grain/Pods-Grain-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		AC06F85C45BC712B9A289EFC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -360,23 +395,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F746787B63AD8B4342B41BB6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Grain/Pods-Grain-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Grain/Pods-Grain-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Grain/Pods-Grain-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -410,8 +428,10 @@
 				06FD6AB92977AF7100B4A859 /* CommunitySearchView.swift in Sources */,
 				06FD6AB52977AF1900B4A859 /* CommunityRowView.swift in Sources */,
 				9958AF75297778D800A51DA9 /* ContentView.swift in Sources */,
+				9958AFBA2977D80200A51DA9 /* AuthenticationTestView.swift in Sources */,
 				0CE64A5A2977CAE600983266 /* SnapCarousel.swift in Sources */,
 				9958AF9329777D7700A51DA9 /* Community.swift in Sources */,
+				9958AFB52977B0C500A51DA9 /* AuthenticationView.swift in Sources */,
 				9958AFA129777F8100A51DA9 /* CommunityStore.swift in Sources */,
 				9958AFA82977804700A51DA9 /* BtnModifier.swift in Sources */,
 
@@ -421,6 +441,7 @@
 				0C535C2D2977B68600E20BD9 /* EditorView.swift in Sources */,
 
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
+				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,
 				9958AF9729777DF700A51DA9 /* ReComment.swift in Sources */,
 				0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */,
 			);
@@ -555,6 +576,7 @@
 				DEVELOPMENT_TEAM = 53HTR6RHK8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Grain/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -586,6 +608,7 @@
 				DEVELOPMENT_TEAM = 53HTR6RHK8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Grain/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

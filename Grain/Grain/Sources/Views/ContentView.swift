@@ -36,3 +36,4 @@ struct ContentView_Previews: PreviewProvider {
             .environmentObject(AuthenticationStore())
     }
 }
+

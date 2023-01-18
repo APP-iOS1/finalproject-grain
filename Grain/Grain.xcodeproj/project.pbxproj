@@ -32,6 +32,7 @@
 		9958AFAE2977811300A51DA9 /* Ex+Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFAD2977811300A51DA9 /* Ex+Date.swift */; };
 		9958AFB02977817C00A51DA9 /* Ex+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFAF2977817C00A51DA9 /* Ex+Color.swift */; };
 		9958AFB2297781F400A51DA9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB1297781F400A51DA9 /* Constants.swift */; };
+		A7442A9C2977ACCF0009A82F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		9958AFAD2977811300A51DA9 /* Ex+Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Date.swift"; sourceTree = "<group>"; };
 		9958AFAF2977817C00A51DA9 /* Ex+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+Color.swift"; sourceTree = "<group>"; };
 		9958AFB1297781F400A51DA9 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.release.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.release.xcconfig"; sourceTree = "<group>"; };
 		D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Grain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -83,7 +85,6 @@
 				067EFC70AEB61514D2E02FD7 /* Pods-Grain.debug.xcconfig */,
 				B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -117,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
+				A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */,
 				9958AF812977793700A51DA9 /* Configuration */,
 				9958AF80297778FD00A51DA9 /* Sources */,
 				9958AF76297778D900A51DA9 /* Assets.xcassets */,
@@ -278,6 +280,7 @@
 			files = (
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
+				A7442A9C2977ACCF0009A82F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

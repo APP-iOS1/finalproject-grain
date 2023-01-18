@@ -24,7 +24,20 @@ struct ContentView: View {
             
         case.authenticated(let user):
             TabView(selection: $tabSelection) {
-               AuthenticationTestView()
+                
+                MagazineBestView()
+                    .tabItem {
+                        Text("매거진뷰")
+                    }.tag(0)
+                
+                CommunityView()
+                    .tabItem {
+                        Text("커뮤니티뷰")
+                    }.tag(1)
+                MapView()
+                    .tabItem {
+                        Text("맵뷰")
+                    }.tag(2)
             }
         }
     }

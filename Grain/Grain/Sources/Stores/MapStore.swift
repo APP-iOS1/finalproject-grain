@@ -42,6 +42,7 @@ class MapStore : ObservableObject{
         firebase.collection("Map").getDocuments { snapshot, error in
             if let snapshot{
                 for document in snapshot.documents{
+                    
                     let docData = document.data()
                     
                     //TODO: 전체적으로 수정 필요
@@ -58,7 +59,7 @@ class MapStore : ObservableObject{
                 }
             }
         }
-        print(self.mapData)
+//        print(self.mapData)
     }
     
     

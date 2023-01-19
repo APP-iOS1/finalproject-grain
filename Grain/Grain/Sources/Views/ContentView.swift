@@ -14,6 +14,10 @@ struct ContentView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
     
     @State private var tabSelection: Int = 0
+    @State var selectedIndex = 0
+    @State var presented = false
+    
+    let icons = ["magazine", "text.justify", "plus","map", "person"]
     
     var body: some View {
         switch authenticationStore.authenticationStatus {
@@ -23,21 +27,111 @@ struct ContentView: View {
             }
             
         case.authenticated(let user):
-            TabView(selection: $tabSelection) {
-                
-                MagazineBestView()
-                    .tabItem {
-                        Text("매거진뷰")
-                    }.tag(0)
-                
-                CommunityView()
-                    .tabItem {
-                        Text("커뮤니티뷰")
-                    }.tag(1)
-                MapView()
-                    .tabItem {
-                        Text("맵뷰")
-                    }.tag(2)
+            VStack{
+                Spacer()
+                //EditorView()
+                ZStack {
+                    Spacer().fullScreenCover(isPresented: $presented) {
+                        Button {
+                            presented.toggle()
+                        } label: {
+                            Text("Close")
+                                .frame(width: 200, height: 50)
+                                .background(.pink)
+                                .cornerRadius(12)
+                        }
+                    }
+                    
+                    switch selectedIndex {
+                    case 0:
+                        NavigationStack {
+                            MagazineBestView()
+                        }
+                    case 1:
+                        NavigationStack {
+                            CommunityView()
+                        }
+                    case 2:
+                        NavigationStack {
+                            //글쓰기뷰
+                        }
+                    case 3:
+                        NavigationStack {
+                            MapView()
+                        }
+                    case 4:
+                        NavigationStack {
+                            //프로필 뷰
+                        }
+                    default:
+                        NavigationStack {
+                            VStack {
+                                Text("second screen")
+                            }
+                        }
+                    }
+                    Spacer()
+
+                    
+                }
+                Divider()
+                HStack {
+                    ForEach(0..<5, id: \.self) { number in
+                        Spacer()
+                        Button {
+                            if number == 2 {
+                                presented.toggle()
+                            } else {
+                                self.selectedIndex = number
+                            }
+                        } label: {
+                            if number == 2 {
+                                Image(systemName: icons[number])
+                                    .font(.system(size: 25,
+                                                  weight: .regular,  design: .default))
+                                    .foregroundColor(.white)
+                                    .frame(width: 60, height: 60)
+                                    .background(.black)
+                                    .cornerRadius(30)
+                                
+                            }
+                            else {
+                                Image(systemName: icons[number])
+                                    .font(.system(size: 25,
+                                                  weight: .regular,  design: .default))
+                                    .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                            }
+                        }
+                        Spacer()
+                    }
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Text("Grain")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                            .padding()
+                    }
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        HStack {
+                            Button {
+                                //검색
+                            } label: {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(.black)
+                            }
+                            Button {
+                                //글쓰기
+                            } label: {
+                                Image(systemName: "plus")
+                                    .foregroundColor(.black)
+                            }
+                        }
+                    }
+                }
             }
         }
     }

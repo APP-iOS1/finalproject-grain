@@ -24,7 +24,6 @@ class MapStore : ObservableObject{
 //            self.mapData.removeAll()
 //            for document in documents.documents{
 //                let docData = document.data()
-//
 //                let category = docData["category"] as? Int ?? 0
 //                let latitude = docData["latitude"] as? Double ?? 0.0
 //                let longitude = docData["longitude"] as? Double ?? 0.0
@@ -43,6 +42,7 @@ class MapStore : ObservableObject{
         firebase.collection("Map").getDocuments { snapshot, error in
             if let snapshot{
                 for document in snapshot.documents{
+                    
                     let docData = document.data()
                     
                     //TODO: 전체적으로 수정 필요
@@ -59,7 +59,7 @@ class MapStore : ObservableObject{
                 }
             }
         }
-        print(self.mapData)
+//        print(self.mapData)
     }
     
     

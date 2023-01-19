@@ -8,54 +8,84 @@
 import SwiftUI
 
 struct CommunityView: View {
-//    @StateObject var communityStore: CommunityStore = CommunityStore()
+    enum SelectCategory: String, CaseIterable {
+        case 전체
+        case 매칭
+        case 마켓
+        case 클래스
+        case 정보
+    }
+    @State private var isSelectedCategory: SelectCategory = .전체
     
-    let titles: [String] = ["전체", "매칭", "마켓", "수업"]
-    @State var selectedIndex: Int = 0
     
-    var community: Community = Community(id: "123123", category: 0, userID: "12341234", image: ["camera"], title: "title입니다", profileImage: "person", nickName: "희경 센세", location: "방구석", content: "testing...", createdAt: Date())
+    private var community: Community = Community(id: "123123", category: 0, userID: "12341234", image: ["camera"], title: "title입니다", profileImage: "person", nickName: "희경 센세", location: "방구석", content: "testing...", createdAt: Date())
     
     var body: some View {
         NavigationStack{
             VStack{
-                SegmentedPicker(
-                    titles,
-                    selectedIndex: Binding(
-                        get: { selectedIndex },
-                        set: { selectedIndex = $0 ?? 0 }),
-                    content: { item, isSelected in
-                        Text(item)
-                            .foregroundColor(isSelected ? Color.black : Color.gray )
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
-                            .font(.title)
-                            .bold()
-                    },
-                    selection: {
-                        VStack(spacing: 0) {
-                            Spacer()
-                            Rectangle()
-                                .fill(Color.black)
-                                .frame(height: 1)
-                        }
-                    })
-                .animation(.easeInOut(duration: 0.3))
+                HStack{
+                    ForEach(SelectCategory.allCases, id: \.rawValue) { category in
+                        Text("\(category.rawValue)")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(isSelectedCategory == category ? .black : .gray)
+                            .onTapGesture {
+                                self.isSelectedCategory = category
+                            }
+                            .padding(.horizontal, 10 )
+                            
+                    }
+                    
+                }
                 
-                ScrollView{
-                    ForEach(0...5, id: \.self) {idx in
-                        NavigationLink(value: community){
-                            CommunityRowView(community: community)
+                    
+                    switch isSelectedCategory {
+                    case .전체:
+                        NavigationStack{
+                            AllTabView()
+                        }
+                        
+                    case .매칭:
+                        NavigationStack{
+                            MatchingTabView()
+                        }
+                        
+                    case .클래스:
+                        NavigationStack{
+                            ClassTabView()
+                        }
+                        
+                    case .마켓:
+                        NavigationStack{
+                            MarketTabView()
+                        }
+                    case .정보:
+                        NavigationStack{
+                            InfoTabView()
                         }
                     }
-                }
-                .navigationDestination(for: Community.self) { Community in
-                    CommunityDetailView(community: Community)
-                }
-                //            .onAppear{
-                //                communityStore.fetchCommunities()
-                //            }
+                
+//                ScrollView{
+//                    ForEach(0...5, id: \.self) {idx in
+//                        NavigationLink(value: community){
+//                            CommunityRowView(community: community)
+//                        }
+//                    }
+//                }
+//                .navigationDestination(for: Community.self) { Community in
+//                    CommunityDetailView(community: Community)
+//                }
+//                //            .onAppear{
+//                //                communityStore.fetchCommunities()
+//                //            }
             }
-            .navigationTitle("Grain")
+            .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Text("Grain")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                        }
+                    }
         }
     }
 }

@@ -12,7 +12,7 @@ import SwiftUI
  userId: String
  image: [String]
  title: string
-
+ 
  location: String
  content: string
  createdAt: TimeStamp
@@ -23,50 +23,55 @@ struct CommunityRowView: View {
     var community: Community
     
     var body: some View {
-        VStack{
+        VStack(alignment: .leading){
             HStack{
-                Image(systemName: community.image.first ?? "camera")
+                
+                Image("sampleImage")
                     .resizable()
-                    .frame(width: 120, height: 100)
+                    .frame(width: 160, height:110 )
                     .padding()
+                    .padding(.leading, -15)
+                //                Image(systemName: community.image.first ?? "camera")
+                //                    .resizable()
+                //                    .frame(width: 120, height: 100)
+                //                    .padding()
                 
                 VStack(alignment: .leading){
-                    HStack{
-                        Image(systemName:community.profileImage)
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                        
-                        Text("\(community.nickName)")
-                        
-                        RoundedRectangle(cornerRadius: 20)
-                            .frame(width: 45, height: 25)
-                            .foregroundColor(.green)
-                            .overlay{
-                                Text("마켓")
-                                    .font(.caption)
-                            }
-                    }
                     
-                    Text("\(community.title)")
-                        .font(.title)
+                    RoundedRectangle(cornerRadius: 20)
+                        .frame(width: 45, height: 25)
+                        .foregroundColor(.black)
+                        .overlay{
+                            Text("매칭")
+                                .foregroundColor(.white)
+                                .bold()
+                                .font(.caption)
+                        }
+                        
+            
+                    Text("광화문 근처 추천할만한 스팟입니다. 2월 4일 함께 출사나가실 모델분 구합니다 .")
+                        .font(.body)
+                        .foregroundColor(.black)
                     
                     HStack{
                         Text("\(community.location)") //??
                         Text(".")
-                        Text("n시간 전")
+                        Text("1시간 전")
                     }
+                    .foregroundColor(.black)
                     .font(.caption)
+                    .offset(x: 80, y: 15)
                     
-                    Text("\(community.createdDate)")
-                        .font(.caption)
-                        .padding(.leading, 50)
-                        .padding(.top, 10)
-
+                    
+                    
                 }
+                .padding(.leading, -10)
             }
             Rectangle()
                 .frame(width: 360, height: 1)
+                .foregroundColor(.black)
         }
+        
     }
 }
 

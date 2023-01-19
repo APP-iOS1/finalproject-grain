@@ -17,9 +17,10 @@ struct EditorView: View {
             //다중이라면 여기 포이치문 필요
             
             //에디터픽 이미지
-            Image("test")
+            Image("editor")
                 .resizable()
-                .frame(width: Screen.maxWidth * 0.8, height: Screen.maxWidth * 0.5)
+                .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.5)
+                .aspectRatio(contentMode: .fit)
         }
     }
 }

@@ -22,47 +22,41 @@ struct CommunityResponse: Codable{
 
 //CommunityDTO 변수명 바꿔야함
 struct CommunityDTO: Codable,Hashable{
-    let likedNum: String
-    let id: String
-    let userID: String
-    let title: String
-    let content: String
-    let cameraInfo: String
-    let nickName: String
     let image: String
+    let profileImage : String
+    let id : String
+    let title : String
+    let category : String
+    let content : String
+    let userID : String
+    let nickName : String
     
     private enum MagazineKeys: String, CodingKey {
         case fields
     }
     private enum FieldKeys: String, CodingKey {
-        case likedNum
-        case id
-        case userID
-        case title
-        case content
-        case cameraInfo
-        case nickName
         case image
+        case profileImage
+        case id
+        case title
+        case category
+        case content
+        case userID
+        case nickName
+        
     }
-//    private enum ArrayValueFieldKey: String, CodingKey{
-//        case arrayValue
-//    }
-//    private enum ValuesFieldKey: String, CodingKey{
-//        case values
-//    }
-    
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: MagazineKeys.self)       //fields
         let fieldContainer = try container.nestedContainer(keyedBy: FieldKeys.self, forKey: .fields)
         
         image = try fieldContainer.decode(StringValue.self, forKey: .image).value
-        likedNum = try fieldContainer.decode(IntegerValue.self, forKey: .likedNum).value
+        profileImage = try fieldContainer.decode(StringValue.self, forKey: .profileImage).value
         id = try fieldContainer.decode(StringValue.self, forKey: .id).value
-        userID = try fieldContainer.decode(StringValue.self, forKey: .userID).value
-        title = try fieldContainer.decode(StringValue.self, forKey: .title).value
+        title = try fieldContainer.decode(StringValue.self, forKey: .userID).value
+        category = try fieldContainer.decode(StringValue.self, forKey: .title).value
         content = try fieldContainer.decode(StringValue.self, forKey: .content).value
-        cameraInfo = try fieldContainer.decode(StringValue.self, forKey: .cameraInfo).value
+        userID = try fieldContainer.decode(StringValue.self, forKey: .userID).value
         nickName = try fieldContainer.decode(StringValue.self, forKey: .nickName).value
 
     }

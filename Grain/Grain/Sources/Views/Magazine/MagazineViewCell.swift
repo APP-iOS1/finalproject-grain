@@ -14,15 +14,19 @@ struct MagazineViewCell: View {
             HStack {
                 Circle()
                     .frame(width: 40)
+                    .foregroundColor(.black)
                 VStack(alignment: .leading
                 ) {
                     Text("희경쨩")
                         .bold()
+                        .foregroundColor(.black)
                         
                     HStack {
                         Text("1분전")
+                            .foregroundColor(.black)
                         Spacer()
                         Text("연남동 어딘가 ")
+                            .foregroundColor(.black)
                     }
                     .font(.caption)
                 }
@@ -55,6 +59,7 @@ struct MagazineViewCell: View {
             Group{
                 HStack{
                     Text("크리스마스 사진 찍기")
+                        .foregroundColor(.black)
                         .font(.title2)
                         .bold()
                     

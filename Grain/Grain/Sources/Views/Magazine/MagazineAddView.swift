@@ -8,13 +8,37 @@
 import SwiftUI
 
 struct MagazineAddView: View {
+    @Binding var isAddViewShown: Bool
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            VStack{
+                Text("사진 올리는곳")
+                
+            }.toolbar {
+                ToolbarItem{
+                    NavigationLink {
+                        MagazineContentAddView(isAddViewShown: $isAddViewShown)
+                    } label: {
+                        Text("다음")
+                    }
+
+
+                }
+                ToolbarItem(placement: .navigationBarLeading){
+                    Button {
+                        isAddViewShown.toggle()
+                    } label: {
+                        Text("취소")
+                    }
+                }
+            }
+        }
     }
 }
 
 struct MagazineAddView_Previews: PreviewProvider {
     static var previews: some View {
-        MagazineAddView()
+        MagazineAddView(isAddViewShown: .constant(false))
     }
 }

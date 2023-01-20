@@ -26,6 +26,7 @@
 		99233D4E2977F36000A875B1 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D4D2977F36000A875B1 /* Map.swift */; };
 		9955E113297A52E200265D14 /* MagazineAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E112297A52E200265D14 /* MagazineAddView.swift */; };
 		9955E115297A538900265D14 /* MagazineDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E114297A538900265D14 /* MagazineDetailView.swift */; };
+		9955E117297A6D5900265D14 /* MagazineContentAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E116297A6D5900265D14 /* MagazineContentAddView.swift */; };
 		9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AF72297778D800A51DA9 /* GrainApp.swift */; };
 		9958AF75297778D800A51DA9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AF74297778D800A51DA9 /* ContentView.swift */; };
 		9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9958AF76297778D900A51DA9 /* Assets.xcassets */; };
@@ -88,6 +89,7 @@
 		99233D4D2977F36000A875B1 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
 		9955E112297A52E200265D14 /* MagazineAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineAddView.swift; sourceTree = "<group>"; };
 		9955E114297A538900265D14 /* MagazineDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDetailView.swift; sourceTree = "<group>"; };
+		9955E116297A6D5900265D14 /* MagazineContentAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineContentAddView.swift; sourceTree = "<group>"; };
 		9958AF6F297778D800A51DA9 /* Grain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9958AF72297778D800A51DA9 /* GrainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrainApp.swift; sourceTree = "<group>"; };
 		9958AF74297778D800A51DA9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -164,8 +166,9 @@
 				0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */,
 				9962CDD4297A215900E834C3 /* MagazineFeedView.swift */,
 				9962CDD6297A224700E834C3 /* MagazineViewCell.swift */,
-				9955E112297A52E200265D14 /* MagazineAddView.swift */,
 				9955E114297A538900265D14 /* MagazineDetailView.swift */,
+				9955E112297A52E200265D14 /* MagazineAddView.swift */,
+				9955E116297A6D5900265D14 /* MagazineContentAddView.swift */,
 			);
 			path = Magazine;
 			sourceTree = "<group>";
@@ -492,6 +495,7 @@
 			files = (
 				9955E113297A52E200265D14 /* MagazineAddView.swift in Sources */,
 				9958AF9F29777F5100A51DA9 /* PlaceStore.swift in Sources */,
+				9955E117297A6D5900265D14 /* MagazineContentAddView.swift in Sources */,
 				06FD6ABB2977B45600B4A859 /* Ex+View.swift in Sources */,
 				06FD6ABD2977B4F600B4A859 /* SegmentedPicker.swift in Sources */,
 				9958AFB2297781F400A51DA9 /* Constants.swift in Sources */,

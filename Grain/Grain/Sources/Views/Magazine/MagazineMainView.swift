@@ -9,7 +9,8 @@ import SwiftUI
 
 struct MagazineMainView: View {
     let titles: [String] = ["Best", "Feed"]
-    @State var selectedIndex: Int = 0
+    @State private var selectedIndex: Int = 0
+    @State private var isAddViewShown: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -39,12 +40,18 @@ struct MagazineMainView: View {
                  
                     Spacer()
                 }
-    
-                if selectedIndex == 0 {
+                TabView(selection: $selectedIndex) {
                     MagazineBestView()
-                }else if selectedIndex == 1 {
+                        .tag(0)
                     MagazineFeedView()
+                        .tag(1)
                 }
+                .tabViewStyle(.page)
+//                if selectedIndex == 0 {
+//                    MagazineBestView()
+//                }else if selectedIndex == 1 {
+//                    MagazineFeedView()
+//                }
             }
         }
         .toolbar {
@@ -56,12 +63,23 @@ struct MagazineMainView: View {
                 
             }
         }
+        .sheet(isPresented: $isAddViewShown, content: {
+            MagazineAddView(isAddViewShown: $isAddViewShown)
+        })
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     //검색
                 } label: {
                     Image(systemName: "magnifyingglass")
+                        .foregroundColor(.black)
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    self.isAddViewShown.toggle()
+                } label: {
+                    Image(systemName: "plus")
                         .foregroundColor(.black)
                 }
             }

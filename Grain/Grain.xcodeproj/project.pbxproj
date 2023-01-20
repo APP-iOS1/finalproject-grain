@@ -16,9 +16,12 @@
 		0C535C2B2977AB7300E20BD9 /* Top10View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2A2977AB7300E20BD9 /* Top10View.swift */; };
 		0C535C2D2977B68600E20BD9 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2C2977B68600E20BD9 /* EditorView.swift */; };
 		0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */; };
+		330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330B945B297A53C3007F5164 /* AddCommunityView.swift */; };
+		330B9460297A719C007F5164 /* CameraLenseFilmModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */; };
 		5265C1181BDD56B8E8B1F897 /* Pods_Grain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */; };
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
+		8BCF31E2297A500900EB6188 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31E1297A500900EB6188 /* CommentView.swift */; };
 		99233D462977F2C700A875B1 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D452977F2C700A875B1 /* MapView.swift */; };
 		99233D482977F2F900A875B1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D472977F2F900A875B1 /* LocationManager.swift */; };
 		99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D492977F31B00A875B1 /* MapCategoryCellView.swift */; };
@@ -80,8 +83,11 @@
 		0C535C2A2977AB7300E20BD9 /* Top10View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Top10View.swift; sourceTree = "<group>"; };
 		0C535C2C2977B68600E20BD9 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineBestView.swift; sourceTree = "<group>"; };
+		330B945B297A53C3007F5164 /* AddCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommunityView.swift; sourceTree = "<group>"; };
+		330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraLenseFilmModalView.swift; sourceTree = "<group>"; };
 		8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityAddView.swift; sourceTree = "<group>"; };
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
+		8BCF31E1297A500900EB6188 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		99233D452977F2C700A875B1 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		99233D472977F2F900A875B1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		99233D492977F31B00A875B1 /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
@@ -166,6 +172,7 @@
 				0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */,
 				9962CDD4297A215900E834C3 /* MagazineFeedView.swift */,
 				9962CDD6297A224700E834C3 /* MagazineViewCell.swift */,
+				330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */,
 				9955E114297A538900265D14 /* MagazineDetailView.swift */,
 				9955E112297A52E200265D14 /* MagazineAddView.swift */,
 				9955E116297A6D5900265D14 /* MagazineContentAddView.swift */,
@@ -187,6 +194,7 @@
 				06FD6AB22977AECE00B4A859 /* CommunityView.swift */,
 				06FD6AB42977AF1900B4A859 /* CommunityRowView.swift */,
 				06FD6AB62977AF2C00B4A859 /* CommunityDetailView.swift */,
+				8BCF31E1297A500900EB6188 /* CommentView.swift */,
 				8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */,
 				8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */,
 				06FD6AB82977AF7100B4A859 /* CommunitySearchView.swift */,
@@ -196,6 +204,7 @@
 				9962CDCC297924BF00E834C3 /* ClassTabView .swift */,
 				9962CDCE297924CC00E834C3 /* MarketTabView.swift */,
 				9962CDD0297924D800E834C3 /* InfoTabView.swift */,
+				330B945B297A53C3007F5164 /* AddCommunityView.swift */,
 			);
 			path = Community;
 			sourceTree = "<group>";
@@ -522,16 +531,19 @@
 				9958AF8B297779C200A51DA9 /* Authentication.swift in Sources */,
 				9958AF9529777DE900A51DA9 /* Comment.swift in Sources */,
 				9962CDCB297924A000E834C3 /* MatchingTabView.swift in Sources */,
+				330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */,
 				9958AF9129777D5A00A51DA9 /* Place.swift in Sources */,
 				9962CDD1297924D800E834C3 /* InfoTabView.swift in Sources */,
 				9958AF9929777E4D00A51DA9 /* AuthenticationStore.swift in Sources */,
 				06FD6AB72977AF2C00B4A859 /* CommunityDetailView.swift in Sources */,
 				8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */,
+				330B9460297A719C007F5164 /* CameraLenseFilmModalView.swift in Sources */,
 				A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */,
 				06FD6AB92977AF7100B4A859 /* CommunitySearchView.swift in Sources */,
 				06FD6AB52977AF1900B4A859 /* CommunityRowView.swift in Sources */,
 				9958AF75297778D800A51DA9 /* ContentView.swift in Sources */,
 				9958AFBA2977D80200A51DA9 /* AuthenticationTestView.swift in Sources */,
+				8BCF31E2297A500900EB6188 /* CommentView.swift in Sources */,
 				A7BAD3C82978339A009C4ECB /* Fields.swift in Sources */,
 				99233D4C2977F34200A875B1 /* MapStore.swift in Sources */,
 				99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */,

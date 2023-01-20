@@ -93,12 +93,12 @@ struct CommunityView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button{
-                        
-                    } label: {
+
+                    NavigationLink(destination: CommunitySearchView()) {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.black)
                     }
+
                 }
                 
             }

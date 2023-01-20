@@ -15,7 +15,13 @@ struct ClassTabView: View {
             ScrollView{
                 ForEach(0...5, id: \.self) {idx in
                     NavigationLink(value: community){
-                        CommunityRowView(community: community)
+                        VStack{
+                            CommunityRowView(community: community)
+                            
+                            Rectangle()
+                                .frame(width: Screen.maxWidth * 0.9, height: 0.5)
+                                .foregroundColor(.secondary)
+                        }
                     }
                 }
             }

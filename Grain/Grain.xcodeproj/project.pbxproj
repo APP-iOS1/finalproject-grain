@@ -59,6 +59,9 @@
 		9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */; };
 		9962CDD5297A215900E834C3 /* MagazineFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD4297A215900E834C3 /* MagazineFeedView.swift */; };
 		9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD6297A224700E834C3 /* MagazineViewCell.swift */; };
+		A733AF06297A556600A2E1DD /* TestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A733AF05297A556600A2E1DD /* TestService.swift */; };
+		A733AF08297A59EC00A2E1DD /* TestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A733AF07297A59EC00A2E1DD /* TestViewModel.swift */; };
+		A733AF0A297A5B1E00A2E1DD /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A733AF09297A5B1E00A2E1DD /* TestView.swift */; };
 		A7442A9C2977ACCF0009A82F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */; };
 		A7BAD3C82978339A009C4ECB /* Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C72978339A009C4ECB /* Fields.swift */; };
 		A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */; };
@@ -121,6 +124,9 @@
 		9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineMainView.swift; sourceTree = "<group>"; };
 		9962CDD4297A215900E834C3 /* MagazineFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineFeedView.swift; sourceTree = "<group>"; };
 		9962CDD6297A224700E834C3 /* MagazineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewCell.swift; sourceTree = "<group>"; };
+		A733AF05297A556600A2E1DD /* TestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestService.swift; sourceTree = "<group>"; };
+		A733AF07297A59EC00A2E1DD /* TestViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewModel.swift; sourceTree = "<group>"; };
+		A733AF09297A5B1E00A2E1DD /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A7BAD3C72978339A009C4ECB /* Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fields.swift; sourceTree = "<group>"; };
 		A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDTO.swift; sourceTree = "<group>"; };
@@ -348,6 +354,9 @@
 				A7BAD3C62978335E009C4ECB /* Query */,
 				A7BAD3C529783358009C4ECB /* DTO */,
 				A7BAD3D129783BE6009C4ECB /* FirebaseService.swift */,
+				A733AF05297A556600A2E1DD /* TestService.swift */,
+				A733AF07297A59EC00A2E1DD /* TestViewModel.swift */,
+				A733AF09297A5B1E00A2E1DD /* TestView.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -511,6 +520,8 @@
 				9958AF9529777DE900A51DA9 /* Comment.swift in Sources */,
 				9962CDCB297924A000E834C3 /* MatchingTabView.swift in Sources */,
 				9958AF9129777D5A00A51DA9 /* Place.swift in Sources */,
+				A733AF06297A556600A2E1DD /* TestService.swift in Sources */,
+				A733AF0A297A5B1E00A2E1DD /* TestView.swift in Sources */,
 				9962CDD1297924D800E834C3 /* InfoTabView.swift in Sources */,
 				9958AF9929777E4D00A51DA9 /* AuthenticationStore.swift in Sources */,
 				06FD6AB72977AF2C00B4A859 /* CommunityDetailView.swift in Sources */,
@@ -530,6 +541,7 @@
 				8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */,
 				0C535C2B2977AB7300E20BD9 /* Top10View.swift in Sources */,
 				0C535C2D2977B68600E20BD9 /* EditorView.swift in Sources */,
+				A733AF08297A59EC00A2E1DD /* TestViewModel.swift in Sources */,
 				9962CDCF297924CC00E834C3 /* MarketTabView.swift in Sources */,
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
 				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,

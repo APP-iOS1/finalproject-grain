@@ -17,6 +17,7 @@ struct MapView: View {
     
     @State private var searchText = ""
     @ObservedObject var mapStore = MapStore()
+    @ObservedObject var testVM = TestViewModel()
     
     var body: some View {
         NavigationStack{
@@ -51,9 +52,7 @@ struct MapView: View {
                 
             }
             .onAppear{
-                Task{
-//                    await mapStore.fetchMapData()
-                }
+                testVM.fetchTest()
             }
             // MARK: 상단 클릭 가능 버튼
             .toolbar {  //MARK: 홈으로 돌아가기?? <- 회의 필요
@@ -71,20 +70,26 @@ struct MapView: View {
             }
             .toolbar {  //MARK: 제보하기 <- 회의 필요
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        Task{
-                            try await print(FirebaseService.getMagazine())
-                        }
-                        
-//                        print("플러스 Button Clicked")
-//                        Task{
-//                            await mapStore.fetchMapData()
-//                        }
-                        
+                    NavigationLink {
+                        TestView()
                     } label: {
-                        Image(systemName: "plus")
-                            .foregroundColor(.black)
+                        Text("테스트")
                     }
+
+//                    Button {
+//                        Task{
+//                            try await print(FirebaseService.getMagazine())
+//                        }
+//
+////                        print("플러스 Button Clicked")
+////                        Task{
+////                            await mapStore.fetchMapData()
+////                        }
+//
+//                    } label: {
+//                        Image(systemName: "plus")
+//                            .foregroundColor(.black)
+//                    }
                 }
             }
             

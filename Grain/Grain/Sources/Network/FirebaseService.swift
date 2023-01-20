@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import Combine
+
+
 
 enum FirebaseService{
     private enum HTTPMethod: String {
@@ -60,46 +63,60 @@ enum FirebaseService{
     }
     
     // MARK: 매거진 데이터 가져오기
-    static func getMagazine() async throws -> [Magazine] {
-        //
-        
-        
-        var resultArray: [Magazine] = []
-        
-        
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
-        guard let url = URL(string: firestoreURL) else {
-            
-            return []
-        }
-        var request = URLRequest(url: url)
-        
-        request.httpMethod = HTTPMethod.get.rawValue
-        
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            //            // status 코드가 200번대여야 성공적인 네트워크라 판단
-            //            let successsRange = 200..<300
-            //            guard let statusCode = (response as? HTTPURLResponse)?.statusCode,
-            //                  successsRange.contains(statusCode) else { return }
-            //
-            guard let data = data, error == nil else{
-                fatalError("error")
-            }
-            //
-            let response = try? JSONDecoder().decode(MagazineResponse.self, from: data)
-            if let response = response{
-                
-                for i in response.magazines{
-
-                    resultArray.append(i)
-                    print(resultArray)
-                }
-            }
-        }.resume()
-        
-        return resultArray
-    }
+//    static func getMagazine() -> AnyPublisher<[Magazine],Error> {
+//        //
+//        
+//
+//        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
+//        guard let url = URL(string: firestoreURL) else {
+//            
+//            return
+//        }
+//        var request = URLRequest(url: url)
+//        
+//        request.httpMethod = HTTPMethod.get.rawValue
+////        URLSession.shared.dataTask(with: request)
+//        
+//        URLSession.shared.dataTask(with: request) { (data, response, error) in
+//
+//            //            // status 코드가 200번대여야 성공적인 네트워크라 판단
+//            //            let successsRange = 200..<300
+//            //            guard let statusCode = (response as? HTTPURLResponse)?.statusCode,
+//            //                  successsRange.contains(statusCode) else { return }
+//            //
+//            guard let data = data, error == nil else{
+//                fatalError("error")
+//            }
+//            //
+//            let response = try? JSONDecoder().decode(MagazineResponse.self, from: data)
+//            
+//            if let response = response{
+//
+//                for i in response.magazines{
+//                    print(resultArray)
+//                }
+//            }
+//        }.resume()
+//        
+//        return URLSession.shared.dataTaskPublisher(for: request)
+//            .tryMap { data ,_ in
+//                try JSONDecoder().decode([Magazine], from: data)
+//            }
+//    
+//    }
     
 }
+//
+//
+//static func fetchVolumeRanking(unit: Int) -> AnyPublisher<[CoinData], AFError> {
+//        print("UserApiService - fetchVolumeRanking() called")
+//
+//        return ApiClient.shared.session
+//            .request(CoinRouter.volume(unit: unit))
+//            .publishDecodable(type: [CoinData].self)
+//            .value()
+//            .map{ receivedValue in
+//                return receivedValue
+//            }.eraseToAnyPublisher()
+//    }
+

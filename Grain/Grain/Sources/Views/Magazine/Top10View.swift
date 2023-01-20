@@ -12,11 +12,11 @@ struct Top10View: View {
     var body: some View {
         VStack {
             TabView{
-                ForEach(0..<10, id: \.self) { _ in
-                    Image("test")
+                ForEach(1..<4, id: \.self) { i in
+                    Image("\(i)")
                         .resizable()
-                        .frame(width: Screen.maxWidth * 0.8, height: Screen.maxWidth * 0.5)
-                        //.aspectRatio(contentMode: .fit)
+                        .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
+                        .aspectRatio(contentMode: .fit)
                 }
             }
             .tabViewStyle(.page)

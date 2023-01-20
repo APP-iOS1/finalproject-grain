@@ -7,45 +7,78 @@
 
 import Foundation
 
+
 enum MagazineQuery {
-    static func insert() -> Data?{
+    
+    
+   // MARK: 매거진 DB에 데이터 저장
+    static func insertMagazineQuery(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String ) -> Data?{
         return
         """
         {
                     "fields": {
-                        "id": {
-                            "stringValue": "Mo9Fh2OcOQss3VcYMD5Y"
-                        },
-                        "cameraInfo": {
-                            "stringValue": "후지 instax mini 40"
-                        },
-                        "image": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": ""
+                                    "likedNum": {
+                                        "integerValue": "0"
+                                    },
+                                    "userID": {
+                                        "stringValue": "\(userID)"
+                                    },
+                                    "id": {
+                                        "stringValue": "패스"
+                                    },
+                                    "cameraInfo": {
+                                        "stringValue": "\(cameraInfo)"
+                                    },
+                                    "nickName": {
+                                        "stringValue": "\(nickName)"
+                                    },
+                                    "image": {
+                                        "stringValue": "\(image)"
+                                    },
+                                    "content": {
+                                        "stringValue": "\(content)"
+                                    },
+                                    "title": {
+                                        "stringValue": "\(title)"
                                     }
-                                ]
-                            }
-                        },
-                        "content": {
-                            "stringValue": "연남동 근방 스팟추천합니다"
-                        },
-                        "userID": {
-                            "stringValue": "DluAWVV7DuUzYTIZHo82"
+                                }
+                }
+        """.data(using: .utf8)
+    }
+    // MARK: 커뮤니티 DB에 데이터 저장
+    static func insertCommunityQuery(profileImage: String,nickName: String,category: String,image: String,userID: String,title: String,content: String ) -> Data?{
+  
+        return
+        
+        """
+        {
+        "fields": {
+                        "profileImage": {
+                            "stringValue": "\(profileImage)"
                         },
                         "nickName": {
-                            "stringValue": "승수2"
+                            "stringValue": "\(nickName)"
+                        },
+                        "category": {
+                            "stringValue": "\(category)"
+                        },
+                        "image": {
+                            "stringValue": "\(image)"
+                        },
+                        "userID": {
+                            "stringValue": "\(userID)"
+                        },
+                        "id": {
+                            "stringValue": "패스"
                         },
                         "title": {
-                            "stringValue": "연남동 주변 스팟 추천"
+                            "stringValue": "\(title)"
                         },
-                        "likedNum": {
-                            "integerValue": "12"
+                        "content": {
+                            "stringValue": "\(content)"
                         }
-        
                     }
-                }
+        }
         """.data(using: .utf8)
     }
 }

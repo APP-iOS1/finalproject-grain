@@ -18,6 +18,10 @@ struct MatchingTabView: View {
                         CommunityRowView(community: community)
                     }
                 }
+//                                        CommunityRowView(community: community)
+//                                        CommunityRowView(community: community)
+
+
             }
             .navigationDestination(for: Community.self) { Community in
                 CommunityDetailView(community: Community)

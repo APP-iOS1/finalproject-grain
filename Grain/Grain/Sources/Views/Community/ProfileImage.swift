@@ -7,20 +7,22 @@
 
 import SwiftUI
 
-struct CircleImage: View {
+struct ProfileImage: View {
     var imageName: String
+    var width: CGFloat
+    var height: CGFloat
     
     var body: some View {
         Image("\(imageName)")
             .resizable()
             .scaledToFit()
             .clipShape(Circle())
-            .frame(width: 60, height: 60)
+            .frame(width: width, height: height)
     }
 }
 
 struct CircleImage_Previews: PreviewProvider {
     static var previews: some View {
-        CircleImage(imageName: "sampleProfile")
+        ProfileImage(imageName: "sampleImage", width: 60, height: 60)
     }
 }

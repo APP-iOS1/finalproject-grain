@@ -15,68 +15,91 @@ enum FirebaseService{
     }
     
     
-    //POST 데이터 넣기
-    static func insertMagazine(){
+    // MARK: 매거진 데이터 넣기
+    static func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String){
         let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
-                guard let url = URL(string: "\(firestoreURL)/Magazine") else {
+        guard let url = URL(string: "\(firestoreURL)/Magazine") else {
             return
         }
-        // https://melod-it.gitbook.io/sagwa/app-frameworks/foundation/url-loading-system/urlrequest 읽어보기
+        
         var request = URLRequest(url: url )
-
+        
         // MARK: 리퀘스트 헤더 설정
         request.addValue("application/json", forHTTPHeaderField: "Content-Type") //서버에 길이 알림
         request.httpMethod = HTTPMethod.post.rawValue   //post 방식
-        request.httpBody = MagazineQuery.insert()
+        request.httpBody = MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title)
         
-
+        
         // 서버 통신
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-           
+            
         }.resume()
         
     }
     
-    
-    static func getMagazine(){
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
-                guard let url = URL(string: firestoreURL) else {
+    // MARK: 매거진 데이터 넣기
+    static func insertCommunity(profileImage: String,nickName: String,category: String,image: String,userID: String,title: String,content: String){
+        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
+        guard let url = URL(string: "\(firestoreURL)/Community") else {
             return
         }
+        
+        var request = URLRequest(url: url )
+        
+        // MARK: 리퀘스트 헤더 설정
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type") //서버에 길이 알림
+        request.httpMethod = HTTPMethod.post.rawValue   //post 방식
+        request.httpBody = MagazineQuery.insertCommunityQuery(profileImage: profileImage,nickName: nickName,category: category,image: image,userID: userID,title: title,content: content)
+        
+        
+        // 서버 통신
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+        }.resume()
+        
+    }
+    
+    // MARK: 매거진 데이터 가져오기
+    static func getMagazine() async throws -> [Magazine] {
+        //
+        
+        
+        var resultArray: [Magazine] = []
+        
+        
+        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
+        guard let url = URL(string: firestoreURL) else {
+            
+            return []
+        }
         var request = URLRequest(url: url)
-
+        
         request.httpMethod = HTTPMethod.get.rawValue
-
+        
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-      
-//            // error가 존재하면 종료
-//            guard error == nil else { return }
-//
-//            // status 코드가 200번대여야 성공적인 네트워크라 판단
-//            let successsRange = 200..<300
-//            guard let statusCode = (response as? HTTPURLResponse)?.statusCode,
-//                  successsRange.contains(statusCode) else { return }
-//
-//
-//            guard let resultData = data else { return }
-//                let resultString = String(data: resultData, encoding: .utf8)
-//
-//            print(resultString)
+            
+            //            // status 코드가 200번대여야 성공적인 네트워크라 판단
+            //            let successsRange = 200..<300
+            //            guard let statusCode = (response as? HTTPURLResponse)?.statusCode,
+            //                  successsRange.contains(statusCode) else { return }
+            //
             guard let data = data, error == nil else{
                 fatalError("error")
             }
-            
+            //
             let response = try? JSONDecoder().decode(MagazineResponse.self, from: data)
             if let response = response{
-                print("response: \(response) \n")
+                
                 for i in response.magazines{
-                    print(i.title)
-                    print(i.likedNum)
+
+                    resultArray.append(i)
+                    print(resultArray)
                 }
             }
-
         }.resume()
-
+        
+        return resultArray
     }
+    
 }

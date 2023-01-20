@@ -8,35 +8,10 @@
 import SwiftUI
 
 struct MagazineBestView: View {
-    
-    let titles: [String] = ["Best", "Feed"]
-    @State var selectedIndex: Int = 0
-    
+
     var body: some View {
         NavigationStack {
             VStack {
-                SegmentedPicker(
-                    titles,
-                    selectedIndex: Binding(
-                        get: { selectedIndex },
-                        set: { selectedIndex = $0 ?? 0 }),
-                    content: { item, isSelected in
-                        Text(item)
-                            .foregroundColor(isSelected ? Color.black : Color.gray )
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
-                            .font(.title)
-                            .bold()
-                    },
-                    selection: {
-                        VStack(spacing: 0) {
-                            Spacer()
-                            Rectangle()
-                                .fill(Color.black)
-                                .frame(height: 1)
-                        }
-                    })
-                
                 ScrollView {
                     ZStack {
                         EditorView()
@@ -76,25 +51,6 @@ struct MagazineBestView: View {
                     
                 } // scroll view
             } //vstack
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Text("GRAIN")
-                        .font(.title)
-                        .bold()
-                        .kerning(7)
-                    
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        //검색
-                    } label: {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.black)
-                    }
-                }
-            }
         }
     }
 }

@@ -21,4 +21,5 @@ extension Color { // 사용법: Color(hex: "#439F47")
         let b = Double((rgb >>  0) & 0xFF) / 255.0
         self.init(red: r, green: g, blue: b)
     }
+    static let textGray = Color(hex: "495057")
 }

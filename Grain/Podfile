@@ -13,7 +13,6 @@ target 'Grain' do
 
   pod 'GoogleSignIn', '~> 6.2.4'
   pod 'GoogleSignInSwiftSupport'
-  pod 'FirebaseAnalyticsSwift'
   pod 'NMapsMap'
   pod 'KakaoSDKCommon'
   pod 'KakaoSDKAuth'

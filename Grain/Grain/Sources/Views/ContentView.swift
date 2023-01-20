@@ -73,7 +73,7 @@ struct ContentView: View {
                     switch selectedIndex {
                     case 0:
                         NavigationStack {
-                            MagazineBestView()
+                            MagazineMainView()
                         }
                     case 1:
                         NavigationStack {

@@ -9,14 +9,22 @@ import SwiftUI
 
 struct MagazineFeedView: View {
     var body: some View {
-        ScrollView{
-            LazyVStack{
-                ForEach(0..<4) { i in
-                    MagazineViewCell()
-//                    Divider()
+       
+            ScrollView{
+                LazyVStack{
+                    ForEach(0..<4) { i in
+                        NavigationLink {
+                            MagazineDetailView()
+                        } label: {
+                            MagazineViewCell()
+                        }
+
+                       
+    //                    Divider()
+                    }
                 }
             }
-        }
+        
     }
 }
 

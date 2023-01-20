@@ -67,6 +67,7 @@
 		A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */; };
 		A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */; };
 		A7BAD3D229783BE6009C4ECB /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3D129783BE6009C4ECB /* FirebaseService.swift */; };
+		A7D957CD297A7933001D2401 /* CommunityDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D957CC297A7933001D2401 /* CommunityDTO.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -132,6 +133,7 @@
 		A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDTO.swift; sourceTree = "<group>"; };
 		A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineQuery.swift; sourceTree = "<group>"; };
 		A7BAD3D129783BE6009C4ECB /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		A7D957CC297A7933001D2401 /* CommunityDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityDTO.swift; sourceTree = "<group>"; };
 		B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.release.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.release.xcconfig"; sourceTree = "<group>"; };
 		D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Grain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -366,6 +368,7 @@
 			children = (
 				A7BAD3C72978339A009C4ECB /* Fields.swift */,
 				A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */,
+				A7D957CC297A7933001D2401 /* CommunityDTO.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -499,6 +502,7 @@
 				9958AFB2297781F400A51DA9 /* Constants.swift in Sources */,
 				9958AF8D297779D700A51DA9 /* User.swift in Sources */,
 				9958AFAE2977811300A51DA9 /* Ex+Date.swift in Sources */,
+				A7D957CD297A7933001D2401 /* CommunityDTO.swift in Sources */,
 				9962CDC92979246500E834C3 /* AllTabView.swift in Sources */,
 				9958AF9B29777E5B00A51DA9 /* UserStore.swift in Sources */,
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,

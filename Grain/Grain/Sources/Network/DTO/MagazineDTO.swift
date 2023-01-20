@@ -22,7 +22,7 @@ struct ArrayValue: Codable{
     }
 }
 //객체를 디코딩하고 있음
-struct Magazine: Codable{
+struct Magazine: Codable,Hashable{
     let likedNum: String
     let id: String
     let userID: String

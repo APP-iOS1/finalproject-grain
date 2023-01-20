@@ -59,7 +59,7 @@ struct MapView: View {
             .toolbar {  //MARK: 홈으로 돌아가기?? <- 회의 필요
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        FirebaseService.insertMagazine(userID: "1", cameraInfo: "1", nickName: "1", image: "1", content: "1", title: "1")
+                        FirebaseService.insertMagazine(userID: "1", cameraInfo: "1", nickName: "1", image: "1", content: "1", title: "1", lenseInfo: "1", longitude: "1", likedNum: "1", filmInfo: "1", customPlaceName: "1", latitude: "1", comment: "!", roadAddress: "1")
 //                        FirebaseService.insertCommunity(profileImage: "1", nickName: "1", category: "1", image: "1", userID: "1", title: "1", content: "1")
                     } label: {
                         Text("Grain")

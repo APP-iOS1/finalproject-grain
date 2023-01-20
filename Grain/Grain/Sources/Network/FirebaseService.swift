@@ -16,7 +16,7 @@ enum FirebaseService{
     
     
     // MARK: 매거진 데이터 넣기
-    static func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String){
+    static func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: String,likedNum: String,filmInfo: String, customPlaceName: String,latitude: String,comment: String,roadAddress: String ){
         let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
         guard let url = URL(string: "\(firestoreURL)/Magazine") else {
             return
@@ -27,7 +27,7 @@ enum FirebaseService{
         // MARK: 리퀘스트 헤더 설정
         request.addValue("application/json", forHTTPHeaderField: "Content-Type") //서버에 길이 알림
         request.httpMethod = HTTPMethod.post.rawValue   //post 방식
-        request.httpBody = MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title)
+        request.httpBody = MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title, lenseInfo: lenseInfo, longitude: longitude, likedNum: likedNum, filmInfo: filmInfo, customPlaceName: customPlaceName, latitude: latitude, comment: comment, roadAddress: roadAddress)
         
         
         // 서버 통신
@@ -49,7 +49,7 @@ enum FirebaseService{
         // MARK: 리퀘스트 헤더 설정
         request.addValue("application/json", forHTTPHeaderField: "Content-Type") //서버에 길이 알림
         request.httpMethod = HTTPMethod.post.rawValue   //post 방식
-        request.httpBody = MagazineQuery.insertCommunityQuery(profileImage: profileImage,nickName: nickName,category: category,image: image,userID: userID,title: title,content: content)
+        request.httpBody = CommunityQuery.insertCommunityQuery(profileImage: profileImage,nickName: nickName,category: category,image: image,userID: userID,title: title,content: content)
         
         
         // 서버 통신

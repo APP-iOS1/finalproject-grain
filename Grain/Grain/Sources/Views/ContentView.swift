@@ -17,7 +17,7 @@ struct ContentView: View {
     @State var selectedIndex = 0
     @State var presented = false
     
-    let icons = ["magazine", "text.justify", "plus","map", "person"]
+    let icons = ["magazine", "note.text", "plus","map", "person"]
     
     var body: some View {
         switch authenticationStore.authenticationStatus {
@@ -32,20 +32,48 @@ struct ContentView: View {
                 //EditorView()
                 ZStack {
                     Spacer().fullScreenCover(isPresented: $presented) {
-                        Button {
-                            presented.toggle()
-                        } label: {
-                            Text("Close")
-                                .frame(width: 200, height: 50)
-                                .background(.pink)
-                                .cornerRadius(12)
+                        VStack {
+                            HStack {
+                                Button {
+                                    presented.toggle()
+                                    //글쓰기 취소
+                                } label: {
+                                    Image(systemName: "xmark")
+                                        .foregroundColor(.black)
+                                        .frame(width: 50, height: 50)
+                                }
+                                Spacer()
+                                if self.selectedIndex == 0 {
+                                    Text("매거진")
+                                } else  if self.selectedIndex == 1 {
+                                    Text("커뮤니티")
+                                }
+                                Spacer()
+                                Button {
+                                    presented.toggle()
+                                    //글쓰기 동작 함수
+                                } label: {
+                                    Text("글쓰기")
+                                        .foregroundColor(.black)
+                                }
+
+                            }
+                            .padding(.horizontal)
+                            Spacer()
+                            if self.selectedIndex == 0 {
+                                //매거진 글쓰기 뷰
+                            } else if self.selectedIndex == 1{
+                                AddCommunityView()
+                            }
+                            Spacer()
+
                         }
                     }
                     
                     switch selectedIndex {
                     case 0:
                         NavigationStack {
-                            MagazineBestView()
+                            MagazineMainView()
                         }
                     case 1:
                         NavigationStack {
@@ -53,7 +81,7 @@ struct ContentView: View {
                         }
                     case 2:
                         NavigationStack {
-                            //글쓰기뷰
+                            CommunityView()
                         }
                     case 3:
                         NavigationStack {

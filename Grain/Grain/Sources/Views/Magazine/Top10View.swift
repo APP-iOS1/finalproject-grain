@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct Top10View: View {
-    @StateObject var viewModel: ContentViewModel = ContentViewModel()
     var body: some View {
         VStack {
             TabView{

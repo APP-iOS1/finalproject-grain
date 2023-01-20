@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct TestView: View {
-    @ObservedObject var testVM = TestViewModel()
+    var test: [Magazine] = []
     
     var body: some View {
         VStack{
-            ForEach(testVM.test, id: \.self){ item in
+            ForEach(test, id: \.self){ item in
                 Text(item.title)
             }
         }

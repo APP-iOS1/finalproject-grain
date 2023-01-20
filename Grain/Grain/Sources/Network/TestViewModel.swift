@@ -16,21 +16,14 @@ final class TestViewModel: ObservableObject{
     var fetchTestSuccess = PassthroughSubject<(), Never>()
     var subscription = Set<AnyCancellable>()
     
-    init(){
-        cancellalble =
-        testService
-            .getMagazine()
-            .receive(on: RunLoop.main)
-            .catch{_ in Just(self.test)}
-            .assign(to: \.test, on: self)
-    }
-    
     func fetchTest(){
         print("TestViewModel fetchTest Start")
-        TestService().getMagazine().sink { (completion: Subscribers.Completion<Error>) in
+        TestService().getMagazine()
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
             print("UserVM completion: (completion)")
-        } receiveValue: { (test :[Magazine]) in
-            self.test = test
+        } receiveValue: { (test: MagazineResponse) in
+            self.test = test.magazines
             self.fetchTestSuccess.send()
         }.store(in: &subscription)
 

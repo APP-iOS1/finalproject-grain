@@ -17,20 +17,23 @@ final class TestService {
         case patch = "PATCH"
     }
     
-    func getMagazine() -> AnyPublisher<[Magazine],Error> {
+    func getMagazine() -> AnyPublisher<MagazineResponse, Error> {
         print("TestService getMagazine start")
         let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
         
         var request = URLRequest(url: (URL(string: firestoreURL) ?? URL(string: ""))! )
         
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type") //서버에 길이 알림
         request.httpMethod = HTTPMethod.get.rawValue
 //        URLSession.shared.dataTask(with: request
         return URLSession
             .shared
             .dataTaskPublisher(for: request)
             .map{ $0.data}
-            .decode(type: [Magazine].self, decoder: JSONDecoder())
+            .decode(type: MagazineResponse.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
-            
     }
+    
+    
+    
 }

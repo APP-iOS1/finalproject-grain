@@ -70,10 +70,10 @@ struct MapView: View {
             }
             .toolbar {  //MARK: 제보하기 <- 회의 필요
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        TestView()
+                    Button {
+                        print("\(testVM.test)")
                     } label: {
-                        Text("테스트")
+                        Text("test")
                     }
 
 //                    Button {

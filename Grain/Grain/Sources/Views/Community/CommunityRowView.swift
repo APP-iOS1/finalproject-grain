@@ -27,7 +27,7 @@ struct CommunityRowView: View {
                 Image("sampleImage")
                     .resizable()
                     .frame(width: 130 , height: 100)
-                    .padding([.leading, .top, .bottom], 20)
+                    .padding([.leading], 20)
                     .padding(.trailing)
                 
                 VStack(alignment: .leading){
@@ -53,38 +53,37 @@ struct CommunityRowView: View {
                             }
                         
                     } // hstack
-                    .padding(.leading, -5)
+                    .padding(.leading, -2)
+                    
+                    
+                    Text("광화문 근처 스냅촬영하실 모델 구합니다.")
+                        .font(.callout)
+                        .foregroundColor(.black)
+                        .lineLimit(2)
+//                        .padding(.bottom, 3)
                     
                     HStack{
                         Text("\(community.location)") //??
                         Text(".")
                         Text("1시간 전")
+                        
+                        Spacer()
+                        Image(systemName: "heart")
+                        Text("\(5)")
+                        
                     }
                     .foregroundColor(.secondary)
                     .font(.caption)
-                    .padding(.bottom, -4)
-                    
-                    Text("광화문 근처 스냅촬영하실 모델 구합니다.  ")
-                        .font(.callout)
-                        .foregroundColor(.black)
-                        .padding(.bottom, 8)
-                    
-                    HStack {
-                        Spacer()
-                        Image(systemName: "heart")
-                        Text("\(5)").padding(.leading, -5)
-                        
-                    }.foregroundColor(.secondary)
-                        .font(.caption)
-                        .padding(.trailing)
+                    .padding(.trailing)
+                    .padding(.top, 1)
+
                 } //vstack
-                .padding(.leading, -12)
             }
             Rectangle()
                 .frame(width: Screen.maxWidth - 30, height: 0.5)
                 .foregroundColor(.secondary)
                 .padding([.leading, .trailing], 20)
-                .padding(.top, -15)
+                .padding(.bottom, 10)
         }
     }
 }

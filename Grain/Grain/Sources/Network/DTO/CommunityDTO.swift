@@ -31,7 +31,7 @@ struct CommunityDTO: Codable,Hashable{
     let userID : String
     let nickName : String
     
-    private enum MagazineKeys: String, CodingKey {
+    private enum CommunityKeys: String, CodingKey {
         case fields
     }
     private enum FieldKeys: String, CodingKey {
@@ -47,7 +47,7 @@ struct CommunityDTO: Codable,Hashable{
     }
 
     init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: MagazineKeys.self)       //fields
+        let container = try decoder.container(keyedBy: CommunityKeys.self)       //fields
         let fieldContainer = try container.nestedContainer(keyedBy: FieldKeys.self, forKey: .fields)
         
         image = try fieldContainer.decode(StringValue.self, forKey: .image).value

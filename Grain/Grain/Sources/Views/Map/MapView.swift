@@ -161,10 +161,28 @@ struct UIMapView: UIViewRepresentable {
                 switch item.category{
                 case 0:
                     marker.iconImage = NMF_MARKER_IMAGE_PINK
+                    // MARK: 아이콘 캡션 - 포토스팟 글씨
+                    marker.captionText = "포토스팟"
+                    // MARK: 캡션 글씨 색상 컬러
+                    // TODO: 디자인 고려해보기
+//                    marker.captionColor = UIColor.blue
+//                    marker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 200.0/255.0, alpha: 1)
                 case 1:
                     marker.iconImage = NMF_MARKER_IMAGE_RED
+                    // MARK: 아이콘 캡션 - 현상소 글씨
+                    marker.captionText = "현상소"
+                    // MARK: 캡션 글씨 색상 컬러
+                    // TODO: 디자인 고려해보기
+//                    marker.captionColor = UIColor.blue
+//                    marker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 200.0/255.0, alpha: 1)
                 case 2:
                     marker.iconImage = NMF_MARKER_IMAGE_YELLOW
+                    // MARK: 아이콘 캡션 - 수리점 글씨
+                    marker.captionText = "수리점"
+                    // MARK: 캡션 글씨 색상 컬러
+                    // TODO: 디자인 고려해보기
+//                    marker.captionColor = UIColor.blue
+//                    marker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 200.0/255.0, alpha: 1)
                 default:
                     marker.iconImage = NMF_MARKER_IMAGE_BLACK
                 }

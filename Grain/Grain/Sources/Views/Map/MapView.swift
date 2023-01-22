@@ -136,10 +136,56 @@ struct UIMapView: UIViewRepresentable {
        
         // TODO: 비동기적으로 코드 수정 필요함! , 마커 대신 이미지 사진, 글씨로 대체해야함
         // MARK: Map 컬렉션 DB에서 위치 정보를 받아와 마커로 표시
+        
+        
+//         방법 1
+//        let myImage = UIImage(named: "testImage") //이미지 객체 생성
+//
+//        var uiImageView = UIImageView()
+//        var image: UIImage = UIImage(named: "sdk")!
+//        uiImageView = UIImageView(image: image)
+//        uiImageView
+//
+//        let url = URL(string: "http://verona-api.municipiumstaging.it/system/images/image/image/22/app_1920_1280_4.jpg")
+//        let data = try Data(contentsOf: url!)
+//        uiImageView.image = UIImage(data: data)
+//        uiImageView
+        
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
             for item in mapStore.mapData{
                 let marker = NMFMarker()
                 marker.position = NMGLatLng(lat: item.latitude, lng:item.longitude )
+                
+                // category -> 0: 포토스팟 / 1: 현상소 / 2: 수리점
+                switch item.category{
+                case 0:
+                    marker.iconImage = NMF_MARKER_IMAGE_PINK
+                case 1:
+                    marker.iconImage = NMF_MARKER_IMAGE_RED
+                case 2:
+                    marker.iconImage = NMF_MARKER_IMAGE_YELLOW
+                default:
+                    marker.iconImage = NMF_MARKER_IMAGE_BLACK
+                }
+                // 방법 1
+//                marker.iconImage = NMFOverlayImage(name: "lense")
+//                marker.width = 25
+//                marker.height = 40
+                // 방법
+//                marker.iconImage = NMF_MARKER_IMAGE_PINK
+//                marker.iconImage = NMFOverlayImage(image: myImage!)
+                
+                // 포토스팟 일떄
+                
+                // 형사소 일때
+                
+                // 수리점 일떄
+                
+                
+//                marker.iconImage = NMFOverlayImage(image: image!)
+//                marker.width = 80
+//                marker.height = 80
                 marker.mapView = view.mapView
             }
         }
@@ -149,6 +195,19 @@ struct UIMapView: UIViewRepresentable {
         return view
     }
     
+    // MARK: 이미지 로드
+//    func loadImage(url: URL){
+//        DispatchQueue.global().async {
+//            [weak self] in
+//            if let data = try? Data(contentsOf: url){
+//                if let image = UIImage(data: data){
+//                    DispatchQueue.main.async {
+//                        self.image = image
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
         

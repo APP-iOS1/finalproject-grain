@@ -53,7 +53,7 @@ class MapStore : ObservableObject{
 //                    var magazineId = docData["magazineId"] as? Array ?? []
                     var url = docData["url"] as? String ?? ""
 
-                    var data = Map(latitude: latitude, longitude: longitude)
+                    var data = Map(category: category, latitude: latitude, longitude: longitude)
                     self.mapData.append(data)
 
                 }

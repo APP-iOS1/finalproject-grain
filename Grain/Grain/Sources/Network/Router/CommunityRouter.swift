@@ -6,13 +6,6 @@
 //
 
 import Foundation
-//let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Community"
-//
-//// FIXME: 확인 필요  -> firestoreURL)!)
-//var request = URLRequest(url: URL(string: firestoreURL)!)
-//
-//request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//request.httpMethod = HTTPMethod.get.rawValue
 
 // 커뮤니티 라우터
 enum CommunityRouter {

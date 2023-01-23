@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		06F0D82A297EB3DC00E7B885 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F0D829297EB3DC00E7B885 /* CommunityViewModel.swift */; };
+		06F0D82C297EB3E700E7B885 /* MagazineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F0D82B297EB3E700E7B885 /* MagazineViewModel.swift */; };
+		06F0D82E297EB3F200E7B885 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F0D82D297EB3F200E7B885 /* MapViewModel.swift */; };
+		06F0D830297EB3FE00E7B885 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F0D82F297EB3FD00E7B885 /* UserViewModel.swift */; };
 		06FD6AB32977AECE00B4A859 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FD6AB22977AECE00B4A859 /* CommunityView.swift */; };
 		06FD6AB52977AF1900B4A859 /* CommunityRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FD6AB42977AF1900B4A859 /* CommunityRowView.swift */; };
 		06FD6AB72977AF2C00B4A859 /* CommunityDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FD6AB62977AF2C00B4A859 /* CommunityDetailView.swift */; };
@@ -80,6 +84,10 @@
 
 /* Begin PBXFileReference section */
 		067EFC70AEB61514D2E02FD7 /* Pods-Grain.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.debug.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.debug.xcconfig"; sourceTree = "<group>"; };
+		06F0D829297EB3DC00E7B885 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
+		06F0D82B297EB3E700E7B885 /* MagazineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewModel.swift; sourceTree = "<group>"; };
+		06F0D82D297EB3F200E7B885 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		06F0D82F297EB3FD00E7B885 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		06FD6AB22977AECE00B4A859 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
 		06FD6AB42977AF1900B4A859 /* CommunityRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityRowView.swift; sourceTree = "<group>"; };
 		06FD6AB62977AF2C00B4A859 /* CommunityDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityDetailView.swift; sourceTree = "<group>"; };
@@ -166,6 +174,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		06F0D828297EB3BD00E7B885 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				06F0D829297EB3DC00E7B885 /* CommunityViewModel.swift */,
+				06F0D82B297EB3E700E7B885 /* MagazineViewModel.swift */,
+				06F0D82D297EB3F200E7B885 /* MapViewModel.swift */,
+				06F0D82F297EB3FD00E7B885 /* UserViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		0B3B0B65CE949ADD062FD807 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -277,6 +296,7 @@
 				A7BAD3C429782D83009C4ECB /* Network */,
 				9958AF872977798900A51DA9 /* Views */,
 				9958AF862977798000A51DA9 /* Stores */,
+				06F0D828297EB3BD00E7B885 /* ViewModels */,
 				9958AF852977797600A51DA9 /* Models */,
 			);
 			path = Sources;
@@ -546,6 +566,7 @@
 				9958AFAE2977811300A51DA9 /* Ex+Date.swift in Sources */,
 				A7D957DB297AAFBD001D2401 /* MagazineService.swift in Sources */,
 				9962CDC92979246500E834C3 /* AllTabView.swift in Sources */,
+				06F0D830297EB3FE00E7B885 /* UserViewModel.swift in Sources */,
 				9958AF9B29777E5B00A51DA9 /* UserStore.swift in Sources */,
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,
 				9958AFA329777F9C00A51DA9 /* CommentStore.swift in Sources */,
@@ -573,6 +594,7 @@
 				A7D957D9297AAFB1001D2401 /* FirebaseService.swift in Sources */,
 				9958AF9929777E4D00A51DA9 /* AuthenticationStore.swift in Sources */,
 				06FD6AB72977AF2C00B4A859 /* CommunityDetailView.swift in Sources */,
+				06F0D82C297EB3E700E7B885 /* MagazineViewModel.swift in Sources */,
 				8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */,
 				330B9460297A719C007F5164 /* CameraLenseFilmModalView.swift in Sources */,
 				A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */,
@@ -582,6 +604,7 @@
 				9958AFBA2977D80200A51DA9 /* AuthenticationTestView.swift in Sources */,
 				8BCF31E2297A500900EB6188 /* CommentView.swift in Sources */,
 				A7BAD3C82978339A009C4ECB /* Fields.swift in Sources */,
+				06F0D82E297EB3F200E7B885 /* MapViewModel.swift in Sources */,
 				A7D957DD297AAFC8001D2401 /* CommunityService.swift in Sources */,
 				99233D4C2977F34200A875B1 /* MapStore.swift in Sources */,
 				99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */,
@@ -590,6 +613,7 @@
 				9958AFA129777F8100A51DA9 /* CommunityStore.swift in Sources */,
 				9958AFA82977804700A51DA9 /* BtnModifier.swift in Sources */,
 				8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */,
+				06F0D82A297EB3DC00E7B885 /* CommunityViewModel.swift in Sources */,
 				0C535C2B2977AB7300E20BD9 /* Top10View.swift in Sources */,
 				0C535C2D2977B68600E20BD9 /* EditorView.swift in Sources */,
 				9962CDCF297924CC00E834C3 /* MarketTabView.swift in Sources */,

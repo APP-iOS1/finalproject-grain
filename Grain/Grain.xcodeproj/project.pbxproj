@@ -294,9 +294,9 @@
 			isa = PBXGroup;
 			children = (
 				A7BAD3C429782D83009C4ECB /* Network */,
+				06F0D828297EB3BD00E7B885 /* ViewModels */,
 				9958AF872977798900A51DA9 /* Views */,
 				9958AF862977798000A51DA9 /* Stores */,
-				06F0D828297EB3BD00E7B885 /* ViewModels */,
 				9958AF852977797600A51DA9 /* Models */,
 			);
 			path = Sources;

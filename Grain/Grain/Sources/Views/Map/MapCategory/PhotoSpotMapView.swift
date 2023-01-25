@@ -70,7 +70,7 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
             for i in mapStore.mapData{
                 // 2 -> 수리점일 경우에 markers에 넣기
                 if i.category == 0{
-                    var object : MarkerCustomInfo = MarkerCustomInfo(marker: NMGLatLng(lat: i.latitude, lng: i.longitude), category: i.category ?? 4)
+                    var object : MarkerCustomInfo = MarkerCustomInfo(marker: NMGLatLng(lat: i.latitude, lng: i.longitude), category: i.category ?? 4, url: i.url)
                     print(object)
                     markers.append(object)
                 }

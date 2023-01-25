@@ -11,4 +11,5 @@ import NMapsMap
 struct MarkerCustomInfo{
     var marker : NMGLatLng
     var category : Int
+    var url : String
 }

@@ -10,7 +10,8 @@ import SwiftUI
 struct Switchingview: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
-    
+    //TODO: 임시코드 <- 리팩토링 하기
+    @State var bindingWebURL : String = ""
     var body: some View {
         switch viewRouter.currentPage{
         case .contentView:
@@ -20,7 +21,7 @@ struct Switchingview: View {
         case .photoSpotDetailView:
             PhotoSpotDetailView()
         case .webkitView:
-            WebkitView()
+            WebkitView(bindingWebURL: $bindingWebURL)   //TODO: 임시코드 <- 리팩토링 하기
         case .photoSpotMapView:
             PhotoSpotMapView()
         case .stationMapView:

@@ -26,14 +26,6 @@ struct MapView: View {
     
     var body: some View {
         NavigationStack{
-            Button {
-                isShowingWebView.toggle()
-            } label: {
-                Text("테스트")
-            }.sheet(isPresented: $isShowingWebView) {
-                WebkitView(bindingWebURL: $bindingWebURL)
-            }
-
             // MARK: 지도 탭의 상단
             VStack{
                 // MARK: 지도 카테고리 버튼
@@ -73,12 +65,12 @@ struct MapView: View {
                     
                 }
             }
-//            .sheet(isPresented: $isShowingPhotoSpot) {
-//                PhotoSpotDetailView()
-//            }
-//            .sheet(isPresented: $isShowingWebView) {
-//                WebkitView(urlToLoad: bindingWebURL)
-//            }
+            .sheet(isPresented: $isShowingPhotoSpot) {
+                PhotoSpotDetailView()
+            }
+            .sheet(isPresented: $isShowingWebView) {
+                WebkitView(bindingWebURL: $bindingWebURL)
+            }
             // MARK: 상단 클릭 가능 버튼
             .toolbar {  //MARK: 홈으로 돌아가기?? <- 회의 필요
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -182,7 +174,7 @@ struct UIMapView: UIViewRepresentable,View {
                     marker.iconImage = NMF_MARKER_IMAGE_PINK
                     // MARK: 아이콘 캡션 - 포토스팟 글씨
                     marker.captionText = "포토스팟"
-                    // FIXME: 카테고리 필터링 기능에 쓸 예정이지만 실패 다른 기능에 사용해보기
+                    // MARK: URL링크 정보 받기
                     marker.userInfo = ["url" : item.url]
                     // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
                     marker.tag = 0
@@ -191,14 +183,12 @@ struct UIMapView: UIViewRepresentable,View {
                     marker.iconImage = NMF_MARKER_IMAGE_RED
                     // MARK: 아이콘 캡션 - 현상소 글씨
                     marker.captionText = "현상소"
-                    // FIXME: 카테고리 필터링 기능에 쓸 예정이지만 실패 다른 기능에 사용해보기
                     marker.userInfo = ["url" : item.url]
                     marker.tag = 1
                 case 2:
                     marker.iconImage = NMF_MARKER_IMAGE_YELLOW
                     // MARK: 아이콘 캡션 - 수리점 글씨
                     marker.captionText = "수리점"
-                    // FIXME: 카테고리 필터링 기능에 쓸 예정이지만 실패 다른 기능에 사용해보기
                     marker.userInfo = ["url" : item.url]
                     marker.tag = 2
                     // MARK: 캡션 글씨 색상 컬러
@@ -221,14 +211,11 @@ struct UIMapView: UIViewRepresentable,View {
                         case 1:
                             print("현상소 클릭")
                             isShowingWebView.toggle()
-                            // TODO: 고치기
                             bindingWebURL = marker.userInfo["url"] as! String
                         case 2:
                             print("수리점 클릭")
-                           
-                            // TODO: 고치기
-                            bindingWebURL = marker.userInfo["url"] as! String
                             isShowingWebView.toggle()
+                            bindingWebURL = marker.userInfo["url"] as! String
                         default:
                             print("없음")
                         }

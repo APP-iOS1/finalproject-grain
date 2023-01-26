@@ -33,7 +33,6 @@ struct MapView: View {
                 HStack{
                     /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
                     MapCategoryCellView(categoryString: $categoryString)
-                    
                 }
             }
             // MARK: 지도 뷰에서 검색 란
@@ -65,9 +64,9 @@ struct MapView: View {
                     
                 }
             }
-            .sheet(isPresented: $isShowingPhotoSpot) {
-                PhotoSpotDetailView()
-            }
+            .sheet(isPresented: $isShowingPhotoSpot, content: {
+                PhotoSpotDetailView() .presentationDetents( [.medium])  /// 모달 뷰 medium으로 보여주기
+            })
             .sheet(isPresented: $isShowingWebView) {
                 WebkitView(bindingWebURL: $bindingWebURL)
             }

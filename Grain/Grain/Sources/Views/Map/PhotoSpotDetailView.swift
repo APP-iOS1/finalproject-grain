@@ -101,12 +101,6 @@ struct PhotoSpotDetailView: View {
                     .padding(.leading, 30)
                     .padding(.top, 10)
                     
-                    Rectangle()
-                        .frame(width: Screen.maxWidth - 30, height: 0.5)
-                        .foregroundColor(.secondary)
-                        .padding([.leading, .trailing], 20)
-                    
-                    CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "악!", comment: "악!악!악!악!악!악!악!악!", createdAt: Date()))
                     
                 } // top vstack
             } //scroll view

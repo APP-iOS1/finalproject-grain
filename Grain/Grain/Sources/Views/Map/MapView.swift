@@ -23,7 +23,7 @@ struct MapView: View {
     @State var isShowingPhotoSpot: Bool = false
     @State var isShowingWebView: Bool = false
     @State var bindingWebURL : String = ""
-    
+  
     var body: some View {
         NavigationStack{
             // MARK: 지도 탭의 상단
@@ -61,7 +61,6 @@ struct MapView: View {
                     RepairShopMapView()
                 default:
                     UIMapView(isShowingPhotoSpot: $isShowingPhotoSpot,isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL)
-                    
                 }
             }
             .sheet(isPresented: $isShowingPhotoSpot, content: {
@@ -74,7 +73,7 @@ struct MapView: View {
             .toolbar {  //MARK: 홈으로 돌아가기?? <- 회의 필요
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        
+                        viewRouter.currentPage = .contentView
                     } label: {
                         Text("Grain")
                             .font(.title)
@@ -108,7 +107,6 @@ struct UIMapView: UIViewRepresentable,View {
     
     @ObservedObject var mapStore = MapStore()
     @EnvironmentObject var viewRouter: ViewRouter
-    
     //모달뷰
     @Binding var isShowingPhotoSpot: Bool
     @Binding var isShowingWebView: Bool
@@ -138,18 +136,20 @@ struct UIMapView: UIViewRepresentable,View {
         // MARK: 지도 회전 잠금
         view.mapView.isRotateGestureEnabled = false
         //        view.mapView.mapType = .hybrid
+        // MARK: 델리게이트 패턴 채택
         view.mapView.touchDelegate = context.coordinator
         
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
-        // TODO: 네이버 지도 공식 문서 읽어보기
         view.showCompass = false
         view.showLocationButton = true
+        // MARK: 위치 정보 받아오기
+        view.showLocationButton = true
+        view.mapView.positionMode = .direction
         
         // MARK: 지도가 그려질때 현재 유저 GPS 위치로 카메라 움직임
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLatitude, lng: userLongitude))
         view.mapView.moveCamera(cameraUpdate)
-        
-        
+            
         // MARK: MAP DB에 들어간 정보
         var markers: [MarkerCustomInfo] = []
         
@@ -207,6 +207,7 @@ struct UIMapView: UIViewRepresentable,View {
                             print("포토스팟 클릭")
                             // MARK: 포토스팟 모달 띄워주기
                             isShowingPhotoSpot.toggle()
+                            
                         case 1:
                             print("현상소 클릭")
                             isShowingWebView.toggle()
@@ -225,6 +226,7 @@ struct UIMapView: UIViewRepresentable,View {
                 
             }
         }
+       
         return view
     }
     
@@ -237,6 +239,20 @@ struct UIMapView: UIViewRepresentable,View {
         return Coordinator(viewModel: self.viewModel)
     }
     
+    // MARK: 주변 게시글 적용
+    // TODO: 나중에 적용해보기
+//    print(context.coordinator.point)
+//    func findAroundPost(_ mapView: NMFMapView,_ point: CGPoint){
+//        var testStr = ""
+//        for pickable in mapView.pickAll(point, withTolerance: 30){
+//            if let marker = pickable as? NMFMarker{
+//                testStr = testStr + "Marker(\(marker.captionText ?? ""))\n"
+//            }
+//            print(testStr)
+//        }
+//    }
+    
+    
 }
 // 이벤트에 반응해야 하는 뷰들은 코디네이터 구현 해야함
 class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate {
@@ -245,21 +261,25 @@ class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, 
     
     @Published var latitude : Double
     @Published var longitude : Double
-    
-    
+    @Published var point : CGPoint
+
     init(viewModel: MapSceneViewModel) {
         self.viewModel = viewModel
         self.latitude = 0.0
         self.longitude = 0.0
+        self.point = CGPoint(x: 0, y: 0)
     }
-    
-    // MARK:  지도 좌표 알아내기
+ 
+    // MARK: 터치 했을때 실행
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
-        print("\(latlng.lat), \(latlng.lng)")
+//        print("\(latlng.lat), \(latlng.lng)")
         self.latitude = latlng.lat
         self.longitude = latlng.lng
+        self.point = point
     }
+    
 }
 
-
-class MapSceneViewModel: ObservableObject {}
+class MapSceneViewModel: ObservableObject {
+    
+}

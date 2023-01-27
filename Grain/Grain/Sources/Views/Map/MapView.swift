@@ -85,7 +85,7 @@ struct MapView: View {
             .toolbar {  //MARK: 제보하기 <- 회의 필요
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        
+                        viewRouter.currentPage = .addMarkerMapView
                     } label: {
                         Image(systemName: "plus")
                             .foregroundColor(.black)
@@ -157,11 +157,9 @@ struct UIMapView: UIViewRepresentable,View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1){
             for i in mapStore.mapData{
                 let object : MarkerCustomInfo = MarkerCustomInfo(marker: NMGLatLng(lat: i.latitude, lng: i.longitude), category: i.category ?? 4, url: i.url)
-                print(object)
                 markers.append(object)
             }
-        }
-        
+        }        
         // TODO: 비동기적으로 코드 수정 필요함! , 마커 대신 이미지 사진, 글씨로 대체해야함
         // MARK: Map 컬렉션 DB에서 위치 정보를 받아와 마커로 표시
         DispatchQueue.main.asyncAfter(deadline: .now() + 1){
@@ -232,7 +230,6 @@ struct UIMapView: UIViewRepresentable,View {
     
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
-        
     }
     
     func makeCoordinator() -> Coordinator {
@@ -262,22 +259,57 @@ class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, 
     @Published var latitude : Double
     @Published var longitude : Double
     @Published var point : CGPoint
-
+    
     init(viewModel: MapSceneViewModel) {
         self.viewModel = viewModel
         self.latitude = 0.0
         self.longitude = 0.0
-        self.point = CGPoint(x: 0, y: 0)
+        self.point = CGPoint(x: 200, y: 350)
     }
  
     // MARK: 터치 했을때 실행
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
-//        print("\(latlng.lat), \(latlng.lng)")
         self.latitude = latlng.lat
         self.longitude = latlng.lng
         self.point = point
+        print("\(latlng.lat), \(latlng.lng)")
+        print(point)
+        
+        
+        ///맵 누르면 버튼 생김
+//        let currentUserMarker = NMFMarker()
+//        currentUserMarker.position = NMGLatLng(lat: latitude, lng: longitude)
+//        currentUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
+//        currentUserMarker.mapView = mapView
+        // 해당 좌표로 이동하기 카메라
+//        mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: latitude, lng: longitude)))
+//        marker.position = NMGLatLng(lat: latitude, lng: longitude)
+//        print("marker.overlayID\(marker.overlayID)")
+//        marker.position = NMGLatLng(lat: latitude, lng: longitude)
+//        marker.mapView = mapView
+//        print(marker.position)
+        
+        // 화면 클릭시 CGRect 생성
+//        let customView = UIView(frame: CGRect(origin:point, size: CGSize(width: 50, height: 50)))
+//        customView.backgroundColor = .clear
+//        
+//        mapView.addSubview(customView)
+        
+        // 폴리곤
+//        let polygonOverlay = NMFPolygonOverlay([
+//            view.mapView.projection.latlng(from: CGPoint(x: 70, y: 600)),
+//            view.mapView.projection.latlng(from: CGPoint(x: 310, y: 600)),
+//            view.mapView.projection.latlng(from: CGPoint(x: 310, y: 650)),
+//            view.mapView.projection.latlng(from: CGPoint(x: 70, y: 650)),
+//            ])
+//
+//        polygonOverlay?.mapView = view.mapView
+
     }
+
     
+    
+
 }
 
 class MapSceneViewModel: ObservableObject {

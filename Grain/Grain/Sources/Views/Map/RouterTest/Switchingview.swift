@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import NMapsMap
 struct Switchingview: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
@@ -28,6 +28,8 @@ struct Switchingview: View {
             StationMapView()
         case .repairShopMapView:
             RepairShopMapView()
+        case .addMarkerMapView:
+            AddMarkerMapView(updateNumber: NMGLatLng(lat: 0, lng: 0))
         }
     }
 }

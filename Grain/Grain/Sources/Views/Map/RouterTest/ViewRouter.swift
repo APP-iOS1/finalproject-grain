@@ -22,5 +22,6 @@ enum Page {
     case stationMapView
     case repairShopMapView
     case photoSpotMapView
+    case addMarkerMapView
     
 }

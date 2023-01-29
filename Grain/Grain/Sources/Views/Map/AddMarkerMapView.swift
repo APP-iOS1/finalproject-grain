@@ -39,8 +39,8 @@ struct AddMarkerMapView: View {
                     }
                 //                    .zIndex(0)
                 Button {
-//                    print("updateNumber\(updateNumber)")
                     markerAddButtonBool.toggle()
+                    print("updateNumber\(updateNumber)")
                 } label: {
                     Text("추가하기")
                         .fontWeight(.bold)
@@ -73,7 +73,6 @@ struct AddMarkerMapView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                       
                     } label: {
                         Image(systemName: "plus")
                             .foregroundColor(.black)
@@ -144,15 +143,13 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
     }
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
-        print("testBool 시작 전 : \(markerAddButtonBool)")
-        
         //  추가하기 버튼 누를시 화면 중앙에 마커 생성
         if markerAddButtonBool{
-            let currentUserMarker = NMFMarker()
-            currentUserMarker.position =  uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 335)) // CGPoint값 수정 필요
-            currentUserMarker.iconImage = NMF_MARKER_IMAGE_RED
-            currentUserMarker.mapView = uiView.mapView
-            print(currentUserMarker.position)
+            let addUserMarker = NMFMarker()
+            addUserMarker.position =  uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 359))
+            addUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
+            addUserMarker.mapView = uiView.mapView
+            updateNumber = addUserMarker.position
             markerAddButtonBool.toggle()
         }
     }

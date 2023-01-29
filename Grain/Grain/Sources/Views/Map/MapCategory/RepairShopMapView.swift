@@ -28,7 +28,7 @@ struct RepairShopMapView: View {
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct RepairShopUIMapView: UIViewRepresentable,View {
     
-    @ObservedObject var viewModel = MapSceneViewModel()
+//    @ObservedObject var viewModel = MapSceneViewModel()
     @StateObject var locationManager = LocationManager()
     @ObservedObject var mapStore = MapStore()
    
@@ -52,7 +52,7 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
         view.mapView.positionMode = .direction
         view.mapView.zoomLevel = 13
         
-        view.mapView.touchDelegate = context.coordinator
+//        view.mapView.touchDelegate = context.coordinator
         
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
         // TODO: 네이버 지도 공식 문서 읽어보기
@@ -107,9 +107,9 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
     }
     
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(viewModel: self.viewModel)
-        
-    }
+//    func makeCoordinator() -> Coordinator {
+//        return Coordinator(viewModel: self.viewModel)
+//
+//    }
 
 }

@@ -101,8 +101,8 @@ struct MapView: View {
 // FIXME: 네이버 지도
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct UIMapView: UIViewRepresentable,View {
-    
-    @ObservedObject var viewModel = MapSceneViewModel()
+    //임시
+//    @ObservedObject var viewModel = MapSceneViewModel()
     @StateObject var locationManager = LocationManager()
     
     @ObservedObject var mapStore = MapStore()
@@ -137,7 +137,8 @@ struct UIMapView: UIViewRepresentable,View {
         view.mapView.isRotateGestureEnabled = false
         //        view.mapView.mapType = .hybrid
         // MARK: 델리게이트 패턴 채택
-        view.mapView.touchDelegate = context.coordinator
+        /// 임시 주석
+//        view.mapView.touchDelegate = context.coordinator
         
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
         view.showCompass = false
@@ -205,7 +206,7 @@ struct UIMapView: UIViewRepresentable,View {
                             print("포토스팟 클릭")
                             // MARK: 포토스팟 모달 띄워주기
                             isShowingPhotoSpot.toggle()
-                            
+                
                         case 1:
                             print("현상소 클릭")
                             isShowingWebView.toggle()
@@ -230,11 +231,16 @@ struct UIMapView: UIViewRepresentable,View {
     
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
+        
     }
     
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(viewModel: self.viewModel)
-    }
+    
+    /// 임시
+//    func makeCoordinator() -> Coordinator {
+//        //임시
+////        return Coordinator(viewModel: self.viewModel)
+//        return Coordinator(markerAddButtonBool: $markerAddButtonBool, markerPoint: $markerPoint)
+//    }
     
     // MARK: 주변 게시글 적용
     // TODO: 나중에 적용해보기
@@ -253,28 +259,36 @@ struct UIMapView: UIViewRepresentable,View {
 }
 // 이벤트에 반응해야 하는 뷰들은 코디네이터 구현 해야함
 class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, NMFMapViewOptionDelegate {
-    @ObservedObject var viewModel: MapSceneViewModel
-    var cancellable = Set<AnyCancellable>()
+    // 임시
+//    @ObservedObject var viewModel: MapSceneViewModel
+    //    @Published var latitude : Double
+    //    @Published var longitude : Double
+    //    @Published var point : CGPoint
+//    init(viewModel: MapSceneViewModel) {
+//        self.viewModel = viewModel
+//        self.latitude = 0.0
+//        self.longitude = 0.0
+//        self.point = CGPoint(x: 0, y: 0)
+//    }
+    // 잠시
+    //var cancellable = Set<AnyCancellable>()
+        
     
-    @Published var latitude : Double
-    @Published var longitude : Double
-    @Published var point : CGPoint
-    
-    init(viewModel: MapSceneViewModel) {
-        self.viewModel = viewModel
-        self.latitude = 0.0
-        self.longitude = 0.0
-        self.point = CGPoint(x: 200, y: 350)
+    //바인딩 할 값 넣기
+    @Binding var markerAddButtonBool : Bool  // 추가하기 true false
+    init(markerAddButtonBool: Binding<Bool>){
+        self._markerAddButtonBool = markerAddButtonBool
     }
- 
+    
     // MARK: 터치 했을때 실행
     func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
-        self.latitude = latlng.lat
-        self.longitude = latlng.lng
-        self.point = point
-        print("\(latlng.lat), \(latlng.lng)")
-        print(point)
-        
+        // 임시
+//        self.latitude = latlng.lat
+//        self.longitude = latlng.lng
+//        self.point = point
+//        print("\(latlng.lat), \(latlng.lng)")
+//        print(point)
+//
         
         ///맵 누르면 버튼 생김
 //        let currentUserMarker = NMFMarker()
@@ -315,3 +329,4 @@ class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, 
 class MapSceneViewModel: ObservableObject {
     
 }
+

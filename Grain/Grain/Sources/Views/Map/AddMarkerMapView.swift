@@ -14,8 +14,9 @@ import UIKit
 struct AddMarkerMapView: View {
     @EnvironmentObject var viewRouter: ViewRouter
 
-    @State var imagePoint : CGPoint = CGPoint(x: 196, y: 335 )
+//    @State var imagePoint : CGPoint = CGPoint(x: 196, y: 335 )
     
+    @State var markerAddButtonBool : Bool = false
     // 가상 마커 CGPoint 좌표 값을 통해 지도 좌표 받아오기
     @State var updateNumber : NMGLatLng
     
@@ -26,18 +27,20 @@ struct AddMarkerMapView: View {
         NavigationStack{
             ZStack{
                 
-                AddMarkerUIMapView(updateNumber: $updateNumber, imagePoint: $imagePoint)
+                AddMarkerUIMapView(updateNumber: $updateNumber, markerAddButtonBool: $markerAddButtonBool)
+//                AddMarkerUIMapView(testBool: $testBool)
                 Image("TestBlackMarker")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 56,height: 56)
-                    .position(imagePoint)
+                    .position(CGPoint(x: 196, y: 335))  //수정 필요
                     .onTapGesture {
                         // 가상 마커 클릭시 액션
                     }
                 //                    .zIndex(0)
                 Button {
-                    print("updateNumber\(updateNumber)")
+//                    print("updateNumber\(updateNumber)")
+                    markerAddButtonBool.toggle()
                 } label: {
                     Text("추가하기")
                         .fontWeight(.bold)
@@ -70,7 +73,7 @@ struct AddMarkerMapView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        print(imagePoint)
+                       
                     } label: {
                         Image(systemName: "plus")
                             .foregroundColor(.black)
@@ -87,12 +90,15 @@ struct AddMarkerMapView: View {
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct AddMarkerUIMapView: UIViewRepresentable,View {
     
-    @ObservedObject var viewModel = MapSceneViewModel()
+    
+    //임시
+//    @ObservedObject var viewModel = MapSceneViewModel()
     @StateObject var locationManager = LocationManager()
     
     // 가상 마커 CGPoint 좌표 값을 통해 지도 좌표 넘겨주기
     @Binding var updateNumber : NMGLatLng
-    @Binding var imagePoint : CGPoint
+    
+    @Binding var markerAddButtonBool : Bool
     
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
@@ -134,19 +140,25 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
 //        let point = view.mapView.projection.point(from: currentUserMarker.position)
         
         currentUserMarker.mapView = view.mapView
-        
         return view
     }
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
+        print("testBool 시작 전 : \(markerAddButtonBool)")
         
-        //TODO: 고치기
-        //추가하기 버튼 누를때 업데이트?
-        updateNumber = uiView.mapView.projection.latlng(from: imagePoint)
-//        print("updateNumber: \(updateNumber)")
+        //  추가하기 버튼 누를시 화면 중앙에 마커 생성
+        if markerAddButtonBool{
+            let currentUserMarker = NMFMarker()
+            currentUserMarker.position =  uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 335)) // CGPoint값 수정 필요
+            currentUserMarker.iconImage = NMF_MARKER_IMAGE_RED
+            currentUserMarker.mapView = uiView.mapView
+            print(currentUserMarker.position)
+            markerAddButtonBool.toggle()
+        }
     }
+    
     func makeCoordinator() -> Coordinator {
-        return Coordinator(viewModel: self.viewModel)
+        return Coordinator(markerAddButtonBool: $markerAddButtonBool)
     }
     
 }
@@ -156,3 +168,5 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
 //        AddMarkerMapView()
 //    }
 //}
+
+

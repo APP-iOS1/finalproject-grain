@@ -50,7 +50,8 @@ struct StationUIMapView: UIViewRepresentable,View {
         let view = NMFNaverMapView()
         view.showZoomControls = false
         view.mapView.positionMode = .direction
-        view.mapView.zoomLevel = 13
+        // 처음에 맵이 생성될떄 줌 레벨
+        view.mapView.zoomLevel = 12
         view.mapView.minZoomLevel = 10
         view.mapView.maxZoomLevel = 16
         view.mapView.isRotateGestureEnabled = false

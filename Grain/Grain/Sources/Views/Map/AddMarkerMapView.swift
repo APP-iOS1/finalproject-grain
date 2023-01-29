@@ -98,7 +98,8 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
     @Binding var updateNumber : NMGLatLng
     
     @Binding var markerAddButtonBool : Bool
-    
+    @State var changeMap : CGPoint = CGPoint(x: 0, y: 0)    //여기서는 안쓰임
+
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
     }
@@ -113,8 +114,10 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         let view = NMFNaverMapView()
         view.showZoomControls = false
         view.mapView.positionMode = .direction
-        view.mapView.zoomLevel = 13
-        
+        // 처음에 맵이 생성될떄 줌 레벨
+        view.mapView.zoomLevel = 12
+        view.mapView.minZoomLevel = 10
+        view.mapView.maxZoomLevel = 16
         
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
         view.showCompass = false
@@ -151,11 +154,13 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
             addUserMarker.mapView = uiView.mapView
             updateNumber = addUserMarker.position
             markerAddButtonBool.toggle()
+            // FIXME: 추가하기 지도 뷰로 들어와 추가하기 버튼 누를시 뷰가 업데이트 되지 않아 <NMGLatLng: 0,0> 으로 나옴
+            /// 버그 고쳐보기
         }
     }
     
     func makeCoordinator() -> Coordinator {
-        return Coordinator(markerAddButtonBool: $markerAddButtonBool)
+        return Coordinator(viewModel: MapSceneViewModel(), markerAddButtonBool: $markerAddButtonBool, changeMap: $changeMap)
     }
     
 }

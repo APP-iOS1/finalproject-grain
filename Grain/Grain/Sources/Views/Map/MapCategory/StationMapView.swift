@@ -51,6 +51,9 @@ struct StationUIMapView: UIViewRepresentable,View {
         view.showZoomControls = false
         view.mapView.positionMode = .direction
         view.mapView.zoomLevel = 13
+        view.mapView.minZoomLevel = 10
+        view.mapView.maxZoomLevel = 16
+        view.mapView.isRotateGestureEnabled = false
 
 //        view.mapView.touchDelegate = context.coordinator
         

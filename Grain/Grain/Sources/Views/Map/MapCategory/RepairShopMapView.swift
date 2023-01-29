@@ -51,7 +51,10 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
         view.showZoomControls = false
         view.mapView.positionMode = .direction
         view.mapView.zoomLevel = 13
-        
+        view.mapView.minZoomLevel = 10
+        view.mapView.maxZoomLevel = 16
+        view.mapView.isRotateGestureEnabled = false
+
 //        view.mapView.touchDelegate = context.coordinator
         
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼

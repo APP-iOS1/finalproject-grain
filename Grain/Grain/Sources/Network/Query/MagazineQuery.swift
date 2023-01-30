@@ -12,7 +12,7 @@ enum MagazineQuery {
     
     // MARK: 매거진 DB에 데이터 저장
     /// id값 패스
-    static func insertMagazineQuery(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: String,likedNum: String,filmInfo: String, customPlaceName: String,latitude: String,comment: String,roadAddress: String ) -> Data?{
+    static func insertMagazineQuery(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: String,likedNum: String,filmInfo: String, customPlaceName: String,latitude: String,comment: String,roadAddress: String) -> Data?{
         return
         """
         {
@@ -29,7 +29,7 @@ enum MagazineQuery {
                                    "roadAddress": {
                                        "stringValue": "\(roadAddress)"
                                    },
-                                   "userId": {
+                                   "userID": {
                                        "stringValue": "\(userID)"
                                    },
                                    "lenseInfo": {
@@ -42,19 +42,22 @@ enum MagazineQuery {
                                        "stringValue": "\(cameraInfo)"
                                    },
                                    "likedNum": {
-                                       "integerValue": "0"
+                                       "stringValue": "\(likedNum)"
                                    },
                                    "title": {
                                        "stringValue": "\(title)"
                                    },
                                    "latitude": {
-                                       "integerValue": "0"
+                                       "stringValue": "\(latitude)"
                                    },
                                    "longitude": {
-                                       "integerValue": "0"
+                                       "stringValue": "\(longitude)"
                                    },
                                    "content": {
                                        "stringValue": "\(content)"
+                                   },
+                                   "nickName": {
+                                       "stringValue": "\(nickName)"
                                    }
                                }
                 }

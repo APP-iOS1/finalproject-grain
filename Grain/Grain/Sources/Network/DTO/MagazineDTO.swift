@@ -15,12 +15,6 @@ struct MagazineResponse: Codable{
 
 }
 
-struct ArrayValue: Codable{
-    let values : String
-    private enum CodingKeys: String, CodingKey {
-        case values = "values"
-    }
-}
 //객체를 디코딩하고 있음
 
 struct MagazineDTO: Codable,Hashable{
@@ -37,6 +31,7 @@ struct MagazineDTO: Codable,Hashable{
     let lenseInfo: String
     let longitude: String
     let roadAddress: String
+    let customPlaceName: String
     
     private enum MagazineKeys: String, CodingKey {
         case fields
@@ -55,16 +50,16 @@ struct MagazineDTO: Codable,Hashable{
         case lenseInfo
         case longitude
         case roadAddress
+        case customPlaceName
+       
     }
-
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: MagazineKeys.self)       //fields
         let fieldContainer = try container.nestedContainer(keyedBy: FieldKeys.self, forKey: .fields)
-
         
         image = try fieldContainer.decode(StringValue.self, forKey: .image).value
-        likedNum = try fieldContainer.decode(IntegerValue.self, forKey: .likedNum).value
+        likedNum = try fieldContainer.decode(StringValue.self, forKey: .likedNum).value
         id = try fieldContainer.decode(StringValue.self, forKey: .id).value
         userID = try fieldContainer.decode(StringValue.self, forKey: .userID).value
         title = try fieldContainer.decode(StringValue.self, forKey: .title).value
@@ -73,9 +68,10 @@ struct MagazineDTO: Codable,Hashable{
         nickName = try fieldContainer.decode(StringValue.self, forKey: .nickName).value
         filmInfo = try fieldContainer.decode(StringValue.self, forKey: .filmInfo).value
         latitude = try fieldContainer.decode(StringValue.self, forKey: .latitude).value
-        lenseInfo = try fieldContainer.decode(IntegerValue.self, forKey: .lenseInfo).value
-        longitude = try fieldContainer.decode(IntegerValue.self, forKey: .longitude).value
+        lenseInfo = try fieldContainer.decode(StringValue.self, forKey: .lenseInfo).value
+        longitude = try fieldContainer.decode(StringValue.self, forKey: .longitude).value
         roadAddress = try fieldContainer.decode(StringValue.self, forKey: .roadAddress).value
+        customPlaceName = try fieldContainer.decode(StringValue.self, forKey: .customPlaceName).value
     }
 
 }
@@ -94,4 +90,9 @@ struct IntegerValue: Codable{
         case value = "integerValue"
     }
 }
-
+struct ArrayValue: Codable{
+    let values : String
+    private enum CodingKeys: String, CodingKey {
+        case values = "values"
+    }
+}

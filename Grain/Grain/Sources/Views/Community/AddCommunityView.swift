@@ -6,15 +6,22 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct AddCommunityView: View {
+    
+    @StateObject var communityVM = CommunityViewModel()
+    
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
-    @State private var inputCustomPlace: String = ""
+//    @State private var inputCustomPlace: String = ""
     @State private var selectedImages: [String] = ["1", "2", "3", "editor"]
     @State private var selectedCamera = 0
+//    @State private var userId = Auth.auth().currentUser?.uid
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
+    
+    @Binding var presented: Bool
     
     enum CommunityTabs: String, CaseIterable, Identifiable {
         case 매칭, 마켓, 클래스, 정보
@@ -26,10 +33,40 @@ struct AddCommunityView: View {
 
     var body: some View {
         VStack {
-            Rectangle()
-                .fill(Color(UIColor.systemGray5))
-                .frame(width: Screen.maxWidth, height: 1)
-            
+            VStack{
+                HStack{
+                    Button {
+                        presented.toggle()
+                        //글쓰기 취소
+                    } label: {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.black)
+                            .frame(width: 50, height: 50)
+                    }
+                    Spacer()
+                    
+                    Text("커뮤니티")
+                    
+                    Spacer()
+                    Button {
+                        //글쓰기 동작 함수
+                        
+                        communityVM.insertCommunity(profileImage: "profileImage", nickName: "nickName", category: selectedTab.rawValue, image: "image", userID: "userID", title: inputTitle, content: inputContent)
+                        
+                        presented.toggle()
+
+                    } label: {
+                        Text("글쓰기")
+                            .foregroundColor(.black)
+                    }
+                    
+                }
+                .padding(.horizontal)
+                
+                Rectangle()
+                    .fill(Color(UIColor.systemGray5))
+                    .frame(width: Screen.maxWidth, height: 1)
+            }
             HStack {
                 Button {
                     //MARK: 사진선택 동작 함수
@@ -102,24 +139,21 @@ struct AddCommunityView: View {
             
             Spacer()
             
-            Rectangle()
-                .fill(Color(UIColor.systemGray5))
-                .frame(width: Screen.maxWidth * 0.95, height: 1)
             
-            HStack {
-                Button {
-                    isShowingModal.toggle()
-                } label: {
-                    Text("장비 선택 임시 버튼")
-                }
-                .foregroundColor(.black)
-                .sheet(isPresented: $isShowingModal) {
-                    CameraLenseFilmModalView()
-                        .presentationDetents([.medium, .large])
-                }
-                Spacer()
-            }
-            .padding(.horizontal, 15)
+//            HStack {
+//                Button {
+//                    isShowingModal.toggle()
+//                } label: {
+//                    Text("장비 선택 임시 버튼")
+//                }
+//                .foregroundColor(.black)
+//                .sheet(isPresented: $isShowingModal) {
+//                    CameraLenseFilmModalView()
+//                        .presentationDetents([.medium, .large])
+//                }
+//                Spacer()
+//            }
+//            .padding(.horizontal, 15)
 //            TextField("customePlaceName", text: $inputCustomPlace)
 //                .keyboardType(.default)
 //                .textInputAutocapitalization(.never)
@@ -129,7 +163,7 @@ struct AddCommunityView: View {
 //                    hideKeyboard()
 //                }
 
-//            Spacer()
+            Spacer()
             
         }
         .ignoresSafeArea(.keyboard)
@@ -137,6 +171,6 @@ struct AddCommunityView: View {
 
 struct AddCommunityView_Previews: PreviewProvider {
     static var previews: some View {
-        AddCommunityView()
+        AddCommunityView(presented: .constant(false))
     }
 }

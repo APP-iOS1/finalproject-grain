@@ -9,19 +9,17 @@ import Foundation
 
 // MARK: documents -> 처음 documents 값을 뻄
 
-
-struct CommunityResponse: Codable{
+struct CommunityResponse: Codable {
     let community : [CommunityDTO]
     // 배열로 받았다.
     private enum CodingKeys: String, CodingKey {
         case community = "documents"
     }
-
 }
 
 
 //CommunityDTO 변수명 바꿔야함
-struct CommunityDTO: Codable,Hashable{
+struct CommunityDTO: Codable,Hashable {
     let image: String
     let profileImage : String
     let id : String
@@ -34,6 +32,7 @@ struct CommunityDTO: Codable,Hashable{
     private enum CommunityKeys: String, CodingKey {
         case fields
     }
+    
     private enum FieldKeys: String, CodingKey {
         case image
         case profileImage

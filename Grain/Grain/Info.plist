@@ -15,5 +15,10 @@
 	</array>
 	<key>NMFClientId</key>
 	<string>e74pxe65j7</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

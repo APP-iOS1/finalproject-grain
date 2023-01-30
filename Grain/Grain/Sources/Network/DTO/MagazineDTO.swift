@@ -83,6 +83,7 @@ struct StringValue: Codable{
         case value = "stringValue"
     }
 }
+
 // MARK: IntegerValue
 struct IntegerValue: Codable{
     let value: String

@@ -46,6 +46,7 @@ struct MagazineFeedView: View {
                 }
             } .onAppear {
                 print("onAppear 시작")
+                magazineVM.fetchMagazine()
                 communityVM.fetchCommunity()
             }
         

@@ -6,13 +6,18 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct AddCommunityView: View {
+    
+    @StateObject var communityVM = CommunityViewModel()
+    
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
-    @State private var inputCustomPlace: String = ""
+//    @State private var inputCustomPlace: String = ""
     @State private var selectedImages: [String] = ["1", "2", "3", "editor"]
     @State private var selectedCamera = 0
+//    @State private var userId = Auth.auth().currentUser?.uid
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
     

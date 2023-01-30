@@ -8,110 +8,126 @@
 import SwiftUI
 
 struct MagazineContentAddView: View {
-    @Environment(\.dismiss) private var dismiss
-    @State private var titleText: String = ""
-    @State private var contentText: String = ""
     @State private var inputTitle: String = ""
-    @State private var inputPlace: String = ""
     @State private var inputContent: String = ""
-    @State private var selectedCamera: Int = 0
-    @State private var selectedLens: Int = 0
-    @State private var selectedFilm: Int = 0
-    let camera:[Int] = [1, 2, 3]
-    let lens:[Int] = [1, 2, 3]
-    let film:[Int] = [1, 2, 3]
+    @State private var inputCustomPlace: String = ""
+    @State private var selectedImages: [String] = ["1", "2", "3", "editor"]
+    @State private var selectedCamera = 0
+    @State private var isShowingModal = false
+    @State private var textFieldFocused: Bool = true
     
-    @Binding var isAddViewShown: Bool
+    var myCamera = ["camera1", "camera2", "camera3", "camera4"]
+    
     var body: some View {
         VStack {
-            Button {
-                
-            } label: {
-                HStack{
-                    Image(systemName: "location.fill")
-                    Text("위치 받아오기")
-                }
-            }
-            Divider()
-            HStack {
-                VStack{
-                    Text("카메라")
-                        .padding(.bottom,-10)
-                    //카메라 피커
-                    Picker(selection: $selectedCamera, label: Text("Picker")) {
-                        ForEach(0 ..< camera.count, id: \.self){index in
-                            Text("\(camera[index])").tag(index)
-                        }
-                    }
-                    
-                }
-                VStack{
-                    Text("렌즈")
-                        .padding(.bottom,-10)
-                    //렌즈 피커
-                    Picker(selection: $selectedLens, label: Text("Picker")) {
-                        ForEach(0 ..< lens.count, id: \.self){index in
-                            Text("\(lens[index])").tag(index)
-                        }
-                    }
-                }
-                VStack{
-                    Text("필름")
-                        .padding(.bottom,-10)
-                    //필름 피커
-                    Picker(selection: $selectedFilm, label: /*@START_MENU_TOKEN@*/Text("Picker")/*@END_MENU_TOKEN@*/) {
-                        ForEach(0 ..< film.count, id: \.self){index in
-                            Text("\(film[index])").tag(index)
-                        }
-                    }
-                }
-            }
+            Rectangle()
+                .fill(Color(UIColor.systemGray5))
+                .frame(width: Screen.maxWidth, height: 1)
             
-
             HStack {
-                Text("제목")
-                    .padding(.horizontal)
-                    .padding(.bottom, -15)
+                Button {
+                    //MARK: 사진선택 동작 함수
+                    // 사진을 선택하면 선택한 사진이 selectedImages 배열으로
+                } label: {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color(UIColor.systemGray4))
+                        .frame(width: 70, height: 70)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(.white)
+                                .frame(width: 68, height: 68)
+                            Image(systemName: "photo.on.rectangle")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.black)
+                        }
+                }
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(selectedImages, id: \.self) { img in
+                            Image(img)
+                                .resizable()
+                                .frame(width: 70, height: 70)
+                                .cornerRadius(8)
+                        }
+                    }
+                }
                 Spacer()
+                
             }
-            TextField(
-                "Title",
-                text: $inputTitle
-            )
-            .padding()
-            .border(.black)
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
-            .padding()
+            .padding(.horizontal)
             
-            TextEditor(
-                text: $inputContent
-            )
-            .border(.black)
-            .textInputAutocapitalization(.never)
-            .autocorrectionDisabled()
-            .padding()
-            .overlay{
-                if inputContent.isEmpty {
-                    Text("내용을 입력해주세요.")
-                        .foregroundColor(.gray)
+            Rectangle()
+                .fill(Color(UIColor.systemGray5))
+                .frame(width: Screen.maxWidth * 0.95, height: 1)
+            
+            TextField("글 제목", text: $inputTitle)
+                .keyboardType(.default)
+                .textInputAutocapitalization(.never)
+                .disableAutocorrection(true)
+                .padding(.horizontal, 15)
+                .onSubmit {
+                    hideKeyboard()
                 }
+            
+            Rectangle()
+                .fill(Color(UIColor.systemGray5))
+                .frame(width: Screen.maxWidth * 0.95, height: 1)
+            
+            TextField("내용을 작성해 주세요.", text: $inputContent, axis: .vertical)
+                .keyboardType(.default)
+                .textInputAutocapitalization(.never)
+                .disableAutocorrection(true)
+                .lineLimit(...25)
+                .padding(.horizontal, 15)
+                .onSubmit {
+                    hideKeyboard()
+                }
+            
+            Spacer()
+            
+            Rectangle()
+                .fill(Color(UIColor.systemGray5))
+                .frame(width: Screen.maxWidth * 0.95, height: 1)
+            Group{
+                
+                HStack {
+                    Button {
+                        isShowingModal.toggle()
+                    } label: {
+                        Text("장비 선택 임시 버튼")
+                    }
+                    .foregroundColor(.black)
+                    .sheet(isPresented: $isShowingModal) {
+                        CameraLenseFilmModalView()
+                            .presentationDetents([.medium, .large])
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, 15)
+                Button {
+                    
+                } label: {
+                    HStack{
+                        Image(systemName: "location.fill")
+                        Text("위치 받아오기")
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             
-            Button {
-                isAddViewShown.toggle()
-            } label: {
-                Text("등록하기")
-            }
+            Spacer()
             
         }
+        .ignoresSafeArea(.keyboard)
     }
 }
 
 struct MagazineContentAddView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            MagazineContentAddView(isAddViewShown: .constant(false))
+            MagazineContentAddView()
         }
     }
 }

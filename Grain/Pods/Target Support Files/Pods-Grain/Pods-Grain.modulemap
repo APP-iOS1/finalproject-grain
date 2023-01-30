@@ -1,6 +1,0 @@
-framework module Pods_Grain {
-  umbrella header "Pods-Grain-umbrella.h"
-
-  export *
-  module * { export * }
-}

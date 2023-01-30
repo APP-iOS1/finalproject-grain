@@ -38,10 +38,7 @@ struct ContentView: View {
                                 MagazineContentAddView(presented: $presented)
                             } else if self.selectedIndex == 1{
                                 AddCommunityView(presented: $presented)
-                                MagazineContentAddView(presented: $presented)
-                            } else if self.selectedIndex == 1{
-                                AddCommunityView()
-                            }
+                            } 
                             Spacer()
 
                         }

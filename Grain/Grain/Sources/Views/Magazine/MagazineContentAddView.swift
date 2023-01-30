@@ -16,6 +16,7 @@ struct MagazineContentAddView: View {
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
     
+    
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     
     var body: some View {

@@ -61,7 +61,7 @@ struct AddMarkerMapView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        viewRouter.currentPage = .mapView
+                        viewRouter.currentPage = .magazineContentAddView
                     } label: {
                         Text("돌아가기")
                             .font(.title3)

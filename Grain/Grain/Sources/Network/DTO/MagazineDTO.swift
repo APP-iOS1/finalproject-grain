@@ -17,7 +17,7 @@ struct MagazineResponse: Codable{
 
 //객체를 디코딩하고 있음
 
-struct MagazineDTO: Codable,Hashable{
+struct MagazineDTO: Codable,Hashable,Identifiable{
     let likedNum: String
     let id: String
     let userID: String

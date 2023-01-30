@@ -56,24 +56,12 @@ struct MagazineDTO: Codable,Hashable{
         case longitude
         case roadAddress
     }
-//    private enum ArrayValueFieldKey: String, CodingKey{
-//        case arrayValue
-//    }
-//    private enum ValuesFieldKey: String, CodingKey{
-//        case values
-//    }
-    
+
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: MagazineKeys.self)       //fields
         let fieldContainer = try container.nestedContainer(keyedBy: FieldKeys.self, forKey: .fields)
-//        let imagefieldContainer = try fieldContainer.nestedContainer(keyedBy: FieldKeys.self, forKey: .image)
-//        let te = try imagefieldContainer.nestedContainer(keyedBy: ArrayValueFieldKey.self, forKey: .)
-//
-//        let imageValueFieldContainer = try fieldContainer.nestedContainer(keyedBy: ArrayValueFieldKey.self, forKey: .values)
-        
-//        image = try imageValueFieldContainer.decode(ArrayImageValue.self, forKey: .values).arrayValue
-//        image = try fieldContainer.decode(TestValue.self, forKey: .image).value
+
         
         image = try fieldContainer.decode(StringValue.self, forKey: .image).value
         likedNum = try fieldContainer.decode(IntegerValue.self, forKey: .likedNum).value
@@ -85,8 +73,8 @@ struct MagazineDTO: Codable,Hashable{
         nickName = try fieldContainer.decode(StringValue.self, forKey: .nickName).value
         filmInfo = try fieldContainer.decode(StringValue.self, forKey: .filmInfo).value
         latitude = try fieldContainer.decode(StringValue.self, forKey: .latitude).value
-        lenseInfo = try fieldContainer.decode(StringValue.self, forKey: .lenseInfo).value
-        longitude = try fieldContainer.decode(StringValue.self, forKey: .longitude).value
+        lenseInfo = try fieldContainer.decode(IntegerValue.self, forKey: .lenseInfo).value
+        longitude = try fieldContainer.decode(IntegerValue.self, forKey: .longitude).value
         roadAddress = try fieldContainer.decode(StringValue.self, forKey: .roadAddress).value
     }
 
@@ -106,10 +94,4 @@ struct IntegerValue: Codable{
         case value = "integerValue"
     }
 }
-//struct TestValue: Codable{
-//    let value: String
-//    private enum CodingKeys: String, CodingKey {
-//        case value = "arrayValue"
-//    }
-//}
 

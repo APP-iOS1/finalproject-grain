@@ -12,6 +12,10 @@ struct Switchingview: View {
     @EnvironmentObject var viewRouter: ViewRouter
     //TODO: 임시코드 <- 리팩토링 하기
     @State var bindingWebURL : String = ""
+    // 임시
+    @State var presented : Bool = true
+
+   
     var body: some View {
         switch viewRouter.currentPage{
         case .contentView:
@@ -30,6 +34,8 @@ struct Switchingview: View {
             RepairShopMapView()
         case .addMarkerMapView:
             AddMarkerMapView(updateNumber: NMGLatLng(lat: 0, lng: 0))
+        case .magazineContentAddView:
+            MagazineContentAddView(presented: $presented)
         }
     }
 }

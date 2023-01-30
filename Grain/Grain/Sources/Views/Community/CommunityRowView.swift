@@ -34,13 +34,41 @@ struct CommunityRowView: View {
                     HStack {
                         RoundedRectangle(cornerRadius: 20)
                             .frame(width: 45, height: 25)
-                            .foregroundColor(.black)
+                            .foregroundColor(Color(hex: "595BB9"))
                             .overlay{
                                 Text("매칭")
                                     .foregroundColor(.white)
                                     .bold()
                                     .font(.caption)
                             }
+                        RoundedRectangle(cornerRadius: 20)
+                            .frame(width: 45, height: 25)
+                            .foregroundColor(Color(hex: "459172"))
+                            .overlay{
+                                Text("매칭")
+                                    .foregroundColor(.white)
+                                    .bold()
+                                    .font(.caption)
+                            }
+                        RoundedRectangle(cornerRadius: 20)
+                            .frame(width: 45, height: 25)
+                            .foregroundColor(Color(hex: "7E736F"))
+                            .overlay{
+                                Text("매칭")
+                                    .foregroundColor(.white)
+                                    .bold()
+                                    .font(.caption)
+                            }
+                        RoundedRectangle(cornerRadius: 20)
+                            .frame(width: 45, height: 25)
+                            .foregroundColor(Color(hex: "44909F"))
+                            .overlay{
+                                Text("매칭")
+                                    .foregroundColor(.white)
+                                    .bold()
+                                    .font(.caption)
+                            }
+                        
                         
                         RoundedRectangle(cornerRadius: 20)
                             .frame(width: 45, height: 25)

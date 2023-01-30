@@ -41,9 +41,18 @@ struct MagazineBestView: View {
                             .frame(width: 203, height: 3.5)
                     }
                     .padding([.leading, .top])
-                    
-                    Top10View().padding([.leading, .trailing])
-                        .frame(height: Screen.maxWidth * 0.52)
+                    ForEach(0 ..< 3){ _ in
+                        NavigationLink {
+                            MagazineDetailView()
+                        } label: {
+                            Top10View()
+                                .padding(.vertical, 7)
+                                .padding(.horizontal)
+                                .frame(height: Screen.maxHeight * 0.6)
+                        }
+
+                       
+                    }
                     
 //                    4: 3 비율 -=> 가로 40  세로 30
 

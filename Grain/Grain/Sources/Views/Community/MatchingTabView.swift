@@ -16,7 +16,7 @@ struct MatchingTabView: View {
                 ForEach(0...5, id: \.self) {idx in
                     NavigationLink(value: community){
                         VStack{
-                            CommunityRowView(community: community)
+                            CommunityRowView2(community: community)
                             
                             Rectangle()
                                 .frame(width: Screen.maxWidth * 0.9, height: 0.5)

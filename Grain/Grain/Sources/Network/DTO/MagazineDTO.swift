@@ -7,7 +7,7 @@
 
 // MARK: documents -> 처음 documents 값을 뻄
 struct MagazineResponse: Codable{
-    let magazines : [Magazine]
+    let magazines : [MagazineDTO]
     // 배열로 받았다.
     private enum CodingKeys: String, CodingKey {
         case magazines = "documents"
@@ -23,7 +23,7 @@ struct ArrayValue: Codable{
 }
 //객체를 디코딩하고 있음
 
-struct Magazine: Codable,Hashable{
+struct MagazineDTO: Codable,Hashable{
     let likedNum: String
     let id: String
     let userID: String

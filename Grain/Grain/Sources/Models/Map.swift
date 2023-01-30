@@ -13,5 +13,5 @@ struct Map :Identifiable{
     var latitude : Double
     var longitude : Double
     var magazineId: [String]?
-    var url: String?
+    var url: String
 }

@@ -22,6 +22,7 @@ struct ArrayValue: Codable{
     }
 }
 //객체를 디코딩하고 있음
+
 struct Magazine: Codable,Hashable{
     let likedNum: String
     let id: String
@@ -31,6 +32,11 @@ struct Magazine: Codable,Hashable{
     let cameraInfo: String
     let nickName: String
     let image: String
+    let filmInfo: String
+    let latitude: String
+    let lenseInfo: String
+    let longitude: String
+    let roadAddress: String
     
     private enum MagazineKeys: String, CodingKey {
         case fields
@@ -44,6 +50,11 @@ struct Magazine: Codable,Hashable{
         case cameraInfo
         case nickName
         case image
+        case filmInfo
+        case latitude
+        case lenseInfo
+        case longitude
+        case roadAddress
     }
 //    private enum ArrayValueFieldKey: String, CodingKey{
 //        case arrayValue
@@ -72,7 +83,11 @@ struct Magazine: Codable,Hashable{
         content = try fieldContainer.decode(StringValue.self, forKey: .content).value
         cameraInfo = try fieldContainer.decode(StringValue.self, forKey: .cameraInfo).value
         nickName = try fieldContainer.decode(StringValue.self, forKey: .nickName).value
-
+        filmInfo = try fieldContainer.decode(StringValue.self, forKey: .filmInfo).value
+        latitude = try fieldContainer.decode(StringValue.self, forKey: .latitude).value
+        lenseInfo = try fieldContainer.decode(StringValue.self, forKey: .lenseInfo).value
+        longitude = try fieldContainer.decode(StringValue.self, forKey: .longitude).value
+        roadAddress = try fieldContainer.decode(StringValue.self, forKey: .roadAddress).value
     }
 
 }

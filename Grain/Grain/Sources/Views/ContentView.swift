@@ -61,7 +61,7 @@ struct ContentView: View {
                             .padding(.horizontal)
                             Spacer()
                             if self.selectedIndex == 0 {
-                                //매거진 글쓰기 뷰
+                                MagazineContentAddView()
                             } else if self.selectedIndex == 1{
                                 AddCommunityView()
                             }

@@ -16,6 +16,12 @@ struct AddCommunityView: View {
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
     
+    enum CommunityTabs: String, CaseIterable, Identifiable {
+        case 매칭, 마켓, 클래스, 정보
+        var id: Self { self }
+    }
+    @State private var selectedTab: CommunityTabs = .매칭
+    
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
 
     var body: some View {
@@ -56,6 +62,16 @@ struct AddCommunityView: View {
                 
             }
             .padding(.horizontal)
+           
+            HStack{
+                Picker("Tab", selection: $selectedTab){
+                    ForEach(CommunityTabs.allCases){ tab in
+                        Text(tab.rawValue)
+                    }
+                }
+                .colorMultiply(.black)
+                Spacer()
+            }
             
             Rectangle()
                 .fill(Color(UIColor.systemGray5))
@@ -113,7 +129,7 @@ struct AddCommunityView: View {
 //                    hideKeyboard()
 //                }
 
-            Spacer()
+//            Spacer()
             
         }
         .ignoresSafeArea(.keyboard)

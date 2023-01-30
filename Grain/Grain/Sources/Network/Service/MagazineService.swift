@@ -23,9 +23,14 @@ enum MagazineService {
         let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
         
         var request = URLRequest(url: URL(string: firestoreURL)!)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = HTTPMethod.get.rawValue
+    
 
+        do {
+            request = try MagazineRouter.get.asURLRequest()
+        } catch {
+            // [x] error handling
+            print("http error")
+        }
         return URLSession
             .shared
             .dataTaskPublisher(for: request)
@@ -38,15 +43,15 @@ enum MagazineService {
     static func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: String,likedNum: String,filmInfo: String, customPlaceName: String,latitude: String,comment: String,roadAddress: String ) -> AnyPublisher<MagazineResponse, Error> {
         print("FirebaseServic insertMagazine start")
         
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
-        let url = URL(string: "\(firestoreURL)/Magazine")
+        let requestRouter = MagazineRouter.post(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title, lenseInfo: lenseInfo, longitude: longitude, likedNum: likedNum, filmInfo: filmInfo, customPlaceName: customPlaceName, latitude: latitude, comment: comment, roadAddress: roadAddress)
+        var request: URLRequest =  URLRequest(url: URL(string: "dfsfsdfd")!)
         
-        // FIXME: 확인 필요 -> url!)
-        var request = URLRequest(url: url!)
+        do {
+            request = try requestRouter.asURLRequest()
+        } catch {
+            print("http error!")
+        }
         
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = HTTPMethod.post.rawValue   //post 방식
-        request.httpBody = MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title, lenseInfo: lenseInfo, longitude: longitude, likedNum: likedNum, filmInfo: filmInfo, customPlaceName: customPlaceName, latitude: latitude, comment: comment, roadAddress: roadAddress)
 
         return URLSession
             .shared

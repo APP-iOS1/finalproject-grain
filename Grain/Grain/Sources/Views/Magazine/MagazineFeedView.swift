@@ -9,23 +9,38 @@ import SwiftUI
 
 struct MagazineFeedView: View {
     @ObservedObject var communityVM = CommunityViewModel()
+    @ObservedObject var magazineVM = MagazineViewModel()
     var body: some View {
        
             ScrollView{
                 LazyVStack{
-//                    ForEach(0..<4) { i in
-//                        NavigationLink {
-//                            MagazineDetailView()
-//                        } label: {
-//                            MagazineViewCell()
+//                    ForEach(magazineVM.fetchMagazine()) { i in
+//                        VStack{
+//                            Text()
 //                        }
-//    //                    Divider()
 //                    }
                     
                     Button {
+                        magazineVM.insertMagazine(userID: "1", cameraInfo: "2", nickName: "3", image: "4", content: "5", title: "6", lenseInfo: "7", longitude: "8", likedNum: "9", filmInfo: "10", customPlaceName: "11", latitude: "12", comment: "13", roadAddress: "14")
+                    } label: {
+                        Text("매거진 insert")
+                    }
+                    Button {
+                        magazineVM.fetchMagazine()
+                        print(magazineVM.magazines)
+                    } label: {
+                        Text("매거진 read")
+                    }
+                    Button {
+                        communityVM.insertCommunity(profileImage: "1", nickName: "2", category: "3", image: "4", userID: "5", title: "6", content: "7")
+                    } label: {
+                        Text("커뮤니티 insert")
+                    }
+                    Button {
+                        communityVM.fetchCommunity()
                         print(communityVM.communities)
                     } label: {
-                        Text("테스투")
+                        Text("커뮤니티 read")
                     }
 
                 }

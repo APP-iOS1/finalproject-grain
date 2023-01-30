@@ -14,6 +14,7 @@ enum MagazineService {
         case get = "GET"
         case post = "POST"
         case patch = "PATCH"
+        case put = "PUT"
     }
     
     // MARK: - 매거진 데이터 가져오기

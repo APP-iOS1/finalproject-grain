@@ -10,7 +10,7 @@ import Foundation
 enum CommunityQuery {
     
     // MARK: 커뮤니티 DB에 데이터 저장
-    static func insertCommunityQuery(profileImage: String,nickName: String,category: String,image: String,userID: String,title: String,content: String ) -> Data?{
+    static func insertCommunityQuery(profileImage: String, nickName: String, category: String, image: String, userID: String, title: String, content: String) -> Data? {
   
         return
         

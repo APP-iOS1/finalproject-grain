@@ -16,11 +16,46 @@ struct MagazineContentAddView: View {
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
     
+    // 모달 내리기
+    @Binding var presented : Bool
+    // insert
+    @ObservedObject var magazineVM = MagazineViewModel()
+    
     
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     
     var body: some View {
         VStack {
+            HStack {
+                Button {
+                    presented.toggle()
+                    //글쓰기 취소
+                } label: {
+                    Image(systemName: "xmark")
+                        .foregroundColor(.black)
+                        .frame(width: 50, height: 50)
+                }
+                Spacer()
+
+                Text("매거진")
+
+
+                Spacer()
+                Button {
+                    // insert 메서드 들어가고
+                    /// cameraInfo, lenseInfo, filmInfo 유저가 가지고 있는 데이터에서 패치를 하고 그거를 피커로 보여지게 만들고 그 다음에 고르면 데이터가 넘어 가게끔
+                    /// userID, nickName 은 UserDB에서 가져와야 됨
+                    /// comment -> 임시
+                    ///
+                    magazineVM.insertMagazine(userID: "패스", cameraInfo: "패스", nickName: "패스", image: "패스", content: inputContent , title: inputTitle , lenseInfo: "패스", longitude: "패스", likedNum: "패스", filmInfo: "패스", customPlaceName: "패스", latitude: "패스", comment: "임시", roadAddress: "패스")
+                } label: {
+                    Text("글쓰기")
+                        .foregroundColor(.black)
+                }
+
+            }
+            .padding(.horizontal)
+            
             Rectangle()
                 .fill(Color(UIColor.systemGray5))
                 .frame(width: Screen.maxWidth, height: 1)
@@ -118,17 +153,17 @@ struct MagazineContentAddView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
             
-            Spacer()
+//            Spacer()
             
         }
         .ignoresSafeArea(.keyboard)
     }
 }
 
-struct MagazineContentAddView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MagazineContentAddView()
-        }
-    }
-}
+//struct MagazineContentAddView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack {
+//            MagazineContentAddView()
+//        }
+//    }
+//}

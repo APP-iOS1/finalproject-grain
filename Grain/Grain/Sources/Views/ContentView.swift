@@ -16,8 +16,6 @@ struct ContentView: View {
     @State private var tabSelection: Int = 0
     @State var selectedIndex = 0
     @State var presented = false
-    // write
-    @ObservedObject var magazineVM = MagazineViewModel()
     
     let icons = ["magazine", "note.text", "plus","map", "person"]
     
@@ -33,6 +31,19 @@ struct ContentView: View {
                 Spacer()
                 //EditorView()
                 ZStack {
+                    Spacer().fullScreenCover(isPresented: $presented) {
+                        VStack {
+
+                            if self.selectedIndex == 0 {
+                                MagazineContentAddView(presented: $presented)
+                            } else if self.selectedIndex == 1{
+                                AddCommunityView()
+                            }
+                            Spacer()
+
+                        }
+                    }
+                    
                     switch selectedIndex {
                     case 0:
                         NavigationStack {

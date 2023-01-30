@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import NMapsMap
 struct MagazineContentAddView: View {
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
@@ -20,8 +20,10 @@ struct MagazineContentAddView: View {
     @Binding var presented : Bool
     // insert
     @ObservedObject var magazineVM = MagazineViewModel()
+    // 뷰 라우터
+    @EnvironmentObject var viewRouter: ViewRouter
     
-    
+
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     
     var body: some View {
@@ -119,14 +121,12 @@ struct MagazineContentAddView: View {
                 .onSubmit {
                     hideKeyboard()
                 }
-            
             Spacer()
             
             Rectangle()
                 .fill(Color(UIColor.systemGray5))
                 .frame(width: Screen.maxWidth * 0.95, height: 1)
             Group{
-                
                 HStack {
                     Button {
                         isShowingModal.toggle()
@@ -145,8 +145,12 @@ struct MagazineContentAddView: View {
                     
                 } label: {
                     HStack{
-                        Image(systemName: "location.fill")
-                        Text("위치 받아오기")
+                        Button {
+                            viewRouter.currentPage = .addMarkerMapView
+                        } label: {
+                            Image(systemName: "location.fill")
+                            Text("위치 받아오기")
+                        }
                     }
                 }
                 .padding()

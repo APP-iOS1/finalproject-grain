@@ -13,7 +13,7 @@ final class MagazineViewModel: ObservableObject {
     
     var subscription = Set<AnyCancellable>()
     
-    @Published var magazines = [Magazine]()
+    @Published var magazines = [MagazineDTO]()
     
     var fetchMagazineSuccess = PassthroughSubject<(), Never>()
     var insertMagazineSuccess = PassthroughSubject<(), Never>()
@@ -32,10 +32,10 @@ final class MagazineViewModel: ObservableObject {
         }.store(in: &subscription)
     }
     
-    func insertMagazine() {
+    func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: String,likedNum: String,filmInfo: String, customPlaceName: String,latitude: String,comment: String,roadAddress: String ) {
         print("TestViewModel insertCommunity Start")
         
-        MagazineService.getMagazine()
+        MagazineService.insertMagazine(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title, lenseInfo: lenseInfo, longitude: longitude, likedNum: likedNum, filmInfo: filmInfo, customPlaceName: customPlaceName, latitude: latitude, comment: comment, roadAddress: roadAddress)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             print("MagazineViewModel fetchCommunity complete")

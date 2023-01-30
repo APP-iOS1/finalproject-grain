@@ -26,6 +26,7 @@
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
 		8BCF31E2297A500900EB6188 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31E1297A500900EB6188 /* CommentView.swift */; };
+		8BCF31E42987876000EB6188 /* CommunityRowView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31E32987876000EB6188 /* CommunityRowView2.swift */; };
 		99233D462977F2C700A875B1 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D452977F2C700A875B1 /* MapView.swift */; };
 		99233D482977F2F900A875B1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D472977F2F900A875B1 /* LocationManager.swift */; };
 		99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D492977F31B00A875B1 /* MapCategoryCellView.swift */; };
@@ -113,6 +114,7 @@
 		8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityAddView.swift; sourceTree = "<group>"; };
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		8BCF31E1297A500900EB6188 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
+		8BCF31E32987876000EB6188 /* CommunityRowView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityRowView2.swift; sourceTree = "<group>"; };
 		99233D452977F2C700A875B1 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		99233D472977F2F900A875B1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		99233D492977F31B00A875B1 /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 			children = (
 				06FD6AB22977AECE00B4A859 /* CommunityView.swift */,
 				06FD6AB42977AF1900B4A859 /* CommunityRowView.swift */,
+				8BCF31E32987876000EB6188 /* CommunityRowView2.swift */,
 				06FD6AB62977AF2C00B4A859 /* CommunityDetailView.swift */,
 				8BCF31E1297A500900EB6188 /* CommentView.swift */,
 				8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */,
@@ -648,6 +651,7 @@
 				9958AFB02977817C00A51DA9 /* Ex+Color.swift in Sources */,
 				9958AF8B297779C200A51DA9 /* Authentication.swift in Sources */,
 				A7D957D1297AA646001D2401 /* CommunityQuery.swift in Sources */,
+				8BCF31E42987876000EB6188 /* CommunityRowView2.swift in Sources */,
 				9958AF9529777DE900A51DA9 /* Comment.swift in Sources */,
 				9962CDCB297924A000E834C3 /* MatchingTabView.swift in Sources */,
 				330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */,

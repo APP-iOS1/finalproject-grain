@@ -7,7 +7,7 @@
 
 // MARK: documents -> 처음 documents 값을 뻄
 struct MagazineResponse: Codable{
-    let magazines : [Magazine]
+    let magazines : [MagazineDTO]
     // 배열로 받았다.
     private enum CodingKeys: String, CodingKey {
         case magazines = "documents"
@@ -15,15 +15,9 @@ struct MagazineResponse: Codable{
 
 }
 
-struct ArrayValue: Codable{
-    let values : String
-    private enum CodingKeys: String, CodingKey {
-        case values = "values"
-    }
-}
 //객체를 디코딩하고 있음
 
-struct Magazine: Codable,Hashable{
+struct MagazineDTO: Codable,Hashable{
     let likedNum: String
     let id: String
     let userID: String
@@ -37,6 +31,7 @@ struct Magazine: Codable,Hashable{
     let lenseInfo: String
     let longitude: String
     let roadAddress: String
+    let customPlaceName: String
     
     private enum MagazineKeys: String, CodingKey {
         case fields
@@ -55,28 +50,16 @@ struct Magazine: Codable,Hashable{
         case lenseInfo
         case longitude
         case roadAddress
+        case customPlaceName
+       
     }
-//    private enum ArrayValueFieldKey: String, CodingKey{
-//        case arrayValue
-//    }
-//    private enum ValuesFieldKey: String, CodingKey{
-//        case values
-//    }
-    
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: MagazineKeys.self)       //fields
         let fieldContainer = try container.nestedContainer(keyedBy: FieldKeys.self, forKey: .fields)
-//        let imagefieldContainer = try fieldContainer.nestedContainer(keyedBy: FieldKeys.self, forKey: .image)
-//        let te = try imagefieldContainer.nestedContainer(keyedBy: ArrayValueFieldKey.self, forKey: .)
-//
-//        let imageValueFieldContainer = try fieldContainer.nestedContainer(keyedBy: ArrayValueFieldKey.self, forKey: .values)
-        
-//        image = try imageValueFieldContainer.decode(ArrayImageValue.self, forKey: .values).arrayValue
-//        image = try fieldContainer.decode(TestValue.self, forKey: .image).value
         
         image = try fieldContainer.decode(StringValue.self, forKey: .image).value
-        likedNum = try fieldContainer.decode(IntegerValue.self, forKey: .likedNum).value
+        likedNum = try fieldContainer.decode(StringValue.self, forKey: .likedNum).value
         id = try fieldContainer.decode(StringValue.self, forKey: .id).value
         userID = try fieldContainer.decode(StringValue.self, forKey: .userID).value
         title = try fieldContainer.decode(StringValue.self, forKey: .title).value
@@ -88,6 +71,7 @@ struct Magazine: Codable,Hashable{
         lenseInfo = try fieldContainer.decode(StringValue.self, forKey: .lenseInfo).value
         longitude = try fieldContainer.decode(StringValue.self, forKey: .longitude).value
         roadAddress = try fieldContainer.decode(StringValue.self, forKey: .roadAddress).value
+        customPlaceName = try fieldContainer.decode(StringValue.self, forKey: .customPlaceName).value
     }
 
 }
@@ -106,10 +90,9 @@ struct IntegerValue: Codable{
         case value = "integerValue"
     }
 }
-//struct TestValue: Codable{
-//    let value: String
-//    private enum CodingKeys: String, CodingKey {
-//        case value = "arrayValue"
-//    }
-//}
-
+struct ArrayValue: Codable{
+    let values : String
+    private enum CodingKeys: String, CodingKey {
+        case values = "values"
+    }
+}

@@ -16,8 +16,6 @@ struct CommunityResponse: Codable {
         case community = "documents"
     }
 }
-
-
 //CommunityDTO 변수명 바꿔야함
 struct CommunityDTO: Codable,Hashable {
     let image: String

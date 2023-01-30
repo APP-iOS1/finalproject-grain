@@ -33,35 +33,9 @@ struct ContentView: View {
                 ZStack {
                     Spacer().fullScreenCover(isPresented: $presented) {
                         VStack {
-                            HStack {
-                                Button {
-                                    presented.toggle()
-                                    //글쓰기 취소
-                                } label: {
-                                    Image(systemName: "xmark")
-                                        .foregroundColor(.black)
-                                        .frame(width: 50, height: 50)
-                                }
-                                Spacer()
-                                if self.selectedIndex == 0 {
-                                    Text("매거진")
-                                } else  if self.selectedIndex == 1 {
-                                    Text("커뮤니티")
-                                }
-                                Spacer()
-                                Button {
-                                    presented.toggle()
-                                    //글쓰기 동작 함수
-                                } label: {
-                                    Text("글쓰기")
-                                        .foregroundColor(.black)
-                                }
 
-                            }
-                            .padding(.horizontal)
-                            Spacer()
                             if self.selectedIndex == 0 {
-                                //매거진 글쓰기 뷰
+                                MagazineContentAddView(presented: $presented)
                             } else if self.selectedIndex == 1{
                                 AddCommunityView()
                             }

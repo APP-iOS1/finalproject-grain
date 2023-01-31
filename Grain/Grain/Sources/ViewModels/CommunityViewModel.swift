@@ -19,10 +19,9 @@ final class CommunityViewModel: ObservableObject {
     
     @Published var communities = [CommunityDTO]()
     
-    var fetchCommunitySuccess = PassthroughSubject<(), Never>()
+    var fetchCommunitySuccess = PassthroughSubject<[CommunityDTO], Never>()
     var insertCommunitySuccess = PassthroughSubject<(), Never>()
     
-  
     func fetchCommunity() {
         print("CommunityViewModel fetchCommunity Start")
         
@@ -32,8 +31,19 @@ final class CommunityViewModel: ObservableObject {
             print("MagazineViewModel fetchCommunity complete")
         } receiveValue: { (data: CommunityResponse) in
             self.communities = data.community
-            self.fetchCommunitySuccess.send()
+            self.fetchCommunitySuccess.send(data.community)
         }.store(in: &subscription)
+        
+        
+    }
+    
+    // 카테고리별 데이터를 filtering 해서 리턴하는 함수
+    func returnCategoryCommunity(category: String) -> [CommunityDTO] {
+        var categoryData: [CommunityDTO] = []
+        categoryData = communities.filter { $0.category == "\(category)"}
+        
+        print(categoryData)
+        return categoryData
     }
     
     func insertCommunity(profileImage: String, nickName: String, category: String, image: String, userID: String, title: String, content: String) {

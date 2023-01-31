@@ -12,55 +12,71 @@ enum MagazineQuery {
     
     // MARK: 매거진 DB에 데이터 저장
     /// id값 패스
-    static func insertMagazineQuery(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: String,likedNum: String,filmInfo: String, customPlaceName: String,latitude: String,comment: String,roadAddress: String) -> Data?{
+    static func insertMagazineQuery(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String) -> Data?{
+        print("query on")
         return
         """
         {
-                   "fields": {
-                                   "customPlaceName": {
-                                       "stringValue": "\(customPlaceName)"
-                                   },
-                                   "image": {
-                                       "stringValue": "\(image)"
-                                   },
-                                   "filmInfo": {
-                                       "stringValue": "\(filmInfo)"
-                                   },
-                                   "roadAddress": {
-                                       "stringValue": "\(roadAddress)"
-                                   },
-                                   "userID": {
-                                       "stringValue": "\(userID)"
-                                   },
-                                   "lenseInfo": {
-                                       "stringValue": "\(lenseInfo)"
-                                   },
-                                   "id": {
-                                       "stringValue": "패스"
-                                   },
-                                   "cameraInfo": {
-                                       "stringValue": "\(cameraInfo)"
-                                   },
-                                   "likedNum": {
-                                       "stringValue": "\(likedNum)"
-                                   },
-                                   "title": {
-                                       "stringValue": "\(title)"
-                                   },
-                                   "latitude": {
-                                       "stringValue": "\(latitude)"
-                                   },
-                                   "longitude": {
-                                       "stringValue": "\(longitude)"
-                                   },
-                                   "content": {
-                                       "stringValue": "\(content)"
-                                   },
-                                   "nickName": {
-                                       "stringValue": "\(nickName)"
-                                   }
-                               }
-                }
+            "fields": {
+                        "longitude": {
+                            "integerValue": \(longitude)
+                        },
+                        "likedNum": {
+                            "integerValue": \(likedNum)
+                        },
+                        "nickName": {
+                            "stringValue": "\(nickName)"
+                        },
+                        "cameraInfo": {
+                            "stringValue": "\(cameraInfo)"
+                        },
+                        "latitude": {
+                            "integerValue": \(latitude)
+                        },
+                        "title": {
+                            "stringValue": "\(title)"
+                        },
+                        "image": {
+                            "arrayValue": {
+                                "values": [
+                                    {
+                                        "stringValue":  "\(image)"
+                                    }
+                                ]
+                            }
+                        },
+                        "filmInfo": {
+                            "stringValue": "\(filmInfo)"
+                        },
+                        "customPlaceName": {
+                            "stringValue": "\(customPlaceName)"
+                        },
+                        "content": {
+                            "stringValue": "\(content)"
+                        },
+                        "userID": {
+                            "stringValue": "\(userID)"
+                        },
+                        "lenseInfo": {
+                            "stringValue": "\(lenseInfo)"
+                        },
+                        "comment": {
+                            "arrayValue": {
+                                "values": [
+                                    {
+                                        "stringValue": "\(comment)"
+                                    }
+                                ]
+                            }
+                        },
+                        "id": {
+                            "stringValue":  "id패스"
+                        },
+                        "roadAddress": {
+                            "stringValue": "\(roadAddress)"
+                        }
+                    }
+            }
         """.data(using: .utf8)
     }
 }

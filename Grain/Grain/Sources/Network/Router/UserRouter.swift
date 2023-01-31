@@ -1,17 +1,17 @@
 //
-//  MagazineRouter.swift
+//  UserRouter.swift
 //  Grain
 //
-//  Created by 박희경 on 2023/01/20.
+//  Created by 지정훈 on 2023/02/01.
 //
+
 
 import Foundation
 
-
-enum MagazineRouter {
+enum UserRouter {
 
     case get
-    case post(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String )
+    case post(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String )
     case delete
     case put
     
@@ -40,7 +40,7 @@ enum MagazineRouter {
     private var endPoint: String {
         switch self {
         default:
-            return "/Magazine"
+            return "/User"
         }
     }
     
@@ -59,8 +59,8 @@ enum MagazineRouter {
    
     private var data: Data? {
         switch self {
-        case let .post(userID, cameraInfo, nickName, image, content, title, lenseInfo, longitude, likedNum, filmInfo, customPlaceName, latitude, comment, roadAddress):
-            return MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title,lenseInfo:lenseInfo,longitude: longitude,likedNum: likedNum,filmInfo: filmInfo, customPlaceName: customPlaceName,latitude: latitude,comment: comment,roadAddress: roadAddress)
+        case let .post(myFilm,bookmarkedMagazineID, email,myCamera, postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId,lastSearched,bookmarkedCommunityID, recentSearch, id, following,myLens,profileImage,name,follower,nickName ):
+            return UserQuery.insertUserQuery(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName )
         default:
             return nil
         }

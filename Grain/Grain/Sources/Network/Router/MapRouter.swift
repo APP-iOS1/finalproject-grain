@@ -1,5 +1,5 @@
 //
-//  MagazineRouter.swift
+//  MapRouter.swift
 //  Grain
 //
 //  Created by 박희경 on 2023/01/20.
@@ -7,11 +7,10 @@
 
 import Foundation
 
-
-enum MagazineRouter {
+enum MapRouter {
 
     case get
-    case post(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String )
+    case post(latitude: Double,url: String,id: String,category: Int,magazineId: String,longitude: Double)
     case delete
     case put
     
@@ -40,7 +39,7 @@ enum MagazineRouter {
     private var endPoint: String {
         switch self {
         default:
-            return "/Magazine"
+            return "/Map"
         }
     }
     
@@ -59,8 +58,8 @@ enum MagazineRouter {
    
     private var data: Data? {
         switch self {
-        case let .post(userID, cameraInfo, nickName, image, content, title, lenseInfo, longitude, likedNum, filmInfo, customPlaceName, latitude, comment, roadAddress):
-            return MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title,lenseInfo:lenseInfo,longitude: longitude,likedNum: likedNum,filmInfo: filmInfo, customPlaceName: customPlaceName,latitude: latitude,comment: comment,roadAddress: roadAddress)
+        case let .post(latitude, url, id, category, magazineId, longitude):
+            return MapQuery.insertMapQuery(latitude: latitude,url: url,id: id,category: category,magazineId: magazineId,longitude: longitude)
         default:
             return nil
         }

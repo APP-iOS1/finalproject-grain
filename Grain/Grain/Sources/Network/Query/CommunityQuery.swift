@@ -27,7 +27,13 @@ enum CommunityQuery {
                             "stringValue": "\(category)"
                         },
                         "image": {
-                            "stringValue": "\(image)"
+                            "arrayValue": {
+                                "values": [
+                                    {
+                                        "stringValue": "\(image)"
+                                    }
+                                ]
+                            }
                         },
                         "userID": {
                             "stringValue": "\(userID)"

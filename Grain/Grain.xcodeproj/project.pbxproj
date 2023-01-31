@@ -530,8 +530,8 @@
 			children = (
 				A7D957D8297AAFB1001D2401 /* FirebaseService.swift */,
 				A7D957DA297AAFBD001D2401 /* MagazineService.swift */,
-				A7D9F2F7298903CD00B39218 /* StorageService.swift */,
 				A7D957DC297AAFC8001D2401 /* CommunityService.swift */,
+				A7D9F2F7298903CD00B39218 /* StorageService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";

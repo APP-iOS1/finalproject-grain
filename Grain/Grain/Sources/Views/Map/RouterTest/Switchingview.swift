@@ -21,6 +21,8 @@ struct Switchingview: View {
         switch viewRouter.currentPage{
         case .contentView:
             ContentView().environmentObject(AuthenticationStore())
+                .environmentObject(KakaoAuthenticationStore())
+                
         case .mapView:
             MapView()
         case .photoSpotDetailView:

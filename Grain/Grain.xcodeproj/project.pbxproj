@@ -211,9 +211,9 @@
 			children = (
 				06F0D829297EB3DC00E7B885 /* CommunityViewModel.swift */,
 				06F0D82B297EB3E700E7B885 /* MagazineViewModel.swift */,
+				A7D9F2FB2989055E00B39218 /* StorageViewModel.swift */,
 				06F0D82D297EB3F200E7B885 /* MapViewModel.swift */,
 				06F0D82F297EB3FD00E7B885 /* UserViewModel.swift */,
-				A7D9F2FB2989055E00B39218 /* StorageViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -507,8 +507,8 @@
 			children = (
 				A7D957D8297AAFB1001D2401 /* FirebaseService.swift */,
 				A7D957DA297AAFBD001D2401 /* MagazineService.swift */,
-				A7D957DC297AAFC8001D2401 /* CommunityService.swift */,
 				A7D9F2F7298903CD00B39218 /* StorageService.swift */,
+				A7D957DC297AAFC8001D2401 /* CommunityService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";

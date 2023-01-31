@@ -58,13 +58,7 @@ enum StorageRouter {
         }
     }
    
-    private var data: Data? {
-        switch self {
-        case .post
-        default:
-            return nil
-        }
-    }
+    
     
     func asURLRequest() throws -> URLRequest {
         let url = baseURL
@@ -75,10 +69,7 @@ enum StorageRouter {
         request.httpMethod = method.value
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        
-        if let data = data {
-            request.httpBody = data
-        }
         return request
     }
+    
 }

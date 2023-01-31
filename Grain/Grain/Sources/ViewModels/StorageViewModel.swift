@@ -13,18 +13,18 @@ final class StorageViewModel: ObservableObject {
     
     var subscription = Set<AnyCancellable>()
     
-    @Published var storages = [StorageDTO]()
+    @Published var storages = [StoragePath]()
     
     var fetchStorageSuccess = PassthroughSubject<(), Never>()
     var insertStorageSuccess = PassthroughSubject<(), Never>()
 
-    func fetchMagazine() {
+    func fetchStorageImage() {
         
-        MagazineService.getMagazine()
+        StorageService.getStorageImage()
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
         } receiveValue: { (data: StorageResponse) in
-            self.storages = data.storages
+            self.storages = data.items
             self.fetchStorageSuccess.send()
         }.store(in: &subscription)
     }

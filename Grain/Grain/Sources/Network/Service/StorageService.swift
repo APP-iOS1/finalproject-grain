@@ -16,8 +16,6 @@ enum StorageService {
         let firebaseStorageURL = "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o"
         
         var request = URLRequest(url: URL(string: firebaseStorageURL)!)
-    
-
         do {
             request = try StorageRouter.get.asURLRequest()
         } catch {

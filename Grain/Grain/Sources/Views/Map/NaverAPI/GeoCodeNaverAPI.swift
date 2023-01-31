@@ -61,3 +61,94 @@
 /// 뽑은 도로명 주소, 경도 위도 값 위로 바인딩해서 넘기기
 /// 받은 경도 위도 값으로 카메라 위치 이동 지도 이동시키기
 ///  그럼 끝
+
+/// 스토리지 값 가져오기 초기 코드
+//func networkTest(){
+//    let firebaseStorageURL = "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o"
+//    URLSession.shared.dataTask(with: URL(string: firebaseStorageURL)!) { (data, _, error) in
+//        guard let data = data, error == nil else{
+//            fatalError("error")
+//        }
+//        let response = try? JSONDecoder().decode(StorageResponse.self, from: data)
+//        if let response = response{
+//            print(response.items[0].name)
+//        }
+//    }.resume()
+//
+//}
+
+///  
+//func networkTest(){
+//    let firebaseStorageURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Map"
+//    URLSession.shared.dataTask(with: URL(string: firebaseStorageURL)!) { (data, _, error) in
+//        guard let data = data, error == nil else{
+//            fatalError("error")
+//        }
+//        let response = try? JSONDecoder().decode(Test333.self, from: data)
+//        if let response = response{
+//            print(response.documents[0].fields.magazineID.arrayValue.values[0].stringValue)
+//        }
+//    }.resume()
+//
+//}
+//
+//  TestDTO.swift
+//  Grain
+//
+//  Created by 지정훈 on 2023/01/31.
+//
+
+//import Foundation
+//  맵 배열
+//// MARK: - Test333
+//struct Test333: Codable {
+//    let documents: [Document]
+//}
+//
+//// MARK: - Document
+//struct Document: Codable {
+//    let name: String
+//    let fields: TestFields
+//    let createTime, updateTime: String
+//}
+//
+//// MARK: - Fields
+//struct TestFields: Codable {
+//    let category: TestCategory
+//    let magazineID: TestMagazineID
+//    let id: ID
+//    let latitude: Itude
+//    let url: ID
+//    let longitude: Itude
+//
+//    enum CodingKeys: String, CodingKey {
+//        case category
+//        case magazineID = "magazineId"
+//        case id, latitude, url, longitude
+//    }
+//}
+//
+//// MARK: - Category
+//struct TestCategory: Codable {
+//    let integerValue: String
+//}
+//
+//// MARK: - ID
+//struct ID: Codable {
+//    let stringValue: String
+//}
+//
+//// MARK: - Itude
+//struct Itude: Codable {
+//    let doubleValue: Double
+//}
+//
+//// MARK: - MagazineID
+//struct TestMagazineID: Codable {
+//    let arrayValue: TestArrayValue
+//}
+//
+//// MARK: - ArrayValue
+//struct TestArrayValue: Codable {
+//    let values: [ID]
+//}

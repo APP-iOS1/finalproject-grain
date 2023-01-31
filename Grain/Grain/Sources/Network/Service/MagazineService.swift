@@ -10,13 +10,6 @@ import Combine
 
 enum MagazineService {
     
-    private enum HTTPMethod: String {
-        case get = "GET"
-        case post = "POST"
-        case patch = "PATCH"
-        case put = "PUT"
-    }
-    
     // MARK: - 매거진 데이터 가져오기
     static func getMagazine() -> AnyPublisher<MagazineResponse, Error> {
         print("FirebaseServic getMagazine start")

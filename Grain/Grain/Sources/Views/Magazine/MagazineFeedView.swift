@@ -46,6 +46,11 @@ struct MagazineFeedView: View {
                 }
             } .onAppear {
                 print("onAppear 시작")
+                magazineVM.fetchMagazine()
+                // 0.2부터 가능했음
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+//                    
+//                }
                 communityVM.fetchCommunity()
             }
         

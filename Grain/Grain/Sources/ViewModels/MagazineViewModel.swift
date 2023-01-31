@@ -18,7 +18,6 @@ final class MagazineViewModel: ObservableObject {
     var fetchMagazineSuccess = PassthroughSubject<(), Never>()
     var insertMagazineSuccess = PassthroughSubject<(), Never>()
 
-    
     func fetchMagazine() {
         print("MagazineViewModel fetchCommunity Start")
         

@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct MagazineBestView: View {
-    @ObservedObject var magazineVM = MagazineViewModel()
-
+    @StateObject var magazineVM = MagazineViewModel()
     var body: some View {
         NavigationStack {
             VStack {
@@ -41,17 +40,17 @@ struct MagazineBestView: View {
                             .frame(width: 203, height: 3.5)
                     }
                     .padding([.leading, .top])
-                    ForEach(magazineVM.magazines, id:\.self){ index in
+                    ForEach(magazineVM.magazines, id: \.self ){ data in
                         NavigationLink {
-                            MagazineDetailView(index: index)
+                            MagazineDetailView(data: data)
                         } label: {
-                            Top10View(image: index.image, nickName: index.nickName, title: index.title, content: index.content)
+                            Top10View(data: data)
                                 .padding(.vertical, 7)
                                 .padding(.horizontal)
                                 .frame(height: Screen.maxHeight * 0.6)
                         }
 
-                       
+
                     }
                     
 //                    4: 3 비율 -=> 가로 40  세로 30

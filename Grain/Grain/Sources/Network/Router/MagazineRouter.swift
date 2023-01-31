@@ -11,7 +11,7 @@ import Foundation
 enum MagazineRouter {
 
     case get
-    case post(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: String,likedNum: String,filmInfo: String, customPlaceName: String,latitude: String,comment: String,roadAddress: String )
+    case post(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String )
     case delete
     case put
     
@@ -60,7 +60,7 @@ enum MagazineRouter {
     private var data: Data? {
         switch self {
         case let .post(userID, cameraInfo, nickName, image, content, title, lenseInfo, longitude, likedNum, filmInfo, customPlaceName, latitude, comment, roadAddress):
-            return MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title, lenseInfo:lenseInfo ,longitude: longitude,likedNum: likedNum,filmInfo: filmInfo, customPlaceName: customPlaceName,latitude: latitude,comment: comment,roadAddress: roadAddress)
+            return MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title,lenseInfo:lenseInfo,longitude: longitude,likedNum: likedNum,filmInfo: filmInfo, customPlaceName: customPlaceName,latitude: latitude,comment: comment,roadAddress: roadAddress)
         default:
             return nil
         }

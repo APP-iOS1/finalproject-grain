@@ -8,29 +8,28 @@
 import SwiftUI
 
 struct MagazineViewCell: View {
-    var index : MagazineDTO
+    var data : MagazineDocument
     var body: some View {
         VStack {
             HStack {
                 Circle()
                     .frame(width: 40)
                     .foregroundColor(.black)
-                VStack(alignment: .leading
-                ) {
-                    Text(index.nickName)
+                VStack(alignment: .leading) {
+                    Text(data.fields.nickName.stringValue)
                         .bold()
                         .foregroundColor(.black)
-                        
+                    
                     HStack {
                         Text("1분전")
                             .foregroundColor(.black)
                         Spacer()
-                        Text(index.customPlaceName)
+                        Text(data.fields.customPlaceName.stringValue)
                             .foregroundColor(.black)
                     }
                     .font(.caption)
                 }
-               
+                
                 Spacer()
                 
             }
@@ -58,7 +57,7 @@ struct MagazineViewCell: View {
             .padding()
             Group{
                 HStack{
-                    Text(index.title)
+                    Text(data.fields.title.stringValue)
                         .foregroundColor(.black)
                         .font(.title2)
                         .bold()
@@ -66,15 +65,15 @@ struct MagazineViewCell: View {
                     Spacer()
                 }
                 .padding(.vertical, -30)
-            
-                Text(index.content)
+                
+                Text(data.fields.content.stringValue)
                     .lineLimit(2)
                     .padding(.vertical, -30)
                     .foregroundColor(Color.textGray)
-                    
+                
             }
             .padding()
-                
+            
             Spacer()
         }
         .frame(height: Screen.maxHeight * 0.5)

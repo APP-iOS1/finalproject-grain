@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MagazineDetailView: View {
     @State private var offsetY: CGFloat = CGFloat.zero
-    var index : MagazineDTO
+    var data : MagazineDocument
     
     private func setOffset(offset: CGFloat) -> some View {
            DispatchQueue.main.async {
@@ -30,13 +30,13 @@ struct MagazineDetailView: View {
                                 .frame(width: 40)
                             VStack(alignment: .leading
                             ) {
-                                Text(index.nickName)
+                                Text(data.fields.nickName.stringValue)
                                     .bold()
                                 
                                 HStack {
                                     Text("1분전")
                                     Spacer()
-                                    Text(index.customPlaceName)
+                                    Text(data.fields.customPlaceName.stringValue)
                                 }
                                 .font(.caption)
                             }
@@ -72,17 +72,17 @@ struct MagazineDetailView: View {
                  
                  
                  LazyVStack(pinnedViews: [.sectionHeaders]) {
-                     Section(header: Header(index: index) ){
-                        
-                         
+                     Section(header: Header(data: data) ){
+
+
                          VStack {
-                             Text(index.content)
+                             Text(data.fields.content.stringValue)
                                  .padding(.vertical, -30)
                                  .foregroundColor(Color.textGray)
-                             
+
                          }
-                         
-                         
+
+
                      }
                      .padding()
                  }
@@ -105,11 +105,11 @@ struct MagazineDetailView: View {
     }
 }
 struct Header: View {
-    var index : MagazineDTO
+    var data : MagazineDocument
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
-            Text(index.title)
+            Text(data.fields.title.stringValue)
                 .font(.title2)
                 .bold()
             Spacer()

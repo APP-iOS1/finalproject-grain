@@ -22,6 +22,11 @@
 		0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */; };
 		330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330B945B297A53C3007F5164 /* AddCommunityView.swift */; };
 		330B9460297A719C007F5164 /* CameraLenseFilmModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */; };
+		334699D32988AE26004153A6 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D22988AE26004153A6 /* MyPageView.swift */; };
+		334699D52988CB86004153A6 /* MyPageOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D42988CB86004153A6 /* MyPageOptionView.swift */; };
+		334699D72988CD44004153A6 /* EditMyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D62988CD44004153A6 /* EditMyPageView.swift */; };
+		334699D92988DE3F004153A6 /* EditCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D82988DE3F004153A6 /* EditCameraView.swift */; };
+		334699DB2988DE51004153A6 /* StoredPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699DA2988DE51004153A6 /* StoredPostView.swift */; };
 		5265C1181BDD56B8E8B1F897 /* Pods_Grain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */; };
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
@@ -32,6 +37,7 @@
 		99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D492977F31B00A875B1 /* MapCategoryCellView.swift */; };
 		99233D4C2977F34200A875B1 /* MapStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D4B2977F34200A875B1 /* MapStore.swift */; };
 		99233D4E2977F36000A875B1 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D4D2977F36000A875B1 /* Map.swift */; };
+		9947E4F52988D2E6002AC952 /* KakaoAuthenticationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9947E4F42988D2E6002AC952 /* KakaoAuthenticationStore.swift */; };
 		9955E113297A52E200265D14 /* MagazineAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E112297A52E200265D14 /* MagazineAddView.swift */; };
 		9955E115297A538900265D14 /* MagazineDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E114297A538900265D14 /* MagazineDetailView.swift */; };
 		9955E117297A6D5900265D14 /* MagazineContentAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E116297A6D5900265D14 /* MagazineContentAddView.swift */; };
@@ -115,6 +121,11 @@
 		0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineBestView.swift; sourceTree = "<group>"; };
 		330B945B297A53C3007F5164 /* AddCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommunityView.swift; sourceTree = "<group>"; };
 		330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraLenseFilmModalView.swift; sourceTree = "<group>"; };
+		334699D22988AE26004153A6 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		334699D42988CB86004153A6 /* MyPageOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageOptionView.swift; sourceTree = "<group>"; };
+		334699D62988CD44004153A6 /* EditMyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageView.swift; sourceTree = "<group>"; };
+		334699D82988DE3F004153A6 /* EditCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCameraView.swift; sourceTree = "<group>"; };
+		334699DA2988DE51004153A6 /* StoredPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredPostView.swift; sourceTree = "<group>"; };
 		8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityAddView.swift; sourceTree = "<group>"; };
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		8BCF31E1297A500900EB6188 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
@@ -124,6 +135,7 @@
 		99233D492977F31B00A875B1 /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
 		99233D4B2977F34200A875B1 /* MapStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStore.swift; sourceTree = "<group>"; };
 		99233D4D2977F36000A875B1 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
+		9947E4F42988D2E6002AC952 /* KakaoAuthenticationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = KakaoAuthenticationStore.swift; path = "../../../../../../.Trash/finalproject-grain 10-48-41-946/Grain/Grain/Sources/Stores/KakaoAuthenticationStore.swift"; sourceTree = "<group>"; };
 		9955E112297A52E200265D14 /* MagazineAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineAddView.swift; sourceTree = "<group>"; };
 		9955E114297A538900265D14 /* MagazineDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDetailView.swift; sourceTree = "<group>"; };
 		9955E116297A6D5900265D14 /* MagazineContentAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineContentAddView.swift; sourceTree = "<group>"; };
@@ -242,6 +254,18 @@
 				9955E116297A6D5900265D14 /* MagazineContentAddView.swift */,
 			);
 			path = Magazine;
+			sourceTree = "<group>";
+		};
+		334699D12988AE0B004153A6 /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				334699D22988AE26004153A6 /* MyPageView.swift */,
+				334699D42988CB86004153A6 /* MyPageOptionView.swift */,
+				334699D62988CD44004153A6 /* EditMyPageView.swift */,
+				334699D82988DE3F004153A6 /* EditCameraView.swift */,
+				334699DA2988DE51004153A6 /* StoredPostView.swift */,
+			);
+			path = MyPage;
 			sourceTree = "<group>";
 		};
 		33FBFCE5803AD110CB6FC1B1 /* Frameworks */ = {
@@ -408,6 +432,7 @@
 				9958AFA229777F9C00A51DA9 /* CommentStore.swift */,
 				9958AFA429777FAF00A51DA9 /* ReCommentStore.swift */,
 				99233D4B2977F34200A875B1 /* MapStore.swift */,
+				9947E4F42988D2E6002AC952 /* KakaoAuthenticationStore.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -418,6 +443,7 @@
 				9958AF74297778D800A51DA9 /* ContentView.swift */,
 				99233D442977F27000A875B1 /* Map */,
 				99233D432977F25300A875B1 /* Community */,
+				334699D12988AE0B004153A6 /* MyPage */,
 				9958AFB32977B09F00A51DA9 /* AuthenticationViews */,
 				0C535C292977A91600E20BD9 /* Magazine */,
 			);
@@ -663,8 +689,10 @@
 				99233D462977F2C700A875B1 /* MapView.swift in Sources */,
 				9962CDCD297924BF00E834C3 /* ClassTabView .swift in Sources */,
 				A7D9F2F8298903CD00B39218 /* StorageService.swift in Sources */,
+				334699D52988CB86004153A6 /* MyPageOptionView.swift in Sources */,
 				9958AFB02977817C00A51DA9 /* Ex+Color.swift in Sources */,
 				9958AF8B297779C200A51DA9 /* Authentication.swift in Sources */,
+				334699D72988CD44004153A6 /* EditMyPageView.swift in Sources */,
 				A7D957D1297AA646001D2401 /* CommunityQuery.swift in Sources */,
 				8BCF31E42987876000EB6188 /* CommunityRowView2.swift in Sources */,
 				9958AF9529777DE900A51DA9 /* Comment.swift in Sources */,
@@ -685,6 +713,7 @@
 				A7D9F2FC2989055E00B39218 /* StorageViewModel.swift in Sources */,
 				06FD6AB92977AF7100B4A859 /* CommunitySearchView.swift in Sources */,
 				06FD6AB52977AF1900B4A859 /* CommunityRowView.swift in Sources */,
+				9947E4F52988D2E6002AC952 /* KakaoAuthenticationStore.swift in Sources */,
 				9958AF75297778D800A51DA9 /* ContentView.swift in Sources */,
 				9958AFBA2977D80200A51DA9 /* AuthenticationTestView.swift in Sources */,
 				8BCF31E2297A500900EB6188 /* CommentView.swift in Sources */,
@@ -695,6 +724,7 @@
 				99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */,
 				9958AF9329777D7700A51DA9 /* Community.swift in Sources */,
 				9958AFB52977B0C500A51DA9 /* AuthenticationView.swift in Sources */,
+				334699D92988DE3F004153A6 /* EditCameraView.swift in Sources */,
 				A75BB98E297E66EE004FE6FA /* Switchingview.swift in Sources */,
 				9958AFA129777F8100A51DA9 /* CommunityStore.swift in Sources */,
 				9958AFA82977804700A51DA9 /* BtnModifier.swift in Sources */,
@@ -705,10 +735,12 @@
 				9962CDCF297924CC00E834C3 /* MarketTabView.swift in Sources */,
 				A7D957D4297AAF74001D2401 /* CommunityRouter.swift in Sources */,
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
+				334699D32988AE26004153A6 /* MyPageView.swift in Sources */,
 				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,
 				A75BB99529815361004FE6FA /* PhotoSpotMapView.swift in Sources */,
 				9958AF9729777DF700A51DA9 /* ReComment.swift in Sources */,
 				9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */,
+				334699DB2988DE51004153A6 /* StoredPostView.swift in Sources */,
 				A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */,
 				A75BB990297EA25C004FE6FA /* WebkitView.swift in Sources */,
 				0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */,
@@ -852,7 +884,6 @@
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "사용자의 위치를 받습니다";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "사용자의 위치를 받습니다";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "사용자의 위치를 받습니다";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -890,7 +921,6 @@
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "사용자의 위치를 받습니다";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "사용자의 위치를 받습니다";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "사용자의 위치를 받습니다";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

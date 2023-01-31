@@ -12,7 +12,7 @@ enum MagazineService {
     
     // MARK: - 매거진 데이터 가져오기
     static func getMagazine() -> AnyPublisher<MagazineResponse, Error> {
-        print("FirebaseServic getMagazine start")
+//        print("FirebaseServic getMagazine start")
         let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
         
         var request = URLRequest(url: URL(string: firestoreURL)!)

@@ -39,7 +39,7 @@ enum CommunityQuery {
                             "stringValue": "\(userID)"
                         },
                         "id": {
-                            "stringValue": "패스"
+                            "stringValue": "id패스"
                         },
                         "title": {
                             "stringValue": "\(title)"

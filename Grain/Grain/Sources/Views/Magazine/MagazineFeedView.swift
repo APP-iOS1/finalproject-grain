@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MagazineFeedView: View {
     
-//    var index : [MagazineDTO]
     @ObservedObject var magazineVM = MagazineViewModel()
     
     var body: some View {
@@ -17,15 +16,18 @@ struct MagazineFeedView: View {
             LazyVStack{
                 ForEach(magazineVM.magazines, id: \.self){ index in
                     NavigationLink {
+                        // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
                         MagazineDetailView(index: index)
                     } label: {
+                        // MARK: fetch해온 데이터 cell뷰로 보여주기
                         MagazineViewCell(index: index)
                     }
                    
                 }
-                
+            
             }
         }.onAppear{
+            // MARK: fetch 데이터 시작
             magazineVM.fetchMagazine()
         }
     }

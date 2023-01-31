@@ -8,57 +8,84 @@
 import SwiftUI
 
 struct MagazineFeedView: View {
-    @ObservedObject var communityVM = CommunityViewModel()
-    @ObservedObject var magazineVM = MagazineViewModel()
+    
+//    var index : [MagazineDTO]
+    
     var body: some View {
-       
-            ScrollView{
-                LazyVStack{
-//                    ForEach(magazineVM.fetchMagazine()) { i in
-//                        VStack{
-//                            Text()
-//                        }
-//                    }
-                    
-                    Button {
-                        magazineVM.insertMagazine(userID: "1", cameraInfo: "2", nickName: "3", image: "4", content: "5", title: "6", lenseInfo: "7", longitude: "8", likedNum: "9", filmInfo: "10", customPlaceName: "11", latitude: "12", comment: "13", roadAddress: "14")
-                    } label: {
-                        Text("매거진 insert")
-                    }
-                    Button {
-                        magazineVM.fetchMagazine()
-                        print(magazineVM.magazines)
-                    } label: {
-                        Text("매거진 read")
-                    }
-                    Button {
-                        communityVM.insertCommunity(profileImage: "1", nickName: "2", category: "3", image: "4", userID: "5", title: "6", content: "7")
-                    } label: {
-                        Text("커뮤니티 insert")
-                    }
-                    Button {
-                        communityVM.fetchCommunity()
-                        print(communityVM.communities)
-                    } label: {
-                        Text("커뮤니티 read")
-                    }
-
-                }
-            } .onAppear {
-                print("onAppear 시작")
-                magazineVM.fetchMagazine()
-                // 0.2부터 가능했음
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
-//                    
-//                }
-                communityVM.fetchCommunity()
-            }
         
+        ScrollView{
+            LazyVStack{
+                
+                Rectangle()
+                    .cornerRadius(15)
+                    .foregroundColor(Color.boxGray)
+                    .overlay(
+                        VStack{
+                            ForEach(0..<2) { _ in
+                                Image("1")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                Text("1")
+                                    .font(.title3)
+                                    .bold()
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth:.infinity, alignment:.leading)
+                                Text("1")
+                                    .bold()
+                                    .foregroundColor(Color.white)
+                                    .font(.title)
+                                    .frame(maxWidth:.infinity, alignment:.leading)
+                                    .padding()
+                                    .multilineTextAlignment(.leading)
+                                    .lineLimit(2)
+                                
+                                Text("1")
+                                    .font(.title3)
+                                    .bold()
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth:.infinity, alignment:.leading)
+                                    .padding(.horizontal)
+                                    .lineLimit(1)
+                            }
+//                            Image("1")
+//                                .resizable()
+//                                .aspectRatio(contentMode: .fit)
+//                            Text(index.nickName)
+//                                .font(.title3)
+//                                .bold()
+//                                .foregroundColor(.white)
+//                                .frame(maxWidth:.infinity, alignment:.leading)
+//                                .padding(.horizontal)
+//                            Text(index.title)
+//                                .bold()
+//                                .foregroundColor(Color.white)
+//                                .font(.title)
+//                                .frame(maxWidth:.infinity, alignment:.leading)
+//                                .padding()
+//                                .multilineTextAlignment(.leading)
+//                                .lineLimit(2)
+//
+//                            Text(index.content)
+//                                .font(.title3)
+//                                .bold()
+//                                .foregroundColor(.white)
+//                                .frame(maxWidth:.infinity, alignment:.leading)
+//                                .padding(.horizontal)
+//                                .lineLimit(1)
+                            
+                            
+                        }.cornerRadius(15),
+                        alignment: .top
+                    )
+                
+            }
+            MagazineViewCell()
+        }
     }
 }
-
-struct MagazineFeedView_Previews: PreviewProvider {
-    static var previews: some View {
-        MagazineFeedView()
-    }
-}
+//
+//struct MagazineFeedView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MagazineFeedView()
+//    }
+//}

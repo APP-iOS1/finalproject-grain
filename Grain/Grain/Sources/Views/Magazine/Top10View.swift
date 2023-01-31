@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct Top10View: View {
+    var image : String
+    var nickName : String
+    var title : String
+    var content : String
+    
     var body: some View {
             VStack{
                 Rectangle()
@@ -18,13 +23,13 @@ struct Top10View: View {
                             Image("1")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                            Text("형구짱")
+                            Text(nickName)
                                 .font(.title3)
                                 .bold()
                                 .foregroundColor(.white)
                                 .frame(maxWidth:.infinity, alignment:.leading)
                                 .padding(.horizontal)
-                            Text("감성있는 크리스마스 사진 찍는법")
+                            Text(title)
                                 .bold()
                                 .foregroundColor(Color.white)
                                 .font(.title)
@@ -33,7 +38,7 @@ struct Top10View: View {
                                 .multilineTextAlignment(.leading)
                                 .lineLimit(2)
                             
-                            Text("피고 놀이 꽃 것은 피가 못할 힘있다. 풀밭에 장식하는 풀이 새 충분히 운다. 속에서 굳세게 되는 싶이 그들에게 천고에 바이며, 황금시대다. 끝에 이상, 소리다.이것은 그러므로 소금이라 것이다.보라, 봄바람을 역사를 끓는 황금시대다. 할지라도 인생을 끝에 광야에서 것이다. 있을 사라지지 인생의 일월과 철환하였는가? 없으면 그들에게 천자만홍이 이상은 바이며, 같은 두기 봄바람이다. 속에서 청춘은 튼튼하며, 그들의 있을 사라지지 피부가 이것이다. 이상의 천지는 황금시대의 지혜는 있을 것이다")
+                            Text(content)
                                 .font(.title3)
                                 .bold()
                                 .foregroundColor(.white)
@@ -68,8 +73,8 @@ struct Top10View: View {
 //    }
 //}
 
-struct Top10View_Previews: PreviewProvider {
-    static var previews: some View {
-        Top10View()
-    }
-}
+//struct Top10View_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Top10View()
+//    }
+//}

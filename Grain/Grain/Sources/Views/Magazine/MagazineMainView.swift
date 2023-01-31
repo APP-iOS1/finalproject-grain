@@ -11,6 +11,9 @@ struct MagazineMainView: View {
     let titles: [String] = ["Best", "Feed"]
     @State private var selectedIndex: Int = 0
     
+    //임시 메인에서 뿌려줄지 고민
+    @ObservedObject var magazineVM = MagazineViewModel()
+    
     var body: some View {
         NavigationStack {
             VStack{
@@ -43,6 +46,7 @@ struct MagazineMainView: View {
                     MagazineBestView()
                         .tag(0)
                     MagazineFeedView()
+//                    MagazineFeedView(index: magazineVM.magazines)
                         .tag(1)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -52,6 +56,10 @@ struct MagazineMainView: View {
 //                    MagazineFeedView()
 //                }
             }
+//            .onAppear{
+//                magazineVM.fetchMagazine()
+//                print(magazineVM.magazines)
+//            }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

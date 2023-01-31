@@ -66,8 +66,7 @@ struct ContentView: View {
                         }
                     case 4:
                         NavigationStack {
-                            //프로필 뷰
-                            AuthenticationTestView()
+                            MyPageView()
                         }
                     default:
                         NavigationStack {
@@ -139,6 +138,7 @@ struct ContentView: View {
                     }
                 }
             }
+            .ignoresSafeArea(.keyboard)
         }
     }
 }

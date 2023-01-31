@@ -37,6 +37,7 @@
 		99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D492977F31B00A875B1 /* MapCategoryCellView.swift */; };
 		99233D4C2977F34200A875B1 /* MapStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D4B2977F34200A875B1 /* MapStore.swift */; };
 		99233D4E2977F36000A875B1 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D4D2977F36000A875B1 /* Map.swift */; };
+		9947E4F729895211002AC952 /* KakaoAuthenticationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9947E4F629895211002AC952 /* KakaoAuthenticationStore.swift */; };
 		9955E113297A52E200265D14 /* MagazineAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E112297A52E200265D14 /* MagazineAddView.swift */; };
 		9955E115297A538900265D14 /* MagazineDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E114297A538900265D14 /* MagazineDetailView.swift */; };
 		9955E117297A6D5900265D14 /* MagazineContentAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E116297A6D5900265D14 /* MagazineContentAddView.swift */; };
@@ -134,6 +135,7 @@
 		99233D492977F31B00A875B1 /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
 		99233D4B2977F34200A875B1 /* MapStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStore.swift; sourceTree = "<group>"; };
 		99233D4D2977F36000A875B1 /* Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map.swift; sourceTree = "<group>"; };
+		9947E4F629895211002AC952 /* KakaoAuthenticationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoAuthenticationStore.swift; sourceTree = "<group>"; };
 		9955E112297A52E200265D14 /* MagazineAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineAddView.swift; sourceTree = "<group>"; };
 		9955E114297A538900265D14 /* MagazineDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDetailView.swift; sourceTree = "<group>"; };
 		9955E116297A6D5900265D14 /* MagazineContentAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineContentAddView.swift; sourceTree = "<group>"; };
@@ -430,6 +432,7 @@
 				9958AFA229777F9C00A51DA9 /* CommentStore.swift */,
 				9958AFA429777FAF00A51DA9 /* ReCommentStore.swift */,
 				99233D4B2977F34200A875B1 /* MapStore.swift */,
+				9947E4F629895211002AC952 /* KakaoAuthenticationStore.swift */,
 			);
 			path = Stores;
 			sourceTree = "<group>";
@@ -734,6 +737,7 @@
 				334699D32988AE26004153A6 /* MyPageView.swift in Sources */,
 				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,
 				A75BB99529815361004FE6FA /* PhotoSpotMapView.swift in Sources */,
+				9947E4F729895211002AC952 /* KakaoAuthenticationStore.swift in Sources */,
 				9958AF9729777DF700A51DA9 /* ReComment.swift in Sources */,
 				9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */,
 				334699DB2988DE51004153A6 /* StoredPostView.swift in Sources */,

@@ -112,16 +112,19 @@ final class AuthenticationStore: ObservableObject {
         self.authenticationState = .authenticated
     }
     
-    public func changeLogInCompanyToKakao() {
-        self.logInCompanyState = .kakaoLogIn
-    }
-    
-    public func changeLogInCompanyToNil() {
-        self.logInCompanyState = .noCompany
-    }
+   
     
 }
 
+extension AuthenticationStore {
+    public func changeLogInCompanyToKakao() {
+        logInCompanyState = .kakaoLogIn
+    }
+    
+    public func changeLogInCompanyToNil() {
+        logInCompanyState = .noCompany
+    }
+}
 
 /// 로그인 상태관리
 enum AuthenticationState {

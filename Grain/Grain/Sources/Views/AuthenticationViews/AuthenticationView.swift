@@ -12,7 +12,7 @@ import FirebaseAuth
 
 struct AuthenticationView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
-//    @StateObject var kakaoAuthenticationStore: KakaoAuthenticationStore = KakaoAuthenticationStore()
+    @EnvironmentObject var kakaoAuthenticationStore: KakaoAuthenticationStore
     
     var body: some View {
         VStack{
@@ -34,7 +34,8 @@ struct AuthenticationView: View {
             .frame(maxWidth: Screen.maxWidth * 0.8)
             
             Button{
-//                kakaoAuthenticationStore.kakaoSignIn()
+                kakaoAuthenticationStore.kakaoSignIn()
+                authenticationStore.changeLogInCompanyToKakao()
             } label: {
                 Image("kakaoLoginLarge")
                     .resizable()

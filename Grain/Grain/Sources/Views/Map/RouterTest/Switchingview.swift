@@ -37,6 +37,8 @@ struct Switchingview: View {
             AddMarkerMapView(updateNumber: $updateNumber)
         case .magazineContentAddView:
             MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
+        case .testGeocodeView:
+            TestGeocodeView()
         }
     }
 }

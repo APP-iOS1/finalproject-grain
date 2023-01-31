@@ -13,11 +13,15 @@ struct MagazineFeedView: View {
     @ObservedObject var magazineVM = MagazineViewModel()
     
     var body: some View {
-        
         ScrollView{
             LazyVStack{
                 ForEach(magazineVM.magazines, id: \.self){ index in
-                    MagazineViewCell(index: index)
+                    NavigationLink {
+                        MagazineDetailView(index: index)
+                    } label: {
+                        MagazineViewCell(index: index)
+                    }
+                   
                 }
                 
             }

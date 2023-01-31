@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MagazineViewCell: View {
-    
+    var index : MagazineDTO
     var body: some View {
         VStack {
             HStack {
@@ -17,7 +17,7 @@ struct MagazineViewCell: View {
                     .foregroundColor(.black)
                 VStack(alignment: .leading
                 ) {
-                    Text("희경쨩")
+                    Text(index.nickName)
                         .bold()
                         .foregroundColor(.black)
                         
@@ -25,7 +25,7 @@ struct MagazineViewCell: View {
                         Text("1분전")
                             .foregroundColor(.black)
                         Spacer()
-                        Text("연남동 어딘가 ")
+                        Text(index.customPlaceName)
                             .foregroundColor(.black)
                     }
                     .font(.caption)
@@ -58,7 +58,7 @@ struct MagazineViewCell: View {
             .padding()
             Group{
                 HStack{
-                    Text("크리스마스 사진 찍기")
+                    Text(index.title)
                         .foregroundColor(.black)
                         .font(.title2)
                         .bold()
@@ -67,7 +67,7 @@ struct MagazineViewCell: View {
                 }
                 .padding(.vertical, -30)
             
-                Text("국회는 헌법 또는 법률에 특별한 규정이 없는 한 재적의원 과반수의 출석과 출석의원 과반수의 찬성으로 의결한다. 가부동수인 때에는 부결된 것으로 본환경권의 내용과 행사에 관하여는 법률로 정한다. 모든 국민은 종교의 자유를 가진다. 법률은 특별한 규정이 없는 한 공포한 날로부터 20일을 경과함으로써 효력을 발생한다.")
+                Text(index.content)
                     .lineLimit(2)
                     .padding(.vertical, -30)
                     .foregroundColor(Color.textGray)
@@ -81,8 +81,8 @@ struct MagazineViewCell: View {
     }
 }
 
-struct MagazineViewCell_Previews: PreviewProvider {
-    static var previews: some View {
-        MagazineViewCell()
-    }
-}
+//struct MagazineViewCell_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MagazineViewCell()
+//    }
+//}

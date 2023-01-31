@@ -1,16 +1,17 @@
 //
-//  MapRouter.swift
+//  UserRouter.swift
 //  Grain
 //
-//  Created by 박희경 on 2023/01/20.
+//  Created by 지정훈 on 2023/02/01.
 //
+
 
 import Foundation
 
-enum MapRouter {
+enum UserRouter {
 
     case get
-    case post(latitude: Double,url: String,id: String,category: Int,magazineId: String,longitude: Double)
+    case post(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String )
     case delete
     case put
     
@@ -39,7 +40,7 @@ enum MapRouter {
     private var endPoint: String {
         switch self {
         default:
-            return "/Map"
+            return "/User"
         }
     }
     
@@ -58,8 +59,8 @@ enum MapRouter {
    
     private var data: Data? {
         switch self {
-        case let .post(latitude, url, id, category, magazineId, longitude):
-            return MapQuery.insertMapQuery(latitude: latitude,url: url,id: id,category: category,magazineId: magazineId,longitude: longitude)
+        case let .post(myFilm,bookmarkedMagazineID, email,myCamera, postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId,lastSearched,bookmarkedCommunityID, recentSearch, id, following,myLens,profileImage,name,follower,nickName ):
+            return UserQuery.insertUserQuery(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName )
         default:
             return nil
         }

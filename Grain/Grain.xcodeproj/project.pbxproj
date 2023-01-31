@@ -105,6 +105,10 @@
 		A7D9F3022989638900B39218 /* MapQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F3012989638900B39218 /* MapQuery.swift */; };
 		A7D9F3042989645D00B39218 /* MapService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F3032989645D00B39218 /* MapService.swift */; };
 		A7D9F306298964AE00B39218 /* MapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F305298964AE00B39218 /* MapRouter.swift */; };
+		A7D9F308298969FC00B39218 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F307298969FC00B39218 /* UserDTO.swift */; };
+		A7D9F30A29896A4B00B39218 /* UserQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30929896A4B00B39218 /* UserQuery.swift */; };
+		A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30B29896C9700B39218 /* UserRouter.swift */; };
+		A7D9F30E29896D8500B39218 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30D29896D8500B39218 /* UserService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -208,6 +212,10 @@
 		A7D9F3012989638900B39218 /* MapQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapQuery.swift; sourceTree = "<group>"; };
 		A7D9F3032989645D00B39218 /* MapService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapService.swift; sourceTree = "<group>"; };
 		A7D9F305298964AE00B39218 /* MapRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouter.swift; sourceTree = "<group>"; };
+		A7D9F307298969FC00B39218 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
+		A7D9F30929896A4B00B39218 /* UserQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuery.swift; sourceTree = "<group>"; };
+		A7D9F30B29896C9700B39218 /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
+		A7D9F30D29896D8500B39218 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.release.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.release.xcconfig"; sourceTree = "<group>"; };
 		D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Grain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -511,6 +519,7 @@
 				A7D957CE297AA574001D2401 /* CommunityDTO.swift */,
 				A7D9F2F52988FD4700B39218 /* StorageDTO.swift */,
 				A7D9F2FF298962B900B39218 /* MapDTO.swift */,
+				A7D9F307298969FC00B39218 /* UserDTO.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -521,6 +530,7 @@
 				A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */,
 				A7D957D0297AA646001D2401 /* CommunityQuery.swift */,
 				A7D9F3012989638900B39218 /* MapQuery.swift */,
+				A7D9F30929896A4B00B39218 /* UserQuery.swift */,
 			);
 			path = Query;
 			sourceTree = "<group>";
@@ -532,6 +542,7 @@
 				A7D957D5297AAF8C001D2401 /* MagazineRouter.swift */,
 				A7D9F2F92989046000B39218 /* StorageRouter.swift */,
 				A7D9F305298964AE00B39218 /* MapRouter.swift */,
+				A7D9F30B29896C9700B39218 /* UserRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -544,6 +555,7 @@
 				A7D957DC297AAFC8001D2401 /* CommunityService.swift */,
 				A7D9F2F7298903CD00B39218 /* StorageService.swift */,
 				A7D9F3032989645D00B39218 /* MapService.swift */,
+				A7D9F30D29896D8500B39218 /* UserService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -696,6 +708,7 @@
 				9955E115297A538900265D14 /* MagazineDetailView.swift in Sources */,
 				A7A32D6629866C2A005CE0CA /* GeoCodeNaverAPI.swift in Sources */,
 				A7D9F2F62988FD4700B39218 /* StorageDTO.swift in Sources */,
+				A7D9F308298969FC00B39218 /* UserDTO.swift in Sources */,
 				9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */,
 				99233D462977F2C700A875B1 /* MapView.swift in Sources */,
 				9962CDCD297924BF00E834C3 /* ClassTabView .swift in Sources */,
@@ -746,6 +759,7 @@
 				0C535C2D2977B68600E20BD9 /* EditorView.swift in Sources */,
 				9962CDCF297924CC00E834C3 /* MarketTabView.swift in Sources */,
 				A7D957D4297AAF74001D2401 /* CommunityRouter.swift in Sources */,
+				A7D9F30E29896D8500B39218 /* UserService.swift in Sources */,
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
 				334699D32988AE26004153A6 /* MyPageView.swift in Sources */,
 				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,
@@ -754,9 +768,11 @@
 				9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */,
 				334699DB2988DE51004153A6 /* StoredPostView.swift in Sources */,
 				A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */,
+				A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */,
 				A75BB990297EA25C004FE6FA /* WebkitView.swift in Sources */,
 				0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */,
 				99233D482977F2F900A875B1 /* LocationManager.swift in Sources */,
+				A7D9F30A29896A4B00B39218 /* UserQuery.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

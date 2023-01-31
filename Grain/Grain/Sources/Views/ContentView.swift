@@ -23,13 +23,13 @@ struct ContentView: View {
     let icons = ["magazine", "note.text", "plus","map", "person"]
     
     var body: some View {
-        switch authenticationStore.authenticationStatus {
-        case .unAuthenticated:
+        switch authenticationStore.authenticationState {
+        case .unauthenticated, .authenticating:
             NavigationStack{
                 AuthenticationView()
             }
             
-        case.authenticated(let user):
+        case.authenticated:
             VStack{
                 Spacer()
                 //EditorView()

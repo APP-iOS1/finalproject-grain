@@ -40,17 +40,14 @@ struct MagazineMainView: View {
                     Spacer()
                 }
                 TabView(selection: $selectedIndex) {
+                    // MARK: 베스트뷰 이동
                     MagazineBestView()
                         .tag(0)
+                    // MARK: 피드뷰 이동
                     MagazineFeedView()
                         .tag(1)
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-//                if selectedIndex == 0 {
-//                    MagazineBestView()
-//                }else if selectedIndex == 1 {
-//                    MagazineFeedView()
-//                }
             }
         }
         .toolbar {

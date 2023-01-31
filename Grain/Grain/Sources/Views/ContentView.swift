@@ -8,14 +8,17 @@
 import SwiftUI
 
 import FirebaseAuth
-
+import NMapsMap
 
 struct ContentView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
     
     @State private var tabSelection: Int = 0
     @State var selectedIndex = 0
+    @State var magazineViewPresented : Bool = false
     @State var presented = false
+    //정훈
+    @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     
     let icons = ["magazine", "note.text", "plus","map", "person"]
     
@@ -35,7 +38,7 @@ struct ContentView: View {
                         VStack {
 
                             if self.selectedIndex == 0 {
-                                MagazineContentAddView(presented: $presented)
+                                MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
                             } else if self.selectedIndex == 1{
                                 AddCommunityView(presented: $presented)
                             } 

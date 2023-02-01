@@ -13,22 +13,45 @@ struct FloatingMenu: View {
     @State var showLensMenu = false
     @State var showFilmMenu = false
     
-    @State var showCameraSheet: Bool = false
-    @State var showLensSheet: Bool = false
-    @State var showFilmSheet: Bool = false
-
+    @Binding var isShowingModal: Bool
+    
+    @Binding var cameraModal: Bool
+    @Binding var lensModal: Bool
+    @Binding var filmModal: Bool
     
     var body: some View {
         VStack {
             Spacer()
             if showCameraMenu {
-                MenuItem(showCameraMenu: $showCameraMenu, showLensMenu: $showLensMenu, showFilmMenu: $showFilmMenu, icon:"camera.fill")
+                MenuItem(icon:"camera.fill")
+                    .onTapGesture {
+                        self.showMenu()
+                        isShowingModal.toggle()
+                        cameraModal = true
+                        lensModal = false
+                        filmModal = false
+                    }
             }
+            
             if showLensMenu {
-                MenuItem(showCameraMenu: $showCameraMenu, showLensMenu: $showLensMenu, showFilmMenu: $showFilmMenu,icon:"camera.aperture")
+                MenuItem(icon:"camera.aperture")
+                    .onTapGesture {
+                        self.showMenu()
+                        isShowingModal.toggle()
+                        cameraModal = false
+                        lensModal = true
+                        filmModal = false
+                    }
             }
             if showFilmMenu {
-                MenuItem(showCameraMenu: $showCameraMenu, showLensMenu: $showLensMenu, showFilmMenu: $showFilmMenu,icon:"film.fill")
+                MenuItem(icon:"film.fill")
+                    .onTapGesture {
+                        self.showMenu()
+                        isShowingModal.toggle()
+                        cameraModal = false
+                        lensModal = false
+                        filmModal = true
+                    }
             }
             
             
@@ -66,42 +89,25 @@ struct FloatingMenu: View {
 
 struct FloatingMenu_Previews: PreviewProvider {
     static var previews: some View {
-        FloatingMenu()
+        FloatingMenu(isShowingModal: .constant(false), cameraModal: .constant(false), lensModal: .constant(false), filmModal: .constant(false))
     }
 }
 
 struct MenuItem: View {
     
-    @Binding var showCameraMenu: Bool
-    @Binding var showLensMenu: Bool
-    @Binding var showFilmMenu: Bool
-    
     var icon: String // icon을 받아서 처리하도록 변경
     var body: some View {
-        Button{
-            
-            if showCameraMenu {
-                print("showCameraMenu")
-            }
-            
-            if showLensMenu {
-                print("showLensMenu")
-            }
-            if showFilmMenu {
-                print("showFilmMenu")
-            }
-            
-        } label: {
-            ZStack{
-                Circle()
-                    .foregroundColor(.black)
-                    .frame(width:50,height:50)
-                Image(systemName: icon)
-                    .imageScale(.large)
-                    .foregroundColor(.white)
-            }
-            .shadow(color: .gray, radius: 0.3, x: 1, y: 1)
-            .transition(.move(edge: .trailing))
+        
+        ZStack{
+            Circle()
+                .foregroundColor(.black)
+                .frame(width:50,height:50)
+            Image(systemName: icon)
+                .imageScale(.large)
+                .foregroundColor(.white)
         }
+        .shadow(color: .gray, radius: 0.3, x: 1, y: 1)
+        .transition(.move(edge: .trailing))
+        
     }
 }

@@ -9,21 +9,26 @@ import SwiftUI
 
 struct FloatingMenu: View {
     
-     @State var showMenuItem1 = false
-     @State var showMenuItem2 = false
-     @State var showMenuItem3 = false
+    @State var showCameraMenu = false
+    @State var showLensMenu = false
+    @State var showFilmMenu = false
+    
+    @State var showCameraSheet: Bool = false
+    @State var showLensSheet: Bool = false
+    @State var showFilmSheet: Bool = false
+
     
     var body: some View {
         VStack {
             Spacer()
-            if showMenuItem1 {
-                MenuItem(showMenuItem1: $showMenuItem1, showMenuItem2: $showMenuItem2, showMenuItem3: $showMenuItem3, icon:"camera.fill")
+            if showCameraMenu {
+                MenuItem(showCameraMenu: $showCameraMenu, showLensMenu: $showLensMenu, showFilmMenu: $showFilmMenu, icon:"camera.fill")
             }
-            if showMenuItem2 {
-                MenuItem(showMenuItem1: $showMenuItem1, showMenuItem2: $showMenuItem2, showMenuItem3: $showMenuItem3,icon:"camera.aperture")
+            if showLensMenu {
+                MenuItem(showCameraMenu: $showCameraMenu, showLensMenu: $showLensMenu, showFilmMenu: $showFilmMenu,icon:"camera.aperture")
             }
-            if showMenuItem3 {
-                MenuItem(showMenuItem1: $showMenuItem1, showMenuItem2: $showMenuItem2, showMenuItem3: $showMenuItem3,icon:"film.fill")
+            if showFilmMenu {
+                MenuItem(showCameraMenu: $showCameraMenu, showLensMenu: $showLensMenu, showFilmMenu: $showFilmMenu,icon:"film.fill")
             }
             
             
@@ -41,21 +46,19 @@ struct FloatingMenu: View {
     
     func showMenu(){
         withAnimation{
-                showMenuItem3.toggle()
+            showFilmMenu.toggle()
         }
         
         withAnimation{
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                    self.showMenuItem2.toggle()
-                }
-
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                self.showLensMenu.toggle()
+            }
         }
+        
         withAnimation{
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
-            self.showMenuItem1.toggle()
-        }
-        
-            
+                self.showCameraMenu.toggle()
+            }
         }
         
     }
@@ -69,20 +72,23 @@ struct FloatingMenu_Previews: PreviewProvider {
 
 struct MenuItem: View {
     
-    @Binding var showMenuItem1: Bool
-    @Binding var showMenuItem2: Bool
-    @Binding var showMenuItem3: Bool
+    @Binding var showCameraMenu: Bool
+    @Binding var showLensMenu: Bool
+    @Binding var showFilmMenu: Bool
     
     var icon: String // icon을 받아서 처리하도록 변경
     var body: some View {
         Button{
             
-            if showMenuItem1 {
-                print("showMenuItem1")
-            } else if showMenuItem2 {
-                print("showMenuItem2")
-            } else if showMenuItem3 {
-                print("showMenuItem3")
+            if showCameraMenu {
+                print("showCameraMenu")
+            }
+            
+            if showLensMenu {
+                print("showLensMenu")
+            }
+            if showFilmMenu {
+                print("showFilmMenu")
             }
             
         } label: {

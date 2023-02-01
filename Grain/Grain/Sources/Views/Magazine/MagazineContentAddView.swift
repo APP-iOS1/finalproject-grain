@@ -7,12 +7,13 @@
 
 import SwiftUI
 import NMapsMap
+import PhotosUI
 
 struct MagazineContentAddView: View {
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
     @State private var inputCustomPlace: String = ""
-    @State private var selectedImages: [String] = ["1", "2", "3", "editor"]
+    @State private var selectedImages: [UIImage] = []
     @State private var selectedCamera = 0
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
@@ -25,6 +26,9 @@ struct MagazineContentAddView: View {
     // 지도에서 좌표 값 가져오기
     @State var updateNumber : NMGLatLng
     
+    // 이미지 앨범에서 가져오기
+    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedImageData: Data? = nil
     
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     
@@ -76,27 +80,47 @@ struct MagazineContentAddView: View {
                 // MARK: 이미지 피커 쪽인거 같음 확인 필요
                 VStack{
                     HStack {
-                        Button {
-                            //MARK: 사진선택 동작 함수
-                            // 사진을 선택하면 선택한 사진이 selectedImages 배열으로
-                        } label: {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color(UIColor.systemGray4))
-                                .frame(width: 70, height: 70)
-                                .overlay {
+                        PhotosPicker(
+                            selection: $selectedItem,
+                            matching: .images,
+                            photoLibrary: .shared()) {
+                                HStack{
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(.white)
-                                        .frame(width: 68, height: 68)
-                                    Image(systemName: "photo.on.rectangle")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .foregroundColor(.black)
+                                        .fill(Color(UIColor.systemGray4))
+                                        .frame(width: 70, height: 70)
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(.white)
+                                                .frame(width: 68, height: 68)
+                                            Image(systemName: "photo.on.rectangle")
+                                                .resizable()
+                                                .frame(width: 30, height: 30)
+                                                .foregroundColor(.black)
+                                        }
                                 }
-                        }
+                            }
+                            // MARK: 이미지가 선택 되었을때
+                            .onChange(of: selectedItem) { newItem in
+                                Task {
+                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                        selectedImageData = data
+                                    }
+                                    // MARK: 선택한 이미지 selectedImages배열에 넣어주기
+                                    /// 이미지 선택 버튼 우측으로 이미지 정렬
+                                    if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+                                        selectedImages.append(uiImage)
+                                    }
+                                }
+                                
+                               
+                            }
+                            .frame(width: 100,height: 100)
+         
                         ScrollView(.horizontal) {
                             HStack {
+                                // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
                                 ForEach(selectedImages, id: \.self) { img in
-                                    Image(img)
+                                    Image(uiImage: img)
                                         .resizable()
                                         .frame(width: 70, height: 70)
                                         .cornerRadius(8)

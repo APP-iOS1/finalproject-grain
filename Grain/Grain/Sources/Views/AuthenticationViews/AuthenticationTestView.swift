@@ -11,18 +11,31 @@ import FirebaseAuth
 
 struct AuthenticationTestView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
+    @EnvironmentObject var kakaoAuthenticationStore: KakaoAuthenticationStore
     
     var body: some View {
         VStack{
             
             Button {
-                authenticationStore.googleLogout()
+                if authenticationStore.logInCompanyState == .googleLogIn {
+                    authenticationStore.googleLogout()
+                } else if authenticationStore.logInCompanyState == .kakaoLogIn {
+                    kakaoAuthenticationStore.kakaoLogOut()
+                } else if authenticationStore.logInCompanyState == .noCompany
+                            && authenticationStore.authenticationState == .authenticated {
+                    kakaoAuthenticationStore.kakaoLogOut()
+                    authenticationStore.googleLogout()
+                }
+                authenticationStore.changeLogInCompanyToNil()
             } label: {
                 Text("로그아웃")
             }
+            
             Text("\(Auth.auth().currentUser?.email ?? "")")
             Button {
+                
                 print(Auth.auth().currentUser?.email ?? "")
+                print(authenticationStore.logInCompanyState)
             } label: {
                 Text("프린트")
             }

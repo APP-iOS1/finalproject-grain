@@ -6,16 +6,36 @@
 //
 
 import SwiftUI
+
 import Firebase
 import GoogleSignIn
 import GoogleSignInSwift
 
+
 final class AuthenticationStore: ObservableObject {
-    @Published var authenticationStatus: AuthenticationStatus = .unAuthenticated
-    @Published var loginStatus: LoginStatus = .pending(status: false)
+    @Published var authenticationState: AuthenticationState = .unauthenticated
+    @Published var logInCompanyState: LogInCompanyState = .noCompany
+    @Published var user: User?
+    @Published var displayName = ""
     
     let userDatabasePath = Firestore.firestore().collection("User")
     let authPath = Auth.auth()
+    
+    init() {
+        registerAuthStateHandler()
+    }
+    
+    // MARK: - authState listener
+    private var authStateHandler: AuthStateDidChangeListenerHandle?
+    func registerAuthStateHandler() {
+        if authStateHandler == nil {
+            authStateHandler = Auth.auth().addStateDidChangeListener { auth, user in
+                self.user = user
+                self.authenticationState = user == nil ? .unauthenticated : .authenticated
+                self.displayName = user?.email ?? ""
+            }
+        }
+    }
     
     // MARK: - Google Login
     
@@ -56,7 +76,7 @@ final class AuthenticationStore: ObservableObject {
                 dump("\(#function) - DEBUG \(error.localizedDescription)")
             } else {
                 guard let profile = user?.profile else { return }
-                userDatabasePath.document(uid ?? "nono").getDocument { snapshot, err in
+                userDatabasePath.document(uid ?? "").getDocument { snapshot, err in
                     if let isExsits = snapshot?.exists,
                        let uid,
                        isExsits == false {
@@ -68,7 +88,8 @@ final class AuthenticationStore: ObservableObject {
                     }
                 }
                 
-                self.authStatusAuthenticated(user: CurrentUser(id: uid ?? "", name: profile.name, email: profile.email))
+                self.authStateAuthenticated(user: CurrentUser(id: uid ?? "", name: profile.name, email: profile.email))
+                self.logInCompanyState = .googleLogIn
             }
         }
     }
@@ -80,24 +101,42 @@ final class AuthenticationStore: ObservableObject {
         
         do {
             try authPath.signOut()
-            self.authenticationStatus = .unAuthenticated
+            self.authenticationState = .unauthenticated
+            self.logInCompanyState = .noCompany
         } catch {
             print(error.localizedDescription)
         }
     }
     
-    public func authStatusAuthenticated(user: CurrentUser) {
-        self.authenticationStatus = .authenticated(user: user)
+    public func authStateAuthenticated(user: CurrentUser) {
+        self.authenticationState = .authenticated
+    }
+    
+   
+    
+}
+
+extension AuthenticationStore {
+    public func changeLogInCompanyToKakao() {
+        logInCompanyState = .kakaoLogIn
+    }
+    
+    public func changeLogInCompanyToNil() {
+        logInCompanyState = .noCompany
     }
 }
 
-
 /// 로그인 상태관리
-enum AuthenticationStatus {
-    case authenticated(user: CurrentUser?)
-    case unAuthenticated
+enum AuthenticationState {
+    case unauthenticated
+    case authenticating
+    case authenticated
 }
 
-enum LoginStatus {
-    case pending(status: Bool)
+enum LogInCompanyState{
+    case googleLogIn
+    case kakaoLogIn
+    case noCompany
 }
+
+

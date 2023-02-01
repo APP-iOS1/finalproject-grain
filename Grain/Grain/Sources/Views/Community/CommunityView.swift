@@ -6,36 +6,21 @@
 //
 
 import SwiftUI
-// TODO
-// [x] detail view
-// [x] homeview 1 2
-// [x] homeview detail
-// [x] chatting view / chatting
-// [x]
 
 struct CommunityView: View {
-    //    enum SelectCategory: String, CaseIterable {
-    //        case 전체
-    //        case 매칭
-    //        case 마켓
-    //        case 클래스
-    //        case 정보
-    //    }
-    
-    //    @State private var isSelectedCategory: SelectCategory = .전체
+
     let titles: [String] = ["전체", "매칭", "마켓", "클래스", "정보"]
     @State private var selectedIndex: Int = 0
     @State private var isAddViewShown: Bool = false
     
-    
-    private var community: Community = Community(id: "123123", category: 0, userID: "12341234", image: ["sampleImage","1"], title: "피고 놀이 꽃 것은 피가 못할 힘있다", profileImage: "sampleImage", nickName: "희경 센세", location: "방구석TEST", content: "피고 놀이 꽃 것은 피가 못할 힘있다. 풀밭에 장식하는 풀이 새 충분히 운다. 속에서 굳세게 되는 싶이 그들에게 천고에 바이며, 황금시대다. 끝에 이상, 소리다.이것은 그러므로 소금이라 것이다.보라, 봄바람을 역사를 끓는 황금시대다. 할지라도 인생을 끝에 광야에서 것이다. 있을 사라지지 인생의 일월과 철환하였는가? 없으면 그들에게 천자만홍이 이상은 바이며, 같은 두기 봄바람이다. 속에서 청춘은 튼튼하며, 그들의 있을 사라지지 피부가 이것이다. 이상의 천지는 황금시대의 지혜는 있을 것이다", createdAt: Date())
+    // 공통으로 사용할 커뮤니티 VM
+    @StateObject var communityVM = CommunityViewModel()
     
     var body: some View {
         NavigationStack{
             VStack{
                 HStack {
                     Spacer()
-                    
                     SegmentedPicker(
                         titles,
                         selectedIndex: Binding(
@@ -59,17 +44,18 @@ struct CommunityView: View {
                         })
                     
                     Spacer()
-                }
+                } // hstack
+                
                 TabView(selection: $selectedIndex) {
-                    AllTabView(community: community)
+                    AllTabView(community: communityVM.communities)
                         .tag(0)
-                    MatchingTabView()
+                    MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"))
                         .tag(1)
-                    ClassTabView(community: community)
+                    ClassTabView(community: communityVM.returnCategoryCommunity(category: "마켓"))
                         .tag(2)
-                    MarketTabView(community: community)
+                    MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"))
                         .tag(3)
-                    InfoTabView(community: community)
+                    InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"))
                         .tag(4)
                 }
                 .tabViewStyle(.page)
@@ -82,17 +68,22 @@ struct CommunityView: View {
                     }
     
                     ToolbarItem(placement: .navigationBarTrailing) {
-    
                         NavigationLink(destination: CommunitySearchView()) {
                             Image(systemName: "magnifyingglass")
                                 .foregroundColor(.black)
                         }
-    
                     }
-    
                 }
-            }
+            } // 최상단 vstack
+        } // navi stack
+        .onAppear {
+            // 1. 커뮤니티 데이터 fetch
+            communityVM.fetchCommunity()
         }
+        // 검증 코드
+//        .onReceive(communityVM.fetchCommunitySuccess) { newValue in
+//                        print(newValue)
+//        }
     }
 }
 

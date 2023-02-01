@@ -12,14 +12,13 @@ import Combine
 import UIKit
 
 struct AddMarkerMapView: View {
-    @EnvironmentObject var viewRouter: ViewRouter
-
-//    @State var imagePoint : CGPoint = CGPoint(x: 196, y: 335 )
     
     @State var markerAddButtonBool : Bool = false
-    // 가상 마커 CGPoint 좌표 값을 통해 지도 좌표 받아오기
-    @State var updateNumber : NMGLatLng
     
+    // 네비게이션 뷰 돌아가기
+    @Environment(\.dismiss) private var dismiss
+    // 경도 위도 값 전달
+    @Binding var updateNumber : NMGLatLng
     let style = StrokeStyle(lineWidth: 2,
                             lineCap: .round)
     
@@ -28,19 +27,19 @@ struct AddMarkerMapView: View {
             ZStack{
                 
                 AddMarkerUIMapView(updateNumber: $updateNumber, markerAddButtonBool: $markerAddButtonBool)
-//                AddMarkerUIMapView(testBool: $testBool)
+                //                AddMarkerUIMapView(testBool: $testBool)
                 Image("TestBlackMarker")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 56,height: 56)
-                    .position(CGPoint(x: 196, y: 335))  //수정 필요
-                    .onTapGesture {
-                        // 가상 마커 클릭시 액션
-                    }
+                    .position(CGPoint(x: 196, y: 330))  //수정 필요
                 //                    .zIndex(0)
                 Button {
                     markerAddButtonBool.toggle()
                     print("updateNumber\(updateNumber)")
+                    
+                    /// 추가하기 버튼 클릭시 게시글 업로드로 돌아가기
+                    dismiss()
                 } label: {
                     Text("추가하기")
                         .fontWeight(.bold)
@@ -49,35 +48,13 @@ struct AddMarkerMapView: View {
                 // ButtonStyle 스타일 사용할껀지?
                 .buttonStyle(.borderedProminent)
                 /// 커스텀 할껀지
-//                .padding(5)    // 글자와 주변 선의 간격을 떨어트림
-//                .overlay {
-//                    // MARK: 텍스트에 주변에 선 만들기
-//                    RoundedRectangle(cornerRadius: 5)
-//                        .stroke(style: style)
-//                }
+                //                .padding(5)    // 글자와 주변 선의 간격을 떨어트림
+                //                .overlay {
+                //                    // MARK: 텍스트에 주변에 선 만들기
+                //                    RoundedRectangle(cornerRadius: 5)
+                //                        .stroke(style: style)
+                //                }
                 .offset(y: 300)
-            }
-            // 네비게이션 스택에 툴바
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        viewRouter.currentPage = .magazineContentAddView
-                    } label: {
-                        Text("돌아가기")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .foregroundColor(.black)
-                    }
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                    } label: {
-                        Image(systemName: "plus")
-                            .foregroundColor(.black)
-                    }
-                }
             }
         }
         

@@ -8,36 +8,26 @@
 import SwiftUI
 
 struct MatchingTabView: View {
-    private var community: Community = Community(id: "123123", category: 0, userID: "12341234", image: ["camera"], title: "title입니다", profileImage: "person", nickName: "희경 센세", location: "방구석", content: "testing...", createdAt: Date())
+    
+    var community: [CommunityDocument]
     
     var body: some View {
         VStack {
             ScrollView{
-                ForEach(0...5, id: \.self) {idx in
-                    NavigationLink(value: community){
-                        VStack{
-                            CommunityRowView2(community: community)
-                            
-                            Rectangle()
-                                .frame(width: Screen.maxWidth * 0.9, height: 0.5)
-                                .foregroundColor(.secondary)
-                        }
+                ForEach(community, id: \.self){ data in
+                    NavigationLink {
+                        CommunityDetailView(community: data)
+                    } label: {
+                        CommunityRowView2(community: data)
                     }
                 }
-//                                        CommunityRowView(community: community)
-//                                        CommunityRowView(community: community)
-
-
             }
-            .navigationDestination(for: Community.self) { Community in
-                CommunityDetailView(community: Community)
-            }
-        }
+        }// vstack
     }
 }
 
-struct MatchingTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        MatchingTabView()
-    }
-}
+//struct MatchingTabView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MatchingTabView()
+//    }
+//}

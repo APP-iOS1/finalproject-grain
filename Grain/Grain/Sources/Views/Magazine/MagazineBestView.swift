@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MagazineBestView: View {
-
+    @StateObject var magazineVM = MagazineViewModel()
     var body: some View {
         NavigationStack {
             VStack {
@@ -31,7 +31,6 @@ struct MagazineBestView: View {
                         }
                         .offset(x: 80 ,y: 60)
                     }
-                    
                     HStack{
                         Text("Recommend")
                             .font(.title)
@@ -41,17 +40,17 @@ struct MagazineBestView: View {
                             .frame(width: 203, height: 3.5)
                     }
                     .padding([.leading, .top])
-                    ForEach(0 ..< 3){ _ in
+                    ForEach(magazineVM.magazines, id: \.self ){ data in
                         NavigationLink {
-                            MagazineDetailView()
+                            MagazineDetailView(data: data)
                         } label: {
-                            Top10View()
+                            Top10View(data: data)
                                 .padding(.vertical, 7)
                                 .padding(.horizontal)
                                 .frame(height: Screen.maxHeight * 0.6)
                         }
 
-                       
+
                     }
                     
 //                    4: 3 비율 -=> 가로 40  세로 30
@@ -59,7 +58,10 @@ struct MagazineBestView: View {
                     // 4: 3 비율로 올린 사진이 가로일수도 있고, 새로일수도있거든요 ?
                     
                 } // scroll view
-            } //vstack
+            }//vstack
+            .onAppear{
+                magazineVM.fetchMagazine()
+            }
         }
     }
 }

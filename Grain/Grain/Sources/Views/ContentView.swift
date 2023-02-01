@@ -8,30 +8,69 @@
 import SwiftUI
 
 import FirebaseAuth
-
+import NMapsMap
 
 struct ContentView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
     
     @State private var tabSelection: Int = 0
     @State var selectedIndex = 0
+    @State var magazineViewPresented : Bool = false
     @State var presented = false
+    //정훈
+    @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     
     let icons = ["magazine", "note.text", "plus","map", "person"]
     
     var body: some View {
-        VStack{
-            switch authenticationStore.authenticationStatus {
-            case .unAuthenticated:
-                NavigationStack{
-                    AuthenticationView()
-                }
-            case.authenticated(let user):
-                VStack{
-                    Spacer()
-                    //EditorView()
-                    ZStack {
-                        Spacer().fullScreenCover(isPresented: $presented) {
+
+        switch authenticationStore.authenticationState {
+        case .unauthenticated, .authenticating:
+            NavigationStack{
+                AuthenticationView()
+            }
+            
+        case.authenticated:
+            VStack{
+                Spacer()
+                //EditorView()
+                ZStack {
+                    Spacer().fullScreenCover(isPresented: $presented) {
+                        VStack {
+
+                            if self.selectedIndex == 0 {
+                                MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
+                            } else if self.selectedIndex == 1{
+                                AddCommunityView(presented: $presented)
+                            } 
+                            Spacer()
+
+                        }
+                    }
+                    
+                    switch selectedIndex {
+                    case 0:
+                        NavigationStack {
+                            MagazineMainView()
+                        }
+                    case 1:
+                        NavigationStack {
+                            CommunityView()
+                        }
+                    case 2:
+                        NavigationStack {
+                            CommunityView()
+                        }
+                    case 3:
+                        NavigationStack {
+                            MapView()
+                        }
+                    case 4:
+                        NavigationStack {
+                            MyPageView()
+                        }
+                    default:
+                        NavigationStack {
                             VStack {
                                 
                                 if self.selectedIndex == 0 {
@@ -142,6 +181,7 @@ struct ContentView: View {
             ZStack{
                 SplashScreen()
             }
+            .ignoresSafeArea(.keyboard)
         }
     }
 }

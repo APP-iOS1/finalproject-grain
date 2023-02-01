@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GeocodeType: Codable {
+struct GeocodeDTO: Codable {
     let addresses: [Address]
     let errorMessage: String
 }

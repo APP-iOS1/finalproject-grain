@@ -21,7 +21,7 @@ struct TestGeocodeView: View {
                 Text("geocode")
             }
         }.onAppear{
-            geocodeVM.fetchGeocode()
+            geocodeVM.fetchGeocode(requestAddress: "경기도 화성시 석우동")
         }
         
 

@@ -91,8 +91,7 @@
 		A75BB9972981537D004FE6FA /* StationMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB9962981537D004FE6FA /* StationMapView.swift */; };
 		A75BB99929815391004FE6FA /* RepairShopMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB99829815391004FE6FA /* RepairShopMapView.swift */; };
 		A75BB99B29817612004FE6FA /* MarkerCustomInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB99A29817612004FE6FA /* MarkerCustomInfo.swift */; };
-		A7A32D6629866C2A005CE0CA /* GeoCodeNaverAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A32D6529866C2A005CE0CA /* GeoCodeNaverAPI.swift */; };
-		A7A32D6829866E75005CE0CA /* NaverAPIType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A32D6729866E75005CE0CA /* NaverAPIType.swift */; };
+		A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */; };
 		A7BAD3C82978339A009C4ECB /* Fields.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C72978339A009C4ECB /* Fields.swift */; };
 		A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */; };
 		A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */; };
@@ -115,7 +114,7 @@
 		A7D9F30A29896A4B00B39218 /* UserQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30929896A4B00B39218 /* UserQuery.swift */; };
 		A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30B29896C9700B39218 /* UserRouter.swift */; };
 		A7D9F30E29896D8500B39218 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30D29896D8500B39218 /* UserService.swift */; };
-		A7D9F31029897A8D00B39218 /* GeocodeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30F29897A8D00B39218 /* GeocodeAPI.swift */; };
+		A7D9F31029897A8D00B39218 /* GeocodeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30F29897A8D00B39218 /* GeocodeEnum.swift */; };
 		A7D9F31229897C9000B39218 /* GeocodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F31129897C9000B39218 /* GeocodeService.swift */; };
 		A7D9F314298981F400B39218 /* TestGeocodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F313298981F400B39218 /* TestGeocodeView.swift */; };
 		A7D9F3162989840200B39218 /* GeocodeAPIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F3152989840200B39218 /* GeocodeAPIViewModel.swift */; };
@@ -209,8 +208,7 @@
 		A75BB9962981537D004FE6FA /* StationMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMapView.swift; sourceTree = "<group>"; };
 		A75BB99829815391004FE6FA /* RepairShopMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairShopMapView.swift; sourceTree = "<group>"; };
 		A75BB99A29817612004FE6FA /* MarkerCustomInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerCustomInfo.swift; sourceTree = "<group>"; };
-		A7A32D6529866C2A005CE0CA /* GeoCodeNaverAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoCodeNaverAPI.swift; sourceTree = "<group>"; };
-		A7A32D6729866E75005CE0CA /* NaverAPIType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverAPIType.swift; sourceTree = "<group>"; };
+		A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeDTO.swift; sourceTree = "<group>"; };
 		A7BAD3C72978339A009C4ECB /* Fields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fields.swift; sourceTree = "<group>"; };
 		A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDTO.swift; sourceTree = "<group>"; };
 		A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineQuery.swift; sourceTree = "<group>"; };
@@ -233,7 +231,7 @@
 		A7D9F30929896A4B00B39218 /* UserQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQuery.swift; sourceTree = "<group>"; };
 		A7D9F30B29896C9700B39218 /* UserRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRouter.swift; sourceTree = "<group>"; };
 		A7D9F30D29896D8500B39218 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
-		A7D9F30F29897A8D00B39218 /* GeocodeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeAPI.swift; sourceTree = "<group>"; };
+		A7D9F30F29897A8D00B39218 /* GeocodeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeEnum.swift; sourceTree = "<group>"; };
 		A7D9F31129897C9000B39218 /* GeocodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeService.swift; sourceTree = "<group>"; };
 		A7D9F313298981F400B39218 /* TestGeocodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGeocodeView.swift; sourceTree = "<group>"; };
 		A7D9F3152989840200B39218 /* GeocodeAPIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeAPIViewModel.swift; sourceTree = "<group>"; };
@@ -262,6 +260,7 @@
 				A7D9F2FB2989055E00B39218 /* StorageViewModel.swift */,
 				06F0D82D297EB3F200E7B885 /* MapViewModel.swift */,
 				06F0D82F297EB3FD00E7B885 /* UserViewModel.swift */,
+				A7D9F3152989840200B39218 /* GeocodeAPIViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -349,7 +348,6 @@
 		99233D442977F27000A875B1 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				A7A32D6429866C0B005CE0CA /* NaverAPI */,
 				A75BB9932981533C004FE6FA /* MapCategory */,
 				A75BB98A297E6684004FE6FA /* RouterTest */,
 				99233D452977F2C700A875B1 /* MapView.swift */,
@@ -528,19 +526,6 @@
 			path = MapCategory;
 			sourceTree = "<group>";
 		};
-		A7A32D6429866C0B005CE0CA /* NaverAPI */ = {
-			isa = PBXGroup;
-			children = (
-				A7A32D6529866C2A005CE0CA /* GeoCodeNaverAPI.swift */,
-				A7A32D6729866E75005CE0CA /* NaverAPIType.swift */,
-				A7D9F30F29897A8D00B39218 /* GeocodeAPI.swift */,
-				A7D9F31129897C9000B39218 /* GeocodeService.swift */,
-				A7D9F3152989840200B39218 /* GeocodeAPIViewModel.swift */,
-				A7D9F317298986B000B39218 /* GeocodeRouter.swift */,
-			);
-			path = NaverAPI;
-			sourceTree = "<group>";
-		};
 		A7BAD3C429782D83009C4ECB /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -561,6 +546,8 @@
 				A7D9F2F52988FD4700B39218 /* StorageDTO.swift */,
 				A7D9F2FF298962B900B39218 /* MapDTO.swift */,
 				A7D9F307298969FC00B39218 /* UserDTO.swift */,
+				A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */,
+				A7D9F30F29897A8D00B39218 /* GeocodeEnum.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -584,6 +571,7 @@
 				A7D9F2F92989046000B39218 /* StorageRouter.swift */,
 				A7D9F305298964AE00B39218 /* MapRouter.swift */,
 				A7D9F30B29896C9700B39218 /* UserRouter.swift */,
+				A7D9F317298986B000B39218 /* GeocodeRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -597,6 +585,7 @@
 				A7D9F2F7298903CD00B39218 /* StorageService.swift */,
 				A7D9F3032989645D00B39218 /* MapService.swift */,
 				A7D9F30D29896D8500B39218 /* UserService.swift */,
+				A7D9F31129897C9000B39218 /* GeocodeService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -744,7 +733,7 @@
 				99233D4E2977F36000A875B1 /* Map.swift in Sources */,
 				A7D9F3162989840200B39218 /* GeocodeAPIViewModel.swift in Sources */,
 				9958AF8F29777D3F00A51DA9 /* Magazine.swift in Sources */,
-				A7A32D6829866E75005CE0CA /* NaverAPIType.swift in Sources */,
+				A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */,
 				A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */,
 				A75BB99B29817612004FE6FA /* MarkerCustomInfo.swift in Sources */,
 				A75BB9972981537D004FE6FA /* StationMapView.swift in Sources */,
@@ -754,7 +743,6 @@
 				9958AFA529777FAF00A51DA9 /* ReCommentStore.swift in Sources */,
 				06FD6AB32977AECE00B4A859 /* CommunityView.swift in Sources */,
 				9955E115297A538900265D14 /* MagazineDetailView.swift in Sources */,
-				A7A32D6629866C2A005CE0CA /* GeoCodeNaverAPI.swift in Sources */,
 				A7D9F2F62988FD4700B39218 /* StorageDTO.swift in Sources */,
 				A7D9F308298969FC00B39218 /* UserDTO.swift in Sources */,
 				9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */,
@@ -778,7 +766,7 @@
 				A7D9F306298964AE00B39218 /* MapRouter.swift in Sources */,
 				9958AF9929777E4D00A51DA9 /* AuthenticationStore.swift in Sources */,
 				A75BB989297E6364004FE6FA /* PhotoSpotDetailView.swift in Sources */,
-				A7D9F31029897A8D00B39218 /* GeocodeAPI.swift in Sources */,
+				A7D9F31029897A8D00B39218 /* GeocodeEnum.swift in Sources */,
 				06FD6AB72977AF2C00B4A859 /* CommunityDetailView.swift in Sources */,
 				A7D9F3022989638900B39218 /* MapQuery.swift in Sources */,
 				06F0D82C297EB3E700E7B885 /* MagazineViewModel.swift in Sources */,

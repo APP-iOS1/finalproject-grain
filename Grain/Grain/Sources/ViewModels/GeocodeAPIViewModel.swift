@@ -19,13 +19,12 @@ final class GeocodeAPIViewModel: ObservableObject {
     var insertGeocodeSuccess = PassthroughSubject<(), Never>()
     
   
-    func fetchGeocode() {
+    func fetchGeocode(requestAddress: String) {
         
-        GeocodeService.getGeocode()
+        GeocodeService.getGeocode(requestAddress: requestAddress)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-//            print("CommunityViewModel fetchCommunity complete")
-        } receiveValue: { (data: GeocodeType) in
+        } receiveValue: { (data: GeocodeDTO) in
             self.addresses = data.addresses
             self.fetchGeocodeSuccess.send()
         }.store(in: &subscription)

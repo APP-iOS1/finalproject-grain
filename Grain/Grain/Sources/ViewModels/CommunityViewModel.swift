@@ -17,7 +17,8 @@ final class CommunityViewModel: ObservableObject {
     
     var subscription = Set<AnyCancellable>()
     
-    @Published var communities = [CommunityDocument]()
+    @Published var communities = [CommunityDTO]()
+//    @Published var communities = [CommunityDocument]()
     
     var fetchCommunitySuccess = PassthroughSubject<[CommunityDTO], Never>()
     var insertCommunitySuccess = PassthroughSubject<(), Never>()
@@ -30,6 +31,7 @@ final class CommunityViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
 //            print("CommunityViewModel fetchCommunity complete")
         } receiveValue: { (data: CommunityResponse) in
+//            self.communities = data.community
             self.communities = data.community
             self.fetchCommunitySuccess.send(data.community)
         }.store(in: &subscription)

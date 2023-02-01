@@ -21,19 +21,52 @@ struct AddMarkerMapView: View {
     @Binding var updateNumber : NMGLatLng
     let style = StrokeStyle(lineWidth: 2,
                             lineCap: .round)
+    // 텍스트 필드 String
+    @State var searchMap : String = ""
+    // geocode 하기 위해
+    @StateObject var geocodeVM = GeocodeAPIViewModel()
+    // 위치 검색 결과 값
+    @State var searchResponse : [Address] = [Address(roadAddress: "", jibunAddress: "", englishAddress: "", x: "", y: "", distance: 0)]
     
     var body: some View {
         NavigationStack{
             ZStack{
+                HStack{
+                    // FIXME: onSubmit 하고 버튼 눌러야함
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color(.black),lineWidth: 2)
+                        .frame(width: Screen.maxWidth * 0.85, height: 50)
+                        .overlay{
+                            TextField("위치를 검색해주세요", text: $searchMap)
+                                .padding()
+                                .onSubmit {
+                                    // MARK: Geocode API 실행
+                                    geocodeVM.fetchGeocode(requestAddress: searchMap)
+                                }
+//                                .background(Color.white)
+                        }
+                    Button{
+                        // api 결과 값 @State에 넘겨 -> Binding
+                        searchResponse = geocodeVM.addresses
+                    } label: {
+                        Image(systemName: "cursorarrow.click.2")
+                            .foregroundColor(.black)
+                            .font(.title2)
+                    }
+                }
+                .zIndex(1)
+                .offset(y:-300)
                 
-                AddMarkerUIMapView(updateNumber: $updateNumber, markerAddButtonBool: $markerAddButtonBool)
+                AddMarkerUIMapView(updateNumber: $updateNumber, markerAddButtonBool: $markerAddButtonBool, searchResponse: $searchResponse)
+                    .zIndex(0)
                 //                AddMarkerUIMapView(testBool: $testBool)
                 Image("TestBlackMarker")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 56,height: 56)
                     .position(CGPoint(x: 196, y: 330))  //수정 필요
-                //                    .zIndex(0)
+                    .zIndex(1)
+                
                 Button {
                     markerAddButtonBool.toggle()
                     print("updateNumber\(updateNumber)")
@@ -55,6 +88,7 @@ struct AddMarkerMapView: View {
                 //                        .stroke(style: style)
                 //                }
                 .offset(y: 300)
+                .zIndex(1)
             }
         }
         
@@ -68,15 +102,16 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
     
     
     //임시
-//    @ObservedObject var viewModel = MapSceneViewModel()
+    //    @ObservedObject var viewModel = MapSceneViewModel()
     @StateObject var locationManager = LocationManager()
-    
     // 가상 마커 CGPoint 좌표 값을 통해 지도 좌표 넘겨주기
     @Binding var updateNumber : NMGLatLng
     
     @Binding var markerAddButtonBool : Bool
     @State var changeMap : CGPoint = CGPoint(x: 0, y: 0)    //여기서는 안쓰임
-
+    // 위에서 값 받아오기
+    @Binding var searchResponse : [Address]
+    
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
     }
@@ -99,14 +134,14 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
         view.showCompass = false
         view.showLocationButton = true
-
+        
         view.mapView.touchDelegate = context.coordinator
         
         // MARK: 지도가 그려질때 현재 유저 GPS 위치로 카메라 움직임
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLatitude, lng: userLongitude))
         view.mapView.moveCamera(cameraUpdate)
         
-                
+        
         let currentUserMarker = NMFMarker()
         currentUserMarker.position = NMGLatLng(lat: userLatitude, lng: userLongitude)
         currentUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
@@ -116,7 +151,7 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         currentUserMarker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 200.0/255.0, alpha: 1)
         
         /// 화면상의 currentUserMarker 마커 CGPoint값
-//        let point = view.mapView.projection.point(from: currentUserMarker.position)
+        //        let point = view.mapView.projection.point(from: currentUserMarker.position)
         
         currentUserMarker.mapView = view.mapView
         return view
@@ -134,6 +169,12 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
             // FIXME: 추가하기 지도 뷰로 들어와 추가하기 버튼 누를시 뷰가 업데이트 되지 않아 <NMGLatLng: 0,0> 으로 나옴
             /// 버그 고쳐보기
         }
+        
+        // MARK: 위치를 검색해주세요 버튼 누를시 장소로 이동
+        /// x -> latitude / y -> longitude
+        for i in searchResponse{
+            uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo:NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude) ))
+        }
     }
     
     func makeCoordinator() -> Coordinator {
@@ -147,5 +188,3 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
 //        AddMarkerMapView()
 //    }
 //}
-
-

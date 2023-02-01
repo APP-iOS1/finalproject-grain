@@ -15,6 +15,22 @@ struct StoragePath: Codable {
     let name : String
 }
 
+struct StorageResponsePost: Codable {
+    let name: String
+    let bucket: String
+    let storageClass: String
+    let size: String
+    let downloadTokens: String
+
+    enum CodingKeys: String, CodingKey {
+        case name
+        case bucket
+        case storageClass
+        case size
+        case downloadTokens
+    }
+}
+
 
 
 // MARK: 전체적으로 구조 코드 수정 1.31일

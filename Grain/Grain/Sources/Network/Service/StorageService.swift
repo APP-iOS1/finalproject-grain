@@ -1,38 +1,60 @@
+////
+////  StorageService.swift
+////  Grain
+////
+////  Created by 지정훈 on 2023/01/31.
+////
 //
-//  StorageService.swift
-//  Grain
+//import Foundation
+//import Combine
+//import FirebaseAuth
 //
-//  Created by 지정훈 on 2023/01/31.
+//enum StorageService {
 //
-
-import Foundation
-import Combine
-
-enum StorageService {
-    
-    // MARK: - 스토리지 이미지 가져오기
-    static func getStorageImage() -> AnyPublisher<StorageResponse, Error> {
-        
-        let firebaseStorageURL = "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o"
-        
-        var request = URLRequest(url: URL(string: firebaseStorageURL)!)
-        do {
-            request = try StorageRouter.get.asURLRequest()
-        } catch {
-            // [x] error handling
-            print("http error")
-        }
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data}
-            .decode(type: StorageResponse.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
-    }
-    
-    // MARK: - 스토리지에 이미지 넣기
-    static func insertStorageImage(){
-        
-    }
-    
-}
+//    // MARK: - 스토리지 이미지 가져오기
+//    static func getStorageImage() -> AnyPublisher<StorageResponse, Error> {
+//
+//        let firebaseStorageURL = "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o"
+//
+//        var request = URLRequest(url: URL(string: firebaseStorageURL)!)
+//        do {
+//            request = try StorageRouter.get.asURLRequest()
+//        } catch {
+//            // [x] error handling
+//            print("http error")
+//        }
+//        return URLSession
+//            .shared
+//            .dataTaskPublisher(for: request)
+//            .map{ $0.data}
+//            .decode(type: StorageResponse.self, decoder: JSONDecoder())
+//            .eraseToAnyPublisher()
+//    }
+//
+////    https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/test111.png
+//    // MARK: - 스토리지에 이미지 넣기
+//    static func insertStorageImage(image: UIImage){
+//        let firebaseStorageURL = "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/"
+//
+//        let userAuthString = Auth.auth().currentUser?.uid
+//        let folderPath = UUID().uuidString
+//
+//        // FIXME: %2F -> /
+//        let firebaseStoragePath =  firebaseStorageURL + userAuthString + "%2F" + folderPath + "%2F"
+//
+//        var request = URLRequest(url: URL(string: firebaseStoragePath)!)
+//        do {
+//            request = try StorageRouter.post(image)
+//        } catch {
+//            // [x] error handling
+//            print("http error")
+//        }
+//        return URLSession
+//            .shared
+//            .dataTaskPublisher(for: request)
+//            .map{ $0.data}
+//            .decode(type: StorageResponsePost.self, decoder: JSONDecoder())
+//            .eraseToAnyPublisher()
+//    }
+//
+//}

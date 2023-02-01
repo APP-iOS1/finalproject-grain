@@ -17,7 +17,7 @@ enum MapService {
         
         var request = URLRequest(url: URL(string: firestoreURL)!)
         do {
-            request = try StorageRouter.get.asURLRequest()
+            request = try MapRouter.get.asURLRequest()
         } catch {
             // [x] error handling
             print("http error")

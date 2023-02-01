@@ -111,8 +111,6 @@ struct MagazineContentAddView: View {
                                         selectedImages.append(uiImage)
                                     }
                                 }
-                                
-                               
                             }
                             .frame(width: 100,height: 100)
          

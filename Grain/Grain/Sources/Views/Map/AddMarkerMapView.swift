@@ -24,7 +24,7 @@ struct AddMarkerMapView: View {
     // 텍스트 필드 String
     @State var searchMap : String = ""
     // geocode 하기 위해
-    @StateObject var geocodeVM = GeocodeAPIViewModel()
+    @StateObject var naverVM = NaverAPIViewModel()
     // 위치 검색 결과 값
     @State var searchResponse : [Address] = [Address(roadAddress: "", jibunAddress: "", englishAddress: "", x: "", y: "", distance: 0)]
     
@@ -41,13 +41,13 @@ struct AddMarkerMapView: View {
                                 .padding()
                                 .onSubmit {
                                     // MARK: Geocode API 실행
-                                    geocodeVM.fetchGeocode(requestAddress: searchMap)
+                                    naverVM.fetchGeocode(requestAddress: searchMap)
                                 }
 //                                .background(Color.white)
                         }
                     Button{
                         // api 결과 값 @State에 넘겨 -> Binding
-                        searchResponse = geocodeVM.addresses
+                        searchResponse = naverVM.addresses
                     } label: {
                         Image(systemName: "cursorarrow.click.2")
                             .foregroundColor(.black)

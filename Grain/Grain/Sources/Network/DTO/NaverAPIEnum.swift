@@ -18,30 +18,29 @@ import Foundation
 -H "X-NCP-APIGW-API-KEY: {애플리케이션 등록 시 발급받은 client secret값}" -v
 */
 ///따라 해보면서 enum으로 만들어 보기 naver api에 쿼리에 들어야 할 헤더 값
-enum GeocodeEnum {
-    case geocode
-    
+enum NaverAPIEnum {
+    case naverApI
     // MARK: 네이버 클라우드 플랫폼 Client ID
     var clientHeaderKeyID: String {
         switch self {
-        case .geocode: return "X-NCP-APIGW-API-KEY-ID"
+        case .naverApI: return "X-NCP-APIGW-API-KEY-ID"
         }
     }
     // MARK: 네이버 클라우드 플랫폼 Client Secret
     var clientHeaderSecretID: String {
         switch self {
-        case .geocode: return "X-NCP-APIGW-API-KEY"
+        case .naverApI: return "X-NCP-APIGW-API-KEY"
         }
     }
     
     var clientID: String {
         switch self {
-        case .geocode: return "e74pxe65j7"  // 정훈 <- 개인 키
+        case .naverApI: return "e74pxe65j7"  // 정훈 <- 개인 키
         }
     }
     var clientSecret: String {
         switch self {
-        case .geocode: return "HNFWk0LMeipNl3nYpciGInljCUOzT0tCpPyqQmAa"    // 정훈 <- 개인 키
+        case .naverApI: return "HNFWk0LMeipNl3nYpciGInljCUOzT0tCpPyqQmAa"    // 정훈 <- 개인 키
         }
     }
 }

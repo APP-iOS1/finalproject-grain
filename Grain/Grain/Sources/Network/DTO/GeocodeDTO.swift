@@ -13,8 +13,10 @@ struct GeocodeDTO: Codable {
 }
 
 struct Address: Codable {
-    let roadAddress, jibunAddress, englishAddress: String
-    let x, y: String
+    let roadAddress: String
+    let jibunAddress: String
+    let englishAddress: String
+    let x: String
+    let y: String
     let distance: Double
-    
 }

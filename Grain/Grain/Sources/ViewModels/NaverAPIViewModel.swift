@@ -9,17 +9,22 @@ import Foundation
 import Combine
 
 
-final class GeocodeAPIViewModel: ObservableObject {
+final class NaverAPIViewModel: ObservableObject {
     
     var subscription = Set<AnyCancellable>()
     
     @Published var addresses = [Address]()
-//    @Published var insideAddresses = Address.self
+    @Published var reverseGeocodeResult = [ReverseGeocodeResult]()
+
     init(){
         addresses = []
+        reverseGeocodeResult = []
     }
     var fetchGeocodeSuccess = PassthroughSubject<(), Never>()
     var insertGeocodeSuccess = PassthroughSubject<(), Never>()
+    
+    var fetchReverseGeocodeSuccess = PassthroughSubject<(), Never>()
+    var insertReverseGeocodeSuccess = PassthroughSubject<(), Never>()
     
   
     func fetchGeocode(requestAddress: String) {
@@ -29,11 +34,18 @@ final class GeocodeAPIViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
         } receiveValue: { (data: GeocodeDTO) in
             self.addresses = data.addresses
-//            for i in self.addresses{
-//                let arr = Address(roadAddress: i.roadAddress, jibunAddress: i.jibunAddress, englishAddress: i.englishAddress x: i.x, y: i.y, distance: i.distance)
-//                insideAddresses = arr
-//            }
             self.fetchGeocodeSuccess.send()
+        }.store(in: &subscription)
+    }
+    
+    func fetchReverseGeocode(latitude: Double, longitude: Double) {
+        
+        ReverseGeocodeService.getReverseGeocode(latitude: latitude, longitude: longitude)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+        } receiveValue: { (data: ReverseGeocodeDTO) in
+            self.reverseGeocodeResult = data.results
+            self.fetchReverseGeocodeSuccess.send()
         }.store(in: &subscription)
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ClassTabView: View {
     
-    var community: [CommunityDTO]
+    var community: [CommunityDocument]
     
     var body: some View {
         VStack {

@@ -14,47 +14,50 @@ struct SplashScreen: View {
     @State private var isAnimation2:Bool = false
     @State private var isAnimation3:Bool = false
     @State private var isAnimation4:Bool = false
+    @State private var isAnimation5:Bool = false
+    @State private var animate = false
+    @State private var endSplash = false
     @State private var rotation = -80.0
+    
     var body: some View {
         ZStack {
-            
             if !isActive {
-                Image("009")
+                Image("019")
                     .resizable()
                     .scaledToFit()
                     .ignoresSafeArea()
                     .offset(x: rotation)
                 
                 if isAnimation {
-                    Image("009")
+                    Image("019")
                         .resizable()
                         .scaledToFit()
                         .ignoresSafeArea()
                         .offset(x: rotation)
                     
                     if isAnimation {
-                        Image("008")
+                        Image("018")
                             .resizable()
                             .scaledToFit()
                             .ignoresSafeArea()
                             .offset(x: rotation)
                         
                         if isAnimation2 {
-                            Image("007")
+                            Image("017")
                                 .resizable()
                                 .scaledToFit()
                                 .ignoresSafeArea()
                                 .offset(x: rotation)
                             
                             if isAnimation3 {
-                                Image("006")
+                                Image("016")
                                     .resizable()
                                     .scaledToFit()
                                     .ignoresSafeArea()
                                     .offset(x: rotation)
                                 
                                 if isAnimation4 {
-                                    Image("005")
+                                    Image("015")
                                         .resizable()
                                         .scaledToFit()
                                         .ignoresSafeArea()
@@ -64,6 +67,23 @@ struct SplashScreen: View {
                         }
                     }
                 }
+            }
+            if isAnimation5 {
+                ZStack{
+                    
+                    Image("flash3")
+                        .resizable()
+                        .renderingMode(.original)
+                        .aspectRatio(contentMode: animate ? .fill : .fit)
+                        .frame(width: animate ? nil : 85, height: animate ? nil : 85)
+                    
+                        .scaleEffect(animate ? 3 : 1)
+                    
+                        .frame(width: UIScreen.main.bounds.width)
+                }
+                .ignoresSafeArea()
+                .onAppear(perform: animateSplash)
+                .opacity(endSplash ? 0 : 1)
             }
         } // ZStack
         .animation(.easeIn(duration: 0.5), value: rotation)
@@ -92,8 +112,13 @@ struct SplashScreen: View {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.6) {
-                withAnimation(.easeInOut(duration: 1.0)) {
+                withAnimation(.easeOut(duration: 0.5)) {
                     self.isActive = true
+                }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.8) {
+                withAnimation {
+                    self.isAnimation5 = true
                 }
             }
         }
@@ -108,6 +133,16 @@ struct SplashScreen: View {
 //        }
         .ignoresSafeArea()
     }
+    func animateSplash(){
+        DispatchQueue.main.asyncAfter(deadline: .now()){
+            withAnimation(Animation.easeOut(duration: 0.45)){
+                animate.toggle()
+            }
+            withAnimation(Animation.easeOut(duration: 0.45)){
+                endSplash.toggle()
+            }
+        }
+    }
 }
 
 
@@ -116,3 +151,4 @@ struct SplashScremm_Previews: PreviewProvider {
         SplashScreen()
     }
 }
+

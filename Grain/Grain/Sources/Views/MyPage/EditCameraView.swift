@@ -12,6 +12,13 @@ struct EditCameraView: View {
     @State private var cameras: [String] = ["코닥", "캐논", "소니", "니콘"]
     @State private var lenses: [String] = ["렌즈1", "렌즈2", "렌즈3", "렌즈4"]
     @State private var films: [String] = ["코닥", "캐논", "소니", "니콘"]
+    
+    @State private var isShowingModal: Bool = false
+  
+    @State private var cameraModal: Bool = true
+    @State private var lensModal: Bool = true
+    @State private var filmModal: Bool = true
+
 
     var body: some View {
         NavigationStack{
@@ -59,16 +66,33 @@ struct EditCameraView: View {
                             
                         }
                     }
-                    .listStyle(.inset)
+                    .listStyle(.sidebar)
                     .scrollContentBackground(.hidden)
                     
                 }
                 .navigationBarBackButtonHidden(true)
                 .navigationBarHidden(true)
                 
-                FloatingMenu()
+                FloatingMenu(isShowingModal: $isShowingModal, cameraModal: $cameraModal, lensModal: $lensModal, filmModal: $filmModal)
                     .padding()
             }
+            .sheet(isPresented: $isShowingModal) {
+                
+                    if cameraModal{
+                        CameraModalView()
+                        .presentationDetents([.height(250)])
+                    } else if lensModal{
+                        VStack{
+                            Text("렌즈")
+                        }
+                    } else if filmModal{
+                        VStack{
+                            Text("film")
+                        }
+                    }
+                
+            }
+            
         }
     }
     // MARK: 카메라 삭제 함수

@@ -32,6 +32,8 @@
 		334699D92988DE3F004153A6 /* EditCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D82988DE3F004153A6 /* EditCameraView.swift */; };
 		334699DB2988DE51004153A6 /* StoredPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699DA2988DE51004153A6 /* StoredPostView.swift */; };
 		5265C1181BDD56B8E8B1F897 /* Pods_Grain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */; };
+		8B0BA0A2298A4197000A7090 /* CameraModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0BA0A1298A4197000A7090 /* CameraModalView.swift */; };
+		8B0BA0A4298A4C15000A7090 /* ListTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0BA0A3298A4C15000A7090 /* ListTestView.swift */; };
 		8B5E09312989FBA200862700 /* FloatingMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E09302989FBA200862700 /* FloatingMenu.swift */; };
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
@@ -144,6 +146,8 @@
 		334699D62988CD44004153A6 /* EditMyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageView.swift; sourceTree = "<group>"; };
 		334699D82988DE3F004153A6 /* EditCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCameraView.swift; sourceTree = "<group>"; };
 		334699DA2988DE51004153A6 /* StoredPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredPostView.swift; sourceTree = "<group>"; };
+		8B0BA0A1298A4197000A7090 /* CameraModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModalView.swift; sourceTree = "<group>"; };
+		8B0BA0A3298A4C15000A7090 /* ListTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTestView.swift; sourceTree = "<group>"; };
 		8B5E09302989FBA200862700 /* FloatingMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingMenu.swift; sourceTree = "<group>"; };
 		8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityAddView.swift; sourceTree = "<group>"; };
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
@@ -304,6 +308,8 @@
 				334699D42988CB86004153A6 /* MyPageOptionView.swift */,
 				334699D62988CD44004153A6 /* EditMyPageView.swift */,
 				334699D82988DE3F004153A6 /* EditCameraView.swift */,
+				8B0BA0A1298A4197000A7090 /* CameraModalView.swift */,
+				8B0BA0A3298A4C15000A7090 /* ListTestView.swift */,
 				8B5E09302989FBA200862700 /* FloatingMenu.swift */,
 				334699DA2988DE51004153A6 /* StoredPostView.swift */,
 			);
@@ -727,6 +733,7 @@
 				A7D9F3042989645D00B39218 /* MapService.swift in Sources */,
 				A7D957DB297AAFBD001D2401 /* MagazineService.swift in Sources */,
 				9962CDC92979246500E834C3 /* AllTabView.swift in Sources */,
+				8B0BA0A2298A4197000A7090 /* CameraModalView.swift in Sources */,
 				0C5204A52989F5D4002623FB /* SplashView.swift in Sources */,
 				06F0D830297EB3FE00E7B885 /* UserViewModel.swift in Sources */,
 				A7D9F31229897C9000B39218 /* GeocodeService.swift in Sources */,
@@ -767,6 +774,7 @@
 				A7D957D6297AAF8C001D2401 /* MagazineRouter.swift in Sources */,
 				9962CDD1297924D800E834C3 /* InfoTabView.swift in Sources */,
 				A7D957D9297AAFB1001D2401 /* FirebaseService.swift in Sources */,
+				8B0BA0A4298A4C15000A7090 /* ListTestView.swift in Sources */,
 				A7D9F306298964AE00B39218 /* MapRouter.swift in Sources */,
 				9958AF9929777E4D00A51DA9 /* AuthenticationStore.swift in Sources */,
 				A75BB989297E6364004FE6FA /* PhotoSpotDetailView.swift in Sources */,
@@ -946,7 +954,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Grain/Preview Content\"";
-				DEVELOPMENT_TEAM = Y84Q82Q5S8;
+				DEVELOPMENT_TEAM = 6R3M7VGRP2;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;
@@ -983,7 +991,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Grain/Preview Content\"";
-				DEVELOPMENT_TEAM = Y84Q82Q5S8;
+				DEVELOPMENT_TEAM = 6R3M7VGRP2;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;

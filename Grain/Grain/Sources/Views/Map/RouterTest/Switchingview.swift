@@ -40,5 +40,10 @@ struct Switchingview: View {
         case .testGeocodeView:
             TestGeocodeView()
         }
+//            .splashView {
+//                ZStack{
+//                    SplashScreen()
+//                }
+//            }
     }
 }

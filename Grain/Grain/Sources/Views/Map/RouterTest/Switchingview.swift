@@ -37,5 +37,10 @@ struct Switchingview: View {
         case .magazineContentAddView:
             MagazineContentAddView(presented: $presented)
         }
+//            .splashView {
+//                ZStack{
+//                    SplashScreen()
+//                }
+//            }
     }
 }

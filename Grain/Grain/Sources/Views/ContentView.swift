@@ -23,58 +23,23 @@ struct ContentView: View {
     let icons = ["magazine", "note.text", "plus","map", "person"]
     
     var body: some View {
-
-        switch authenticationStore.authenticationState {
-        case .unauthenticated, .authenticating:
-            NavigationStack{
-                AuthenticationView()
-            }
-            
-        case.authenticated:
-            VStack{
-                Spacer()
-                //EditorView()
-                ZStack {
-                    Spacer().fullScreenCover(isPresented: $presented) {
-                        VStack {
-
-                            if self.selectedIndex == 0 {
-                                MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
-                            } else if self.selectedIndex == 1{
-                                AddCommunityView(presented: $presented)
-                            } 
-                            Spacer()
-
-                        }
-                    }
-                    
-                    switch selectedIndex {
-                    case 0:
-                        NavigationStack {
-                            MagazineMainView()
-                        }
-                    case 1:
-                        NavigationStack {
-                            CommunityView()
-                        }
-                    case 2:
-                        NavigationStack {
-                            CommunityView()
-                        }
-                    case 3:
-                        NavigationStack {
-                            MapView()
-                        }
-                    case 4:
-                        NavigationStack {
-                            MyPageView()
-                        }
-                    default:
-                        NavigationStack {
+        VStack{
+            switch authenticationStore.authenticationState {
+            case .unauthenticated, .authenticating:
+                NavigationStack{
+                    AuthenticationView()
+                }
+                
+            case.authenticated:
+                VStack{
+                    Spacer()
+                    //EditorView()
+                    ZStack {
+                        Spacer().fullScreenCover(isPresented: $presented) {
                             VStack {
                                 
                                 if self.selectedIndex == 0 {
-                                    MagazineContentAddView(presented: $presented)
+                                    MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
                                 } else if self.selectedIndex == 1{
                                     AddCommunityView(presented: $presented)
                                 }
@@ -102,18 +67,21 @@ struct ContentView: View {
                             }
                         case 4:
                             NavigationStack {
-                                //프로필 뷰
+                                MyPageView()
                             }
                         default:
                             NavigationStack {
                                 VStack {
-                                    Text("second screen")
+                                    
+                                    if self.selectedIndex == 0 {
+                                        MagazineContentAddView(presented: $presented, updateNumber: NMGLatLng(lat: 0, lng: 0))
+                                    } else if self.selectedIndex == 1{
+                                        AddCommunityView(presented: $presented)
+                                    }
                                 }
                             }
                         }
                         Spacer()
-                        
-                        
                     }
                     Divider()
                     HStack {
@@ -173,15 +141,17 @@ struct ContentView: View {
                             }
                         }
                     }
+                    
+                    
                 }
-                
+                .ignoresSafeArea(.keyboard)
             }
         }
         .splashView {
             ZStack{
                 SplashScreen()
             }
-            .ignoresSafeArea(.keyboard)
+            
         }
     }
 }

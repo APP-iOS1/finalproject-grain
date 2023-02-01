@@ -23,6 +23,12 @@ struct EditMyPageView: View {
                     Image(systemName: "chevron.left")
                     Text("설정")
                     Spacer()
+                    
+                    Button{
+                        
+                    }label: {
+                        Text("저장")
+                    }
                 }
                 .padding(.horizontal)
             })

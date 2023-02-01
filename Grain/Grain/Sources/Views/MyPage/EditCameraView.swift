@@ -9,25 +9,80 @@ import SwiftUI
 
 struct EditCameraView: View {
     @Environment(\.presentationMode) var presentationMode
+    @State private var cameras: [String] = ["코닥", "캐논", "소니", "니콘"]
+    @State private var lenses: [String] = ["렌즈1", "렌즈2", "렌즈3", "렌즈4"]
+    @State private var films: [String] = ["코닥", "캐논", "소니", "니콘"]
 
     var body: some View {
-        VStack {
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }, label: {
-                HStack {
-                    Image(systemName: "chevron.left")
-                    Text("설정")
-                    Spacer()
+        NavigationStack{
+            ZStack(alignment: .bottomTrailing){
+                VStack {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                            Text("설정")
+                            Spacer()
+                            
+                            
+                            EditButton()
+                            
+                        }
+                        .padding(.horizontal)
+                    })
+                    .accentColor(.black)
+                    
+                    List{
+                        Section(header: Text("카메라")){
+                            
+                            ForEach(cameras, id: \.self) { camera in
+                                Text(camera)
+                            }
+                            .onDelete(perform: removeCameraList(at:))
+                            
+                        }
+                        
+                        Section(header: Text("렌즈")){
+                            ForEach(lenses, id: \.self) { lens in
+                                Text(lens)
+                            }
+                            .onDelete(perform: removeLensList(at:))
+                            
+                        }
+                        
+                        Section(header: Text("필름")){
+                            ForEach(films, id: \.self) { film in
+                                Text(film)
+                            }
+                            .onDelete(perform: removeFilmList(at:))
+                            
+                        }
+                    }
+                    .listStyle(.inset)
+                    .scrollContentBackground(.hidden)
+                    
                 }
-                .padding(.horizontal)
-            })
-            .accentColor(.black)
-            
-            Text("카메라 편집 뷰")
+                .navigationBarBackButtonHidden(true)
+                .navigationBarHidden(true)
+                
+                FloatingMenu()
+                    .padding()
+            }
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarHidden(true)
+    }
+    // MARK: 카메라 삭제 함수
+    func removeCameraList(at offsets: IndexSet) {
+        cameras.remove(atOffsets: offsets)
+    }
+    
+    // MARK: 렌즈 삭제 함수
+    func removeLensList(at offsets: IndexSet) {
+        lenses.remove(atOffsets: offsets)
+        
+    } // MARK: 필름 삭제 함수
+    func removeFilmList(at offsets: IndexSet) {
+        films.remove(atOffsets: offsets)
     }
 }
 
@@ -36,3 +91,5 @@ struct EditCameraView_Previews: PreviewProvider {
         EditCameraView()
     }
 }
+
+

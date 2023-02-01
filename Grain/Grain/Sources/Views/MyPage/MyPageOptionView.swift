@@ -44,7 +44,7 @@ struct MyPageOptionView: View {
             }
             
             NavigationLink {
-                EditMyPageView()
+                EditCameraView()
             } label: {
                 HStack {
                     Image(systemName: "camera")

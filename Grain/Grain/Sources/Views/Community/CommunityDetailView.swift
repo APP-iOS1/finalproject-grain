@@ -9,7 +9,7 @@ import SwiftUI
 
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
-    let community: CommunityDTO
+    let community: CommunityDocument
     
     @State private var isBookMarked: Bool = false
     @State private var isliked: Bool = false
@@ -22,7 +22,7 @@ struct CommunityDetailView: View {
                 VStack {
                     HStack{
                         VStack(alignment: .leading){
-                            Text("\(community.title)")
+                            Text("\(community.fields.title.stringValue)")
                                 .multilineTextAlignment(.leading)
                                 .font(.title)
                                 .bold()
@@ -51,6 +51,7 @@ struct CommunityDetailView: View {
                     .padding(.vertical, 10)
                     
                     TabView {
+                        //FIXME: 고치기
 //                        ForEach(community.image, id: \.self)  { img in
 //                            Image(img)
 //                                .resizable()
@@ -68,7 +69,7 @@ struct CommunityDetailView: View {
                     
                     HStack {
                         ProfileImage(imageName: "sampleImage", width: 60, height: 60)
-                        Text(community.nickName)
+                        Text(community.fields.nickName.stringValue)
                             .font(.title3)
                             .bold()
                         Spacer()
@@ -83,7 +84,7 @@ struct CommunityDetailView: View {
                     } // 작성자 프로필
                     .padding(.horizontal)
                     
-                    Text(community.content)
+                    Text(community.fields.content.stringValue)
                         .padding(.horizontal, 30)
                         .multilineTextAlignment(.leading)
 //                        .padding(.top, 1)
@@ -110,6 +111,7 @@ struct CommunityDetailView: View {
                         .foregroundColor(.secondary)
                         .padding([.leading, .trailing], 20)
                     
+                    //FIXME: 고치기
                     CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "악!", comment: "악!악!악!악!악!악!악!악!", createdAt: Date()))
                     
                 } // top vstack

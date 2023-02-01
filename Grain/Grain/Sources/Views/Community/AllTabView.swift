@@ -9,20 +9,24 @@ import SwiftUI
 
 struct AllTabView: View {
     
-    var community: [CommunityDTO]
+    var community: [CommunityDocument]
     
     var body: some View {
+        
         VStack {
             ScrollView{
-                ForEach(community, id: \.self){ data in
+                ForEach(community, id: \.self) { data in
                     NavigationLink {
                         CommunityDetailView(community: data)
                     } label: {
                         CommunityRowView(community: data)
+
                     }
                 }
             }
         }// vstack
+        
+        
     }
 }
 

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CommunityRowView2: View {
     
-    var community: CommunityDTO
+    var community: CommunityDocument
     
     var body: some View {
         VStack(alignment: .leading){
@@ -20,7 +20,7 @@ struct CommunityRowView2: View {
                             .frame(width: 45, height: 25)
                             .foregroundColor(.black)
                             .overlay{
-                                Text("\(community.category)")
+                                Text("\(community.fields.category.stringValue)")
                                     .foregroundColor(.white)
                                     .bold()
                                     .font(.caption)
@@ -40,7 +40,7 @@ struct CommunityRowView2: View {
                     .padding(.leading, -2)
                     
                     
-                    Text("\(community.title)")
+                    Text("\(community.fields.title.stringValue)")
                         .font(.callout)
                         .foregroundColor(.black)
                         .multilineTextAlignment(.leading)

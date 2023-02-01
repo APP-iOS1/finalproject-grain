@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MarketTabView: View {
     
-    var community: [CommunityDTO]
+    var community: [CommunityDocument]
     
     var body: some View {
         VStack {

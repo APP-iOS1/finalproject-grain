@@ -51,9 +51,9 @@ struct CommunityView: View {
                         .tag(0)
                     MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"))
                         .tag(1)
-                    ClassTabView(community: communityVM.returnCategoryCommunity(category: "클래스"))
+                    ClassTabView(community: communityVM.returnCategoryCommunity(category: "마켓"))
                         .tag(2)
-                    MarketTabView(community: communityVM.returnCategoryCommunity(category: "마켓"))
+                    MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"))
                         .tag(3)
                     InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"))
                         .tag(4)
@@ -80,9 +80,10 @@ struct CommunityView: View {
             // 1. 커뮤니티 데이터 fetch
             communityVM.fetchCommunity()
         }
-        .onReceive(communityVM.fetchCommunitySuccess) { newValue in
-                        print(newValue)
-                    }
+        // 검증 코드
+//        .onReceive(communityVM.fetchCommunitySuccess) { newValue in
+//                        print(newValue)
+//        }
     }
 }
 

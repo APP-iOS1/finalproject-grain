@@ -17,10 +17,9 @@ final class CommunityViewModel: ObservableObject {
     
     var subscription = Set<AnyCancellable>()
     
-    @Published var communities = [CommunityDTO]()
-//    @Published var communities = [CommunityDocument]()
+    @Published var communities = [CommunityDocument]()
     
-    var fetchCommunitySuccess = PassthroughSubject<[CommunityDTO], Never>()
+    var fetchCommunitySuccess = PassthroughSubject<[CommunityDocument], Never>()
     var insertCommunitySuccess = PassthroughSubject<(), Never>()
     
     func fetchCommunity() {
@@ -31,18 +30,17 @@ final class CommunityViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
 //            print("CommunityViewModel fetchCommunity complete")
         } receiveValue: { (data: CommunityResponse) in
-//            self.communities = data.community
-            self.communities = data.community
-            self.fetchCommunitySuccess.send(data.community)
+            self.communities = data.documents
+            self.fetchCommunitySuccess.send(data.documents)
         }.store(in: &subscription)
         
         
     }
     
     // 카테고리별 데이터를 filtering 해서 리턴하는 함수
-    func returnCategoryCommunity(category: String) -> [CommunityDTO] {
-        var categoryData: [CommunityDTO] = []
-        categoryData = communities.filter { $0.category == "\(category)"}
+    func returnCategoryCommunity(category: String) -> [CommunityDocument] {
+        var categoryData: [CommunityDocument] = []
+        categoryData = communities.filter { $0.fields.category.stringValue == "\(category)"}
         
         print(categoryData)
         return categoryData

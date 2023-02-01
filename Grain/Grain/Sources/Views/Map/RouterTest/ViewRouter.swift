@@ -24,4 +24,5 @@ enum Page {
     case photoSpotMapView
     case addMarkerMapView
     case magazineContentAddView
+    case testGeocodeView
 }

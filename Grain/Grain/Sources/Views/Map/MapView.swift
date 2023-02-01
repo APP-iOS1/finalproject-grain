@@ -136,7 +136,7 @@ struct UIMapView: UIViewRepresentable,View {
         // 처음에 맵이 생성될떄 줌 레벨
         // 숫자가 작을수록 축소
         // 숫자가 클수록 확대
-        view.mapView.zoomLevel = 12
+        view.mapView.zoomLevel = 2
         // TODO: 최대 최소 줌 레벨 알아보기
         view.mapView.minZoomLevel = 10
         view.mapView.maxZoomLevel = 16

@@ -87,7 +87,7 @@ struct MapView: View {
             .toolbar {  //MARK: 제보하기 <- 회의 필요
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        viewRouter.currentPage = .addMarkerMapView
+                        viewRouter.currentPage = .testGeocodeView
                     } label: {
                         Image(systemName: "plus")
                             .foregroundColor(.black)

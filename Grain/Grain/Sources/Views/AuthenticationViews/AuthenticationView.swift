@@ -12,7 +12,7 @@ import FirebaseAuth
 
 struct AuthenticationView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
-    
+    @EnvironmentObject var kakaoAuthenticationStore: KakaoAuthenticationStore
     
     var body: some View {
         VStack{
@@ -32,8 +32,19 @@ struct AuthenticationView: View {
                 authenticationStore.googleLogin()
             }
             .frame(maxWidth: Screen.maxWidth * 0.8)
+            
+            Button{
+                kakaoAuthenticationStore.kakaoSignIn()
+                authenticationStore.changeLogInCompanyToKakao()
+            } label: {
+                Image("kakaoLoginLarge")
+                    .resizable()
+                    .frame(maxWidth: Screen.maxWidth * 0.8, maxHeight: Screen.maxHeight * 0.05)
+                    .shadow(radius: 7)
+            }
             Button {
                 print(Auth.auth().currentUser?.email ?? "")
+                print(authenticationStore.logInCompanyState)
             } label: {
                 Text("프린트")
             }

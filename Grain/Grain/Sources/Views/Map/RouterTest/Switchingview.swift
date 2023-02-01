@@ -13,13 +13,14 @@ struct Switchingview: View {
     //TODO: 임시코드 <- 리팩토링 하기
     @State var bindingWebURL : String = ""
     // 임시
-    @State var presented : Bool = true
-
+    @State var presented : Bool = false
+    // 정훈
+    @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
    
     var body: some View {
         switch viewRouter.currentPage{
         case .contentView:
-            ContentView().environmentObject(AuthenticationStore())
+            ContentView().environmentObject(AuthenticationStore()).environmentObject(KakaoAuthenticationStore())
         case .mapView:
             MapView()
         case .photoSpotDetailView:
@@ -33,9 +34,16 @@ struct Switchingview: View {
         case .repairShopMapView:
             RepairShopMapView()
         case .addMarkerMapView:
-            AddMarkerMapView(updateNumber: NMGLatLng(lat: 0, lng: 0))
+            AddMarkerMapView(updateNumber: $updateNumber)
         case .magazineContentAddView:
-            MagazineContentAddView(presented: $presented)
+            MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
+        case .testGeocodeView:
+            TestGeocodeView()
         }
+//            .splashView {
+//                ZStack{
+//                    SplashScreen()
+//                }
+//            }
     }
 }

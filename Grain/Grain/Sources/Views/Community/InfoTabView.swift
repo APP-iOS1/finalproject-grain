@@ -18,7 +18,7 @@ struct InfoTabView: View {
                     NavigationLink {
                         CommunityDetailView(community: data)
                     } label: {
-                        CommunityRowView2(community: data)
+                        CommunityRowView(community: data)
                     }
                 }
             }

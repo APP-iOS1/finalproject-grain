@@ -10,17 +10,17 @@ import Foundation
 struct ReverseGeocodeDTO: Codable {
     let results: [ReverseGeocodeResult]
 }
-struct ReverseGeocodeResult: Codable {
+struct ReverseGeocodeResult:  Codable,Hashable {
     let region: Region
 }
 
-struct Region: Codable {
+struct Region:  Codable,Hashable {
     let area1: Area
     let area2: Area
     let area3: Area
     let area4: Area
 }
-struct Area: Codable {
+struct Area:  Codable,Hashable {
     let name: String
 }
 

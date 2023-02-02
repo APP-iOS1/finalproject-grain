@@ -81,8 +81,8 @@
 		9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */; };
 		9962CDD5297A215900E834C3 /* MagazineFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD4297A215900E834C3 /* MagazineFeedView.swift */; };
 		9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD6297A224700E834C3 /* MagazineViewCell.swift */; };
+		A71680E4298B3B3B0050549D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A71680E3298B3B3B0050549D /* GoogleService-Info.plist */; };
 		A739C63D2982EAFE0093D71C /* AddMarkerMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */; };
-		A7442A9C2977ACCF0009A82F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */; };
 		A75BB989297E6364004FE6FA /* PhotoSpotDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB988297E6364004FE6FA /* PhotoSpotDetailView.swift */; };
 		A75BB98C297E6694004FE6FA /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB98B297E6694004FE6FA /* ViewRouter.swift */; };
 		A75BB98E297E66EE004FE6FA /* Switchingview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB98D297E66EE004FE6FA /* Switchingview.swift */; };
@@ -202,8 +202,8 @@
 		9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineMainView.swift; sourceTree = "<group>"; };
 		9962CDD4297A215900E834C3 /* MagazineFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineFeedView.swift; sourceTree = "<group>"; };
 		9962CDD6297A224700E834C3 /* MagazineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewCell.swift; sourceTree = "<group>"; };
+		A71680E3298B3B3B0050549D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMarkerMapView.swift; sourceTree = "<group>"; };
-		A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A75BB988297E6364004FE6FA /* PhotoSpotDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSpotDetailView.swift; sourceTree = "<group>"; };
 		A75BB98B297E6694004FE6FA /* ViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRouter.swift; sourceTree = "<group>"; };
 		A75BB98D297E66EE004FE6FA /* Switchingview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switchingview.swift; sourceTree = "<group>"; };
@@ -393,7 +393,7 @@
 			children = (
 				9958AFB82977D56000A51DA9 /* Info.plist */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
-				A7442A9B2977ACCF0009A82F /* GoogleService-Info.plist */,
+				A71680E3298B3B3B0050549D /* GoogleService-Info.plist */,
 				9958AF812977793700A51DA9 /* Configuration */,
 				9958AF80297778FD00A51DA9 /* Sources */,
 				9958AF76297778D900A51DA9 /* Assets.xcassets */,
@@ -664,7 +664,7 @@
 			files = (
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
-				A7442A9C2977ACCF0009A82F /* GoogleService-Info.plist in Resources */,
+				A71680E4298B3B3B0050549D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

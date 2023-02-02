@@ -120,7 +120,6 @@ struct UIMapView: UIViewRepresentable,View {
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
     }
-    
     var userLongitude: Double {
         return locationManager.lastLocation?.coordinate.longitude ?? 127.07766400
     }

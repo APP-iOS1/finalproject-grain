@@ -21,7 +21,6 @@ import SwiftUI
 struct CommunityRowView: View {
     
     var community: CommunityDocument
-    
     var body: some View {
         VStack(alignment: .leading){
             HStack{

@@ -7,45 +7,41 @@
 
 import Foundation
 
-
 struct UserResponse: Codable {
     let documents: [UserDocument]
 }
 
-struct UserDocument: Codable {
-    let name: String
+struct UserDocument: Codable,Hashable {
     let fields: UserFields
     let createTime, updateTime: String
 }
 
-struct UserFields: Codable {
-    let myFilm, bookmarkedMagazineID, myCamera, postedCommunityID: BookmarkedCommunityID?
-    let postedMagazineID, likedMagazineID, lastSearched, bookmarkedCommunityID: BookmarkedCommunityID?
-    let recentSearch: UserEmail?
-    let id: UserEmail
-    let following, myLens: BookmarkedCommunityID?
-    let profileImage: UserEmail?
-    let follower: BookmarkedCommunityID?
-    let nickName, name, email: UserEmail?
+struct UserFields: Codable,Hashable {
+    let likedMagazineID: UserArrayKey
+    let id: UserStringValue
+    let myLens, myFilm, postedCommunityID: UserArrayKey
+    let nickName: UserStringValue
+    let following: UserArrayKey
+    let profileImage: UserStringValue
+    let recentSearch, bookmarkedCommunityID, follower, lastSearched: UserArrayKey
+    let email: UserStringValue
+    let postedMagazineID, myCamera, bookmarkedMagazineID: UserArrayKey
+    let name: UserStringValue
 
     enum CodingKeys: String, CodingKey {
-        case myFilm, bookmarkedMagazineID, myCamera, postedCommunityID, postedMagazineID
         case likedMagazineID = "likedMagazineId"
-        case lastSearched, bookmarkedCommunityID, recentSearch, id, following, myLens, profileImage, follower, nickName, name, email
+        case id, myLens, myFilm, postedCommunityID, nickName, following, profileImage, recentSearch, bookmarkedCommunityID, follower, lastSearched, email, postedMagazineID, myCamera, bookmarkedMagazineID, name
     }
 }
 
-
-struct BookmarkedCommunityID: Codable {
+struct UserArrayKey: Codable,Hashable {
     let arrayValue: UserArrayValue
 }
-
-
-struct UserArrayValue: Codable {
-    let values: [UserEmail]
+struct UserArrayValue: Codable,Hashable{
+    let values: [UserStringValue]
 }
 
 
-struct UserEmail: Codable {
+struct UserStringValue: Codable,Hashable{
     let stringValue: String
 }

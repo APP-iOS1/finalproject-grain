@@ -8,135 +8,142 @@
 import Foundation
 
 enum UserQuery {
-    // MARK: 커뮤니티 DB에 데이터 저장
+    
+    // MARK: 최초로 로그인시 사용
     static func insertUserQuery(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String ) -> Data? {
-  
-        return
-        """
-        {
-        "fields": {
-                        "myFilm": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(myFilm)"
-                                    }
-                                ]
-                            }
-                        },
-                        "bookmarkedMagazineID": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(bookmarkedMagazineID)"
-                                    }
-                                    
-                                ]
-                            }
-                        },
-                        "email": {
-                            "stringValue": "\(email)"
-                        },
-                        "myCamera": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(myCamera)"
-                                    }
-                                ]
-                            }
-                        },
-                        "postedCommunityID": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(postedCommunityID)"
-                                    }
-                                ]
-                            }
-                        },
-                        "postedMagazineID": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(postedMagazineID)"
-                                    }
-                                ]
-                            }
-                        },
-                        "likedMagazineId": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(likedMagazineId)"
-                                    }
-                                ]
-                            }
-                        },
-                        "lastSearched": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(lastSearched)"
-                                    }
-                                ]
-                            }
-                        },
-                        "bookmarkedCommunityID": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(bookmarkedCommunityID)"
-                                    }
-                                ]
-                            }
-                        },
-                        "recentSearch": {
-                            "stringValue": "\(recentSearch)"
-                        },
-                        "id": {
-                            "stringValue": "\(id)"
-                        },
-                        "following": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(following)"
-                                    }
-                                ]
-                            }
-                        },
-                        "myLens": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(myLens)"
-                                    }
-                                ]
 
-                            }
-                        },
-                        "profileImage": {
-                            "stringValue": "\(profileImage)"
-                        },
-                        "name": {
-                            "stringValue": "\(name)"
-                        },
-                        "follower": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(follower)"
+        return
+        
+        """
+         {
+                            "fields": {
+                
+                                "follower": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(follower)"
+                                            }
+                                        ]
                                     }
-                                ]
+                                },
+                                "myCamera": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(myCamera)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "profileImage": {
+                                    "stringValue": "\(profileImage)"
+                                },
+                                "email": {
+                                    "stringValue": "\(email)"
+                                },
+                                "bookmarkedMagazineID": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(bookmarkedMagazineID)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "name": {
+                                    "stringValue": "\(name)"
+                                },
+                                "id": {
+                                    "stringValue":  "\(id)"
+                                },
+                                "nickName": {
+                                    "stringValue": "\(nickName)"
+                                },
+                                "recentSearch": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                    "stringValue": "\(recentSearch)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "likedMagazineId": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(likedMagazineId)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "myLens": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(myLens)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "bookmarkedCommunityID": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(bookmarkedCommunityID)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "postedMagazineID": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(postedMagazineID)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "postedCommunityID": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(postedCommunityID)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "lastSearched": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(lastSearched)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "myFilm": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(myFilm)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "following": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(following)"
+                                            }
+                                        ]
+                                    }
+                                }
                             }
-                        },
-                        "nickName": {
-                            "stringValue": "\(nickName)"
-                        }
-                    }
-                }
-        }
+         }
+                        
         """.data(using: .utf8)
     }
 }

@@ -42,14 +42,89 @@ enum UserService {
         } catch {
             print("http error!")
         }
-        
-
         return URLSession
             .shared
             .dataTaskPublisher(for: request)
             .map{ $0.data }
             .decode(type: UserResponse.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
+    }
+    // 실패한거 같음
+//    static func getCurrentUser(userID: String) -> AnyPublisher<CurrentUserResponse, Error> {
+//
+//        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/User/\(userID)"
+//        let encodeQueryURL = firestoreURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+//
+//        var request = URLRequest(url: URL(string: encodeQueryURL)!)
+//        do {
+//            request = try UserRouter.get.asURLRequestCurrent(request: request)
+//        } catch {
+//            // [x] error handling
+//            print("http error")
+//        }
+//        return URLSession
+//            .shared
+//            .dataTaskPublisher(for: request)
+//            .map{ $0.data}
+//            .decode(type: CurrentUserResponse.self, decoder: JSONDecoder())
+//            .eraseToAnyPublisher()
+//    }
+    
+    // 데이터 삭제
+    func test(){
+        let firestoreRef = "https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents/{DOCUMENT_PATH}"
+        // MARK: 콜렉션 / uuid 값
+        let documentPath = "User/gTQvo3MwawdxVMU0IfYv"
+
+        let url = URL(string: firestoreRef.replacingOccurrences(of: "{PROJECT_ID}", with: "grain-final")
+                        .replacingOccurrences(of: "{DOCUMENT_PATH}", with: documentPath))!
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "DELETE"
+
+        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Error deleting document: \(error)")
+                return
+            }
+            print("Document deleted successfully")
+        }.resume()
+
+    }
+    // 데이터 업데이트 -> 검증 필요함
+    func test1(){
+        let firestoreRef = "https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents/{DOCUMENT_PATH}"
+        
+        let documentPath = "User/sSPEMIqXetpBVApoNbbT"
+        
+        let url = URL(string: firestoreRef.replacingOccurrences(of: "{PROJECT_ID}", with: "grain-final")
+            .replacingOccurrences(of: "{DOCUMENT_PATH}", with: documentPath))!
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "PATCH"
+        
+        let json: [String: Any] = [
+            "fields": [
+                "field1": [
+                    "stringValue": "3333"
+                ]
+            ]
+        ]
+
+        let jsonData = try! JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+
+        urlRequest.httpBody = jsonData
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Error updating document: \(error)")
+                return
+            }
+            print("Document updated successfully")
+        }.resume()
+
+        
     }
     
 }

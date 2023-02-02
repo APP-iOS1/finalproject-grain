@@ -33,35 +33,27 @@ struct MapView: View {
                 VStack{
                     HStack{
                         // FIXME: onSubmit 하고 버튼 눌러야함
+                        TextField("🔍 위치를 검색해주세요", text: $searchText)
+                            .padding()
+                            .background(.white)
+                            .cornerRadius(15)
+                        
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color(.black),lineWidth: 2)
-                            .frame(width: Screen.maxWidth * 0.8, height: 40)
+//                            .stroke(Color(.black),lineWidth: 2)
+                            .foregroundColor(.white)
+                            .frame(width: 50, height: 51)
                             .overlay{
-                                TextField("🔍 위치를 검색해주세요", text: $searchText)
-                                    .padding()
-                                    .onSubmit {
-         
+                                Image(systemName: "location.magnifyingglass")
+                                    .onTapGesture {
+                                        // 액션
                                     }
                             }
-                        Button{
- 
-                        } label: {
-                            Image(systemName: "chevron.right.circle.fill")
-                                .foregroundColor(.black)
-                                .font(.title2)
-                        }
-                        Button{
- 
-                        } label: {
-                            Image(systemName: "arrow.clockwise")
-                                .foregroundColor(.black)
-                                .font(.title2)
-                        }
-                        
                     }.padding()
+                    
                     HStack{
                         /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
                         MapCategoryCellView(categoryString: $categoryString)
+                            .offset(x: -30 , y: -10)
                     }
                 }
                 .zIndex(1)
@@ -83,6 +75,25 @@ struct MapView: View {
                 default:
                     UIMapView(isShowingPhotoSpot: $isShowingPhotoSpot,isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap).zIndex(0)
                 }
+                
+                // 이지역 재 검색 버튼
+                RoundedRectangle(cornerRadius: 17)
+                    .frame(width: Screen.maxWidth * 0.4, height: 40)
+//                            .stroke(Color(.black),lineWidth: 2)
+                    .foregroundColor(.white)
+                    .overlay{
+                        HStack{
+                            Image(systemName: "arrow.clockwise")
+                            Text("이 지역 재검색")
+                                .fontWeight(.bold)
+                        }.onTapGesture {
+                            // 액션
+                            
+                        }
+                       
+                    }
+                .offset(y:280)
+                
             }
             .sheet(isPresented: $isShowingPhotoSpot, content: {
                 PhotoSpotDetailView() .presentationDetents( [.medium])  /// 모달 뷰 medium으로 보여주기

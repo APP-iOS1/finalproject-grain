@@ -16,7 +16,8 @@ struct AddMarkerMapView: View {
     @State var markerAddButtonBool : Bool = false
     @State var locationcheckBool : Bool = false
     @State var searchResponseBool : Bool = false
-    
+    //임시
+//    searchMap = data.region.area1.name + data.region.area2.name + data.region.area3.name
     // 네비게이션 뷰 돌아가기
     @Environment(\.dismiss) private var dismiss
     // 경도 위도 값 전달
@@ -42,28 +43,26 @@ struct AddMarkerMapView: View {
             ZStack{
                 HStack{
                     // FIXME: onSubmit 하고 버튼 눌러야함
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color(.black),lineWidth: 2)
-                        .frame(width: Screen.maxWidth * 0.85, height: 50)
-                        .overlay{
-                            TextField("위치를 검색해주세요", text: $searchMap)
-                                .padding()
-                                .onSubmit {
-                                    // MARK: Geocode API 실행
-                                    naverVM.fetchGeocode(requestAddress: searchMap)
-                                }
-                            //                                .background(Color.white)
+                    TextField("🔍 위치를 검색해주세요", text: $searchMap)
+                        .padding()
+                        .background(.white)
+                        .cornerRadius(15)
+                        .onSubmit {
+                            // MARK: Geocode API 실행
+                            naverVM.fetchGeocode(requestAddress: searchMap)
                         }
-                    Button{
-                        // api 결과 값 @State에 넘겨 -> Binding
-                        searchResponse = naverVM.addresses
-                        searchResponseBool.toggle()
-                    } label: {
-                        Image(systemName: "cursorarrow.click.2")
-                            .foregroundColor(.black)
-                            .font(.title2)
-                    }
-                }
+                    RoundedRectangle(cornerRadius: 10)
+//                            .stroke(Color(.black),lineWidth: 2)
+                        .foregroundColor(.white)
+                        .frame(width: 50, height: 51)
+                        .overlay{
+                            Image(systemName: "location.magnifyingglass")
+                                .onTapGesture {
+                                    searchResponse = naverVM.addresses
+                                    searchResponseBool.toggle()
+                                }
+                        }
+                }.padding()
                 .zIndex(1)
                 .offset(y:-300)
                 
@@ -77,58 +76,53 @@ struct AddMarkerMapView: View {
                     .frame(width: 56,height: 56)
                     .position(CGPoint(x: 196, y: 330))  //수정 필요
                     .zIndex(1)
-                HStack{
-                    Button {
-                        markerAddButtonBool.toggle()
-                        print("updateNumber\(updateNumber)")
-                        
-                        /// 추가하기 버튼 클릭시 게시글 업로드로 돌아가기
-                        dismiss()
-                    } label: {
+//                HStack{
+//                    Button {
+//                        markerAddButtonBool.toggle()
+//                        print("updateNumber\(updateNumber)")
+//
+//                        /// 추가하기 버튼 클릭시 게시글 업로드로 돌아가기
+//                        dismiss()
+//                    } label: {
+//                        Text("추가하기")
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.black)
+//                    }
+//                    // ButtonStyle 스타일 사용할껀지?
+//                    .buttonStyle(.borderedProminent)
+//                    /// 커스텀 할껀지
+//                    //                .padding(5)    // 글자와 주변 선의 간격을 떨어트림
+//                    //                .overlay {
+//                    //                    // MARK: 텍스트에 주변에 선 만들기
+//                    //                    RoundedRectangle(cornerRadius: 5)
+//                    //                        .stroke(style: style)
+//                    //                }
+//                    Button {
+//                        locationcheckBool.toggle()
+//                    } label: {
+//                        Text("위치 확인")
+//                            .fontWeight(.bold)
+//                            .foregroundColor(.black)
+//                    }.buttonStyle(.borderedProminent)
+//
+//                }
+//                .offset(y: 300)
+//                .zIndex(1)
+                
+                RoundedRectangle(cornerRadius: 15)
+                    .frame(width: Screen.maxWidth * 0.65, height: 40)
+                    .foregroundColor(.white)
+                    .overlay{
                         Text("추가하기")
                             .fontWeight(.bold)
-                            .foregroundColor(.black)
+                            .onTapGesture {
+                                //액션
+                                dismiss()
+                                print("updateNumber\(updateNumber)")
+                            }
                     }
-                    // ButtonStyle 스타일 사용할껀지?
-                    .buttonStyle(.borderedProminent)
-                    /// 커스텀 할껀지
-                    //                .padding(5)    // 글자와 주변 선의 간격을 떨어트림
-                    //                .overlay {
-                    //                    // MARK: 텍스트에 주변에 선 만들기
-                    //                    RoundedRectangle(cornerRadius: 5)
-                    //                        .stroke(style: style)
-                    //                }
-                    Button {
-                        locationcheckBool.toggle()
-                    } label: {
-                        Text("위치 확인")
-                            .fontWeight(.bold)
-                            .foregroundColor(.black)
-                    }.buttonStyle(.borderedProminent)
-
-                }
-                .offset(y: 300)
+                .offset(y: 270)
                 .zIndex(1)
-                HStack{
-                    ForEach(TestnaverVM.reverseGeocodeResult, id:\.self){ data in
-                            Text(data.region.area1.name ?? "도")
-                                .fontWeight(.bold)
-                                .foregroundColor(.black)
-                            Text(data.region.area2.name ?? "시")
-                                .fontWeight(.bold)
-                                .foregroundColor(.black)
-                            Text(data.region.area3.name ?? "동")
-                                .fontWeight(.bold)
-                                .foregroundColor(.black)
-                    }
-                }.onAppear{
-                    TestnaverVM.fetchReverseGeocode(latitude:locationManager.lastLocation?.coordinate.latitude ?? 37.21230200 , longitude:locationManager.lastLocation?.coordinate.longitude ?? 127.07766400 )
-                    updateReverseGeocodeResult = TestnaverVM.reverseGeocodeResult
-                    print("여기 실행")
-                }
-                .offset(y: 250)
-                .zIndex(1)
-                
             }
         }
         

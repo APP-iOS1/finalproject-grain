@@ -20,21 +20,21 @@ struct MapCategoryCellView: View {
     var body: some View {
         // MARK: 카테고리 버튼
         ForEach(categoryList, id: \.self){ index in
-            Button {
-                categoryString = index
-            } label: {
-                // categoryList 안에 있는 카테고리를 버튼을 만들어줌
-                Text(index)
-                    .fontWeight(.bold)
-                    .foregroundColor(.black)
-                    
-            }.padding(5)    // 글자와 주변 선의 간격을 떨어트림
-            .overlay {
-                // MARK: 텍스트에 주변에 선 만들기
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(style: style)
-            }
-
-        }.padding(.trailing)    // 버튼끼리 패딩 값을 주어 서로 사이를 떨어트림
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundColor(.white)
+                .frame(width: 69, height: 40)
+                .overlay{
+                    Button {
+                        categoryString = index
+                    } label: {
+                        // categoryList 안에 있는 카테고리를 버튼을 만들어줌
+                        Text(index)
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
+                            
+                    }
+                }
+            
+        }
     }
 }

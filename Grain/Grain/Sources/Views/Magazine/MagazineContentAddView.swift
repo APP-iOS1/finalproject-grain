@@ -22,6 +22,7 @@ struct MagazineContentAddView: View {
     @Binding var presented : Bool
     // insert
     @ObservedObject var magazineVM = MagazineViewModel()
+    @ObservedObject var storageVM = StorageViewModel()
    
     // 지도에서 좌표 값 가져오기
     @State var updateNumber : NMGLatLng
@@ -57,9 +58,8 @@ struct MagazineContentAddView: View {
                         Spacer()
                         Button {
                             print("시작\(selectedImageData)")
-//                            StorageRouter.post.makeBody(imageArray: selectedImages)
-                            StorageRouter.post.uploadImage(paramName: "test", fileName: "test11", image: selectedImages)
-                            
+                            // MARK: 스토리지에 이미지 업로드
+                            storageVM.insertStorageImage(image: selectedImages)
                             // insert 메서드 들어가고
                             /// cameraInfo, lenseInfo, filmInfo 유저가 가지고 있는 데이터에서 패치를 하고 그거를 피커로 보여지게 만들고 그 다음에 고르면 데이터가 넘어 가게끔
                             /// userID, nickName 은 UserDB에서 가져와야 됨

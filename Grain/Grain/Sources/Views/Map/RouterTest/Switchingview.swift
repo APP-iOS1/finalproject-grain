@@ -42,7 +42,7 @@ struct Switchingview: View {
         }
 //            .splashView {
 //                ZStack{
-//                    SplashScreen()
+//                    SplashScreen()searchMap
 //                }
 //            }
     }

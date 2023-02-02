@@ -7,13 +7,16 @@
 
 import Foundation
 
-struct GeocodeType: Codable {
+struct GeocodeDTO: Codable {
     let addresses: [Address]
     let errorMessage: String
 }
 
 struct Address: Codable {
-    let roadAddress, jibunAddress, englishAddress: String
-    let x, y: String
+    let roadAddress: String
+    let jibunAddress: String
+    let englishAddress: String
+    let x: String
+    let y: String
     let distance: Double
 }

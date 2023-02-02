@@ -25,44 +25,63 @@ struct MapView: View {
     @State var bindingWebURL : String = ""
     @State var markerAddButtonBool: Bool = false
     @State var changeMap: CGPoint = CGPoint(x: 0, y: 0)
-    
+
     var body: some View {
         NavigationStack{
             // MARK: 지도 탭의 상단
-            VStack{
-                // MARK: 지도 카테고리 버튼
-                // TODO: 포토스팟, 현상소, 수리점 셀뷰로 만들기
-                HStack{
-                    /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
-                    MapCategoryCellView(categoryString: $categoryString)
-                }
-            }
-            // MARK: 지도 뷰에서 검색 란
-            /// https://ios-development.tistory.com/1124 참고 자료 <- 리팩토링 할때 다시 읽어보기
-            .searchable(
-                text: $searchText,
-                placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "검색 placholder..."
-            )
-            // searchable에서 완료 버튼을 누를시 액션
-            .onSubmit(of: .search) {
-                print("검색 완료: \(searchText)")
-            }
-            
             ZStack{
+                VStack{
+                    HStack{
+                        // FIXME: onSubmit 하고 버튼 눌러야함
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color(.black),lineWidth: 2)
+                            .frame(width: Screen.maxWidth * 0.8, height: 40)
+                            .overlay{
+                                TextField("🔍 위치를 검색해주세요", text: $searchText)
+                                    .padding()
+                                    .onSubmit {
+         
+                                    }
+                            }
+                        Button{
+ 
+                        } label: {
+                            Image(systemName: "chevron.right.circle.fill")
+                                .foregroundColor(.black)
+                                .font(.title2)
+                        }
+                        Button{
+ 
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
+                                .foregroundColor(.black)
+                                .font(.title2)
+                        }
+                        
+                    }.padding()
+                    HStack{
+                        /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
+                        MapCategoryCellView(categoryString: $categoryString)
+                    }
+                }
+                .zIndex(1)
+                .offset(y:-250)
+                
                 // MARK: 지도 뷰
                 /// 카테고리 버튼 별로 해당하는 지도 뷰가 보여줌
                 switch categoryString{
                 case "전체":
                     UIMapView(isShowingPhotoSpot: $isShowingPhotoSpot,isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
+                        .zIndex(0)
+
                 case "포토스팟":
-                    PhotoSpotMapView()
+                    PhotoSpotMapView().zIndex(0)
                 case "현상소":
-                    StationMapView()
+                    StationMapView().zIndex(0)
                 case "수리점":
-                    RepairShopMapView()
+                    RepairShopMapView().zIndex(0)
                 default:
-                    UIMapView(isShowingPhotoSpot: $isShowingPhotoSpot,isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
+                    UIMapView(isShowingPhotoSpot: $isShowingPhotoSpot,isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap).zIndex(0)
                 }
             }
             .sheet(isPresented: $isShowingPhotoSpot, content: {
@@ -71,30 +90,6 @@ struct MapView: View {
             .sheet(isPresented: $isShowingWebView) {
                 WebkitView(bindingWebURL: $bindingWebURL)
             }
-            // MARK: 상단 클릭 가능 버튼
-            .toolbar {  //MARK: 홈으로 돌아가기?? <- 회의 필요
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        viewRouter.currentPage = .contentView
-                    } label: {
-                        Text("Grain")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.black)
-                    }
-                }
-            }
-            .toolbar {  //MARK: 제보하기 <- 회의 필요
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        viewRouter.currentPage = .testGeocodeView
-                    } label: {
-                        Image(systemName: "plus")
-                            .foregroundColor(.black)
-                    }
-                }
-            }
-            
         }
     }
 }

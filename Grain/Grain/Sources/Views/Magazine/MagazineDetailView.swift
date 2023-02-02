@@ -1,38 +1,17 @@
-//
-//  MagazineDetail.swift
-//  Grain
-//
-//  Created by 조형구 on 2023/01/20.
-//
-
 import SwiftUI
 
 struct MagazineDetailView: View {
-    @State private var offsetY: CGFloat = CGFloat.zero
     var data : MagazineDocument
-    
-    private func setOffset(offset: CGFloat) -> some View {
-           DispatchQueue.main.async {
-               self.offsetY = offset
-           }
-           return EmptyView()
-       }
     var body: some View {
         ScrollView {
-            
              VStack{
-                GeometryReader { geometry in
-                    let offset = geometry.frame(in: .global).minY
-                    setOffset(offset: offset)
                     VStack {
                         HStack {
                             Circle()
                                 .frame(width: 40)
-                            VStack(alignment: .leading
-                            ) {
+                            VStack(alignment: .leading) {
                                 Text(data.fields.nickName.stringValue)
                                     .bold()
-                                
                                 HStack {
                                     Text("1분전")
                                     Spacer()
@@ -40,12 +19,9 @@ struct MagazineDetailView: View {
                                 }
                                 .font(.caption)
                             }
-                            
                             Spacer()
-                            
                         }
                         .padding()
-                        
                         Divider()
                             .frame(maxWidth: Screen.maxWidth * 0.9)
                             .background(Color.black)
@@ -67,41 +43,22 @@ struct MagazineDetailView: View {
                         .frame(maxHeight: Screen.maxHeight * 0.27)
                         .padding()
                 }
-                    }
                 .frame(minHeight: 350)
-                 
                  
                  LazyVStack(pinnedViews: [.sectionHeaders]) {
                      Section(header: Header(data: data) ){
-
-
                          VStack {
                              Text(data.fields.content.stringValue)
-                                 .padding(.vertical, -30)
+                                 .padding(.vertical, -5)
+                                 .padding()
                                  .foregroundColor(Color.textGray)
-
                          }
-
-
                      }
-                     .padding()
                  }
-                 .overlay(
-                    Rectangle()
-                        .border(.black)
-                        .foregroundColor(.white)
-                        .frame(height: UIApplication.shared.windows.first?.safeAreaInsets.top)
-                        .edgesIgnoringSafeArea(.all)
-                        .opacity(offsetY > -350 ? 0 : 1)
-                    , alignment: .top
-                 )
-                 
                  Spacer()
-                
-                
             }
         }
-    
+        .padding(.top, 1)
     }
 }
 struct Header: View {
@@ -112,6 +69,7 @@ struct Header: View {
             Text(data.fields.title.stringValue)
                 .font(.title2)
                 .bold()
+                .padding(.horizontal)
             Spacer()
             Divider()
         }

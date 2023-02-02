@@ -147,12 +147,12 @@ struct ContentView: View {
                 .ignoresSafeArea(.keyboard)
             }
         }
-//        .splashView {
-//            ZStack{
-//                SplashScreen()
-//            }
-//            
-//        }
+        .splashView {
+            ZStack{
+                SplashScreen()
+            }
+            
+        }
     }
 }
 

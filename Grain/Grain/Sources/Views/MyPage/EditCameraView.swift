@@ -80,6 +80,7 @@ struct EditCameraView: View {
                 
                     if cameraModal{
                         CameraModalView()
+//                        ListTestView()
                         .presentationDetents([.height(250)])
                     } else if lensModal{
                         VStack{

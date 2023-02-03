@@ -34,6 +34,8 @@
 		5265C1181BDD56B8E8B1F897 /* Pods_Grain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */; };
 		8B0BA0A2298A4197000A7090 /* CameraModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0BA0A1298A4197000A7090 /* CameraModalView.swift */; };
 		8B0BA0A4298A4C15000A7090 /* ListTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0BA0A3298A4C15000A7090 /* ListTestView.swift */; };
+		8B10F42A298CD18F00582D27 /* MyPageView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F429298CD18F00582D27 /* MyPageView2.swift */; };
+		8B10F42C298CE4AE00582D27 /* MyPageMyFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F42B298CE4AE00582D27 /* MyPageMyFeedView.swift */; };
 		8B5E09312989FBA200862700 /* FloatingMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E09302989FBA200862700 /* FloatingMenu.swift */; };
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
@@ -150,6 +152,8 @@
 		334699DA2988DE51004153A6 /* StoredPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredPostView.swift; sourceTree = "<group>"; };
 		8B0BA0A1298A4197000A7090 /* CameraModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModalView.swift; sourceTree = "<group>"; };
 		8B0BA0A3298A4C15000A7090 /* ListTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTestView.swift; sourceTree = "<group>"; };
+		8B10F429298CD18F00582D27 /* MyPageView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView2.swift; sourceTree = "<group>"; };
+		8B10F42B298CE4AE00582D27 /* MyPageMyFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageMyFeedView.swift; sourceTree = "<group>"; };
 		8B5E09302989FBA200862700 /* FloatingMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingMenu.swift; sourceTree = "<group>"; };
 		8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityAddView.swift; sourceTree = "<group>"; };
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
@@ -311,7 +315,9 @@
 			isa = PBXGroup;
 			children = (
 				334699D22988AE26004153A6 /* MyPageView.swift */,
+				8B10F429298CD18F00582D27 /* MyPageView2.swift */,
 				334699D42988CB86004153A6 /* MyPageOptionView.swift */,
+				8B10F42B298CE4AE00582D27 /* MyPageMyFeedView.swift */,
 				334699D62988CD44004153A6 /* EditMyPageView.swift */,
 				334699D82988DE3F004153A6 /* EditCameraView.swift */,
 				8B0BA0A1298A4197000A7090 /* CameraModalView.swift */,
@@ -758,6 +764,7 @@
 				A7D9F308298969FC00B39218 /* UserDTO.swift in Sources */,
 				9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */,
 				A7D9F318298986B000B39218 /* GeocodeRouter.swift in Sources */,
+				8B10F42A298CD18F00582D27 /* MyPageView2.swift in Sources */,
 				99233D462977F2C700A875B1 /* MapView.swift in Sources */,
 				9962CDCD297924BF00E834C3 /* ClassTabView .swift in Sources */,
 				A7D9F2F8298903CD00B39218 /* StorageService.swift in Sources */,
@@ -797,6 +804,7 @@
 				99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */,
 				9958AF9329777D7700A51DA9 /* Community.swift in Sources */,
 				9958AFB52977B0C500A51DA9 /* AuthenticationView.swift in Sources */,
+				8B10F42C298CE4AE00582D27 /* MyPageMyFeedView.swift in Sources */,
 				334699D92988DE3F004153A6 /* EditCameraView.swift in Sources */,
 				A75BB98E297E66EE004FE6FA /* Switchingview.swift in Sources */,
 				9958AFA129777F8100A51DA9 /* CommunityStore.swift in Sources */,

@@ -11,7 +11,7 @@ import PhotosUI
 
 struct AddCommunityView: View {
     
-    @StateObject var communityVM = CommunityViewModel()
+    @StateObject var communityVM : CommunityViewModel
     
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
@@ -55,9 +55,10 @@ struct AddCommunityView: View {
                     
                     Spacer()
                     Button {
-                        //글쓰기 동작 함수
-                        
+                        // 커뮤니티 add
                         communityVM.insertCommunity(profileImage: "profileImage", nickName: "nickName", category: selectedTab.rawValue, image: "image", userID: "userID", title: inputTitle, content: inputContent)
+                        
+                        communityVM.fetchCommunity()
                         
                         presented.toggle()
 
@@ -105,8 +106,6 @@ struct AddCommunityView: View {
                                 selectedImages.append(uiImage)
                             }
                         }
-                        
-                       
                     }
                     .frame(width: 100,height: 100)
  
@@ -195,8 +194,8 @@ struct AddCommunityView: View {
         .ignoresSafeArea(.keyboard)
     }}
 
-struct AddCommunityView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddCommunityView(presented: .constant(false))
-    }
-}
+//struct AddCommunityView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddCommunityView(presented: .constant(false))
+//    }
+//}

@@ -74,7 +74,6 @@ enum UserRouter {
         request.httpMethod = method.value
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        print(request)
         if let data = data {
             request.httpBody = data
         }
@@ -86,15 +85,15 @@ enum UserRouter {
     }
     
     // 실패한거 같음
-//    func asURLRequestCurrent(request: URLRequest) throws -> URLRequest {
-//        var insideRequest = request
-//
-//        insideRequest.httpMethod = method.value
-//        insideRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        if let data = data {
-//            insideRequest.httpBody = data
-//        }
-//        return request
-//    }
+    
+    func asURLRequestCurrent(request: URLRequest) throws -> URLRequest {
+        var insideRequest = request
+        insideRequest.httpMethod = method.value
+        insideRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        if let data = data {
+            insideRequest.httpBody = data
+        }
+        return request
+    }
     
 }

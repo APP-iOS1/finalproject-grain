@@ -13,9 +13,11 @@ import UIKit
 
 
 struct PhotoSpotMapView: View {
+    @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
+    
     var body: some View {
         ZStack{
-            PhotoSpotUIMapView()
+            PhotoSpotUIMapView(mapData: $mapData)
         }
         
     }
@@ -26,12 +28,12 @@ struct PhotoSpotMapView: View {
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct PhotoSpotUIMapView: UIViewRepresentable,View {
     
-//    @ObservedObject var viewModel = MapSceneViewModel()
+
     @StateObject var locationManager = LocationManager()
     
-    @ObservedObject var mapStore = MapStore()
-
+    @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     
+
     //TODO: 지금 현재 위치를 못 받아오는거 같음
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
@@ -44,7 +46,7 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
     // UIView 기반 컴포넌트의 인스턴스 생성하고 필요한 초기화 작업을 수행한 뒤 반환한다.
     func makeUIView(context: Context) -> NMFNaverMapView {
         // TODO: 비동기 알아보기
-        mapStore.fetchMapData()
+        
         // MARK: 네이버 맵 지도 생성
         let view = NMFNaverMapView()
         view.showZoomControls = false
@@ -65,33 +67,19 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLatitude, lng: userLongitude))
         view.mapView.moveCamera(cameraUpdate)
         
-        
-        // MARK: MAP DB에 들어간 정보
-        var markers: [MarkerCustomInfo] = []
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
-            for i in mapStore.mapData{
-                // 2 -> 수리점일 경우에 markers에 넣기
-                if i.category == 0{
-                    var object : MarkerCustomInfo = MarkerCustomInfo(marker: NMGLatLng(lat: i.latitude, lng: i.longitude), category: i.category ?? 4, url: i.url)
-                    print(object)
-                    markers.append(object)
-                }
-            }
-        }
-        // TODO: 비동기적으로 코드 수정 필요함! , 마커 대신 이미지 사진, 글씨로 대체해야함
-        // MARK: Map 컬렉션 DB에서 위치 정보를 받아와 마커로 표시
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
-            for item in markers{
+        for item in mapData{
+            if item.fields.category.stringValue == "포토스팟"{
                 let marker = NMFMarker()
-                marker.position = item.marker
-                marker.iconImage = NMF_MARKER_IMAGE_RED
-
-                // MARK: 아이콘 캡션 - 수리점 글씨
-                marker.captionText = "포토스팟"
-                marker.userInfo = ["tag" : 0]
-                marker.tag = 2
-                
+                marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
+                marker.iconImage = NMF_MARKER_IMAGE_PINK
+                marker.width = 25
+                marker.height = 35
+                // MARK: 아이콘 캡션 - 포토스팟 글씨
+                marker.captionText = item.fields.category.stringValue
+                // MARK: URL링크 정보 받기
+                marker.userInfo = ["url" : item.fields.url.stringValue]
+                // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
+                marker.tag = 0
                 // MARK: 마커 클릭시
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {
@@ -100,9 +88,10 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
                     return true
                 }
                 marker.mapView = view.mapView
-
             }
+    
         }
+        
         return view
     }
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.

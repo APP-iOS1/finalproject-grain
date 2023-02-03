@@ -10,6 +10,7 @@ import SwiftUI
 import Firebase
 import GoogleSignIn
 import GoogleSignInSwift
+import Combine
 
 
 final class AuthenticationStore: ObservableObject {
@@ -76,17 +77,9 @@ final class AuthenticationStore: ObservableObject {
                 dump("\(#function) - DEBUG \(error.localizedDescription)")
             } else {
                 guard let profile = user?.profile else { return }
-                userDatabasePath.document(uid ?? "").getDocument { snapshot, err in
-                    if let isExsits = snapshot?.exists,
-                       let uid,
-                       isExsits == false {
-                        self.userDatabasePath.document(uid).setData([
-                            "id": uid,
-                            "name": profile.name,
-                            "email": profile.email
-                        ])
-                    }
-                }
+                
+                
+                insertUser(myFilm: "", bookmarkedMagazineID: "", email: profile.email, myCamera: "", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: uid ?? "", following: "", myLens: "", profileImage: "", name: profile.name, follower: "", nickName: "")
                 
                 self.authStateAuthenticated(user: CurrentUser(id: uid ?? "", name: profile.name, email: profile.email))
                 self.logInCompanyState = .googleLogIn
@@ -110,6 +103,21 @@ final class AuthenticationStore: ObservableObject {
     
     public func authStateAuthenticated(user: CurrentUser) {
         self.authenticationState = .authenticated
+    }
+    // 유저 데이터 만들기
+
+    var subscription = Set<AnyCancellable>()
+    var fetchUsersSuccess = PassthroughSubject<(), Never>()
+    var insertUsersSuccess = PassthroughSubject<(), Never>()
+    
+    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String) {
+
+        UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+        } receiveValue: { (data: UserResponse) in
+            self.fetchUsersSuccess.send()
+        }.store(in: &subscription)
     }
     
    

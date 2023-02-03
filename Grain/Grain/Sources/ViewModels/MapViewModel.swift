@@ -12,36 +12,32 @@ final class MapViewModel: ObservableObject {
     
     var subscription = Set<AnyCancellable>()
     
-    @Published var magazines = [MapDocument]()
+    @Published var mapData = [MapDocument]()
     
     var fetchMapSuccess = PassthroughSubject<(), Never>()
     var insertMapSuccess = PassthroughSubject<(), Never>()
 
-    func fetchMagazine() {
-//        print("MagazineViewModel fetchCommunity Start")
-        
+    func fetchMap() {
         MapService.getMap()
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-//            print("MagazineViewModel fetchCommunity complete")
         } receiveValue: { (data: MapResponse) in
-            self.magazines = data.documents
+            self.mapData = data.documents
             self.fetchMapSuccess.send()
         }.store(in: &subscription)
-
     }
     
-    func insertMagazine(latitude: Double,url: String,id: String,category: Int,magazineId: String,longitude: Double ) {
-//        print("TestViewModel insertCommunity Start")
-        
-        MapService.insertMap(latitude: latitude,url: url,id: id,category: category,magazineId: magazineId,longitude: longitude)
-            .receive(on: DispatchQueue.main)
-            .sink { (completion: Subscribers.Completion<Error>) in
-//            print("MagazineViewModel fetchCommunity complete")
-        } receiveValue: { (data: MapResponse) in
-            self.insertMapSuccess.send()
-        }.store(in: &subscription)
-    }
+//    func insertMagazine(latitude: Double,url: String,id: String,category: Int,magazineId: String,longitude: Double ) {
+////        print("TestViewModel insertCommunity Start")
+//
+//        MapService.insertMap(latitude: latitude,url: url,id: id,category: category,magazineId: magazineId,longitude: longitude)
+//            .receive(on: DispatchQueue.main)
+//            .sink { (completion: Subscribers.Completion<Error>) in
+////            print("MagazineViewModel fetchCommunity complete")
+//        } receiveValue: { (data: MapResponse) in
+//            self.insertMapSuccess.send()
+//        }.store(in: &subscription)
+//    }
     
     
 }

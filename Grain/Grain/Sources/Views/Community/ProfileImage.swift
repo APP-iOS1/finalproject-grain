@@ -15,9 +15,8 @@ struct ProfileImage: View {
     var body: some View {
         Image("\(imageName)")
             .resizable()
-            .scaledToFit()
-            .clipShape(Circle())
             .frame(width: width, height: height)
+            .cornerRadius(48)
     }
 }
 

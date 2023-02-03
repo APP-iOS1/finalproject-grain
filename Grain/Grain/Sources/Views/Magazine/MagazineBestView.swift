@@ -35,6 +35,7 @@ struct MagazineBestView: View {
                                 .padding(.vertical, 7)
                                 .padding(.horizontal)
                                 .frame(height: Screen.maxHeight * 0.6)
+                            
                         }
                     }
                     

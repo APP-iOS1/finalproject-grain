@@ -43,7 +43,6 @@ enum MapService {
             print("http error!")
         }
         
-
         return URLSession
             .shared
             .dataTaskPublisher(for: request)

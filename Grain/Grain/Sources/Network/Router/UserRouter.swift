@@ -74,7 +74,6 @@ enum UserRouter {
         request.httpMethod = method.value
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        print(request)
         if let data = data {
             request.httpBody = data
         }

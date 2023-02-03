@@ -20,11 +20,12 @@ struct ContentView: View {
     //정훈
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     
+
+    let icons = ["film", "text.bubble", "plus","map", "person"]
+    let labels = ["필름", "커뮤니티", "", "지도", "마이"]
     @StateObject var mapVM = MapViewModel()
     @StateObject var magazineVM = MagazineViewModel()
-    
-    let icons = ["magazine", "note.text", "plus","map", "person"]
-    
+
     var body: some View {
         VStack{
             switch authenticationStore.authenticationState {
@@ -75,7 +76,6 @@ struct ContentView: View {
                         default:
                             NavigationStack {
                                 VStack {
-                                    
                                     if self.selectedIndex == 0 {
                                         MagazineContentAddView(presented: $presented, updateNumber: NMGLatLng(lat: 0, lng: 0))
                                     } else if self.selectedIndex == 1{
@@ -108,13 +108,18 @@ struct ContentView: View {
                                         .frame(width: 60, height: 60)
                                         .background(.black)
                                         .cornerRadius(30)
-                                    
                                 }
                                 else {
-                                    Image(systemName: icons[number])
-                                        .font(.system(size: 25,
-                                                      weight: .regular,  design: .default))
-                                        .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                    VStack{
+                                        Image(systemName: icons[number])
+                                            .font(.system(size: 25,
+                                                          weight: .regular,  design: .default))
+                                            .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                            .padding(.vertical, 3)
+                                        Text(labels[number])
+                                            .font(.caption)
+                                            .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                    }
                                 }
                             }
                             Spacer()

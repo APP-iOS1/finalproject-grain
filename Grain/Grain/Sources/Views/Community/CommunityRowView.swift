@@ -35,7 +35,7 @@ struct CommunityRowView: View {
                     HStack {
                         RoundedRectangle(cornerRadius: 20)
                             .frame(width: 45, height: 25)
-                            .foregroundColor(Color(hex: "595BB9"))
+                            .foregroundColor(Color(hex: "F58800"))
                             .overlay{
                                 Text("\(community.fields.category.stringValue)")
                                     .foregroundColor(.white)
@@ -44,10 +44,10 @@ struct CommunityRowView: View {
                             }
                         RoundedRectangle(cornerRadius: 20)
                             .frame(width: 45, height: 25)
-                            .foregroundColor(.black)
+                            .foregroundColor(Color(hex: "F8BC24"))
                             .overlay{
                                 Text("모집중")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.black)
                                     .bold()
                                     .font(.caption)
                             }

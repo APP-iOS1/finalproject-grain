@@ -14,25 +14,31 @@ struct Switchingview: View {
     @State var bindingWebURL : String = ""
     // 임시
     @State var presented : Bool = false
+    @State var clickedMagazineDataID : String = ""
     // 정훈
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
-   
+    @StateObject var mapVM = MapViewModel()
+    @StateObject var magazineVM = MagazineViewModel()
+
     var body: some View {
         switch viewRouter.currentPage{
         case .contentView:
             ContentView().environmentObject(AuthenticationStore()).environmentObject(KakaoAuthenticationStore())
         case .mapView:
-            MapView()
+            MapView(mapData: $mapVM.mapData, magazineData: $magazineVM.magazines)
         case .photoSpotDetailView:
-            PhotoSpotDetailView()
+            PhotoSpotDetailView(magazineData: $magazineVM.magazines, clickedMagazineDataID: $clickedMagazineDataID)
+                .onAppear{
+                    magazineVM.fetchMagazine()
+                }
         case .webkitView:
             WebkitView(bindingWebURL: $bindingWebURL)   //TODO: 임시코드 <- 리팩토링 하기
         case .photoSpotMapView:
-            PhotoSpotMapView()
+            PhotoSpotMapView(mapData: $mapVM.mapData)
         case .stationMapView:
-            StationMapView()
+            StationMapView(mapData: $mapVM.mapData)
         case .repairShopMapView:
-            RepairShopMapView()
+            RepairShopMapView(mapData: $mapVM.mapData)
         case .addMarkerMapView:
             AddMarkerMapView(updateNumber: $updateNumber)
         case .magazineContentAddView:
@@ -46,4 +52,5 @@ struct Switchingview: View {
 //                }
 //            }
     }
+        
 }

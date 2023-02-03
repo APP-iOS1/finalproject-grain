@@ -12,7 +12,6 @@ struct MapResponse: Codable {
 }
 
 struct MapDocument: Codable,Hashable {
-    let name: String
     let fields: Fields
     let createTime, updateTime: String
 }
@@ -23,7 +22,7 @@ struct Fields: Codable,Hashable {
     let longitude: MapLocation
     let url: MapID
     let latitude: MapLocation
-    let category: MapCategory
+    let category: MapID
     
     enum CodingKeys: String, CodingKey {
         case magazineID = "magazineId"
@@ -31,9 +30,11 @@ struct Fields: Codable,Hashable {
     }
 }
 
-struct MapCategory: Codable,Hashable {
-    let integerValue: String
-}
+// FIXME: 분명 Firebase Store에서는 숫자 타입이고 postman에서 실험할떄는 String형으로 나오는지??
+// MARK: category: MapCategory -> category: MapID
+//struct MapCategory: Codable,Hashable {
+//    let integerValue: String
+//}
 
 struct MapID: Codable,Hashable {
     let stringValue: String

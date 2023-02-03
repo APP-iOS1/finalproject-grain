@@ -20,6 +20,9 @@ struct ContentView: View {
     //정훈
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     
+    @StateObject var mapVM = MapViewModel()
+    @StateObject var magazineVM = MagazineViewModel()
+    
     let icons = ["magazine", "note.text", "plus","map", "person"]
     
     var body: some View {
@@ -63,7 +66,7 @@ struct ContentView: View {
                             }
                         case 3:
                             NavigationStack {
-                                MapView()
+                                MapView(mapData:$mapVM.mapData, magazineData: $magazineVM.magazines)
                             }
                         case 4:
                             NavigationStack {
@@ -145,14 +148,19 @@ struct ContentView: View {
                     
                 }
                 .ignoresSafeArea(.keyboard)
+                .onAppear{
+                    /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
+                    mapVM.fetchMap()
+                    magazineVM.fetchMagazine()
+                }
             }
         }
-        .splashView {
-            ZStack{
-                SplashScreen()
-            }
-            
-        }
+//        .splashView {
+//            ZStack{
+//                SplashScreen()
+//            }
+//            
+//        }
     }
 }
 

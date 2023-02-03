@@ -99,6 +99,7 @@
 		A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */; };
 		A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */; };
 		A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */; };
+		A7BFE18B298CC24E00D15F45 /* PhotoSpotTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFE18A298CC24E00D15F45 /* PhotoSpotTestView.swift */; };
 		A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D957CE297AA574001D2401 /* CommunityDTO.swift */; };
 		A7D957D1297AA646001D2401 /* CommunityQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D957D0297AA646001D2401 /* CommunityQuery.swift */; };
 		A7D957D4297AAF74001D2401 /* CommunityRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D957D3297AAF74001D2401 /* CommunityRouter.swift */; };
@@ -219,6 +220,7 @@
 		A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeDTO.swift; sourceTree = "<group>"; };
 		A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDTO.swift; sourceTree = "<group>"; };
 		A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineQuery.swift; sourceTree = "<group>"; };
+		A7BFE18A298CC24E00D15F45 /* PhotoSpotTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSpotTestView.swift; sourceTree = "<group>"; };
 		A7D957CE297AA574001D2401 /* CommunityDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityDTO.swift; sourceTree = "<group>"; };
 		A7D957D0297AA646001D2401 /* CommunityQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityQuery.swift; sourceTree = "<group>"; };
 		A7D957D3297AAF74001D2401 /* CommunityRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityRouter.swift; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 				A75BB988297E6364004FE6FA /* PhotoSpotDetailView.swift */,
 				A75BB98F297EA25C004FE6FA /* WebkitView.swift */,
 				A7D9F313298981F400B39218 /* TestGeocodeView.swift */,
+				A7BFE18A298CC24E00D15F45 /* PhotoSpotTestView.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -759,6 +762,7 @@
 				9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */,
 				A7D9F318298986B000B39218 /* GeocodeRouter.swift in Sources */,
 				99233D462977F2C700A875B1 /* MapView.swift in Sources */,
+				A7BFE18B298CC24E00D15F45 /* PhotoSpotTestView.swift in Sources */,
 				9962CDCD297924BF00E834C3 /* ClassTabView .swift in Sources */,
 				A7D9F2F8298903CD00B39218 /* StorageService.swift in Sources */,
 				334699D52988CB86004153A6 /* MyPageOptionView.swift in Sources */,

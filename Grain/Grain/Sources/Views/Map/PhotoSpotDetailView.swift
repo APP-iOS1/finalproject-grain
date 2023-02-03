@@ -44,13 +44,7 @@ struct PhotoSpotDetailView: View {
                                 
                                 Spacer()
                                 
-                                Button {
-                                    isBookMarked.toggle()
-                                } label: {
-                                    Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
-                                        .font(.title2)
-                                        .foregroundColor(.black)
-                                }
+                                
                                 
                             } //상단 타이틀, 북마크
                             .padding(.horizontal, 30)
@@ -72,6 +66,7 @@ struct PhotoSpotDetailView: View {
                                 Text(item.fields.nickName.stringValue)
                                     .font(.title3)
                                     .bold()
+                                
                                 Spacer()
                                 
                                 Button{
@@ -80,6 +75,22 @@ struct PhotoSpotDetailView: View {
                                     Text("팔로우")
                                 }
                                 .padding(.trailing, 10)
+                                
+                                Button {
+                                    isBookMarked.toggle()
+                                } label: {
+                                    Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
+                                        .font(.title2)
+                                        .foregroundColor(.black)
+                                }.padding(.trailing, 10)
+                                
+                                Button{
+                                    
+                                } label: {
+                                    Text("더 찾기")
+                                }
+                                .padding(.trailing, 10)
+                                
                                 
                             } // 작성자 프로필
                             .padding(.horizontal)

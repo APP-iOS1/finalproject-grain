@@ -34,6 +34,7 @@ enum StorageService {
     // MARK: - 스토리지에 이미지 넣기
     static func insertStorageImage(image: [UIImage]) -> AnyPublisher<StorageResponse, Error>{
         let firebaseStorageURL = "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/"
+        
         // MARK: 유저 고유의 폴더 경로
         let userAuthString = Auth.auth().currentUser?.uid
         // MARK: 업로드시 생성되는 게시글 폴더 이미지 경로
@@ -50,6 +51,36 @@ enum StorageService {
         } catch {
             print("http error")
         }
+        
+        return URLSession
+            .shared
+            .dataTaskPublisher(for: request)
+            .map{ $0.data}
+            .decode(type: StorageResponse.self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
+    }
+
+    // MARK: - 스토리지에 이미지 넣기
+    static func testinsertStorageImage(image: [UIImage]) -> AnyPublisher<StorageResponse, Error>{
+        let firebaseStorageURL = "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/"
+        
+        // MARK: 유저 고유의 폴더 경로
+        let userAuthString = Auth.auth().currentUser?.uid
+        // MARK: 업로드시 생성되는 게시글 폴더 이미지 경로
+        let folderPath = UUID().uuidString
+
+//         FIXME: %2F -> /
+        let firebaseStoragePath =  firebaseStorageURL + userAuthString! + "%2F" + folderPath + "%2F"
+        
+        // FIXME: 여기서 request이거는 왜 만드는지??
+        let request = URLRequest(url: URL(string: firebaseStorageURL)!)
+        do {
+            // FIXME: paramName fileName 의미 알아보기
+            var request = try StorageRouter.post.uploadImage(paramName: "1", fileName: "2", image: image, url: firebaseStoragePath)
+        } catch {
+            print("request error")
+        }
+        
         return URLSession
             .shared
             .dataTaskPublisher(for: request)

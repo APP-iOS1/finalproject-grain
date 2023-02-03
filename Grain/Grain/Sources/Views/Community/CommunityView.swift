@@ -8,13 +8,11 @@
 import SwiftUI
 
 struct CommunityView: View {
-
+    @StateObject var communityVM: CommunityViewModel
+    
     let titles: [String] = ["전체", "매칭", "마켓", "클래스", "정보"]
     @State private var selectedIndex: Int = 0
     @State private var isAddViewShown: Bool = false
-    
-    // 공통으로 사용할 커뮤니티 VM
-    @StateObject var communityVM = CommunityViewModel()
     
     var body: some View {
         NavigationStack{
@@ -77,18 +75,14 @@ struct CommunityView: View {
             } // 최상단 vstack
         } // navi stack
         .onAppear {
-            // 1. 커뮤니티 데이터 fetch
+            // 커뮤니티 데이터 fetch
             communityVM.fetchCommunity()
         }
-        // 검증 코드
-//        .onReceive(communityVM.fetchCommunitySuccess) { newValue in
-//                        print(newValue)
-//        }
     }
 }
 
-struct CommunityView_Previews: PreviewProvider {
-    static var previews: some View {
-        CommunityView()
-    }
-}
+//struct CommunityView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CommunityView()
+//    }
+//}

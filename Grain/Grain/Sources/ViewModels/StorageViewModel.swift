@@ -29,13 +29,14 @@ final class StorageViewModel: ObservableObject {
 //            self.fetchStorageSuccess.send()
 //        }.store(in: &subscription)
     }
-
+    
     func insertStorageImage(image: [UIImage]) {
         StorageService.insertStorageImage(image: image)
+            .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-        } receiveValue: { (data: StorageResponse) in
-            self.insertStorageSuccess.send()
-        }.store(in: &subscription)      //메모리상에서 연결을 날려줌
+            } receiveValue: { (data: StorageResponse) in
+                self.insertStorageSuccess.send()
+            }.store(in: &subscription)      //메모리상에서 연결을 날려줌
     }
 
 }

@@ -12,11 +12,16 @@ import NMapsMap
 
 struct ContentView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
+    @StateObject var communityVM = CommunityViewModel()
     
     @State private var tabSelection: Int = 0
     @State var selectedIndex = 0
     @State var magazineViewPresented : Bool = false
     @State var presented = false
+    
+    // add 버튼 눌렀을때 상태처리 변수
+    @State var ispushedAddButton = false
+    
     //정훈
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     
@@ -37,14 +42,12 @@ struct ContentView: View {
                     ZStack {
                         Spacer().fullScreenCover(isPresented: $presented) {
                             VStack {
-                                
                                 if self.selectedIndex == 0 {
                                     MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
-                                } else if self.selectedIndex == 1{
-                                    AddCommunityView(presented: $presented)
+                                } else if self.selectedIndex == 1 {
+                                    AddCommunityView(communityVM: communityVM, presented: $presented)
                                 }
                                 Spacer()
-                                
                             }
                         }
                         
@@ -55,11 +58,11 @@ struct ContentView: View {
                             }
                         case 1:
                             NavigationStack {
-                                CommunityView()
+                                CommunityView(communityVM: communityVM)
                             }
                         case 2:
                             NavigationStack {
-                                CommunityView()
+                                CommunityView(communityVM: communityVM)
                             }
                         case 3:
                             NavigationStack {
@@ -72,11 +75,10 @@ struct ContentView: View {
                         default:
                             NavigationStack {
                                 VStack {
-                                    
                                     if self.selectedIndex == 0 {
                                         MagazineContentAddView(presented: $presented, updateNumber: NMGLatLng(lat: 0, lng: 0))
-                                    } else if self.selectedIndex == 1{
-                                        AddCommunityView(presented: $presented)
+                                    } else if self.selectedIndex == 1 {
+                                        AddCommunityView(communityVM: communityVM, presented: $presented)
                                     }
                                 }
                             }
@@ -102,7 +104,6 @@ struct ContentView: View {
                                         .frame(width: 60, height: 60)
                                         .background(.black)
                                         .cornerRadius(30)
-                                    
                                 }
                                 else {
                                     Image(systemName: icons[number])
@@ -132,17 +133,9 @@ struct ContentView: View {
                                     Image(systemName: "magnifyingglass")
                                         .foregroundColor(.black)
                                 }
-                                Button {
-                                    //글쓰기
-                                } label: {
-                                    Image(systemName: "plus")
-                                        .foregroundColor(.black)
-                                }
                             }
                         }
                     }
-                    
-                    
                 }
                 .ignoresSafeArea(.keyboard)
             }

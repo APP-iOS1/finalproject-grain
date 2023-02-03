@@ -27,101 +27,68 @@ struct CommunityRowView: View {
                 Image("sampleImage")
                     .resizable()
                     .frame(width: 130 , height: 100)
-                    .padding([.leading], 20)
-                    .padding(.trailing)
+                    .padding(.leading, 10)
                 
                 VStack(alignment: .leading){
+                    
+                    //MARK: 게시글 태그
                     HStack {
                         RoundedRectangle(cornerRadius: 20)
                             .frame(width: 45, height: 25)
-                            .foregroundColor(Color(hex: "595BB9"))
+                            .foregroundColor(Color(hex: "F58800"))
                             .overlay{
                                 Text("\(community.fields.category.stringValue)")
                                     .foregroundColor(.white)
                                     .bold()
                                     .font(.caption)
                             }
-//                        RoundedRectangle(cornerRadius: 20)
-//                            .frame(width: 45, height: 25)
-//                            .foregroundColor(Color(hex: "459172"))
-//                            .overlay{
-//                                Text("매칭")
-//                                    .foregroundColor(.white)
-//                                    .bold()
-//                                    .font(.caption)
-//                            }
-//                        RoundedRectangle(cornerRadius: 20)
-//                            .frame(width: 45, height: 25)
-//                            .foregroundColor(Color(hex: "7E736F"))
-//                            .overlay{
-//                                Text("매칭")
-//                                    .foregroundColor(.white)
-//                                    .bold()
-//                                    .font(.caption)
-//                            }
-//                        RoundedRectangle(cornerRadius: 20)
-//                            .frame(width: 45, height: 25)
-//                            .foregroundColor(Color(hex: "44909F"))
-//                            .overlay{
-//                                Text("매칭")
-//                                    .foregroundColor(.white)
-//                                    .bold()
-//                                    .font(.caption)
-//                            }
-                        
-                        
                         RoundedRectangle(cornerRadius: 20)
                             .frame(width: 45, height: 25)
-                            .foregroundColor(.black)
+                            .foregroundColor(Color(hex: "F8BC24"))
                             .overlay{
                                 Text("모집중")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.black)
                                     .bold()
                                     .font(.caption)
                             }
-                        
                     } // hstack
-                    .padding(.leading, -2)
                     
+                    Spacer()
                     
+                    //MARK: 게시글 제목
                     Text("\(community.fields.title.stringValue)")
                         .font(.callout)
                         .foregroundColor(.black)
                         .multilineTextAlignment(.leading)
 //                        .padding(.bottom, 3)
                     
-                    HStack{
-//                        Text("\(community.location)") //??
-//                        Text(".")
+                    Spacer()
+                    
+                    HStack {
                         Text("1시간 전")
                         
                         Spacer()
+                        
                         Image(systemName: "heart")
                         Text("\(50)")
                         Image(systemName: "text.bubble")
                         Text("\(12)")
-                        
                     }
                     .foregroundColor(.secondary)
                     .font(.caption)
-                    .padding(.trailing)
-                    .padding(.top, 1)
-
-                } //vstack
+                    .padding(.trailing, 10)
+                }
+                .frame(height: 100)
+                //vstack
             }
-//            Rectangle()
-//                .frame(width: Screen.maxWidth * 0.9, height: 0.5)
-//                .foregroundColor(.secondary)
-//                .padding(.leading, 18)
-
         }
-        .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.17)
+        .padding(.vertical, 5)
     }
 }
 
-//struct CommunityRowView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CommunityRowView()
-//    }
-//}
-//
+struct CommunityRowView_Previews: PreviewProvider {
+    static var previews: some View {
+        CommunityRowView(community: CommunityDocument(name: "abc", fields: CommunityFields(title: CommunityCategory(stringValue: "임시 타이틀입니다"), category: CommunityCategory(stringValue: "매칭중"), content: CommunityCategory(stringValue: "content"), profileImage: CommunityCategory(stringValue: "test"), nickName: CommunityCategory(stringValue: "han"), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "abc")])), userID: CommunityCategory(stringValue: "seungsoo"), id: CommunityCategory(stringValue: "123")), createTime: "2023-02-03", updateTime: "방금"))
+    }
+}
+

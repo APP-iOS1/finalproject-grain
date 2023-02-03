@@ -25,8 +25,12 @@ struct ContentView: View {
     //정훈
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     
-    let icons = ["magazine", "note.text", "plus","map", "person"]
-    
+
+    let icons = ["film", "text.bubble", "plus","map", "person"]
+    let labels = ["필름", "커뮤니티", "", "지도", "마이"]
+    @StateObject var mapVM = MapViewModel()
+    @StateObject var magazineVM = MagazineViewModel()
+
     var body: some View {
         VStack{
             switch authenticationStore.authenticationState {
@@ -66,7 +70,7 @@ struct ContentView: View {
                             }
                         case 3:
                             NavigationStack {
-                                MapView()
+                                MapView(mapData:$mapVM.mapData, magazineData: $magazineVM.magazines)
                             }
                         case 4:
                             NavigationStack {
@@ -85,7 +89,10 @@ struct ContentView: View {
                         }
                         Spacer()
                     }
+                    
                     Divider()
+                        .padding(.top, -8)
+                    
                     HStack {
                         ForEach(0..<5, id: \.self) { number in
                             Spacer()
@@ -106,10 +113,16 @@ struct ContentView: View {
                                         .cornerRadius(30)
                                 }
                                 else {
-                                    Image(systemName: icons[number])
-                                        .font(.system(size: 25,
-                                                      weight: .regular,  design: .default))
-                                        .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                    VStack{
+                                        Image(systemName: icons[number])
+                                            .font(.system(size: 25,
+                                                          weight: .regular,  design: .default))
+                                            .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                            .padding(.vertical, 3)
+                                        Text(labels[number])
+                                            .font(.caption)
+                                            .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                    }
                                 }
                             }
                             Spacer()
@@ -138,6 +151,11 @@ struct ContentView: View {
                     }
                 }
                 .ignoresSafeArea(.keyboard)
+                .onAppear{
+                    /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
+                    mapVM.fetchMap()
+                    magazineVM.fetchMagazine()
+                }
             }
         }
         .splashView {

@@ -44,6 +44,19 @@ struct CommunityView: View {
                     Spacer()
                 } // hstack
                 
+                //MARK: 소희님이 공유해주신 제스쳐 탭이동 없애기부분 (적용하면 툴바 사용할수없음)
+//                switch(selectedIndex) {
+//                case 0:
+//                    AllTabView(community: communityVM.communities)
+//                case 1:
+//                    MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"))
+//                case 2:
+//                    ClassTabView(community: communityVM.returnCategoryCommunity(category: "마켓"))
+//                case 3:
+//                    MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"))
+//                case 4:
+//                    InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"))
+//                }
                 TabView(selection: $selectedIndex) {
                     AllTabView(community: communityVM.communities)
                         .tag(0)

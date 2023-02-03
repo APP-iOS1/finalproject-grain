@@ -3,8 +3,9 @@ import SwiftUI
 struct MagazineDetailView: View {
     var data : MagazineDocument
     var body: some View {
-        ScrollView {
-             VStack{
+        NavigationStack{
+            ScrollView {
+                VStack{
                     VStack {
                         HStack {
                             Circle()
@@ -22,6 +23,7 @@ struct MagazineDetailView: View {
                             Spacer()
                         }
                         .padding()
+                        .padding(.top, -15)
                         Divider()
                             .frame(maxWidth: Screen.maxWidth * 0.9)
                             .background(Color.black)
@@ -42,23 +44,45 @@ struct MagazineDetailView: View {
                         .tabViewStyle(.page)
                         .frame(maxHeight: Screen.maxHeight * 0.27)
                         .padding()
+                    }
+                    .frame(minHeight: 350)
+                    
+                    LazyVStack(pinnedViews: [.sectionHeaders]) {
+                        Section(header: Header(data: data) ){
+                            VStack {
+                                Text(data.fields.content.stringValue)
+                                    .lineSpacing(4.0)
+                                    .padding(.vertical, -9)
+                                    .padding()
+                                    .foregroundColor(Color.textGray)
+                            }
+                        }
+                    }
+                    Spacer()
                 }
-                .frame(minHeight: 350)
-                 
-                 LazyVStack(pinnedViews: [.sectionHeaders]) {
-                     Section(header: Header(data: data) ){
-                         VStack {
-                             Text(data.fields.content.stringValue)
-                                 .padding(.vertical, -5)
-                                 .padding()
-                                 .foregroundColor(Color.textGray)
-                         }
-                     }
-                 }
-                 Spacer()
+            }
+            .padding(.top, 1)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                HStack{
+                    Button {
+                        //수정
+                    } label: {
+                        Image(systemName: "square.and.pencil")
+                           
+                            .foregroundColor(.blue)
+                    }
+                    Button {
+                        //삭제
+                    } label: {
+                        Image(systemName: "trash")
+                          
+                            .foregroundColor(.blue)
+                    }
+                }
             }
         }
-        .padding(.top, 1)
     }
 }
 struct Header: View {

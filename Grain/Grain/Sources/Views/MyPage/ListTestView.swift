@@ -70,9 +70,19 @@ struct ListTestView: View {
                        Spacer()
                        Button{
                            showAddItem.toggle()
+                           
                        } label: {
 //                           Image(systemName: "plus")
-                           Text("기기 추가")
+                           if showAddItem{
+                               Text("완료")
+                                   .foregroundColor(Color(UIColor.systemGray2))
+                           } else {
+                               HStack{
+                                   Image(systemName: "plus.circle")
+                                   Text("기기 추가하기")
+                               }
+                               .foregroundColor(Color(UIColor.systemGray))
+                           }
                        }
                        Spacer()
                    }

@@ -6,58 +6,58 @@
 //
 
 import SwiftUI
+import UIKit
 
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
     let community: CommunityDocument
+    @Environment(\.presentationMode) var presentationMode
     
     @State private var isBookMarked: Bool = false
     @State private var isliked: Bool = false
-
     @State private var comment: String = ""
+    @State private var isHiddenComment: Bool = true
+    @FocusState private var textFieldFocused: Bool
     
     var body: some View {
-        VStack{
+        VStack {
             ScrollView {
-                VStack {
-                    HStack{
-                        VStack(alignment: .leading){
-                            Text("\(community.fields.title.stringValue)")
-                                .multilineTextAlignment(.leading)
-                                .font(.title)
-                                .bold()
-                            
-//                            HStack{
-////                                Image(systemName: "mappin")
-//                                Text(community.location)
-//                            }
-//                            .font(.subheadline)
-//                            .foregroundColor(.gray)
-                            
+                VStack(alignment: .leading) {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                            Text("커뮤니티")
                         }
-                        
-                        Spacer()
-                        
-                        Button {
-                            isBookMarked.toggle()
-                        } label: {
-                            Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
-                                .font(.title2)
-                                .foregroundColor(.black)
-                        }
-                        
-                    } //상단 타이틀, 북마크
-                    .padding(.horizontal, 30)
-                    .padding(.vertical, 10)
+                        .padding(.horizontal, 10)
+                    })
+                    .accentColor(.black)
+                    
+                    //MARK: 게시글(디테일뷰) 제목
+                    VStack(alignment: .leading) {
+                        Text("\(community.fields.title.stringValue)")
+                            .multilineTextAlignment(.leading)
+                            .font(.title)
+                            .bold()
+                        //                            HStack{
+                        //                                Image(systemName: "mappin")
+                        //                                Text(community.location)
+                        //                            }
+                        //                            .font(.subheadline)
+                        //                            .foregroundColor(.gray)
+                    }
+                    .padding(.top, 10)
+                    .padding(.horizontal, 10)
                     
                     TabView {
                         //FIXME: 고치기
-//                        ForEach(community.image, id: \.self)  { img in
-//                            Image(img)
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fill)
-//                                .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
-//                        }
+                        //                        ForEach(community.image, id: \.self)  { img in
+                        //                            Image(img)
+                        //                                .resizable()
+                        //                                .aspectRatio(contentMode: .fill)
+                        //                                .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
+                        //                        }
                         
                         Image("sampleImage")
                             .resizable()
@@ -67,82 +67,112 @@ struct CommunityDetailView: View {
                     .tabViewStyle(.page)
                     .frame(height: Screen.maxHeight * 0.3)
                     
+                    //MARK: 작성자 정보
                     HStack {
-                        ProfileImage(imageName: "sampleImage", width: 60, height: 60)
+                        ProfileImage(imageName: "sampleImage", width: 45, height: 45)
                         Text(community.fields.nickName.stringValue)
                             .font(.title3)
                             .bold()
-                        Spacer()
-                        
-                        Button{
-                            
-                        } label: {
-                            Text("팔로우")
-                        }
-                        .padding(.trailing, 10)
-                        
-                    } // 작성자 프로필
-                    .padding(.horizontal)
+                    }
+                    .padding(.horizontal, 10)
                     
                     Text(community.fields.content.stringValue)
-                        .padding(.horizontal, 30)
-                        .multilineTextAlignment(.leading)
-//                        .padding(.top, 1)
+                        .padding(.horizontal, 10)
                     
-                    HStack{
+                    HStack {
                         Button{
                             isliked.toggle()
                         } label: {
-                            Image(systemName: isliked ? "heart.fill" : "heart")
-                                .foregroundColor(.red)
+                            if isliked {
+                                Image(systemName: "heart.fill")
+                                    .foregroundColor(.red)
+                                    .font(.title2)
+                            } else {
+                                Image(systemName: "heart")
+                                    .foregroundColor(.black)
+                                    .font(.title2)
+                            }
                         }
-                        Text("50")
+
+                        //Text("50")
+                        Button {
+                            //댓글 입력 키보드 팝업
+                            isHiddenComment.toggle()
+                            textFieldFocused = true
+                        } label: {
+                            Image(systemName: "message")
+                                .font(.title3)
+                                .foregroundColor(.black)
+                        }
+
+                        //MARK: 북마크 버튼
+                        Button {
+                            isBookMarked.toggle()
+                        } label: {
+                            Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
+                                .font(.title2)
+                                .foregroundColor(.black)
+                        }
                         
-                        Image(systemName: "text.bubble")
-                        Text("12")
                         
-                        Spacer()
+
                     }
-                    .padding(.leading, 30)
-                    .padding(.top, 10)
-                    
-                    Rectangle()
-                        .frame(width: Screen.maxWidth - 30, height: 0.5)
-                        .foregroundColor(.secondary)
-                        .padding([.leading, .trailing], 20)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 1)
+                    //                    Rectangle()
+                    //                        .frame(width: Screen.maxWidth * 0.9, height: 0.5)
+                    //                        .foregroundColor(.secondary)
+                    //                        .padding(.horizontal, 30)
                     
                     //FIXME: 고치기
-                    CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "악!", comment: "악!악!악!악!악!악!악!악!", createdAt: Date()))
-                    
+                    CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "악!", comment: "가나다라마바사아자차카타파하거너더러머버서어저처커터처허 가나다라마바사아자차카타파하아라", createdAt: Date()))
+                        .padding(.horizontal, 10)
                 } // top vstack
             } //scroll view
             
-            HStack{
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color(.black),lineWidth: 2)
-                    .frame(width: Screen.maxWidth * 0.85, height: 50)
-                    .overlay{
-                        TextField("댓글을 입력해주세요", text: $comment)
+            //MARK: 댓글입력 창
+            if !isHiddenComment {
+                HStack {
+                    TextField("댓글을 입력해주세요", text: $comment)
+                        .disableAutocorrection(true)
+                        .autocapitalization(.none)
+                        .padding()
+                        .focused($textFieldFocused)
+                        .onSubmit {
+                            self.hideKeyboard()
+                            isHiddenComment = true
+                            comment = ""
+                        }
+                    
+                    Spacer()
+                    
+                    Button {
+                        // 댓글추가 동작 함수
+                        self.hideKeyboard()
+                        isHiddenComment = true
+                        comment = ""
+                    } label: {
+                        Image(systemName: "paperplane")
+                            .foregroundColor(.blue)
+                            .font(.title3)
                             .padding()
                     }
-                
-                Button{
-                    
-                } label: {
-                    Image(systemName: "paperplane")
-                        .foregroundColor(.black)
-                        .font(.title2)
-
                 }
-                        
             }
-            .padding()
+            //.isHidden(isHiddenComment)
+        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .onTapGesture {
+            self.hideKeyboard()
+            isHiddenComment = true
+            comment = ""
         }
     }
 }
 
-//struct CommunityDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CommunityDetailView(community: Community(id: "123123", category: 0, userID: "12341234", image: ["sampleImage","1"], title: "피고 놀이 꽃 것은", profileImage: "sampleImage", nickName: "희경 센세", location: "방구석TEST", content: "피고 놀이 꽃 것은 피가 못할 힘있다. 풀밭에 장식하는 풀이 새 충분히 운다. 속에서 굳세게 되는 싶이 그들에게 천고에 바이며, 황금시대다. 끝에 이상, 소리다.이것은 그러므로 소금이라 것이다.보라, 봄바람을 역사를 끓는 황금시대다. 할지라도 인생을 끝에 광야에서 것이다. 있을 사라지지 인생의 일월과 철환하였는가? 없으면 그들에게 천자만홍이 이상은 바이며, 같은 두기 봄바람이다. 속에서 청춘은 튼튼하며, 그들의 있을 사라지지 피부가 이것이다. 이상의 천지는 황금시대의 지혜는 있을 것이다", createdAt: Date()))
-//    }
-//}
+struct CommunityDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        CommunityDetailView(community: CommunityDocument(name: "승수", fields: CommunityFields(title: CommunityCategory(stringValue: "임시 제목"), category: CommunityCategory(stringValue: "클래스"), content: CommunityCategory(stringValue: "가나다라마바사아자차카타파하갸냐댜랴먀뱌샤야쟈챠캬탸퍄햐 거너더러머버서어저처커터퍼허 겨녀뎌려며벼셔여져쳐켜텨벼혀"), profileImage: CommunityCategory(stringValue: "test"), nickName: CommunityCategory(stringValue: "seungsoo"), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "abc")])), userID: CommunityCategory(stringValue: "클래스"), id: CommunityCategory(stringValue: "han")), createTime: "2023-02-03", updateTime: "지금"))
+    }
+}

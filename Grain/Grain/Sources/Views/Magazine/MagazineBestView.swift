@@ -13,31 +13,18 @@ struct MagazineBestView: View {
         NavigationStack {
             VStack {
                 ScrollView {
-                    ZStack {
+                    NavigationLink {
                         EditorView()
-                        VStack(alignment: .leading) {
-                            Text("GRAIN 에디터가")
-                                .foregroundColor(.white)
-                                .font(.title)
-                                .fontWeight(.medium)
-                            Text("필름에 담은 겨울 제주")
-                                .foregroundColor(.white)
-                                .font(.title)
-                                .fontWeight(.medium)
-                            Text(": With WONDER ")
-                                .foregroundColor(.white)
-                                .font(.title)
-                                .fontWeight(.medium)
-                        }
-                        .offset(x: 80 ,y: 60)
+                    } label: {
+                        EditorViewCell()
                     }
                     HStack{
-                        Text("Recommend")
+                        Text("인기 게시글")
                             .font(.title)
                             .fontWeight(.bold)
                         Image("line")
                             .resizable()
-                            .frame(width: 203, height: 3.5)
+                            .frame(width: 240, height: 3.5)
                     }
                     .padding([.leading, .top])
                     ForEach(magazineVM.magazines, id: \.self ){ data in
@@ -48,9 +35,8 @@ struct MagazineBestView: View {
                                 .padding(.vertical, 7)
                                 .padding(.horizontal)
                                 .frame(height: Screen.maxHeight * 0.6)
+                            
                         }
-
-
                     }
                     
 //                    4: 3 비율 -=> 가로 40  세로 30

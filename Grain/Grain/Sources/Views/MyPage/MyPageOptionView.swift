@@ -52,7 +52,7 @@ struct MyPageOptionView: View {
                         .frame(width: 20, height: 20)
                         .aspectRatio(contentMode: .fit)
                         .padding(.trailing)
-                    Text("카메라 정보")
+                    Text("나의 장비 정보")
                     Spacer()
                     Image(systemName: "chevron.right")
                 }

@@ -23,6 +23,9 @@ struct MapView: View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     @Binding var magazineData: [MagazineDocument] //매거진 데이터 전달 받기
     
+//    @State var aroundPostArr = Set<String>()
+    @State var aroundPostArr : [String] = []
+    
     @State var isShowingPhotoSpot: Bool = false
     @State var clickedMagazineDataID : String = ""
     @State var isShowingWebView: Bool = false
@@ -68,7 +71,7 @@ struct MapView: View {
                 /// 카테고리 버튼 별로 해당하는 지도 뷰가 보여줌
                 switch categoryString{
                 case "전체":
-                    UIMapView(mapData: $mapData, isShowingPhotoSpot: $isShowingPhotoSpot,clickedMagazineDataID: $clickedMagazineDataID, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
+                    UIMapView(mapData: $mapData, aroundPostArr: $aroundPostArr, isShowingPhotoSpot: $isShowingPhotoSpot,clickedMagazineDataID: $clickedMagazineDataID, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
                         .zIndex(0)
 
                 case "포토스팟":
@@ -81,7 +84,7 @@ struct MapView: View {
                     RepairShopMapView(mapData: $mapData)
                         .zIndex(0)
                 default:
-                    UIMapView(mapData: $mapData, isShowingPhotoSpot: $isShowingPhotoSpot,clickedMagazineDataID: $clickedMagazineDataID, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
+                    UIMapView(mapData: $mapData, aroundPostArr: $aroundPostArr, isShowingPhotoSpot: $isShowingPhotoSpot,clickedMagazineDataID: $clickedMagazineDataID, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
                         .zIndex(0)
                 }
                 
@@ -106,7 +109,7 @@ struct MapView: View {
             }
             
             .sheet(isPresented: $isShowingPhotoSpot, content: {
-                PhotoSpotDetailView(magazineData: $magazineData,clickedMagazineDataID: $clickedMagazineDataID) .presentationDetents( [.medium])  /// 모달 뷰 medium으로 보여주기
+                PhotoSpotDetailView(magazineData: $magazineData,clickedMagazineDataID: $clickedMagazineDataID, aroundPostArr: $aroundPostArr) .presentationDetents( [.medium])  /// 모달 뷰 medium으로 보여주기
             })
             .sheet(isPresented: $isShowingWebView) {
                 WebkitView(bindingWebURL: $bindingWebURL)
@@ -124,6 +127,10 @@ struct UIMapView: UIViewRepresentable,View {
     @StateObject var locationManager = LocationManager()
 
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
+    
+    //FIXME: Set으로 만들어보기
+//    var aroundPostArr = Set<String>()   //주변 게시물 저장
+    @Binding var aroundPostArr : [String]
     
     @EnvironmentObject var viewRouter: ViewRouter
     //모달뷰
@@ -230,23 +237,31 @@ struct UIMapView: UIViewRepresentable,View {
                 marker.iconImage = NMF_MARKER_IMAGE_BLACK
             }
             // MARK: 마커 클릭시
+            
             marker.touchHandler = { (overlay) in
                 if let marker = overlay as? NMFMarker {
                     switch marker.tag{
-                    case 0:
-                        print("포토스팟 클릭")
+                    case 0: //포토스팟
                         // MARK: 포토스팟 모달 띄워주기
                         isShowingPhotoSpot.toggle()
                         clickedMagazineDataID = marker.userInfo["magazine"] as! String
-                    case 1:
-                        print("현상소 클릭")
+                       
+                        for pickable in view.mapView.pickAll(view.mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng)), withTolerance: 30){
+                            if let marker = pickable as? NMFMarker{
+                                if marker.tag == 0 {
+//                                    aroundPostArr.insert(marker.userInfo["magazine"] as! String)
+                                    aroundPostArr.append(marker.userInfo["magazine"] as! String)
+                                }
+                            }
+                        }
+ 
+                    case 1: //현상소
                         isShowingWebView.toggle()
                         bindingWebURL = marker.userInfo["url"] as! String
-                    case 2:
-                        print("수리점 클릭")
+                    case 2: //수리점
                         isShowingWebView.toggle()
                         bindingWebURL = marker.userInfo["url"] as! String
-                    default:
+                    default:    //없음
                         print("없음")
                     }
                 }
@@ -254,6 +269,20 @@ struct UIMapView: UIViewRepresentable,View {
             }
             marker.mapView = view.mapView
         }
+        // MARK: 포토스팟 마커 클릭시 주변 게시글
+       
+        // MARK: 주변 게시글 적용
+        // TODO: 나중에 적용해보기
+        //    print(context.coordinator.point)
+        //    func findAroundPost(_ mapView: NMFMapView,_ point: CGPoint){
+        //        var testStr = ""
+        //        for pickable in mapView.pickAll(point, withTolerance: 30){
+        //            if let marker = pickable as? NMFMarker{
+        //                testStr = testStr + "Marker(\(marker.captionText ?? ""))\n"
+        //            }
+        //            print(testStr)
+        //        }
+        //    }
         
         
         // TODO: 클러스팅 비슷한 동작 해보기
@@ -346,7 +375,7 @@ struct UIMapView: UIViewRepresentable,View {
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
         // 연구 중
-        print(changeMap)
+//        print(changeMap)
     }
 
     func makeCoordinator() -> Coordinator {
@@ -402,8 +431,8 @@ class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, 
         self.latitude = latlng.lat
         self.longitude = latlng.lng
         self.point = point
-        print("\(latlng.lat), \(latlng.lng)")
-        print(point)
+//        print("\(latlng.lat), \(latlng.lng)")
+//        print(point)
         
         ///맵 누르면 버튼 생김
         //        let currentUserMarker = NMFMarker()

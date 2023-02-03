@@ -15,6 +15,8 @@ struct Switchingview: View {
     // 임시
     @State var presented : Bool = false
     @State var clickedMagazineDataID : String = ""
+    @State var aroundPostArr : [String] = []
+    
     // 정훈
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     @StateObject var mapVM = MapViewModel()
@@ -27,7 +29,7 @@ struct Switchingview: View {
         case .mapView:
             MapView(mapData: $mapVM.mapData, magazineData: $magazineVM.magazines)
         case .photoSpotDetailView:
-            PhotoSpotDetailView(magazineData: $magazineVM.magazines, clickedMagazineDataID: $clickedMagazineDataID)
+            PhotoSpotDetailView(magazineData: $magazineVM.magazines, clickedMagazineDataID: $clickedMagazineDataID, aroundPostArr: $aroundPostArr)
                 .onAppear{
                     magazineVM.fetchMagazine()
                 }

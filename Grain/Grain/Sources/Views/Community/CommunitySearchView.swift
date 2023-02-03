@@ -7,98 +7,144 @@
 
 import SwiftUI
 
+private enum FocusableField: Hashable {
+    case search
+}
+
 struct CommunitySearchView: View {
     @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
     
     @State private var searchWord: String = ""
-    @State var searchList: [String] =  ["카메라", "명소", " 출사"]
+    @State private var searchList: [String] =  ["카메라", "명소", " 출사"]
+    @State private var isSearchResultShown: Bool = false
+    
+    @FocusState private var focus: FocusableField?
     
     var body: some View {
-        VStack{
+        NavigationStack {
             VStack{
-                HStack{
-                    TextField("검색어를 입력하세요", text: $searchWord)
-                    
-                    Image(systemName: "magnifyingglass")
-                        .font(.title2)
-                }
-                .padding()
-                
-                Rectangle()
-                    .frame(width: Screen.maxWidth, height: 1.5, alignment: .bottom)
-                    .foregroundColor(.black)
-            }
-            
-            if searchWord.isEmpty {
-                VStack{
-                    HStack {
-                        Text("최근 검색어")
-                            .fontWeight(.bold)
-                            .foregroundColor(.gray)
-                        Spacer()
+                VStack(spacing: 0){
+                    HStack{
+                        TextField("검색어를 입력하세요", text: $searchWord)
+                            .tint(Color.black)
+                            .textInputAutocapitalization(.never)
+                            .disableAutocorrection(true)
+                            .focused($focus, equals: .search)
+                            .submitLabel(.search)
+                            .onSubmit {
+                                self.isSearchResultShown.toggle()
+                            }
+                        Button {
+                            self.isSearchResultShown.toggle()
+                        } label: {
+                            Image(systemName: "magnifyingglass")
+                                .font(.title2)
+                        }
                         
-                        Button(action: {
-                            searchList.removeAll()
-                        }) {
-                            Text("전체삭제")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                        if focus == .search{
+                            Button {
+                                self.focus = nil
+                                self.searchWord = ""
+                            } label: {
+                                Text("취소")
+                            }
+                            
                         }
                     }
-                    .padding(.bottom, 0)
-                    ForEach(0..<searchList.count, id: \.self) { index in
+                    .padding()
+                    
+                    Rectangle()
+                        .frame(width: Screen.maxWidth, height: 1, alignment: .bottom)
+                        .foregroundColor(.black)
+                    
+                }
+                
+                if searchWord.isEmpty {
+                    VStack{
                         HStack {
-                            NavigationLink(destination: {
-                                
-                            }) {
-                                Text(searchList[index])
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.black)
-                                
-                            }
+                            Text("최근 검색어")
+                                .fontWeight(.bold)
+                                .foregroundColor(.gray)
                             Spacer()
                             
-                            
-                            
                             Button(action: {
-                                searchList.remove(at: index)
+                                searchList.removeAll()
                             }) {
-                                Image(systemName: "multiply")
+                                Text("전체삭제")
+                                    .font(.subheadline)
                                     .foregroundColor(.gray)
-                                    
                             }
-                            .frame(alignment: .trailing )
-                            
                         }
-                        .padding()
+                        .padding(.bottom, 0)
+                        ForEach(0..<searchList.count, id: \.self) { index in
+                            HStack {
+                                NavigationLink(destination: {
+                                    
+                                }) {
+                                    Text(searchList[index])
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.black)
+                                    
+                                }
+                                Spacer()
+                                
+                                
+                                
+                                Button(action: {
+                                    searchList.remove(at: index)
+                                }) {
+                                    Image(systemName: "multiply")
+                                        .foregroundColor(.gray)
+                                    
+                                }
+                                .frame(alignment: .trailing )
+                                
+                            }
+                            .padding()
+                        }
+                        
                     }
+                    .padding()
                     
-                }
-                .padding()
-            } else if !searchWord.isEmpty {
-                VStack{
-                    List{
-                        ForEach(communtyViewModel.communities.filter {
-                            $0.fields.title.stringValue.localizedCaseInsensitiveContains(self.searchWord)
-                                                }, id: \.self) { item in
-                                                    Text(item.fields.title.stringValue)
-                                                }
+                } else if !searchWord.isEmpty {
+                    VStack{
+                        List(communtyViewModel.communities.filter {
+                            $0.fields.title.stringValue
+                                .localizedCaseInsensitiveContains(self.searchWord) || $0.fields.content.stringValue
+                                .localizedCaseInsensitiveContains(self.searchWord)
+                        },id: \.self) { item in
+                            VStack(alignment: .leading){
+                                Text(item.fields.title.stringValue)
+                                    .bold()
+                                    .padding(.bottom, 5)
+                                Text(item.fields.content.stringValue)
+                                    .lineLimit(2)
+                                    .foregroundColor(.textGray)
+                                    .font(.caption)
+                            }
+                        }
+                        .listStyle(.plain)
                     }
-                    .listStyle(.plain)
                 }
+                
+                Spacer()
             }
-            
-            Spacer()
-        }
-        .onAppear{
-            communtyViewModel.fetchCommunity()
+            .navigationDestination(isPresented: $isSearchResultShown, destination: {
+                CommunitySearchResultView(searchWord: $searchWord)
+            })
+            .onAppear{
+                self.searchWord = ""
+                communtyViewModel.fetchCommunity()
+            }
         }
     }
 }
 
 struct CommunitySearchView_Previews: PreviewProvider {
     static var previews: some View {
-        CommunitySearchView()
+        NavigationStack {
+            CommunitySearchView()
+        }
     }
 }
 

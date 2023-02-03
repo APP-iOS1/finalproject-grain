@@ -11,11 +11,11 @@ import Foundation
 struct StorageResponse: Codable {
     let items: [StoragePath]
 }
-struct StoragePath: Codable {
+struct StoragePath: Codable,Hashable {
     let name : String
 }
 
-struct StorageResponsePost: Codable {
+struct StorageResponsePost: Codable,Hashable {
     let name: String
     let bucket: String
     let storageClass: String

@@ -119,12 +119,12 @@ struct LikedNum: Codable,Hashable {
 //}
 //
 //// MARK: StringValue
-struct StringValue: Codable{
-    let value: String
-    private enum CodingKeys: String, CodingKey {
-        case value = "stringValue"
-    }
-}
+//struct StringValue: Codable{
+//    let value: String
+//    private enum CodingKeys: String, CodingKey {
+//        case value = "stringValue"
+//    }
+//}
 
 //// MARK: IntegerValue
 //struct IntegerValue: Codable{

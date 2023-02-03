@@ -65,7 +65,7 @@ struct AddMarkerMapView: View {
                 }.padding()
                 .zIndex(1)
                 .offset(y:-300)
-                
+               
                 
                 AddMarkerUIMapView(updateNumber: $updateNumber, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult)
                     .zIndex(0)

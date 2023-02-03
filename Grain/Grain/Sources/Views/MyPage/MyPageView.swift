@@ -32,28 +32,30 @@ struct MyPageView: View {
                     .bold()
                 Text("자기소개글")
                     .padding(.top, 3)
-                
-                ScrollView{
-                    LazyVGrid(columns: columns) {
-                        ForEach(0..<images.count, id: \.self) { idx in
-                            NavigationLink {
-                                //이미지에 해당하는 게시글로 이동
-                            } label: {
-                                images[idx]
-                                    .resizable()
-                                    .frame(width: 130, height: 100)
-                            }
-                            
-                        }
-                    }
-                }
+
+                MyPageMyFeedView()
+
+//                ScrollView{
+//                    LazyVGrid(columns: columns) {
+//                        ForEach(0..<images.count, id: \.self) { idx in
+//                            NavigationLink {
+//                                //이미지에 해당하는 게시글로 이동
+//                            } label: {
+//                                images[idx]
+//                                    .resizable()
+//                                    .frame(width: 130, height: 100)
+//                            }
+//
+//                        }
+//                    }
+//                }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
                         MyPageOptionView()
                     } label: {
-                        Image(systemName: "gearshape.fill")
+                        Image(systemName: "ellipsis")
                             .foregroundColor(.black)
                     }
                 }

@@ -355,8 +355,6 @@
 				8BCF31E1297A500900EB6188 /* CommentView.swift */,
 				8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */,
 				8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */,
-				06FD6AB82977AF7100B4A859 /* CommunitySearchView.swift */,
-				9936E2AD298CD003006F3333 /* CommunitySearchResultView.swift */,
 				06FD6ABC2977B4F600B4A859 /* SegmentedPicker.swift */,
 				9962CDC82979246500E834C3 /* AllTabView.swift */,
 				9962CDCA297924A000E834C3 /* MatchingTabView.swift */,
@@ -384,6 +382,15 @@
 				A7BFE18A298CC24E00D15F45 /* PhotoSpotTestView.swift */,
 			);
 			path = Map;
+			sourceTree = "<group>";
+		};
+		9936E2AF298D4CFF006F3333 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				06FD6AB82977AF7100B4A859 /* CommunitySearchView.swift */,
+				9936E2AD298CD003006F3333 /* CommunitySearchResultView.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 		9958AF66297778D800A51DA9 = {
@@ -512,8 +519,9 @@
 		9958AF872977798900A51DA9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				0C5204A22989F5A5002623FB /* Splash */,
 				9958AF74297778D800A51DA9 /* ContentView.swift */,
+				9936E2AF298D4CFF006F3333 /* Search */,
+				0C5204A22989F5A5002623FB /* Splash */,
 				99233D442977F27000A875B1 /* Map */,
 				99233D432977F25300A875B1 /* Community */,
 				334699D12988AE0B004153A6 /* MyPage */,

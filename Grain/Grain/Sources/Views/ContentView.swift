@@ -86,7 +86,10 @@ struct ContentView: View {
                         }
                         Spacer()
                     }
+                    
                     Divider()
+                        .padding(.top, -8)
+                    
                     HStack {
                         ForEach(0..<5, id: \.self) { number in
                             Spacer()

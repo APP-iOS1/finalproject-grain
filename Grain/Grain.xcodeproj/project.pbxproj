@@ -558,10 +558,10 @@
 				A7D9F2F52988FD4700B39218 /* StorageDTO.swift */,
 				A7D9F2FF298962B900B39218 /* MapDTO.swift */,
 				A7D9F307298969FC00B39218 /* UserDTO.swift */,
+				A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */,
 				A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */,
 				A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */,
 				A7D9F30F29897A8D00B39218 /* NaverAPIEnum.swift */,
-				A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";

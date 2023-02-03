@@ -42,7 +42,6 @@ final class CommunityViewModel: ObservableObject {
         var categoryData: [CommunityDocument] = []
         categoryData = communities.filter { $0.fields.category.stringValue == "\(category)"}
         
-        print(categoryData)
         return categoryData
     }
     

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MagazineMainView: View {
-    let titles: [String] = ["Best", "Feed"]
+    let titles: [String] = ["인기", "피드"]
     @State private var selectedIndex: Int = 0
     
     var body: some View {
@@ -35,19 +35,24 @@ struct MagazineMainView: View {
                                     .fill(Color.black)
                                     .frame(height: 1)
                             }
-                    })
-                 
+                        })
                     Spacer()
+                }//HS
+                switch selectedIndex {
+                case 0:
+                        MagazineBestView()
+                default:
+                        MagazineFeedView()
                 }
-                TabView(selection: $selectedIndex) {
-                    // MARK: 베스트뷰 이동
-                    MagazineBestView()
-                        .tag(0)
-                    // MARK: 피드뷰 이동
-                    MagazineFeedView()
-                        .tag(1)
-                }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                //                TabView(selection: $selectedIndex) {
+                //                    // MARK: 베스트뷰 이동
+                //                    MagazineBestView()
+                //                        .tag(0)
+                //                    // MARK: 피드뷰 이동
+                //                    MagazineFeedView()
+                //                        .tag(1)
+                //                }
+                // .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
         }
         .toolbar {

@@ -50,7 +50,7 @@ enum StorageRouter {
         for i in image{
             // MARK: 넘어온 폴더 경로에 UUID 생성하여 업로드 되는 파일 이미지 중복 되지 않게 이벤트 발생시 생성
             let url = url + UUID().uuidString
-            print("url: \(url)")
+//            print("url: \(url)")
             
             // 바운더리를 구분하기 위한 임의의 문자열. 각 필드는 `--바운더리`의 라인으로 구분된다.
             let boundary = UUID().uuidString

@@ -31,6 +31,10 @@ struct MagazineContentAddView: View {
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImageData: Data? = nil
     
+    // 유저 데이터
+    @AppStorage("docID") private var docID : String?
+    @StateObject var userVM = UserViewModel()
+    
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     
     var body: some View {
@@ -57,15 +61,13 @@ struct MagazineContentAddView: View {
                         }
                         Spacer()
                         Button {
-                            print("시작\(selectedImageData)")
                             // MARK: 스토리지에 이미지 업로드
                             storageVM.insertStorageImage(image: selectedImages)
                             // insert 메서드 들어가고
                             /// cameraInfo, lenseInfo, filmInfo 유저가 가지고 있는 데이터에서 패치를 하고 그거를 피커로 보여지게 만들고 그 다음에 고르면 데이터가 넘어 가게끔
-                            /// userID, nickName 은 UserDB에서 가져와야 됨
+                            /// userID, nickName 은 UserDB에서 가져와야 됨 -> 클리어
                             /// comment -> 임시
-                            ///
-                            magazineVM.insertMagazine(userID: "패스", cameraInfo: "패스", nickName: "패스", image: "패스", content: inputContent , title: inputTitle , lenseInfo: "패스", longitude: updateNumber.lng, likedNum: 0, filmInfo: "패스", customPlaceName: "패스", latitude: updateNumber.lat, comment: "임시", roadAddress: "패스")
+                            magazineVM.insertMagazine(userID: userVM.currentUsers?.id.stringValue ?? "", cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "", nickName: userVM.currentUsers?.nickName.stringValue ?? "", image: "패스", content: inputContent , title: inputTitle , lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "", longitude: updateNumber.lng, likedNum: 0, filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "", customPlaceName: "패스", latitude: updateNumber.lat, comment: "임시", roadAddress: "패스")
                         } label: {
                             Text("글쓰기")
                                 .foregroundColor(.black)
@@ -188,10 +190,11 @@ struct MagazineContentAddView: View {
                         Spacer()
                         ///지도뷰로 이동하기 위해 NavigationLink걸어줌
                         NavigationLink(destination: AddMarkerMapView(updateNumber: $updateNumber)) {
-                            Image(systemName: "location.fill")
-                            Text("위치 받아오기")
+                            HStack{
+                                Image(systemName: "location.fill")
+                                Text("위치 받아오기")
+                            }.offset(x: 60) // FIXME: 위치 고치기 offset 사용 X
                         }
-                        // FIXME: 170 ~ 177번에 있는 적용 값? 들 원하시는 부분에 적용이 됐는지 확인해 주시면 감사합니다.
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading) //
                     }
@@ -199,7 +202,9 @@ struct MagazineContentAddView: View {
                 }
                
                 
-            }.ignoresSafeArea(.keyboard)
+            }.ignoresSafeArea(.keyboard).onAppear{
+                userVM.fetchCurrentUser(userID: docID ?? "")
+            }
         }
         
     }

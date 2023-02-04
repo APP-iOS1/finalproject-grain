@@ -76,39 +76,6 @@ struct AddMarkerMapView: View {
                     .frame(width: 56,height: 56)
                     .position(CGPoint(x: 196, y: 330))  //수정 필요
                     .zIndex(1)
-//                HStack{
-//                    Button {
-//                        markerAddButtonBool.toggle()
-//                        print("updateNumber\(updateNumber)")
-//
-//                        /// 추가하기 버튼 클릭시 게시글 업로드로 돌아가기
-//                        dismiss()
-//                    } label: {
-//                        Text("추가하기")
-//                            .fontWeight(.bold)
-//                            .foregroundColor(.black)
-//                    }
-//                    // ButtonStyle 스타일 사용할껀지?
-//                    .buttonStyle(.borderedProminent)
-//                    /// 커스텀 할껀지
-//                    //                .padding(5)    // 글자와 주변 선의 간격을 떨어트림
-//                    //                .overlay {
-//                    //                    // MARK: 텍스트에 주변에 선 만들기
-//                    //                    RoundedRectangle(cornerRadius: 5)
-//                    //                        .stroke(style: style)
-//                    //                }
-//                    Button {
-//                        locationcheckBool.toggle()
-//                    } label: {
-//                        Text("위치 확인")
-//                            .fontWeight(.bold)
-//                            .foregroundColor(.black)
-//                    }.buttonStyle(.borderedProminent)
-//
-//                }
-//                .offset(y: 300)
-//                .zIndex(1)
-                
                 RoundedRectangle(cornerRadius: 15)
                     .frame(width: Screen.maxWidth * 0.65, height: 40)
                     .foregroundColor(.white)
@@ -116,8 +83,8 @@ struct AddMarkerMapView: View {
                         Text("추가하기")
                             .fontWeight(.bold)
                             .onTapGesture {
-                                //액션
                                 dismiss()
+                                markerAddButtonBool.toggle()    // 추가하기 버튼 true 만들어야지 맵에서 좌표값 받아옴
                                 print("updateNumber\(updateNumber)")
                             }
                     }
@@ -220,11 +187,13 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         }
         
         if markerAddButtonBool{
+            print("markerAddButtonBool 눌름")
             let addUserMarker = NMFMarker()
             addUserMarker.position =  uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 359))
             addUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
             addUserMarker.mapView = uiView.mapView
             updateNumber = addUserMarker.position
+            print(updateNumber)
             markerAddButtonBool.toggle()
             // FIXME: 추가하기 지도 뷰로 들어와 추가하기 버튼 누를시 뷰가 업데이트 되지 않아 <NMGLatLng: 0,0> 으로 나옴
             /// 버그 고쳐보기

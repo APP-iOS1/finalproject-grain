@@ -12,6 +12,7 @@ struct UserResponse: Codable {
 }
 
 struct UserDocument: Codable,Hashable {
+    let name : String
     let fields: UserFields
     let createTime, updateTime: String
 }

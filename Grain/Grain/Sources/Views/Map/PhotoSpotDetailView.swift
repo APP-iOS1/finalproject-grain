@@ -29,7 +29,7 @@ struct PhotoSpotDetailView: View {
             VStack{
                 ScrollView {
                     ForEach(magazineData,id: \.self) { item in
-                        if item.fields.id.stringValue == clickedMagazineDataID{
+//                        if item.fields.id.stringValue == clickedMagazineDataID{
                             VStack {
                                 HStack{
                                     VStack(alignment: .leading){
@@ -132,7 +132,7 @@ struct PhotoSpotDetailView: View {
                                 
                             } // top vstack
                             
-                        }
+                        
                     }
                     
                     

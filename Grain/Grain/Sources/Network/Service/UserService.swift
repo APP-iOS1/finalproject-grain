@@ -31,7 +31,7 @@ enum UserService {
     }
     
     // MARK: - 맵 데이터 넣기
-    static func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String ) -> AnyPublisher<UserResponse, Error> {
+    static func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String ) -> AnyPublisher<UserDocument, Error> {
        
         
         let requestRouter = UserRouter.post(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName)
@@ -46,7 +46,7 @@ enum UserService {
             .shared
             .dataTaskPublisher(for: request)
             .map{ $0.data }
-            .decode(type: UserResponse.self, decoder: JSONDecoder())
+            .decode(type: UserDocument.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
     }
     

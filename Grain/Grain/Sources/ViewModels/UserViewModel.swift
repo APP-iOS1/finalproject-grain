@@ -22,11 +22,11 @@ final class UserViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
     
     @Published var users = [UserDocument]()
-    
-    // 실패한거 같음
+    // 파이어스토어 User -> 유저 문서 ID
+    @Published var userDocId : String = ""
+    // 현재 유저 데이터 값
     @Published var currentUsers : CurrentUserFields?
-    
-    
+
     var fetchUsersSuccess = PassthroughSubject<(), Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
 
@@ -48,6 +48,7 @@ final class UserViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
         } receiveValue: { (data: CurrentUserResponse) in
             self.currentUsers = data.fields
+//            print(" 확인 \(data.createTime)") -> 시간 값 나중에 써먹을수 있을듯
             self.fetchUsersSuccess.send()
         }.store(in: &subscription)
 
@@ -58,7 +59,10 @@ final class UserViewModel: ObservableObject {
         UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-        } receiveValue: { (data: UserResponse) in
+        } receiveValue: { (data: UserDocument) in
+            // MARK: 최초로 유저 데이터를 만들떄 UserDefaults 값에다가 저장
+            UserDefaults.standard.set(String(data.name.suffix(20)), forKey: "docID")
+            self.userDocId = String(data.name.suffix(20))   //혹시 모르니 Published 에다가도 저장
             self.fetchUsersSuccess.send()
         }.store(in: &subscription)
     }

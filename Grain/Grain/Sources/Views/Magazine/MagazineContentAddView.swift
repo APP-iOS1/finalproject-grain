@@ -26,6 +26,7 @@ struct MagazineContentAddView: View {
    
     // 지도에서 좌표 값 가져오기
     @State var updateNumber : NMGLatLng
+    @State var updateReverseGeocodeResult1 : String = ""
     
     // 이미지 앨범에서 가져오기
     @State private var selectedItem: PhotosPickerItem? = nil
@@ -67,7 +68,7 @@ struct MagazineContentAddView: View {
                             /// cameraInfo, lenseInfo, filmInfo 유저가 가지고 있는 데이터에서 패치를 하고 그거를 피커로 보여지게 만들고 그 다음에 고르면 데이터가 넘어 가게끔
                             /// userID, nickName 은 UserDB에서 가져와야 됨 -> 클리어
                             /// comment -> 임시
-                            magazineVM.insertMagazine(userID: userVM.currentUsers?.id.stringValue ?? "", cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "", nickName: userVM.currentUsers?.nickName.stringValue ?? "", image: "패스", content: inputContent , title: inputTitle , lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "", longitude: updateNumber.lng, likedNum: 0, filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "", customPlaceName: "패스", latitude: updateNumber.lat, comment: "임시", roadAddress: "패스")
+                            magazineVM.insertMagazine(userID: userVM.currentUsers?.id.stringValue ?? "", cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "", nickName: userVM.currentUsers?.nickName.stringValue ?? "", image: "패스", content: inputContent , title: inputTitle , lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "", longitude: updateNumber.lng, likedNum: 0, filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "", customPlaceName: "패스", latitude: updateNumber.lat, comment: "임시", roadAddress: updateReverseGeocodeResult1)
                         } label: {
                             Text("글쓰기")
                                 .foregroundColor(.black)
@@ -143,6 +144,7 @@ struct MagazineContentAddView: View {
                 
                 // MARK: 게시물 글 제목 작성 란
                 VStack{
+                    Text(updateReverseGeocodeResult1)
                     TextField("글 제목", text: $inputTitle)
                         .keyboardType(.default)
                         .textInputAutocapitalization(.never)
@@ -169,6 +171,15 @@ struct MagazineContentAddView: View {
                             hideKeyboard()
                         }
                     Spacer()
+                    
+                    // MARK: 위치 받아온 값 ex) 경기도 화성시 석우동
+                    VStack{
+                        Text(updateReverseGeocodeResult1)
+                            .foregroundColor(.gray)
+                            .font(.caption2)
+                            .offset(x: 125)
+                    }
+                    
                     Rectangle()
                         .fill(Color(UIColor.systemGray5))
                         .frame(width: Screen.maxWidth * 0.95, height: 1)
@@ -189,7 +200,7 @@ struct MagazineContentAddView: View {
                         }
                         Spacer()
                         ///지도뷰로 이동하기 위해 NavigationLink걸어줌
-                        NavigationLink(destination: AddMarkerMapView(updateNumber: $updateNumber)) {
+                        NavigationLink(destination: AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1)) {
                             HStack{
                                 Image(systemName: "location.fill")
                                 Text("위치 받아오기")

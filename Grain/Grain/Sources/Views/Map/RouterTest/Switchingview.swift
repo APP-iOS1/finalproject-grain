@@ -41,8 +41,8 @@ struct Switchingview: View {
             StationMapView(mapData: $mapVM.mapData)
         case .repairShopMapView:
             RepairShopMapView(mapData: $mapVM.mapData)
-        case .addMarkerMapView:
-            AddMarkerMapView(updateNumber: $updateNumber)
+//        case .addMarkerMapView:
+//            AddMarkerMapView(updateNumber: $updateNumber)
         case .magazineContentAddView:
             MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
         case .testGeocodeView:

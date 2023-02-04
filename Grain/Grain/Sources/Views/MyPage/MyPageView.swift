@@ -16,7 +16,6 @@ struct MyPageView: View {
     @AppStorage("docID") private var docID : String?
     
     @StateObject var userVM = UserViewModel()
-    
     var body: some View {
         NavigationStack {
             VStack {
@@ -35,7 +34,6 @@ struct MyPageView: View {
                     .bold()
                 Text("자기소개글")
                     .padding(.top, 3)
-
                 MyPageMyFeedView()
 
 //                ScrollView{

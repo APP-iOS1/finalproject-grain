@@ -22,8 +22,6 @@ final class UserViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
     
     @Published var users = [UserDocument]()
-    // 파이어스토어 User -> 유저 문서 ID
-    @Published var userDocId : String = ""
     // 현재 유저 데이터 값
     @Published var currentUsers : CurrentUserFields?
 
@@ -54,18 +52,19 @@ final class UserViewModel: ObservableObject {
 
     }
     
-    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String) {
-
-        UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName)
-            .receive(on: DispatchQueue.main)
-            .sink { (completion: Subscribers.Completion<Error>) in
-        } receiveValue: { (data: UserDocument) in
-            // MARK: 최초로 유저 데이터를 만들떄 UserDefaults 값에다가 저장
-            UserDefaults.standard.set(String(data.name.suffix(20)), forKey: "docID")
-            self.userDocId = String(data.name.suffix(20))   //혹시 모르니 Published 에다가도 저장
-            self.fetchUsersSuccess.send()
-        }.store(in: &subscription)
-    }
+    // MARK: 메서드 사용하는 쪽이 옮겨짐!  AuthenticationStore -> 최초 가입한 사용자를 DB을 만들어야 하기 때문에 저쪽에서 사용
+//    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String) {
+//
+//        UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName)
+//            .receive(on: DispatchQueue.main)
+//            .sink { (completion: Subscribers.Completion<Error>) in
+//        } receiveValue: { (data: UserDocument) in
+//            // MARK: 최초로 유저 데이터를 만들떄 UserDefaults 값에다가 저장
+//            UserDefaults.standard.set(String(data.name.suffix(20)), forKey: "docID")
+//            self.userDocId = String(data.name.suffix(20))   //혹시 모르니 Published 에다가도 저장
+//            self.fetchUsersSuccess.send()
+//        }.store(in: &subscription)
+//    }
 
     
 }

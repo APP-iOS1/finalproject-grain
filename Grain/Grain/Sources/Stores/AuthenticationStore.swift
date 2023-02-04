@@ -79,7 +79,7 @@ final class AuthenticationStore: ObservableObject {
                 guard let profile = user?.profile else { return }
                 
                 
-//                insertUser(myFilm: "", bookmarkedMagazineID: "", email: profile.email, myCamera: "", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: uid ?? "", following: "", myLens: "", profileImage: "", name: profile.name, follower: "", nickName: "")
+                insertUser(myFilm: "", bookmarkedMagazineID: "", email: profile.email, myCamera: "", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: uid ?? "", following: "", myLens: "", profileImage: "", name: profile.name, follower: "", nickName: "")
                 
                 self.authStateAuthenticated(user: CurrentUser(id: uid ?? "", name: profile.name, email: profile.email))
                 self.logInCompanyState = .googleLogIn
@@ -106,20 +106,21 @@ final class AuthenticationStore: ObservableObject {
     }
     // 유저 데이터 만들기
 
-//    var subscription = Set<AnyCancellable>()
-//    var fetchUsersSuccess = PassthroughSubject<(), Never>()
-//    var insertUsersSuccess = PassthroughSubject<(), Never>()
-//
-//    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String) {
-//
-//        UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName)
-//            .receive(on: DispatchQueue.main)
-//            .sink { (completion: Subscribers.Completion<Error>) in
-//        } receiveValue: { (data: UserResponse) in
-//            self.fetchUsersSuccess.send()
-//        }.store(in: &subscription)
-//    }
-//
+    var subscription = Set<AnyCancellable>()
+    var fetchUsersSuccess = PassthroughSubject<(), Never>()
+    var insertUsersSuccess = PassthroughSubject<(), Never>()
+
+    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String) {
+
+        UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+        } receiveValue: { (data: UserDocument) in
+            UserDefaults.standard.set(String(data.name.suffix(20)), forKey: "docID")
+            self.fetchUsersSuccess.send()
+        }.store(in: &subscription)
+    }
+
    
     
 }

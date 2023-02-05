@@ -68,7 +68,8 @@ struct MagazineContentAddView: View {
                             /// cameraInfo, lenseInfo, filmInfo 유저가 가지고 있는 데이터에서 패치를 하고 그거를 피커로 보여지게 만들고 그 다음에 고르면 데이터가 넘어 가게끔
                             /// userID, nickName 은 UserDB에서 가져와야 됨 -> 클리어
                             /// comment -> 임시
-                            magazineVM.insertMagazine(userID: userVM.currentUsers?.id.stringValue ?? "", cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "", nickName: userVM.currentUsers?.nickName.stringValue ?? "", image: "패스", content: inputContent , title: inputTitle , lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "", longitude: updateNumber.lng, likedNum: 0, filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "", customPlaceName: "패스", latitude: updateNumber.lat, comment: "임시", roadAddress: updateReverseGeocodeResult1)
+                            // FIXME: 스토리지 작업중 주석 풀기
+//                            magazineVM.insertMagazine(userID: userVM.currentUsers?.id.stringValue ?? "", cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "", nickName: userVM.currentUsers?.nickName.stringValue ?? "", image: "패스", content: inputContent , title: inputTitle , lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "", longitude: updateNumber.lng, likedNum: 0, filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "", customPlaceName: "패스", latitude: updateNumber.lat, comment: "임시", roadAddress: updateReverseGeocodeResult1)
                         } label: {
                             Text("글쓰기")
                                 .foregroundColor(.black)

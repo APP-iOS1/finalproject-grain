@@ -46,24 +46,24 @@ final class MagazineViewModel: ObservableObject {
         }.store(in: &subscription)
     }
     
-    func updateMagazine() {
-        MagazineService.patchMagazine(token: "bkT8aWSxt3PSJhQppATD")
-            .receive(on: DispatchQueue.main)
-            .sink { (completion: Subscribers.Completion<Error>) in
-        } receiveValue: { (data: MagazineDocument) in
-            self.updateMagazineData = data
-            self.patchMagazineSuccess.send()
-        }.store(in: &subscription)
-        
-        // 실제 업데이트 되는 부분
-        MagazineService.patchMagazine1(token: "bkT8aWSxt3PSJhQppATD", updateMagazineData: updateMagazineData!)
-            .receive(on: DispatchQueue.main)
-            .sink { (completion: Subscribers.Completion<Error>) in
-            } receiveValue: { (data: MagazineDocument) in
-                self.updateMagazineData = data
-                self.patchMagazineSuccess.send()
-            }.store(in: &subscription)
-    }
+//    func updateMagazine() {
+//        MagazineService.patchUserMagazine(token: "bkT8aWSxt3PSJhQppATD")
+//            .receive(on: DispatchQueue.main)
+//            .sink { (completion: Subscribers.Completion<Error>) in
+//        } receiveValue: { (data: MagazineDocument) in
+//            self.updateMagazineData = data
+//            self.patchMagazineSuccess.send()
+//        }.store(in: &subscription)
+//        
+//        // 실제 업데이트 되는 부분
+//        MagazineService.patchMagazine1(token: "bkT8aWSxt3PSJhQppATD", updateMagazineData: updateMagazineData!)
+//            .receive(on: DispatchQueue.main)
+//            .sink { (completion: Subscribers.Completion<Error>) in
+//            } receiveValue: { (data: MagazineDocument) in
+//                self.updateMagazineData = data
+//                self.patchMagazineSuccess.send()
+//            }.store(in: &subscription)
+//    }
     
     func deleteMagazine() {
         

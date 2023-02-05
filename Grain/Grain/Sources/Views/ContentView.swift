@@ -155,7 +155,7 @@ struct ContentView: View {
                     /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
                     mapVM.fetchMap()
                     magazineVM.fetchMagazine()
-                    magazineVM.updateMagazine()
+//                    magazineVM.updateMagazine()
                 }
             }
         }

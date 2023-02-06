@@ -91,8 +91,9 @@ struct CommunityView: View {
             // 커뮤니티 데이터 fetch
             communityVM.fetchCommunity()
             // MARK: 커뮤니티 업데이트 메서드 부분 필요시 확인하고 사용하기!
+            /// isArray 업데이트 해야하는 값이 배열이면 true로 전달
 //            Task{
-//                await communityVM.updateCommunity(updateDocument: "PQGsHYXGjF8QkeQol8sz", updateKey: "bookmarkedMagazineID", updateValue: "123131")
+//                await communityVM.updateCommunity(updateDocument: "PQGsHYXGjF8QkeQol8sz", updateKey: "name", updateValue: "123131", isArray: false)
 //            }
             
         }

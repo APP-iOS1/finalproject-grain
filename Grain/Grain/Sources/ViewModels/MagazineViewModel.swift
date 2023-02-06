@@ -47,19 +47,33 @@ final class MagazineViewModel: ObservableObject {
     }
     
     // MARK: Update -> Firebase Store SDK 사용
-    func updateMagazine(updateDocument: String, updateKey: String, updateValue: String) async {
-        
+    func updateMagazine(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
         let db = Firestore.firestore()
+        
         let documentRef = db.collection("Magazine").document("\(updateDocument)")
-        do{
-            try? await documentRef.updateData(
-                [
-                    "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
-                ]
-            )
-        }catch let error {
-            print("Error updating document: \(error)")
+        
+        if isArray{
+            do{
+                try? await documentRef.updateData(
+                    [
+                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
+                    ]
+                )
+            }catch let error {
+                print("Error updating document: \(error)")
+            }
+        }else{
+            do{
+                try? await documentRef.updateData(
+                    [
+                         "\(updateKey)" : "\(updateValue)"
+                    ]
+                )
+            }catch let error {
+                print("Error updating document: \(error)")
+            }
         }
+        
     }
     
     func deleteMagazine() {

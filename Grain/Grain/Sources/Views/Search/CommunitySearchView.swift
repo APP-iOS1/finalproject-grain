@@ -20,12 +20,17 @@ struct CommunitySearchView: View {
     
     @FocusState private var focus: FocusableField?
     
+    private func ignoreSpaces(in string: String) -> String {
+        return string.replacingOccurrences(of: " ", with: "")
+    }
+    
     var body: some View {
         NavigationStack {
             VStack{
                 VStack(spacing: 0){
                     HStack{
                         TextField("검색어를 입력하세요", text: $searchWord)
+                            .textContentType(.oneTimeCode)
                             .tint(Color.black)
                             .textInputAutocapitalization(.never)
                             .disableAutocorrection(true)
@@ -88,8 +93,6 @@ struct CommunitySearchView: View {
                                 }
                                 Spacer()
                                 
-                                
-                                
                                 Button(action: {
                                     searchList.remove(at: index)
                                 }) {
@@ -109,9 +112,9 @@ struct CommunitySearchView: View {
                 } else if !searchWord.isEmpty {
                     VStack{
                         List(communtyViewModel.communities.filter {
-                            $0.fields.title.stringValue
-                                .localizedCaseInsensitiveContains(self.searchWord) || $0.fields.content.stringValue
-                                .localizedCaseInsensitiveContains(self.searchWord)
+                           ignoreSpaces(in: $0.fields.title.stringValue)
+                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
+                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                         },id: \.self) { item in
                             VStack(alignment: .leading){
                                 Text(item.fields.title.stringValue)

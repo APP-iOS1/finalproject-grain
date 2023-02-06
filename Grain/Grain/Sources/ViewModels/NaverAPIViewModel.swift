@@ -47,7 +47,6 @@ final class NaverAPIViewModel: ObservableObject {
             self.reverseGeocodeResult = data.results
             self.fetchReverseGeocodeSuccess.send()
         }.store(in: &subscription)
-        print("fetchReverseGeocode")
     }
 }
 

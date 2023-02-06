@@ -9,136 +9,92 @@ import SwiftUI
 
 // TODO: 포토스팟 마커 클릭시 넘어올 뷰
 struct PhotoSpotDetailView: View {
-    var title : String = "피고 놀이 꽃 것은 피가 못할 힘있다."
-    var location: String = "방구석 어딘가"
+    
     @State private var isBookMarked: Bool = false
-    var image: [String] = ["sampleImage","sampleImage","sampleImage"]
-    var profileImage: String = "sampleImage"
-    var nickName: String = "테스트 봇1"
-    var content: String = "테스트 중입ㄴ디ㅏ 나중에 글이 들어올 부분입니다"
     @State private var isliked: Bool = false
-    
-    @Binding var  magazineData : [MagazineDocument]
-    @Binding var clickedMagazineDataID : String
-    @Binding var aroundPostArr : [String]
-    
-    @State private var aroundPostArrBool : Bool = false
+    @Environment(\.dismiss) private var dismiss
+    var data : MagazineDocument
     
     var body: some View {
         NavigationStack{
-            VStack{
-                ScrollView {
-                    ForEach(magazineData,id: \.self) { item in
-                        if item.fields.id.stringValue == clickedMagazineDataID{
-                            VStack {
-                                HStack{
-                                    VStack(alignment: .leading){
-                                        Text("\(item.fields.title.stringValue)")
-                                            .multilineTextAlignment(.leading)
-                                            .font(.title)
-                                            .bold()
-                                        
-                                        HStack{
-                                            Text(item.fields.customPlaceName.stringValue)
-                                        }
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                        
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    
-                                    
-                                } //상단 타이틀
-                                .padding(.horizontal, 30)
-                                .padding(.vertical, 10)
-                                
-                                TabView {
-                                    ForEach(image, id: \.self)  { img in
-                                        Image(img)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
-                                    }
-                                } //이미지 뷰
-                                .tabViewStyle(.page)
-                                .frame(height: Screen.maxHeight * 0.3)
-                                
+            ScrollView {
+                VStack{
+                    VStack {
+                        HStack {
+                            Circle()
+                                .frame(width: 40)
+                            VStack(alignment: .leading) {
+                                Text(data.fields.nickName.stringValue)
+                                    .bold()
                                 HStack {
-                                    ProfileImage(imageName: profileImage, width: 60, height: 60)
-                                    Text(item.fields.nickName.stringValue)
-                                        .font(.title3)
-                                        .bold()
-                                    
+                                    Text("1분전")
                                     Spacer()
-                                    
-                                    Button{
-                                        
-                                    } label: {
-                                        Text("팔로우")
-                                    }
-                                    .padding(.trailing, 10)
-                                    
-                                    Button {
-                                        isBookMarked.toggle()
-                                    } label: {
-                                        Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
-                                            .font(.title2)
-                                            .foregroundColor(.black)
-                                    }.padding(.trailing, 10)
-                                    
-                                    
-//                                    NavigationLink {
-//                                        TestGeocodeView()
-//                                    } label: {
-//                                        Text("더 찾기").onTapGesture {
-//                                            aroundPostArrBool.toggle()
-//                                        }
-//                                    }
-//                                    .padding(.trailing, 10)
-                                    NavigationLink {
-                                        AroundPostView(magazineData: $magazineData, aroundPostArr: $aroundPostArr)
-                                    } label: {
-                                        Text("더 찾기")
-                                    }
-
-                                    
-                                } // 작성자 프로필
-                                .padding(.horizontal)
-                                
-                                Text(item.fields.content.stringValue)
-                                    .padding(.horizontal, 30)
-                                    .multilineTextAlignment(.leading)
-                                //                        .padding(.top, 1)
-                                
-                                HStack{
-                                    Button{
-                                        isliked.toggle()
-                                    } label: {
-                                        Image(systemName: isliked ? "heart.fill" : "heart")
-                                            .foregroundColor(.red)
-                                    }
-                                    Text("50")
-                                    
-                                    Image(systemName: "text.bubble")
-                                    Text("12")
-                                    
-                                    Spacer()
+                                    Text(data.fields.customPlaceName.stringValue)
                                 }
-                                .padding(.leading, 30)
-                                .padding(.top, 10)
-                                
-                                
-                            } // top vstack
-                            
+                                .font(.caption)
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .padding(.top, -15)
+                        Divider()
+                            .frame(maxWidth: Screen.maxWidth * 0.9)
+                            .background(Color.black)
+                            .padding(.top, -5)
+                            .padding(.bottom, -10)
+                        
+                        //            Image("line")
+                        //                .resizable()
+                        //                .frame(width: Screen.maxWidth, height: 0.3)
+                        TabView{
+                            ForEach(1..<4, id: \.self) { i in
+                                Image("\(i)")
+                                    .resizable()
+                                    .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
+                                    .aspectRatio(contentMode: .fit)
+                            }
+                        }
+                        .tabViewStyle(.page)
+                        .frame(maxHeight: Screen.maxHeight * 0.27)
+                        .padding()
+                    }
+                    .frame(minHeight: 350)
+                    
+                    LazyVStack(pinnedViews: [.sectionHeaders]) {
+                        Section(header: Header(data: data) ){
+                            VStack {
+                                Text(data.fields.content.stringValue)
+                                    .lineSpacing(4.0)
+                                    .padding(.vertical, -9)
+                                    .padding()
+                                    .foregroundColor(Color.textGray)
+                            }
                         }
                     }
-                    
-                    
-                } //scroll view
+                    Spacer()
+                }
+            }
+            .padding(.top, 1)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    // 다른 용도로 쓰일수 있어서 우선 남겨둠
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack{
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .foregroundColor(.black)
+                                .frame(width: 50, height: 50)
+                        }
+                    }
+                }
             }
         }
+        
         
     }
 }

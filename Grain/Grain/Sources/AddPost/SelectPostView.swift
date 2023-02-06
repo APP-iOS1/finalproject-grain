@@ -18,7 +18,7 @@ struct SelectPostView: View {
     @State var updateNumber : NMGLatLng
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             VStack(spacing: 0){
                 
                 //MARK: 게시글 선택 뷰 취소 버튼

@@ -22,6 +22,7 @@ struct AddMarkerMapView: View {
     @Environment(\.dismiss) private var dismiss
     // 경도 위도 값 전달
     @Binding var updateNumber : NMGLatLng
+    @Binding var updateReverseGeocodeResult1 : String
     let style = StrokeStyle(lineWidth: 2,
                             lineCap: .round)
     // 텍스트 필드 String
@@ -67,7 +68,7 @@ struct AddMarkerMapView: View {
                 .offset(y:-300)
                
                 
-                AddMarkerUIMapView(updateNumber: $updateNumber, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult)
+                AddMarkerUIMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult)
                     .zIndex(0)
                 
                 Image("TestBlackMarker")
@@ -76,39 +77,6 @@ struct AddMarkerMapView: View {
                     .frame(width: 56,height: 56)
                     .position(CGPoint(x: 196, y: 330))  //수정 필요
                     .zIndex(1)
-//                HStack{
-//                    Button {
-//                        markerAddButtonBool.toggle()
-//                        print("updateNumber\(updateNumber)")
-//
-//                        /// 추가하기 버튼 클릭시 게시글 업로드로 돌아가기
-//                        dismiss()
-//                    } label: {
-//                        Text("추가하기")
-//                            .fontWeight(.bold)
-//                            .foregroundColor(.black)
-//                    }
-//                    // ButtonStyle 스타일 사용할껀지?
-//                    .buttonStyle(.borderedProminent)
-//                    /// 커스텀 할껀지
-//                    //                .padding(5)    // 글자와 주변 선의 간격을 떨어트림
-//                    //                .overlay {
-//                    //                    // MARK: 텍스트에 주변에 선 만들기
-//                    //                    RoundedRectangle(cornerRadius: 5)
-//                    //                        .stroke(style: style)
-//                    //                }
-//                    Button {
-//                        locationcheckBool.toggle()
-//                    } label: {
-//                        Text("위치 확인")
-//                            .fontWeight(.bold)
-//                            .foregroundColor(.black)
-//                    }.buttonStyle(.borderedProminent)
-//
-//                }
-//                .offset(y: 300)
-//                .zIndex(1)
-                
                 RoundedRectangle(cornerRadius: 15)
                     .frame(width: Screen.maxWidth * 0.65, height: 40)
                     .foregroundColor(.white)
@@ -116,9 +84,8 @@ struct AddMarkerMapView: View {
                         Text("추가하기")
                             .fontWeight(.bold)
                             .onTapGesture {
-                                //액션
                                 dismiss()
-                                print("updateNumber\(updateNumber)")
+                                markerAddButtonBool.toggle()    // 추가하기 버튼 true 만들어야지 맵에서 좌표값 받아옴
                             }
                     }
                 .offset(y: 270)
@@ -142,6 +109,7 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
     @StateObject var locationManager = LocationManager()
     // 가상 마커 CGPoint 좌표 값을 통해 지도 좌표 넘겨주기
     @Binding var updateNumber : NMGLatLng
+    @Binding var updateReverseGeocodeResult1 : String
     
     @Binding var markerAddButtonBool : Bool
     @Binding var locationcheckBool : Bool
@@ -201,20 +169,9 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
         //  추가하기 버튼 누를시 화면 중앙에 마커 생성
         
-        
-//        Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { timer in
-//            self.value += 1
-//            print("타이머")
-//            print(value)
-//            naverVM.fetchReverseGeocode(latitude: updateNumber.lat, longitude: updateNumber.lng)
-//            if markerAddButtonBool{
-//                timer.invalidate()
-//            }
-//        }
-        
+        // FIXME: 현재 위치 버튼 -> 로직 변경 해야함
         if locationcheckBool{
             TestnaverVM.fetchReverseGeocode(latitude: updateNumber.lat, longitude: updateNumber.lng)
-            print("버튼 눌림")
             updateReverseGeocodeResult = TestnaverVM.reverseGeocodeResult
             locationcheckBool.toggle()
         }
@@ -224,10 +181,17 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
             addUserMarker.position =  uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 359))
             addUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
             addUserMarker.mapView = uiView.mapView
+            
+            // 업로드에 위치 정보 넘겨줌
             updateNumber = addUserMarker.position
+            naverVM.fetchReverseGeocode(latitude: addUserMarker.position.lat, longitude: addUserMarker.position.lng)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+                updateReverseGeocodeResult1 = naverVM.reverseGeocodeResult[0].region.area1.name + " " + naverVM.reverseGeocodeResult[0].region.area2.name + " " +
+                naverVM.reverseGeocodeResult[0].region.area3.name
+            }
+
             markerAddButtonBool.toggle()
-            // FIXME: 추가하기 지도 뷰로 들어와 추가하기 버튼 누를시 뷰가 업데이트 되지 않아 <NMGLatLng: 0,0> 으로 나옴
-            /// 버그 고쳐보기
         }
         
         if searchResponseBool{

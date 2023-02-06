@@ -34,8 +34,9 @@ final class StorageViewModel: ObservableObject {
         StorageService.insertStorageImage(image: image)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-            } receiveValue: { (data: StorageResponse) in
+            } receiveValue: { (data: StorageResponsePost) in
                 self.insertStorageSuccess.send()
+                print("data.downloadTokens: \(data.downloadTokens)")    //아마 지금은 안될듯 
             }.store(in: &subscription)      //메모리상에서 연결을 날려줌
     }
 

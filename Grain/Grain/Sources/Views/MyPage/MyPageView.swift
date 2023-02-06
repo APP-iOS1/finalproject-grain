@@ -12,7 +12,9 @@ struct MyPageView: View {
     let columns = [
         GridItem(.adaptive(minimum: 100))
     ]
-    
+    // MARK: docID -> 파이어스토어 User -> 문서ID 값 유저마다 고유의 값으로 들어가야 될듯
+    @AppStorage("docID") private var docID : String?
+    @StateObject var userVM = UserViewModel()
     var body: some View {
         NavigationStack {
             VStack {
@@ -26,13 +28,11 @@ struct MyPageView: View {
                         Circle()
                             .stroke(lineWidth: 1.5)
                     }
-                
-                Text("nickname")
+                Text(userVM.currentUsers?.name.stringValue ?? "")
                     .font(.title2)
                     .bold()
                 Text("자기소개글")
                     .padding(.top, 3)
-
                 MyPageMyFeedView()
 
 //                ScrollView{
@@ -49,6 +49,10 @@ struct MyPageView: View {
 //                        }
 //                    }
 //                }
+            }
+            .onAppear{
+                // MARK: userID에 UserDefaults이용해서 저장
+                userVM.fetchCurrentUser(userID: docID ?? "")
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

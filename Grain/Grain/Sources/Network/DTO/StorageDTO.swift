@@ -15,6 +15,7 @@ struct StoragePath: Codable,Hashable {
     let name : String
 }
 
+// ????
 struct StorageResponsePost: Codable,Hashable {
     let name: String
     let bucket: String
@@ -70,3 +71,4 @@ struct StorageResponsePost: Codable,Hashable {
 //        case value = "name"
 //    }
 //}
+

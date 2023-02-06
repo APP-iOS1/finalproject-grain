@@ -10,7 +10,8 @@ import SwiftUI
 struct MyPageOptionView: View {
     let optionMenu = ["프로필 편집", "카메라 정보", "저장됨", "로그아웃"]
     @Environment(\.presentationMode) var presentationMode
-
+    @StateObject var authVM = AuthenticationStore()
+    
     var body: some View {
         VStack(alignment: .leading){
             Button(action: {
@@ -81,8 +82,8 @@ struct MyPageOptionView: View {
                 .padding(.bottom)
             }
             
-            NavigationLink {
-                EditMyPageView()
+            Button {
+                authVM.googleLogout()
             } label: {
                 HStack {
                     Image(systemName: "person")
@@ -98,6 +99,24 @@ struct MyPageOptionView: View {
                 .foregroundColor(.black)
                 .padding(.horizontal)
             }
+
+//            NavigationLink {
+//                EditMyPageView()
+//            } label: {
+//                HStack {
+//                    Image(systemName: "person")
+//                        .resizable()
+//                        .frame(width: 20, height: 20)
+//                        .aspectRatio(contentMode: .fit)
+//                        .padding(.trailing)
+//                    Text("로그아웃")
+//                    Spacer()
+//                    Image(systemName: "chevron.right")
+//                }
+//                .font(.title2)
+//                .foregroundColor(.black)
+//                .padding(.horizontal)
+//            }
             Spacer()
         }
         .navigationBarHidden(true)

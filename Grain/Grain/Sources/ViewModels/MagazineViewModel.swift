@@ -14,9 +14,11 @@ final class MagazineViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
     
     @Published var magazines = [MagazineDocument]()
+    @Published var updateMagazineData : MagazineDocument?
     
     var fetchMagazineSuccess = PassthroughSubject<(), Never>()
     var insertMagazineSuccess = PassthroughSubject<(), Never>()
+    var patchMagazineSuccess = PassthroughSubject<(), Never>()
 
     func fetchMagazine() {
 
@@ -44,9 +46,24 @@ final class MagazineViewModel: ObservableObject {
         }.store(in: &subscription)
     }
     
-    func updateMagazine() {
-        
-    }
+//    func updateMagazine() {
+//        MagazineService.patchUserMagazine(token: "bkT8aWSxt3PSJhQppATD")
+//            .receive(on: DispatchQueue.main)
+//            .sink { (completion: Subscribers.Completion<Error>) in
+//        } receiveValue: { (data: MagazineDocument) in
+//            self.updateMagazineData = data
+//            self.patchMagazineSuccess.send()
+//        }.store(in: &subscription)
+//        
+//        // 실제 업데이트 되는 부분
+//        MagazineService.patchMagazine1(token: "bkT8aWSxt3PSJhQppATD", updateMagazineData: updateMagazineData!)
+//            .receive(on: DispatchQueue.main)
+//            .sink { (completion: Subscribers.Completion<Error>) in
+//            } receiveValue: { (data: MagazineDocument) in
+//                self.updateMagazineData = data
+//                self.patchMagazineSuccess.send()
+//            }.store(in: &subscription)
+//    }
     
     func deleteMagazine() {
         
@@ -69,4 +86,5 @@ final class MagazineViewModel: ObservableObject {
     }
     
 }
+
 

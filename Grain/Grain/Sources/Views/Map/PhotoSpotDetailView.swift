@@ -31,6 +31,7 @@ struct PhotoSpotDetailView: View {
                                     Spacer()
                                     Text(data.fields.customPlaceName.stringValue)
                                 }
+
                                 .font(.caption)
                             }
                             Spacer()

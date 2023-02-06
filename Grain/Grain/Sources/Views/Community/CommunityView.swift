@@ -90,6 +90,11 @@ struct CommunityView: View {
         .onAppear {
             // 커뮤니티 데이터 fetch
             communityVM.fetchCommunity()
+            // MARK: 커뮤니티 업데이트 메서드 부분 필요시 확인하고 사용하기!
+//            Task{
+//                await communityVM.updateCommunity(updateDocument: "PQGsHYXGjF8QkeQol8sz", updateKey: "bookmarkedMagazineID", updateValue: "123131")
+//            }
+            
         }
     }
 }

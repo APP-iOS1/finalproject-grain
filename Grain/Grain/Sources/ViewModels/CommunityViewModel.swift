@@ -11,7 +11,7 @@
 
 import Foundation
 import Combine
-
+import FirebaseFirestore
 
 final class CommunityViewModel: ObservableObject {
     
@@ -57,7 +57,20 @@ final class CommunityViewModel: ObservableObject {
         }.store(in: &subscription)
     }
     
-    func updateCommunity() {
+    // MARK: Update -> Firebase Store SDK 사용
+    func updateCommunity(updateDocument: String, updateKey: String, updateValue: String) async {
+        
+        let db = Firestore.firestore()
+        let documentRef = db.collection("User").document("\(updateDocument)")
+        do{
+            try? await documentRef.updateData(
+                [
+                    "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
+                ]
+            )
+        }catch let error {
+            print("Error updating document: \(error)")
+        }
         
     }
     
@@ -66,4 +79,3 @@ final class CommunityViewModel: ObservableObject {
     }
     
 }
-

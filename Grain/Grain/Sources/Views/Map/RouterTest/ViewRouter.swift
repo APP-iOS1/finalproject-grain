@@ -16,13 +16,12 @@ class ViewRouter : ObservableObject{
 
 enum Page {
     case contentView
-    case mapView    // FIX
-    case photoSpotDetailView    // FIX
+//    case mapView    // FIX
+//    case photoSpotDetailView    // FIX
     case webkitView // FIX
     case stationMapView
     case repairShopMapView
     case photoSpotMapView
 //    case addMarkerMapView
     case magazineContentAddView
-    case testGeocodeView
 }

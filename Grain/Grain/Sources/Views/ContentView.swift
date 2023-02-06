@@ -24,7 +24,7 @@ struct ContentView: View {
     
     //정훈
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
-    
+    @State var clikedMagazineData : MagazineDocument?
 
     let icons = ["film", "text.bubble", "plus","map", "person"]
     let labels = ["필름", "커뮤니티", "", "지도", "마이"]
@@ -70,7 +70,7 @@ struct ContentView: View {
                             }
                         case 3:
                             NavigationStack {
-                                MapView(mapData:$mapVM.mapData, magazineData: $magazineVM.magazines)
+                                MapView(mapData:$mapVM.mapData, magazineData: $magazineVM.magazines, clikedMagazineData: clikedMagazineData)
                             }
                         case 4:
                             NavigationStack {
@@ -159,12 +159,13 @@ struct ContentView: View {
                 }
             }
         }
-//        .splashView {
-//            ZStack{
-//                SplashScreen()
-//            }
-//            
-//        }
+        .splashView {
+            ZStack{
+                SplashScreen()
+            }
+
+        }
+
     }
 }
 

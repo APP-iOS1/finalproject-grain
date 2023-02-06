@@ -15,7 +15,7 @@ struct MapCategoryCellView: View {
     let categoryList : [String] = ["전체","포토스팟", "현상소", "수리점"]
     @Binding var categoryString : String
     
-    @State var allButtonClickedBool : Bool = false
+    @State var allButtonClickedBool : Bool = true
     @State var photoButtonClickedBool : Bool = false
     @State var StationButtonClickedBool : Bool = false
     @State var repairButtonClickedBool : Bool = false

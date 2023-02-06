@@ -104,7 +104,6 @@
 		A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */; };
 		A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */; };
 		A7BFE18B298CC24E00D15F45 /* PhotoSpotTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFE18A298CC24E00D15F45 /* PhotoSpotTestView.swift */; };
-		A7BFE18D298CE52A00D15F45 /* AroundPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFE18C298CE52A00D15F45 /* AroundPostView.swift */; };
 		A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D957CE297AA574001D2401 /* CommunityDTO.swift */; };
 		A7D957D1297AA646001D2401 /* CommunityQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D957D0297AA646001D2401 /* CommunityQuery.swift */; };
 		A7D957D4297AAF74001D2401 /* CommunityRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D957D3297AAF74001D2401 /* CommunityRouter.swift */; };
@@ -125,9 +124,9 @@
 		A7D9F30E29896D8500B39218 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30D29896D8500B39218 /* UserService.swift */; };
 		A7D9F31029897A8D00B39218 /* NaverAPIEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30F29897A8D00B39218 /* NaverAPIEnum.swift */; };
 		A7D9F31229897C9000B39218 /* GeocodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F31129897C9000B39218 /* GeocodeService.swift */; };
-		A7D9F314298981F400B39218 /* TestGeocodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F313298981F400B39218 /* TestGeocodeView.swift */; };
 		A7D9F3162989840200B39218 /* NaverAPIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F3152989840200B39218 /* NaverAPIViewModel.swift */; };
 		A7D9F318298986B000B39218 /* GeocodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F317298986B000B39218 /* GeocodeRouter.swift */; };
+		A7E3DDE3298D3D5F004DA1F6 /* NearbyPostsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3DDE2298D3D5F004DA1F6 /* NearbyPostsComponent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -230,7 +229,6 @@
 		A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDTO.swift; sourceTree = "<group>"; };
 		A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineQuery.swift; sourceTree = "<group>"; };
 		A7BFE18A298CC24E00D15F45 /* PhotoSpotTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSpotTestView.swift; sourceTree = "<group>"; };
-		A7BFE18C298CE52A00D15F45 /* AroundPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AroundPostView.swift; sourceTree = "<group>"; };
 		A7D957CE297AA574001D2401 /* CommunityDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityDTO.swift; sourceTree = "<group>"; };
 		A7D957D0297AA646001D2401 /* CommunityQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityQuery.swift; sourceTree = "<group>"; };
 		A7D957D3297AAF74001D2401 /* CommunityRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityRouter.swift; sourceTree = "<group>"; };
@@ -251,9 +249,9 @@
 		A7D9F30D29896D8500B39218 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		A7D9F30F29897A8D00B39218 /* NaverAPIEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverAPIEnum.swift; sourceTree = "<group>"; };
 		A7D9F31129897C9000B39218 /* GeocodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeService.swift; sourceTree = "<group>"; };
-		A7D9F313298981F400B39218 /* TestGeocodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGeocodeView.swift; sourceTree = "<group>"; };
 		A7D9F3152989840200B39218 /* NaverAPIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverAPIViewModel.swift; sourceTree = "<group>"; };
 		A7D9F317298986B000B39218 /* GeocodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeRouter.swift; sourceTree = "<group>"; };
+		A7E3DDE2298D3D5F004DA1F6 /* NearbyPostsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyPostsComponent.swift; sourceTree = "<group>"; };
 		B32AC91721F3F99CCDA6BEDD /* Pods-Grain.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grain.release.xcconfig"; path = "Target Support Files/Pods-Grain/Pods-Grain.release.xcconfig"; sourceTree = "<group>"; };
 		D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Grain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -378,10 +376,9 @@
 				99233D472977F2F900A875B1 /* LocationManager.swift */,
 				99233D492977F31B00A875B1 /* MapCategoryCellView.swift */,
 				A75BB988297E6364004FE6FA /* PhotoSpotDetailView.swift */,
-				A7BFE18C298CE52A00D15F45 /* AroundPostView.swift */,
 				A75BB98F297EA25C004FE6FA /* WebkitView.swift */,
-				A7D9F313298981F400B39218 /* TestGeocodeView.swift */,
 				A7BFE18A298CC24E00D15F45 /* PhotoSpotTestView.swift */,
+				A7E3DDE2298D3D5F004DA1F6 /* NearbyPostsComponent.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -760,6 +757,7 @@
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,
 				9958AFA329777F9C00A51DA9 /* CommentStore.swift in Sources */,
 				99233D4E2977F36000A875B1 /* Map.swift in Sources */,
+				A7E3DDE3298D3D5F004DA1F6 /* NearbyPostsComponent.swift in Sources */,
 				A7D9F3162989840200B39218 /* NaverAPIViewModel.swift in Sources */,
 				9958AF8F29777D3F00A51DA9 /* Magazine.swift in Sources */,
 				A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */,
@@ -772,7 +770,6 @@
 				9958AFA529777FAF00A51DA9 /* ReCommentStore.swift in Sources */,
 				06FD6AB32977AECE00B4A859 /* CommunityView.swift in Sources */,
 				9955E115297A538900265D14 /* MagazineDetailView.swift in Sources */,
-				A7BFE18D298CE52A00D15F45 /* AroundPostView.swift in Sources */,
 				A7D9F2F62988FD4700B39218 /* StorageDTO.swift in Sources */,
 				A7D9F308298969FC00B39218 /* UserDTO.swift in Sources */,
 				9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */,
@@ -840,7 +837,6 @@
 				9958AF9729777DF700A51DA9 /* ReComment.swift in Sources */,
 				9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */,
 				334699DB2988DE51004153A6 /* StoredPostView.swift in Sources */,
-				A7D9F314298981F400B39218 /* TestGeocodeView.swift in Sources */,
 				A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */,
 				A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */,
 				A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */,

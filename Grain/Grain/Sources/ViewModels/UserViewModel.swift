@@ -6,12 +6,7 @@
 //
 
 import Foundation
-//
-//  UserViewModel.swift
-//  Grain
-//
-//  Created by 박희경 on 2023/01/23.
-//
+import FirebaseFirestore
 
 import Foundation
 import Combine
@@ -51,6 +46,34 @@ final class UserViewModel: ObservableObject {
         }.store(in: &subscription)
         
 
+    }
+    func updateUser(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+        
+        let db = Firestore.firestore()
+        let documentRef = db.collection("User").document("\(updateDocument)")
+        if isArray{
+            do{
+                try? await documentRef.updateData(
+                    [
+                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
+                    ]
+                )
+            }catch let error {
+                print("Error updating document: \(error)")
+            }
+        }else{
+            do{
+                try? await documentRef.updateData(
+                    [
+                         "\(updateKey)" : "\(updateValue)"
+                    ]
+                )
+            }catch let error {
+                print("Error updating document: \(error)")
+            }
+        }
+       
+        
     }
     
 

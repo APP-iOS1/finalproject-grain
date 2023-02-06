@@ -61,7 +61,7 @@ final class CommunityViewModel: ObservableObject {
     func updateCommunity(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
         
         let db = Firestore.firestore()
-        let documentRef = db.collection("User").document("\(updateDocument)")
+        let documentRef = db.collection("Community").document("\(updateDocument)")
         if isArray{
             do{
                 try? await documentRef.updateData(

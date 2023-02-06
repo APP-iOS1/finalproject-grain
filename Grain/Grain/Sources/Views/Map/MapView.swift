@@ -22,22 +22,26 @@ struct MapView: View {
     
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     @Binding var magazineData: [MagazineDocument] //매거진 데이터 전달 받기
+    @StateObject var magazineVM = MagazineViewModel()
     
-//    @State var aroundPostArr = Set<String>()
-    @State var aroundPostArr : [String] = []
+//    @State var nearbyPostsArr = Set<String>()
+    @State var nearbyPostsArr : [String] = []
+    
+    @State var visitButton : Bool = false
+    @State var clikedMagazineData : MagazineDocument?
     
     @State var isShowingPhotoSpot: Bool = false
-    @State var clickedMagazineDataID : String = ""
     @State var isShowingWebView: Bool = false
     @State var bindingWebURL : String = ""
     @State var markerAddButtonBool: Bool = false
     @State var changeMap: CGPoint = CGPoint(x: 0, y: 0)
-
+    
+    
     
     var body: some View {
         NavigationStack{
             // MARK: 지도 탭의 상단
-            ZStack{
+            ZStack(alignment: .center){
                 VStack{
                     HStack{
                         // FIXME: onSubmit 하고 버튼 눌러야함
@@ -71,7 +75,7 @@ struct MapView: View {
                 /// 카테고리 버튼 별로 해당하는 지도 뷰가 보여줌
                 switch categoryString{
                 case "전체":
-                    UIMapView(mapData: $mapData, aroundPostArr: $aroundPostArr, isShowingPhotoSpot: $isShowingPhotoSpot,clickedMagazineDataID: $clickedMagazineDataID, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
+                    UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
                         .zIndex(0)
 
                 case "포토스팟":
@@ -84,7 +88,7 @@ struct MapView: View {
                     RepairShopMapView(mapData: $mapData)
                         .zIndex(0)
                 default:
-                    UIMapView(mapData: $mapData, aroundPostArr: $aroundPostArr, isShowingPhotoSpot: $isShowingPhotoSpot,clickedMagazineDataID: $clickedMagazineDataID, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
+                    UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
                         .zIndex(0)
                 }
                 
@@ -106,13 +110,25 @@ struct MapView: View {
                     }
                 .offset(y:280)
                 
+             
+                if isShowingPhotoSpot{
+                    /// nearbyMagazineData -> NearbyPostsComponent뷰에서 ForEach을 위한 Magazine 데이터
+                    /// magazineVM.nearbyPostsFilter메서드 호출 반환 값으로 [MagazineDocument]
+                    /// 매개변수로는 contentView에서 전달 받은 magazineData 값 전달 / nearbyPostsArr : 포토스팟 클릭 마커
+                    /// 그럼 메서드에서 for in 두번 돌려 필요한 값만 전달
+                    /// 이 과정에서 DB 연관 없다고 생각 듬! -> 확인  필요
+                    NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineData, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData)
+                        .offset(x:40,y: 250)
+                    //  FIXME: offset x:40 없애기 화면상에서 가운데 정렬 시켜야함
+                }
+
+                
             }
-            
-            .sheet(isPresented: $isShowingPhotoSpot, content: {
-                PhotoSpotDetailView(magazineData: $magazineData,clickedMagazineDataID: $clickedMagazineDataID, aroundPostArr: $aroundPostArr) .presentationDetents( [.medium])  /// 모달 뷰 medium으로 보여주기
+            .fullScreenCover(isPresented: $visitButton, content: {
+                PhotoSpotDetailView(data: clikedMagazineData!)
             })
-            .sheet(isPresented: $isShowingWebView) {
-                WebkitView(bindingWebURL: $bindingWebURL)
+            .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
+                WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium])
             }
         }
     }
@@ -129,13 +145,12 @@ struct UIMapView: UIViewRepresentable,View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     
     //FIXME: Set으로 만들어보기
-//    var aroundPostArr = Set<String>()   //주변 게시물 저장
-    @Binding var aroundPostArr : [String]
+//    var nearbyPostsArr = Set<String>()   //주변 게시물 저장
+    @Binding var nearbyPostsArr : [String]
     
     @EnvironmentObject var viewRouter: ViewRouter
     //모달뷰
     @Binding var isShowingPhotoSpot: Bool
-    @Binding var clickedMagazineDataID : String //마커에서 클릭한 포토스팟
     
     @Binding var isShowingWebView: Bool
     @Binding var bindingWebURL : String
@@ -171,10 +186,10 @@ struct UIMapView: UIViewRepresentable,View {
         view.mapView.touchDelegate = context.coordinator
         
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
-        view.showCompass = false
-        view.showLocationButton = true
+//        view.showCompass = false
         // MARK: 위치 정보 받아오기
-        view.showLocationButton = true
+//        view.showLocationButton = true
+        
         view.mapView.positionMode = .direction
         
         // MARK: 지도가 그려질때 현재 유저 GPS 위치로 카메라 움직임
@@ -196,6 +211,7 @@ struct UIMapView: UIViewRepresentable,View {
 //                markers.append(object)
 //            }
 //        }
+        
         
         // MARK: Combine 이용 Content뷰에서 처음에 불러온 데이터 고정
         // MARK: Map 컬렉션 DB에서 위치 정보를 받아와 마커로 표시
@@ -236,25 +252,22 @@ struct UIMapView: UIViewRepresentable,View {
             default:
                 marker.iconImage = NMF_MARKER_IMAGE_BLACK
             }
-            // MARK: 마커 클릭시
             
+            // MARK: 마커 클릭시
             marker.touchHandler = { (overlay) in
                 if let marker = overlay as? NMFMarker {
                     switch marker.tag{
                     case 0: //포토스팟
-                        // MARK: 포토스팟 모달 띄워주기
+                        // MARK: 포토스팟 컴포넌트 띄워주기
                         isShowingPhotoSpot.toggle()
-                        clickedMagazineDataID = marker.userInfo["magazine"] as! String
-                       
+                        nearbyPostsArr.removeAll()
                         for pickable in view.mapView.pickAll(view.mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng)), withTolerance: 30){
                             if let marker = pickable as? NMFMarker{
                                 if marker.tag == 0 {
-//                                    aroundPostArr.insert(marker.userInfo["magazine"] as! String)
-                                    aroundPostArr.append(marker.userInfo["magazine"] as! String)
+                                    nearbyPostsArr.append(marker.userInfo["magazine"] as! String)
                                 }
                             }
                         }
- 
                     case 1: //현상소
                         isShowingWebView.toggle()
                         bindingWebURL = marker.userInfo["url"] as! String
@@ -269,6 +282,8 @@ struct UIMapView: UIViewRepresentable,View {
             }
             marker.mapView = view.mapView
         }
+        
+
         // MARK: 포토스팟 마커 클릭시 주변 게시글
        
         // MARK: 주변 게시글 적용
@@ -431,8 +446,8 @@ class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, 
         self.latitude = latlng.lat
         self.longitude = latlng.lng
         self.point = point
-//        print("\(latlng.lat), \(latlng.lng)")
-//        print(point)
+        print("\(latlng.lat), \(latlng.lng)")
+        print(point)
         
         ///맵 누르면 버튼 생김
         //        let currentUserMarker = NMFMarker()

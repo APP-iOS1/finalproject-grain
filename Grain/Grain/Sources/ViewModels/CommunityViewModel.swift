@@ -47,7 +47,7 @@ final class CommunityViewModel: ObservableObject {
     
     func insertCommunity(profileImage: String, nickName: String, category: String, image: String, userID: String, title: String, content: String) {
 //        print("CommunityViewModel insertCommunity Start")
-        
+
         CommunityService.insertCommunity(profileImage: profileImage, nickName: nickName, category: category, image: image, userID: userID, title: title, content: content)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in

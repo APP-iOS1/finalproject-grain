@@ -9,6 +9,7 @@
 import Foundation
 
 struct CurrentUserResponse: Codable {
+    let name : String
     let fields: CurrentUserFields
     let createTime, updateTime: String
 }

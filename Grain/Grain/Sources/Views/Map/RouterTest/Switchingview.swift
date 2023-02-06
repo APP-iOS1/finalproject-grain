@@ -10,13 +10,13 @@ import NMapsMap
 struct Switchingview: View {
     
     @EnvironmentObject var viewRouter: ViewRouter
-    //TODO: 임시코드 <- 리팩토링 하기
+ 
     @State var bindingWebURL : String = ""
-    // 임시
+
     @State var presented : Bool = false
     @State var clickedMagazineDataID : String = ""
-    @State var aroundPostArr : [String] = []
-    
+    @State var nearbyPostsArr : [String] = []
+
     // 정훈
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     @StateObject var mapVM = MapViewModel()
@@ -26,13 +26,10 @@ struct Switchingview: View {
         switch viewRouter.currentPage{
         case .contentView:
             ContentView().environmentObject(AuthenticationStore()).environmentObject(KakaoAuthenticationStore())
-        case .mapView:
-            MapView(mapData: $mapVM.mapData, magazineData: $magazineVM.magazines)
-        case .photoSpotDetailView:
-            PhotoSpotDetailView(magazineData: $magazineVM.magazines, clickedMagazineDataID: $clickedMagazineDataID, aroundPostArr: $aroundPostArr)
-                .onAppear{
-                    magazineVM.fetchMagazine()
-                }
+            //        case .mapView:
+            //            MapView(mapData: $mapVM.mapData, magazineData: $magazineVM.magazines, clikedMagazineData: nearbyMagazineData)
+            //        case .photoSpotDetailView:
+            //            PhotoSpotDetailView(data: magazineVM.magazines) //임시
         case .webkitView:
             WebkitView(bindingWebURL: $bindingWebURL)   //TODO: 임시코드 <- 리팩토링 하기
         case .photoSpotMapView:
@@ -41,12 +38,10 @@ struct Switchingview: View {
             StationMapView(mapData: $mapVM.mapData)
         case .repairShopMapView:
             RepairShopMapView(mapData: $mapVM.mapData)
-        case .addMarkerMapView:
-            AddMarkerMapView(updateNumber: $updateNumber)
+//        case .addMarkerMapView:
+//            AddMarkerMapView(updateNumber: $updateNumber)
         case .magazineContentAddView:
             MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
-        case .testGeocodeView:
-            TestGeocodeView()
         }
 //            .splashView {
 //                ZStack{

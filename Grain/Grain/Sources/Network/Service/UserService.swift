@@ -31,7 +31,7 @@ enum UserService {
     }
     
     // MARK: - 맵 데이터 넣기
-    static func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String ) -> AnyPublisher<UserResponse, Error> {
+    static func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String ) -> AnyPublisher<UserDocument, Error> {
        
         
         let requestRouter = UserRouter.post(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName)
@@ -46,7 +46,7 @@ enum UserService {
             .shared
             .dataTaskPublisher(for: request)
             .map{ $0.data }
-            .decode(type: UserResponse.self, decoder: JSONDecoder())
+            .decode(type: UserDocument.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
     }
     
@@ -72,26 +72,27 @@ enum UserService {
     }
     
     // 데이터 삭제
-//    func test(){
-//        let firestoreRef = "https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents/{DOCUMENT_PATH}"
-//        // MARK: 콜렉션 / uuid 값
-//        let documentPath = "User/gTQvo3MwawdxVMU0IfYv"
-//
-//        let url = URL(string: firestoreRef.replacingOccurrences(of: "{PROJECT_ID}", with: "grain-final")
-//                        .replacingOccurrences(of: "{DOCUMENT_PATH}", with: documentPath))!
-//
-//        var urlRequest = URLRequest(url: url)
-//        urlRequest.httpMethod = "DELETE"
-//
-//        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-//            if let error = error {
-//                print("Error deleting document: \(error)")
-//                return
-//            }
-//            print("Document deleted successfully")
-//        }.resume()
-//
-//    }
+    func test(){
+        let firestoreRef = "https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents/{DOCUMENT_PATH}"
+        // MARK: 콜렉션 / uuid 값
+        let documentPath = "User/gTQvo3MwawdxVMU0IfYv"
+
+        
+        let url = URL(string: firestoreRef.replacingOccurrences(of: "{PROJECT_ID}", with: "grain-final")
+                        .replacingOccurrences(of: "{DOCUMENT_PATH}", with: documentPath))!
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "DELETE"
+
+        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                print("Error deleting document: \(error)")
+                return
+            }
+            print("Document deleted successfully")
+        }.resume()
+
+    }
     // 데이터 업데이트 -> 검증 필요함
 //    func test1(){
 //        let firestoreRef = "https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents/{DOCUMENT_PATH}"

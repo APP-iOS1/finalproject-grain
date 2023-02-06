@@ -54,6 +54,7 @@ enum StorageService {
             print("http error")
         }
         print("request: \(returnURLRequestArr)")
+        
         return URLSession
             .shared
             .dataTaskPublisher(for: request)

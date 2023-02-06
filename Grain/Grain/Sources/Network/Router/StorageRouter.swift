@@ -89,7 +89,9 @@ enum StorageRouter {
                 if error == nil {
                     let decoder = JSONDecoder()
                     let jsonData = try? decoder.decode(StorageResponsePost.self, from: responseData!)
-                    
+                    print("\(jsonData?.downloadTokens ?? "")")
+                    returnURLRequestArr.append(jsonData?.downloadTokens ?? "")
+                    print("router returnURLRequestArr: \(returnURLRequestArr)")
                 }
             }).resume()
         }

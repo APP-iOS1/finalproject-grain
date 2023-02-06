@@ -191,6 +191,8 @@ struct AddCommunityView: View {
             Spacer()
             
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
         .ignoresSafeArea(.keyboard)
     }}
 

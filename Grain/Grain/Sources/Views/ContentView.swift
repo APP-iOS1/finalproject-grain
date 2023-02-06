@@ -46,11 +46,13 @@ struct ContentView: View {
                     ZStack {
                         Spacer().fullScreenCover(isPresented: $presented) {
                             VStack {
-                                if self.selectedIndex == 0 {
-                                    MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
-                                } else if self.selectedIndex == 1 {
-                                    AddCommunityView(communityVM: communityVM, presented: $presented)
-                                }
+                                
+                                SelectPostView(presented: $presented, communityVM: communityVM, updateNumber: updateNumber)
+//                                if self.selectedIndex == 0 {
+//                                    MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
+//                                } else if self.selectedIndex == 1 {
+//                                    AddCommunityView(communityVM: communityVM, presented: $presented)
+//                                }
                                 Spacer()
                             }
                         }
@@ -79,11 +81,12 @@ struct ContentView: View {
                         default:
                             NavigationStack {
                                 VStack {
-                                    if self.selectedIndex == 0 {
-                                        MagazineContentAddView(presented: $presented, updateNumber: NMGLatLng(lat: 0, lng: 0))
-                                    } else if self.selectedIndex == 1 {
-                                        AddCommunityView(communityVM: communityVM, presented: $presented)
-                                    }
+                                    SelectPostView(presented: $presented, communityVM: communityVM, updateNumber: updateNumber)
+//                                    if self.selectedIndex == 0 {
+//                                        MagazineContentAddView(presented: $presented, updateNumber: NMGLatLng(lat: 0, lng: 0))
+//                                    } else if self.selectedIndex == 1 {
+//                                        AddCommunityView(communityVM: communityVM, presented: $presented)
+//                                    }
                                 }
                             }
                         }

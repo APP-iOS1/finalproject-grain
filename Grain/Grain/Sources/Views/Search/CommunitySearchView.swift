@@ -1,155 +1,55 @@
 //
-//  CommunitySearchView.swift
+//  CommunitySearchView .swift
 //  Grain
 //
-//  Created by 박희경 on 2023/01/18.
+//  Created by 조형구 on 2023/02/06.
 //
 
 import SwiftUI
 
-private enum FocusableField: Hashable {
-    case search
-}
-
 struct CommunitySearchView: View {
     @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
     
-    @State private var searchWord: String = ""
-    @State private var searchList: [String] =  ["카메라", "명소", " 출사"]
-    @State private var isSearchResultShown: Bool = false
-    
-    @FocusState private var focus: FocusableField?
-    
+    @Binding var searchWord: String
+    @State private var isCommunitySearchResultShown: Bool = false
+
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
-    
     var body: some View {
-        NavigationStack {
-            VStack{
-                VStack(spacing: 0){
-                    HStack{
-                        TextField("검색어를 입력하세요", text: $searchWord)
-                            .textContentType(.oneTimeCode)
-                            .tint(Color.black)
-                            .textInputAutocapitalization(.never)
-                            .disableAutocorrection(true)
-                            .focused($focus, equals: .search)
-                            .submitLabel(.search)
-                            .onSubmit {
-                                self.isSearchResultShown.toggle()
-                            }
-                        Button {
-                            self.isSearchResultShown.toggle()
-                        } label: {
-                            Image(systemName: "magnifyingglass")
-                                .font(.title2)
-                        }
-                        
-                        if focus == .search{
-                            Button {
-                                self.focus = nil
-                                self.searchWord = ""
-                            } label: {
-                                Text("취소")
-                            }
-                            
-                        }
-                    }
-                    .padding()
-                    
-                    Rectangle()
-                        .frame(width: Screen.maxWidth, height: 1, alignment: .bottom)
-                        .foregroundColor(.black)
-                    
+        VStack{
+                HStack{
+                    Text("\(Image(systemName: "magnifyingglass")) \(searchWord)")
+                    Spacer()
                 }
-                
-                if searchWord.isEmpty {
-                    VStack{
-                        HStack {
-                            Text("최근 검색어")
-                                .fontWeight(.bold)
-                                .foregroundColor(.gray)
-                            Spacer()
-                            
-                            Button(action: {
-                                searchList.removeAll()
-                            }) {
-                                Text("전체삭제")
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
-                            }
-                        }
-                        .padding(.bottom, 0)
-                        ForEach(0..<searchList.count, id: \.self) { index in
-                            HStack {
-                                NavigationLink(destination: {
-                                    
-                                }) {
-                                    Text(searchList[index])
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.black)
-                                    
-                                }
-                                Spacer()
-                                
-                                Button(action: {
-                                    searchList.remove(at: index)
-                                }) {
-                                    Image(systemName: "multiply")
-                                        .foregroundColor(.gray)
-                                    
-                                }
-                                .frame(alignment: .trailing )
-                                
-                            }
-                            .padding()
-                        }
-                        
-                    }
-                    .padding()
-                    
-                } else if !searchWord.isEmpty {
-                    VStack{
-                        List(communtyViewModel.communities.filter {
-                           ignoreSpaces(in: $0.fields.title.stringValue)
-                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
-                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                        },id: \.self) { item in
-                            VStack(alignment: .leading){
-                                Text(item.fields.title.stringValue)
-                                    .bold()
-                                    .padding(.bottom, 5)
-                                Text(item.fields.content.stringValue)
-                                    .lineLimit(2)
-                                    .foregroundColor(.textGray)
-                                    .font(.caption)
-                            }
-                        }
-                        .listStyle(.plain)
-                    }
+            List(communtyViewModel.communities.filter {
+               ignoreSpaces(in: $0.fields.title.stringValue)
+                    .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
+                    .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+            },id: \.self) { item in
+                VStack(alignment: .leading){
+                    Text(item.fields.title.stringValue)
+                        .bold()
+                        .padding(.bottom, 5)
+                    Text(item.fields.content.stringValue)
+                        .lineLimit(2)
+                        .foregroundColor(.textGray)
+                        .font(.caption)
                 }
-                
-                Spacer()
             }
-            .navigationDestination(isPresented: $isSearchResultShown, destination: {
-                CommunitySearchResultView(searchWord: $searchWord)
-            })
-            .onAppear{
-                self.searchWord = ""
-                communtyViewModel.fetchCommunity()
-            }
+            .listStyle(.plain)
+        }
+        .navigationDestination(isPresented: $isCommunitySearchResultShown, destination: {
+            CommunitySearchResultView(searchWord: $searchWord)
+        })
+        .onAppear{
+            communtyViewModel.fetchCommunity()
         }
     }
 }
 
 struct CommunitySearchView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack {
-            CommunitySearchView()
-        }
+        CommunitySearchView(searchWord: .constant(""))
     }
 }
-
-
-

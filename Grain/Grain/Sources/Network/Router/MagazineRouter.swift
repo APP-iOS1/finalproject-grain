@@ -11,7 +11,7 @@ import Foundation
 enum MagazineRouter {
 
     case get
-    case post(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String )
+    case post(userID: String, cameraInfo: String, nickName: String, image: [String], content: String, title: String, lenseInfo:String, longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String, latitude: Double, comment: String, roadAddress: String )
     case delete
     case put
     case patch
@@ -86,7 +86,6 @@ enum MagazineRouter {
         return request
     }
 
-    
     // MARK: 실험 코드
     func asURLPatch(token: String) throws -> URLRequest {
         let url = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents" + "/Magazine/\(token)"

@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 
 final class MagazineViewModel: ObservableObject {
@@ -21,8 +22,6 @@ final class MagazineViewModel: ObservableObject {
     var patchMagazineSuccess = PassthroughSubject<(), Never>()
 
     func fetchMagazine() {
-
-        
         MagazineService.getMagazine()
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
@@ -34,8 +33,8 @@ final class MagazineViewModel: ObservableObject {
 
     }
     
-    func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String ) {
-
+    func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: [UIImage], content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String ) {
+        
         
         MagazineService.insertMagazine(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title, lenseInfo: lenseInfo, longitude: longitude, likedNum: likedNum, filmInfo: filmInfo, customPlaceName: customPlaceName, latitude: latitude, comment: comment, roadAddress: roadAddress)
             .receive(on: DispatchQueue.main)

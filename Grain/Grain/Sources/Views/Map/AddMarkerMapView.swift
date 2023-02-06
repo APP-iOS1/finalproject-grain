@@ -30,7 +30,7 @@ struct AddMarkerMapView: View {
     // geocode 하기 위해
     
     @StateObject var naverVM = NaverAPIViewModel()
-    @StateObject var TestnaverVM = TestNaverAPIViewModel()
+
     // 위치 검색 결과 값
     @State var searchResponse : [Address] = [Address(roadAddress: "", jibunAddress: "", englishAddress: "", x: "", y: "", distance: 0)]
     

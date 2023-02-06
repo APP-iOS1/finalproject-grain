@@ -6,10 +6,10 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct Top10View: View {
     var data : MagazineDocument
-    
     var body: some View {
             VStack{
                 Rectangle()
@@ -17,7 +17,10 @@ struct Top10View: View {
                     .foregroundColor(Color.boxGray)
                     .overlay(
                         VStack{
-                            Image("1")
+                          let url = URL(string: data.fields.image.arrayValue.values[0].stringValue)
+                            //MARK: KingFisher를 사용하여 이미지 캐싱 처리
+                            //url이 없을때 보여줄 이미지(placeholder) 정해서 지금 스트링값에 주소 넣어주면 될것같습니다
+                            KFImage.url(url ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg")!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                             Text(data.fields.nickName.stringValue)
@@ -42,8 +45,6 @@ struct Top10View: View {
                                 .frame(maxWidth:.infinity, alignment:.leading)
                                 .padding(.horizontal)
                                 .lineLimit(1)
-                            
-                            
                         }.cornerRadius(15),
                         alignment: .top
                     )
@@ -75,3 +76,5 @@ struct Top10Cell: View {
 //        Top10View()
 //    }
 //}
+
+

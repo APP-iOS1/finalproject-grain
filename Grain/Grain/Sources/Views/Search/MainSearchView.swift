@@ -26,8 +26,11 @@ struct MainSearchView: View {
     @State private var isMagazineSearchResultShown: Bool = false
     @State private var isCommunitySearchResultShown: Bool = false
     @State private var isUserSearchResultShown: Bool = false
+    @State private var isShownProgress: Bool = true
+    @State private var isShownPickerProgress: Bool = false
     @State private var searchStatus: SearchState = .magazine
     @State private var selectedIndex: Int = 0
+    @State private var progress: Double = 0.5
     
     @FocusState private var focus: FocusableField?
     
@@ -38,7 +41,11 @@ struct MainSearchView: View {
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
-    
+    init(){
+        if searchWord.isEmpty{
+            isShownProgress = true
+        }
+    }
     var body: some View {
         NavigationStack {
             VStack{
@@ -52,14 +59,24 @@ struct MainSearchView: View {
                             .focused($focus, equals: .search)
                             .submitLabel(.search)
                             .onSubmit {
-                                if selectedIndex == 0 {
-                                    self.isMagazineSearchResultShown.toggle()
-                                }else if selectedIndex == 1 {
-                                    self.isCommunitySearchResultShown.toggle()
-                                }else {
-                                    self.isUserSearchResultShown.toggle()
+                                if searchWord.isEmpty {
+                                    self.focus = nil
+                                } else{
+                                    if selectedIndex == 0 {
+                                        self.isMagazineSearchResultShown.toggle()
+                                    }else if selectedIndex == 1 {
+                                        self.isCommunitySearchResultShown.toggle()
+                                    }else {
+                                        self.isUserSearchResultShown.toggle()
+                                    }
                                 }
                             }
+                            .onChange(of: searchWord) { value in
+                                                self.isShownProgress = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                                    self.isShownProgress = false
+                                                }
+                                            }
                             .padding(.leading)
                         
                         if focus == .search{
@@ -108,6 +125,12 @@ struct MainSearchView: View {
                                         .frame(height: 1)
                                 }
                             })
+                        .onChange(of: selectedIndex) { value in
+                                            self.isShownPickerProgress = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                                self.isShownPickerProgress = false
+                                            }
+                                        }
                         
                         Spacer()
                     }
@@ -160,98 +183,202 @@ struct MainSearchView: View {
                     .padding()
                     
                 } else if !searchWord.isEmpty {
-                    VStack{
-                        switch selectedIndex {
-                        case 0:
-                            List{
-                                ForEach(magazineViewModel.magazines.filter {
-                                    ignoreSpaces(in: $0.fields.title.stringValue)
-                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-                                    ignoreSpaces(in: $0.fields.content.stringValue)
-                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                                },id: \.self) { item in
-                                    NavigationLink {
-                                        MagazineDetailView(data: item)
-                                    } label: {
-                                        
-                                        VStack(alignment: .leading){
-                                            Text(item.fields.title.stringValue)
-                                                .bold()
-                                                .padding(.bottom, 5)
-                                            Text(item.fields.content.stringValue)
-                                                .lineLimit(2)
-                                                .foregroundColor(.textGray)
-                                                .font(.caption)
+                    ZStack {
+                        VStack{
+                            switch selectedIndex {
+                            case 0:
+                                List{
+                                    HStack{
+                                        Text(Image(systemName: "magnifyingglass"))
+                                            .padding(.leading)
                                             
+                                        Text("\(searchWord)")
+                                    }
+                                    .padding(.top)
+                                    .frame(width: Screen.maxWidth, alignment: .leading)
+                                    ForEach(magazineViewModel.magazines.filter {
+                                        ignoreSpaces(in: $0.fields.title.stringValue)
+                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                                        ignoreSpaces(in: $0.fields.content.stringValue)
+                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                                    }.prefix(3),id: \.self) { item in
+                                        NavigationLink {
+                                            MagazineDetailView(data: item)
+                                        } label: {
+                                            VStack(alignment: .leading){
+                                                Text(item.fields.title.stringValue)
+                                                    .font(.body)
+                                                    .bold()
+                                                    .padding(.vertical, 5)
+                                                Text(item.fields.content.stringValue)
+                                                    .lineLimit(1)
+                                                    .foregroundColor(.textGray)
+                                                    .font(.caption)
+                                            }
                                         }
                                     }
+                                    Button {
+                                        self.isMagazineSearchResultShown.toggle()
+                                    } label: {
+                                     Text("결과 모두 보기")
+                                            .foregroundColor(.blue)
+                                            .font(.body)
+                                            .offset(x: Screen.maxWidth * 0.32)
+                                            .padding(.vertical, 9)
+                                    }
                                 }
-                            }
-                            .listStyle(.plain)
-                            
-                        case 1:
-                            List{
-                                ForEach(communtyViewModel.communities.filter {
+                                .emptyPlaceholder(magazineViewModel.magazines.filter {
+                                    ignoreSpaces(in: $0.fields.title.stringValue)
+                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
+                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                                }) {
+                                    VStack{
+                                        Spacer()
+                                        MainSearchPlaceHolder(searchWord: $searchWord)
+                                        Spacer()
+                                    }
+                                    
+                                }
+                                .listStyle(.plain)
+                                
+                            case 1:
+                                List{
+                                    HStack{
+                                        Text(Image(systemName: "magnifyingglass"))
+                                            .padding(.leading)
+                                            
+                                        Text("\(searchWord)")
+                                    }
+                                    .frame(width: Screen.maxWidth, alignment: .leading)
+                                    ForEach(communtyViewModel.communities.filter {
+                                        ignoreSpaces(in: $0.fields.title.stringValue)
+                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                                        ignoreSpaces(in: $0.fields.content.stringValue)
+                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                                    }.prefix(3),id: \.self) { item in
+                                        NavigationLink {
+                                            CommunitySearchDetailView(community: item)
+                                        } label: {
+                                            VStack(alignment: .leading){
+                                                Text(item.fields.title.stringValue)
+                                                    .font(.body)
+                                                    .bold()
+                                                    .padding(.vertical, 5)
+                                                Text(item.fields.content.stringValue)
+                                                    .lineLimit(1)
+                                                    .foregroundColor(.textGray)
+                                                    .font(.caption)
+                                            }
+                                        }
+                                    }
+                                 
+                                        Button {
+                                            self.isCommunitySearchResultShown.toggle()
+                                        } label: {
+                                         Text("결과 모두 보기")
+                                                .foregroundColor(.blue)
+                                                .font(.body)
+                                                .offset(x: Screen.maxWidth * 0.32)
+                                                .padding(.vertical, 8)
+                                        }
+                                  
+    
+                                    .buttonStyle(.plain)
+                                     
+
+                                }
+                                .emptyPlaceholder(communtyViewModel.communities.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                     ignoreSpaces(in: $0.fields.content.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                                },id: \.self) { item in
-                                    NavigationLink {
-                                        CommunitySearchDetailView(community: item)
-                                    } label: {
-                                        VStack(alignment: .leading){
-                                            Text(item.fields.title.stringValue)
-                                                .bold()
-                                                .padding(.bottom, 5)
-                                            Text(item.fields.content.stringValue)
-                                                .lineLimit(2)
-                                                .foregroundColor(.textGray)
-                                                .font(.caption)
+                                }) {
+                                    VStack{
+                                        Spacer()
+                                        MainSearchPlaceHolder(searchWord: $searchWord)
+                                        Spacer()
+                                    }
+                                    
+                                }
+                                .listStyle(.plain)
+                               
+                            case 2:
+                                List{
+                                    ForEach(userViewModel.users.filter {
+                                        ignoreSpaces(in: $0.fields.nickName.stringValue)
+                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                                        ignoreSpaces(in: $0.fields.name.stringValue)
+                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                                    }.prefix(4),id: \.self) { item in
+                                        NavigationLink {
+                                            UserSearchDetailView(user: item)
+                                        } label: {
+                                            HStack{
+                                                Circle()
+                                                    .stroke(lineWidth: 1)
+                                                    .frame(width: 47, height: 47)
+                                                    .foregroundColor(.black)
+                                                    .overlay(
+                                                        Image(systemName: "person.fill")
+                                                            .resizable()
+                                                            .foregroundColor(.brightGray)
+                                                            .aspectRatio(contentMode: .fit)
+                                                            .padding(9)
+                                                    )
+                                                VStack(alignment: .leading){
+                                                    Text(item.fields.nickName.stringValue)
+                                                        .bold()
+                                                        .padding(.bottom, 5)
+                                                    Text(item.fields.name.stringValue)
+                                                        .font(.caption)
+                                                        .foregroundColor(.textGray)
+                                                        .frame(alignment: .leading)
+                                                }
+                                                .padding(.leading)
+                                                Spacer()
+                                            }
                                         }
                                     }
+                                    Button {
+                                        self.isCommunitySearchResultShown.toggle()
+                                    } label: {
+                                     Text("결과 모두 보기")
+                                            .foregroundColor(.blue)
+                                            .font(.body)
+                                            .offset(x: Screen.maxWidth * 0.32)
+                                            .padding(.vertical, 9)
+                                    }
                                 }
-                            }
-                            .listStyle(.plain)
-                        case 2:
-                            List{
-                                ForEach(userViewModel.users.filter {
+                                .emptyPlaceholder(userViewModel.users.filter {
                                     ignoreSpaces(in: $0.fields.nickName.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                     ignoreSpaces(in: $0.fields.name.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                                },id: \.self) { item in
-                                    NavigationLink {
-                                        UserSearchDetailView(user: item)
-                                    } label: {
-                                        VStack(alignment: .leading){
-                                            HStack{
-                                                Circle()
-                                                    .frame(width: 60, height: 60)
-                                                    .foregroundColor(.brightGray)
-                                                    .overlay(
-                                                        Image(systemName: "person.fill")
-                                                    )
-                                                VStack{
-                                                    Text(item.fields.nickName.stringValue)
-                                                        .bold()
-                                                        .padding([.bottom, .leading], 5)
-                                                    
-                                                }
-                                            }
-                                            
-                                        }
+                                }) {
+                                    VStack{
+                                        Spacer()
+                                        MainSearchPlaceHolder(searchWord: $searchWord)
+                                        Spacer()
                                     }
+                                    
                                 }
+                                .listStyle(.plain)
+                            default:
+                               Text("다시 시도해주세요")
                             }
-                            .listStyle(.plain)
-                        default:
-                           Text("다시 시도해주세요")
+                            
+                        }
+                        
+                        if isShownProgress == true {
+                            SearchProgress()
+                        }
+                        
+                        if isShownPickerProgress == true {
+                            SearchProgress()
                         }
                         
                     }
                 }
-                
                 Spacer()
             }
             .onAppear{
@@ -273,7 +400,6 @@ struct MainSearchView: View {
                 UserSearchResultView(searchWord: $searchWord)
             })
         }
-        
     }
 }
 

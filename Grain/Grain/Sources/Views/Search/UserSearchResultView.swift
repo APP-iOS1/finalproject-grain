@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct UserSearchResultView: View {
-    @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+    
+    @State private var isShownProgress: Bool = true
     @Binding var searchWord: String
     
     private func ignoreSpaces(in string: String) -> String {
@@ -17,64 +18,74 @@ struct UserSearchResultView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            VStack{
-                List{
-                    ForEach(userViewModel.users.filter {
+            ZStack {
+                VStack{
+                    List{
+                        ForEach(userViewModel.users.filter {
+                            ignoreSpaces(in: $0.fields.nickName.stringValue)
+                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                            ignoreSpaces(in: $0.fields.name.stringValue)
+                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                        },id: \.self) { item in
+                            NavigationLink {
+                                UserSearchDetailView(user: item)
+                            } label: {
+                                HStack{
+                                    Circle()
+                                        .stroke(lineWidth: 1)
+                                        .frame(width: 47, height: 47)
+                                        .foregroundColor(.black)
+                                        .overlay(
+                                            Image(systemName: "person.fill")
+                                                .resizable()
+                                                .foregroundColor(.brightGray)
+                                                .aspectRatio(contentMode: .fit)
+                                                .padding(9)
+                                        )
+                                    VStack(alignment: .leading){
+                                        Text(item.fields.nickName.stringValue)
+                                            .bold()
+                                            .padding(.bottom, 5)
+                                        Text(item.fields.name.stringValue)
+                                            .font(.caption)
+                                            .foregroundColor(.textGray)
+                                            .frame(alignment: .leading)
+                                    }
+                                    .padding(.leading)
+                                    Spacer()
+                                }
+                            }
+                        }
+                    }
+                    .emptyPlaceholder(userViewModel.users.filter {
                         ignoreSpaces(in: $0.fields.nickName.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                         ignoreSpaces(in: $0.fields.name.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                    },id: \.self) { item in
-                        NavigationLink {
-                            UserSearchDetailView(user: item)
-                        } label: {
-                            VStack(alignment: .leading){
-                                HStack{
-                                    Circle()
-                                        .frame(width: 60, height: 60)
-                                        .foregroundColor(.brightGray)
-                                        .overlay(
-                                            Image(systemName: "person.fill")
-                                        )
-                                    VStack{
-                                        Text(item.fields.nickName.stringValue)
-                                            .bold()
-                                            .padding([.bottom, .leading], 5)
-                                        Text(item.fields.name.stringValue)
-                                            .font(.caption)
-                                            .foregroundColor(.textGray)
-                                    }
-                                }
-                                
-                            }
-                        }
-                    }
-                }
-                .emptyPlaceholder(userViewModel.users.filter {
-                    ignoreSpaces(in: $0.fields.nickName.stringValue)
-                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                }) {
-                    VStack{
+                    }) {
                         VStack{
                             Spacer()
                             SearchPlaceHolderView(searchWord: $searchWord)
-                                .frame(height: 600)
                             Spacer()
                         }
                     }
+                    .listStyle(.plain)
+                    Spacer()
                 }
-                .listStyle(.plain)
-                Spacer()
+                if isShownProgress == true {
+                    SearchProgress()
+                        .onAppear{
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.isShownProgress = false
+                            }
+                        }
+                }
             }
             .navigationTitle("\(searchWord)")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear{
-                magazineViewModel.fetchMagazine()
                 userViewModel.fetchUser()
             }
-        }
-        
     }
 }
 

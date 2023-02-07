@@ -10,6 +10,8 @@ import SwiftUI
 struct MagazineSearchResultView: View {
     @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
     
+    @State private var isShownProgress:Bool = true
+    
     @Binding var searchWord: String
     
     private func ignoreSpaces(in string: String) -> String {
@@ -17,67 +19,72 @@ struct MagazineSearchResultView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            VStack{
-                List{
-                    ForEach(magazineViewModel.magazines.filter {
-                        ignoreSpaces(in: $0.fields.title.stringValue)
-                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-                        ignoreSpaces(in: $0.fields.content.stringValue)
-                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                    },id: \.self) { item in
-                        NavigationLink {
-                            MagazineDetailView(data: item)
-                        } label: {
-                            HStack{
-                                Rectangle()
-                                    .foregroundColor(.gray)
-                                    .frame(width: 90, height: 90)
-                                    .overlay{
-                                        Image(systemName: "camera.fill")
-                                            .resizable()
-                                            .foregroundColor(.white)
-                                            .aspectRatio(contentMode: .fit)
-                                            .padding()
+            ZStack{
+                
+                VStack{
+                    List{
+                        ForEach(magazineViewModel.magazines.filter {
+                            ignoreSpaces(in: $0.fields.title.stringValue)
+                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                            ignoreSpaces(in: $0.fields.content.stringValue)
+                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                        },id: \.self) { item in
+                            NavigationLink {
+                                MagazineDetailView(data: item)
+                            } label: {
+                                HStack{
+                                    Rectangle()
+                                        .foregroundColor(.gray)
+                                        .frame(width: 90, height: 90)
+                                        .overlay{
+                                            Image(systemName: "camera.fill")
+                                                .resizable()
+                                                .foregroundColor(.white)
+                                                .aspectRatio(contentMode: .fit)
+                                                .padding()
+                                        }
+                                    VStack(alignment: .leading){
+                                        Text(item.fields.title.stringValue)
+                                            .bold()
+                                            .padding(.bottom, 5)
+                                        Text(item.fields.content.stringValue)
+                                            .lineLimit(2)
+                                            .foregroundColor(.textGray)
+                                            .font(.caption)
                                     }
-                                VStack(alignment: .leading){
-                                    Text(item.fields.title.stringValue)
-                                        .bold()
-                                        .padding(.bottom, 5)
-                                    Text(item.fields.content.stringValue)
-                                        .lineLimit(2)
-                                        .foregroundColor(.textGray)
-                                        .font(.caption)
                                 }
                             }
                         }
                     }
-                }
-                .emptyPlaceholder(magazineViewModel.magazines.filter {
-                    ignoreSpaces(in: $0.fields.title.stringValue)
-                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
-                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                }) {
-                    VStack{
+                    .emptyPlaceholder(magazineViewModel.magazines.filter {
+                        ignoreSpaces(in: $0.fields.title.stringValue)
+                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
+                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                    }) {
                         VStack{
                             Spacer()
                             SearchPlaceHolderView(searchWord: $searchWord)
-                                .frame(height: 600)
                             Spacer()
                         }
+                        
                     }
-                    
+                    .listStyle(.plain)
+                    Spacer()
                 }
-                .listStyle(.plain)
-                Spacer()
+                if isShownProgress == true {
+                    SearchProgress()
+                        .onAppear{
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.isShownProgress = false
+                            }
+                        }
+                }
             }
             .navigationTitle("\(searchWord)")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear{
                 magazineViewModel.fetchMagazine()
-        }
-        }
-
+            }
     }
 }
 

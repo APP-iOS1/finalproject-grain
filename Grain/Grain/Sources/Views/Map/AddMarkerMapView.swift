@@ -55,8 +55,9 @@ struct AddMarkerMapView: View {
     var body: some View {
         NavigationView {
             VStack {
+
                 ZStack(alignment: .top) {
-                    
+
                     //MARK: 네이버맵뷰
                     AddMarkerUIMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult)
                     //.zIndex(0)

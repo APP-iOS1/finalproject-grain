@@ -43,6 +43,37 @@ struct MagazineContentAddView: View {
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
         NavigationView{
             VStack {
+
+
+                // MARK: 상단 기능 ( 취소, 매거진, 글쓰기 )
+                HStack {
+                    Button {
+                        presented.toggle()
+                        //글쓰기 취소
+                    } label: {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.black)
+                            .frame(width: 50, height: 50)
+                    }
+                    
+                    Spacer()
+                    
+                    Text("매거진")
+                    
+                    Spacer()
+                    
+                    NavigationLink {
+                        AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace)
+                            .ignoresSafeArea()
+                    } label: {
+                        Text("다음")
+                    }
+                } //HStack
+                .padding(.horizontal)
+                
+                
+                // 상단 기능과 구분선
+
                 Rectangle()
                     .fill(Color(UIColor.systemGray5))
                     .frame(width: Screen.maxWidth, height: 1)

@@ -7,36 +7,63 @@
 
 import SwiftUI
 
+/*
+ @Environment(\.editMode) private var editMode
+
+ ...
+
+ .onChange(of: editMode!.wrappedValue, perform: { value in
+   if value.isEditing {
+      // Entering edit mode (e.g. 'Edit' tapped)
+   } else {
+      // Leaving edit mode (e.g. 'Done' tapped)
+   }
+ */
+
+// 텍스트 필드 포커스를 위한 열거형
+//private enum FocusableField: Hashable {
+//    case body
+//    case lens
+//    case film
+//}
+
 struct EditCameraView: View {
     @Environment(\.presentationMode) var presentationMode
     // editMode
     @Environment(\.editMode) private var editMode
-
     
     // 사용자 장비가 담긴 배열
     @State private var  myBodies: [String] = ["코닥", "캐논", "니콘"]
     @State private var myLenses: [String] = ["렌즈1", "렌즈2", "렌즈3"]
     @State private var myFilms: [String] = ["코닥", "캐논", "니콘"]
     
-    //
+    // 장비 추가 버튼 출현 변수
     @State private var showAddBody = false
     @State private var showAddLens = false
     @State private var showAddFilm = false
     
-    @State private var newItem = ""
+    // 각 장비 별 추가 변수
+    @State private var newBodyItem = ""
+    @State private var newLensItem = ""
+    @State private var newFilmItem = ""
     
-    @State private var showAlert: Bool = false
-    
-    var trimNewItem: String {
-        newItem.trimmingCharacters(in: .whitespaces)
+    // 장비 추가 변수의 공백 제거한 변수
+    var trimNewBodyItem: String {
+        newBodyItem.trimmingCharacters(in: .whitespaces)
     }
-
-    //    @State private var isShowingModal: Bool = false
-    //
-    //    @State private var cameraModal: Bool = true
-    //    @State private var lensModal: Bool = true
-    //    @State private var filmModal: Bool = true
+    var trimNewLensItem: String {
+        newLensItem.trimmingCharacters(in: .whitespaces)
+    }
+    var trimNewFilmItem: String {
+        newFilmItem.trimmingCharacters(in: .whitespaces)
+    }
     
+    // Alert 변수
+    @State private var showAlert: Bool = false
+
+    //
+//    @FocusState var focus: FocusableField
+
     //MARK: - body
     var body: some View {
         NavigationStack{
@@ -46,7 +73,7 @@ struct EditCameraView: View {
                     // MARK: 상단 바
                     HStack{
                         Button {
-                            if trimNewItem.count > 0 {
+                            if trimNewBodyItem.count > 0 || trimNewLensItem.count > 0 || trimNewFilmItem.count > 0 {
                                 showAlert.toggle()
                             } else {
                                 presentationMode.wrappedValue.dismiss()
@@ -63,11 +90,11 @@ struct EditCameraView: View {
                             Alert(title: Text("설정으로 이동하시겠습니까?"),
                                   message: Text("설정으로 이동하시면 입력하신 정보가 저장되지 않습니다."),
                                   primaryButton: .default(
-                                    Text("돌아가기")
+                                    Text("취소")
                                     
                                   ),
                                   secondaryButton: .destructive(
-                                    Text("이동하기")
+                                    Text("네")
                                   ){
                                       presentationMode.wrappedValue.dismiss()
                                   })
@@ -89,13 +116,13 @@ struct EditCameraView: View {
                     
                     List{
                         // MARK: 카메라 바디 섹션
-                        BodyList(myBodies: $myBodies, showAddBody: $showAddBody, newItem: $newItem)
+                        BodyList(myBodies: $myBodies, showAddBody: $showAddBody, newItem: $newBodyItem)
                         
                         // MARK: 카메라 렌즈 섹션
-                        LensList(myLenses: $myLenses, showAddLens: $showAddLens, newItem: $newItem)
+                        LensList(myLenses: $myLenses, showAddLens: $showAddLens, newItem: $newLensItem)
                         
                         // MARK: 카메라 필름 섹션
-                        FilmList(myFilms: $myFilms, showAddFilm: $showAddFilm, newItem: $newItem)
+                        FilmList(myFilms: $myFilms, showAddFilm: $showAddFilm, newItem: $newFilmItem)
                     }
                     .listStyle(.sidebar)
                     .scrollContentBackground(.hidden)
@@ -104,27 +131,6 @@ struct EditCameraView: View {
                 .navigationBarBackButtonHidden(true)
                 .navigationBarHidden(true)
                 
-                //                FloatingMenu(isShowingModal: $isShowingModal, cameraModal: $cameraModal, lensModal: $lensModal, filmModal: $filmModal)
-                //                    .padding()
-//            }
-            //            .sheet(isPresented: $isShowingModal) {
-            //
-            //                    if cameraModal{
-            //                        CameraModalView()
-            ////                        ListTestView()
-            //                        .presentationDetents([.height(250)])
-            //                    } else if lensModal{
-            //                        VStack{
-            //                            Text("렌즈")
-            //                        }
-            //                    } else if filmModal{
-            //                        VStack{
-            //                            Text("film")
-            //                        }
-            //                    }
-            //
-            //            }
-            
         }
     }
 
@@ -149,6 +155,8 @@ struct BodyList: View {
         self.newItem.trimmingCharacters(in: .whitespaces)
     }
 
+    @FocusState private var focus: Bool
+    
     var body: some View {
         Section(header: Text("바디").bold()){
             
@@ -163,6 +171,12 @@ struct BodyList: View {
                 if showAddBody {
                     HStack {
                         TextField("장비를 입력하세요", text: $newItem)
+                            .focused($focus)
+                            .textInputAutocapitalization(.never)
+                            .disableAutocorrection(true)
+                            .onSubmit {
+                                addCamera()
+                            }
                         
                         Button{
                             if trimNewItem.count > 0{
@@ -179,6 +193,7 @@ struct BodyList: View {
                     Spacer()
                     Button{
                         self.showAddBody.toggle()
+                        focus.toggle()
                     } label: {
                         if showAddBody{
                             Text("완료")
@@ -224,6 +239,8 @@ struct LensList: View {
         self.newItem.trimmingCharacters(in: .whitespaces)
     }
     
+    @FocusState private var focus: Bool
+
     var body: some View {
         Section(header: Text("렌즈").bold()){
             ForEach(myLenses, id: \.self) { lens in
@@ -236,6 +253,12 @@ struct LensList: View {
                 if showAddLens {
                     HStack {
                         TextField("장비를 입력하세요", text: $newItem)
+                            .focused($focus)
+                            .textInputAutocapitalization(.never)
+                            .disableAutocorrection(true)
+                            .onSubmit {
+                                addLens()
+                            }
                         
                         Button{
                             if trimNewItem.count > 0{
@@ -252,6 +275,7 @@ struct LensList: View {
                     Spacer()
                     Button{
                         showAddLens.toggle()
+                        focus.toggle()
                     } label: {
                         if showAddLens{
                             Text("완료")
@@ -296,6 +320,8 @@ struct FilmList: View {
         self.newItem.trimmingCharacters(in: .whitespaces)
     }
     
+    @FocusState private var focus: Bool
+
     var body: some View {
         Section(header: Text("필름").bold()){
             ForEach(myFilms, id: \.self) { film in
@@ -308,6 +334,12 @@ struct FilmList: View {
                 if showAddFilm {
                     HStack {
                         TextField("장비를 입력하세요", text: $newItem)
+                            .focused($focus)
+                            .textInputAutocapitalization(.never)
+                            .disableAutocorrection(true)
+                            .onSubmit {
+                                addFilm()
+                            }
                         
                         Button{
                             if trimNewItem.count > 0{
@@ -324,6 +356,7 @@ struct FilmList: View {
                     Spacer()
                     Button{
                         showAddFilm.toggle()
+                        focus.toggle()
                     } label: {
                         if showAddFilm{
                             Text("완료")

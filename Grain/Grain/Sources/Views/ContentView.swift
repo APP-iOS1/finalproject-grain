@@ -162,6 +162,7 @@ struct ContentView: View {
                 }
             }
         }
+        .tint(.black)
 //        .splashView {
 //            ZStack{
 //                SplashScreen()

@@ -9,17 +9,22 @@ import SwiftUI
 
 struct CommunitySearchResultView: View {
     @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
-    
-    @State private var searchList: [String] =  ["카메라", "명소", " 출사"]
+  
     @Binding var searchWord: String
+    @Environment(\.dismiss) private var dismiss
+    
+    private func ignoreSpaces(in string: String) -> String {
+        return string.replacingOccurrences(of: " ", with: "")
+    }
     
     var body: some View {
         NavigationStack {
             VStack{
                 List(communtyViewModel.communities.filter {
-                    $0.fields.title.stringValue
-                        .localizedCaseInsensitiveContains(self.searchWord) || $0.fields.content.stringValue
-                        .localizedCaseInsensitiveContains(self.searchWord)
+                    ignoreSpaces(in: $0.fields.title.stringValue)
+                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                    ignoreSpaces(in: $0.fields.content.stringValue)
+                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                 },id: \.self) { item in
                     
                     HStack{
@@ -44,11 +49,33 @@ struct CommunitySearchResultView: View {
                         }
                     }
                 }
+                .emptyPlaceholder(communtyViewModel.communities.filter {
+                    ignoreSpaces(in: $0.fields.title.stringValue)
+                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
+                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                }) {
+        
+                    SearchPlaceHolderView(searchWord: $searchWord)
+                        .frame(height: Screen.maxHeight)
+                        
+                }
                 .listStyle(.plain)
                 Spacer()
             }
+            .navigationBarBackButtonHidden(true)
             .navigationTitle("\(searchWord)")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.title3)
+                    }
+                    .tint(.black)
+                }
+            }
             .onAppear{
                 communtyViewModel.fetchCommunity()
             }

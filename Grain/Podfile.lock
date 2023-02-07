@@ -747,6 +747,7 @@ PODS:
     - KakaoSDKCommon/Common (= 2.13.1)
   - KakaoSDKUser (2.13.1):
     - KakaoSDKAuth (= 2.13.1)
+  - Kingfisher (7.6.0)
   - leveldb-library (1.22.1)
   - Libuv-gRPC (0.0.10):
     - Libuv-gRPC/Implementation (= 0.0.10)
@@ -774,6 +775,7 @@ DEPENDENCIES:
   - KakaoSDKAuth
   - KakaoSDKCommon
   - KakaoSDKUser
+  - Kingfisher
   - NMapsMap
 
 SPEC REPOS:
@@ -802,6 +804,7 @@ SPEC REPOS:
     - KakaoSDKAuth
     - KakaoSDKCommon
     - KakaoSDKUser
+    - Kingfisher
     - leveldb-library
     - Libuv-gRPC
     - nanopb
@@ -834,6 +837,7 @@ SPEC CHECKSUMS:
   KakaoSDKAuth: d9de0cb0c723441ced3616d481952bde34438dcb
   KakaoSDKCommon: a16807e19984a0a208c3117c7ef117f101a9a128
   KakaoSDKUser: 92d34cf6af7b123c22a7ee44424332123e356901
+  Kingfisher: b9bb0cd6907813593db268be80ddb931423c33b2
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
@@ -841,6 +845,6 @@ SPEC CHECKSUMS:
   NMapsMap: 926c3a303d381a24bec8da3cd6e198f50af93ae9
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
 
-PODFILE CHECKSUM: 5d28c48b1194cdf956f5323c43828113283c3731
+PODFILE CHECKSUM: 015d535e5277856cef315e8b6a8ea0bd66e6d060
 
 COCOAPODS: 1.11.3

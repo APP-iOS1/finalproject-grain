@@ -11,7 +11,7 @@ import Foundation
 enum MagazineRouter {
 
     case get
-    case post(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String )
+    case post(userID: String, cameraInfo: String, nickName: String, image: [String], content: String, title: String, lenseInfo:String, longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String, latitude: Double, comment: String, roadAddress: String )
     case delete
     case put
     case patch
@@ -85,6 +85,7 @@ enum MagazineRouter {
 //        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
         return request
     }
+
     
 }
 

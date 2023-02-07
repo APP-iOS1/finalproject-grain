@@ -23,4 +23,8 @@ extension Color { // 사용법: Color(hex: "#439F47")
     }
     static let textGray = Color(hex: "495057")
     static let boxGray = Color(hex: "323232")
+    static let brightGray = Color(hex: "bbbbbb")
+    static let middlebrightGray = Color(hex: "9a9a9a")
+    static let middleDarkGray = Color(hex: "616161")
+    static let middleDarkRed = Color(hex: "d61500")
 }

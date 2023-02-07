@@ -163,86 +163,94 @@ struct MainSearchView: View {
                     
                 } else if !searchWord.isEmpty {
                     VStack{
-                            switch selectedIndex {
-                            case 0:
-                                List{
-                                    ForEach(magazineViewModel.magazines.filter {
-                                        ignoreSpaces(in: $0.fields.title.stringValue)
-                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
-                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                                    },id: \.self) { item in
-                                        VStack(alignment: .leading){
-                                            Text(item.fields.title.stringValue)
-                                                .bold()
-                                                .padding(.bottom, 5)
-                                            Text(item.fields.content.stringValue)
-                                                .lineLimit(2)
-                                                .foregroundColor(.textGray)
-                                                .font(.caption)
-                                        }
+                        switch selectedIndex {
+                        case 0:
+                            List{
+                                ForEach(magazineViewModel.magazines.filter {
+                                    ignoreSpaces(in: $0.fields.title.stringValue)
+                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                                    ignoreSpaces(in: $0.fields.content.stringValue)
+                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                                },id: \.self) { item in
+                                    
+                                    VStack(alignment: .leading){
+                                        Text(item.fields.title.stringValue)
+                                            .bold()
+                                            .padding(.bottom, 5)
+                                        Text(item.fields.content.stringValue)
+                                            .lineLimit(2)
+                                            .foregroundColor(.textGray)
+                                            .font(.caption)
+                                        
                                     }
-                                   
-                                } .listStyle(.plain)
-                                
-                            case 1:
-                                List{
-                                    ForEach(communtyViewModel.communities.filter {
-                                        ignoreSpaces(in: $0.fields.title.stringValue)
-                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
-                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                                    },id: \.self) { item in
-                                        VStack(alignment: .leading){
-                                            Text(item.fields.title.stringValue)
-                                                .bold()
-                                                .padding(.bottom, 5)
-                                            Text(item.fields.content.stringValue)
-                                                .lineLimit(2)
-                                                .foregroundColor(.textGray)
-                                                .font(.caption)
-                                        }
-                                    }
+                                    
                                 }
-                                .listStyle(.plain)
-                            default:
-                               List{
-                                    ForEach(userViewModel.users.filter {
-                                        ignoreSpaces(in: $0.fields.nickName.stringValue)
-                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                                    },id: \.self) { item in
-                                        VStack(alignment: .leading){
-                                            HStack{
-                                                Circle()
-                                                    .foregroundColor(.boxGray)
-                                                    .overlay(
-                                                        Image(systemName: "person.fill")
-                                                    )
-                                                Text(item.fields.nickName.stringValue)
-                                                    .bold()
-                                                    .padding([.bottom, .leading], 5)
-                                            }
-                                            
-                                        }
-                                    }
-                                }
-                               .listStyle(.plain)
                             }
+                            .listStyle(.plain)
+                            
+                        case 1:
+                            List{
+                                ForEach(communtyViewModel.communities.filter {
+                                    ignoreSpaces(in: $0.fields.title.stringValue)
+                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                                    ignoreSpaces(in: $0.fields.content.stringValue)
+                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                                },id: \.self) { item in
+                                    VStack(alignment: .leading){
+                                        Text(item.fields.title.stringValue)
+                                            .bold()
+                                            .padding(.bottom, 5)
+                                        Text(item.fields.content.stringValue)
+                                            .lineLimit(2)
+                                            .foregroundColor(.textGray)
+                                            .font(.caption)
+                                    }
+                                }
+                            }
+                            .listStyle(.plain)
+                        default:
+                            List{
+                                ForEach(userViewModel.users.filter {
+                                    ignoreSpaces(in: $0.fields.nickName.stringValue)
+                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                                },id: \.self) { item in
+                                    VStack(alignment: .leading){
+                                        HStack{
+                                            Circle()
+                                                .foregroundColor(.boxGray)
+                                                .overlay(
+                                                    Image(systemName: "person.fill")
+                                                )
+                                            Text(item.fields.nickName.stringValue)
+                                                .bold()
+                                                .padding([.bottom, .leading], 5)
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                            .listStyle(.plain)
+                        }
                         
                     }
                 }
                 
                 Spacer()
             }
+            .navigationBarBackButtonHidden(true)
             .navigationDestination(isPresented: $isCommunitySearchResultShown, destination: {
                 CommunitySearchResultView(searchWord: $searchWord)
             })
+
             .onAppear{
+                self.focus = .search
                 self.searchWord = ""
                 communtyViewModel.fetchCommunity()
                 magazineViewModel.fetchMagazine()
                 userViewModel.fetchUser()
             }
-            .navigationBarBackButtonHidden(true)
         }
+        
     }
 }
 
@@ -253,6 +261,3 @@ struct MainSearchView_Previews: PreviewProvider {
         }
     }
 }
-
-
-

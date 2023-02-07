@@ -13,28 +13,38 @@ import UIKit
 
 struct MapView: View {
     
-    @State private var searchText = ""
-    @ObservedObject var mapStore = MapStore()
     
-    @State var categoryString : String = "전체"  /// 초기값 설정
+    @StateObject var magazineVM = MagazineViewModel()
+    @Binding var magazineData: [MagazineDocument]   //매거진 데이터 전달 받기
     
+    @Binding var mapData: [MapDocument]         // 맵 데이터 전달 받기
+    
+    
+    @State var categoryString : String = "전체"   // 카테고리 버튼 default : 전체
+    
+    //중단
     @EnvironmentObject var viewRouter: ViewRouter
     
-    @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
-    @Binding var magazineData: [MagazineDocument] //매거진 데이터 전달 받기
-    @StateObject var magazineVM = MagazineViewModel()
     
-//    @State var nearbyPostsArr = Set<String>()
-    @State var nearbyPostsArr : [String] = []
+    @StateObject var naverVM = NaverAPIViewModel()  // 네이버 API 관련
+    @State var searchResponse : [Address] = [Address(roadAddress: "", jibunAddress: "", englishAddress: "", x: "", y: "", distance: 0)]
     
-    @State var visitButton : Bool = false
-    @State var clikedMagazineData : MagazineDocument?
+    @State private var searchText = ""          // 위치를 검색해주세요 텍스트 필드
     
-    @State var isShowingPhotoSpot: Bool = false
-    @State var isShowingWebView: Bool = false
-    @State var bindingWebURL : String = ""
-    @State var markerAddButtonBool: Bool = false
-    @State var changeMap: CGPoint = CGPoint(x: 0, y: 0)
+    @State var clikedMagazineData : MagazineDocument?   //까먹음
+    
+    @State var visitButton : Bool = false   // 포토스팟 방문 했는지 판단으로 생각 됨 ???!!
+    
+    @State var nearbyPostsArr : [String] = [] //주변 게시물 저장
+    @State var isShowingPhotoSpot: Bool = false // 주변 게시물 보여주는 Bool
+    
+    @State var isShowingWebView: Bool = false   // 현상소, 수리점 모달 띄워주는 Bool
+    @State var bindingWebURL : String = ""      // UIMapView 에서 마커에서 나오는 정보 가져오기 위해
+    
+    @State var searchResponseBool : Bool = false    // 검색하기 버튼 Bool
+    
+    @State var markerAddButtonBool: Bool = false     //???
+    @State var changeMap: CGPoint = CGPoint(x: 0, y: 0) // 클러스팅 할때 쓰일 예정
     
     
     
@@ -49,6 +59,11 @@ struct MapView: View {
                             .padding()
                             .background(.white)
                             .cornerRadius(15)
+                            .onSubmit {
+                                // MARK: Geocode API 실행
+                                naverVM.fetchGeocode(requestAddress: searchText)
+                                
+                            }
                         
                         RoundedRectangle(cornerRadius: 10)
 //                            .stroke(Color(.black),lineWidth: 2)
@@ -57,7 +72,8 @@ struct MapView: View {
                             .overlay{
                                 Image(systemName: "location.magnifyingglass")
                                     .onTapGesture {
-                                        // 액션
+                                        searchResponse = naverVM.addresses
+                                        searchResponseBool.toggle()
                                     }
                             }
                     }.padding()
@@ -65,8 +81,7 @@ struct MapView: View {
                     HStack{
                         /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
                         MapCategoryCellView(categoryString: $categoryString)
-                            .offset(x: -30 , y: -10)
-                    }
+                    }.padding(.leading , 7) // -> 검증 필요
                 }
                 .zIndex(1)
                 .offset(y:-250)
@@ -104,7 +119,6 @@ struct MapView: View {
                                 .fontWeight(.bold)
                         }.onTapGesture {
                             // 액션
-                            
                         }
                        
                     }
@@ -145,8 +159,8 @@ struct UIMapView: UIViewRepresentable,View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     
     //FIXME: Set으로 만들어보기
-//    var nearbyPostsArr = Set<String>()   //주변 게시물 저장
-    @Binding var nearbyPostsArr : [String]
+//    var nearbyPostsArr = Set<String>()
+    @Binding var nearbyPostsArr : [String]  //주변 게시물 저장
     
     @EnvironmentObject var viewRouter: ViewRouter
     //모달뷰

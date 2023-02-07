@@ -11,7 +11,7 @@ import Foundation
 enum MagazineRouter {
 
     case get
-    case post(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String )
+    case post(userID: String, cameraInfo: String, nickName: String, image: [String], content: String, title: String, lenseInfo:String, longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String, latitude: Double, comment: String, roadAddress: String )
     case delete
     case put
     case patch
@@ -87,95 +87,5 @@ enum MagazineRouter {
     }
 
     
-    // MARK: 실험 코드
-    func asURLPatch(token: String) throws -> URLRequest {
-        let url = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents" + "/Magazine/\(token)"
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = method.value
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        if let data = data {
-            request.httpBody = data
-        }
-        return request
-    }
-    
-    func asURLUpdate(token: String,updateMagazineData : MagazineDocument) throws -> URLRequest {
-        let url = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents" + "/Magazine/\(token)"
-                
-        var request = URLRequest(url: URL(string: url)!)
-        ///switch? 이거를 써야 하나?
-        request.httpMethod = method.value
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let data = """
-                {
-                    "fields": {
-                                "longitude": {
-                                    "integerValue": \(updateMagazineData.fields.longitude.doubleValue)
-                                },
-                                "likedNum": {
-                                    "integerValue": \(updateMagazineData.fields.likedNum)
-                                },
-                                "nickName": {
-                                    "stringValue": "\(updateMagazineData.fields.likedNum.integerValue)"
-                                },
-                                "cameraInfo": {
-                                    "stringValue": "\(updateMagazineData.fields.cameraInfo.stringValue)"
-                                },
-                                "latitude": {
-                                    "integerValue": \(updateMagazineData.fields.latitude.doubleValue)
-                                },
-                                "title": {
-                                    "stringValue": "\(updateMagazineData.fields.title.stringValue)"
-                                },
-                                "image": {
-                                    "arrayValue": {
-                                        "values": [
-                                            {
-                                                "stringValue":  "image"
-                                            }
-                                        ]
-                                    }
-                                },
-                                "filmInfo": {
-                                    "stringValue": "\(updateMagazineData.fields.filmInfo.stringValue)"
-                                },
-                                "customPlaceName": {
-                                    "stringValue": "\(updateMagazineData.fields.customPlaceName.stringValue)"
-                                },
-                                "content": {
-                                    "stringValue": "\(updateMagazineData.fields.content.stringValue)"
-                                },
-                                "userID": {
-                                    "stringValue": "\(updateMagazineData.fields.userID.stringValue)"
-                                },
-                                "lenseInfo": {
-                                    "stringValue": "\(updateMagazineData.fields.lenseInfo.stringValue)"
-                                },
-                                "comment": {
-                                    "arrayValue": {
-                                        "values": [
-                                            {
-                                                "stringValue": "\(updateMagazineData.fields.comment)"
-                                            }
-                                        ]
-                                    }
-                                },
-                                "id": {
-                                    "stringValue":  "id패스"
-                                },
-                                "roadAddress": {
-                                    "stringValue": "\(updateMagazineData.fields.roadAddress.stringValue)"
-                                }
-                            }
-                    }
-                """.data(using: .utf8)
-        
-        
-        if let data = data {
-            request.httpBody = data
-        }
-        return request
-    }
 }
 

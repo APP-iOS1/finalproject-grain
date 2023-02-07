@@ -125,6 +125,32 @@ struct AddMarkerMapView: View {
                     }
                     .zIndex(1)
 
+
+            }
+            .toolbar {
+                ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
+                    Button {
+                        self.mode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.black)
+                            .bold()
+                            .opacity(1)
+                            .shadow(radius: 1)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
+                            .navigationBarBackButtonHidden(true)
+                    } label: {
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.black)
+                            .bold()
+                            .opacity(1)
+                            .shadow(radius: 1)
+                    }
+
                 }
 
             }

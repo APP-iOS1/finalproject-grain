@@ -8,32 +8,51 @@
 import SwiftUI
 import Combine
 
+// 텍스트 필드 포커스를 위한 열거형
+private enum FocusableField: Hashable {
+    case nickName
+    case introduce
+}
+
 struct EditMyPageView: View {
+    var userVM: UserViewModel
+    
     @Environment(\.presentationMode) var presentationMode
+    
     @State private var editedNickname = ""
     @State private var editedIntroduce = ""
+    
     let nickNameLimit = 8
     let introduceLimit = 20
+    
+    @FocusState private var focus: FocusableField?
+
+    
     var body: some View {
         VStack {
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-            }, label: {
-                HStack {
-                    Image(systemName: "chevron.left")
-                    Text("설정")
-                    Spacer()
-                    
-                    Button{
-                        
-                    }label: {
-                        Text("저장")
+            //MARK: 상단바
+            HStack{
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }, label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text("설정")
                     }
+                })
+                
+                Spacer()
+                
+                Button{
+                    
+                }label: {
+                    Text("저장")
                 }
-                .padding(.horizontal)
-            })
+            }
             .accentColor(.black)
-            
+            .padding(.horizontal)
+
+            //MARK: 프로필 이미지 변경 버튼
             Button {
                 //이미지 선택 동작
             } label: {
@@ -60,43 +79,87 @@ struct EditMyPageView: View {
                             }
                     }
             }
-
-            HStack {
-                Text("닉네임")
-                    .padding(.horizontal, 3)
-                Spacer()
-                Text("\(editedNickname.count)/8")
-            }
-            .padding(.horizontal)
-            TextField("변경할 닉네임을 입력해주세요", text: $editedNickname)
-                .disableAutocorrection(true)
-                .autocapitalization(.none)
-                .underlineTextField()
-                .padding(.bottom, 30)
-                .onReceive(Just(editedNickname)) { _ in
-                    limitNickname(nickNameLimit)
-                }
             
-            HStack {
-                Text("소개")
-                    .padding(.horizontal, 3)
-                Spacer()
-                Text("\(editedIntroduce.count)/20")
-            }
-            .padding(.horizontal)
-            TextField("소개글을 입력해주세요", text: $editedIntroduce)
-                .disableAutocorrection(true)
-                .autocapitalization(.none)
+            //MARK: 닉네임, 소개 변경 텍스트 필드
+            VStack{
+                HStack {
+                    Text("닉네임")
+                        .padding(.horizontal, 3)
+                    Spacer()
+                    Text("\(editedNickname.count)/8")
+                }
+                .padding(.horizontal)
+                
+                HStack{
+                    TextField("변경할 닉네임을 입력해주세요", text: $editedNickname)
+                        .focused($focus, equals: .nickName)
+                        .disableAutocorrection(true)
+                        .autocapitalization(.none)
+                        .onReceive(Just(editedNickname)) { _ in
+                            limitNickname(nickNameLimit)
+                        }
+                    
+                    if (focus == .nickName) || editedNickname.count > 0 {
+                        HStack{
+                            Button {
+                                self.editedNickname = ""
+                            } label: {
+                                Image(systemName: "x.circle.fill")
+                            }
+                            .tint(.gray)
+                            .padding(.trailing, 7)
+                            .animation(.easeInOut, value: focus)
+                        }
+                    }
+                }
                 .underlineTextField()
                 .padding(.bottom, 30)
-                .onReceive(Just(editedIntroduce)) { _ in
-                    limitIntroduce(introduceLimit)
+
+
+                
+                HStack {
+                    Text("소개")
+                        .padding(.horizontal, 3)
+                    Spacer()
+                    Text("\(editedIntroduce.count)/20")
                 }
+                .padding(.horizontal)
+                
+                HStack{
+                    TextField("소개글을 입력해주세요", text: $editedIntroduce)
+                        .focused($focus, equals: .introduce)
+                        .disableAutocorrection(true)
+                        .autocapitalization(.none)
+                        .onReceive(Just(editedIntroduce)) { _ in
+                            limitIntroduce(introduceLimit)
+                        }
+                    
+                    if (focus == .introduce) || editedIntroduce.count > 0 {
+                        HStack{
+                            Button {
+                                self.editedNickname = ""
+                            } label: {
+                                Image(systemName: "x.circle.fill")
+                            }
+                            .tint(.gray)
+                            .padding(.trailing, 7)
+                            .animation(.easeInOut, value: focus)
+                        }
+                    }
+                }
+                .underlineTextField()
+                .padding(.bottom, 30)
+            }
+            
             Spacer()
 
         }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
+        .onAppear{
+            focus = .nickName
+            editedNickname = userVM.currentUsers?.nickName.stringValue ?? ""
+        }
     }
     
     func limitNickname(_ upper: Int) {
@@ -111,18 +174,18 @@ struct EditMyPageView: View {
     }
 }
 
-struct EditMyPageView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditMyPageView()
-    }
-}
+//struct EditMyPageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EditMyPageView()
+//    }
+//}
 
 
 extension View {
     func underlineTextField() -> some View {
         self
             .padding(.horizontal, 10)
-            .overlay(Rectangle().frame(width: Screen.maxWidth * 0.9, height: 2).padding(.top, 35).padding(.horizontal))
+            .overlay(Rectangle().frame(width: Screen.maxWidth * 0.9, height: 1.3).padding(.top, 35).padding(.horizontal))
             .foregroundColor(Color(UIColor.black))
             .padding(.horizontal,10)
     }

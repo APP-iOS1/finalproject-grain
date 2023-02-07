@@ -7,7 +7,7 @@
 
 // [TODO]
 // 1. storage 사진 올리기
-// 2. realtime database 
+// 2. realtime database
 
 import Foundation
 import Combine
@@ -76,7 +76,7 @@ final class CommunityViewModel: ObservableObject {
             do{
                 try? await documentRef.updateData(
                     [
-                         "\(updateKey)" : "\(updateValue)" 
+                         "\(updateKey)" : "\(updateValue)"
                     ]
                 )
             }catch let error {

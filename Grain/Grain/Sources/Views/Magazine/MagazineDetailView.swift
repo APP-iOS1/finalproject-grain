@@ -81,8 +81,8 @@ struct MagazineDetailView: View {
                             //삭제
                         } label: {
                             Image(systemName: "trash")
-                              
-                                .foregroundColor(.blue)
+                            .foregroundColor(.blue)
+
                         }
                     }
                     
@@ -108,6 +108,7 @@ struct MagazineDetailHeader: View {
         .background(Rectangle().foregroundColor(.white))
     }
 }
+
 //struct MagazineDetailView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        NavigationStack {

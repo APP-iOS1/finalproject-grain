@@ -13,6 +13,7 @@ struct CommunityView: View {
     let titles: [String] = ["전체", "매칭", "마켓", "클래스", "정보"]
     @State private var selectedIndex: Int = 0
     @State private var isAddViewShown: Bool = false
+    @State private var isSearchViewShown: Bool = false
     
     var body: some View {
         NavigationStack{
@@ -79,18 +80,26 @@ struct CommunityView: View {
                     }
     
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink(destination: MainSearchView()) {
+                        Button {
+                            self.isSearchViewShown.toggle()
+                        } label: {
                             Image(systemName: "magnifyingglass")
                                 .foregroundColor(.black)
                         }
+
                     }
+                }
+                .navigationDestination(isPresented: $isSearchViewShown) {
+                    MainSearchView()
                 }
             } // 최상단 vstack
         } // navi stack
         .onAppear {
             // 커뮤니티 데이터 fetch
             communityVM.fetchCommunity()
+            self.isSearchViewShown = false
         }
+        
     }
 }
 

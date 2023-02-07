@@ -10,6 +10,7 @@ import SwiftUI
 struct MagazineMainView: View {
     let titles: [String] = ["인기", "피드"]
     @State private var selectedIndex: Int = 0
+    @State private var isSearchViewShown: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -54,6 +55,13 @@ struct MagazineMainView: View {
                 //                }
                 // .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
+            .navigationDestination(isPresented: $isSearchViewShown) {
+                MainSearchView()
+            }
+        }
+      
+        .onAppear {
+            self.isSearchViewShown = false
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -67,11 +75,12 @@ struct MagazineMainView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    //검색
+                    self.isSearchViewShown = true
                 } label: {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.black)
                 }
+
             }
         }
     }

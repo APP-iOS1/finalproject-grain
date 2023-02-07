@@ -3,8 +3,9 @@ import FirebaseAuth
 
 struct MagazineDetailView: View {
     var data : MagazineDocument
+    
     var body: some View {
-        NavigationStack{
+        NavigationView{
             ScrollView {
                 VStack{
                     VStack {
@@ -75,14 +76,16 @@ struct MagazineDetailView: View {
                             Image(systemName: "square.and.pencil")
                                 .foregroundColor(.blue)
                         }
-                        
+
                         Button {
                             //삭제
                         } label: {
                             Image(systemName: "trash")
                             .foregroundColor(.blue)
+
                         }
                     }
+                    
                 }
             }
         }

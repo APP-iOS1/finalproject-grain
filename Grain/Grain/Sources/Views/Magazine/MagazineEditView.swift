@@ -4,6 +4,8 @@
 //
 //  Created by 지정훈 on 2023/02/07.
 //
+
+
 import SwiftUI
 import FirebaseAuth
 
@@ -11,10 +13,10 @@ struct MagazineEditView: View {
     @State var data : MagazineDocument
     @StateObject var magazineVM = MagazineViewModel()
 
+
     @State var editTitle : String = ""
     @State var editContent : String = ""
     @State var editCustomPlace : String = ""
-
 
     var body: some View {
         NavigationView{
@@ -34,7 +36,6 @@ struct MagazineEditView: View {
                                         .onSubmit {
                                             data.fields.customPlaceName.stringValue = editCustomPlace
                                         }
-
 
                                 }
                                 .font(.caption)
@@ -128,6 +129,7 @@ struct MagazineEditHeader: View {
 //        MagazineEditView()
 //    }
 //}
+
 
 //----------------여기까지 디테일 수정 update 로쥑
 //1. 메거진 데이터 올리고 response data로 자동으로 생성된 매거진 id 받아서 magazine put(update) 바로 다시 request 보냄 . -> 이거슨 바로 수정, 삭제하기 위한 큰그림(왜냐하면 "해당" 게시물 만 접근해야되기 때문입니다! )

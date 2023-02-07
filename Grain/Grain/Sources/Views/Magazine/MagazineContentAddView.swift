@@ -35,7 +35,7 @@ struct MagazineContentAddView: View {
     // 유저 데이터
     @AppStorage("docID") private var docID : String?
     @StateObject var userVM = UserViewModel()
-    @Environment(\.presentationMode) var mode: Binding<PresentationMode>
+    
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     
     var body: some View {
@@ -43,9 +43,39 @@ struct MagazineContentAddView: View {
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
         NavigationView{
             VStack {
+                
+                // MARK: 상단 기능 ( 취소, 매거진, 글쓰기 )
+                HStack {
+                    Button {
+                        presented.toggle()
+                        //글쓰기 취소
+                    } label: {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.black)
+                            .frame(width: 50, height: 50)
+                    }
+                    
+                    Spacer()
+                    
+                    Text("매거진")
+                    
+                    Spacer()
+                    
+                    NavigationLink {
+                        AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace)
+                            .ignoresSafeArea()
+                    } label: {
+                        Text("다음")
+                    }
+                } //HStack
+                .padding(.horizontal)
+                
+                
+                // 상단 기능과 구분선
                 Rectangle()
                     .fill(Color(UIColor.systemGray5))
                     .frame(width: Screen.maxWidth, height: 1)
+                
                 // MARK: 이미지 피커 쪽인거 같음 확인 필요
                 HStack {
                     PhotosPicker(
@@ -126,34 +156,38 @@ struct MagazineContentAddView: View {
                         hideKeyboard()
                     }
                 Spacer()
-            }
-            .toolbar {
-                ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
-                    Button {
-                        self.mode.wrappedValue.dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.black)
-                            .bold()
+                
+                Rectangle()
+                    .fill(Color(UIColor.systemGray5))
+                    .frame(width: Screen.maxWidth * 0.95, height: 1)
+                
+                Group{
+                    HStack {
+                        Button {
+                            isShowingModal.toggle()
+                        } label: {
+                            Text("장비 선택 임시 버튼")
+                        }
+                        .foregroundColor(.black)
+                        //                        .sheet(isPresented: $isShowingModal) {
+                        //                            CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1)
+                        //                                .presentationDetents([.medium, .large])
+                        //                        }
+                        Spacer()
                     }
-
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
-                            .navigationBarBackButtonHidden(true)
-                    } label: {
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.black)
-                            .bold()
-                    }
+                    .padding(.horizontal, 15)
                 }
             }
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
+            .ignoresSafeArea(.keyboard)
             .onAppear {
                 userVM.fetchCurrentUser(userID: docID ?? "")
             }
             
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 }
 struct MagazineContentAddView_Previews: PreviewProvider {

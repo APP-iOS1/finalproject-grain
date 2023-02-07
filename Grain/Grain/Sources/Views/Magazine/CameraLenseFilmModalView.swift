@@ -8,7 +8,7 @@
 import SwiftUI
 import NMapsMap
 struct CameraLenseFilmModalView: View {
-    @Environment(\.dismiss) private var dismiss
+    
     var myCamera = ["camera1asdasdasd", "camera2", "camera3"]
     var myLense = ["lenseA", "lenseB", "lenseC","lense1", "lense2", "lense3"]
     var myFilm = ["film1", "film2", "film3", "film4"]
@@ -21,8 +21,9 @@ struct CameraLenseFilmModalView: View {
     @Binding var inputContent: String
     @Binding var updateNumber: NMGLatLng
     @Binding var updateReverseGeocodeResult1: String
-    @Binding var selectedPlace: [UIImage]
+    @Binding var selectedImages: [UIImage]
     @Binding var inputCustomPlace: String
+    @Binding var presented : Bool
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     @State private var selection: String?
     var body: some View {
@@ -70,8 +71,8 @@ struct CameraLenseFilmModalView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     //MARK: 글쓰기 완료 함수
-                    magazineVM.insertMagazine(userID: userVM.currentUsers?.id.stringValue ?? "", cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "", nickName: userVM.currentUsers?.nickName.stringValue ?? "", image: [], content: inputContent , title: inputTitle , lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "", longitude: updateNumber.lng, likedNum: 0, filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "", customPlaceName: "패스", latitude: updateNumber.lat, comment: "임시", roadAddress: updateReverseGeocodeResult1)
-                    dismiss()
+                    magazineVM.insertMagazine(userID: userVM.currentUsers?.id.stringValue ?? "", cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "", nickName: userVM.currentUsers?.nickName.stringValue ?? "", image: selectedImages, content: inputContent , title: inputTitle , lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "", longitude: updateNumber.lng, likedNum: 0, filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "", customPlaceName: "패스", latitude: updateNumber.lat, comment: "임시", roadAddress: updateReverseGeocodeResult1)
+                    presented.toggle()
                 } label: {
                     Text("완료")
                         .foregroundColor(.black)

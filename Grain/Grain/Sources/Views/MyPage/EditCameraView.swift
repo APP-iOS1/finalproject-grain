@@ -9,8 +9,11 @@ import SwiftUI
 
 struct EditCameraView: View {
     @Environment(\.presentationMode) var presentationMode
+    // editMode
+    @Environment(\.editMode) private var editMode
+
     
-    // 각 장비가 담긴 배열
+    // 사용자 장비가 담긴 배열
     @State private var  myBodies: [String] = ["코닥", "캐논", "니콘"]
     @State private var myLenses: [String] = ["렌즈1", "렌즈2", "렌즈3"]
     @State private var myFilms: [String] = ["코닥", "캐논", "니콘"]
@@ -21,6 +24,8 @@ struct EditCameraView: View {
     @State private var showAddFilm = false
     
     @State private var newItem = ""
+    
+    @State private var showAlert: Bool = false
     
     var trimNewItem: String {
         newItem.trimmingCharacters(in: .whitespaces)
@@ -39,24 +44,47 @@ struct EditCameraView: View {
                 VStack {
                     
                     // MARK: 상단 바
-                    Button {
-                        presentationMode.wrappedValue.dismiss()
-                    } label: {
-                        HStack {
-                            Image(systemName: "chevron.left")
-                            Text("설정")
-                            Spacer()
+                    HStack{
+                        Button {
+                            if trimNewItem.count > 0 {
+                                showAlert.toggle()
+                            } else {
+                                presentationMode.wrappedValue.dismiss()
+
+                            }
                             
-                            Text("나의 장비 정보")
-                                .padding(.trailing)
-                            
-                            Spacer()
-                            
-                            EditButton()
-                            
+                        } label: {
+                            HStack {
+                                Image(systemName: "chevron.left")
+                                Text("설정")
+                            }
                         }
-                        .padding(.horizontal)
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text("설정으로 이동하시겠습니까?"),
+                                  message: Text("설정으로 이동하시면 입력하신 정보가 저장되지 않습니다."),
+                                  primaryButton: .default(
+                                    Text("돌아가기")
+                                    
+                                  ),
+                                  secondaryButton: .destructive(
+                                    Text("이동하기")
+                                  ){
+                                      presentationMode.wrappedValue.dismiss()
+                                  })
+                        }
+                        
+                        Spacer()
+                        
+                        Text("나의 장비 정보")
+                            .font(.title3)
+                            .bold()
+                            .padding(.trailing)
+                        
+                        Spacer()
+                        
+                        EditButton()
                     }
+                    .padding(.horizontal)
                     .accentColor(.black)
                     
                     List{
@@ -111,6 +139,8 @@ struct EditCameraView_Previews: PreviewProvider {
 
 // MARK: - 카메라 바디 섹션 선언부
 struct BodyList: View {
+    @Environment(\.editMode) private var editMode
+
     @Binding var  myBodies: [String]
     @Binding var showAddBody: Bool
     @Binding var newItem: String
@@ -120,7 +150,7 @@ struct BodyList: View {
     }
 
     var body: some View {
-        Section(header: Text("바디")){
+        Section(header: Text("바디").bold()){
             
             // 카메라 바디 정보가 담긴 배열로 부터 리스트 생성
             ForEach(myBodies, id: \.self) { camera in
@@ -128,41 +158,43 @@ struct BodyList: View {
             }
             .onDelete(perform: removeCameraList(at:))
             
-            // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
-            if showAddBody {
-                HStack {
-                    TextField("장비를 입력하세요", text: $newItem)
-                    
-                    Button{
-                        if trimNewItem.count > 0{
-                            addCamera()
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle")
-                    }
-                }
-            }
-            
-            // 바디 추가하기 버튼
-            HStack{
-                Spacer()
-                Button{
-                    self.showAddBody.toggle()
-                } label: {
-                    if showAddBody{
-                        Text("완료")
-                            .foregroundColor(Color(UIColor.systemGray2))
-                    } else {
-                        HStack{
-                            Image(systemName: "plus.circle")
-                            Text("바디 추가하기")
-                        }
-                        .foregroundColor(Color(UIColor.systemGray))
-                        .font(.subheadline)
+            if editMode?.wrappedValue.isEditing == true {
+                // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
+                if showAddBody {
+                    HStack {
+                        TextField("장비를 입력하세요", text: $newItem)
                         
+                        Button{
+                            if trimNewItem.count > 0{
+                                addCamera()
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle")
+                        }
                     }
                 }
-                Spacer()
+                
+                // 바디 추가하기 버튼
+                HStack{
+                    Spacer()
+                    Button{
+                        self.showAddBody.toggle()
+                    } label: {
+                        if showAddBody{
+                            Text("완료")
+                                .foregroundColor(Color(UIColor.systemGray2))
+                        } else {
+                            HStack{
+                                Image(systemName: "plus.circle")
+                                Text("바디 추가하기")
+                            }
+                            .foregroundColor(Color(UIColor.systemGray))
+                            .font(.subheadline)
+                            
+                        }
+                    }
+                    Spacer()
+                }
             }
         }
     }
@@ -182,6 +214,8 @@ struct BodyList: View {
 
 // MARK: - 카메라 렌즈 섹션 선언부
 struct LensList: View {
+    @Environment(\.editMode) private var editMode
+
     @Binding var  myLenses: [String]
     @Binding var showAddLens: Bool
     @Binding var newItem: String
@@ -191,49 +225,50 @@ struct LensList: View {
     }
     
     var body: some View {
-        Section(header: Text("렌즈")){
+        Section(header: Text("렌즈").bold()){
             ForEach(myLenses, id: \.self) { lens in
                 Text(lens)
             }
             .onDelete(perform: removeLensList(at:))
             
-            // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
-            if showAddLens {
-                HStack {
-                    TextField("장비를 입력하세요", text: $newItem)
-                    
-                    Button{
-                        if trimNewItem.count > 0{
-                            addLens()
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle")
-                    }
-                }
-            }
-            
-            // 바디 추가하기 버튼
-            HStack{
-                Spacer()
-                Button{
-                    showAddLens.toggle()
-                } label: {
-                    if showAddLens{
-                        Text("완료")
-                            .foregroundColor(Color(UIColor.systemGray2))
-                    } else {
-                        HStack{
-                            Image(systemName: "plus.circle")
-                            Text("바디 추가하기")
-                        }
-                        .foregroundColor(Color(UIColor.systemGray))
-                        .font(.subheadline)
+            if editMode?.wrappedValue.isEditing == true {
+                // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
+                if showAddLens {
+                    HStack {
+                        TextField("장비를 입력하세요", text: $newItem)
                         
+                        Button{
+                            if trimNewItem.count > 0{
+                                addLens()
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle")
+                        }
                     }
                 }
-                Spacer()
+                
+                // 바디 추가하기 버튼
+                HStack{
+                    Spacer()
+                    Button{
+                        showAddLens.toggle()
+                    } label: {
+                        if showAddLens{
+                            Text("완료")
+                                .foregroundColor(Color(UIColor.systemGray2))
+                        } else {
+                            HStack{
+                                Image(systemName: "plus.circle")
+                                Text("바디 추가하기")
+                            }
+                            .foregroundColor(Color(UIColor.systemGray))
+                            .font(.subheadline)
+                            
+                        }
+                    }
+                    Spacer()
+                }
             }
-            
         }
     }
     // MARK: 렌즈 추가 함수
@@ -251,6 +286,8 @@ struct LensList: View {
 
 // MARK: - 카메라 필름 섹션 선언부
 struct FilmList: View {
+    @Environment(\.editMode) private var editMode
+
     @Binding var  myFilms: [String]
     @Binding var showAddFilm: Bool
     @Binding var newItem: String
@@ -260,49 +297,50 @@ struct FilmList: View {
     }
     
     var body: some View {
-        Section(header: Text("필름")){
+        Section(header: Text("필름").bold()){
             ForEach(myFilms, id: \.self) { film in
                 Text(film)
             }
             .onDelete(perform: removeFilmList(at:))
             
-            // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
-            if showAddFilm {
-                HStack {
-                    TextField("장비를 입력하세요", text: $newItem)
-                    
-                    Button{
-                        if trimNewItem.count > 0{
-                            addFilm()
-                        }
-                    } label: {
-                        Image(systemName: "plus.circle")
-                    }
-                }
-            }
-            
-            // 바디 추가하기 버튼
-            HStack{
-                Spacer()
-                Button{
-                    showAddFilm.toggle()
-                } label: {
-                    if showAddFilm{
-                        Text("완료")
-                            .foregroundColor(Color(UIColor.systemGray2))
-                    } else {
-                        HStack{
-                            Image(systemName: "plus.circle")
-                            Text("바디 추가하기")
-                        }
-                        .foregroundColor(Color(UIColor.systemGray))
-                        .font(.subheadline)
+            if editMode?.wrappedValue.isEditing == true {
+                // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
+                if showAddFilm {
+                    HStack {
+                        TextField("장비를 입력하세요", text: $newItem)
                         
+                        Button{
+                            if trimNewItem.count > 0{
+                                addFilm()
+                            }
+                        } label: {
+                            Image(systemName: "plus.circle")
+                        }
                     }
                 }
-                Spacer()
+                
+                // 바디 추가하기 버튼
+                HStack{
+                    Spacer()
+                    Button{
+                        showAddFilm.toggle()
+                    } label: {
+                        if showAddFilm{
+                            Text("완료")
+                                .foregroundColor(Color(UIColor.systemGray2))
+                        } else {
+                            HStack{
+                                Image(systemName: "plus.circle")
+                                Text("바디 추가하기")
+                            }
+                            .foregroundColor(Color(UIColor.systemGray))
+                            .font(.subheadline)
+                            
+                        }
+                    }
+                    Spacer()
+                }
             }
-            
         }
     }
     // MARK: 필름 추가 함수

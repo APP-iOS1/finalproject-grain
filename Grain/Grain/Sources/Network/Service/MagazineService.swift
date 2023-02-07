@@ -34,7 +34,7 @@ enum MagazineService {
     }
     
     // MARK: - 매거진 데이터 넣기
-    static func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: [UIImage], content: String, title: String, lenseInfo:String, longitude: Double, likedNum: Int, filmInfo: String, customPlaceName: String, latitude: Double, comment: String, roadAddress: String ) -> AnyPublisher<MagazineResponse, Error> {
+    static func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: [UIImage], content: String, title: String, lenseInfo:String, longitude: Double, likedNum: Int, filmInfo: String, customPlaceName: String, latitude: Double, comment: String, roadAddress: String ) -> AnyPublisher<MagazineDocument, Error> {
         print("FirebaseServic insertMagazine start")
         
         // 1. 스토리지 라우터에 있는 uploadImage 메소드를 호출해서 여기서 urlArr 를 받는다.
@@ -60,9 +60,31 @@ enum MagazineService {
             .shared
             .dataTaskPublisher(for: request)
             .map{ $0.data }
-            .decode(type: MagazineResponse.self, decoder: JSONDecoder())
+            .decode(type: MagazineDocument.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
     }
     
+    static func updateMagazine(data: MagazineDocument, docID: String) -> AnyPublisher<MagazineDocument, Error> {
+        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
+        
+        var request = URLRequest(url: URL(string: firestoreURL)!)
+        print("id: \(docID), MagazineService update method")
 
+        do {
+            let suffixedId: String = String(docID.suffix(20))
+            request = try MagazineRouter.patch(putData: data, docID: suffixedId).asURLRequest()
+        } catch {
+            // [x] error handling
+            print("http error")
+        }
+        
+        print(request)
+        return URLSession
+            .shared
+            .dataTaskPublisher(for: request)
+            .map{ $0.data }
+            .decode(type: MagazineDocument.self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
+        
+    }
 }

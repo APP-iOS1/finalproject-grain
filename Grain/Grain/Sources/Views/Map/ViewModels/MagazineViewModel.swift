@@ -20,7 +20,7 @@ final class MagazineViewModel: ObservableObject {
     
     var fetchMagazineSuccess = PassthroughSubject<(), Never>()
     var insertMagazineSuccess = PassthroughSubject<(), Never>()
-    var patchMagazineSuccess = PassthroughSubject<(), Never>()
+    var updateMagazineSuccess = PassthroughSubject<(), Never>()
 
     func fetchMagazine() {
         MagazineService.getMagazine()
@@ -35,19 +35,34 @@ final class MagazineViewModel: ObservableObject {
     }
     
     func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: [UIImage], content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String ) {
-        
+
         
         MagazineService.insertMagazine(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title, lenseInfo: lenseInfo, longitude: longitude, likedNum: likedNum, filmInfo: filmInfo, customPlaceName: customPlaceName, latitude: latitude, comment: comment, roadAddress: roadAddress)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
 
-        } receiveValue: { (data: MagazineResponse) in
+        } receiveValue: { (data: MagazineDocument) in
             self.insertMagazineSuccess.send()
+//            print(data.name)
+//            print(data.createTime)
+            self.updateMagazine(data: data, docID: data.name)
+            print("id: \(data.name)")
         }.store(in: &subscription)
+    }
+
+    // MARK: update
+    func updateMagazine(data: MagazineDocument, docID: String){
+        MagazineService.updateMagazine(data: data, docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+                
+            } receiveValue: { (data: MagazineDocument) in
+                self.fetchMagazineSuccess.send()
+            }.store(in: &subscription)
     }
     
     // MARK: Update -> Firebase Store SDK 사용
-    func updateMagazine(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+    func updateMagazineSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
         let db = Firestore.firestore()
         
         let documentRef = db.collection("Magazine").document("\(updateDocument)")

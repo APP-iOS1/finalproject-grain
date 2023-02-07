@@ -91,6 +91,7 @@
 		9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */; };
 		9962CDD5297A215900E834C3 /* MagazineFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD4297A215900E834C3 /* MagazineFeedView.swift */; };
 		9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD6297A224700E834C3 /* MagazineViewCell.swift */; };
+		A71516B829921010009A0780 /* MagazineEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71516B729921010009A0780 /* MagazineEditView.swift */; };
 		A71680E4298B3B3B0050549D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A71680E3298B3B3B0050549D /* GoogleService-Info.plist */; };
 		A7332EFC298BE726001AE5B0 /* CurrentUserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */; };
 		A739C63D2982EAFE0093D71C /* AddMarkerMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */; };
@@ -220,6 +221,7 @@
 		9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineMainView.swift; sourceTree = "<group>"; };
 		9962CDD4297A215900E834C3 /* MagazineFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineFeedView.swift; sourceTree = "<group>"; };
 		9962CDD6297A224700E834C3 /* MagazineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewCell.swift; sourceTree = "<group>"; };
+		A71516B729921010009A0780 /* MagazineEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineEditView.swift; sourceTree = "<group>"; };
 		A71680E3298B3B3B0050549D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserDTO.swift; sourceTree = "<group>"; };
 		A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMarkerMapView.swift; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				9955E112297A52E200265D14 /* MagazineAddView.swift */,
 				9955E116297A6D5900265D14 /* MagazineContentAddView.swift */,
 				0C70BCFA298CA692004A4DB0 /* EditorView.swift */,
+				A71516B729921010009A0780 /* MagazineEditView.swift */,
 			);
 			path = Magazine;
 			sourceTree = "<group>";
@@ -784,7 +787,6 @@
 				9958AF9B29777E5B00A51DA9 /* UserStore.swift in Sources */,
 				A75BB98C297E6694004FE6FA /* ViewRouter.swift in Sources */,
 				A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */,
-				9936E2B329909A44006F3333 /* CommunitySearchView.swift in Sources */,
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,
 				9958AFA329777F9C00A51DA9 /* CommentStore.swift in Sources */,
 				99233D4E2977F36000A875B1 /* Map.swift in Sources */,
@@ -838,6 +840,7 @@
 				330B9460297A719C007F5164 /* CameraLenseFilmModalView.swift in Sources */,
 				A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */,
 				A7D9F2FC2989055E00B39218 /* StorageViewModel.swift in Sources */,
+				A71516B829921010009A0780 /* MagazineEditView.swift in Sources */,
 				06FD6AB52977AF1900B4A859 /* CommunityRowView.swift in Sources */,
 				9958AF75297778D800A51DA9 /* ContentView.swift in Sources */,
 				9958AFBA2977D80200A51DA9 /* AuthenticationTestView.swift in Sources */,

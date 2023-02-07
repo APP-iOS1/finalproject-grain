@@ -40,6 +40,8 @@ struct AddMarkerMapView: View {
     
     @Binding var inputTitle: String
     @Binding var inputContent: String
+    @Binding var selectedImages: [UIImage]
+    @Binding var inputCustomPlace: String
     
     var body: some View {
         NavigationView {
@@ -52,13 +54,12 @@ struct AddMarkerMapView: View {
                             .foregroundColor(.black)
                     }
 
-
                     Spacer()
                     Text("위치 선택")
                     Spacer()
                     
                     NavigationLink {
-                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1)
+                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImage: $selectedImages, inputCustomPlace: $inputCustomPlace)
                         //MagazineMainView()
                         //.zIndex(2)
                     } label: {
@@ -112,19 +113,13 @@ struct AddMarkerMapView: View {
                         //.zIndex(1)
                         
                         //MARK: 추가하기 버튼
-                        NavigationLink(destination: {
-                            CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1)
-                            //.zIndex(2)
-                        }, label: {
-                            Button {
-                                //markerAddButtonBool.toggle()
-                                dismiss()
-                                print("추가하기 클릭")
-                            } label: {
-                                Text("추가하기")
-                                    .foregroundColor(.red)
-                            }
-                        })
+                        Button {
+                            //markerAddButtonBool.toggle()
+                            print("추가하기 클릭")
+                        } label: {
+                            Text("추가하기")
+                                .foregroundColor(.red)
+                        }
                         .offset(y: 270)
                         //.zIndex(1)
                     }

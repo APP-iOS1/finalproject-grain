@@ -99,7 +99,23 @@ struct PhotoSpotDetailView: View {
         
     }
 }
-
+struct Header: View {
+    var data : MagazineDocument
+    var body: some View {
+        VStack(alignment: .leading) {
+            Spacer()
+            Text(data.fields.title.stringValue)
+                .font(.title2)
+                .bold()
+                .padding(.horizontal)
+            Spacer()
+            Divider()
+        }
+        .frame(minWidth: 0, maxWidth: .infinity)
+        .frame(height: 56)
+        .background(Rectangle().foregroundColor(.white))
+    }
+}
 //struct PhotoSpotDetailView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        PhotoSpotDetailView()   // FIX

@@ -47,7 +47,7 @@ final class UserViewModel: ObservableObject {
         
 
     }
-    func updateUser(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+    func updateUserSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
         
         let db = Firestore.firestore()
         let documentRef = db.collection("User").document("\(updateDocument)")

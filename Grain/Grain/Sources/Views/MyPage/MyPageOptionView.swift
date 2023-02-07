@@ -10,10 +10,8 @@ import SwiftUI
 struct MyPageOptionView: View {
 //    let optionMenu = ["프로필 편집", "카메라 정보", "저장됨", "로그아웃"]
     @Environment(\.presentationMode) var presentationMode
-//    @StateObject var authVM = AuthenticationStore()
-    var userVM: UserViewModel
-    
-    @StateObject var communityVM: CommunityViewModel = CommunityViewModel()
+    @StateObject var authVM = AuthenticationStore()
+//    @StateObject var communityVM: CommunityViewModel
     
     var body: some View {
         VStack(alignment: .leading){
@@ -41,35 +39,256 @@ struct MyPageOptionView: View {
             }
             .accentColor(.black)
             
-            ScrollView{
-                //MARK: 계정 섹션
-                AccountSection(userVM: userVM, community: communityVM.communities)
+            //MARK: 계정 섹션
+            VStack(alignment: .leading, spacing: 10){
+                Text("계정")
+                    .font(.title2)
+                    .bold()
+                    .padding(.horizontal)
+                    .padding(.top)
                 
-                //MARK: 지원 섹션
-                SupportSection()
+                NavigationLink {
+                    EditMyPageView()
+                } label: {
+                    HStack {
+                        Image(systemName: "person")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.trailing)
+                        Text("프로필 편집")
+                            .font(.title3)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.title2)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
+                    .padding(.vertical)
+                }
+                .padding(.horizontal)
                 
-                //MARK: 정보 섹션
-                InfoSection()
+                NavigationLink {
+                    EditCameraView()
+                } label: {
+                    HStack {
+                        Image(systemName: "camera")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.trailing)
+                        Text("나의 장비 정보")
+                            .font(.title3)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.title2)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
                     .padding(.bottom)
+                }
+                .padding(.horizontal)
+                
+                NavigationLink {
+                    BookmarkedMagazine()
+                } label: {
+                    HStack {
+                        Image(systemName: "bookmark")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.trailing)
+                        Text("저장된 매거진")
+                            .font(.title3)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.title2)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                }
+                .padding(.horizontal)
+                
+                NavigationLink {
+//                    BookmarkedCommunityView(communityVM: communityVM.communities)
+                } label: {
+                    HStack {
+                        Image(systemName: "bookmark")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.trailing)
+                        Text("저장된 커뮤니티 글")
+                            .font(.title3)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.title2)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                }
+                .padding(.horizontal)
             }
+            
+            //MARK: 지원 섹션
+            VStack(alignment: .leading, spacing: 10){
+                Text("지원")
+                    .font(.title2)
+                    .bold()
+                    .padding()
+                
+                NavigationLink {
+                    Text("고객센터")
+                } label: {
+                    HStack {
+                        Image(systemName: "bookmark")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.trailing)
+                        Text("고객센터")
+                            .font(.title3)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.title2)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                }
+                .padding(.horizontal)
+                
+                NavigationLink {
+                    Text("피드백")
+                } label: {
+                    HStack {
+                        Image(systemName: "envelope")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.trailing)
+                        Text("피드백")
+                            .font(.title3)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.title2)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                }
+                .padding(.horizontal)
+            }
+            
+            //MARK: 정보 섹션
+            VStack(alignment: .leading, spacing: 10){
+                Text("정보")
+                    .font(.title2)
+                    .bold()
+                    .padding()
+                
+                NavigationLink {
+                    Text("이용약관")
+                } label: {
+                    HStack {
+                        Image(systemName: "doc")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.trailing)
+                        Text("이용약관")
+                            .font(.title3)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.title2)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                }
+                .padding(.horizontal)
+                
+                NavigationLink {
+                    Text("개인 정보 처리방침")
+                } label: {
+                    HStack {
+                        Image(systemName: "shield")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.trailing)
+                        Text("개인 정보 처리방침")
+                            .font(.title3)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.title2)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
+                    .padding(.bottom)
+                }
+                .padding(.horizontal)
+                
+                Button {
+                    authVM.googleLogout()
+                } label: {
+                    HStack {
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.trailing)
+                        Text("로그아웃")
+                            .font(.title3)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                    }
+                    .font(.title2)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
+                }
+                .padding(.horizontal)
+
+            }
+            
+
+//            NavigationLink {
+//                EditMyPageView()
+//            } label: {
+//                HStack {
+//                    Image(systemName: "person")
+//                        .resizable()
+//                        .frame(width: 20, height: 20)
+//                        .aspectRatio(contentMode: .fit)
+//                        .padding(.trailing)
+//                    Text("로그아웃")
+//                    Spacer()
+//                    Image(systemName: "chevron.right")
+//                }
+//                .font(.title2)
+//                .foregroundColor(.black)
+//                .padding(.horizontal)
+//            }
             Spacer()
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
-        .onAppear {
-            // 커뮤니티 데이터 fetch
-            communityVM.fetchCommunity()
-        }
+//        .onAppear {
+//            // 커뮤니티 데이터 fetch
+//            communityVM.fetchCommunity()
+//        }
     }
 }
 
-//struct MyPageOptionView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NavigationStack {
-//            MyPageOptionView()
-//        }
-//    }
-//}
+struct MyPageOptionView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            MyPageOptionView()
+        }
+    }
+}
 
 extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate {
     override open func viewDidLoad() {
@@ -79,258 +298,5 @@ extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate 
 
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return viewControllers.count > 1
-    }
-}
-
-//MARK: - 계정 섹션
-struct AccountSection: View {
-    var userVM: UserViewModel
-    var community: [CommunityDocument]
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10){
-            Text("계정")
-                .font(.title2)
-                .bold()
-                .padding(.horizontal)
-                .padding(.top)
-                .padding(.leading, 5)
-            
-            NavigationLink {
-                EditMyPageView(userVM: userVM)
-            } label: {
-                HStack() {
-                    Image(systemName: "person")
-                        .font(.system(size: 25))
-                        .padding(.trailing, 10)
-                    
-                    Text("프로필 편집")
-                        .font(.title3)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .font(.title3)
-                }
-                .foregroundColor(.black)
-                .padding(.horizontal)
-                .padding(.vertical)
-            }
-            .padding(.horizontal)
-            
-            NavigationLink {
-                EditCameraView()
-            } label: {
-                HStack {
-                    Image(systemName: "camera")
-                        .font(.system(size: 20))
-                        .padding(.trailing, 10)
-                    
-                    Text("나의 장비 정보")
-                        .font(.title3)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .font(.title3)
-                }
-                .foregroundColor(.black)
-                .padding(.horizontal)
-                .padding(.bottom)
-            }
-            .padding(.horizontal)
-            
-            NavigationLink {
-                BookmarkedMagazine()
-            } label: {
-                HStack {
-                    Image(systemName: "bookmark")
-                        .font(.system(size: 22))
-                        .padding(.leading, 2.8)
-                        .padding(.trailing, 13)
-                    
-                    Text("저장된 매거진")
-                        .font(.title3)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .font(.title3)
-                }
-                .foregroundColor(.black)
-                .padding(.horizontal)
-                .padding(.bottom)
-            }
-            .padding(.horizontal)
-            
-            NavigationLink {
-                BookmarkedCommunityView(community: community)
-            } label: {
-                HStack {
-                    Image(systemName: "bookmark")
-                        .font(.system(size: 22))
-                        .padding(.leading, 2.8)
-                        .padding(.trailing, 13)
-                    
-                    Text("저장된 커뮤니티 글")
-                        .font(.title3)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .font(.title3)
-                }
-                .foregroundColor(.black)
-                .padding(.horizontal)
-                .padding(.bottom)
-            }
-            .padding(.horizontal)
-        }
-    }
-}
-
-//MARK: - 지원 섹션
-struct SupportSection: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10){
-            Text("지원")
-                .font(.title2)
-                .bold()
-                .padding()
-                .padding(.leading, 5)
-            
-            NavigationLink {
-                Text("고객센터")
-            } label: {
-                HStack {
-                    Image(systemName: "message")
-                        .font(.system(size: 19))
-                        .padding(.leading, 3)
-                        .padding(.trailing, 11)
-                    
-                    //                            .resizable()
-                    //                            .frame(width: 20, height: 20)
-                    //                            .aspectRatio(contentMode: .fit)
-                    //                            .padding(.trailing)
-                    Text("고객센터")
-                        .font(.title3)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .font(.title2)
-                }
-                .foregroundColor(.black)
-                .padding(.horizontal)
-                .padding(.bottom)
-            }
-            .padding(.horizontal)
-            
-            NavigationLink {
-                Text("피드백")
-            } label: {
-                HStack {
-                    Image(systemName: "envelope")
-                        .font(.system(size: 19))
-                        .padding(.leading, 3)
-                        .padding(.trailing, 12)
-                    //                            .resizable()
-                    //                            .frame(width: 20, height: 20)
-                    //                            .aspectRatio(contentMode: .fit)
-                    //                            .padding(.trailing)
-                    Text("피드백")
-                        .font(.title3)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                }
-                .font(.title2)
-                .foregroundColor(.black)
-                .padding(.horizontal)
-                .padding(.bottom)
-            }
-            .padding(.horizontal)
-        }
-    }
-}
-
-//MARK: - 정보 섹션
-struct InfoSection: View {
-    @StateObject var authVM = AuthenticationStore()
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 10){
-            Text("정보")
-                .font(.title2)
-                .bold()
-                .padding()
-                .padding(.leading, 5)
-            
-            NavigationLink {
-                Text("이용약관")
-            } label: {
-                HStack {
-                    Image(systemName: "doc")
-                        .font(.system(size:22))
-                        .padding(.leading, 3.6)
-                        .padding(.trailing, 14)
-                    
-                    Text("이용약관")
-                        .font(.title3)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")                    .font(.title3)
-                    
-                }
-                .foregroundColor(.black)
-                .padding(.horizontal)
-                .padding(.bottom)
-            }
-            .padding(.horizontal)
-            
-            NavigationLink {
-                Text("개인 정보 처리방침")
-            } label: {
-                HStack {
-                    Image(systemName: "shield")
-                        .font(.system(size:23))
-                        .padding(.leading, 2.9)
-                        .padding(.trailing, 14)
-                    
-                    Text("개인 정보 처리방침")
-                        .font(.title3)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .font(.title3)
-                }
-                .foregroundColor(.black)
-                .padding(.horizontal)
-                .padding(.bottom)
-            }
-            .padding(.horizontal)
-            
-            Button {
-                authVM.googleLogout()
-            } label: {
-                HStack {
-                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                        .font(.system(size:20))
-                        .padding(.leading, 5.5)
-                        .padding(.trailing, 12)
-                    
-                    Text("로그아웃")
-                        .font(.title3)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .font(.title3)
-                }
-                .foregroundColor(.black)
-                .padding(.horizontal)
-            }
-            .padding(.horizontal)
-            
-        }
     }
 }

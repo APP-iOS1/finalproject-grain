@@ -31,6 +31,7 @@
 		334699D72988CD44004153A6 /* EditMyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D62988CD44004153A6 /* EditMyPageView.swift */; };
 		334699D92988DE3F004153A6 /* EditCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D82988DE3F004153A6 /* EditCameraView.swift */; };
 		334699DB2988DE51004153A6 /* StoredPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699DA2988DE51004153A6 /* StoredPostView.swift */; };
+		33728E802990920D00E8AB97 /* SelectPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33728E7F2990920D00E8AB97 /* SelectPostView.swift */; };
 		5265C1181BDD56B8E8B1F897 /* Pods_Grain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */; };
 		8B0BA0A2298A4197000A7090 /* CameraModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0BA0A1298A4197000A7090 /* CameraModalView.swift */; };
 		8B0BA0A4298A4C15000A7090 /* ListTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0BA0A3298A4C15000A7090 /* ListTestView.swift */; };
@@ -156,6 +157,7 @@
 		334699D62988CD44004153A6 /* EditMyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageView.swift; sourceTree = "<group>"; };
 		334699D82988DE3F004153A6 /* EditCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCameraView.swift; sourceTree = "<group>"; };
 		334699DA2988DE51004153A6 /* StoredPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredPostView.swift; sourceTree = "<group>"; };
+		33728E7F2990920D00E8AB97 /* SelectPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPostView.swift; sourceTree = "<group>"; };
 		8B0BA0A1298A4197000A7090 /* CameraModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModalView.swift; sourceTree = "<group>"; };
 		8B0BA0A3298A4C15000A7090 /* ListTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTestView.swift; sourceTree = "<group>"; };
 		8B10F429298CD18F00582D27 /* MyPageView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView2.swift; sourceTree = "<group>"; };
@@ -337,6 +339,14 @@
 			path = MyPage;
 			sourceTree = "<group>";
 		};
+		33728E7E299091CA00E8AB97 /* AddPost */ = {
+			isa = PBXGroup;
+			children = (
+				33728E7F2990920D00E8AB97 /* SelectPostView.swift */,
+			);
+			path = AddPost;
+			sourceTree = "<group>";
+		};
 		33FBFCE5803AD110CB6FC1B1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -439,6 +449,7 @@
 				A7BAD3C429782D83009C4ECB /* Network */,
 				06F0D828297EB3BD00E7B885 /* ViewModels */,
 				9958AF872977798900A51DA9 /* Views */,
+				33728E7E299091CA00E8AB97 /* AddPost */,
 				9958AF862977798000A51DA9 /* Stores */,
 				9958AF852977797600A51DA9 /* Models */,
 			);
@@ -802,6 +813,7 @@
 				9962CDCB297924A000E834C3 /* MatchingTabView.swift in Sources */,
 				330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */,
 				A75BB99929815391004FE6FA /* RepairShopMapView.swift in Sources */,
+				33728E802990920D00E8AB97 /* SelectPostView.swift in Sources */,
 				A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */,
 				9958AF9129777D5A00A51DA9 /* Place.swift in Sources */,
 				A7D957D6297AAF8C001D2401 /* MagazineRouter.swift in Sources */,

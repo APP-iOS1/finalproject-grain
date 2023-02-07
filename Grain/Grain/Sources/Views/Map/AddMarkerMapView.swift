@@ -17,7 +17,7 @@ struct AddMarkerMapView: View {
     @State var locationcheckBool : Bool = false
     @State var searchResponseBool : Bool = false
     //임시
-//    searchMap = data.region.area1.name + data.region.area2.name + data.region.area3.name
+    //    searchMap = data.region.area1.name + data.region.area2.name + data.region.area3.name
     // 네비게이션 뷰 돌아가기
     @Environment(\.dismiss) private var dismiss
     // 경도 위도 값 전달
@@ -28,7 +28,7 @@ struct AddMarkerMapView: View {
     // 텍스트 필드 String
     @State var searchMap : String = ""
     // geocode 하기 위해
-
+    
     @StateObject var naverVM = NaverAPIViewModel()
 
     // 위치 검색 결과 값
@@ -38,61 +38,106 @@ struct AddMarkerMapView: View {
     
     @State var updateReverseGeocodeResult :  [ReverseGeocodeResult] = [ReverseGeocodeResult(region: Region(area1: Area(name: ""), area2: Area(name: ""), area3: Area(name: ""), area4: Area(name: "")))]
     
+    @Binding var inputTitle: String
+    @Binding var inputContent: String
     
     var body: some View {
-        NavigationStack{
-            ZStack{
-                HStack{
-                    // FIXME: onSubmit 하고 버튼 눌러야함
-                    TextField("🔍 위치를 검색해주세요", text: $searchMap)
-                        .padding()
-                        .background(.white)
-                        .cornerRadius(15)
-                        .onSubmit {
-                            // MARK: Geocode API 실행
-                            naverVM.fetchGeocode(requestAddress: searchMap)
-                        }
-                    RoundedRectangle(cornerRadius: 10)
-//                            .stroke(Color(.black),lineWidth: 2)
-                        .foregroundColor(.white)
-                        .frame(width: 50, height: 51)
-                        .overlay{
-                            Image(systemName: "location.magnifyingglass")
-                                .onTapGesture {
-                                    searchResponse = naverVM.addresses
-                                    searchResponseBool.toggle()
+        NavigationView {
+            VStack {
+                HStack {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("<")
+                            .foregroundColor(.black)
+                    }
+
+
+                    Spacer()
+                    Text("위치 선택")
+                    Spacer()
+                    
+                    NavigationLink {
+                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1)
+                        //MagazineMainView()
+                        //.zIndex(2)
+                    } label: {
+                        Text("다음")
+                            .foregroundColor(.black)
+                    }
+                }
+                .padding(.horizontal)
+                
+                ZStack {
+                    
+                    //MARK: 네이버맵뷰
+                    AddMarkerUIMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult)
+                    .zIndex(0)
+                    .ignoresSafeArea(.keyboard)
+                    
+                    VStack {
+                        
+                        //MARK: 맵뷰 상단 검색바
+                        HStack{
+                            // FIXME: onSubmit 하고 버튼 눌러야함
+                            TextField("🔍 위치를 검색해주세요", text: $searchMap)
+                                .padding()
+                                .background(.white)
+                                .cornerRadius(15)
+                                .onSubmit {
+                                    // MARK: Geocode API 실행
+                                    naverVM.fetchGeocode(requestAddress: searchMap)
+                                }
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.white)
+                                .frame(width: 50, height: 51)
+                                .overlay{
+                                    Image(systemName: "location.magnifyingglass")
+                                        .onTapGesture {
+                                            searchResponse = naverVM.addresses
+                                            searchResponseBool.toggle()
+                                        }
                                 }
                         }
-                }.padding()
-                .zIndex(1)
-                .offset(y:-300)
-               
-                
-                AddMarkerUIMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult)
-                    .zIndex(0)
-                
-                Image("TestBlackMarker")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 56,height: 56)
-                    .position(CGPoint(x: 196, y: 330))  //수정 필요
-                    .zIndex(1)
-                RoundedRectangle(cornerRadius: 15)
-                    .frame(width: Screen.maxWidth * 0.65, height: 40)
-                    .foregroundColor(.white)
-                    .overlay{
-                        Text("추가하기")
-                            .fontWeight(.bold)
-                            .onTapGesture {
+                        .padding()
+                        .offset(y:-300)
+                        
+
+                        
+                        //                Image("TestBlackMarker")
+                        //                    .resizable()
+                        //                    .aspectRatio(contentMode: .fit)
+                        //                    .frame(width: 56,height: 56)
+                        //                    .position(CGPoint(x: 196, y: 330))  //수정 필요
+                        //.zIndex(1)
+                        
+                        //MARK: 추가하기 버튼
+                        NavigationLink(destination: {
+                            CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1)
+                            //.zIndex(2)
+                        }, label: {
+                            Button {
+                                //markerAddButtonBool.toggle()
                                 dismiss()
-                                markerAddButtonBool.toggle()    // 추가하기 버튼 true 만들어야지 맵에서 좌표값 받아옴
+                                print("추가하기 클릭")
+                            } label: {
+                                Text("추가하기")
+                                    .foregroundColor(.red)
                             }
+                        })
+                        .offset(y: 270)
+                        //.zIndex(1)
                     }
-                .offset(y: 270)
-                .zIndex(1)
+                    .zIndex(1)
+
+                }
+
             }
+            .ignoresSafeArea(.keyboard)
         }
-        
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        //.ignoresSafeArea(.keyboard)
     }
 }
 
@@ -189,7 +234,7 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
                 updateReverseGeocodeResult1 = naverVM.reverseGeocodeResult[0].region.area1.name + " " + naverVM.reverseGeocodeResult[0].region.area2.name + " " +
                 naverVM.reverseGeocodeResult[0].region.area3.name
             }
-
+            
             markerAddButtonBool.toggle()
         }
         
@@ -201,7 +246,7 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
             }
             searchResponseBool.toggle()
         }
-       
+        
     }
     
     func makeCoordinator() -> Coordinator {

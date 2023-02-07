@@ -12,6 +12,15 @@ enum MagazineQuery {
     // MARK: 매거진 DB에 데이터 저장
     /// id값 패스
     static func insertMagazineQuery(userID: String, cameraInfo: String, nickName: String, image: [String], content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String) -> Data?{
+        var str : String = ""
+        for i in 0..<image.count {
+            str += """
+                { "stringValue": "\(image[i])" },
+                """
+        }
+        //FIXME: 강해져서 돌아오기
+        str.removeLast()
+        
         return
         """
         {
@@ -37,12 +46,7 @@ enum MagazineQuery {
                         "image": {
                             "arrayValue": {
                                 "values": [
-                                    {
-                                        "stringValue":  "\(image[0])"
-                                    },
-                                    {
-                                        "stringValue":  "\(image[2])"
-                                    }
+                                            \(str)
                                 ]
                             }
                         },

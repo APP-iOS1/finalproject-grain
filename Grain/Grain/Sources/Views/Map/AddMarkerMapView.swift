@@ -54,13 +54,12 @@ struct AddMarkerMapView: View {
                             .foregroundColor(.black)
                     }
 
-
                     Spacer()
                     Text("위치 선택")
                     Spacer()
                     
                     NavigationLink {
-                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedPlace: $selectedImages, inputCustomPlace: $inputCustomPlace)
+                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImage: $selectedImages, inputCustomPlace: $inputCustomPlace)
                         //MagazineMainView()
                         //.zIndex(2)
                     } label: {

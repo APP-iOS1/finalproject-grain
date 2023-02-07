@@ -64,7 +64,27 @@ enum MagazineService {
             .eraseToAnyPublisher()
     }
     
-    static func update(){
+    static func updateMagazine(data: MagazineDocument, docID: String) -> AnyPublisher<MagazineDocument, Error> {
+        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
+        
+        var request = URLRequest(url: URL(string: firestoreURL)!)
+        print("id: \(docID), MagazineService update method")
+
+        do {
+            let suffixedId: String = String(docID.suffix(20))
+            request = try MagazineRouter.patch(putData: data, docID: suffixedId).asURLRequest()
+        } catch {
+            // [x] error handling
+            print("http error")
+        }
+        
+        print(request)
+        return URLSession
+            .shared
+            .dataTaskPublisher(for: request)
+            .map{ $0.data }
+            .decode(type: MagazineDocument.self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
         
     }
 }

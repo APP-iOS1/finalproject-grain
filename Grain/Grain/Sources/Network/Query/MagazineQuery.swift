@@ -86,7 +86,7 @@ enum MagazineQuery {
     }
     
     // FIXME: 메서드명 고치기
-    static func insertStructMagazineQuery(data: MagazineDocument) -> Data?{
+    static func updateMagazineQuery(data: MagazineDocument, docID: String) -> Data?{
         var str : String = ""
         for i in 0..<data.fields.image.arrayValue.values.count {
             str += """
@@ -96,6 +96,7 @@ enum MagazineQuery {
         //FIXME: 강해져서 돌아오기
         str.removeLast()
         
+        print("magazine 쿼리: \(docID)")
         return
         """
         {
@@ -107,7 +108,8 @@ enum MagazineQuery {
                             "integerValue": \(data.fields.likedNum.integerValue)
                         },
                         "nickName": {
-                            "stringValue": "\(data.fields.nickName.stringValue)"
+                            "stringValue": "희경,,,팍
+        "
                         },
                         "cameraInfo": {
                             "stringValue": "\(data.fields.cameraInfo.stringValue)"
@@ -150,7 +152,7 @@ enum MagazineQuery {
                             }
                         },
                         "id": {
-                            "stringValue":  "\(data.name)"
+                            "stringValue":  "\(docID)"
                         },
                         "roadAddress": {
                             "stringValue": "\(data.fields.roadAddress.stringValue)"

@@ -20,7 +20,7 @@ final class MagazineViewModel: ObservableObject {
     
     var fetchMagazineSuccess = PassthroughSubject<(), Never>()
     var insertMagazineSuccess = PassthroughSubject<(), Never>()
-    var patchMagazineSuccess = PassthroughSubject<(), Never>()
+    var updateMagazineSuccess = PassthroughSubject<(), Never>()
 
     func fetchMagazine() {
         MagazineService.getMagazine()
@@ -46,14 +46,20 @@ final class MagazineViewModel: ObservableObject {
 //            print(data.name)
 //            print(data.createTime)
             self.updateMagazine(data: data, docID: data.name)
+            print("id: \(data.name)")
         }.store(in: &subscription)
     }
 
     // MARK: update
     func updateMagazine(data: MagazineDocument, docID: String){
-        let docID = docID
+        MagazineService.updateMagazine(data: data, docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+                
+            } receiveValue: { (data: MagazineDocument) in
+                self.fetchMagazineSuccess.send()
+            }.store(in: &subscription)
     }
-    
     
     // MARK: Update -> Firebase Store SDK 사용
     func updateMagazineSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {

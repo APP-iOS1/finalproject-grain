@@ -50,6 +50,8 @@ struct LikedNum: Codable,Hashable {
 }
 
 
+
+
 // MARK: 전체적으로 구조 코드 수정 1.31일
 //// MARK: documents -> 처음 documents 값을 뻄
 //struct MagazineResponse: Codable{

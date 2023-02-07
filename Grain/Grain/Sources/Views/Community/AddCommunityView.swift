@@ -15,10 +15,10 @@ struct AddCommunityView: View {
     
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
-//    @State private var inputCustomPlace: String = ""
+    //    @State private var inputCustomPlace: String = ""
     
     @State private var selectedCamera = 0
-//    @State private var userId = Auth.auth().currentUser?.uid
+    //    @State private var userId = Auth.auth().currentUser?.uid
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
     
@@ -34,46 +34,15 @@ struct AddCommunityView: View {
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImageData: Data? = nil
     @State private var selectedImages: [UIImage] = []
-    
-    var myCamera = ["camera1", "camera2", "camera3", "camera4"]
+    @Environment(\.presentationMode) var mode: Binding<PresentationMode>
 
+    var myCamera = ["camera1", "camera2", "camera3", "camera4"]
+    
     var body: some View {
         VStack {
-            VStack{
-                HStack{
-                    Button {
-                        presented.toggle()
-                        //글쓰기 취소
-                    } label: {
-                        Image(systemName: "xmark")
-                            .foregroundColor(.black)
-                            .frame(width: 50, height: 50)
-                    }
-                    Spacer()
-                    
-                    Text("커뮤니티")
-                    
-                    Spacer()
-                    Button {
-                        // 커뮤니티 add
-                        communityVM.insertCommunity(profileImage: "profileImage", nickName: "nickName", category: selectedTab.rawValue, image: "image", userID: "userID", title: inputTitle, content: inputContent)
-                        
-                        communityVM.fetchCommunity()
-                        
-                        presented.toggle()
-
-                    } label: {
-                        Text("글쓰기")
-                            .foregroundColor(.black)
-                    }
-                    
-                }
-                .padding(.horizontal)
-                
-                Rectangle()
-                    .fill(Color(UIColor.systemGray5))
-                    .frame(width: Screen.maxWidth, height: 1)
-            }
+            Rectangle()
+                .fill(Color(UIColor.systemGray5))
+                .frame(width: Screen.maxWidth, height: 1)
             HStack {
                 PhotosPicker(
                     selection: $selectedItem,
@@ -94,7 +63,7 @@ struct AddCommunityView: View {
                                 }
                         }
                     }
-                    // MARK: 이미지가 선택 되었을때
+                // MARK: 이미지가 선택 되었을때
                     .onChange(of: selectedItem) { newItem in
                         Task {
                             if let data = try? await newItem?.loadTransferable(type: Data.self) {
@@ -108,7 +77,7 @@ struct AddCommunityView: View {
                         }
                     }
                     .frame(width: 100,height: 100)
- 
+                
                 ScrollView(.horizontal) {
                     HStack {
                         // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
@@ -124,7 +93,7 @@ struct AddCommunityView: View {
                 
             }
             .padding(.horizontal)
-           
+            
             HStack{
                 Picker("Tab", selection: $selectedTab){
                     ForEach(CommunityTabs.allCases){ tab in
@@ -161,41 +130,34 @@ struct AddCommunityView: View {
                 .onSubmit {
                     hideKeyboard()
                 }
-            
             Spacer()
-            
-            
-//            HStack {
-//                Button {
-//                    isShowingModal.toggle()
-//                } label: {
-//                    Text("장비 선택 임시 버튼")
-//                }
-//                .foregroundColor(.black)
-//                .sheet(isPresented: $isShowingModal) {
-//                    CameraLenseFilmModalView()
-//                        .presentationDetents([.medium, .large])
-//                }
-//                Spacer()
-//            }
-//            .padding(.horizontal, 15)
-//            TextField("customePlaceName", text: $inputCustomPlace)
-//                .keyboardType(.default)
-//                .textInputAutocapitalization(.never)
-//                .disableAutocorrection(true)
-//                .padding(.horizontal, 15)
-//                .onSubmit {
-//                    hideKeyboard()
-//                }
-
-            Spacer()
-            
         }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
-        .ignoresSafeArea(.keyboard)
-    }}
+        .toolbar {
+            ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
+                Button {
+                    self.mode.wrappedValue.dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(.black)
+                        .bold()
+                }
 
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    //글쓰기 함수
+                    communityVM.insertCommunity(profileImage: "profileImage", nickName: "nickName", category: selectedTab.rawValue, image: "image", userID: "userID", title: inputTitle, content: inputContent)
+                    communityVM.fetchCommunity()
+                    presented.toggle()
+                } label: {
+                    Text("완료")
+                    .foregroundColor(.black)
+                    .bold()
+                }
+            }
+        }
+    }
+}
 //struct AddCommunityView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        AddCommunityView(presented: .constant(false))

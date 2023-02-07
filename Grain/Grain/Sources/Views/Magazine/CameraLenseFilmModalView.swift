@@ -21,6 +21,8 @@ struct CameraLenseFilmModalView: View {
     @Binding var inputContent: String
     @Binding var updateNumber: NMGLatLng
     @Binding var updateReverseGeocodeResult1: String
+    @Binding var selectedPlace: [UIImage]
+    @Binding var inputCustomPlace: String
     
     var body: some View {
         VStack {
@@ -78,6 +80,7 @@ struct CameraLenseFilmModalView: View {
             }
             Spacer()
         }
+        .toolbar(.hidden)
         .onAppear {
             selectedCamera = myCamera[0]
             selectedLense = myLense[0]

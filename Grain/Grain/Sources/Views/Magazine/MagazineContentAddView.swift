@@ -63,7 +63,7 @@ struct MagazineContentAddView: View {
                     Spacer()
                     
                     NavigationLink {
-                        AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent)
+                        AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace)
                             .ignoresSafeArea()
                     } label: {
                         Text("다음")

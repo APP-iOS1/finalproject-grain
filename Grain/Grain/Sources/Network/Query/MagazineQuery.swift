@@ -100,65 +100,70 @@ enum MagazineQuery {
         return
         """
         {
+            "name" : "d1231312",
             "fields": {
-                        "longitude": {
-                            "integerValue": \(data.fields.longitude.doubleValue)
-                        },
-                        "likedNum": {
-                            "integerValue": \(data.fields.likedNum.integerValue)
-                        },
-                        "nickName": {
-                            "stringValue": "희경,,,팍
-        "
-                        },
-                        "cameraInfo": {
-                            "stringValue": "\(data.fields.cameraInfo.stringValue)"
-                        },
-                        "latitude": {
-                            "integerValue": \(data.fields.latitude.doubleValue)
-                        },
-                        "title": {
-                            "stringValue": "\(data.fields.title.stringValue)"
-                        },
-                        "image": {
-                            "arrayValue": {
-                                "values": [
-                                            \(str)
-                                ]
-                            }
-                        },
-                        "filmInfo": {
-                            "stringValue": "\(data.fields.filmInfo.stringValue)"
-                        },
-                        "customPlaceName": {
-                            "stringValue": "\(data.fields.customPlaceName.stringValue)"
-                        },
-                        "content": {
-                            "stringValue": "\(data.fields.content.stringValue)"
-                        },
-                        "userID": {
-                            "stringValue": "\(data.fields.userID.stringValue)"
-                        },
-                        "lenseInfo": {
-                            "stringValue": "\(data.fields.lenseInfo.stringValue)"
-                        },
-                        "comment": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(data.fields.content.stringValue)"
-                                    }
-                                ]
-                            }
-                        },
-                        "id": {
-                            "stringValue":  "\(docID)"
-                        },
-                        "roadAddress": {
-                            "stringValue": "\(data.fields.roadAddress.stringValue)"
-                        }
+                "lenseInfo": {
+                    "stringValue": "\(data.fields.lenseInfo.stringValue)"
+                },
+                "filmInfo": {
+                    "stringValue": "\(data.fields.filmInfo.stringValue)"
+                },
+                "likedNum": {
+                    "integerValue": \(data.fields.likedNum.integerValue)
+
+                },
+                "longitude": {
+                    "integerValue": \(data.fields.longitude.doubleValue)
+                },
+                "customPlaceName": {
+                    "stringValue": "\(data.fields.customPlaceName.stringValue)"
+                },
+                "cameraInfo": {
+                    "stringValue": "\(data.fields.cameraInfo.stringValue)"
+                },
+                "nickName": {
+                    "stringValue": "\(data.fields.nickName.stringValue)"
+                },
+                "latitude": {
+                    "integerValue": \(data.fields.latitude.doubleValue)
+                },
+                "content": {
+                    "stringValue": "\(data.fields.content.stringValue)"
+                },
+                "id": {
+                    "stringValue": "\(docID)"
+                },
+                "title": {
+                    "stringValue": "\(data.fields.title.stringValue)"
+                },
+                "roadAddress": {
+                    "stringValue": "\(data.fields.roadAddress.stringValue)"
+                },
+                "image": {
+                    "arrayValue": {
+                        "values": [
+                                {
+                                    "stringValue": "id패스"
+                                }
+                            ]
                     }
-            }
+                },
+                "userID": {
+                    "stringValue": "\(data.fields.userID.stringValue)"
+                },
+                "comment": {
+                    "arrayValue": {
+                        "values": [
+                            {
+                                "stringValue": "\(data.fields.comment.arrayValue.values)"
+                            }
+                        ]
+                    }
+                }
+            },
+           "createTime": "2023-02-07T07:39:31.052580Z",
+           "updateTime": "2023-02-07T08:06:53.439626Z"
+        }
         """.data(using: .utf8)
     }
 }

@@ -7,6 +7,8 @@
 
 import Foundation
 import Combine
+import FirebaseFirestore
+import UIKit
 
 
 final class MagazineViewModel: ObservableObject {
@@ -21,8 +23,6 @@ final class MagazineViewModel: ObservableObject {
     var patchMagazineSuccess = PassthroughSubject<(), Never>()
 
     func fetchMagazine() {
-
-        
         MagazineService.getMagazine()
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
@@ -34,8 +34,8 @@ final class MagazineViewModel: ObservableObject {
 
     }
     
-    func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String ) {
-
+    func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: [UIImage], content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String ) {
+        
         
         MagazineService.insertMagazine(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title, lenseInfo: lenseInfo, longitude: longitude, likedNum: likedNum, filmInfo: filmInfo, customPlaceName: customPlaceName, latitude: latitude, comment: comment, roadAddress: roadAddress)
             .receive(on: DispatchQueue.main)
@@ -46,24 +46,35 @@ final class MagazineViewModel: ObservableObject {
         }.store(in: &subscription)
     }
     
-//    func updateMagazine() {
-//        MagazineService.patchUserMagazine(token: "bkT8aWSxt3PSJhQppATD")
-//            .receive(on: DispatchQueue.main)
-//            .sink { (completion: Subscribers.Completion<Error>) in
-//        } receiveValue: { (data: MagazineDocument) in
-//            self.updateMagazineData = data
-//            self.patchMagazineSuccess.send()
-//        }.store(in: &subscription)
-//        
-//        // 실제 업데이트 되는 부분
-//        MagazineService.patchMagazine1(token: "bkT8aWSxt3PSJhQppATD", updateMagazineData: updateMagazineData!)
-//            .receive(on: DispatchQueue.main)
-//            .sink { (completion: Subscribers.Completion<Error>) in
-//            } receiveValue: { (data: MagazineDocument) in
-//                self.updateMagazineData = data
-//                self.patchMagazineSuccess.send()
-//            }.store(in: &subscription)
-//    }
+    // MARK: Update -> Firebase Store SDK 사용
+    func updateMagazine(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+        let db = Firestore.firestore()
+        
+        let documentRef = db.collection("Magazine").document("\(updateDocument)")
+        
+        if isArray{
+            do{
+                try? await documentRef.updateData(
+                    [
+                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
+                    ]
+                )
+            }catch let error {
+                print("Error updating document: \(error)")
+            }
+        }else{
+            do{
+                try? await documentRef.updateData(
+                    [
+                         "\(updateKey)" : "\(updateValue)"
+                    ]
+                )
+            }catch let error {
+                print("Error updating document: \(error)")
+            }
+        }
+        
+    }
     
     func deleteMagazine() {
         

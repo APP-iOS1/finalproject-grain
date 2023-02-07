@@ -46,11 +46,13 @@ struct ContentView: View {
                     ZStack {
                         Spacer().fullScreenCover(isPresented: $presented) {
                             VStack {
-                                if self.selectedIndex == 0 {
-                                    MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
-                                } else if self.selectedIndex == 1 {
-                                    AddCommunityView(communityVM: communityVM, presented: $presented)
-                                }
+                                
+                                SelectPostView(presented: $presented, communityVM: communityVM, updateNumber: updateNumber)
+//                                if self.selectedIndex == 0 {
+//                                    MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
+//                                } else if self.selectedIndex == 1 {
+//                                    AddCommunityView(communityVM: communityVM, presented: $presented)
+//                                }
                                 Spacer()
                             }
                         }
@@ -70,7 +72,7 @@ struct ContentView: View {
                             }
                         case 3:
                             NavigationStack {
-                                MapView(mapData:$mapVM.mapData, magazineData: $magazineVM.magazines, clikedMagazineData: clikedMagazineData)
+                                MapView(magazineData: $magazineVM.magazines, mapData:$mapVM.mapData, clikedMagazineData: clikedMagazineData)
                             }
                         case 4:
                             NavigationStack {
@@ -79,11 +81,12 @@ struct ContentView: View {
                         default:
                             NavigationStack {
                                 VStack {
-                                    if self.selectedIndex == 0 {
-                                        MagazineContentAddView(presented: $presented, updateNumber: NMGLatLng(lat: 0, lng: 0))
-                                    } else if self.selectedIndex == 1 {
-                                        AddCommunityView(communityVM: communityVM, presented: $presented)
-                                    }
+                                    SelectPostView(presented: $presented, communityVM: communityVM, updateNumber: updateNumber)
+//                                    if self.selectedIndex == 0 {
+//                                        MagazineContentAddView(presented: $presented, updateNumber: NMGLatLng(lat: 0, lng: 0))
+//                                    } else if self.selectedIndex == 1 {
+//                                        AddCommunityView(communityVM: communityVM, presented: $presented)
+//                                    }
                                 }
                             }
                         }
@@ -159,12 +162,12 @@ struct ContentView: View {
                 }
             }
         }
-        .splashView {
-            ZStack{
-                SplashScreen()
-            }
-
-        }
+//        .splashView {
+//            ZStack{
+//                SplashScreen()
+//            }
+//
+//        }
 
     }
 }

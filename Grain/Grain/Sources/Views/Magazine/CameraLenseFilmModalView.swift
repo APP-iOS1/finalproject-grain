@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import NMapsMap
 struct CameraLenseFilmModalView: View {
     @Environment(\.dismiss) private var dismiss
     var myCamera = ["camera1asdasdasd", "camera2", "camera3"]
@@ -15,12 +15,20 @@ struct CameraLenseFilmModalView: View {
     @State private var selectedCamera: String = ""
     @State private var selectedLense: String = ""
     @State private var selectedFilm: String = ""
+    @ObservedObject var magazineVM = MagazineViewModel()
+    @StateObject var userVM = UserViewModel()
+    @Binding var inputTitle: String
+    @Binding var inputContent: String
+    @Binding var updateNumber: NMGLatLng
+    @Binding var updateReverseGeocodeResult1: String
+    
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Button {
                     //카메라,렌즈,필름 선택 완료 버튼
+                    magazineVM.insertMagazine(userID: userVM.currentUsers?.id.stringValue ?? "", cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "", nickName: userVM.currentUsers?.nickName.stringValue ?? "", image: [], content: inputContent , title: inputTitle , lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "", longitude: updateNumber.lng, likedNum: 0, filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "", customPlaceName: "패스", latitude: updateNumber.lat, comment: "임시", roadAddress: updateReverseGeocodeResult1)
                     dismiss()
                 } label: {
                     Text("완료")
@@ -75,11 +83,12 @@ struct CameraLenseFilmModalView: View {
             selectedLense = myLense[0]
             selectedFilm = myFilm[0]
         }
+        
     }
 }
 
-struct CameraLenseFilmModalView_Previews: PreviewProvider {
-    static var previews: some View {
-        CameraLenseFilmModalView()
-    }
-}
+//struct CameraLenseFilmModalView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CameraLenseFilmModalView()
+//    }
+//}

@@ -84,16 +84,15 @@ enum UserRouter {
         return request
     }
     
-    // 실패한거 같음
-    
+    // 현재 로그인한 유저의 값 가져오기 위해
     func asURLRequestCurrent(request: URLRequest) throws -> URLRequest {
-        var insideRequest = request
-        insideRequest.httpMethod = method.value
-        insideRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        var returnRequest = request
+        returnRequest.httpMethod = method.value
+        returnRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         if let data = data {
-            insideRequest.httpBody = data
+            returnRequest.httpBody = data
         }
-        return request
+        return returnRequest
     }
     
 }

@@ -1,17 +1,23 @@
 //
-//  MagazineSearchDetailView.swift
+//  MagazineEditView.swift
 //  Grain
 //
-//  Created by 조형구 on 2023/02/07.
+//  Created by 지정훈 on 2023/02/07.
 //
-
 import SwiftUI
+import FirebaseAuth
 
-struct MagazineSearchDetailView: View {
-    let magazine: MagazineDocument
-    
+struct MagazineEditView: View {
+    @State var data : MagazineDocument
+    @StateObject var magazineVM = MagazineViewModel()
+
+    @State var editTitle : String = ""
+    @State var editContent : String = ""
+    @State var editCustomPlace : String = ""
+
+
     var body: some View {
-        NavigationStack{
+        NavigationView{
             ScrollView {
                 VStack{
                     VStack {
@@ -19,12 +25,17 @@ struct MagazineSearchDetailView: View {
                             Circle()
                                 .frame(width: 40)
                             VStack(alignment: .leading) {
-                                Text(magazine.fields.nickName.stringValue)
+                                Text(data.fields.nickName.stringValue)
                                     .bold()
                                 HStack {
                                     Text("1분전")
                                     Spacer()
-                                    Text(magazine.fields.customPlaceName.stringValue)
+                                    TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
+                                        .onSubmit {
+                                            data.fields.customPlaceName.stringValue = editCustomPlace
+                                        }
+
+
                                 }
                                 .font(.caption)
                             }
@@ -37,7 +48,10 @@ struct MagazineSearchDetailView: View {
                             .background(Color.black)
                             .padding(.top, -5)
                             .padding(.bottom, -10)
-                   
+
+                        //            Image("line")
+                        //                .resizable()
+                        //                .frame(width: Screen.maxWidth, height: 0.3)
                         TabView{
                             ForEach(1..<4, id: \.self) { i in
                                 Image("\(i)")
@@ -51,15 +65,18 @@ struct MagazineSearchDetailView: View {
                         .padding()
                     }
                     .frame(minHeight: 350)
-                    
+
                     LazyVStack(pinnedViews: [.sectionHeaders]) {
-                        Section(header: MagazineSearchHeader(data: magazine) ){
+                        Section(header: MagazineEditHeader(data: data, editTitle: $editTitle) ){
                             VStack {
-                                Text(magazine.fields.content.stringValue)
+                                TextField(data.fields.content.stringValue, text: $editContent)
                                     .lineSpacing(4.0)
                                     .padding(.vertical, -9)
                                     .padding()
                                     .foregroundColor(Color.textGray)
+                                    .onSubmit {
+                                        data.fields.content.stringValue = editContent
+                                    }
                             }
                         }
                     }
@@ -73,32 +90,31 @@ struct MagazineSearchDetailView: View {
                 HStack{
                     Button {
                         //수정
+//                        magazineVM
                     } label: {
-                        Image(systemName: "square.and.pencil")
-                           
-                            .foregroundColor(.blue)
+                        Text("수정완료")
                     }
-                    Button {
-                        //삭제
-                    } label: {
-                        Image(systemName: "trash")
-                          
-                            .foregroundColor(.blue)
-                    }
+
                 }
             }
         }
     }
 }
-struct MagazineSearchHeader: View {
-    let data : MagazineDocument
+
+struct MagazineEditHeader: View {
+    @State var data : MagazineDocument
+    @Binding var editTitle : String
+
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
-            Text(data.fields.title.stringValue)
+            TextField(data.fields.title.stringValue, text: $editTitle)
                 .font(.title2)
                 .bold()
                 .padding(.horizontal)
+                .onSubmit {
+                    data.fields.title.stringValue = editTitle
+                }
             Spacer()
             Divider()
         }
@@ -107,9 +123,12 @@ struct MagazineSearchHeader: View {
         .background(Rectangle().foregroundColor(.white))
     }
 }
-
-//struct MagazineSearchDetailView_Previews: PreviewProvider {
+//struct MagazineEditView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        MagazineSearchDetailView(magazine: MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: 0), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), likedNum: LikedNum(integerValue: ""), latitude: MagazineLocation(doubleValue: 0), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: ""))))
+//        MagazineEditView()
 //    }
 //}
+
+//----------------여기까지 디테일 수정 update 로쥑
+//1. 메거진 데이터 올리고 response data로 자동으로 생성된 매거진 id 받아서 magazine put(update) 바로 다시 request 보냄 . -> 이거슨 바로 수정, 삭제하기 위한 큰그림(왜냐하면 "해당" 게시물 만 접근해야되기 때문입니다! )
+//-------------------------- 여기까지 완성되면 수정, 삭제 가능합니다 ^^* "해줘"

@@ -7,7 +7,7 @@
 
 // [TODO]
 // 1. storage 사진 올리기
-// 2. realtime database 
+// 2. realtime database
 
 import Foundation
 import Combine
@@ -58,7 +58,7 @@ final class CommunityViewModel: ObservableObject {
     }
     
     // MARK: Update -> Firebase Store SDK 사용
-    func updateCommunity(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+    func updateCommunitySDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
         
         let db = Firestore.firestore()
         let documentRef = db.collection("Community").document("\(updateDocument)")
@@ -76,7 +76,7 @@ final class CommunityViewModel: ObservableObject {
             do{
                 try? await documentRef.updateData(
                     [
-                         "\(updateKey)" : "\(updateValue)" 
+                         "\(updateKey)" : "\(updateValue)"
                     ]
                 )
             }catch let error {

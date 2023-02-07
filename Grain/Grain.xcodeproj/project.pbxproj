@@ -97,6 +97,7 @@
 		998847D8299226EC00004066 /* UserSearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D7299226EC00004066 /* UserSearchResultView.swift */; };
 		998847DA2992270100004066 /* UserSearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D92992270100004066 /* UserSearchDetailView.swift */; };
 		998847DC299239D600004066 /* UserSearchFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847DB299239D600004066 /* UserSearchFeedView.swift */; };
+		A71516BA29926233009A0780 /* MagazineEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71516B929926233009A0780 /* MagazineEditView.swift */; };
 		A71680E4298B3B3B0050549D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A71680E3298B3B3B0050549D /* GoogleService-Info.plist */; };
 		A7332EFC298BE726001AE5B0 /* CurrentUserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */; };
 		A739C63D2982EAFE0093D71C /* AddMarkerMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */; };
@@ -232,6 +233,7 @@
 		998847D7299226EC00004066 /* UserSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchResultView.swift; sourceTree = "<group>"; };
 		998847D92992270100004066 /* UserSearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchDetailView.swift; sourceTree = "<group>"; };
 		998847DB299239D600004066 /* UserSearchFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchFeedView.swift; sourceTree = "<group>"; };
+		A71516B929926233009A0780 /* MagazineEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineEditView.swift; sourceTree = "<group>"; };
 		A71680E3298B3B3B0050549D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserDTO.swift; sourceTree = "<group>"; };
 		A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMarkerMapView.swift; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 				9955E112297A52E200265D14 /* MagazineAddView.swift */,
 				9955E116297A6D5900265D14 /* MagazineContentAddView.swift */,
 				0C70BCFA298CA692004A4DB0 /* EditorView.swift */,
+				A71516B929926233009A0780 /* MagazineEditView.swift */,
 			);
 			path = Magazine;
 			sourceTree = "<group>";
@@ -842,6 +845,7 @@
 				A75BB99929815391004FE6FA /* RepairShopMapView.swift in Sources */,
 				33728E802990920D00E8AB97 /* SelectPostView.swift in Sources */,
 				A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */,
+				A71516BA29926233009A0780 /* MagazineEditView.swift in Sources */,
 				8B10F4302990DD5300582D27 /* BookmarkedCommunityView.swift in Sources */,
 				9958AF9129777D5A00A51DA9 /* Place.swift in Sources */,
 				A7D957D6297AAF8C001D2401 /* MagazineRouter.swift in Sources */,

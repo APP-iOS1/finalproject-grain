@@ -21,13 +21,6 @@ final class StorageViewModel: ObservableObject {
 
     func fetchStorageImage() {
 
-//        StorageService.getStorageImage()
-//            .receive(on: DispatchQueue.main)
-//            .sink { (completion: Subscribers.Completion<Error>) in
-//        } receiveValue: { (data: StorageResponse) in
-//            self.storages = data.items
-//            self.fetchStorageSuccess.send()
-//        }.store(in: &subscription)
     }
     
 //    func insertStorageImage(image: [UIImage]) {
@@ -41,27 +34,3 @@ final class StorageViewModel: ObservableObject {
 //    }
 
 }
-
-//extension DefaultFirestoreRepository {
-//    func save(profileImageData: Data, of userNickname: String) -> Observable<String> {
-//        let endPoint = FirebaseStorageConfiguration.baseURL
-//        + FirebaseStorageConfiguration.projectNamePath + "/\(userNickname)%2F"
-//        + FirebaseStorageConfiguration.profileImageName
-//        let header = FirebaseStorageConfiguration.mediaContentType
-//        let tokenKey = FirebaseStorageConfiguration.downloadTokens
-//
-//        return self.urlSession.post(profileImageData, url: endPoint, headers: header)
-//            .map({ result -> String in
-//                switch result {
-//                case .success(let data):
-//                    guard let json = self.decode(data: data, to: [String: String].self),
-//                          let token = json[tokenKey] else { throw Error.decodingError }
-//                    return endPoint + "?"
-//                    + [FirebaseStorageConfiguration.altMediaParameter,
-//                       FirebaseStorageConfiguration.tokenParameter + token].joined(separator: "&")
-//                case .failure(let error):
-//                    throw error
-//                }
-//            })
-//    }
-//}

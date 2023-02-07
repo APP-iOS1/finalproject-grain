@@ -30,7 +30,7 @@ struct AddMarkerMapView: View {
     // geocode 하기 위해
 
     @StateObject var naverVM = NaverAPIViewModel()
-    @StateObject var TestnaverVM = TestNaverAPIViewModel()
+
     // 위치 검색 결과 값
     @State var searchResponse : [Address] = [Address(roadAddress: "", jibunAddress: "", englishAddress: "", x: "", y: "", distance: 0)]
     
@@ -104,8 +104,7 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
     
     //임시
     @StateObject var naverVM = NaverAPIViewModel()
-    @StateObject var TestnaverVM = TestNaverAPIViewModel()
-    
+
     @StateObject var locationManager = LocationManager()
     // 가상 마커 CGPoint 좌표 값을 통해 지도 좌표 넘겨주기
     @Binding var updateNumber : NMGLatLng
@@ -171,8 +170,8 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         
         // FIXME: 현재 위치 버튼 -> 로직 변경 해야함
         if locationcheckBool{
-            TestnaverVM.fetchReverseGeocode(latitude: updateNumber.lat, longitude: updateNumber.lng)
-            updateReverseGeocodeResult = TestnaverVM.reverseGeocodeResult
+            naverVM.fetchReverseGeocode(latitude: updateNumber.lat, longitude: updateNumber.lng)
+            updateReverseGeocodeResult = naverVM.reverseGeocodeResult
             locationcheckBool.toggle()
         }
         

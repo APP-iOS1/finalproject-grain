@@ -102,7 +102,6 @@
 		A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */; };
 		A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */; };
 		A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */; };
-		A77E1DD6298ABEF60019AD87 /* TestNaverAPIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD5298ABEF60019AD87 /* TestNaverAPIViewModel.swift */; };
 		A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */; };
 		A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */; };
 		A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */; };
@@ -229,7 +228,6 @@
 		A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeService.swift; sourceTree = "<group>"; };
 		A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeDTO.swift; sourceTree = "<group>"; };
 		A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeRouter.swift; sourceTree = "<group>"; };
-		A77E1DD5298ABEF60019AD87 /* TestNaverAPIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNaverAPIViewModel.swift; sourceTree = "<group>"; };
 		A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeDTO.swift; sourceTree = "<group>"; };
 		A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDTO.swift; sourceTree = "<group>"; };
 		A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineQuery.swift; sourceTree = "<group>"; };
@@ -282,7 +280,6 @@
 				06F0D82D297EB3F200E7B885 /* MapViewModel.swift */,
 				06F0D82F297EB3FD00E7B885 /* UserViewModel.swift */,
 				A7D9F3152989840200B39218 /* NaverAPIViewModel.swift */,
-				A77E1DD5298ABEF60019AD87 /* TestNaverAPIViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -770,7 +767,7 @@
 				9958AF9B29777E5B00A51DA9 /* UserStore.swift in Sources */,
 				A75BB98C297E6694004FE6FA /* ViewRouter.swift in Sources */,
 				A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */,
-				A77E1DD6298ABEF60019AD87 /* TestNaverAPIViewModel.swift in Sources */,
+				9936E2B329909A44006F3333 /* CommunitySearchView.swift in Sources */,
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,
 				9958AFA329777F9C00A51DA9 /* CommentStore.swift in Sources */,
 				99233D4E2977F36000A875B1 /* Map.swift in Sources */,

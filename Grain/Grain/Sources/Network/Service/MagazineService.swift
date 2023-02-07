@@ -64,48 +64,5 @@ enum MagazineService {
             .eraseToAnyPublisher()
     }
     
-   
-    // MARK: 실험 코드
-    static func patchUserMagazine(token: String) -> AnyPublisher<MagazineDocument, Error> {
 
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
-        var request = URLRequest(url: URL(string: firestoreURL)!)
-        do {
-            request = try MagazineRouter.patch.asURLPatch(token: token)
-        } catch {
-            // [x] error handling
-            print("http error")
-        }
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data}
-            .decode(type: MagazineDocument.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
-    }
-    
-    //MARK: 희경 실험코드 - 컴바인 적용해서 이미지 토큰 url 생성하는 메소드
-    static func imageTokenUrl() {
-        
-    }
-    
-    static func patchMagazine1(token: String,updateMagazineData : MagazineDocument ) -> AnyPublisher<MagazineDocument, Error> {
-
-        
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
-        var request = URLRequest(url: URL(string: firestoreURL)!)
-        do {
-            // PATCH
-            request = try MagazineRouter.patch.asURLUpdate(token: token ,updateMagazineData : updateMagazineData)
-        } catch {
-            // [x] error handling
-            print("http error")
-        }
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data}
-            .decode(type: MagazineDocument.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
-    }
 }

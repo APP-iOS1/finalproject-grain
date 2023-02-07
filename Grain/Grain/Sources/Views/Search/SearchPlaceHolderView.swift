@@ -49,6 +49,7 @@ struct SearchPlaceHolderView: View {
                 .foregroundColor(.middlebrightGray)
                 .fontWeight(.semibold)
         }
+        .frame(height: 650)
     }
 }
 

@@ -91,15 +91,7 @@
 		9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */; };
 		9962CDD5297A215900E834C3 /* MagazineFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD4297A215900E834C3 /* MagazineFeedView.swift */; };
 		9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD6297A224700E834C3 /* MagazineViewCell.swift */; };
-
-		998847D22992171400004066 /* CommunitySearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D12992171400004066 /* CommunitySearchDetailView.swift */; };
-		998847D4299226AE00004066 /* MagazineSearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D3299226AE00004066 /* MagazineSearchResultView.swift */; };
-		998847D6299226CB00004066 /* MagazineSearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D5299226CB00004066 /* MagazineSearchDetailView.swift */; };
-		998847D8299226EC00004066 /* UserSearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D7299226EC00004066 /* UserSearchResultView.swift */; };
-		998847DA2992270100004066 /* UserSearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D92992270100004066 /* UserSearchDetailView.swift */; };
-		998847DC299239D600004066 /* UserSearchFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847DB299239D600004066 /* UserSearchFeedView.swift */; };
 		A71516B829921010009A0780 /* MagazineEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71516B729921010009A0780 /* MagazineEditView.swift */; };
-
 		A71680E4298B3B3B0050549D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A71680E3298B3B3B0050549D /* GoogleService-Info.plist */; };
 		A7332EFC298BE726001AE5B0 /* CurrentUserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */; };
 		A739C63D2982EAFE0093D71C /* AddMarkerMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */; };
@@ -229,16 +221,7 @@
 		9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineMainView.swift; sourceTree = "<group>"; };
 		9962CDD4297A215900E834C3 /* MagazineFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineFeedView.swift; sourceTree = "<group>"; };
 		9962CDD6297A224700E834C3 /* MagazineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewCell.swift; sourceTree = "<group>"; };
-
-		998847D12992171400004066 /* CommunitySearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySearchDetailView.swift; sourceTree = "<group>"; };
-		998847D3299226AE00004066 /* MagazineSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchResultView.swift; sourceTree = "<group>"; };
-		998847D5299226CB00004066 /* MagazineSearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchDetailView.swift; sourceTree = "<group>"; };
-		998847D7299226EC00004066 /* UserSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchResultView.swift; sourceTree = "<group>"; };
-		998847D92992270100004066 /* UserSearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchDetailView.swift; sourceTree = "<group>"; };
-		998847DB299239D600004066 /* UserSearchFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchFeedView.swift; sourceTree = "<group>"; };
-
 		A71516B729921010009A0780 /* MagazineEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineEditView.swift; sourceTree = "<group>"; };
-
 		A71680E3298B3B3B0050549D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserDTO.swift; sourceTree = "<group>"; };
 		A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMarkerMapView.swift; sourceTree = "<group>"; };
@@ -425,12 +408,6 @@
 			children = (
 				06FD6AB82977AF7100B4A859 /* MainSearchView.swift */,
 				9936E2AD298CD003006F3333 /* CommunitySearchResultView.swift */,
-				998847D12992171400004066 /* CommunitySearchDetailView.swift */,
-				998847D3299226AE00004066 /* MagazineSearchResultView.swift */,
-				998847D5299226CB00004066 /* MagazineSearchDetailView.swift */,
-				998847D7299226EC00004066 /* UserSearchResultView.swift */,
-				998847D92992270100004066 /* UserSearchDetailView.swift */,
-				998847DB299239D600004066 /* UserSearchFeedView.swift */,
 				9936E2B629915CB8006F3333 /* SearchPlaceHolderView.swift */,
 			);
 			path = Search;
@@ -794,16 +771,13 @@
 				9955E117297A6D5900265D14 /* MagazineContentAddView.swift in Sources */,
 				A739C63D2982EAFE0093D71C /* AddMarkerMapView.swift in Sources */,
 				A7D9F2FA2989046000B39218 /* StorageRouter.swift in Sources */,
-				998847D22992171400004066 /* CommunitySearchDetailView.swift in Sources */,
 				06FD6ABB2977B45600B4A859 /* Ex+View.swift in Sources */,
-				998847DC299239D600004066 /* UserSearchFeedView.swift in Sources */,
 				06FD6ABD2977B4F600B4A859 /* SegmentedPicker.swift in Sources */,
 				9958AFB2297781F400A51DA9 /* Constants.swift in Sources */,
 				9958AF8D297779D700A51DA9 /* User.swift in Sources */,
 				8B5E09312989FBA200862700 /* FloatingMenu.swift in Sources */,
 				9958AFAE2977811300A51DA9 /* Ex+Date.swift in Sources */,
 				A7D9F3042989645D00B39218 /* MapService.swift in Sources */,
-				998847D4299226AE00004066 /* MagazineSearchResultView.swift in Sources */,
 				A7D957DB297AAFBD001D2401 /* MagazineService.swift in Sources */,
 				9962CDC92979246500E834C3 /* AllTabView.swift in Sources */,
 				8B0BA0A2298A4197000A7090 /* CameraModalView.swift in Sources */,
@@ -895,15 +869,12 @@
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
 				334699D32988AE26004153A6 /* MyPageView.swift in Sources */,
 				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,
-				998847D8299226EC00004066 /* UserSearchResultView.swift in Sources */,
-				998847D6299226CB00004066 /* MagazineSearchDetailView.swift in Sources */,
 				A75BB99529815361004FE6FA /* PhotoSpotMapView.swift in Sources */,
 				9947E4F729895211002AC952 /* KakaoAuthenticationStore.swift in Sources */,
 				9936E2B729915CB8006F3333 /* SearchPlaceHolderView.swift in Sources */,
 				9958AF9729777DF700A51DA9 /* ReComment.swift in Sources */,
 				9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */,
 				334699DB2988DE51004153A6 /* StoredPostView.swift in Sources */,
-				998847DA2992270100004066 /* UserSearchDetailView.swift in Sources */,
 				A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */,
 				A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */,
 				A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */,

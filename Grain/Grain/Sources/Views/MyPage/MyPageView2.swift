@@ -27,7 +27,7 @@ struct MyPageView2: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink {
-//                    MyPageOptionView()
+                    MyPageOptionView()
                 } label: {
                     Image(systemName: "ellipsis")
                         .foregroundColor(.black)

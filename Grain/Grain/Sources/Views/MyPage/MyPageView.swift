@@ -15,7 +15,6 @@ struct MyPageView: View {
     // MARK: docID -> 파이어스토어 User -> 문서ID 값 유저마다 고유의 값으로 들어가야 될듯
     @AppStorage("docID") private var docID : String?
     @StateObject var userVM = UserViewModel()
-    
     var body: some View {
         NavigationStack {
             VStack {
@@ -58,7 +57,7 @@ struct MyPageView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        MyPageOptionView(userVM: userVM)
+                        MyPageOptionView()
                     } label: {
                         Image(systemName: "ellipsis")
                             .foregroundColor(.black)

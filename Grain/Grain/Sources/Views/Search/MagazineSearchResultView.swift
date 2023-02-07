@@ -1,14 +1,14 @@
 //
-//  CommunitySearchResultView.swift
+//  MagazineSearchResultView.swift
 //  Grain
 //
-//  Created by 조형구 on 2023/02/03.
+//  Created by 조형구 on 2023/02/07.
 //
 
 import SwiftUI
 
-struct CommunitySearchResultView: View {
-    @ObservedObject var communityViewModel: CommunityViewModel = CommunityViewModel()
+struct MagazineSearchResultView: View {
+    @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
     
     @Binding var searchWord: String
     
@@ -20,14 +20,14 @@ struct CommunitySearchResultView: View {
         NavigationStack {
             VStack{
                 List{
-                    ForEach(communityViewModel.communities.filter {
+                    ForEach(magazineViewModel.magazines.filter {
                         ignoreSpaces(in: $0.fields.title.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                         ignoreSpaces(in: $0.fields.content.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                     },id: \.self) { item in
                         NavigationLink {
-                            CommunitySearchDetailView(community: item)
+                            MagazineDetailView(data: item)
                         } label: {
                             HStack{
                                 Rectangle()
@@ -53,7 +53,7 @@ struct CommunitySearchResultView: View {
                         }
                     }
                 }
-                .emptyPlaceholder(communityViewModel.communities.filter {
+                .emptyPlaceholder(magazineViewModel.magazines.filter {
                     ignoreSpaces(in: $0.fields.title.stringValue)
                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
@@ -74,15 +74,15 @@ struct CommunitySearchResultView: View {
             .navigationTitle("\(searchWord)")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear{
-                communityViewModel.fetchCommunity()
+                magazineViewModel.fetchMagazine()
         }
         }
+
     }
 }
 
-struct CommunitySearchResultView_Previews: PreviewProvider {
-    
+struct MagazineSearchResultView_Previews: PreviewProvider {
     static var previews: some View {
-        CommunitySearchResultView(searchWord: .constant(""))
+        MagazineSearchResultView(searchWord: .constant(""))
     }
 }

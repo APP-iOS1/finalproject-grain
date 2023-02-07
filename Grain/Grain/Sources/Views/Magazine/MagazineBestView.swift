@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct MagazineBestView: View {
     @StateObject var magazineVM = MagazineViewModel()
     var body: some View {

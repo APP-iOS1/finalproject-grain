@@ -7,43 +7,46 @@
 import Foundation
 
 struct MagazineResponse: Codable {
-    let documents: [MagazineDocument]
+    var documents: [MagazineDocument]
 }
 
 struct MagazineDocument: Codable,Hashable {
-    let fields: MagazineFields
+    var fields: MagazineFields
+    var name: String
+    var createTime: String
+    var updateTime: String
 }
 
 struct MagazineFields: Codable,Hashable{
-    let filmInfo, id, customPlaceName: MagazineString
-    let longitude: MagazineLocation
-    let title: MagazineString
-    let comment: MagazineComment
-    let lenseInfo, userID: MagazineString
-    let image: MagazineComment
-    let likedNum: LikedNum
-    let latitude: MagazineLocation
-    let content, nickName, roadAddress, cameraInfo: MagazineString
+    var filmInfo, id, customPlaceName: MagazineString
+    var longitude: MagazineLocation
+    var title: MagazineString
+    var comment: MagazineComment
+    var lenseInfo, userID: MagazineString
+    var image: MagazineComment
+    var likedNum: LikedNum
+    var latitude: MagazineLocation
+    var content, nickName, roadAddress, cameraInfo: MagazineString
 }
 
 struct MagazineString: Codable ,Hashable{
-    let stringValue: String
+    var stringValue: String
 }
 
 struct MagazineComment: Codable,Hashable {
-    let arrayValue: MagazineArrayValue
+    var arrayValue: MagazineArrayValue
 }
 
 struct MagazineArrayValue: Codable,Hashable {
-    let values: [MagazineString]
+    var values: [MagazineString]
 }
 
 struct MagazineLocation: Codable,Hashable {
-    let doubleValue: Double?
+    var doubleValue: Double?
 }
 
 struct LikedNum: Codable,Hashable {
-    let integerValue: String
+    var integerValue: String
 }
 
 

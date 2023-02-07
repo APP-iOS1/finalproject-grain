@@ -12,9 +12,8 @@ enum MagazineRouter {
 
     case get
     case post(userID: String, cameraInfo: String, nickName: String, image: [String], content: String, title: String, lenseInfo:String, longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String, latitude: Double, comment: String, roadAddress: String )
-    case delete
-    case put
-    case patch
+    case delete(docID : String)
+    case put(putData: MagazineDocument, docID: String)
     
     private var baseURL: URL {
         let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
@@ -25,14 +24,15 @@ enum MagazineRouter {
     private enum HTTPMethod {
             case get
             case post
-            case patch
+            case put
             case delete
+        
             
             var value: String {
                 switch self {
                 case .get: return "GET"
                 case .post: return "POST"
-                case .patch: return "PATCH"
+                case .put: return "PUT"
                 case .delete: return "DELETE"
                 }
             }
@@ -40,6 +40,10 @@ enum MagazineRouter {
     
     private var endPoint: String {
         switch self {
+        case let .put(_, docID):
+            return "/Magazine/\(docID)"
+        case let .delete(docID):
+            return "/Magazine/\(docID)"
         default:
             return "/Magazine"
         }
@@ -53,10 +57,8 @@ enum MagazineRouter {
             return .post
         case .delete:
             return .delete
-        case .patch:
-            return .patch
         default:
-            return .get
+            return .put
         }
     }
    
@@ -64,6 +66,12 @@ enum MagazineRouter {
         switch self {
         case let .post(userID, cameraInfo, nickName, image, content, title, lenseInfo, longitude, likedNum, filmInfo, customPlaceName, latitude, comment, roadAddress):
             return MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title,lenseInfo:lenseInfo,longitude: longitude,likedNum: likedNum,filmInfo: filmInfo, customPlaceName: customPlaceName,latitude: latitude,comment: comment,roadAddress: roadAddress)
+            
+        case let .put(putData, _):
+                // FIXME: 변수명 고치기
+            let structData = MagazineDocument(fields: putData.fields, name: putData.name, createTime: putData.createTime, updateTime: putData.updateTime)
+            
+            return MagazineQuery.insertStructMagazineQuery(data: structData)
         default:
             return nil
         }

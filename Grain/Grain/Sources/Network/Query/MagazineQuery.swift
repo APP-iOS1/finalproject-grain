@@ -84,4 +84,79 @@ enum MagazineQuery {
             }
         """.data(using: .utf8)
     }
+    
+    // FIXME: 메서드명 고치기
+    static func insertStructMagazineQuery(data: MagazineDocument) -> Data?{
+        var str : String = ""
+        for i in 0..<data.fields.image.arrayValue.values.count {
+            str += """
+                { "stringValue": "\(data.fields.image.arrayValue.values[i])" },
+                """
+        }
+        //FIXME: 강해져서 돌아오기
+        str.removeLast()
+        
+        return
+        """
+        {
+            "fields": {
+                        "longitude": {
+                            "integerValue": \(data.fields.longitude.doubleValue)
+                        },
+                        "likedNum": {
+                            "integerValue": \(data.fields.likedNum.integerValue)
+                        },
+                        "nickName": {
+                            "stringValue": "\(data.fields.nickName.stringValue)"
+                        },
+                        "cameraInfo": {
+                            "stringValue": "\(data.fields.cameraInfo.stringValue)"
+                        },
+                        "latitude": {
+                            "integerValue": \(data.fields.latitude.doubleValue)
+                        },
+                        "title": {
+                            "stringValue": "\(data.fields.title.stringValue)"
+                        },
+                        "image": {
+                            "arrayValue": {
+                                "values": [
+                                            \(str)
+                                ]
+                            }
+                        },
+                        "filmInfo": {
+                            "stringValue": "\(data.fields.filmInfo.stringValue)"
+                        },
+                        "customPlaceName": {
+                            "stringValue": "\(data.fields.customPlaceName.stringValue)"
+                        },
+                        "content": {
+                            "stringValue": "\(data.fields.content.stringValue)"
+                        },
+                        "userID": {
+                            "stringValue": "\(data.fields.userID.stringValue)"
+                        },
+                        "lenseInfo": {
+                            "stringValue": "\(data.fields.lenseInfo.stringValue)"
+                        },
+                        "comment": {
+                            "arrayValue": {
+                                "values": [
+                                    {
+                                        "stringValue": "\(data.fields.content.stringValue)"
+                                    }
+                                ]
+                            }
+                        },
+                        "id": {
+                            "stringValue":  "\(data.name)"
+                        },
+                        "roadAddress": {
+                            "stringValue": "\(data.fields.roadAddress.stringValue)"
+                        }
+                    }
+            }
+        """.data(using: .utf8)
+    }
 }

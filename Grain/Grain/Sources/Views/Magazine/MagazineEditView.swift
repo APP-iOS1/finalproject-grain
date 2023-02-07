@@ -1,8 +1,21 @@
+//
+//  MagazineEditView.swift
+//  Grain
+//
+//  Created by 지정훈 on 2023/02/07.
+//
+
 import SwiftUI
 import FirebaseAuth
 
-struct MagazineDetailView: View {
-    var data : MagazineDocument
+struct MagazineEditView: View {
+    @State var data : MagazineDocument
+    @StateObject var magazineVM = MagazineViewModel()
+    
+    @State var editTitle : String = ""
+    @State var editContent : String = ""
+    @State var editCustomPlace : String = ""
+    
     
     var body: some View {
         NavigationView{
@@ -18,7 +31,12 @@ struct MagazineDetailView: View {
                                 HStack {
                                     Text("1분전")
                                     Spacer()
-                                    Text(data.fields.customPlaceName.stringValue)
+                                    TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
+                                        .onSubmit {
+                                            data.fields.customPlaceName.stringValue = editCustomPlace
+                                        }
+                                    
+                                    
                                 }
                                 .font(.caption)
                             }
@@ -50,13 +68,16 @@ struct MagazineDetailView: View {
                     .frame(minHeight: 350)
                     
                     LazyVStack(pinnedViews: [.sectionHeaders]) {
-                        Section(header: MagazineDetailHeader(data: data) ){
+                        Section(header: MagazineEditHeader(data: data, editTitle: $editTitle) ){
                             VStack {
-                                Text(data.fields.content.stringValue)
+                                TextField(data.fields.content.stringValue, text: $editContent)
                                     .lineSpacing(4.0)
                                     .padding(.vertical, -9)
                                     .padding()
                                     .foregroundColor(Color.textGray)
+                                    .onSubmit {
+                                        data.fields.content.stringValue = editContent
+                                    }
                             }
                         }
                     }
@@ -68,38 +89,33 @@ struct MagazineDetailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack{
-                    // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
-                    if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
-                        NavigationLink {
-                            MagazineEditView(data: data)
-                        } label: {
-                            Image(systemName: "square.and.pencil")
-                                .foregroundColor(.blue)
-                        }
-
-                        Button {
-                            //삭제
-                        } label: {
-                            Image(systemName: "trash")
-                              
-                                .foregroundColor(.blue)
-                        }
+                    Button {
+                        //수정
+//                        magazineVM
+                    } label: {
+                        Text("수정완료")
                     }
-                    
+
                 }
             }
         }
     }
 }
-struct MagazineDetailHeader: View {
-    var data : MagazineDocument
+
+struct MagazineEditHeader: View {
+    @State var data : MagazineDocument
+    @Binding var editTitle : String
+    
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
-            Text(data.fields.title.stringValue)
+            TextField(data.fields.title.stringValue, text: $editTitle)
                 .font(.title2)
                 .bold()
                 .padding(.horizontal)
+                .onSubmit {
+                    data.fields.title.stringValue = editTitle
+                }
             Spacer()
             Divider()
         }
@@ -108,11 +124,13 @@ struct MagazineDetailHeader: View {
         .background(Rectangle().foregroundColor(.white))
     }
 }
-//struct MagazineDetailView_Previews: PreviewProvider {
+//struct MagazineEditView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        NavigationStack {
-//            MagazineDetailView()
-//        }
-//
+//        MagazineEditView()
 //    }
 //}
+
+
+//----------------여기까지 디테일 수정 update 로쥑
+//1. 메거진 데이터 올리고 response data로 자동으로 생성된 매거진 id 받아서 magazine put(update) 바로 다시 request 보냄 . -> 이거슨 바로 수정, 삭제하기 위한 큰그림(왜냐하면 "해당" 게시물 만 접근해야되기 때문입니다! )
+//-------------------------- 여기까지 완성되면 수정, 삭제 가능합니다 ^^* "해줘"

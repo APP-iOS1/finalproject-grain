@@ -58,7 +58,7 @@ final class CommunityViewModel: ObservableObject {
     }
     
     // MARK: Update -> Firebase Store SDK 사용
-    func updateCommunity(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+    func updateCommunitySDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
         
         let db = Firestore.firestore()
         let documentRef = db.collection("Community").document("\(updateDocument)")

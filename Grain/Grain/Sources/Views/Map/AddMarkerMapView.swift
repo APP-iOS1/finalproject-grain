@@ -42,40 +42,34 @@ struct AddMarkerMapView: View {
     @Binding var inputContent: String
     @Binding var selectedImages: [UIImage]
     @Binding var inputCustomPlace: String
+    @Binding var presented : Bool
+
+    @State var isDragging = false
+    @Environment(\.presentationMode) var mode: Binding<PresentationMode>
+    var drag: some Gesture {
+        DragGesture()
+            .onChanged{ _ in self.isDragging = true}
+            .onEnded{ _ in self.isDragging = false}
+    }
     
     var body: some View {
         NavigationView {
             VStack {
-                HStack {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Text("<")
-                            .foregroundColor(.black)
-                    }
-
-
-                    Spacer()
-                    Text("위치 선택")
-                    Spacer()
-                    
-                    NavigationLink {
-                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedPlace: $selectedImages, inputCustomPlace: $inputCustomPlace)
-                        //MagazineMainView()
-                        //.zIndex(2)
-                    } label: {
-                        Text("다음")
-                            .foregroundColor(.black)
-                    }
-                }
-                .padding(.horizontal)
-                
-                ZStack {
+                ZStack(alignment: .top) {
                     
                     //MARK: 네이버맵뷰
                     AddMarkerUIMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult)
-                    .zIndex(0)
-                    .ignoresSafeArea(.keyboard)
+                    //.zIndex(0)
+                        .ignoresSafeArea()
+                    .onTapGesture {
+                        hideKeyboard()
+                        //markerAddButtonBool.toggle()
+                    }
+//                    .onChange(of: isDragging) { newValue in
+//                        markerAddButtonBool.toggle()
+//                    }
+                    
+
                     
                     VStack {
                         
@@ -102,38 +96,71 @@ struct AddMarkerMapView: View {
                                 }
                         }
                         .padding()
-                        .offset(y:-300)
+                        .shadow(radius: 1)
+                        //.offset(y:-300)
                         
 
                         
-                        //                Image("TestBlackMarker")
-                        //                    .resizable()
-                        //                    .aspectRatio(contentMode: .fit)
-                        //                    .frame(width: 56,height: 56)
+                                    
                         //                    .position(CGPoint(x: 196, y: 330))  //수정 필요
                         //.zIndex(1)
                         
+                        Spacer()
+                        //MARK: 마커가 찍힌 주소 출력 부분
+                        Text(updateReverseGeocodeResult1)
+                            .foregroundColor(.red)
                         //MARK: 추가하기 버튼
-                        Button {
-                            //markerAddButtonBool.toggle()
-                            print("추가하기 클릭")
-                        } label: {
-                            Text("추가하기")
-                                .foregroundColor(.red)
-                        }
-                        .offset(y: 270)
+//                        Button {
+//                            //markerAddButtonBool.toggle()
+//                            print("추가하기 클릭")
+//                        } label: {
+//                            RoundedRectangle(cornerRadius: 12)
+//                                .foregroundColor(.white)
+//                                .frame(width: Screen.maxWidth * 0.3, height: Screen.maxHeight * 0.1)
+//                                .overlay {
+//                                    Text("추가하기")
+//                                        .foregroundColor(.red)
+//                                }
+//                        }
+                        //.offset(y: 270)
                         //.zIndex(1)
                     }
-                    .zIndex(1)
-
+                    
+                    //.zIndex(1)
+                    Image("TestBlackMarker")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 56,height: 56)
+                        .offset(y: Screen.maxHeight * 0.355)
                 }
 
             }
-            .ignoresSafeArea(.keyboard)
+            .toolbar {
+                ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
+                    Button {
+                        self.mode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.black)
+                            .bold()
+                            .opacity(1)
+                            .shadow(radius: 1)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink {
+                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedPlace: $selectedImages, inputCustomPlace: $inputCustomPlace)
+                            .navigationBarBackButtonHidden(true)
+                    } label: {
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.black)
+                            .bold()
+                            .opacity(1)
+                            .shadow(radius: 1)
+                    }
+                }
+            }
         }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
-        //.ignoresSafeArea(.keyboard)
     }
 }
 

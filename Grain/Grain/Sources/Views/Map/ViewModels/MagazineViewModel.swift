@@ -45,6 +45,7 @@ final class MagazineViewModel: ObservableObject {
             self.insertMagazineSuccess.send()
 //            print(data.name)
 //            print(data.createTime)
+            // 현재 메거진 id 가 "" 빈값이기 때문에 id update
             self.updateMagazine(data: data, docID: data.name)
             print("id: \(data.name)")
         }.store(in: &subscription)

@@ -9,7 +9,7 @@ import Foundation
 
 // 커뮤니티 라우터
 enum CommunityRouter {
-
+    
     case get
     case post(profileImage: String, nickName: String, category: String, image: String, userID: String, title: String, content: String)
     case delete
@@ -21,20 +21,20 @@ enum CommunityRouter {
     }
     
     private enum HTTPMethod {
-            case get
-            case post
-            case put
-            case delete
-            
-            var value: String {
-                switch self {
-                case .get: return "GET"
-                case .post: return "POST"
-                case .put: return "PUT"
-                case .delete: return "DELETE"
-                }
+        case get
+        case post
+        case put
+        case delete
+        
+        var value: String {
+            switch self {
+            case .get: return "GET"
+            case .post: return "POST"
+            case .put: return "PUT"
+            case .delete: return "DELETE"
             }
         }
+    }
     
     private var endPoint: String {
         switch self {
@@ -55,7 +55,7 @@ enum CommunityRouter {
             return .put
         }
     }
-   
+    
     private var data: Data? {
         switch self {
         case let .post(profileImage, nickName, category, image, userID, title, content):
@@ -78,7 +78,7 @@ enum CommunityRouter {
         }
         
         // [x] TODO: Encoding 하는 방식으로 data 넘겨주기
-//        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
+        //        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
         
         return request
     }

@@ -9,10 +9,9 @@ import Foundation
 
 
 enum MagazineQuery {
-    
     // MARK: 매거진 DB에 데이터 저장
     /// id값 패스
-    static func insertMagazineQuery(userID: String, cameraInfo: String, nickName: String, image: String, content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String) -> Data?{
+    static func insertMagazineQuery(userID: String, cameraInfo: String, nickName: String, image: [String], content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String) -> Data?{
         return
         """
         {
@@ -39,7 +38,10 @@ enum MagazineQuery {
                             "arrayValue": {
                                 "values": [
                                     {
-                                        "stringValue":  "\(image)"
+                                        "stringValue":  "\(image[0])"
+                                    },
+                                    {
+                                        "stringValue":  "\(image[2])"
                                     }
                                 ]
                             }

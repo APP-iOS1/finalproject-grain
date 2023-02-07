@@ -53,6 +53,7 @@ struct MagazineContentAddView: View {
                         Image(systemName: "xmark")
                             .foregroundColor(.black)
                             .frame(width: 50, height: 50)
+
                     }
                     
                     Spacer()

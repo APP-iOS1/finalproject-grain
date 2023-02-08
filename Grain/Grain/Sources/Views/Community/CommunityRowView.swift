@@ -90,6 +90,7 @@ struct CommunityRowView: View {
                     }
                     .frame(height: 100)
                     .padding(.trailing, 13)
+                    .padding(.leading, -3)
                    
                 }
                 

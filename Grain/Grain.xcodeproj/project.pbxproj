@@ -101,6 +101,8 @@
 		998847DC299239D600004066 /* UserSearchFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847DB299239D600004066 /* UserSearchFeedView.swift */; };
 		998847FC2992D65400004066 /* SearchProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847FB2992D65400004066 /* SearchProgress.swift */; };
 		998847FE2992F37A00004066 /* MainSearchPlaceHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847FD2992F37A00004066 /* MainSearchPlaceHolder.swift */; };
+		99B21EC129936ACF006933BB /* HeartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B21EC029936ACF006933BB /* HeartButton.swift */; };
+		99B21EC329938CD7006933BB /* MagazineCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B21EC229938CD7006933BB /* MagazineCommentView.swift */; };
 		A71516BA29926233009A0780 /* MagazineEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71516B929926233009A0780 /* MagazineEditView.swift */; };
 		A71680E4298B3B3B0050549D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A71680E3298B3B3B0050549D /* GoogleService-Info.plist */; };
 		A7332EFC298BE726001AE5B0 /* CurrentUserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */; };
@@ -241,6 +243,8 @@
 		998847DB299239D600004066 /* UserSearchFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchFeedView.swift; sourceTree = "<group>"; };
 		998847FB2992D65400004066 /* SearchProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProgress.swift; sourceTree = "<group>"; };
 		998847FD2992F37A00004066 /* MainSearchPlaceHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSearchPlaceHolder.swift; sourceTree = "<group>"; };
+		99B21EC029936ACF006933BB /* HeartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HeartButton.swift; path = "../../../../../../../.Trash/finalproject-grain 13-43-10-068/Grain/Grain/Sources/Views/Magazine/HeartButton.swift"; sourceTree = "<group>"; };
+		99B21EC229938CD7006933BB /* MagazineCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineCommentView.swift; sourceTree = "<group>"; };
 		A71516B929926233009A0780 /* MagazineEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineEditView.swift; sourceTree = "<group>"; };
 		A71680E3298B3B3B0050549D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserDTO.swift; sourceTree = "<group>"; };
@@ -345,6 +349,8 @@
 				9955E116297A6D5900265D14 /* MagazineContentAddView.swift */,
 				0C70BCFA298CA692004A4DB0 /* EditorView.swift */,
 				A71516B929926233009A0780 /* MagazineEditView.swift */,
+				99B21EC029936ACF006933BB /* HeartButton.swift */,
+				99B21EC229938CD7006933BB /* MagazineCommentView.swift */,
 			);
 			path = Magazine;
 			sourceTree = "<group>";
@@ -905,6 +911,7 @@
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
 				334699D32988AE26004153A6 /* MyPageView.swift in Sources */,
 				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,
+				99B21EC329938CD7006933BB /* MagazineCommentView.swift in Sources */,
 				998847D8299226EC00004066 /* UserSearchResultView.swift in Sources */,
 				998847D6299226CB00004066 /* MagazineSearchDetailView.swift in Sources */,
 				0693B4C72992849600F9CDE2 /* Error.swift in Sources */,
@@ -920,6 +927,7 @@
 				A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */,
 				A75BB990297EA25C004FE6FA /* WebkitView.swift in Sources */,
 				0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */,
+				99B21EC129936ACF006933BB /* HeartButton.swift in Sources */,
 				99233D482977F2F900A875B1 /* LocationManager.swift in Sources */,
 				A7D9F30A29896A4B00B39218 /* UserQuery.swift in Sources */,
 				9936E2AE298CD003006F3333 /* CommunitySearchResultView.swift in Sources */,

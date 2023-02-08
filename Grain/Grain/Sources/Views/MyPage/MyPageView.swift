@@ -16,10 +16,11 @@ struct MyPageView: View {
     @AppStorage("docID") private var docID : String?
     @StateObject var userVM = UserViewModel()
     
+    var magazineDocument: [MagazineDocument]
+    
     var body: some View {
         NavigationStack {
             VStack {
-                
                 //MARK: 프로필 이미지
                 Image("2")
                     .resizable()
@@ -34,7 +35,7 @@ struct MyPageView: View {
                     .bold()
                 Text("자기소개글")
                     .padding(.top, 3)
-                MyPageMyFeedView()
+                MyPageMyFeedView(magazineDocument: magazineDocument)
 
 //                ScrollView{
 //                    LazyVGrid(columns: columns) {
@@ -69,8 +70,8 @@ struct MyPageView: View {
     }
 }
 
-struct MyPageView_Previews: PreviewProvider {
-    static var previews: some View {
-        MyPageView()
-    }
-}
+//struct MyPageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MyPageView()
+//    }
+//}

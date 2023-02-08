@@ -8,20 +8,18 @@
 import SwiftUI
 
 struct UserSearchResultView: View {
-    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
-    
     @State private var isShownProgress: Bool = true
     @Binding var searchWord: String
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
-    
+    let user: UserViewModel
     var body: some View {
             ZStack {
                 VStack{
                     List{
-                        ForEach(userViewModel.users.filter {
+                        ForEach(user.users.filter {
                             ignoreSpaces(in: $0.fields.nickName.stringValue)
                                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                             ignoreSpaces(in: $0.fields.name.stringValue)
@@ -57,7 +55,7 @@ struct UserSearchResultView: View {
                             }
                         }
                     }
-                    .emptyPlaceholder(userViewModel.users.filter {
+                    .emptyPlaceholder(user.users.filter {
                         ignoreSpaces(in: $0.fields.nickName.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                         ignoreSpaces(in: $0.fields.name.stringValue)
@@ -83,15 +81,12 @@ struct UserSearchResultView: View {
             }
             .navigationTitle("\(searchWord)")
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear{
-                userViewModel.fetchUser()
-            }
     }
 }
 
 
 struct UserSearchResultView_Previews: PreviewProvider {
     static var previews: some View {
-        UserSearchResultView(searchWord: .constant(""))
+        UserSearchResultView(searchWord: .constant(""), user: UserViewModel())
     }
 }

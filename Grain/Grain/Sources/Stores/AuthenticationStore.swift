@@ -79,7 +79,7 @@ final class AuthenticationStore: ObservableObject {
                 guard let profile = user?.profile else { return }
                 
                 
-                insertUser(myFilm: "", bookmarkedMagazineID: "", email: profile.email, myCamera: "", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: uid ?? "", following: "", myLens: "", profileImage: "", name: profile.name, follower: "", nickName: "")
+                insertUser(myFilm: "선택", bookmarkedMagazineID: "", email: profile.email, myCamera: "필수", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: uid ?? "", following: "", myLens: "선택", profileImage: "", name: profile.name, follower: "", nickName: "")
                 
                 self.authStateAuthenticated(user: CurrentUser(id: uid ?? "", name: profile.name, email: profile.email))
                 self.logInCompanyState = .googleLogIn

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import FirebaseAuth
 
 // 텍스트 필드 포커스를 위한 열거형
 private enum FocusableField: Hashable {
@@ -28,7 +29,6 @@ struct EditMyPageView: View {
     
     @FocusState private var focus: FocusableField?
 
-    
     var body: some View {
         VStack {
 //            //MARK: 상단바
@@ -160,9 +160,10 @@ struct EditMyPageView: View {
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button{
-                    Task{
-                        await userVM.updateUser(updateDocument: docID ?? "", updateKey: "nickName", updateValue: editedNickname, isArray: false)
-                    }
+//                    Task{
+//                        await userVM.updateUser(updateDocument: docID ?? "", updateKey: "nickName", updateValue: editedNickname, isArray: false)
+//                    }
+//                    userVM.updateUser(userData: userVM.currentUsers, docID: Auth.auth().currentUser?.uid)
                 }label: {
                     Text("저장")
                 }

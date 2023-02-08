@@ -16,7 +16,6 @@ enum MagazineRouter {
     
     private var baseURL: URL {
         let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
-    
         return URL(string: baseUrlString)!
     }
     
@@ -35,8 +34,6 @@ enum MagazineRouter {
             }
         }
     }
-    
-    // url = f'https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/{collection_name}?documentId={your_custom_doc_id}&key={web_api_key}'maga
     
     private var endPoint: String {
         switch self {

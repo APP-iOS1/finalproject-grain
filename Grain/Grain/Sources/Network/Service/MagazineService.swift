@@ -15,7 +15,7 @@ enum MagazineService {
     
     // MARK: - 매거진 데이터 가져오기
     static func getMagazine() -> AnyPublisher<MagazineResponse, Error> {
-        print("FirebaseServic getMagazine start")
+        print("FirebaseService getMagazine start")
         
         do {
             let request = try MagazineRouter.get.asURLRequest()
@@ -33,7 +33,7 @@ enum MagazineService {
     
     // MARK: - 매거진 데이터 넣기
     static func insertMagazine(data: MagazineFields, images: [UIImage]) -> AnyPublisher<MagazineDocument, Error> {
-        print("FirebaseServic insertMagazine start")
+        print("FirebaseService insertMagazine start")
         
         let docID: String = data.id.stringValue
         var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "param", fileName: "file", image: images)
@@ -42,7 +42,6 @@ enum MagazineService {
         
         do {
             let request = try requestRouter.asURLRequest()
-            print("request:\(request)")
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -51,18 +50,17 @@ enum MagazineService {
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
-            
         }
         
     }
     
     static func updateMagazine(data: MagazineDocument, docID: String) -> AnyPublisher<MagazineDocument, Error> {
-    
-        print("id: \(docID), MagazineService update method")
+        print("FirebaseService updateMagazine start")
         
         do {
-            let suffixedId: String = String(docID.suffix(20))
-            let request = try MagazineRouter.patch(putData: data, docID: suffixedId).asURLRequest()
+            let docID: String = data.fields.id.stringValue
+//            let suffixedId: String = String(docID.suffix(20))
+            let request = try MagazineRouter.patch(putData: data, docID: docID).asURLRequest()
             print(request)
             return URLSession
                 .shared
@@ -73,10 +71,10 @@ enum MagazineService {
         } catch {
             return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
-        
     }
     
     static func deleteMagazine(docID: String) -> AnyPublisher<MagazineDocument, Error> {
+        print("FirebaseService deleteMagazine start")
         
         do {
             let suffixedId: String = String(docID.suffix(20))
@@ -91,7 +89,6 @@ enum MagazineService {
         } catch {
             return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
-        
     }
     
 }

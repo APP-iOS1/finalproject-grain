@@ -11,12 +11,12 @@ import Combine
 // TODO: 유저가 좋아요 누른 게시물 id update method [x]
 // TODO: 유저가 좋아요 누른 커뮤니티 글 id update method [x]
 // TODO: 유저가 즐겨찾기한 사람 id update method [x]
+// 참고 * : 유저가 좋아요 누르면, update magazine 메소드도 동시에 불러야함 (메거진에 어떤 사람이 좋아요눌렀는지, 좋아요 수 + 1 해야하기 때문 )
 
 enum UserService {
     
     // MARK: - 스토리지 이미지 가져오기
     static func getUser() -> AnyPublisher<UserResponse, Error> {
-       
         do {
             let request = try UserRouter.get.asURLRequest()
             return URLSession
@@ -48,7 +48,39 @@ enum UserService {
             return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
     }
+
+    // MARK: - 유저정보 업데이트 메소드
+    static func updateUserData(userData: UserFields, docID: String) -> AnyPublisher<UserDocument, Error>  {
+        do {
+            let request = try UserRouter.patch(putData: userData, docID: docID).asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: UserDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
+    }
     
+    // MARK: - 유저 탈퇴 (흠 필요한지 모르겟뜸)
+    static func deleteUserData(docID: String) -> AnyPublisher<UserDocument, Error> {
+        do {
+            let request = try UserRouter.delete(docID: docID).asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: UserDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
+    }
+    
+    
+    // MARK: - 현재 로그인한 유저 정보 가져오기
     static func getCurrentUser(userID: String) -> AnyPublisher<CurrentUserResponse, Error> {
 
         let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/User/\(userID)"

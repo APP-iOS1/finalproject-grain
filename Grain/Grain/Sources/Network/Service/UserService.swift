@@ -8,6 +8,10 @@
 import Foundation
 import Combine
 
+// TODO: 유저가 좋아요 누른 게시물 id update method [x]
+// TODO: 유저가 좋아요 누른 커뮤니티 글 id update method [x]
+// TODO: 유저가 즐겨찾기한 사람 id update method [x]
+
 enum UserService {
     
     // MARK: - 스토리지 이미지 가져오기

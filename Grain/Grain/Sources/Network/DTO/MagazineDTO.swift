@@ -4,6 +4,7 @@
 //
 //  Created by 지정훈 on 2023/01/18.
 //
+
 import Foundation
 
 struct MagazineResponse: Codable {
@@ -28,6 +29,20 @@ struct MagazineFields: Codable,Hashable{
     var latitude: MagazineLocation
     var content, nickName, roadAddress, cameraInfo: MagazineString
 }
+
+// 매개변수로 이동할 구조체입니다.
+struct Magazine: Codable, Hashable {
+    var filmInfo, id, customPlaceName: String
+    var longitude: Double?
+    var title: String
+    var comment: [String]
+    var lenseInfo, userID: String
+    var image: [String]
+    var likedNum: String
+    var latitude: Double?
+    var content, nickName, roadAddress, cameraInfo: String
+}
+
 
 struct MagazineString: Codable ,Hashable{
     var stringValue: String

@@ -8,6 +8,7 @@
 import SwiftUI
 import NMapsMap
 struct CameraLenseFilmModalView: View {
+    @State var data : MagazineDocument
     
     var myCamera = ["camera1asdasdasd", "camera2", "camera3"]
     var myLense = ["lenseA", "lenseB", "lenseC","lense1", "lense2", "lense3"]
@@ -72,23 +73,30 @@ struct CameraLenseFilmModalView: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    //MARK: 글쓰기 완료 함수
-//                    magazineVM.insertMagazine(userID: "1", cameraInfo: "1", nickName: "1", image: selectedImages, content: "1", title: "1", lenseInfo: "1", longitude: 0.0, likedNum: 0, filmInfo: "1", customPlaceName: "1", latitude: 0.0, comment: "1", roadAddress: "1")
-                    magazineVM.insertMagazine(
-                        userID: userVM.currentUsers?.id.stringValue ?? "",
-                        cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "",
-                        nickName: userVM.currentUsers?.nickName.stringValue ?? "",
-                        image: selectedImages,
-                        content: inputContent,
-                        title: inputTitle ,
-                        lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "",
-                        longitude: updateNumber.lng ?? 0.0,
-                        likedNum: 0,
-                        filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "",
-                        customPlaceName: "패스",
-                        latitude: updateNumber.lat ?? 0.0,
-                        comment: "임시",
-                        roadAddress: updateReverseGeocodeResult1 ?? "")
+                    //MARK: 글쓰기 완료 액션
+                    
+                    // data.field에 데이터 저장
+                    var docId = UUID().uuidString
+                    data.fields.id.stringValue = docId
+                    data.fields.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
+                    data.fields.filmInfo.stringValue = userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? ""
+                    data.fields.customPlaceName.stringValue = "패스"
+                    data.fields.title.stringValue = inputTitle
+                    data.fields.content.stringValue = inputContent
+                    data.fields.cameraInfo.stringValue = userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? ""
+                    data.fields.filmInfo.stringValue = userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? ""
+                    data.fields.lenseInfo.stringValue = userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? ""
+                    data.fields.likedNum.integerValue = "0"
+                    data.fields.longitude.doubleValue = updateNumber.lng
+                    data.fields.latitude.doubleValue = updateNumber.lat
+                    data.fields.nickName.stringValue = userVM.currentUsers?.nickName.stringValue ?? ""
+                    data.fields.roadAddress.stringValue = updateReverseGeocodeResult1
+                    data.fields.comment.arrayValue = MagazineArrayValue(values: [])
+//                    data.fields.image.arrayValue = selectedImages
+                    
+                    // insertMagazine 호출
+                    magazineVM.insertMagazine(data: data)
+                    
                     presented.toggle()
                 } label: {
                     Text("완료")

@@ -9,6 +9,9 @@ import Foundation
 import Combine
 import UIKit
 
+
+// TODO: 매거진 데이터 넣을때 magazineID생성해서 넣어주는 부분 코드 수정
+
 enum MagazineService {
     
     // MARK: - 매거진 데이터 가져오기
@@ -29,19 +32,11 @@ enum MagazineService {
     }
     
     // MARK: - 매거진 데이터 넣기
-    static func insertMagazine(userID: String, cameraInfo: String, nickName: String, image: [UIImage], content: String, title: String, lenseInfo:String, longitude: Double, likedNum: Int, filmInfo: String, customPlaceName: String, latitude: Double, comment: String, roadAddress: String ) -> AnyPublisher<MagazineDocument, Error> {
+    static func insertMagazine(data: MagazineDocument) -> AnyPublisher<MagazineDocument, Error> {
         print("FirebaseServic insertMagazine start")
         
-        // 1. 스토리지 라우터에 있는 uploadImage 메소드를 호출해서 여기서 urlArr 를 받는다.
-        // 2. 스토리지에 이미지들이 업로드가 된다.
-        // 3. 리팩토링 - 라우터에 있는 uploadimage코드를  service, vm로 옮겨야한다.
-        var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "1", fileName: "1", image: image)
-       
-        
-        // 여기서 이미지 들어가게 하고 , 그담 이미지 리퀘스트 받아서 url 만들고 저장해서
-        // 요기 밑에 지금 오류나는 image 부분에 넣어줘야한다.
-        
-        let requestRouter = MagazineRouter.post(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: imageUrlArr, content: content, title: title, lenseInfo: lenseInfo, longitude: longitude, likedNum: likedNum, filmInfo: filmInfo, customPlaceName: customPlaceName, latitude: latitude, comment: comment, roadAddress: roadAddress)
+        let docID: String = data.fields.id.stringValue
+        let requestRouter = MagazineRouter.post(magazineData: data, docID: docID)
         
         do {
             let request = try requestRouter.asURLRequest()

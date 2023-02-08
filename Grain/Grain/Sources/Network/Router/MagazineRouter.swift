@@ -10,7 +10,7 @@ import Foundation
 enum MagazineRouter {
 
     case get
-    case post(userID: String, cameraInfo: String, nickName: String, image: [String], content: String, title: String, lenseInfo:String, longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String, latitude: Double, comment: String, roadAddress: String )
+    case post(magazineData: MagazineDocument, docID: String)
     case delete(docID : String)
     case patch(putData: MagazineDocument, docID: String)
     
@@ -36,8 +36,12 @@ enum MagazineRouter {
         }
     }
     
+    // url = f'https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/{collection_name}?documentId={your_custom_doc_id}&key={web_api_key}'maga
+    
     private var endPoint: String {
         switch self {
+        case let .post(_, docID):
+            return "/Magazine/?documentId=\(docID)"
         case let .patch(_, docID):
             return "/Magazine/\(docID)"
         case let .delete(docID):
@@ -62,12 +66,11 @@ enum MagazineRouter {
    
     private var data: Data? {
         switch self {
-        case let .post(userID, cameraInfo, nickName, image, content, title, lenseInfo, longitude, likedNum, filmInfo, customPlaceName, latitude, comment, roadAddress):
-            return MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title,lenseInfo:lenseInfo,longitude: longitude,likedNum: likedNum,filmInfo: filmInfo, customPlaceName: customPlaceName,latitude: latitude,comment: comment,roadAddress: roadAddress)
+        case let .post(magazineData, docID):
+            return MagazineQuery.insertMagazineQuery(data: magazineData, docID: docID)
         case let .patch(putData, docID):
             // FIXME: 변수명 고치기
             let structData = MagazineDocument(fields: putData.fields, name: putData.name, createTime: putData.createTime, updateTime: putData.updateTime)
-            
             return MagazineQuery.updateMagazineQuery(data: structData, docID: docID)
         default:
             return nil
@@ -86,7 +89,7 @@ enum MagazineRouter {
             request.httpBody = data
         }
         
-        // [x] TODO: Encoding 하는 방식으로 data 넘겨주기
+        // FIXME: Encoding 하는 방식으로 data 넘겨주기
         //        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
         return request
     }

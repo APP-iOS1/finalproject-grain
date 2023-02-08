@@ -25,12 +25,15 @@ struct ContentView: View {
     //정훈
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     @State var clikedMagazineData : MagazineDocument?
+    
+    @State var testArray:[String] = []
 
     let icons = ["film", "text.bubble", "plus","map", "person"]
     let labels = ["필름", "커뮤니티", "", "지도", "마이"]
     @StateObject var mapVM = MapViewModel()
     @StateObject var magazineVM = MagazineViewModel()
-
+    @AppStorage("docID") private var docID : String?
+    @StateObject var userVM = UserViewModel()
     var body: some View {
         VStack{
             switch authenticationStore.authenticationState {
@@ -76,7 +79,7 @@ struct ContentView: View {
                             }
                         case 4:
                             NavigationStack {
-                                MyPageView()
+                                MyPageView(magazineDocument: magazineVM.UserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.userPostedMagazine))
                             }
                         default:
                             NavigationStack {
@@ -158,6 +161,7 @@ struct ContentView: View {
                     /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
                     mapVM.fetchMap()
                     magazineVM.fetchMagazine()
+                    userVM.fetchCurrentUser(userID: docID ?? "")
 //                    magazineVM.updateMagazine()
                 }
             }

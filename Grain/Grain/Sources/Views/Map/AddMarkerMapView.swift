@@ -13,6 +13,7 @@ import UIKit
 
 struct AddMarkerMapView: View {
     
+    @State var reMarkerAddButtonBool : Bool = false
     @State var markerAddButtonBool : Bool = false
     @State var locationcheckBool : Bool = false
     @State var searchResponseBool : Bool = false
@@ -30,7 +31,7 @@ struct AddMarkerMapView: View {
     // geocode 하기 위해
     
     @StateObject var naverVM = NaverAPIViewModel()
-
+    
     // 위치 검색 결과 값
     @State var searchResponse : [Address] = [Address(roadAddress: "", jibunAddress: "", englishAddress: "", x: "", y: "", distance: 0)]
     
@@ -43,7 +44,7 @@ struct AddMarkerMapView: View {
     @Binding var selectedImages: [UIImage]
     @Binding var inputCustomPlace: String
     @Binding var presented : Bool
-
+    
     @State var isDragging = false
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     var drag: some Gesture {
@@ -58,18 +59,18 @@ struct AddMarkerMapView: View {
                 ZStack(alignment: .top) {
                     
                     //MARK: 네이버맵뷰
-                    AddMarkerUIMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult)
-                    //.zIndex(0)
+                    AddMarkerUIMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, reMarkerAddButtonBool: $reMarkerAddButtonBool, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult)
+                        .zIndex(0)
                         .ignoresSafeArea()
-                    .onTapGesture {
-                        hideKeyboard()
-                        //markerAddButtonBool.toggle()
-                    }
-//                    .onChange(of: isDragging) { newValue in
-//                        markerAddButtonBool.toggle()
-//                    }
+                        .onTapGesture {
+                            hideKeyboard()
+                            //markerAddButtonBool.toggle()
+                        }
+                    //                    .onChange(of: isDragging) { newValue in
+                    //                        markerAddButtonBool.toggle()
+                    //                    }
                     
-
+                    
                     
                     VStack {
                         
@@ -99,9 +100,9 @@ struct AddMarkerMapView: View {
                         .shadow(radius: 1)
                         //.offset(y:-300)
                         
-
                         
-                                    
+                        
+                        
                         //                    .position(CGPoint(x: 196, y: 330))  //수정 필요
                         //.zIndex(1)
                         
@@ -109,31 +110,37 @@ struct AddMarkerMapView: View {
                         //MARK: 마커가 찍힌 주소 출력 부분
                         Text(updateReverseGeocodeResult1)
                             .foregroundColor(.red)
+                        
                         //MARK: 추가하기 버튼
-//                        Button {
-//                            //markerAddButtonBool.toggle()
-//                            print("추가하기 클릭")
-//                        } label: {
-//                            RoundedRectangle(cornerRadius: 12)
-//                                .foregroundColor(.white)
-//                                .frame(width: Screen.maxWidth * 0.3, height: Screen.maxHeight * 0.1)
-//                                .overlay {
-//                                    Text("추가하기")
-//                                        .foregroundColor(.red)
-//                                }
-//                        }
-                        //.offset(y: 270)
-                        //.zIndex(1)
+                        Text("\(updateNumber.lat)")
+                        Text("\(updateNumber.lng)")
+                        Button {
+                            markerAddButtonBool.toggle()
+                            print("추가하기 클릭")
+                        } label: {
+                            RoundedRectangle(cornerRadius: 12)
+                                .foregroundColor(.white)
+                                .frame(width: Screen.maxWidth * 0.3, height: Screen.maxHeight * 0.1)
+                                .overlay {
+                                    Text("추가하기")
+                                        .foregroundColor(.red)
+                                }
+                        }
+                        
+                        
+                        
+                        //                        .offset(y: 270)
+                        //                        .zIndex(1)
                     }
+                    //                    .zIndex(1)
                     
-                    //.zIndex(1)
                     Image("TestBlackMarker")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 56,height: 56)
-                        .offset(y: Screen.maxHeight * 0.355)
+                        .position(CGPoint(x: 196, y: 285))
                 }
-
+                
             }
             .toolbar {
                 ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
@@ -172,12 +179,13 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
     
     //임시
     @StateObject var naverVM = NaverAPIViewModel()
-
+    
     @StateObject var locationManager = LocationManager()
     // 가상 마커 CGPoint 좌표 값을 통해 지도 좌표 넘겨주기
     @Binding var updateNumber : NMGLatLng
     @Binding var updateReverseGeocodeResult1 : String
     
+    @Binding var reMarkerAddButtonBool : Bool
     @Binding var markerAddButtonBool : Bool
     @Binding var locationcheckBool : Bool
     @Binding var searchResponseBool : Bool
@@ -218,18 +226,18 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         view.mapView.moveCamera(cameraUpdate)
         
         
-        let currentUserMarker = NMFMarker()
-        currentUserMarker.position = NMGLatLng(lat: userLatitude, lng: userLongitude)
-        currentUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
-        currentUserMarker.zIndex = 1    /// 마커 zindex
-        currentUserMarker.captionText = "현재위치"
-        currentUserMarker.captionColor = UIColor.black
-        currentUserMarker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 200.0/255.0, alpha: 1)
-        
-        /// 화면상의 currentUserMarker 마커 CGPoint값
+        //        let currentUserMarker = NMFMarker()
+        //        currentUserMarker.position = NMGLatLng(lat: userLatitude, lng: userLongitude)
+        //        currentUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
+        //        currentUserMarker.zIndex = 1    /// 마커 zindex
+        //        currentUserMarker.captionText = "현재위치"
+        //        currentUserMarker.captionColor = UIColor.black
+        //        currentUserMarker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 200.0/255.0, alpha: 1)
+        //        // 화면상의 currentUserMarker 마커 CGPoint값
         //        let point = view.mapView.projection.point(from: currentUserMarker.position)
+        //        print("point: \(point)")
+        //        currentUserMarker.mapView = view.mapView
         
-        currentUserMarker.mapView = view.mapView
         return view
     }
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
@@ -243,10 +251,16 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
             locationcheckBool.toggle()
         }
         
+        
+        
+        var addUserMarker = NMFMarker()
+        
         if markerAddButtonBool{
-            let addUserMarker = NMFMarker()
-            addUserMarker.position =  uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 359))
+            
+            
+            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 408))
             addUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
+            addUserMarker.zIndex = 100
             addUserMarker.mapView = uiView.mapView
             
             // 업로드에 위치 정보 넘겨줌
@@ -260,6 +274,11 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
             
             markerAddButtonBool.toggle()
         }
+        
+        if reMarkerAddButtonBool{
+            // 추가하기 FIXME: 고쳐야함
+        }
+        
         
         if searchResponseBool{
             // MARK: 위치를 검색해주세요 버튼 누를시 장소로 이동

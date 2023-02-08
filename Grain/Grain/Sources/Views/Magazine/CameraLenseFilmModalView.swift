@@ -82,11 +82,11 @@ struct CameraLenseFilmModalView: View {
                         content: inputContent,
                         title: inputTitle ,
                         lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "",
-                        longitude: updateNumber.lng ?? 0.0,
+                        longitude: updateNumber.lng,
                         likedNum: 0,
                         filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "",
                         customPlaceName: "패스",
-                        latitude: updateNumber.lat ?? 0.0,
+                        latitude: updateNumber.lat,
                         comment: "임시",
                         roadAddress: updateReverseGeocodeResult1 ?? "")
                     presented.toggle()

@@ -20,14 +20,14 @@ enum MagazineQuery {
                 """
         }
         //FIXME: 강해져서 돌아오기
-        //        str.removeLast()
+        str.removeLast()
         
         return
         """
         {
             "fields": {
                         "longitude": {
-                            "integerValue": \(longitude)
+                            "doubleValue": \(longitude)
                         },
                         "likedNum": {
                             "integerValue": \(likedNum)
@@ -39,7 +39,7 @@ enum MagazineQuery {
                             "stringValue": "\(cameraInfo)"
                         },
                         "latitude": {
-                            "integerValue": \(latitude)
+                            "doubleValue": \(latitude)
                         },
                         "title": {
                             "stringValue": "\(title)"
@@ -105,6 +105,11 @@ enum MagazineQuery {
         }
         str.removeLast()
 //        comment.removeLast()
+        
+        // MARK: 코드를 바꿔야 할수도 있음 post 만들고 값을 받아오면 옵셔널 값으로 묶여 와서 처리해야함
+        var latitude = data.fields.latitude.doubleValue!
+        var longitude = data.fields.longitude.doubleValue!
+
         return
         """
         {
@@ -141,10 +146,10 @@ enum MagazineQuery {
                   "stringValue": "\(data.fields.content.stringValue)"
                 },
                 "latitude": {
-                  "doubleValue": "\(0)"
+                  "doubleValue": \(latitude)
                 },
                 "longitude": {
-                  "doubleValue": \(0)
+                  "doubleValue": \(longitude)
                 },
                 "nickName": {
                   "stringValue": "\(data.fields.nickName.stringValue)"

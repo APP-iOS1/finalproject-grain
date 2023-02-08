@@ -2,14 +2,21 @@ import SwiftUI
 import FirebaseAuth
 
 struct MagazineDetailView: View {
-    var data : MagazineDocument
     @StateObject var magazineVM = MagazineViewModel()
+    
+    @State private var isHeartAnimation: Bool = false
+    @State private var heartOpacity: Double = 0
+    
     @Environment(\.dismiss) private var dismiss // <- 임시 방편
+    
+    let data : MagazineDocument
+    
     var body: some View {
         NavigationStack{
             ScrollView {
                 VStack{
                     VStack {
+                        // MARK: 닉네임 헤더
                         HStack {
                             Circle()
                                 .frame(width: 40)
@@ -33,9 +40,7 @@ struct MagazineDetailView: View {
                             .padding(.top, -5)
                             .padding(.bottom, -10)
                         
-                        //            Image("line")
-                        //                .resizable()
-                        //                .frame(width: Screen.maxWidth, height: 0.3)
+                    // MARK: 이미지
                         TabView{
                             ForEach(1..<4, id: \.self) { i in
                                 Image("\(i)")
@@ -47,9 +52,30 @@ struct MagazineDetailView: View {
                         .tabViewStyle(.page)
                         .frame(maxHeight: Screen.maxHeight * 0.27)
                         .padding()
-                    }
+                        .overlay{
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.white)
+                                .font(.system(size: isHeartAnimation ? 110 : 70 ))
+//                                .scaleEffect(isHeartAnimation ? 5 : 1)
+                                .opacity(heartOpacity)
+                        }
+                        HStack{
+                            HeartButton(isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
+                                .padding(.leading)
+                            NavigationLink {
+                                MagazineCommentView()
+                            } label: {
+                                Image(systemName: "bubble.right")
+                                    .font(.title2)
+                                    .foregroundColor(.black)
+                            }
+
+                            Spacer()
+
+                        }
+                    }//VStack
                     .frame(minHeight: 350)
-                    
+                    // MARK: 스티키 헤더 제목과 건텐츠
                     LazyVStack(pinnedViews: [.sectionHeaders]) {
                         Section(header: MagazineDetailHeader(data: data) ){
                             VStack {
@@ -62,8 +88,8 @@ struct MagazineDetailView: View {
                         }
                     }
                     Spacer()
-                }
-            }
+                }//VStack
+            }//스크롤뷰
             .padding(.top, 1)
         }
         .toolbar {
@@ -110,11 +136,11 @@ struct MagazineDetailHeader: View {
     }
 }
 
-//struct MagazineDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NavigationStack {
-//            MagazineDetailView()
-//        }
-//
-//    }
-//}
+struct MagazineDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            MagazineDetailView(data: MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: 0), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), likedNum: LikedNum(integerValue: ""), latitude: MagazineLocation(doubleValue: 0), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: "")), name: "", createTime: "", updateTime: ""))
+        }
+
+    }
+}

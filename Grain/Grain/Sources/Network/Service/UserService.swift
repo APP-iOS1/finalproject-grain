@@ -12,22 +12,18 @@ enum UserService {
     
     // MARK: - 스토리지 이미지 가져오기
     static func getUser() -> AnyPublisher<UserResponse, Error> {
-        
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/User"
-        
-        var request = URLRequest(url: URL(string: firestoreURL)!)
+       
         do {
-            request = try UserRouter.get.asURLRequest()
+            let request = try UserRouter.get.asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data}
+                .decode(type: UserResponse.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
-            // [x] error handling
-            print("http error")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data}
-            .decode(type: UserResponse.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
     }
     
     // MARK: - 맵 데이터 넣기
@@ -35,19 +31,18 @@ enum UserService {
        
         
         let requestRouter = UserRouter.post(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName)
-        var request: URLRequest =  URLRequest(url: URL(string: "dfsfsdfd")!)
         
         do {
-            request = try requestRouter.asURLRequest()
+            let request = try requestRouter.asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: UserDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
-            print("http error!")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data }
-            .decode(type: UserDocument.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
     }
     
     static func getCurrentUser(userID: String) -> AnyPublisher<CurrentUserResponse, Error> {
@@ -56,18 +51,18 @@ enum UserService {
         let encodeQueryURL = firestoreURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
 
         var request = URLRequest(url: URL(string: encodeQueryURL)!)
+        
         do {
             request = try UserRouter.get.asURLRequestCurrent(request: request)
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data}
+                .decode(type: CurrentUserResponse.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
-            // [x] error handling
-            print("http error")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data}
-            .decode(type: CurrentUserResponse.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
     }
     
     // 데이터 삭제

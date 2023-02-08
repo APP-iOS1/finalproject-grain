@@ -14,44 +14,34 @@ enum CommunityService {
     static func getCommunity() -> AnyPublisher<CommunityResponse, Error> {
         print("FirebaseService getCommunity start")
         
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Community"
-      
-        var request = URLRequest(url: URL(string: firestoreURL)!)
-        
         do {
-            request = try CommunityRouter.get.asURLRequest()
+            let request = try CommunityRouter.get.asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: CommunityResponse.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
-            // [x] error handling
-            print("http error")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
-        
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data }
-            .decode(type: CommunityResponse.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
     }
     
     //MARK: - 커뮤니티 데이터 넣기
     static func insertCommunity(profileImage: String, nickName: String,category: String,image: String,userID: String,title: String,content: String ) -> AnyPublisher<CommunityResponse, Error> {
        
-        let requestRouter = CommunityRouter.post(profileImage: profileImage, nickName: nickName, category: category, image: image, userID: userID, title: title, content: content)
-        var request: URLRequest =  URLRequest(url: URL(string: "dfsfsdfd")!)
-
         do {
-            request = try requestRouter.asURLRequest()
+            let requestRouter = CommunityRouter.post(profileImage: profileImage, nickName: nickName, category: category, image: image, userID: userID, title: title, content: content)
+            let request = try requestRouter.asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: CommunityResponse.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
-            print("http error!")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
-        
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data }
-            .decode(type: CommunityResponse.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
-        
     }
     
 }

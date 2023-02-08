@@ -15,6 +15,7 @@ private enum FocusableField: Hashable {
 }
 
 struct EditMyPageView: View {
+    @AppStorage("docID") private var docID : String?
     var userVM: UserViewModel
     
     @Environment(\.presentationMode) var presentationMode
@@ -30,27 +31,27 @@ struct EditMyPageView: View {
     
     var body: some View {
         VStack {
-            //MARK: 상단바
-            HStack{
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    HStack {
-                        Image(systemName: "chevron.left")
-                        Text("설정")
-                    }
-                })
-                
-                Spacer()
-                
-                Button{
-                    
-                }label: {
-                    Text("저장")
-                }
-            }
-            .accentColor(.black)
-            .padding(.horizontal)
+//            //MARK: 상단바
+//            HStack{
+//                Button(action: {
+//                    presentationMode.wrappedValue.dismiss()
+//                }, label: {
+//                    HStack {
+//                        Image(systemName: "chevron.left")
+//                        Text("설정")
+//                    }
+//                })
+//                
+//                Spacer()
+//                
+//                Button{
+//                    
+//                }label: {
+//                    Text("저장")
+//                }
+//            }
+//            .accentColor(.black)
+//            .padding(.horizontal)
 
             //MARK: 프로필 이미지 변경 버튼
             Button {
@@ -154,8 +155,21 @@ struct EditMyPageView: View {
             Spacer()
 
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarHidden(true)
+        .navigationTitle("프로필 편집")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar{
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button{
+                    Task{
+                        await userVM.updateUser(updateDocument: docID ?? "", updateKey: "nickName", updateValue: editedNickname, isArray: false)
+                    }
+                }label: {
+                    Text("저장")
+                }
+            }
+        }
+//        .navigationBarBackButtonHidden(true)
+//        .navigationBarHidden(true)
         .onAppear{
             focus = .nickName
             editedNickname = userVM.currentUsers?.nickName.stringValue ?? ""

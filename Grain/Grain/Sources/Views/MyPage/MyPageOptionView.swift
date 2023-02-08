@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MyPageOptionView: View {
 //    let optionMenu = ["프로필 편집", "카메라 정보", "저장됨", "로그아웃"]
-    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.presentationMode) var presentationMode
 //    @StateObject var authVM = AuthenticationStore()
     var userVM: UserViewModel
     
@@ -19,27 +19,27 @@ struct MyPageOptionView: View {
         VStack(alignment: .leading){
             
             //MARK: 상단바
-            HStack{
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    HStack {
-                        Image(systemName: "chevron.left")
-                        Text("마이페이지")
-                    }
-                    .padding(.horizontal)
-                })
-                
-                Spacer()
-                
-                Text("설정")
-                    .font(.title3)
-                    .bold()
-                    .padding(.trailing, 125)
-            
-                Spacer()
-            }
-            .accentColor(.black)
+//            HStack{
+//                Button(action: {
+//                    presentationMode.wrappedValue.dismiss()
+//                }, label: {
+//                    HStack {
+//                        Image(systemName: "chevron.left")
+//                        Text("마이페이지")
+//                    }
+//                    .padding(.horizontal)
+//                })
+//
+//                Spacer()
+//
+//                Text("설정")
+//                    .font(.title3)
+//                    .bold()
+//                    .padding(.trailing, 125)
+//
+//                Spacer()
+//            }
+//            .accentColor(.black)
             
             ScrollView{
                 //MARK: 계정 섹션
@@ -54,8 +54,10 @@ struct MyPageOptionView: View {
             }
             Spacer()
         }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
+        .navigationTitle("설정")
+        .navigationBarTitleDisplayMode(.inline)
+//        .navigationBarHidden(true)
+//        .navigationBarBackButtonHidden(true)
         .onAppear {
             // 커뮤니티 데이터 fetch
             communityVM.fetchCommunity()
@@ -63,7 +65,7 @@ struct MyPageOptionView: View {
     }
 }
 
-//struct MyPageOptionView_Previews: PreviewProvider {
+//struct MyPageOptionView_Previews: PreviewProvider {    
 //    static var previews: some View {
 //        NavigationStack {
 //            MyPageOptionView()
@@ -119,7 +121,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                EditCameraView()
+                EditCameraView(userVM: userVM)
             } label: {
                 HStack {
                     Image(systemName: "camera")

@@ -7,8 +7,9 @@
 
 import Foundation
 
-enum CustomError: Error {
-    case invalidInput
+
+enum HTTPError: Error {
+    case invalidInput  
     case networkError
     case requestError
     case uploadImageError

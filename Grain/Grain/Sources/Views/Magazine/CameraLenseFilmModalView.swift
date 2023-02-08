@@ -24,6 +24,8 @@ struct CameraLenseFilmModalView: View {
     @Binding var selectedImages: [UIImage]
     @Binding var inputCustomPlace: String
     @Binding var presented : Bool
+    @AppStorage("docID") private var docID : String?
+    
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     @State private var selection: String?
     var body: some View {
@@ -71,7 +73,22 @@ struct CameraLenseFilmModalView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     //MARK: 글쓰기 완료 함수
-                    magazineVM.insertMagazine(userID: userVM.currentUsers?.id.stringValue ?? "", cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "", nickName: userVM.currentUsers?.nickName.stringValue ?? "", image: selectedImages, content: inputContent , title: inputTitle , lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "", longitude: updateNumber.lng, likedNum: 0, filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "", customPlaceName: "패스", latitude: updateNumber.lat, comment: "임시", roadAddress: updateReverseGeocodeResult1)
+//                    magazineVM.insertMagazine(userID: "1", cameraInfo: "1", nickName: "1", image: selectedImages, content: "1", title: "1", lenseInfo: "1", longitude: 0.0, likedNum: 0, filmInfo: "1", customPlaceName: "1", latitude: 0.0, comment: "1", roadAddress: "1")
+                    magazineVM.insertMagazine(
+                        userID: userVM.currentUsers?.id.stringValue ?? "",
+                        cameraInfo: userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? "",
+                        nickName: userVM.currentUsers?.nickName.stringValue ?? "",
+                        image: selectedImages,
+                        content: inputContent,
+                        title: inputTitle ,
+                        lenseInfo: userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? "",
+                        longitude: updateNumber.lng ?? 0.0,
+                        likedNum: 0,
+                        filmInfo: userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? "",
+                        customPlaceName: "패스",
+                        latitude: updateNumber.lat ?? 0.0,
+                        comment: "임시",
+                        roadAddress: updateReverseGeocodeResult1 ?? "")
                     presented.toggle()
                 } label: {
                     Text("완료")
@@ -80,11 +97,12 @@ struct CameraLenseFilmModalView: View {
                 }
             }
         }
-//        .onAppear {
+        .onAppear {
+            userVM.fetchCurrentUser(userID: docID ?? "")
 //            selectedCamera = myCamera[0]
 //            selectedLense = myLense[0]
 //            selectedFilm = myFilm[0]
-//        }
+        }
         
     }
 }

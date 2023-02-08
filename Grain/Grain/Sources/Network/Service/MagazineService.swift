@@ -13,24 +13,19 @@ enum MagazineService {
     
     // MARK: - 매거진 데이터 가져오기
     static func getMagazine() -> AnyPublisher<MagazineResponse, Error> {
-//        print("FirebaseServic getMagazine start")
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
+        print("FirebaseServic getMagazine start")
         
-        var request = URLRequest(url: URL(string: firestoreURL)!)
-    
-
         do {
-            request = try MagazineRouter.get.asURLRequest()
+            let request = try MagazineRouter.get.asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data}
+                .decode(type: MagazineResponse.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
-            // [x] error handling
-            print("http error")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data}
-            .decode(type: MagazineResponse.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
     }
     
     // MARK: - 매거진 데이터 넣기
@@ -41,50 +36,64 @@ enum MagazineService {
         // 2. 스토리지에 이미지들이 업로드가 된다.
         // 3. 리팩토링 - 라우터에 있는 uploadimage코드를  service, vm로 옮겨야한다.
         var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "1", fileName: "1", image: image)
-        print("makeURL: \(imageUrlArr)")
+       
         
         // 여기서 이미지 들어가게 하고 , 그담 이미지 리퀘스트 받아서 url 만들고 저장해서
         // 요기 밑에 지금 오류나는 image 부분에 넣어줘야한다.
         
         let requestRouter = MagazineRouter.post(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: imageUrlArr, content: content, title: title, lenseInfo: lenseInfo, longitude: longitude, likedNum: likedNum, filmInfo: filmInfo, customPlaceName: customPlaceName, latitude: latitude, comment: comment, roadAddress: roadAddress)
         
-        var request: URLRequest =  URLRequest(url: URL(string: "dfsfsdfd")!)
-        
         do {
-            request = try requestRouter.asURLRequest()
+            let request = try requestRouter.asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: MagazineDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
-            print("http error!")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+            
         }
-
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data }
-            .decode(type: MagazineDocument.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
+        
     }
     
     static func updateMagazine(data: MagazineDocument, docID: String) -> AnyPublisher<MagazineDocument, Error> {
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
-        
-        var request = URLRequest(url: URL(string: firestoreURL)!)
+    
         print("id: \(docID), MagazineService update method")
-
+        
         do {
             let suffixedId: String = String(docID.suffix(20))
-            request = try MagazineRouter.patch(putData: data, docID: suffixedId).asURLRequest()
+            let request = try MagazineRouter.patch(putData: data, docID: suffixedId).asURLRequest()
+            print(request)
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: MagazineDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
-            // [x] error handling
-            print("http error")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
         
-        print(request)
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data }
-            .decode(type: MagazineDocument.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
+    }
+    
+    static func deleteMagazine(docID: String) -> AnyPublisher<MagazineDocument, Error> {
+        
+        do {
+            let suffixedId: String = String(docID.suffix(20))
+            let request = try MagazineRouter.delete(docID: suffixedId).asURLRequest()
+            print(request)
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: MagazineDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
         
     }
+    
 }

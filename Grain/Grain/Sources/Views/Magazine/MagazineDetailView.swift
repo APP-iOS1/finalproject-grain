@@ -3,6 +3,8 @@ import FirebaseAuth
 
 struct MagazineDetailView: View {
     var data : MagazineDocument
+    @StateObject var magazineVM = MagazineViewModel()
+    @Environment(\.dismiss) private var dismiss // <- 임시 방편
     var body: some View {
         NavigationStack{
             ScrollView {
@@ -78,6 +80,8 @@ struct MagazineDetailView: View {
                         
                         Button {
                             //삭제
+                            magazineVM.deleteMagazine(docID: data.name)
+                            dismiss()
                         } label: {
                             Image(systemName: "trash")
                             .foregroundColor(.blue)

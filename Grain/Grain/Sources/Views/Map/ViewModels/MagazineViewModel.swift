@@ -45,6 +45,7 @@ final class MagazineViewModel: ObservableObject {
             self.insertMagazineSuccess.send()
 //            print(data.name)
 //            print(data.createTime)
+            // 현재 메거진 id 가 "" 빈값이기 때문에 id update
             self.updateMagazine(data: data, docID: data.name)
             print("id: \(data.name)")
         }.store(in: &subscription)
@@ -56,6 +57,16 @@ final class MagazineViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
                 
+            } receiveValue: { (data: MagazineDocument) in
+                self.fetchMagazineSuccess.send()
+            }.store(in: &subscription)
+    }
+    
+    // MARK: 게시글 삭제
+    func deleteMagazine(docID: String) {
+        MagazineService.deleteMagazine(docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: MagazineDocument) in
                 self.fetchMagazineSuccess.send()
             }.store(in: &subscription)
@@ -90,11 +101,7 @@ final class MagazineViewModel: ObservableObject {
         }
         
     }
-    
-    func deleteMagazine() {
-        
-    }
-    
+
     func nearbyPostsFilter(magazineData: [MagazineDocument],nearbyPostsArr: [String]) -> [MagazineDocument] {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
         var nearbyPostFilterArr: [MagazineDocument] = []

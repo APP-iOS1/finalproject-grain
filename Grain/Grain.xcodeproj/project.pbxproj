@@ -33,6 +33,7 @@
 		334699D92988DE3F004153A6 /* EditCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D82988DE3F004153A6 /* EditCameraView.swift */; };
 		334699DB2988DE51004153A6 /* StoredPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699DA2988DE51004153A6 /* StoredPostView.swift */; };
 		33728E802990920D00E8AB97 /* SelectPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33728E7F2990920D00E8AB97 /* SelectPostView.swift */; };
+		33CFBCA42993A14C00DD2707 /* HeartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFBCA32993A14C00DD2707 /* HeartButton.swift */; };
 		5265C1181BDD56B8E8B1F897 /* Pods_Grain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */; };
 		8B0BA0A2298A4197000A7090 /* CameraModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0BA0A1298A4197000A7090 /* CameraModalView.swift */; };
 		8B0BA0A4298A4C15000A7090 /* ListTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0BA0A3298A4C15000A7090 /* ListTestView.swift */; };
@@ -101,7 +102,6 @@
 		998847DC299239D600004066 /* UserSearchFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847DB299239D600004066 /* UserSearchFeedView.swift */; };
 		998847FC2992D65400004066 /* SearchProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847FB2992D65400004066 /* SearchProgress.swift */; };
 		998847FE2992F37A00004066 /* MainSearchPlaceHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847FD2992F37A00004066 /* MainSearchPlaceHolder.swift */; };
-		99B21EC129936ACF006933BB /* HeartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B21EC029936ACF006933BB /* HeartButton.swift */; };
 		99B21EC329938CD7006933BB /* MagazineCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B21EC229938CD7006933BB /* MagazineCommentView.swift */; };
 		A71516BA29926233009A0780 /* MagazineEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71516B929926233009A0780 /* MagazineEditView.swift */; };
 		A71680E4298B3B3B0050549D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A71680E3298B3B3B0050549D /* GoogleService-Info.plist */; };
@@ -174,6 +174,7 @@
 		334699D82988DE3F004153A6 /* EditCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCameraView.swift; sourceTree = "<group>"; };
 		334699DA2988DE51004153A6 /* StoredPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredPostView.swift; sourceTree = "<group>"; };
 		33728E7F2990920D00E8AB97 /* SelectPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPostView.swift; sourceTree = "<group>"; };
+		33CFBCA32993A14C00DD2707 /* HeartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartButton.swift; sourceTree = "<group>"; };
 		8B0BA0A1298A4197000A7090 /* CameraModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraModalView.swift; sourceTree = "<group>"; };
 		8B0BA0A3298A4C15000A7090 /* ListTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTestView.swift; sourceTree = "<group>"; };
 		8B10F429298CD18F00582D27 /* MyPageView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView2.swift; sourceTree = "<group>"; };
@@ -243,7 +244,6 @@
 		998847DB299239D600004066 /* UserSearchFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchFeedView.swift; sourceTree = "<group>"; };
 		998847FB2992D65400004066 /* SearchProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProgress.swift; sourceTree = "<group>"; };
 		998847FD2992F37A00004066 /* MainSearchPlaceHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSearchPlaceHolder.swift; sourceTree = "<group>"; };
-		99B21EC029936ACF006933BB /* HeartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HeartButton.swift; path = "../../../../../../../.Trash/finalproject-grain 13-43-10-068/Grain/Grain/Sources/Views/Magazine/HeartButton.swift"; sourceTree = "<group>"; };
 		99B21EC229938CD7006933BB /* MagazineCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineCommentView.swift; sourceTree = "<group>"; };
 		A71516B929926233009A0780 /* MagazineEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineEditView.swift; sourceTree = "<group>"; };
 		A71680E3298B3B3B0050549D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -349,8 +349,8 @@
 				9955E116297A6D5900265D14 /* MagazineContentAddView.swift */,
 				0C70BCFA298CA692004A4DB0 /* EditorView.swift */,
 				A71516B929926233009A0780 /* MagazineEditView.swift */,
-				99B21EC029936ACF006933BB /* HeartButton.swift */,
 				99B21EC229938CD7006933BB /* MagazineCommentView.swift */,
+				33CFBCA32993A14C00DD2707 /* HeartButton.swift */,
 			);
 			path = Magazine;
 			sourceTree = "<group>";
@@ -902,6 +902,7 @@
 				9958AFA82977804700A51DA9 /* BtnModifier.swift in Sources */,
 				8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */,
 				06F0D82A297EB3DC00E7B885 /* CommunityViewModel.swift in Sources */,
+				33CFBCA42993A14C00DD2707 /* HeartButton.swift in Sources */,
 				9936E2B529915B04006F3333 /* Ex+EmptyPlaceholder.swift in Sources */,
 				0C535C2B2977AB7300E20BD9 /* Top10View.swift in Sources */,
 				0C535C2D2977B68600E20BD9 /* EditorViewCell.swift in Sources */,
@@ -927,7 +928,6 @@
 				A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */,
 				A75BB990297EA25C004FE6FA /* WebkitView.swift in Sources */,
 				0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */,
-				99B21EC129936ACF006933BB /* HeartButton.swift in Sources */,
 				99233D482977F2F900A875B1 /* LocationManager.swift in Sources */,
 				A7D9F30A29896A4B00B39218 /* UserQuery.swift in Sources */,
 				9936E2AE298CD003006F3333 /* CommunitySearchResultView.swift in Sources */,

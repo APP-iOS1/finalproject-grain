@@ -26,8 +26,6 @@ struct ContentView: View {
     
     let icons = ["film", "text.bubble", "plus","map", "person"]
     let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
-    @StateObject var mapVM = MapViewModel()
-    @StateObject var magazineVM = MagazineViewModel()
     @AppStorage("docID") private var docID : String?
     @StateObject var userVM = UserViewModel()
     var body: some View {
@@ -120,6 +118,14 @@ struct ContentView: View {
                 }
             }
         }
+        .tint(.black)
+        .onAppear{
+            /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
+            mapVM.fetchMap()
+            magazineVM.fetchMagazine()
+            userVM.fetchCurrentUser(userID: docID ?? "")
+            //                    magazineVM.updateMagazine()
+        }
         .ignoresSafeArea(.keyboard)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
@@ -139,17 +145,10 @@ struct ContentView: View {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.black)
                     }
-                .ignoresSafeArea(.keyboard)
-                .onAppear{
-                    /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
-                    mapVM.fetchMap()
-                    magazineVM.fetchMagazine()
-                    userVM.fetchCurrentUser(userID: docID ?? "")
-//                    magazineVM.updateMagazine()
+                    .ignoresSafeArea(.keyboard)
                 }
             }
         }
-        .tint(.black)
         //        .splashView {
         //            ZStack{
         //                SplashScreen()
@@ -157,9 +156,8 @@ struct ContentView: View {
         //
         //        }
     }
+    
 }
-
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()

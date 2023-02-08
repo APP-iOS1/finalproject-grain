@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 enum HTTPError: Error {
     case invalidInput  
     case networkError

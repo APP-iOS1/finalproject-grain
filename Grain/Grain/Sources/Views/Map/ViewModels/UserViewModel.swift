@@ -21,8 +21,9 @@ final class UserViewModel: ObservableObject {
     @Published var currentUsers : CurrentUserFields?
     
     // 유저가 포스팅한 매거진 id 담는 배열
-    @Published var userPostedMagazine: [CurrentUserStringValue] = []
-
+    @Published var currentUserStringValue: [CurrentUserStringValue] = [] // 변환만 하기 위해
+    @Published var userPostedMagazine : [String] = [] //string값만
+    
     var fetchUsersSuccess = PassthroughSubject<(), Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
 
@@ -46,10 +47,16 @@ final class UserViewModel: ObservableObject {
             self.currentUsers = data.fields
 //            print(" 확인 \(data.createTime)") -> 시간 값 나중에 써먹을수 있을듯
             // user가 포스팅한 매거진 필터링
-            self.userPostedMagazine.append(contentsOf: data.fields.postedMagazineID.arrayValue.values)
+            
+            
+            self.currentUserStringValue.append(contentsOf: data.fields.postedMagazineID.arrayValue.values)
+            for i in self.currentUserStringValue{
+                self.userPostedMagazine.append(i.stringValue)
+            }
             self.fetchUsersSuccess.send()
         }.store(in: &subscription)
     }
+    
     func updateUser(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
         
         let db = Firestore.firestore()

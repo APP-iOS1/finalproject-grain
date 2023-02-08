@@ -26,6 +26,7 @@ struct ContentView: View {
     
     let icons = ["film", "text.bubble", "plus","map", "person"]
     let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
+    
     @AppStorage("docID") private var docID : String?
     @StateObject var userVM = UserViewModel()
     var body: some View {
@@ -70,7 +71,7 @@ struct ContentView: View {
                             }
                         case 4:
                             NavigationStack {
-                                MyPageView(magazineDocument: magazineVM.UserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.userPostedMagazine))
+                                MyPageView(magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.userPostedMagazine))
                             }
                         default:
                             NavigationStack {

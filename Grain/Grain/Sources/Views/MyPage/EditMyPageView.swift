@@ -30,27 +30,27 @@ struct EditMyPageView: View {
     
     var body: some View {
         VStack {
-            //MARK: 상단바
-            HStack{
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    HStack {
-                        Image(systemName: "chevron.left")
-                        Text("설정")
-                    }
-                })
-                
-                Spacer()
-                
-                Button{
-                    
-                }label: {
-                    Text("저장")
-                }
-            }
-            .accentColor(.black)
-            .padding(.horizontal)
+//            //MARK: 상단바
+//            HStack{
+//                Button(action: {
+//                    presentationMode.wrappedValue.dismiss()
+//                }, label: {
+//                    HStack {
+//                        Image(systemName: "chevron.left")
+//                        Text("설정")
+//                    }
+//                })
+//                
+//                Spacer()
+//                
+//                Button{
+//                    
+//                }label: {
+//                    Text("저장")
+//                }
+//            }
+//            .accentColor(.black)
+//            .padding(.horizontal)
 
             //MARK: 프로필 이미지 변경 버튼
             Button {
@@ -154,8 +154,10 @@ struct EditMyPageView: View {
             Spacer()
 
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarHidden(true)
+        .navigationTitle("프로필 편집")
+        .navigationBarTitleDisplayMode(.inline)
+//        .navigationBarBackButtonHidden(true)
+//        .navigationBarHidden(true)
         .onAppear{
             focus = .nickName
             editedNickname = userVM.currentUsers?.nickName.stringValue ?? ""

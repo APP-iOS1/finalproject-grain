@@ -121,10 +121,10 @@ struct EditCameraView: View {
                     
                     List{
                         // MARK: 카메라 바디 섹션
-                        BodyList(userVM: userVM, myBodies: $myBodies, showAddBody: $showAddBody, newItem: $newBodyItem)
+                        BodyList(userVM: userVM, myBodies: $myBodies, newItem: $newBodyItem)
                         
                         // MARK: 카메라 렌즈 섹션
-                        LensList(myLenses: $myLenses, showAddLens: $showAddLens, newItem: $newLensItem)
+                        LensList(userVM: userVM, myLenses: $myLenses, showAddLens: $showAddLens, newItem: $newLensItem)
                         
                         // MARK: 카메라 필름 섹션
                         FilmList(myFilms: $myFilms, showAddFilm: $showAddFilm, newItem: $newFilmItem)
@@ -143,14 +143,13 @@ struct EditCameraView: View {
 //                        showAddBody.toggle()
                     } else {
                         print("done")
-                        showAddBody = false
+//                        showAddBody = false
                     }
                 })
             
                 
         }
         .onAppear{
-//            myBodies = userVM.currentUsers?.myCamera.arrayValue.values ?? []
         }
     }
 
@@ -165,14 +164,18 @@ struct EditCameraView: View {
 
 // MARK: - 카메라 바디 섹션 선언부
 struct BodyList: View {
+    @AppStorage("docID") private var docID : String?
     var userVM: UserViewModel
 
     @Environment(\.editMode) private var editMode
 
     @Binding var  myBodies: [String]
 //    @Binding var myBodies: [CurrentUserStringValue]
-    @Binding var showAddBody: Bool
+//    @Binding var showAddBody: Bool
+    @State private var showAddBody: Bool = false
     @Binding var newItem: String
+    
+    @State private var isAdded: Bool = false
     
     var trimNewItem: String {
         self.newItem.trimmingCharacters(in: .whitespaces)
@@ -188,6 +191,9 @@ struct BodyList: View {
                 Text(camera.stringValue)
             }
             .onDelete(perform: removeCameraList(at:))
+//            .onChange(of: isAdded) { value in
+//                userVM.fetchCurrentUser(userID: docID ?? "")
+//            }
             
             if editMode?.wrappedValue.isEditing == true {
                 // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
@@ -198,12 +204,28 @@ struct BodyList: View {
                             .textInputAutocapitalization(.never)
                             .disableAutocorrection(true)
                             .onSubmit {
-                                addCamera()
+//                                Task{
+//                                    await addCamera(docID: docID ?? "", newItem: newItem)
+//                                }
+                                Task{
+                                    await userVM.updateUser(updateDocument: docID ?? "", updateKey: "myCamera", updateValue: newItem, isArray: true)
+                                    newItem = ""
+//                                    userVM.fetchCurrentUser(userID: docID ?? "")
+
+                                }
+//                                self.isAdded.toggle()
                             }
                         
                         Button{
                             if trimNewItem.count > 0{
-                                addCamera()
+//                                addCamera()
+                                Task{
+                                    await userVM.updateUser(updateDocument: docID ?? "", updateKey: "myCamera", updateValue: newItem, isArray: true)
+                                    newItem = ""
+
+                                }
+                                self.isAdded.toggle()
+
                             }
                         } label: {
                             Image(systemName: "plus.circle")
@@ -235,14 +257,18 @@ struct BodyList: View {
                 }
             }
         }
+        
     }
     
     // MARK: 바디 추가 함수
-    func addCamera() {
-        let newItemType = CurrentUserStringValue(stringValue: newItem)
+    func addCamera(docID: String, newItem: String) async {
+//        CurrentUserStringValue(stringValue: newItem)
 //        myBodies.append(newItem)
-//        userVM.currentUsers?.myCamera.arrayValue.values.append(newItemType)
-        newItem = ""
+        await userVM.updateUser(updateDocument: docID , updateKey: "myCamera", updateValue: newItem, isArray: true)
+
+//        userVM.fetchCurrentUser(userID: userID)
+        return self.newItem = ""
+        
     }
     
     // MARK: 바디 삭제 함수
@@ -254,6 +280,9 @@ struct BodyList: View {
 
 // MARK: - 카메라 렌즈 섹션 선언부
 struct LensList: View {
+    @AppStorage("docID") private var docID : String?
+    var userVM: UserViewModel
+    
     @Environment(\.editMode) private var editMode
 
     @Binding var  myLenses: [String]
@@ -268,8 +297,8 @@ struct LensList: View {
 
     var body: some View {
         Section(header: Text("렌즈").bold()){
-            ForEach(myLenses, id: \.self) { lens in
-                Text(lens)
+            ForEach(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self) { lens in
+                Text(lens.stringValue)
             }
             .onDelete(perform: removeLensList(at:))
             
@@ -282,7 +311,10 @@ struct LensList: View {
                             .textInputAutocapitalization(.never)
                             .disableAutocorrection(true)
                             .onSubmit {
-                                addLens()
+//                                addLens()
+                                Task{
+                                    await userVM.updateUser(updateDocument: docID ?? "", updateKey: "myLens", updateValue: newItem, isArray: true)
+                                }
                             }
                         
                         Button{

@@ -16,6 +16,7 @@ struct MagazineEditView: View {
     @State var editCustomPlace : String = ""
     
     @State var clickedContent : Bool = false    // 텍스트 클릭 Bool
+    @State var clickedCustomPlace : Bool = false    // 텍스트 클릭 Bool
     
     var body: some View {
         NavigationView{
@@ -31,13 +32,19 @@ struct MagazineEditView: View {
                                 HStack {
                                     Text("1분전")
                                     Spacer()
-                                    TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
-                                        .onSubmit {
-                                            data.fields.customPlaceName.stringValue = editCustomPlace
-                                            
-                                        }
-
-
+                                    if clickedCustomPlace{
+                                        TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
+                                            .onSubmit {
+                                                data.fields.customPlaceName.stringValue = editCustomPlace
+                                                clickedCustomPlace.toggle()
+                                            }
+                                    }else{
+                                        Text(data.fields.customPlaceName.stringValue)
+                                            .onTapGesture {
+                                                clickedCustomPlace.toggle()
+                                            }
+                                    }
+                                   
                                 }
                                 .font(.caption)
                             }
@@ -80,8 +87,7 @@ struct MagazineEditView: View {
                                         .padding()
                                         .foregroundColor(Color.textGray)
                                         .onSubmit {
-                                            data.fields.content.stringValue = editContent
-                                            
+//                                            data.fields.content.stringValue = editContent
                                             clickedContent.toggle()
                                         }
                                 }else{
@@ -108,6 +114,8 @@ struct MagazineEditView: View {
                 HStack{
                     Button {
                         var docId = String(data.name.suffix(20))
+                        data.fields.title.stringValue = editTitle
+                        data.fields.content.stringValue = editContent
                         magazineVM.updateMagazine(data: data, docID: docId)
                     } label: {
                         Text("수정완료")

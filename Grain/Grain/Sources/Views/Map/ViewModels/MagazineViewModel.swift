@@ -62,6 +62,16 @@ final class MagazineViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
+    // MARK: 게시글 삭제
+    func deleteMagazine(docID: String) {
+        MagazineService.deleteMagazine(docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: MagazineDocument) in
+                self.fetchMagazineSuccess.send()
+            }.store(in: &subscription)
+    }
+    
     // MARK: Update -> Firebase Store SDK 사용
     func updateMagazineSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
         let db = Firestore.firestore()
@@ -91,11 +101,7 @@ final class MagazineViewModel: ObservableObject {
         }
         
     }
-    
-    func deleteMagazine() {
-        
-    }
-    
+
     func nearbyPostsFilter(magazineData: [MagazineDocument],nearbyPostsArr: [String]) -> [MagazineDocument] {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
         var nearbyPostFilterArr: [MagazineDocument] = []

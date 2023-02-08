@@ -82,4 +82,24 @@ enum MagazineService {
         }
         
     }
+    
+    static func deleteMagazine(docID: String) -> AnyPublisher<MagazineDocument, Error> {
+        
+        do {
+            let suffixedId: String = String(docID.suffix(20))
+            let request = try MagazineRouter.delete(docID: suffixedId).asURLRequest()
+            print(request)
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: MagazineDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            // [x] error handling
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
+        
+    }
+    
 }

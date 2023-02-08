@@ -37,7 +37,7 @@ struct CurrentUserUpperArrayValue: Codable {
 struct CurrentUserArrayValue: Codable {
     let values: [CurrentUserStringValue]
 }
-struct CurrentUserStringValue: Codable {
+struct CurrentUserStringValue: Codable, Hashable {
     let stringValue: String
 }
 

@@ -15,6 +15,7 @@ private enum FocusableField: Hashable {
 }
 
 struct EditMyPageView: View {
+    @AppStorage("docID") private var docID : String?
     var userVM: UserViewModel
     
     @Environment(\.presentationMode) var presentationMode
@@ -156,6 +157,17 @@ struct EditMyPageView: View {
         }
         .navigationTitle("프로필 편집")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar{
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button{
+                    Task{
+                        await userVM.updateUser(updateDocument: docID ?? "", updateKey: "nickName", updateValue: editedNickname, isArray: false)
+                    }
+                }label: {
+                    Text("저장")
+                }
+            }
+        }
 //        .navigationBarBackButtonHidden(true)
 //        .navigationBarHidden(true)
         .onAppear{

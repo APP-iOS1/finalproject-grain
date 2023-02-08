@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct MyPageView: View {
-    var images: [Image] = [Image("1"), Image("2"), Image("3"), Image("test"), Image("sampleImage"), Image("testImage")]
+//    var images: [Image] = [Image("1"), Image("2"), Image("3"), Image("test"), Image("sampleImage"), Image("testImage")]
     let columns = [
         GridItem(.adaptive(minimum: 100))
     ]
@@ -37,20 +37,6 @@ struct MyPageView: View {
                 Text("자기소개글")
                     .padding(.top, 3)
                 MyPageMyFeedView(magazineDocument: magazineDocument)
-
-                ScrollView{
-                    LazyVGrid(columns: columns) {
-                        ForEach(magazineDocument, id: \.self) { item in
-                            NavigationLink {
-                                
-                            } label: {
-                                KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                   .resizable()
-                                   .aspectRatio(contentMode: .fit)
-                            }
-                        }
-                    }
-                }
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장

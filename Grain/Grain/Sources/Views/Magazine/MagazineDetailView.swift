@@ -1,5 +1,6 @@
 import SwiftUI
 import FirebaseAuth
+import Kingfisher
 
 struct MagazineDetailView: View {
     @StateObject var magazineVM = MagazineViewModel()
@@ -42,11 +43,11 @@ struct MagazineDetailView: View {
                         
                     // MARK: 이미지
                         TabView{
-                            ForEach(1..<4, id: \.self) { i in
-                                Image("\(i)")
-                                    .resizable()
-                                    .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
-                                    .aspectRatio(contentMode: .fit)
+                            ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
+                                KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                   .resizable()
+                                   .aspectRatio(contentMode: .fit)
+                                   .frame(width: 100)
                             }
                         }
                         .tabViewStyle(.page)

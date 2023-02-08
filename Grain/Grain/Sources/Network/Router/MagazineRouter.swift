@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 enum MagazineRouter {
 
     case get
@@ -22,20 +21,20 @@ enum MagazineRouter {
     }
     
     private enum HTTPMethod {
-            case get
-            case post
-            case patch
-            case delete
-            
-            var value: String {
-                switch self {
-                case .get: return "GET"
-                case .post: return "POST"
-                case .patch: return "PATCH"
-                case .delete: return "DELETE"
-                }
+        case get
+        case post
+        case patch
+        case delete
+        
+        var value: String {
+            switch self {
+            case .get: return "GET"
+            case .post: return "POST"
+            case .patch: return "PATCH"
+            case .delete: return "DELETE"
             }
         }
+    }
     
     private var endPoint: String {
         switch self {
@@ -66,7 +65,7 @@ enum MagazineRouter {
         case let .post(userID, cameraInfo, nickName, image, content, title, lenseInfo, longitude, likedNum, filmInfo, customPlaceName, latitude, comment, roadAddress):
             return MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title,lenseInfo:lenseInfo,longitude: longitude,likedNum: likedNum,filmInfo: filmInfo, customPlaceName: customPlaceName,latitude: latitude,comment: comment,roadAddress: roadAddress)
         case let .patch(putData, docID):
-                // FIXME: 변수명 고치기
+            // FIXME: 변수명 고치기
             let structData = MagazineDocument(fields: putData.fields, name: putData.name, createTime: putData.createTime, updateTime: putData.updateTime)
             
 //            guard let returndata = MagazineQuery.updateMagazineQuery(data: MagazineDocument(fields: putData.fields, name: putData.name, createTime: putData.createTime, updateTime: putData.updateTime), docID: docID) else { return nil }
@@ -91,7 +90,7 @@ enum MagazineRouter {
         }
         
         // [x] TODO: Encoding 하는 방식으로 data 넘겨주기
-//        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
+        //        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
         return request
     }
 

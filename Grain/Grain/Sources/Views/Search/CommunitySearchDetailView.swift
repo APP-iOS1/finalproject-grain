@@ -154,7 +154,7 @@ struct CommunitySearchDetailView: View {
             comment = ""
         }
         .onAppear{
-            communtyViewModel.fetchCommunity()
+//            communtyViewModel.fetchCommunity()
         }
         
     }

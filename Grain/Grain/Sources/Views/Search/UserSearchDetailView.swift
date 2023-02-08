@@ -43,7 +43,7 @@ struct UserSearchDetailView: View {
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장
-                userViewModel.fetchUser()
+//                userViewModel.fetchUser()
             }
         }
     }

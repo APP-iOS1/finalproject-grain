@@ -13,24 +13,19 @@ enum MagazineService {
     
     // MARK: - 매거진 데이터 가져오기
     static func getMagazine() -> AnyPublisher<MagazineResponse, Error> {
-//        print("FirebaseServic getMagazine start")
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
+        print("FirebaseServic getMagazine start")
         
-        var request = URLRequest(url: URL(string: firestoreURL)!)
-    
-
         do {
-            request = try MagazineRouter.get.asURLRequest()
+            let request = try MagazineRouter.get.asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data}
+                .decode(type: MagazineResponse.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
-            // [x] error handling
-            print("http error")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data}
-            .decode(type: MagazineResponse.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
     }
     
     // MARK: - 매거진 데이터 넣기
@@ -52,38 +47,39 @@ enum MagazineService {
         
         do {
             request = try requestRouter.asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: MagazineDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
-            print("http error!")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+            
         }
-
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data }
-            .decode(type: MagazineDocument.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
+        
     }
     
     static func updateMagazine(data: MagazineDocument, docID: String) -> AnyPublisher<MagazineDocument, Error> {
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
-        print(data)
-        var request = URLRequest(url: URL(string: firestoreURL)!)
+
+    
+        print("id: \(docID), MagazineService update method")
+
         
         do {
             let suffixedId: String = String(docID.suffix(20))
-            request = try MagazineRouter.patch(putData: data, docID: suffixedId).asURLRequest()
+            let request = try MagazineRouter.patch(putData: data, docID: suffixedId).asURLRequest()
+            print(request)
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: MagazineDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
         } catch {
             // [x] error handling
-            print("http error")
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
-        
-        print(request)
-        return URLSession
-            .shared
-            .dataTaskPublisher(for: request)
-            .map{ $0.data }
-            .decode(type: MagazineDocument.self, decoder: JSONDecoder())
-            .eraseToAnyPublisher()
         
     }
 }

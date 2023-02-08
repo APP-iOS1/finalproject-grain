@@ -81,7 +81,7 @@ struct UserSearchFeedView: View {
                 }.onAppear{
                     // MARK: fetch 데이터 시작
                     magazineViewModel.fetchMagazine()
-                    userViewModel.fetchUser()
+//                    userViewModel.fetchUser()
                 }
             }
             

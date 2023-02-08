@@ -68,9 +68,6 @@ enum MagazineRouter {
             // FIXME: 변수명 고치기
             let structData = MagazineDocument(fields: putData.fields, name: putData.name, createTime: putData.createTime, updateTime: putData.updateTime)
             
-//            guard let returndata = MagazineQuery.updateMagazineQuery(data: MagazineDocument(fields: putData.fields, name: putData.name, createTime: putData.createTime, updateTime: putData.updateTime), docID: docID) else { return nil }
-//            print(String(decoding: returndata, as: UTF8.self))
-            
             return MagazineQuery.updateMagazineQuery(data: structData, docID: docID)
         default:
             return nil

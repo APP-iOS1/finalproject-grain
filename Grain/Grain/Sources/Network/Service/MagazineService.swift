@@ -43,10 +43,8 @@ enum MagazineService {
         
         let requestRouter = MagazineRouter.post(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: imageUrlArr, content: content, title: title, lenseInfo: lenseInfo, longitude: longitude, likedNum: likedNum, filmInfo: filmInfo, customPlaceName: customPlaceName, latitude: latitude, comment: comment, roadAddress: roadAddress)
         
-        var request: URLRequest =  URLRequest(url: URL(string: "dfsfsdfd")!)
-        
         do {
-            request = try requestRouter.asURLRequest()
+            let request = try requestRouter.asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -61,10 +59,8 @@ enum MagazineService {
     }
     
     static func updateMagazine(data: MagazineDocument, docID: String) -> AnyPublisher<MagazineDocument, Error> {
-
     
         print("id: \(docID), MagazineService update method")
-
         
         do {
             let suffixedId: String = String(docID.suffix(20))
@@ -77,7 +73,6 @@ enum MagazineService {
                 .decode(type: MagazineDocument.self, decoder: JSONDecoder())
                 .eraseToAnyPublisher()
         } catch {
-            // [x] error handling
             return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
         
@@ -96,7 +91,6 @@ enum MagazineService {
                 .decode(type: MagazineDocument.self, decoder: JSONDecoder())
                 .eraseToAnyPublisher()
         } catch {
-            // [x] error handling
             return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
         

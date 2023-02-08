@@ -10,7 +10,7 @@ import SwiftUI
 struct HeartButton: View {
     @State private var lifetime: Float = 0
     @State private var imageScale: CGFloat = 1
-    @State private var isHeartToggle: Bool = false
+    @Binding var isHeartToggle: Bool
     @Binding var isHeartAnimation: Bool
     @Binding var heartOpacity: Double
    
@@ -66,8 +66,8 @@ struct HeartButton: View {
     }
 }
 
-struct HeartButton_Previews: PreviewProvider {
-    static var previews: some View {
-        HeartButton(isHeartAnimation: .constant(false), heartOpacity: .constant(0))
-    }
-}
+//struct HeartButton_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HeartButton(isHeartAnimation: .constant(false), heartOpacity: .constant(0))
+//    }
+//}

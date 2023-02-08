@@ -14,8 +14,9 @@ struct MagazineEditView: View {
     @State var editTitle : String = ""
     @State var editContent : String = ""
     @State var editCustomPlace : String = ""
-
-
+    
+    @State var clickedContent : Bool = false    // 텍스트 클릭 Bool
+    
     var body: some View {
         NavigationView{
             ScrollView {
@@ -33,6 +34,7 @@ struct MagazineEditView: View {
                                     TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
                                         .onSubmit {
                                             data.fields.customPlaceName.stringValue = editCustomPlace
+                                            
                                         }
 
 
@@ -69,14 +71,30 @@ struct MagazineEditView: View {
                     LazyVStack(pinnedViews: [.sectionHeaders]) {
                         Section(header: MagazineEditHeader(data: data, editTitle: $editTitle) ){
                             VStack {
-                                TextField(data.fields.content.stringValue, text: $editContent)
-                                    .lineSpacing(4.0)
-                                    .padding(.vertical, -9)
-                                    .padding()
-                                    .foregroundColor(Color.textGray)
-                                    .onSubmit {
-                                        data.fields.content.stringValue = editContent
-                                    }
+                                
+                                // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
+                                if clickedContent{
+                                    TextField(data.fields.content.stringValue, text: $editContent)
+                                        .lineSpacing(4.0)
+                                        .padding(.vertical, -9)
+                                        .padding()
+                                        .foregroundColor(Color.textGray)
+                                        .onSubmit {
+                                            data.fields.content.stringValue = editContent
+                                            
+                                            clickedContent.toggle()
+                                        }
+                                }else{
+                                    Text(data.fields.content.stringValue)
+                                        .lineSpacing(4.0)
+                                        .padding(.vertical, -9)
+                                        .padding()
+                                        .foregroundColor(Color.textGray)
+                                        .onTapGesture {
+                                            clickedContent.toggle()
+                                        }
+                                }
+                                
                             }
                         }
                     }
@@ -89,8 +107,8 @@ struct MagazineEditView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack{
                     Button {
-                        //수정
-//                        magazineVM
+                        var docId = String(data.name.suffix(20))
+                        magazineVM.updateMagazine(data: data, docID: docId)
                     } label: {
                         Text("수정완료")
                     }
@@ -104,17 +122,32 @@ struct MagazineEditView: View {
 struct MagazineEditHeader: View {
     @State var data : MagazineDocument
     @Binding var editTitle : String
-
+    @State var clickedTitle : Bool = false  // 텍스트 클릭 Bool
+    
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
-            TextField(data.fields.title.stringValue, text: $editTitle)
-                .font(.title2)
-                .bold()
-                .padding(.horizontal)
-                .onSubmit {
-                    data.fields.title.stringValue = editTitle
-                }
+            
+            // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
+            if clickedTitle{
+                TextField(data.fields.title.stringValue, text: $editTitle)
+                    .font(.title2)
+                    .bold()
+                    .padding(.horizontal)
+                    .onSubmit {
+                        data.fields.title.stringValue = editTitle
+                        clickedTitle.toggle()
+                    }
+            }else{
+                Text(data.fields.title.stringValue)
+                    .font(.title2)
+                    .bold()
+                    .padding(.horizontal)
+                    .onTapGesture {
+                        clickedTitle.toggle()
+                    }
+            }
+            
             Spacer()
             Divider()
         }

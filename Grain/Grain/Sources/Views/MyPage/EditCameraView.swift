@@ -28,12 +28,16 @@ import SwiftUI
 //}
 
 struct EditCameraView: View {
+    @AppStorage("docID") private var docID : String?
+    var userVM: UserViewModel
+    
     @Environment(\.presentationMode) var presentationMode
     // editMode
     @Environment(\.editMode) private var editMode
     
     // 사용자 장비가 담긴 배열
     @State private var  myBodies: [String] = ["코닥", "캐논", "니콘"]
+//    @State private var myBodies: [CurrentUserStringValue] = []
     @State private var myLenses: [String] = ["렌즈1", "렌즈2", "렌즈3"]
     @State private var myFilms: [String] = ["코닥", "캐논", "니콘"]
     
@@ -117,7 +121,7 @@ struct EditCameraView: View {
                     
                     List{
                         // MARK: 카메라 바디 섹션
-                        BodyList(myBodies: $myBodies, showAddBody: $showAddBody, newItem: $newBodyItem)
+                        BodyList(userVM: userVM, myBodies: $myBodies, showAddBody: $showAddBody, newItem: $newBodyItem)
                         
                         // MARK: 카메라 렌즈 섹션
                         LensList(myLenses: $myLenses, showAddLens: $showAddLens, newItem: $newLensItem)
@@ -136,29 +140,37 @@ struct EditCameraView: View {
                 .onChange(of: editMode?.wrappedValue, perform: { newValue in
                     if newValue?.isEditing == true {
                         print("on EditMode")
+//                        showAddBody.toggle()
                     } else {
                         print("done")
+                        showAddBody = false
                     }
                 })
             
                 
         }
+        .onAppear{
+//            myBodies = userVM.currentUsers?.myCamera.arrayValue.values ?? []
+        }
     }
 
 }
 
-struct EditCameraView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditCameraView()
-    }
-}
+//struct EditCameraView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EditCameraView()
+//    }
+//}
 
 
 // MARK: - 카메라 바디 섹션 선언부
 struct BodyList: View {
+    var userVM: UserViewModel
+
     @Environment(\.editMode) private var editMode
 
     @Binding var  myBodies: [String]
+//    @Binding var myBodies: [CurrentUserStringValue]
     @Binding var showAddBody: Bool
     @Binding var newItem: String
     
@@ -172,8 +184,8 @@ struct BodyList: View {
         Section(header: Text("바디").bold()){
             
             // 카메라 바디 정보가 담긴 배열로 부터 리스트 생성
-            ForEach(myBodies, id: \.self) { camera in
-                Text(camera)
+            ForEach(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self) { camera in
+                Text(camera.stringValue)
             }
             .onDelete(perform: removeCameraList(at:))
             
@@ -227,7 +239,9 @@ struct BodyList: View {
     
     // MARK: 바디 추가 함수
     func addCamera() {
-        myBodies.append(newItem)
+        let newItemType = CurrentUserStringValue(stringValue: newItem)
+//        myBodies.append(newItem)
+//        userVM.currentUsers?.myCamera.arrayValue.values.append(newItemType)
         newItem = ""
     }
     

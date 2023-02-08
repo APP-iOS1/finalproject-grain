@@ -10,7 +10,7 @@ import Foundation
 enum MagazineRouter {
 
     case get
-    case post(magazineData: MagazineDocument, docID: String)
+    case post(magazineData: MagazineFields, images: [String], docID: String)
     case delete(docID : String)
     case patch(putData: MagazineDocument, docID: String)
     
@@ -40,14 +40,23 @@ enum MagazineRouter {
     
     private var endPoint: String {
         switch self {
-        case let .post(_, docID):
-            return "/Magazine/?documentId=\(docID)"
         case let .patch(_, docID):
             return "/Magazine/\(docID)"
         case let .delete(docID):
             return "/Magazine/\(docID)"
         default:
             return "/Magazine"
+        }
+    }
+    
+    var parameters: URLQueryItem? {
+        switch self {
+        case let .post(_ , _ , docID):
+            let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
+            return params
+        default :
+            let params: URLQueryItem? = nil
+            return params
         }
     }
     
@@ -66,8 +75,10 @@ enum MagazineRouter {
    
     private var data: Data? {
         switch self {
-        case let .post(magazineData, docID):
-            return MagazineQuery.insertMagazineQuery(data: magazineData, docID: docID)
+        case let .post(magazineData, images, docID):
+            guard let magazinequery = MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID) else { return nil }
+            print( String(decoding: magazinequery, as: UTF8.self))
+            return MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID)
         case let .patch(putData, docID):
             // FIXME: 변수명 고치기
             let structData = MagazineDocument(fields: putData.fields, name: putData.name, createTime: putData.createTime, updateTime: putData.updateTime)
@@ -80,7 +91,13 @@ enum MagazineRouter {
     func asURLRequest() throws -> URLRequest {
         let url = baseURL.appendingPathComponent(endPoint)
         
-        var request = URLRequest(url: url)
+        var component = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        
+        if let param = parameters {
+            component.queryItems = [param]
+        }
+        
+        var request = URLRequest(url: component.url!)
         
         request.httpMethod = method.value
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")

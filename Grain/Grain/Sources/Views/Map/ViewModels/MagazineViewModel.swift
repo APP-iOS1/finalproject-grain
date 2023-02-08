@@ -34,12 +34,14 @@ final class MagazineViewModel: ObservableObject {
         
     }
     
-    func insertMagazine(data: MagazineDocument) {
-        MagazineService.insertMagazine(data: data)
+    // MARK: upload
+    func insertMagazine(data: MagazineFields, images: [UIImage]) {
+        MagazineService.insertMagazine(data: data, images: images)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
                 
             } receiveValue: { (data: MagazineDocument) in
+                print(" gmadfsdfs: \(data)")
                 self.insertMagazineSuccess.send()
                 print("id: \(data.name)")
             }.store(in: &subscription)
@@ -56,7 +58,7 @@ final class MagazineViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-    // MARK: 게시글 삭제
+    // MARK: delete
     func deleteMagazine(docID: String) {
         MagazineService.deleteMagazine(docID: docID)
             .receive(on: DispatchQueue.main)
@@ -66,7 +68,7 @@ final class MagazineViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-    // MARK: Update -> Firebase Store SDK 사용
+    // MARK: update -> Firebase Store SDK 사용
     func updateMagazineSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
         let db = Firestore.firestore()
         

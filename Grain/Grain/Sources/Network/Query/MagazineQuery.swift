@@ -7,26 +7,33 @@
 
 import Foundation
 
-
 enum MagazineQuery {
     
     // MARK: - 매거진 DB에 데이터 저장 메소드
-    static func insertMagazineQuery(data: MagazineDocument, docID: String) -> Data?{
+    static func insertMagazineQuery(data: MagazineFields, images: [String], docID: String) -> Data? {
         var str : String = ""
         var comment : String = ""
         
-        for i in 0..<data.fields.image.arrayValue.values.count {
+        for i in 0..<images.count {
             str += """
-                 { "stringValue": "\(data.fields.image.arrayValue.values[i].stringValue)" },
+                 { "stringValue": "\(images[i])" },
                 """
         }
         
         //FIXME: 강해져서 돌아오기!!
-        for i in 0..<data.fields.comment.arrayValue.values.count{
+//        for i in 0..<data.fields.comment.arrayValue.values.count{
+//            comment += """
+//                  { "stringValue": "\(data.fields.comment.arrayValue.values[i].stringValue)" }
+//            """
+//        }
+        
+        // 임시 댓글 데이터
+        for _ in 0..<1{
             comment += """
-                  { "stringValue": "\(data.fields.comment.arrayValue.values[i].stringValue)" }
-            """
+                          { "stringValue": "사진 예뿌다." }
+                    """
         }
+        
         str.removeLast()
         //        comment.removeLast()
         
@@ -35,7 +42,7 @@ enum MagazineQuery {
                 {
                     "fields": {
                         "lenseInfo": {
-                            "stringValue": "\(data.fields.lenseInfo.stringValue)"
+                            "stringValue": "\(data.lenseInfo.stringValue)"
                         },
                         "image": {
                             "arrayValue": {
@@ -48,31 +55,31 @@ enum MagazineQuery {
                             "stringValue": "\(docID)"
                         },
                         "likedNum": {
-                          "integerValue": \(data.fields.likedNum.integerValue)
+                          "integerValue": \(data.likedNum.integerValue)
                         },
                         "title": {
-                          "stringValue": "\(data.fields.title.stringValue)"
+                          "stringValue": "\(data.title.stringValue)"
                         },
                         "filmInfo": {
-                          "stringValue": "\(data.fields.filmInfo.stringValue)"
+                          "stringValue": "\(data.filmInfo.stringValue)"
                         },
                         "cameraInfo": {
-                          "stringValue": "\(data.fields.cameraInfo.stringValue)"
+                          "stringValue": "\(data.cameraInfo.stringValue)"
                         },
                         "customPlaceName": {
-                          "stringValue": "\(data.fields.customPlaceName.stringValue)"
+                          "stringValue": "\(data.customPlaceName.stringValue)"
                         },
                         "content": {
-                          "stringValue": "\(data.fields.content.stringValue)"
+                          "stringValue": "\(data.content.stringValue)"
                         },
                         "latitude": {
-                          "doubleValue": "\(0)"
+                          "doubleValue": 0.0
                         },
                         "longitude": {
-                          "doubleValue": \(0)
+                          "doubleValue": 0.0
                         },
                         "nickName": {
-                          "stringValue": "\(data.fields.nickName.stringValue)"
+                          "stringValue": "\(data.nickName.stringValue)"
                         },
                         "comment": {
                           "arrayValue": {
@@ -84,10 +91,10 @@ enum MagazineQuery {
                           }
                         },
                         "roadAddress": {
-                          "stringValue": "\(data.fields.roadAddress.stringValue)"
+                          "stringValue": "\(data.roadAddress.stringValue)"
                         },
                         "userID": {
-                          "stringValue": "\(data.fields.userID.stringValue)"
+                          "stringValue": "\(data.userID.stringValue)"
                         }
                 
                     }

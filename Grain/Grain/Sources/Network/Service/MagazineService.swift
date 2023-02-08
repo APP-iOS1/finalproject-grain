@@ -11,7 +11,6 @@ import UIKit
 
 
 // TODO: 매거진 데이터 넣을때 magazineID생성해서 넣어주는 부분 코드 수정
-
 enum MagazineService {
     
     // MARK: - 매거진 데이터 가져오기
@@ -20,6 +19,7 @@ enum MagazineService {
         
         do {
             let request = try MagazineRouter.get.asURLRequest()
+            print("request: \(request.url)")
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -32,14 +32,17 @@ enum MagazineService {
     }
     
     // MARK: - 매거진 데이터 넣기
-    static func insertMagazine(data: MagazineDocument) -> AnyPublisher<MagazineDocument, Error> {
+    static func insertMagazine(data: MagazineFields, images: [UIImage]) -> AnyPublisher<MagazineDocument, Error> {
         print("FirebaseServic insertMagazine start")
         
-        let docID: String = data.fields.id.stringValue
-        let requestRouter = MagazineRouter.post(magazineData: data, docID: docID)
+        let docID: String = data.id.stringValue
+        var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "param", fileName: "file", image: images)
+        
+        let requestRouter = MagazineRouter.post(magazineData: data, images: imageUrlArr, docID: docID)
         
         do {
             let request = try requestRouter.asURLRequest()
+            print("request:\(request)")
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

@@ -8,16 +8,18 @@
 import SwiftUI
 import NMapsMap
 struct CameraLenseFilmModalView: View {
-    @State var data : MagazineDocument
     
     var myCamera = ["camera1asdasdasd", "camera2", "camera3"]
     var myLense = ["lenseA", "lenseB", "lenseC","lense1", "lense2", "lense3"]
     var myFilm = ["film1", "film2", "film3", "film4"]
+    
+    @ObservedObject var magazineVM = MagazineViewModel()
+    @StateObject var userVM = UserViewModel()
+    
     @State private var selectedCamera: String? = ""
     @State private var selectedLense: String? = ""
     @State private var selectedFilm: String? = ""
-    @ObservedObject var magazineVM = MagazineViewModel()
-    @StateObject var userVM = UserViewModel()
+    
     @Binding var inputTitle: String
     @Binding var inputContent: String
     @Binding var updateNumber: NMGLatLng
@@ -74,28 +76,47 @@ struct CameraLenseFilmModalView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     //MARK: 글쓰기 완료 액션
-                    
                     // data.field에 데이터 저장
                     var docId = UUID().uuidString
-                    data.fields.id.stringValue = docId
-                    data.fields.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
-                    data.fields.filmInfo.stringValue = userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? ""
-                    data.fields.customPlaceName.stringValue = "패스"
-                    data.fields.title.stringValue = inputTitle
-                    data.fields.content.stringValue = inputContent
-                    data.fields.cameraInfo.stringValue = userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? ""
-                    data.fields.filmInfo.stringValue = userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? ""
-                    data.fields.lenseInfo.stringValue = userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? ""
-                    data.fields.likedNum.integerValue = "0"
-                    data.fields.longitude.doubleValue = updateNumber.lng
-                    data.fields.latitude.doubleValue = updateNumber.lat
-                    data.fields.nickName.stringValue = userVM.currentUsers?.nickName.stringValue ?? ""
-                    data.fields.roadAddress.stringValue = updateReverseGeocodeResult1
-                    data.fields.comment.arrayValue = MagazineArrayValue(values: [])
-//                    data.fields.image.arrayValue = selectedImages
+                    
+                    var data: MagazineFields = MagazineFields(filmInfo: MagazineString(stringValue: ""),
+                                                              id: MagazineString(stringValue: docId),
+                                                              customPlaceName: MagazineString(stringValue: ""),
+                                                              longitude: MagazineLocation(doubleValue: 0.0),
+                                                              title: MagazineString(stringValue: " "),
+                                                              comment: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
+                                                              lenseInfo: MagazineString(stringValue: ""),
+                                                              userID: MagazineString(stringValue: ""),
+                                                              image: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
+                                                              likedNum: LikedNum(integerValue: "0"),
+                                                              latitude: MagazineLocation(doubleValue: 0.0),
+                                                              content: MagazineString(stringValue: ""),
+                                                              nickName: MagazineString(stringValue: ""),
+                                                              roadAddress: MagazineString(stringValue: ""),
+                                                              cameraInfo: MagazineString(stringValue: ""))
+           
+                    
+                    data.id.stringValue = docId
+                    data.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
+                    data.filmInfo.stringValue = userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? ""
+                    data.customPlaceName.stringValue = "패스"
+                    data.title.stringValue = inputTitle
+                    data.content.stringValue = inputContent
+                    data.cameraInfo.stringValue = userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? ""
+                    data.filmInfo.stringValue = userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? ""
+                    data.lenseInfo.stringValue = userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? ""
+                    data.likedNum.integerValue = "0"
+                    data.longitude.doubleValue = updateNumber.lng
+                    data.latitude.doubleValue = updateNumber.lat
+                    data.nickName.stringValue = userVM.currentUsers?.nickName.stringValue ?? ""
+                    data.roadAddress.stringValue = updateReverseGeocodeResult1
+                    
+                    // FIXME: 이부분 나중에 여기서 배열 처리 해야함.. !
+                    data.comment.arrayValue = MagazineArrayValue(values: [])
+                    data.image.arrayValue = MagazineArrayValue(values: [])
                     
                     // insertMagazine 호출
-                    magazineVM.insertMagazine(data: data)
+                    magazineVM.insertMagazine(data: data, images: selectedImages)
                     
                     presented.toggle()
                 } label: {

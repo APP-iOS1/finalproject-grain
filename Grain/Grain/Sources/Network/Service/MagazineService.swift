@@ -41,7 +41,7 @@ enum MagazineService {
         // 2. 스토리지에 이미지들이 업로드가 된다.
         // 3. 리팩토링 - 라우터에 있는 uploadimage코드를  service, vm로 옮겨야한다.
         var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "1", fileName: "1", image: image)
-        print("makeURL: \(imageUrlArr)")
+       
         
         // 여기서 이미지 들어가게 하고 , 그담 이미지 리퀘스트 받아서 url 만들고 저장해서
         // 요기 밑에 지금 오류나는 image 부분에 넣어줘야한다.
@@ -66,10 +66,9 @@ enum MagazineService {
     
     static func updateMagazine(data: MagazineDocument, docID: String) -> AnyPublisher<MagazineDocument, Error> {
         let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/Magazine"
-        
+        print(data)
         var request = URLRequest(url: URL(string: firestoreURL)!)
-        print("id: \(docID), MagazineService update method")
-
+        
         do {
             let suffixedId: String = String(docID.suffix(20))
             request = try MagazineRouter.patch(putData: data, docID: suffixedId).asURLRequest()

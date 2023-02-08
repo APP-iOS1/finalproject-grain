@@ -658,8 +658,8 @@
 				A7D9F2F7298903CD00B39218 /* StorageService.swift */,
 				A7D9F3032989645D00B39218 /* MapService.swift */,
 				A7D9F30D29896D8500B39218 /* UserService.swift */,
-				A7D9F31129897C9000B39218 /* GeocodeService.swift */,
 				A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */,
+				A7D9F31129897C9000B39218 /* GeocodeService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";

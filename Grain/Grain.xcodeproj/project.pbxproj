@@ -39,6 +39,7 @@
 		8B10F42C298CE4AE00582D27 /* MyPageMyFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F42B298CE4AE00582D27 /* MyPageMyFeedView.swift */; };
 		8B10F42E2990C3F100582D27 /* BookmarkedMagazine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F42D2990C3F100582D27 /* BookmarkedMagazine.swift */; };
 		8B10F4302990DD5300582D27 /* BookmarkedCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F42F2990DD5300582D27 /* BookmarkedCommunityView.swift */; };
+		8B10F4322992A44300582D27 /* ScrollViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F4312992A44300582D27 /* ScrollViewTest.swift */; };
 		8B5E09312989FBA200862700 /* FloatingMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E09302989FBA200862700 /* FloatingMenu.swift */; };
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
@@ -173,6 +174,7 @@
 		8B10F42B298CE4AE00582D27 /* MyPageMyFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageMyFeedView.swift; sourceTree = "<group>"; };
 		8B10F42D2990C3F100582D27 /* BookmarkedMagazine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkedMagazine.swift; sourceTree = "<group>"; };
 		8B10F42F2990DD5300582D27 /* BookmarkedCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkedCommunityView.swift; sourceTree = "<group>"; };
+		8B10F4312992A44300582D27 /* ScrollViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewTest.swift; sourceTree = "<group>"; };
 		8B5E09302989FBA200862700 /* FloatingMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingMenu.swift; sourceTree = "<group>"; };
 		8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityAddView.swift; sourceTree = "<group>"; };
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 			isa = PBXGroup;
 			children = (
 				334699D22988AE26004153A6 /* MyPageView.swift */,
+				8B10F4312992A44300582D27 /* ScrollViewTest.swift */,
 				8B10F429298CD18F00582D27 /* MyPageView2.swift */,
 				334699D42988CB86004153A6 /* MyPageOptionView.swift */,
 				8B10F42D2990C3F100582D27 /* BookmarkedMagazine.swift */,
@@ -805,6 +808,7 @@
 				0C5204A52989F5D4002623FB /* SplashView.swift in Sources */,
 				06F0D830297EB3FE00E7B885 /* UserViewModel.swift in Sources */,
 				A7D9F31229897C9000B39218 /* GeocodeService.swift in Sources */,
+				8B10F4322992A44300582D27 /* ScrollViewTest.swift in Sources */,
 				9958AF9B29777E5B00A51DA9 /* UserStore.swift in Sources */,
 				A75BB98C297E6694004FE6FA /* ViewRouter.swift in Sources */,
 				A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */,

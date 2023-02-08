@@ -103,13 +103,14 @@ struct EditCameraView: View {
                         Spacer()
                         
                         Text("나의 장비 정보")
-                            .font(.title3)
+                            .font(.system(size: 17))
                             .bold()
-                            .padding(.trailing)
+                            .padding(.trailing, 21)
                         
                         Spacer()
                         
                         EditButton()
+                            
                     }
                     .padding(.horizontal)
                     .accentColor(.black)
@@ -128,8 +129,18 @@ struct EditCameraView: View {
                     .scrollContentBackground(.hidden)
                     
                 }
+//                .navigationTitle("나의 장비 정보")
+//                .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarHidden(true)
+                .onChange(of: editMode?.wrappedValue, perform: { newValue in
+                    if newValue?.isEditing == true {
+                        print("on EditMode")
+                    } else {
+                        print("done")
+                    }
+                })
+            
                 
         }
     }

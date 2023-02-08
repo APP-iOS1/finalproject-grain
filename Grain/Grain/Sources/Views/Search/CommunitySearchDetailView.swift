@@ -153,10 +153,6 @@ struct CommunitySearchDetailView: View {
             isHiddenComment = true
             comment = ""
         }
-        .onAppear{
-//            communtyViewModel.fetchCommunity()
-        }
-        
     }
 }
 

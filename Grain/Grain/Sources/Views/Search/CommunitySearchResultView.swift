@@ -8,21 +8,19 @@
 import SwiftUI
 
 struct CommunitySearchResultView: View {
-    @ObservedObject var communityViewModel: CommunityViewModel = CommunityViewModel()
-    
     @State private var isShownProgress: Bool = true
     @Binding var searchWord: String
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
-    
+    let community: CommunityViewModel
     var body: some View {
        
             ZStack {
                 VStack{
                     List{
-                        ForEach(communityViewModel.communities.filter {
+                        ForEach(community.communities.filter {
                             ignoreSpaces(in: $0.fields.title.stringValue)
                                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                             ignoreSpaces(in: $0.fields.content.stringValue)
@@ -55,7 +53,7 @@ struct CommunitySearchResultView: View {
                             }
                         }
                     }
-                    .emptyPlaceholder(communityViewModel.communities.filter {
+                    .emptyPlaceholder(community.communities.filter {
                         ignoreSpaces(in: $0.fields.title.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
@@ -81,16 +79,12 @@ struct CommunitySearchResultView: View {
             }
             .navigationTitle("\(searchWord)")
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear{
-                communityViewModel.fetchCommunity()
-            }
-        
     }
 }
 
 struct CommunitySearchResultView_Previews: PreviewProvider {
     
     static var previews: some View {
-        CommunitySearchResultView(searchWord: .constant(""))
+        CommunitySearchResultView(searchWord: .constant(""), community: CommunityViewModel())
     }
 }

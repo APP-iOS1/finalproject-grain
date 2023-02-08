@@ -127,28 +127,6 @@ struct ContentView: View {
             //                    magazineVM.updateMagazine()
         }
         .ignoresSafeArea(.keyboard)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Text("Grain")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(.black)
-                    .padding()
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack {
-                    Button {
-                        //검색
-                    } label: {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.black)
-                    }
-                    .ignoresSafeArea(.keyboard)
-                }
-            }
-        }
         //        .splashView {
         //            ZStack{
         //                SplashScreen()

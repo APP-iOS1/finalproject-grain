@@ -5,25 +5,24 @@
 //  Created by 지정훈 on 2023/02/02.
 //
 //
-// 실패한거 같음
 import Foundation
 
 struct CurrentUserResponse: Codable {
-    let name : String
-    let fields: CurrentUserFields
-    let createTime, updateTime: String
+    var name : String
+    var fields: CurrentUserFields
+    var createTime, updateTime: String
 }
 struct CurrentUserFields: Codable {
-    let bookmarkedCommunityID, lastSearched, follower, following: CurrentUserUpperArrayValue
-    let myFilm: CurrentUserUpperArrayValue
-    let name: CurrentUserStringValue
-    let myLens: CurrentUserUpperArrayValue
-    let nickName: CurrentUserStringValue
-    let bookmarkedMagazineID, myCamera: CurrentUserUpperArrayValue
-    let profileImage: CurrentUserStringValue
-    let postedCommunityID: CurrentUserUpperArrayValue
-    let email, id: CurrentUserStringValue
-    let recentSearch, likedMagazineID, postedMagazineID: CurrentUserUpperArrayValue
+    var bookmarkedCommunityID, lastSearched, follower, following: CurrentUserUpperArrayValue
+    var myFilm: CurrentUserUpperArrayValue
+    var name: CurrentUserStringValue
+    var myLens: CurrentUserUpperArrayValue
+    var nickName: CurrentUserStringValue
+    var bookmarkedMagazineID, myCamera: CurrentUserUpperArrayValue
+    var profileImage: CurrentUserStringValue
+    var postedCommunityID: CurrentUserUpperArrayValue
+    var email, id: CurrentUserStringValue
+    var recentSearch, likedMagazineID, postedMagazineID: CurrentUserUpperArrayValue
 
     enum CodingKeys: String, CodingKey {
         case bookmarkedCommunityID, lastSearched, follower, following, myFilm, name, myLens, nickName, bookmarkedMagazineID, myCamera, profileImage, postedCommunityID, email, id, recentSearch
@@ -32,12 +31,12 @@ struct CurrentUserFields: Codable {
     }
 }
 struct CurrentUserUpperArrayValue: Codable {
-    let arrayValue: CurrentUserArrayValue
+    var arrayValue: CurrentUserArrayValue
 }
 struct CurrentUserArrayValue: Codable {
-    let values: [CurrentUserStringValue]
+    var values: [CurrentUserStringValue]
 }
 struct CurrentUserStringValue: Codable, Hashable {
-    let stringValue: String
+    var stringValue: String
 }
 

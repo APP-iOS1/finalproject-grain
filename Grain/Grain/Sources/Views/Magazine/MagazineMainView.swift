@@ -11,7 +11,7 @@ struct MagazineMainView: View {
     let titles: [String] = ["인기", "피드"]
     @State private var selectedIndex: Int = 0
     @State private var isSearchViewShown: Bool = false
-    
+    var currentUsers : CurrentUserFields?
     var body: some View {
         NavigationStack {
             VStack{
@@ -41,9 +41,9 @@ struct MagazineMainView: View {
                 }//HS
                 switch selectedIndex {
                 case 0:
-                        MagazineBestView()
+                    MagazineBestView(currentUsers: currentUsers)
                 default:
-                        MagazineFeedView()
+                    MagazineFeedView(currentUsers: currentUsers)
                 }
                 //                TabView(selection: $selectedIndex) {
                 //                    // MARK: 베스트뷰 이동
@@ -86,10 +86,10 @@ struct MagazineMainView: View {
     }
 }
 
-struct MagazineMainView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MagazineMainView()
-        }
-    }
-}
+//struct MagazineMainView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack {
+//            MagazineMainView()
+//        }
+//    }
+//}

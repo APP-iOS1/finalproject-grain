@@ -11,36 +11,50 @@ import Foundation
 enum UserRouter {
 
     case get
-    case post(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String )
-    case delete
-    case put
+    case post(myFilm: String, bookmarkedMagazineID: String,email: String, myCamera: String, postedCommunityID: String, postedMagazineID: String, likedMagazineId: String, lastSearched: String, bookmarkedCommunityID: String, recentSearch: String, id: String, following: String, myLens : String, profileImage: String, name: String, follower: String, nickName: String)
+    case delete(docID: String)
+    case patch(putData: CurrentUserFields, docID: String)
     
     private var baseURL: URL {
         let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
-    
         return URL(string: baseUrlString)!
     }
 
     private enum HTTPMethod {
-            case get
-            case post
-            case put
-            case delete
-            
-            var value: String {
-                switch self {
-                case .get: return "GET"
-                case .post: return "POST"
-                case .put: return "PUT"
-                case .delete: return "DELETE"
-                }
+        case get
+        case post
+        case patch
+        case delete
+        
+        var value: String {
+            switch self {
+            case .get: return "GET"
+            case .post: return "POST"
+            case .patch: return "PATCH"
+            case .delete: return "DELETE"
             }
         }
+    }
     
     private var endPoint: String {
         switch self {
+        case let .patch(_, docID):
+            return "/User/\(docID)"
+        case let .delete(docID: docID):
+            return "/User/\(docID)"
         default:
             return "/User"
+        }
+    }
+    
+    var parameters: URLQueryItem? {
+        switch self {
+        case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID, postedMagazineID, likedMagazineId, lastSearched, bookmarkedCommunityID, recentSearch, id, following, myLens , profileImage, name, follower, nickName):
+            let params: URLQueryItem = URLQueryItem(name: "documentId", value: id)
+            return params
+        default :
+            let params: URLQueryItem? = nil
+            return params
         }
     }
     
@@ -53,14 +67,18 @@ enum UserRouter {
         case .delete:
             return .delete
         default:
-            return .put
+            return .patch
         }
     }
    
     private var data: Data? {
         switch self {
-        case let .post(myFilm,bookmarkedMagazineID, email,myCamera, postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId,lastSearched,bookmarkedCommunityID, recentSearch, id, following,myLens,profileImage,name,follower,nickName ):
-            return UserQuery.insertUserQuery(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName )
+        case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId,lastSearched,bookmarkedCommunityID, recentSearch, id, following,myLens,profileImage,name,follower,nickName):
+            return UserQuery.insertUserQuery(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID, postedMagazineID: postedMagazineID, likedMagazineId: likedMagazineId, lastSearched: lastSearched, bookmarkedCommunityID: bookmarkedCommunityID, recentSearch: recentSearch, id: id, following: following, myLens: myLens, profileImage: profileImage, name: name, follower: follower, nickName: nickName)
+        case let .patch(putData, docID):
+            var data = UserQuery.updateUserQuery(userData: putData, docID: docID)
+            print(String(decoding: data!, as: UTF8.self))
+            return UserQuery.updateUserQuery(userData: putData, docID: docID)
         default:
             return nil
         }
@@ -69,17 +87,21 @@ enum UserRouter {
     func asURLRequest() throws -> URLRequest {
         let url = baseURL.appendingPathComponent(endPoint)
         
-        var request = URLRequest(url: url)
+        var component = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        
+        if let param = parameters {
+            component.queryItems = [param]
+        }
+        
+        var request = URLRequest(url: component.url!)
         
         request.httpMethod = method.value
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if let data = data {
+            print("query: \(data)")
             request.httpBody = data
         }
-        
-        // [x] TODO: Encoding 하는 방식으로 data 넘겨주기
-//        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
         
         return request
     }

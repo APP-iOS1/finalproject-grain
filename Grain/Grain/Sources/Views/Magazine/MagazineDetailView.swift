@@ -1,13 +1,20 @@
 import SwiftUI
 import FirebaseAuth
+import Kingfisher
 
 struct MagazineDetailView: View {
     @StateObject var magazineVM = MagazineViewModel()
+    
+    @State var isHeartToggle: Bool = false    // 하트 눌림 상황
+    @StateObject var userVM = UserViewModel()
+    @AppStorage("docID") private var docID : String?
+    var currentUsers : CurrentUserFields?
     
     @State private var isHeartAnimation: Bool = false
     @State private var heartOpacity: Double = 0
     
     @Environment(\.dismiss) private var dismiss // <- 임시 방편
+    
     
     let data : MagazineDocument
     
@@ -40,27 +47,39 @@ struct MagazineDetailView: View {
                             .padding(.top, -5)
                             .padding(.bottom, -10)
                         
-                    // MARK: 이미지
+                        // MARK: 이미지
                         TabView{
-                            ForEach(1..<4, id: \.self) { i in
-                                Image("\(i)")
+                            ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
+                                KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                     .resizable()
-                                    .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
                                     .aspectRatio(contentMode: .fit)
+                                    .frame(width: 100)
                             }
                         }
                         .tabViewStyle(.page)
                         .frame(maxHeight: Screen.maxHeight * 0.27)
                         .padding()
                         .overlay{
+                    
                             Image(systemName: "heart.fill")
+                                .onAppear{
+                                    if ((currentUsers?.likedMagazineID.arrayValue.values.filter { $0.stringValue == data.fields.id.stringValue}) != nil){
+                                        isHeartToggle = true
+                                    }else{
+                                        isHeartToggle = false
+                                    }
+                                }
                                 .foregroundColor(.white)
                                 .font(.system(size: isHeartAnimation ? 110 : 70 ))
-//                                .scaleEffect(isHeartAnimation ? 5 : 1)
+                            //                                .scaleEffect(isHeartAnimation ? 5 : 1)
                                 .opacity(heartOpacity)
+                                .onTapGesture {
+                                    //액션
+                                    isHeartToggle.toggle()
+                                }
                         }
                         HStack{
-                            HeartButton(isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
+                            HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
                                 .padding(.leading)
                             NavigationLink {
                                 MagazineCommentView()
@@ -69,9 +88,9 @@ struct MagazineDetailView: View {
                                     .font(.title2)
                                     .foregroundColor(.black)
                             }
-
+                            
                             Spacer()
-
+                            
                         }
                     }//VStack
                     .frame(minHeight: 350)
@@ -90,6 +109,20 @@ struct MagazineDetailView: View {
                     Spacer()
                 }//VStack
             }//스크롤뷰
+            .onAppear{
+                userVM.fetchCurrentUser(userID: docID ?? "")
+            }
+            .onDisappear{
+                Task{
+                    if isHeartToggle{
+                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
+                    }else{
+                        // FIXME: 고치기
+                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: "1", isArray: true)
+                    }
+                   
+                }
+            }
             .padding(.top, 1)
         }
         .toolbar {
@@ -110,7 +143,7 @@ struct MagazineDetailView: View {
                             dismiss()
                         } label: {
                             Image(systemName: "trash")
-                            .foregroundColor(.blue)
+                                .foregroundColor(.blue)
                         }
                     }
                 }
@@ -118,6 +151,7 @@ struct MagazineDetailView: View {
         }
     }
 }
+
 struct MagazineDetailHeader: View {
     var data : MagazineDocument
     var body: some View {
@@ -136,11 +170,11 @@ struct MagazineDetailHeader: View {
     }
 }
 
-struct MagazineDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MagazineDetailView(data: MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: 0), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), likedNum: LikedNum(integerValue: ""), latitude: MagazineLocation(doubleValue: 0), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: "")), name: "", createTime: "", updateTime: ""))
-        }
-
-    }
-}
+//struct MagazineDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack {
+//            MagazineDetailView(data: MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: 0), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), likedNum: LikedNum(integerValue: ""), latitude: MagazineLocation(doubleValue: 0), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: "")), name: "", createTime: "", updateTime: ""))
+//        }
+//
+//    }
+//}

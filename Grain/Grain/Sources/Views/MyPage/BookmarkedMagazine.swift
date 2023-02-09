@@ -21,30 +21,6 @@ struct BookmarkedMagazine: View {
     
     var body: some View {
         VStack{
-            
-            //MARK: 상단바
-            HStack{
-                Button{
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    HStack {
-                        Image(systemName: "chevron.left")
-                        Text("설정")
-                    }
-                    .padding(.horizontal)
-                }
-                
-                Spacer()
-                
-                Text("저장된 매거진")
-                    .font(.title3)
-                    .bold()
-                    .padding(.trailing, 80)
-                
-                Spacer()
-            }
-            .accentColor(.black)
-
             ScrollView{
                 LazyVGrid(columns: columns, spacing: 1) {
                     ForEach(0..<images.count, id: \.self) { idx in
@@ -62,8 +38,8 @@ struct BookmarkedMagazine: View {
                 }
             }
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarHidden(true)
+        .navigationTitle("저장된 매거진")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

@@ -16,6 +16,7 @@ struct MatchingTabView: View {
             ScrollView{
                 ForEach(community, id: \.self){ data in
                     NavigationLink {
+                        
                         CommunityDetailView(community: data)
                     } label: {
                         CommunityRowView(community: data)

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import FirebaseAuth
 
 // 텍스트 필드 포커스를 위한 열거형
 private enum FocusableField: Hashable {
@@ -28,31 +29,8 @@ struct EditMyPageView: View {
     
     @FocusState private var focus: FocusableField?
 
-    
     var body: some View {
         VStack {
-//            //MARK: 상단바
-//            HStack{
-//                Button(action: {
-//                    presentationMode.wrappedValue.dismiss()
-//                }, label: {
-//                    HStack {
-//                        Image(systemName: "chevron.left")
-//                        Text("설정")
-//                    }
-//                })
-//                
-//                Spacer()
-//                
-//                Button{
-//                    
-//                }label: {
-//                    Text("저장")
-//                }
-//            }
-//            .accentColor(.black)
-//            .padding(.horizontal)
-
             //MARK: 프로필 이미지 변경 버튼
             Button {
                 //이미지 선택 동작
@@ -159,17 +137,24 @@ struct EditMyPageView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button{
-                    Task{
-                        await userVM.updateUser(updateDocument: docID ?? "", updateKey: "nickName", updateValue: editedNickname, isArray: false)
+                if editedNickname.count > 0 {
+                    Button{
+                        if var currentUser = userVM.currentUsers {
+                            let docID = currentUser.id.stringValue
+                            currentUser.nickName.stringValue = editedNickname
+                            userVM.updateCurrentUser(userData: currentUser, docID: docID)
+                            print("testnickname: \( currentUser.nickName)")
+                            print("testname: \(currentUser.name)")
+                        }
+                    }label: {
+                        Text("저장")
                     }
-                }label: {
+                } else {
                     Text("저장")
+                        .foregroundColor(.textGray)
                 }
             }
         }
-//        .navigationBarBackButtonHidden(true)
-//        .navigationBarHidden(true)
         .onAppear{
             focus = .nickName
             editedNickname = userVM.currentUsers?.nickName.stringValue ?? ""
@@ -188,11 +173,14 @@ struct EditMyPageView: View {
     }
 }
 
-//struct EditMyPageView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EditMyPageView()
-//    }
-//}
+struct EditMyPageView_Previews: PreviewProvider {
+//    @StateObject var userVM: UserViewModel = UserViewModel()
+    static var previews: some View {
+        NavigationStack{
+            EditMyPageView(userVM: UserViewModel())
+        }
+    }
+}
 
 
 extension View {

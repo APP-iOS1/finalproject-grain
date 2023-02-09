@@ -69,6 +69,7 @@ struct CommunityView: View {
                         .tag(3)
                     InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"))
                         .tag(4)
+                    
                 }
                 .tabViewStyle(.page)
                 .toolbar {

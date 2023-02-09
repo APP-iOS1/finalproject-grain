@@ -14,29 +14,6 @@ struct BookmarkedCommunityView: View {
 
     var body: some View {
         VStack{
-            //MARK: 상단바
-            HStack{
-                Button{
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    HStack {
-                        Image(systemName: "chevron.left")
-                        Text("설정")
-                    }
-                    .padding(.horizontal)
-                }
-                
-                Spacer()
-                
-                Text("저장된 커뮤니티 글")
-                    .font(.title3)
-                    .bold()
-                    .padding(.trailing, 80)
-                
-                Spacer()
-            }
-            .accentColor(.black)
-            
             ScrollView{
                 ForEach(community, id: \.self) { data in
                     NavigationLink {
@@ -48,7 +25,8 @@ struct BookmarkedCommunityView: View {
                 }
             }
         }
-        
+        .navigationTitle("저장된 커뮤니티 글")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

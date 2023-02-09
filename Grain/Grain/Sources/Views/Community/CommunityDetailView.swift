@@ -11,6 +11,9 @@ import UIKit
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
     let community: CommunityDocument
+    @AppStorage("docID") private var docID : String?
+    @StateObject var communityVM = CommunityViewModel()
+    @StateObject var userVM = UserViewModel()
     @Environment(\.presentationMode) var presentationMode
     
     @State private var isBookMarked: Bool = false
@@ -67,20 +70,14 @@ struct CommunityDetailView: View {
                     .frame(height: Screen.maxHeight * 0.27)
                     .padding()
                     HStack {
+                        //MARK: 좋아요 버튼
                         Button{
                             isliked.toggle()
                         } label: {
-                            if isliked {
-                                Image(systemName: "heart.fill")
-                                    .foregroundColor(.red)
-                                    .font(.title2)
-                            } else {
-                                Image(systemName: "heart")
-                                    .foregroundColor(.black)
-                                    .font(.title2)
-                            }
+                            Image(systemName: isliked ? "heart.fill" : "heart" )
+                                .foregroundColor(.red)
+                                .font(.title2)
                         }
-                        
                         //Text("50")
                         Button {
                             //댓글 입력 키보드 팝업
@@ -100,8 +97,6 @@ struct CommunityDetailView: View {
                                 .font(.title2)
                                 .foregroundColor(.black)
                         }
-                        
-                        
                         
                     }
                     .padding(.horizontal, 10)
@@ -156,6 +151,50 @@ struct CommunityDetailView: View {
                 }
             }
             //.isHidden(isHiddenComment)
+        }
+        .onAppear{
+            userVM.fetchCurrentUser(userID: docID ?? "")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+
+                // 유저가 좋아요를 눌렀는지
+//                if userVM.likedMagazineIdArr.contains(where: { item in
+//                    item == community.fields.id?.stringValue})
+//                {
+//                    isliked = true
+//                }else{
+//                    isliked = false
+//                }
+                
+                // 유저가 저장을 눌렀는지
+                if userVM.userBookmarkedCommunity.contains(where: { item in
+                    item == community.fields.id.stringValue})
+                {
+                    print(isBookMarked)
+                    isBookMarked = true
+                }else{
+                    isBookMarked = false
+                }
+            }
+            
+        }
+        .onDisappear{
+            Task{
+
+//                if isliked {
+//                    /// 추가 부분
+//                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "bookmarkedCommunityID", updateValue: community.fields.id?.stringValue ?? "", isArray: true)
+//                }else{
+//                    /// 삭제부분
+//                    await userVM.deleteUserSDK(updateDocument: docID ?? "", deleteKey: "bookmarkedCommunityID", deleteIndex: community.fields.id?.stringValue ?? "", isArray: true)
+//                }
+                
+//                 유저 DB에 북마크 상태 저장/삭제
+                if isBookMarked {
+                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "bookmarkedMagazineID", updateValue: community.fields.id.stringValue, isArray: true)
+                }else{
+                    await userVM.deleteUserUsingSDK(updateDocument: docID ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: community.fields.id.stringValue, isArray: true)
+                }
+            }
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)

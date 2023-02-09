@@ -83,12 +83,35 @@ final class CommunityViewModel: ObservableObject {
                 print("Error updating document: \(error)")
             }
         }
-       
-        
     }
     
-    func deleteCommunity() {
-        
-    }
+    // MARK: Delete -> Firebase Store SDK 사용
+    func deleteCommunitySDK(updateDocument: String, deleteKey: String, deleteIndex: String, isArray: Bool) async {
+        let db = Firestore.firestore()
+        let documentRef = db.collection("Community").document("\(updateDocument)")
     
+        if isArray{
+            do{
+                try? await documentRef.updateData(
+                    [
+                        "\(deleteKey)": FieldValue.arrayRemove([
+                            "\(deleteIndex)"
+                        ])
+                    ]
+                )
+            }catch let error {
+                print("Error updating document: \(error)")
+            }
+        }else{
+            do{
+                try? await documentRef.updateData(
+                    [
+                        "\(deleteKey)" : FieldValue.delete()
+                    ]
+                )
+            }catch let error {
+                print("Error updating document: \(error)")
+            }
+        }
+    }
 }

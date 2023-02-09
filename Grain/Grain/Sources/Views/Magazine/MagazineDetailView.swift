@@ -10,6 +10,7 @@ struct MagazineDetailView: View {
     @AppStorage("docID") private var docID : String?
     var currentUsers : CurrentUserFields?
     
+    @State private var isBookMarked: Bool = false
     @State private var isHeartAnimation: Bool = false
     @State private var heartOpacity: Double = 0
     
@@ -74,7 +75,15 @@ struct MagazineDetailView: View {
                                 MagazineCommentView()
                             } label: {
                                 Image(systemName: "bubble.right")
-                                    .font(.title2)
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.black)
+                            }
+                            //MARK: 북마크 버튼
+                            Button {
+                                isBookMarked.toggle()
+                            } label: {
+                                Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
+                                    .font(.system(size: 25))
                                     .foregroundColor(.black)
                             }
                             Spacer()
@@ -97,32 +106,47 @@ struct MagazineDetailView: View {
                 }//VStack
             }//스크롤뷰
             .onAppear{
+                /// 뷰가 처음 생길떄 fetch 한번 한다.
+                /// 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
                 userVM.fetchCurrentUser(userID: docID ?? "")
-                
-                // 이슈화 여기서 디스패치 거냐? 이전 뷰에서 전부 유저 데이터 패치
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
-//                    if userVM.likedMagazineIdArr.filter{$0 == data.fields.id.stringValue}.contains(data.fields.id.stringValue){
-//                        isHeartToggle = true  // 정훈 삽질
+
                     if userVM.likedMagazineIdArr.contains(where: { item in
-                        item == data.fields.id.stringValue
-                    }){
+                        item == data.fields.id.stringValue})
+                    {
                         isHeartToggle = true
                     }else{
                         isHeartToggle = false
                     }
+                    
+                    if userVM.userBookmarkedMagazine.contains(where: { item in
+                        item == data.fields.id.stringValue})
+                    {
+                        isBookMarked = true
+                    }else{
+                        isBookMarked = false
+                    }
                 }
                 
             }
+            
             .onDisappear{
+                /// restAPI 방식으로 수정 해야할 부분
                 Task{
+                    // 유저 DB에 좋아요 상태 저장/삭제
                     if isHeartToggle {
                         /// 추가 부분
                         await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
                     }else{
-                        // FIXME: 고치기
-                        /// 삭제부분 -> 배열 전체를 지움
-                        await userVM.deleteUserSDK(updateDocument: docID ?? "", deleteKey: "likedMagazineId", deleteIndex: data.fields.id.stringValue, isArray: true)
-//                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: "1", isArray: true)
+                        /// 삭제부분
+                        await userVM.deleteUserUsingSDK(updateDocument: docID ?? "", deleteKey: "likedMagazineId", deleteIndex: data.fields.id.stringValue, isArray: true)
+                    }
+                    
+                    // 유저 DB에 북마크 상태 저장/삭제
+                    if isBookMarked {
+                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "bookmarkedMagazineID", updateValue: data.fields.id.stringValue, isArray: true)
+                    }else{
+                        await userVM.deleteUserUsingSDK(updateDocument: docID ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: data.fields.id.stringValue, isArray: true)
                     }
                 }
             }

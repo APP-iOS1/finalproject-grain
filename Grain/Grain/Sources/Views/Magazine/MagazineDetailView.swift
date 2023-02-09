@@ -115,10 +115,10 @@ struct MagazineDetailView: View {
             .onDisappear{
                 Task{
                     if isHeartToggle{
-                        await userVM.updateUser(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
+                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
                     }else{
                         // FIXME: 고치기
-                        await userVM.updateUser(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: "1", isArray: true)
+                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: "1", isArray: true)
                     }
                    
                 }

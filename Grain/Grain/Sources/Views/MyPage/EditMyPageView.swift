@@ -141,7 +141,7 @@ struct EditMyPageView: View {
                 if editedNickname.count > 0 {
                     Button{
                         Task{
-                            await userVM.updateUser(updateDocument: docID ?? "", updateKey: "nickName", updateValue: editedNickname, isArray: false)
+                            await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "nickName", updateValue: editedNickname, isArray: false)
                         }
                     }label: {
                         Text("저장")

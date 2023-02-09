@@ -159,10 +159,10 @@ enum MagazineQuery {
                   "stringValue": "\(data.fields.content.stringValue)"
                 },
                 "latitude": {
-                  "doubleValue": \(latitude)
+                  "doubleValue": \(data.fields.latitude.doubleValue)
                 },
                 "longitude": {
-                  "doubleValue": \(longitude)
+                  "doubleValue": \(data.fields.longitude.doubleValue)
                 },
                 "nickName": {
                   "stringValue": "\(data.fields.nickName.stringValue)"

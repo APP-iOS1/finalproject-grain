@@ -205,7 +205,7 @@ struct BodyList: View {
                             .onSubmit {
                                 if trimNewItem.count > 0 {
                                     Task{
-                                        await userVM.updateUser(updateDocument: docID ?? "", updateKey: "myCamera", updateValue: newItem, isArray: true)
+                                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myCamera", updateValue: newItem, isArray: true)
                                         newItem = ""
                                         userVM.fetchCurrentUser(userID: docID ?? "")
                                         
@@ -217,7 +217,7 @@ struct BodyList: View {
                             if trimNewItem.count > 0{
 //                                addCamera()
                                 Task{
-                                    await userVM.updateUser(updateDocument: docID ?? "", updateKey: "myCamera", updateValue: newItem, isArray: true)
+                                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myCamera", updateValue: newItem, isArray: true)
                                     newItem = ""
                                     userVM.fetchCurrentUser(userID: docID ?? "")
                                     
@@ -260,7 +260,7 @@ struct BodyList: View {
     func addCamera(docID: String, newItem: String) async {
 //        CurrentUserStringValue(stringValue: newItem)
 //        myBodies.append(newItem)
-        await userVM.updateUser(updateDocument: docID , updateKey: "myCamera", updateValue: newItem, isArray: true)
+        await userVM.updateUserUsingSDK(updateDocument: docID , updateKey: "myCamera", updateValue: newItem, isArray: true)
 
 //        userVM.fetchCurrentUser(userID: userID)
         return self.newItem = ""
@@ -311,7 +311,7 @@ struct LensList: View {
                             .onSubmit {
                                 if trimNewItem.count > 0 {
                                     Task{
-                                        await userVM.updateUser(updateDocument: docID ?? "", updateKey: "myLens", updateValue: newItem, isArray: true)
+                                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myLens", updateValue: newItem, isArray: true)
                                         newItem = ""
                                         userVM.fetchCurrentUser(userID: docID ?? "")
                                     }
@@ -321,7 +321,7 @@ struct LensList: View {
                         Button{
                             if trimNewItem.count > 0{
                                 Task{
-                                    await userVM.updateUser(updateDocument: docID ?? "", updateKey: "myLens", updateValue: newItem, isArray: true)
+                                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myLens", updateValue: newItem, isArray: true)
                                     newItem = ""
                                     userVM.fetchCurrentUser(userID: docID ?? "")
                                 }                            }
@@ -404,7 +404,7 @@ struct FilmList: View {
                             .onSubmit {
                                 if trimNewItem.count > 0 {
                                     Task{
-                                        await userVM.updateUser(updateDocument: docID ?? "", updateKey: "myFilm", updateValue: newItem, isArray: true)
+                                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myFilm", updateValue: newItem, isArray: true)
                                         newItem = ""
                                         userVM.fetchCurrentUser(userID: docID ?? "")
                                     }
@@ -414,7 +414,7 @@ struct FilmList: View {
                         Button{
                             if trimNewItem.count > 0{
                                 Task{
-                                    await userVM.updateUser(updateDocument: docID ?? "", updateKey: "myFilm", updateValue: newItem, isArray: true)
+                                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myFilm", updateValue: newItem, isArray: true)
                                     newItem = ""
                                     userVM.fetchCurrentUser(userID: docID ?? "")
                                 }

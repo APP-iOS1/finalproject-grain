@@ -18,24 +18,39 @@ struct MyPageView: View {
     @StateObject var userVM = UserViewModel()
     
     var magazineDocument: [MagazineDocument]
+    var boomarkedMagazineDocument: [MagazineDocument]
     
     var body: some View {
         NavigationStack {
             VStack {
-                //MARK: 프로필 이미지
-                Image("2")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(64)
-                    .overlay {
-                        Circle()
-                            .stroke(lineWidth: 1.5)
+                VStack(alignment: .leading){
+                    HStack{
+                        //MARK: 프로필 이미지
+                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                            .resizable()
+                            .frame(width: 90, height: 90)
+                            .cornerRadius(64)
+                            .overlay {
+                                Circle()
+                                    .stroke(lineWidth: 1.5)
+                            }
+                            .padding(.trailing)
+                        
+                        VStack(alignment: .leading){
+                            Text("자기소개 글 blah blahblahblahblahblahblah")
+                                .lineLimit(3)
+                                .padding(.top, 2)
+                        }
                     }
-                Text(userVM.currentUsers?.name.stringValue ?? "")
-                    .font(.title2)
-                    .bold()
-                Text("자기소개글")
-                    .padding(.top, 3)
+                    .padding(.bottom)
+                    .padding(.trailing, 30)
+                    
+//                    Text("userNickName")
+                    Text(userVM.currentUsers?.nickName.stringValue ?? "닉네임 없음")
+                        .font(.title3)
+                        .bold()
+                        .padding(.leading, 8)
+                }
                 MyPageMyFeedView(magazineDocument: magazineDocument)
             }
             .onAppear{
@@ -45,7 +60,7 @@ struct MyPageView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        MyPageOptionView(userVM: userVM)
+                        MyPageOptionView(userVM: userVM, bookmarkedMagazineDocument: boomarkedMagazineDocument)
                     } label: {
                         Image(systemName: "ellipsis")
                             .foregroundColor(.black)
@@ -58,6 +73,6 @@ struct MyPageView: View {
 
 //struct MyPageView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        MyPageView()
+//        MyPageView(magazineDocument: [], boomarkedMagazineDocument: [])
 //    }
 //}

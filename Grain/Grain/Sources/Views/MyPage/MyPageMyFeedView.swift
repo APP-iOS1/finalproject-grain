@@ -38,6 +38,7 @@ struct MyPageMyFeedView: View {
             .foregroundColor(.black)
             .font(.title3)
             .padding()
+            .padding(.leading, 22)
             
             if showGridOrList {
                 ScrollView{

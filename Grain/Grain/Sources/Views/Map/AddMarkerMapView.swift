@@ -47,6 +47,7 @@ struct AddMarkerMapView: View {
     
     @State var isDragging = false
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
+    @State private var showingAlert = false
     var drag: some Gesture {
         DragGesture()
             .onChanged{ _ in self.isDragging = true}
@@ -77,7 +78,7 @@ struct AddMarkerMapView: View {
                         //MARK: 맵뷰 상단 검색바
                         HStack{
                             // FIXME: onSubmit 하고 버튼 눌러야함
-                            TextField("🔍 위치를 검색해주세요", text: $searchMap)
+                            TextField("🔍 ex) 서울시 종로구 사직동", text: $searchMap)
                                 .padding()
                                 .background(.white)
                                 .cornerRadius(15)
@@ -120,10 +121,11 @@ struct AddMarkerMapView: View {
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
                                 .foregroundColor(.white)
-                                .frame(width: Screen.maxWidth * 0.3, height: Screen.maxHeight * 0.1)
+                                .shadow(radius: 2)
+                                .frame(width: Screen.maxWidth * 0.1, height: Screen.maxHeight * 0.1)
                                 .overlay {
-                                    Text("추가하기")
-                                        .foregroundColor(.red)
+                                    Text("요기!")
+                                        .foregroundColor(.black)
                                 }
                         }
                         
@@ -154,19 +156,37 @@ struct AddMarkerMapView: View {
                             .shadow(radius: 1)
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
-                            .navigationBarBackButtonHidden(true)
-                    } label: {
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.black)
-                            .bold()
-                            .opacity(1)
-                            .shadow(radius: 1)
+                if updateNumber.lat == 0 && updateNumber.lng == 0 { //마커를 지정안했을 경우
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            showingAlert = true
+                        } label: {
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.black)
+                                .bold()
+                                .opacity(1)
+                                .shadow(radius: 1)
+                        }
+                        .alert(isPresented: $showingAlert) {
+                            Alert(title: Text("알림"), message: Text("위치를 지정해주세요."), dismissButton: .default(Text("확인")))
+                        }
+                    }
+                } else {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        NavigationLink {
+                            CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
+                                .navigationBarBackButtonHidden(true)
+                        } label: {
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.black)
+                                .bold()
+                                .opacity(1)
+                                .shadow(radius: 1)
+                        }
                     }
                 }
             }
+            .ignoresSafeArea(.keyboard)
         }
     }
 }

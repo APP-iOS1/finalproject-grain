@@ -116,7 +116,7 @@ final class AuthenticationStore: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
         } receiveValue: { (data: UserDocument) in
-            UserDefaults.standard.set(String(data.name.suffix(20)), forKey: "docID")
+            UserDefaults.standard.set((data.fields.id.stringValue), forKey: "docID")
             self.fetchUsersSuccess.send()
         }.store(in: &subscription)
     }

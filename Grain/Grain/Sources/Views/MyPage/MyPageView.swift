@@ -40,7 +40,7 @@ struct MyPageView: View {
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장
-                userVM.fetchCurrentUser(userID: docID ?? "")
+                userVM.fetchCurrentUser(userID: "j78qzOgxohWAGy2CkhY7UR93BTo2")
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

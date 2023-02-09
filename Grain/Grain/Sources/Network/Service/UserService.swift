@@ -50,7 +50,8 @@ enum UserService {
     }
 
     // MARK: - 유저정보 업데이트 메소드
-    static func updateUserData(userData: UserFields, docID: String) -> AnyPublisher<UserDocument, Error>  {
+    static func updateCurrentUser(userData: CurrentUserFields, docID: String) -> AnyPublisher<UserDocument, Error>  {
+        print("updateCurrentUser Service Start")
         do {
             let request = try UserRouter.patch(putData: userData, docID: docID).asURLRequest()
             return URLSession
@@ -65,7 +66,7 @@ enum UserService {
     }
     
     // MARK: - 유저 탈퇴 (흠 필요한지 모르겟뜸)
-    static func deleteUserData(docID: String) -> AnyPublisher<UserDocument, Error> {
+    static func deleteUser(docID: String) -> AnyPublisher<UserDocument, Error> {
         do {
             let request = try UserRouter.delete(docID: docID).asURLRequest()
             return URLSession

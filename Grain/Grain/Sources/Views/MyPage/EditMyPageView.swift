@@ -137,11 +137,14 @@ struct EditMyPageView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-
                 if editedNickname.count > 0 {
                     Button{
-                        Task{
-                            await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "nickName", updateValue: editedNickname, isArray: false)
+                        if var currentUser = userVM.currentUsers {
+                            let docID = currentUser.id.stringValue
+                            currentUser.nickName.stringValue = editedNickname
+                            userVM.updateCurrentUser(userData: currentUser, docID: docID)
+                            print("testnickname: \( currentUser.nickName)")
+                            print("testname: \(currentUser.name)")
                         }
                     }label: {
                         Text("저장")

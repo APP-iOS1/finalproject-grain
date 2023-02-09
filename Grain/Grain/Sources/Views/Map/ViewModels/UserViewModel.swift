@@ -57,8 +57,9 @@ final class UserViewModel: ObservableObject {
     }
     
 
-    func updateUser(userData: UserFields, docID: String) {
-        UserService.updateUserData(userData: userData, docID: docID)
+    func updateCurrentUser(userData: CurrentUserFields, docID: String) {
+        print("updateCurrentUser Service Start")
+        UserService.updateCurrentUser(userData: userData, docID: docID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
         } receiveValue: { (data: UserDocument) in
@@ -67,7 +68,7 @@ final class UserViewModel: ObservableObject {
     }
     
     func deleteUser(docID: String) {
-        UserService.deleteUserData(docID: docID)
+        UserService.deleteUser(docID: docID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
         } receiveValue: { (data: UserDocument) in

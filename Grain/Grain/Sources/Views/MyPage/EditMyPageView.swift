@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import FirebaseAuth
 
 // 텍스트 필드 포커스를 위한 열거형
 private enum FocusableField: Hashable {
@@ -28,7 +29,6 @@ struct EditMyPageView: View {
     
     @FocusState private var focus: FocusableField?
 
-    
     var body: some View {
         VStack {
             //MARK: 프로필 이미지 변경 버튼
@@ -137,6 +137,7 @@ struct EditMyPageView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
+
                 if editedNickname.count > 0 {
                     Button{
                         Task{

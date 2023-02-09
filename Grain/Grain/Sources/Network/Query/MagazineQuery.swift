@@ -7,86 +7,102 @@
 
 import Foundation
 
-
 enum MagazineQuery {
-    // MARK: 매거진 DB에 데이터 저장
-    /// id값 패스
-    static func insertMagazineQuery(userID: String, cameraInfo: String, nickName: String, image: [String], content: String, title: String,lenseInfo:String,longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String,latitude: Double,comment: String,roadAddress: String) -> Data?{
-        
+    
+    // MARK: - 매거진 DB에 데이터 저장 메소드
+    static func insertMagazineQuery(data: MagazineFields, images: [String], docID: String) -> Data? {
         var str : String = ""
-        for i in 0..<image.count {
+        var comment : String = ""
+        
+        for i in 0..<images.count {
             str += """
-                { "stringValue": "\(image[i])" },
+                 { "stringValue": "\(images[i])" },
                 """
         }
-        //FIXME: 강해져서 돌아오기
+
+        //FIXME: 강해져서 돌아오기!!
+//        for i in 0..<data.fields.comment.arrayValue.values.count{
+//            comment += """
+//                  { "stringValue": "\(data.fields.comment.arrayValue.values[i].stringValue)" }
+//            """
+//        }
+        
+        // 임시 댓글 데이터
+        for _ in 0..<1{
+            comment += """
+                          { "stringValue": "사진 예뿌다." }
+                    """
+        }
+        
         str.removeLast()
+        //        comment.removeLast()
         
         return
-        """
-        {
-            "fields": {
-                        "longitude": {
-                            "doubleValue": \(longitude)
-                        },
-                        "likedNum": {
-                            "integerValue": \(likedNum)
-                        },
-                        "nickName": {
-                            "stringValue": "\(nickName)"
-                        },
-                        "cameraInfo": {
-                            "stringValue": "\(cameraInfo)"
-                        },
-                        "latitude": {
-                            "doubleValue": \(latitude)
-                        },
-                        "title": {
-                            "stringValue": "\(title)"
+                """
+                {
+                    "fields": {
+                        "lenseInfo": {
+                            "stringValue": "\(data.lenseInfo.stringValue)"
                         },
                         "image": {
                             "arrayValue": {
                                 "values": [
-                                            \(str)
-                                ]
-                            }
-                        },
-                        "filmInfo": {
-                            "stringValue": "\(filmInfo)"
-                        },
-                        "customPlaceName": {
-                            "stringValue": "\(customPlaceName)"
-                        },
-                        "content": {
-                            "stringValue": "\(content)"
-                        },
-                        "userID": {
-                            "stringValue": "\(userID)"
-                        },
-                        "lenseInfo": {
-                            "stringValue": "\(lenseInfo)"
-                        },
-                        "comment": {
-                            "arrayValue": {
-                                "values": [
-                                    {
-                                        "stringValue": "\(comment)"
-                                    }
+                                        \(str)
                                 ]
                             }
                         },
                         "id": {
-                            "stringValue":  ""
+                            "stringValue": "\(docID)"
+                        },
+                        "likedNum": {
+                          "integerValue": \(data.likedNum.integerValue)
+                        },
+                        "title": {
+                          "stringValue": "\(data.title.stringValue)"
+                        },
+                        "filmInfo": {
+                          "stringValue": "\(data.filmInfo.stringValue)"
+                        },
+                        "cameraInfo": {
+                          "stringValue": "\(data.cameraInfo.stringValue)"
+                        },
+                        "customPlaceName": {
+                          "stringValue": "\(data.customPlaceName.stringValue)"
+                        },
+                        "content": {
+                          "stringValue": "\(data.content.stringValue)"
+                        },
+                        "latitude": {
+                          "doubleValue": 0.0
+                        },
+                        "longitude": {
+                          "doubleValue": 0.0
+                        },
+                        "nickName": {
+                          "stringValue": "\(data.nickName.stringValue)"
+                        },
+                        "comment": {
+                          "arrayValue": {
+                            "values": [
+                              
+                                 \(comment)
+                              
+                            ]
+                          }
                         },
                         "roadAddress": {
-                            "stringValue": "\(roadAddress)"
+                          "stringValue": "\(data.roadAddress.stringValue)"
+                        },
+                        "userID": {
+                          "stringValue": "\(data.userID.stringValue)"
                         }
+                
                     }
-            }
-        """.data(using: .utf8)
+                }
+                """.data(using: .utf8)
     }
     
-    // FIXME: 메서드명 고치기
+    //MARK: - 매거진 DB에 update 쿼리 리턴 메소드
     static func updateMagazineQuery(data: MagazineDocument, docID: String) -> Data?{
         var str : String = ""
         var comment : String = ""
@@ -96,7 +112,7 @@ enum MagazineQuery {
                  { "stringValue": "\(data.fields.image.arrayValue.values[i].stringValue)" },
                 """
         }
-        //FIXME: 강해져서 돌아오기!!
+        
         //FIXME: 강해져서 돌아오기!!
         for i in 0..<data.fields.comment.arrayValue.values.count{
             comment += """
@@ -104,11 +120,8 @@ enum MagazineQuery {
             """
         }
         str.removeLast()
-//        comment.removeLast()
-        
-        // MARK: 코드를 바꿔야 할수도 있음 post 만들고 값을 받아오면 옵셔널 값으로 묶여 와서 처리해야함
-        var latitude = data.fields.latitude.doubleValue!
-        var longitude = data.fields.longitude.doubleValue!
+
+        //        comment.removeLast()
 
         return
         """

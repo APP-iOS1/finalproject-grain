@@ -5,11 +5,10 @@
 //  Created by 박희경 on 2023/01/23.
 //
 
-import Foundation
-import FirebaseFirestore
 
 import Foundation
 import Combine
+import FirebaseFirestore
 
 
 final class UserViewModel: ObservableObject {
@@ -26,6 +25,8 @@ final class UserViewModel: ObservableObject {
     
     var fetchUsersSuccess = PassthroughSubject<(), Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
+    var updateUsersSuccess = PassthroughSubject<(), Never>()
+    var deleteUsersSuccess = PassthroughSubject<(), Never>()
 
     func fetchUser() {
         UserService.getUser()
@@ -35,9 +36,7 @@ final class UserViewModel: ObservableObject {
             self.users = data.documents
             self.fetchUsersSuccess.send()
         }.store(in: &subscription)
-
     }
-
     
     func fetchCurrentUser(userID: String) {
         UserService.getCurrentUser(userID: userID)
@@ -57,7 +56,27 @@ final class UserViewModel: ObservableObject {
         }.store(in: &subscription)
     }
     
-    func updateUser(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+
+    func updateUser(userData: UserFields, docID: String) {
+        UserService.updateUserData(userData: userData, docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+        } receiveValue: { (data: UserDocument) in
+            self.updateUsersSuccess.send()
+        }.store(in: &subscription)
+    }
+    
+    func deleteUser(docID: String) {
+        UserService.deleteUserData(docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+        } receiveValue: { (data: UserDocument) in
+            self.deleteUsersSuccess.send()
+        }.store(in: &subscription)
+    }
+    
+    func updateUserUsingSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+
         
         let db = Firestore.firestore()
         let documentRef = db.collection("User").document("\(updateDocument)")

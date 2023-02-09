@@ -5,7 +5,6 @@
 //  Created by 지정훈 on 2023/02/02.
 //
 //
-// 실패한거 같음
 import Foundation
 
 struct CurrentUserResponse: Codable {

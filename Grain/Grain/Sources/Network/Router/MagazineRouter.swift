@@ -10,13 +10,12 @@ import Foundation
 enum MagazineRouter {
 
     case get
-    case post(userID: String, cameraInfo: String, nickName: String, image: [String], content: String, title: String, lenseInfo:String, longitude: Double,likedNum: Int,filmInfo: String, customPlaceName: String, latitude: Double, comment: String, roadAddress: String )
+    case post(magazineData: MagazineFields, images: [String], docID: String)
     case delete(docID : String)
     case patch(putData: MagazineDocument, docID: String)
     
     private var baseURL: URL {
         let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
-    
         return URL(string: baseUrlString)!
     }
     
@@ -47,6 +46,17 @@ enum MagazineRouter {
         }
     }
     
+    var parameters: URLQueryItem? {
+        switch self {
+        case let .post(_ , _ , docID):
+            let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
+            return params
+        default :
+            let params: URLQueryItem? = nil
+            return params
+        }
+    }
+    
     private var method: HTTPMethod {
         switch self {
         case .get :
@@ -62,12 +72,13 @@ enum MagazineRouter {
    
     private var data: Data? {
         switch self {
-        case let .post(userID, cameraInfo, nickName, image, content, title, lenseInfo, longitude, likedNum, filmInfo, customPlaceName, latitude, comment, roadAddress):
-            return MagazineQuery.insertMagazineQuery(userID: userID, cameraInfo: cameraInfo, nickName: nickName, image: image, content: content, title: title,lenseInfo:lenseInfo,longitude: longitude,likedNum: likedNum,filmInfo: filmInfo, customPlaceName: customPlaceName,latitude: latitude,comment: comment,roadAddress: roadAddress)
+        case let .post(magazineData, images, docID):
+            guard let magazinequery = MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID) else { return nil }
+            print( String(decoding: magazinequery, as: UTF8.self))
+            return MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID)
         case let .patch(putData, docID):
             // FIXME: 변수명 고치기
             let structData = MagazineDocument(fields: putData.fields, name: putData.name, createTime: putData.createTime, updateTime: putData.updateTime)
-            
             return MagazineQuery.updateMagazineQuery(data: structData, docID: docID)
         default:
             return nil
@@ -77,7 +88,13 @@ enum MagazineRouter {
     func asURLRequest() throws -> URLRequest {
         let url = baseURL.appendingPathComponent(endPoint)
         
-        var request = URLRequest(url: url)
+        var component = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        
+        if let param = parameters {
+            component.queryItems = [param]
+        }
+        
+        var request = URLRequest(url: component.url!)
         
         request.httpMethod = method.value
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -86,7 +103,7 @@ enum MagazineRouter {
             request.httpBody = data
         }
         
-        // [x] TODO: Encoding 하는 방식으로 data 넘겨주기
+        // FIXME: Encoding 하는 방식으로 data 넘겨주기
         //        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
         return request
     }

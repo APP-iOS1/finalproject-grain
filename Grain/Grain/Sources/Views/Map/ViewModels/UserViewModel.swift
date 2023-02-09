@@ -23,6 +23,8 @@ final class UserViewModel: ObservableObject {
     @Published var currentUserStringValue: [CurrentUserStringValue] = [] // 변환만 하기 위해
     @Published var userPostedMagazine : [String] = [] //string값만
     
+    @Published var likedMagazineIdArr : [String] = [] //string값만
+    
     var fetchUsersSuccess = PassthroughSubject<(), Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
     var updateUsersSuccess = PassthroughSubject<(), Never>()
@@ -51,6 +53,10 @@ final class UserViewModel: ObservableObject {
             self.currentUserStringValue.append(contentsOf: data.fields.postedMagazineID.arrayValue.values)
             for i in self.currentUserStringValue{
                 self.userPostedMagazine.append(i.stringValue)
+            }
+            
+            for i in data.fields.likedMagazineID.arrayValue.values{
+                self.likedMagazineIdArr.append(i.stringValue)
             }
             self.fetchUsersSuccess.send()
         }.store(in: &subscription)
@@ -105,6 +111,33 @@ final class UserViewModel: ObservableObject {
         
     }
     
+    
+    func deleteUserSDK(updateDocument: String, deleteKey: String,isArray: Bool) async {
+        let db = Firestore.firestore()
+        let documentRef = db.collection("User").document("\(updateDocument)")
+    
+        if isArray{
+            do{
+                try? await documentRef.updateData(
+                    [
+                        "\(deleteKey)": FieldValue.delete()
+                    ]
+                )
+            }catch let error {
+                print("Error updating document: \(error)")
+            }
+        }else{
+            do{
+                try? await documentRef.updateData(
+                    [
+                        "\(deleteKey)" : FieldValue.delete()
+                    ]
+                )
+            }catch let error {
+                print("Error updating document: \(error)")
+            }
+        }
+    }
 
     
 }

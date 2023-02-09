@@ -15,6 +15,7 @@ extension Date {
     func renderTime() -> String {
         if Calendar.current.dateComponents([.day], from: self, to: .now).day! > 7 { // 기준 7일
             let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
             formatter.locale = Locale(identifier: "ko_KR")
             formatter.timeZone = TimeZone(abbreviation: "KST")
             formatter.amSymbol = "오전"
@@ -30,4 +31,18 @@ extension Date {
         formatter.dateTimeStyle = .named
         return formatter.localizedString(for: self, relativeTo: .now)
     }
+    
+    static func fromString(string: String, format: String = "yyyy-MM-dd") -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.date(from: string)
+    }
 }
+
+//let dateString = "2023-02-08"
+//
+//if let date = Date.fromString(string: dateString) {
+//    print("Successfully converted to date: \(date)")
+//} else {
+//    print("Failed to convert to date")
+//}

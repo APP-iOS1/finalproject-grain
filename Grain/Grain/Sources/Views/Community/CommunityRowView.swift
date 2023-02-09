@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 /*
  id:String
  category: Int
@@ -19,7 +20,7 @@ import SwiftUI
  */
 
 struct CommunityRowView: View {
-    
+    @State private var communityDate: String = ""
     var community: CommunityDocument
     var body: some View {
         VStack(alignment: .leading){
@@ -74,8 +75,9 @@ struct CommunityRowView: View {
                        // Spacer()
                         
                         HStack {
-                            Text("1시간 전")
                             
+                           // String.toDate(community.createTime)
+                            Text("\(communityDate)")
                             Spacer()
                             
                             Image(systemName: "heart")
@@ -102,6 +104,23 @@ struct CommunityRowView: View {
                 
         }
         .padding(.top, 5)
+        .onAppear {
+            // MARK: CleanCode로 고쳐야함
+            // renderTime()을 쓰기 위한 노력: Date타입에 쓸 수 있음 Date -> String (ex."n시간 전")
+            // 우리가 받아오는 community.createTime은 "2023-02-08T14:13:07.734982Z"형식의 String
+            // renderTime()을 쓰려면 "yyyy-MM-dd"의 String에서 .toDate()를 통해 Date타입으로 바꿔야함
+            // "2023-02-08T14:13:07.734982Z" 문자열을 잘라줘서 "2023-02-08"(subString)으로 바꾼뒤 String으로 형변환 - communityDateStr
+            // toDate() 함수를 써서 String -> Date로 바꿈 - dateTime
+            // renderTime() 함수를 써서 n시간 전 String으로 계산
+            // communityDate에 최종적으로 넣어줌
+            let startIndex = community.createTime.startIndex
+            let endIndex = community.createTime.index(community.createTime.startIndex, offsetBy: 9)
+            let range = startIndex...endIndex
+            let communityDateStr = String(community.createTime[range])
+            let dateTime = communityDateStr.toDate()
+            let beforeTime = dateTime?.renderTime()
+            communityDate = beforeTime ?? ""
+        }
     }
 }
 

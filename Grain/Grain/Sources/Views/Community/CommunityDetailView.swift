@@ -22,63 +22,50 @@ struct CommunityDetailView: View {
     var body: some View {
         VStack {
             ScrollView {
-                VStack(alignment: .leading) {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }, label: {
-                        HStack {
-                            Image(systemName: "chevron.left")
-                            Text("커뮤니티")
+                VStack(alignment: .leading){
+                        Button(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        }, label: {
+                            HStack {
+                                Image(systemName: "chevron.left")
+                                Text("커뮤니티")
+                            }
+                            .padding(.horizontal, 10)
+                        })
+                        .accentColor(.black)
+                        
+                    // MARK: 닉네임 헤더
+                    HStack {
+                        ProfileImage(imageName: "sampleImage", width: 40, height: 40)
+                        VStack(alignment: .leading) {
+                            Text(community.fields.nickName.stringValue)
+                                .font(.title3)
+                                .bold()
+                            Text("1분전")
+                                .font(.caption)
                         }
-                        .padding(.horizontal, 10)
-                    })
-                    .accentColor(.black)
-                    
-                    //MARK: 게시글(디테일뷰) 제목
-                    VStack(alignment: .leading) {
-                        Text("\(community.fields.title.stringValue)")
-                            .multilineTextAlignment(.leading)
-                            .font(.title)
-                            .bold()
-                        //                            HStack{
-                        //                                Image(systemName: "mappin")
-                        //                                Text(community.location)
-                        //                            }
-                        //                            .font(.subheadline)
-                        //                            .foregroundColor(.gray)
+                        Spacer()
                     }
-                    .padding(.top, 10)
-                    .padding(.horizontal, 10)
+                    .padding()
+                    .padding(.top, -15)
+                    Divider()
+                        .frame(maxWidth: Screen.maxWidth * 0.92)
+                        .background(Color.black)
+                        .padding(.top, -5)
+                        .padding(.bottom, -10)
+                        .padding(.leading, Screen.maxWidth * 0.04)
                     
+                    //MARK: 사진
                     TabView {
                         //FIXME: 고치기
-                        //                        ForEach(community.image, id: \.self)  { img in
-                        //                            Image(img)
-                        //                                .resizable()
-                        //                                .aspectRatio(contentMode: .fill)
-                        //                                .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
-                        //                        }
-                        
                         Image("sampleImage")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
                     } //이미지 뷰
                     .tabViewStyle(.page)
-                    .frame(height: Screen.maxHeight * 0.3)
-                    
-                    //MARK: 작성자 정보
-                    HStack {
-                        ProfileImage(imageName: "sampleImage", width: 45, height: 45)
-                        Text(community.fields.nickName.stringValue)
-                            .font(.title3)
-                            .bold()
-                    }
-                    .padding(.horizontal, 10)
-                    
-                    Text(community.fields.content.stringValue)
-                        .padding(.horizontal, 10)
-                    
+                    .frame(height: Screen.maxHeight * 0.27)
+                    .padding()
                     HStack {
                         Button{
                             isliked.toggle()
@@ -93,7 +80,7 @@ struct CommunityDetailView: View {
                                     .font(.title2)
                             }
                         }
-
+                        
                         //Text("50")
                         Button {
                             //댓글 입력 키보드 팝업
@@ -104,7 +91,7 @@ struct CommunityDetailView: View {
                                 .font(.title3)
                                 .foregroundColor(.black)
                         }
-
+                        
                         //MARK: 북마크 버튼
                         Button {
                             isBookMarked.toggle()
@@ -115,20 +102,31 @@ struct CommunityDetailView: View {
                         }
                         
                         
-
+                        
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 1)
-                    //                    Rectangle()
-                    //                        .frame(width: Screen.maxWidth * 0.9, height: 0.5)
-                    //                        .foregroundColor(.secondary)
-                    //                        .padding(.horizontal, 30)
-                    
+                    //                    //MARK: 게시글(디테일뷰) 제목
+                    // MARK: 스티키 헤더 제목과 건텐츠
+                    LazyVStack(pinnedViews: [.sectionHeaders]) {
+                        Section(header: CommunityDetailHeader(community: community) ){
+                            VStack {
+                                Text(community.fields.content.stringValue)
+                                    .lineSpacing(4.0)
+                                    .padding(.vertical, -9)
+                                    .padding()
+                                //                                    .foregroundColor(Color.textGray)
+                            }
+                        }
+                    }
                     //FIXME: 고치기
                     CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "악!", comment: "가나다라마바사아자차카타파하거너더러머버서어저처커터처허 가나다라마바사아자차카타파하아라", createdAt: Date()))
                         .padding(.horizontal, 10)
-                } // top vstack
+
+                    // top vstack
+                }
             } //scroll view
+            .padding(.top, 1)
             
             //MARK: 댓글입력 창
             if !isHiddenComment {
@@ -143,9 +141,7 @@ struct CommunityDetailView: View {
                             isHiddenComment = true
                             comment = ""
                         }
-                    
                     Spacer()
-                    
                     Button {
                         // 댓글추가 동작 함수
                         self.hideKeyboard()
@@ -168,6 +164,22 @@ struct CommunityDetailView: View {
             isHiddenComment = true
             comment = ""
         }
+    }
+}
+
+struct CommunityDetailHeader: View {
+    let community: CommunityDocument
+    var body: some View {
+        HStack {
+            Text(community.fields.title.stringValue)
+                .font(.title2)
+                .bold()
+                .padding(.horizontal)
+           Spacer()
+        }
+        .frame(minWidth: 0, maxWidth: .infinity)
+        .frame(height: 40)
+        .background(Rectangle().foregroundColor(.white))
     }
 }
 

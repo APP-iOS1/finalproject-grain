@@ -22,6 +22,9 @@ final class UserViewModel: ObservableObject {
     // 유저가 포스팅한 매거진 id 담는 배열
     @Published var currentUserStringValue: [CurrentUserStringValue] = [] // 변환만 하기 위해
     @Published var userPostedMagazine : [String] = [] //string값만
+    @Published var cameraList: [String] = []
+    @Published var lensList: [String] = []
+    @Published var filmList: [String] = []
     
     var fetchUsersSuccess = PassthroughSubject<(), Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
@@ -51,6 +54,15 @@ final class UserViewModel: ObservableObject {
             self.currentUserStringValue.append(contentsOf: data.fields.postedMagazineID.arrayValue.values)
             for i in self.currentUserStringValue{
                 self.userPostedMagazine.append(i.stringValue)
+            }
+            for i in self.currentUsers?.myCamera.arrayValue.values ?? [] {
+                self.cameraList.append(i.stringValue)
+            }
+            for i in self.currentUsers?.myLens.arrayValue.values ?? [] {
+                self.lensList.append(i.stringValue)
+            }
+            for i in self.currentUsers?.myFilm.arrayValue.values ?? [] {
+                self.filmList.append(i.stringValue)
             }
             self.fetchUsersSuccess.send()
         }.store(in: &subscription)

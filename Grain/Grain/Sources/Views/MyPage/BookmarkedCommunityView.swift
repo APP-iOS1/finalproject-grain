@@ -27,6 +27,7 @@ struct BookmarkedCommunityView: View {
         }
         .navigationTitle("저장된 커뮤니티 글")
         .navigationBarTitleDisplayMode(.inline)
+        
     }
 }
 

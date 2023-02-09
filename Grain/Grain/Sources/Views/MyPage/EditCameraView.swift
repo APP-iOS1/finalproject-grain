@@ -190,7 +190,9 @@ struct BodyList: View {
             
             // 유저의 바디 정보가 담긴 배열로 부터 리스트 생성
             ForEach(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self) { camera in
-                Text(camera.stringValue)
+                if camera.stringValue != "필수" { //계정 등록 시 장비정보에 기본으로 들어가는 "필수" 안보여주기위함
+                    Text(camera.stringValue)
+                }
             }
             .onDelete(perform: removeCameraList(at:))
 
@@ -296,7 +298,9 @@ struct LensList: View {
             
             // 유저의 렌즈 정보가 담긴 배열로 부터 리스트 생성
             ForEach(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self) { lens in
-                Text(lens.stringValue)
+                if lens.stringValue != "선택" {
+                    Text(lens.stringValue)
+                }
             }
             .onDelete(perform: removeLensList(at:))
             
@@ -373,9 +377,8 @@ struct LensList: View {
 struct FilmList: View {
     @AppStorage("docID") private var docID : String?
     var userVM: UserViewModel
-    
-    @Environment(\.editMode) private var editMode
 
+    @Environment(\.editMode) private var editMode
     @Binding var  myFilms: [String]
     @Binding var showAddFilm: Bool
     @Binding var newItem: String
@@ -389,7 +392,9 @@ struct FilmList: View {
     var body: some View {
         Section(header: Text("필름").bold()){
             ForEach(userVM.currentUsers?.myFilm.arrayValue.values ?? [], id: \.self) { film in
-                Text(film.stringValue)
+                if film.stringValue != "선택" {
+                    Text(film.stringValue)
+                }
             }
             .onDelete(perform: removeFilmList(at:))
             

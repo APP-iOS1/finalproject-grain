@@ -109,12 +109,24 @@ struct AddCommunityView: View {
                 .frame(width: Screen.maxWidth * 0.95, height: 1)
             
             TextField("글 제목", text: $inputTitle)
-                .keyboardType(.default)
+                .keyboardType(.asciiCapable)
+                .textContentType(.init(rawValue: ""))
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
                 .padding(.horizontal, 15)
                 .onSubmit {
                     hideKeyboard()
+                }
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button {
+                            hideKeyboard()
+                        } label: {
+                            Text("Done")
+                                .foregroundColor(.blue)
+                        }
+                    }
                 }
             
             Rectangle()
@@ -122,7 +134,7 @@ struct AddCommunityView: View {
                 .frame(width: Screen.maxWidth * 0.95, height: 1)
             
             TextField("내용을 작성해 주세요.", text: $inputContent, axis: .vertical)
-                .keyboardType(.default)
+                .keyboardType(.alphabet)
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
                 .lineLimit(...25)

@@ -71,7 +71,7 @@ struct CommunityView: View {
                         .tag(4)
                     
                 }
-                .tabViewStyle(.page)
+                .tabViewStyle(.page(indexDisplayMode: .never))
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Text("GRAIN")

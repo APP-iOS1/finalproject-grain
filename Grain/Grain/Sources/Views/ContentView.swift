@@ -71,7 +71,7 @@ struct ContentView: View {
                             }
                         case 4:
                             NavigationStack {
-                                MyPageView(magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.userPostedMagazine))
+                                MyPageView(magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.userPostedMagazine), boomarkedMagazineDocument: magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.userBookmarkedMagazine))
                             }
                         default:
                             NavigationStack {

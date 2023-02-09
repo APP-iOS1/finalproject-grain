@@ -135,8 +135,9 @@ final class UserViewModel: ObservableObject {
         
     }
     
+
     
-    func deleteUserSDK(updateDocument: String, deleteKey: String,isArray: Bool) async {
+    func deleteUserSDK(updateDocument: String, deleteKey: String, deleteIndex: String, isArray: Bool) async {
         let db = Firestore.firestore()
         let documentRef = db.collection("User").document("\(updateDocument)")
     
@@ -144,7 +145,9 @@ final class UserViewModel: ObservableObject {
             do{
                 try? await documentRef.updateData(
                     [
-                        "\(deleteKey)": FieldValue.delete()
+                        "\(deleteKey)": FieldValue.arrayRemove([
+                            "\(deleteIndex)"
+                        ])
                     ]
                 )
             }catch let error {

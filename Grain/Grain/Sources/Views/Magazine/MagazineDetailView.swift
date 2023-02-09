@@ -120,8 +120,9 @@ struct MagazineDetailView: View {
                         await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
                     }else{
                         // FIXME: 고치기
-                        /// 삭제부분
-                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: "1", isArray: true)
+                        /// 삭제부분 -> 배열 전체를 지움
+                        await userVM.deleteUserSDK(updateDocument: docID ?? "", deleteKey: "likedMagazineId", deleteIndex: data.fields.id.stringValue, isArray: true)
+//                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: "1", isArray: true)
                     }
                 }
             }

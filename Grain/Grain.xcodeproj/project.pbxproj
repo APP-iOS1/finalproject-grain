@@ -122,6 +122,9 @@
 		A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */; };
 		A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */; };
 		A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */; };
+		A7AF1A03299566EF007E6D43 /* CommentDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A02299566EF007E6D43 /* CommentDTO.swift */; };
+		A7AF1A0529956A12007E6D43 /* CommentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A0429956A12007E6D43 /* CommentQuery.swift */; };
+		A7AF1A0729956CDC007E6D43 /* CommentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A0629956CDC007E6D43 /* CommentRouter.swift */; };
 		A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */; };
 		A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */; };
 		A7BFE18B298CC24E00D15F45 /* PhotoSpotTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFE18A298CC24E00D15F45 /* PhotoSpotTestView.swift */; };
@@ -267,6 +270,9 @@
 		A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeDTO.swift; sourceTree = "<group>"; };
 		A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeRouter.swift; sourceTree = "<group>"; };
 		A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeDTO.swift; sourceTree = "<group>"; };
+		A7AF1A02299566EF007E6D43 /* CommentDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDTO.swift; sourceTree = "<group>"; };
+		A7AF1A0429956A12007E6D43 /* CommentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentQuery.swift; sourceTree = "<group>"; };
+		A7AF1A0629956CDC007E6D43 /* CommentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRouter.swift; sourceTree = "<group>"; };
 		A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDTO.swift; sourceTree = "<group>"; };
 		A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineQuery.swift; sourceTree = "<group>"; };
 		A7BFE18A298CC24E00D15F45 /* PhotoSpotTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSpotTestView.swift; sourceTree = "<group>"; };
@@ -647,6 +653,7 @@
 				A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */,
 				A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */,
 				A7D9F30F29897A8D00B39218 /* NaverAPIEnum.swift */,
+				A7AF1A02299566EF007E6D43 /* CommentDTO.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -658,6 +665,7 @@
 				A7D957D0297AA646001D2401 /* CommunityQuery.swift */,
 				A7D9F3012989638900B39218 /* MapQuery.swift */,
 				A7D9F30929896A4B00B39218 /* UserQuery.swift */,
+				A7AF1A0429956A12007E6D43 /* CommentQuery.swift */,
 			);
 			path = Query;
 			sourceTree = "<group>";
@@ -673,6 +681,7 @@
 				A7D9F317298986B000B39218 /* GeocodeRouter.swift */,
 				A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */,
 				0693B4C62992849600F9CDE2 /* Error.swift */,
+				A7AF1A0629956CDC007E6D43 /* CommentRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -873,8 +882,10 @@
 				9962CDCB297924A000E834C3 /* MatchingTabView.swift in Sources */,
 				330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */,
 				A75BB99929815391004FE6FA /* RepairShopMapView.swift in Sources */,
+				A7AF1A0729956CDC007E6D43 /* CommentRouter.swift in Sources */,
 				33728E802990920D00E8AB97 /* SelectPostView.swift in Sources */,
 				A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */,
+				A7AF1A0529956A12007E6D43 /* CommentQuery.swift in Sources */,
 				A71516BA29926233009A0780 /* MagazineEditView.swift in Sources */,
 				8B10F4302990DD5300582D27 /* BookmarkedCommunityView.swift in Sources */,
 				9958AF9129777D5A00A51DA9 /* Place.swift in Sources */,
@@ -904,6 +915,7 @@
 				99233D4C2977F34200A875B1 /* MapStore.swift in Sources */,
 				99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */,
 				9958AF9329777D7700A51DA9 /* Community.swift in Sources */,
+				A7AF1A03299566EF007E6D43 /* CommentDTO.swift in Sources */,
 				9958AFB52977B0C500A51DA9 /* AuthenticationView.swift in Sources */,
 				8B10F42C298CE4AE00582D27 /* MyPageMyFeedView.swift in Sources */,
 				334699D92988DE3F004153A6 /* EditCameraView.swift in Sources */,

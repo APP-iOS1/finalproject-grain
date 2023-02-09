@@ -40,7 +40,7 @@ struct CommunityFields: Codable,Hashable{
     let nickName: CommunityCategory
     let image: CommunityImage
     let userID: CommunityCategory
-    let id: CommunityCategory?
+    let id: CommunityCategory
 }
 
 struct CommunityCategory: Codable,Hashable {

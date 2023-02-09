@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MagazineFeedView: View {
-    
+    var currentUsers : CurrentUserFields?
     @ObservedObject var magazineVM = MagazineViewModel()
     var body: some View {
         ScrollView{

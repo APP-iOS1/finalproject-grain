@@ -6,24 +6,17 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MyPageMyFeedView: View {
-//    @ObservedObject var magazineVM = MagazineViewModel()
-    @AppStorage("docID") private var docID : String?
-    @StateObject var magazineVM = MagazineViewModel()
-    @StateObject var userVM = UserViewModel()
-    
-    var images: [Image] = [Image("1"), Image("2"), Image("3"), Image("test"), Image("sampleImage"), Image("testImage")]
-    
+
     // 나의 피드를 그리드로 보여줄지 리스트로 보여줄지 선택하는 변수
     @State private var showGridOrList: Bool = true
     
     var magazineDocument: [MagazineDocument]
     
     let columns = [
-        GridItem(.flexible(), spacing: 1),
-        GridItem(.flexible(), spacing: 1),
-        GridItem(.flexible(), spacing: 1)
+        GridItem(.adaptive(minimum: 100))
     ]
     
     var body: some View {
@@ -49,15 +42,14 @@ struct MyPageMyFeedView: View {
             if showGridOrList {
                 ScrollView{
                     LazyVGrid(columns: columns, spacing: 1) {
-                        ForEach(0..<images.count, id: \.self) { idx in
+                        ForEach(magazineDocument, id: \.self) { item in
                             NavigationLink {
-                                //이미지에 해당하는 게시글로 이동
+                                MagazineDetailView(data: item)
                             } label: {
-                                images[idx]
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: (Screen.maxWidth / 3 - 1), height: (Screen.maxWidth / 3 - 1))
-                                    .clipped()
+                                KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                   .resizable()
+                                   .aspectRatio(contentMode: .fit)
+                                   .frame(width: 100)
                             }
                             
                         }
@@ -76,21 +68,9 @@ struct MyPageMyFeedView: View {
                             }
                         }
                     }
-                }.onAppear{
-                    // MARK: fetch 데이터 시작
-                    magazineVM.fetchMagazine()
-                    userVM.fetchCurrentUser(userID: docID ?? "")
                 }
             }
             
         }
-        
-        
     }
 }
-//
-//struct MyPageMyFeedView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MyPageMyFeedView()
-//    }
-//}

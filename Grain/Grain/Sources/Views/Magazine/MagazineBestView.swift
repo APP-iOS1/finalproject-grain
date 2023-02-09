@@ -9,6 +9,11 @@ import SwiftUI
 
 struct MagazineBestView: View {
     @StateObject var magazineVM = MagazineViewModel()
+    
+    @StateObject var userVM = UserViewModel()
+    @AppStorage("docID") private var docID : String?
+    var currentUsers : CurrentUserFields?
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -29,7 +34,7 @@ struct MagazineBestView: View {
                     .padding([.leading, .top])
                     ForEach(magazineVM.magazines, id: \.self ){ data in
                         NavigationLink {
-                            MagazineDetailView(data: data)
+                            MagazineDetailView(currentUsers: currentUsers, data: data)
                         } label: {
                             Top10View(data: data)
                                 .padding(.vertical, 7)
@@ -46,13 +51,14 @@ struct MagazineBestView: View {
                 } // scroll view
             }//vstack
             .onAppear{
+                userVM.fetchCurrentUser(userID: docID ?? "")
                 magazineVM.fetchMagazine()
             }
         }
     }
 }
-struct MagazineBestView_Previews: PreviewProvider {
-    static var previews: some View {
-        MagazineBestView()
-    }
-}
+//struct MagazineBestView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MagazineBestView()
+//    }
+//}

@@ -23,6 +23,10 @@ final class UserViewModel: ObservableObject {
     @Published var currentUserStringValue: [CurrentUserStringValue] = [] // 변환만 하기 위해
     @Published var userPostedMagazine : [String] = [] //string값만
     
+    // 유저가 저장한 매거진 id 담는 배열
+    @Published var currentUserBookmarkedStringValue: [CurrentUserStringValue] = [] // 변환만 하기 위해
+    @Published var userBookmarkedMagazine : [String] = [] //string값만
+    
     var fetchUsersSuccess = PassthroughSubject<(), Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
     var updateUsersSuccess = PassthroughSubject<(), Never>()
@@ -52,8 +56,15 @@ final class UserViewModel: ObservableObject {
             for i in self.currentUserStringValue{
                 self.userPostedMagazine.append(i.stringValue)
             }
+            
+            self.currentUserBookmarkedStringValue.append(contentsOf: data.fields.bookmarkedMagazineID.arrayValue.values)
+            for i in self.currentUserBookmarkedStringValue{
+                self.userBookmarkedMagazine.append(i.stringValue)
+            }
+            
             self.fetchUsersSuccess.send()
         }.store(in: &subscription)
+      
     }
     
 

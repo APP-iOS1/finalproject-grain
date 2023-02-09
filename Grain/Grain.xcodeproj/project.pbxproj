@@ -42,6 +42,8 @@
 		8B10F42E2990C3F100582D27 /* BookmarkedMagazine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F42D2990C3F100582D27 /* BookmarkedMagazine.swift */; };
 		8B10F4302990DD5300582D27 /* BookmarkedCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F42F2990DD5300582D27 /* BookmarkedCommunityView.swift */; };
 		8B10F4322992A44300582D27 /* ScrollViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F4312992A44300582D27 /* ScrollViewTest.swift */; };
+		8B10F43429948BF900582D27 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F43329948BF900582D27 /* PrivacyPolicyView.swift */; };
+		8B10F4362994906A00582D27 /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F4352994906A00582D27 /* TermsOfServiceView.swift */; };
 		8B5E09312989FBA200862700 /* FloatingMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E09302989FBA200862700 /* FloatingMenu.swift */; };
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
@@ -183,6 +185,8 @@
 		8B10F42D2990C3F100582D27 /* BookmarkedMagazine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkedMagazine.swift; sourceTree = "<group>"; };
 		8B10F42F2990DD5300582D27 /* BookmarkedCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkedCommunityView.swift; sourceTree = "<group>"; };
 		8B10F4312992A44300582D27 /* ScrollViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewTest.swift; sourceTree = "<group>"; };
+		8B10F43329948BF900582D27 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
+		8B10F4352994906A00582D27 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
 		8B5E09302989FBA200862700 /* FloatingMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingMenu.swift; sourceTree = "<group>"; };
 		8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityAddView.swift; sourceTree = "<group>"; };
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
@@ -364,6 +368,8 @@
 				8B10F4312992A44300582D27 /* ScrollViewTest.swift */,
 				8B10F429298CD18F00582D27 /* MyPageView2.swift */,
 				334699D42988CB86004153A6 /* MyPageOptionView.swift */,
+				8B10F4352994906A00582D27 /* TermsOfServiceView.swift */,
+				8B10F43329948BF900582D27 /* PrivacyPolicyView.swift */,
 				8B10F42D2990C3F100582D27 /* BookmarkedMagazine.swift */,
 				8B10F42F2990DD5300582D27 /* BookmarkedCommunityView.swift */,
 				8B10F42B298CE4AE00582D27 /* MyPageMyFeedView.swift */,
@@ -804,6 +810,7 @@
 				9936E2B129909846006F3333 /* MainSearchView.swift in Sources */,
 				0C5204A92989FFBD002623FB /* Comment.swift in Sources */,
 				0C5204A82989FFB8002623FB /* CommunityRowView2.swift in Sources */,
+				8B10F43429948BF900582D27 /* PrivacyPolicyView.swift in Sources */,
 				9955E113297A52E200265D14 /* MagazineAddView.swift in Sources */,
 				9958AF9F29777F5100A51DA9 /* PlaceStore.swift in Sources */,
 				A7D9F300298962B900B39218 /* MapDTO.swift in Sources */,
@@ -871,6 +878,7 @@
 				A71516BA29926233009A0780 /* MagazineEditView.swift in Sources */,
 				8B10F4302990DD5300582D27 /* BookmarkedCommunityView.swift in Sources */,
 				9958AF9129777D5A00A51DA9 /* Place.swift in Sources */,
+				8B10F4362994906A00582D27 /* TermsOfServiceView.swift in Sources */,
 				A7D957D6297AAF8C001D2401 /* MagazineRouter.swift in Sources */,
 				9962CDD1297924D800E834C3 /* InfoTabView.swift in Sources */,
 				8B0BA0A4298A4C15000A7090 /* ListTestView.swift in Sources */,

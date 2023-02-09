@@ -16,10 +16,11 @@ struct CameraLenseFilmModalView: View {
     @ObservedObject var magazineVM = MagazineViewModel()
     @StateObject var userVM = UserViewModel()
     
-    @State private var selectedCamera: String? = ""
-    @State private var selectedLense: String? = ""
-    @State private var selectedFilm: String? = ""
+    @State private var selectedCamera: String = ""
+    @State private var selectedLense: String = ""
+    @State private var selectedFilm: String = ""
     
+    @State private var tempSelectedCamera: [String] = []
     @Binding var inputTitle: String
     @Binding var inputContent: String
     @Binding var updateNumber: NMGLatLng
@@ -28,9 +29,10 @@ struct CameraLenseFilmModalView: View {
     @Binding var inputCustomPlace: String
     @Binding var presented : Bool
     @AppStorage("docID") private var docID : String?
-    
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     @State private var selection: String?
+    @State private var showingAlert = false
+    
     var body: some View {
         VStack {
             //MARK:
@@ -53,10 +55,16 @@ struct CameraLenseFilmModalView: View {
                 Text("등록된카메라없음")
             } else {
                 Picker("카메라 바디 선택", selection: $selectedCamera) {
-                    ForEach(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self) {
-                        Text($0.stringValue)
+                    ForEach(userVM.cameraList, id: \.self) {
+                        Text($0)
                     }
-                }.pickerStyle(.wheel)
+                }
+                .pickerStyle(.wheel)
+//                List(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self, selection: $selectedCamera) { camera in
+//                    Text(camera.stringValue)
+//                }
+//                .listStyle(.plain)
+                Text("선택된 카메라: \(selectedCamera)")
 //                List(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self, selection: $selectedCamera) { camera in
 //                    Text(camera.stringValue)
 //                }
@@ -81,8 +89,8 @@ struct CameraLenseFilmModalView: View {
                 //필름없을때 보여줄 뷰
             } else {
                 Picker("카메라 렌즈 선택", selection: $selectedLense) {
-                    ForEach(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self) {
-                        Text($0.stringValue)
+                    ForEach(userVM.lensList, id: \.self) {
+                        Text($0)
                     }
                 }.pickerStyle(.wheel)
 //                List(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self, selection: $selectedLense) { lense in
@@ -110,8 +118,8 @@ struct CameraLenseFilmModalView: View {
                 //렌즈없을때 보여줄 뷰
             } else {
                 Picker("카메라 필름 선택", selection: $selectedFilm) {
-                    ForEach(userVM.currentUsers?.myFilm.arrayValue.values ?? [], id: \.self) {
-                        Text($0.stringValue)
+                    ForEach(userVM.filmList, id: \.self) {
+                        Text($0)
                     }
                 }.pickerStyle(.wheel)
 //                List(userVM.currentUsers?.myFilm.arrayValue.values ?? [], id: \.self, selection: $selectedFilm) { film in
@@ -138,55 +146,58 @@ struct CameraLenseFilmModalView: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-
-                    //MARK: 글쓰기 완료 액션
-                    // data.field에 데이터 저장
-                    var docId = UUID().uuidString
-                    
-                    var data: MagazineFields = MagazineFields(filmInfo: MagazineString(stringValue: ""),
-                                                              id: MagazineString(stringValue: docId),
-                                                              customPlaceName: MagazineString(stringValue: ""),
-                                                              longitude: MagazineLocation(doubleValue: 0.0),
-                                                              title: MagazineString(stringValue: " "),
-                                                              comment: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
-                                                              lenseInfo: MagazineString(stringValue: ""),
-                                                              userID: MagazineString(stringValue: ""),
-                                                              image: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
-                                                              likedNum: LikedNum(integerValue: "0"),
-                                                              latitude: MagazineLocation(doubleValue: 0.0),
-                                                              content: MagazineString(stringValue: ""),
-                                                              nickName: MagazineString(stringValue: ""),
-                                                              roadAddress: MagazineString(stringValue: ""),
-                                                              cameraInfo: MagazineString(stringValue: ""))
-           
-                    
-                    data.id.stringValue = docId
-                    data.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
-                    data.filmInfo.stringValue = userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? ""
-                    data.customPlaceName.stringValue = "패스"
-                    data.title.stringValue = inputTitle
-                    data.content.stringValue = inputContent
-                    data.cameraInfo.stringValue = userVM.currentUsers?.myCamera.arrayValue.values[0].stringValue ?? ""
-                    data.filmInfo.stringValue = userVM.currentUsers?.myFilm.arrayValue.values[0].stringValue ?? ""
-                    data.lenseInfo.stringValue = userVM.currentUsers?.myLens.arrayValue.values[0].stringValue ?? ""
-                    data.likedNum.integerValue = "0"
-                    data.longitude.doubleValue = updateNumber.lng
-                    data.latitude.doubleValue = updateNumber.lat
-                    data.nickName.stringValue = userVM.currentUsers?.nickName.stringValue ?? ""
-                    data.roadAddress.stringValue = updateReverseGeocodeResult1
-                    
-                    // FIXME: 이부분 나중에 여기서 배열 처리 해야함.. !
-                    data.comment.arrayValue = MagazineArrayValue(values: [])
-                    data.image.arrayValue = MagazineArrayValue(values: [])
-                    
-                    // insertMagazine 호출
-                    magazineVM.insertMagazine(data: data, images: selectedImages)
-
-                    presented.toggle()
+                    if selectedCamera == "필수" || selectedCamera == "" { //카메라바디목록에서 카메라 바디 선택안했을 때
+                        showingAlert = true
+                    } else {
+                        //MARK: 글쓰기 완료 함수
+                        //MARK: 글쓰기 완료 액션
+                        // data.field에 데이터 저장
+                        var docId = UUID().uuidString
+                        
+                        var data: MagazineFields = MagazineFields(filmInfo: MagazineString(stringValue: ""),
+                                                                  id: MagazineString(stringValue: docId),
+                                                                  customPlaceName: MagazineString(stringValue: ""),
+                                                                  longitude: MagazineLocation(doubleValue: 0.0),
+                                                                  title: MagazineString(stringValue: " "),
+                                                                  comment: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
+                                                                  lenseInfo: MagazineString(stringValue: ""),
+                                                                  userID: MagazineString(stringValue: ""),
+                                                                  image: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
+                                                                  likedNum: LikedNum(integerValue: "0"),
+                                                                  latitude: MagazineLocation(doubleValue: 0.0),
+                                                                  content: MagazineString(stringValue: ""),
+                                                                  nickName: MagazineString(stringValue: ""),
+                                                                  roadAddress: MagazineString(stringValue: ""),
+                                                                  cameraInfo: MagazineString(stringValue: ""))
+               
+                        
+                        data.id.stringValue = docId
+                        data.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
+                        data.customPlaceName.stringValue = "패스"
+                        data.title.stringValue = inputTitle
+                        data.content.stringValue = inputContent
+                        data.cameraInfo.stringValue = selectedCamera
+                        data.filmInfo.stringValue = selectedFilm
+                        data.lenseInfo.stringValue = selectedLense
+                        data.likedNum.integerValue = "0"
+                        data.longitude.doubleValue = updateNumber.lng
+                        data.latitude.doubleValue = updateNumber.lat
+                        data.nickName.stringValue = userVM.currentUsers?.nickName.stringValue ?? ""
+                        data.roadAddress.stringValue = updateReverseGeocodeResult1
+                        
+                        // FIXME: 이부분 나중에 여기서 배열 처리 해야함.. !
+                        data.comment.arrayValue = MagazineArrayValue(values: [])
+                        data.image.arrayValue = MagazineArrayValue(values: [])
+                        magazineVM.insertMagazine(data: data, images: selectedImages)
+                        presented.toggle()
+                    }
                 } label: {
                     Text("완료")
                         .foregroundColor(.black)
                         .opacity(1)
+                }
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text("알림"), message: Text("카메라 바디가 선택되지 않았습니다."), dismissButton: .default(Text("확인")))
                 }
             }
         }
@@ -196,7 +207,8 @@ struct CameraLenseFilmModalView: View {
             //            selectedLense = myLense[0]
             //            selectedFilm = myFilm[0]
         }
-        
+
+
     }
 }
 

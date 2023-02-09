@@ -17,7 +17,7 @@ struct MagazineContentAddView: View {
     @State private var selectedCamera = 0
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
-    
+    @State private var showingAlert = false
     // 모달 내리기
     @Binding var presented : Bool
     // insert
@@ -111,14 +111,15 @@ struct MagazineContentAddView: View {
                         hideKeyboard()
                     }
                 
+                
                 Rectangle()
                     .fill(Color(UIColor.systemGray5))
                     .frame(width: Screen.maxWidth * 0.95, height: 1)
                 
                 // MARK: 게시물 내용 작성 란
                 TextField("내용을 작성해 주세요.", text: $inputContent, axis: .vertical)
-                    .keyboardType(.default)
                     .textInputAutocapitalization(.never)
+                    .keyboardType(.default)
                     .disableAutocorrection(true)
                     .lineLimit(...25)
                     .padding(.horizontal, 15)
@@ -140,14 +141,29 @@ struct MagazineContentAddView: View {
                     }
 
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
-                            .navigationBarBackButtonHidden(true)
-                    } label: {
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.black)
-                            .bold()
+                if selectedImages.isEmpty {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            showingAlert = true
+                        } label: {
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.black)
+                                .bold()
+                        }
+                        .alert(isPresented: $showingAlert) {
+                            Alert(title: Text("알림"), message: Text("최소 1장 이상의 사진을 업로드하세요."), dismissButton: .default(Text("확인")))
+                        }
+                    }
+                } else {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        NavigationLink {
+                            AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
+                                .navigationBarBackButtonHidden(true)
+                        } label: {
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.black)
+                                .bold()
+                        }
                     }
                 }
             }

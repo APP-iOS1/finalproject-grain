@@ -15,13 +15,13 @@ extension Date {
     func renderTime() -> String {
         if Calendar.current.dateComponents([.day], from: self, to: .now).day! > 7 { // 기준 7일
             let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
             formatter.locale = Locale(identifier: "ko_KR")
             formatter.timeZone = TimeZone(abbreviation: "KST")
             formatter.amSymbol = "오전"
             formatter.pmSymbol = "오후"
             formatter.dateStyle = .long
             formatter.timeStyle = .short
+            formatter.dateFormat = "yyyy.MM.dd"
             return formatter.string(from: self)
         }
         

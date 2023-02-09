@@ -12,6 +12,7 @@ struct MyPageOptionView: View {
 //    @Environment(\.presentationMode) var presentationMode
 //    @StateObject var authVM = AuthenticationStore()
     var userVM: UserViewModel
+    var bookmarkedMagazineDocument: [MagazineDocument]
     
     @StateObject var communityVM: CommunityViewModel = CommunityViewModel()
     
@@ -43,7 +44,7 @@ struct MyPageOptionView: View {
             
             ScrollView{
                 //MARK: 계정 섹션
-                AccountSection(userVM: userVM, community: communityVM.communities)
+                AccountSection(userVM: userVM, community: communityVM.communities, bookmarkedMagazineDocument: bookmarkedMagazineDocument)
                 
                 //MARK: 지원 섹션
                 SupportSection()
@@ -88,7 +89,8 @@ extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate 
 struct AccountSection: View {
     var userVM: UserViewModel
     var community: [CommunityDocument]
-    
+    var bookmarkedMagazineDocument: [MagazineDocument]
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
             Text("계정")
@@ -143,7 +145,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedMagazine()
+                BookmarkedMagazine(bookmarkedMagazineDocument: bookmarkedMagazineDocument)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")
@@ -268,7 +270,7 @@ struct InfoSection: View {
                 .padding(.leading, 5)
             
             NavigationLink {
-                Text("이용약관")
+                TermsOfServiceView()
             } label: {
                 HStack {
                     Image(systemName: "doc")
@@ -291,7 +293,7 @@ struct InfoSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                Text("개인 정보 처리방침")
+                PrivacyPolicyView()
             } label: {
                 HStack {
                     Image(systemName: "shield")

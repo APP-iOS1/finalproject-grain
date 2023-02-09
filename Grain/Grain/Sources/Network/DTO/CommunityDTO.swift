@@ -15,7 +15,24 @@ struct CommunityResponse: Codable {
 struct CommunityDocument: Codable,Hashable{
     let name: String
     let fields: CommunityFields
-    let createTime, updateTime: String
+    var createTime, updateTime: String
+    // MARK: 로직
+    // renderTime()을 쓰기 위한 노력: Date타입에 쓸 수 있음 Date -> String (ex."n시간 전")
+    // 우리가 받아오는 community.createTime은 "2023-02-08T14:13:07.734982Z"형식의 String
+    // renderTime()을 쓰려면 "yyyy-MM-dd"의 String에서 .toDate()를 통해 Date타입으로 바꿔야함
+    // "2023-02-08T14:13:07.734982Z" 문자열을 잘라줘서 "2023-02-08"(subString)으로 바꾼뒤 String으로 형변환 - communityDateStr
+    // toDate() 함수를 써서 String -> Date로 바꿈 - dateTime
+    // renderTime() 함수를 써서 n시간 전 String으로 계산
+    // communityDate에 최종적으로 넣어줌
+    var createdDate: Date? {
+        let startIndex = createTime.startIndex
+        let endIndex = createTime.index(createTime.startIndex, offsetBy: 9)
+        let range = startIndex...endIndex
+        //2023-02-08형태의 String
+        let createdAt = String(createTime[range])
+        return createdAt.toDate()
+    }
+    
 }
 
 struct CommunityFields: Codable,Hashable{

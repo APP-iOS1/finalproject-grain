@@ -15,9 +15,9 @@ struct MagazineDetailView: View {
     
     @Environment(\.dismiss) private var dismiss // <- 임시 방편
     
-    
     let data : MagazineDocument
     
+   
     var body: some View {
         NavigationStack{
             ScrollView {
@@ -31,7 +31,7 @@ struct MagazineDetailView: View {
                                 Text(data.fields.nickName.stringValue)
                                     .bold()
                                 HStack {
-                                    Text("1분전")
+                                    Text(data.createdDate?.renderTime() ?? "")
                                     Spacer()
                                     Text(data.fields.customPlaceName.stringValue)
                                 }
@@ -60,23 +60,12 @@ struct MagazineDetailView: View {
                         .frame(maxHeight: Screen.maxHeight * 0.27)
                         .padding()
                         .overlay{
-                    
+                            
                             Image(systemName: "heart.fill")
-                                .onAppear{
-                                    if ((currentUsers?.likedMagazineID.arrayValue.values.filter { $0.stringValue == data.fields.id.stringValue}) != nil){
-                                        isHeartToggle = true
-                                    }else{
-                                        isHeartToggle = false
-                                    }
-                                }
                                 .foregroundColor(.white)
                                 .font(.system(size: isHeartAnimation ? 110 : 70 ))
                             //                                .scaleEffect(isHeartAnimation ? 5 : 1)
                                 .opacity(heartOpacity)
-                                .onTapGesture {
-                                    //액션
-                                    isHeartToggle.toggle()
-                                }
                         }
                         HStack{
                             HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
@@ -88,9 +77,7 @@ struct MagazineDetailView: View {
                                     .font(.title2)
                                     .foregroundColor(.black)
                             }
-                            
                             Spacer()
-                            
                         }
                     }//VStack
                     .frame(minHeight: 350)
@@ -111,16 +98,31 @@ struct MagazineDetailView: View {
             }//스크롤뷰
             .onAppear{
                 userVM.fetchCurrentUser(userID: docID ?? "")
+                
+                // 이슈화 여기서 디스패치 거냐? 이전 뷰에서 전부 유저 데이터 패치
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+//                    if userVM.likedMagazineIdArr.filter{$0 == data.fields.id.stringValue}.contains(data.fields.id.stringValue){
+//                        isHeartToggle = true  // 정훈 삽질
+                    if userVM.likedMagazineIdArr.contains(where: { item in
+                        item == data.fields.id.stringValue
+                    }){
+                        isHeartToggle = true
+                    }else{
+                        isHeartToggle = false
+                    }
+                }
+                
             }
             .onDisappear{
                 Task{
-                    if isHeartToggle{
+                    if isHeartToggle {
+                        /// 추가 부분
                         await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
                     }else{
                         // FIXME: 고치기
+                        /// 삭제부분
                         await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: "1", isArray: true)
                     }
-                   
                 }
             }
             .padding(.top, 1)
@@ -178,3 +180,9 @@ struct MagazineDetailHeader: View {
 //
 //    }
 //}
+
+
+//123 == 123 t
+//123 == 1234 f
+//12345 == 12345 f
+//

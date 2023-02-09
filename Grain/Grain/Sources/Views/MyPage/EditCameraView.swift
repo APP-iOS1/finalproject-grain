@@ -33,6 +33,7 @@ struct EditCameraView: View {
     @StateObject var userVM: UserViewModel = UserViewModel()
     
     @Environment(\.presentationMode) var presentationMode
+    
     // editMode
     @Environment(\.editMode) private var editMode
     
@@ -84,7 +85,7 @@ struct EditCameraView: View {
                                 presentationMode.wrappedValue.dismiss()
 
                             }
-                            
+
                         } label: {
                             HStack {
                                 Image(systemName: "chevron.left")
@@ -92,30 +93,29 @@ struct EditCameraView: View {
                             }
                         }
                         .alert(isPresented: $showAlert) {
-                            Alert(title: Text("설정으로 이동하시겠습니까?"),
-                                  message: Text("설정으로 이동하시면 입력하신 정보가 저장되지 않습니다."),
+                            Alert(title: Text("변경 내용을 삭제하시겠어요?"),
+                                  message: Text("지금 돌어가면 입력하신 정보가 삭제됩니다."),
                                   primaryButton: .destructive(
-                                    Text("네")
-                                    
-                                  ),
-                                  secondaryButton: .default(
-                                    Text("취소")
+                                    Text("변경 내용 삭제")
                                   ){
                                       presentationMode.wrappedValue.dismiss()
-                                  })
+                                  },
+                                  secondaryButton: .default(
+                                    Text("수정 계속하기")
+                                  ))
                         }
-                        
+
                         Spacer()
-                        
+
                         Text("나의 장비 정보")
                             .font(.system(size: 17))
                             .bold()
                             .padding(.trailing, 21)
-                        
+
                         Spacer()
-                        
+
                         EditButton()
-                            
+
                     }
                     .padding(.horizontal)
                     .accentColor(.black)
@@ -138,17 +138,17 @@ struct EditCameraView: View {
 //                .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarHidden(true)
-                .onChange(of: editMode?.wrappedValue, perform: { newValue in
-                    if newValue?.isEditing == true {
-                        print("on EditMode")
-//                        showAddBody.toggle()
-                    } else {
-                        print("done")
-//                        showAddBody = false
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Text("설정")
                     }
-                })
-            
-                
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
+                    }
+                }
+
+
+
         }
         .onAppear{
             userVM.fetchCurrentUser(userID: docID ?? "")
@@ -157,11 +157,13 @@ struct EditCameraView: View {
 
 }
 
-//struct EditCameraView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        EditCameraView()
-//    }
-//}
+struct EditCameraView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack{
+            EditCameraView()
+        }
+    }
+}
 
 
 // MARK: - 카메라 바디 섹션 선언부
@@ -190,7 +192,9 @@ struct BodyList: View {
             
             // 유저의 바디 정보가 담긴 배열로 부터 리스트 생성
             ForEach(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self) { camera in
-                Text(camera.stringValue)
+                if camera.stringValue != "필수" { //계정 등록 시 장비정보에 기본으로 들어가는 "필수" 안보여주기위함
+                    Text(camera.stringValue)
+                }
             }
             .onDelete(perform: removeCameraList(at:))
 
@@ -296,7 +300,9 @@ struct LensList: View {
             
             // 유저의 렌즈 정보가 담긴 배열로 부터 리스트 생성
             ForEach(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self) { lens in
-                Text(lens.stringValue)
+                if lens.stringValue != "선택" {
+                    Text(lens.stringValue)
+                }
             }
             .onDelete(perform: removeLensList(at:))
             
@@ -373,9 +379,8 @@ struct LensList: View {
 struct FilmList: View {
     @AppStorage("docID") private var docID : String?
     var userVM: UserViewModel
-    
-    @Environment(\.editMode) private var editMode
 
+    @Environment(\.editMode) private var editMode
     @Binding var  myFilms: [String]
     @Binding var showAddFilm: Bool
     @Binding var newItem: String
@@ -389,7 +394,9 @@ struct FilmList: View {
     var body: some View {
         Section(header: Text("필름").bold()){
             ForEach(userVM.currentUsers?.myFilm.arrayValue.values ?? [], id: \.self) { film in
-                Text(film.stringValue)
+                if film.stringValue != "선택" {
+                    Text(film.stringValue)
+                }
             }
             .onDelete(perform: removeFilmList(at:))
             

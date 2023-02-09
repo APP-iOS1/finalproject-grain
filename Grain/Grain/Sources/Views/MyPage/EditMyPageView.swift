@@ -8,6 +8,8 @@
 import SwiftUI
 import Combine
 import FirebaseAuth
+import PhotosUI
+import Kingfisher
 
 // 텍스트 필드 포커스를 위한 열거형
 private enum FocusableField: Hashable {
@@ -28,36 +30,77 @@ struct EditMyPageView: View {
     let introduceLimit = 20
     
     @FocusState private var focus: FocusableField?
+    
+    // 이미지 앨범에서 가져오기
+    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedImageData: Data? = nil
+    @State private var selectedImages: [UIImage] = []
 
     var body: some View {
         VStack {
-            //MARK: 프로필 이미지 변경 버튼
-            Button {
-                //이미지 선택 동작
-            } label: {
-                Image("2")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(64)
-                    .overlay {
-                        Circle()
-                            .stroke(lineWidth: 1.5)
-                            .foregroundColor(.black)
+//            //MARK: 프로필 이미지 변경 버튼
+//            Button {
+//                //이미지 선택 동작
+//            } label: {
+//                Image("2")
+//                    .resizable()
+//                    .frame(width: 100, height: 100)
+//                    .cornerRadius(64)
+//                    .overlay {
+//                        Circle()
+//                            .stroke(lineWidth: 1.5)
+//                            .foregroundColor(.black)
+//                    }
+//                    .overlay {
+//                        Circle()
+//                            .frame(width: 30, height: 30)
+//                            .foregroundColor(.white)
+//                            .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+//                            .overlay {
+//                                Image(systemName: "camera.circle.fill")
+//                                    .resizable()
+//                                    .frame(width: 26, height: 26)
+//                                    .foregroundColor(.black)
+//                                    .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+//                            }
+//                    }
+//            }
+            
+            PhotosPicker(
+                selection: $selectedItem,
+                matching: .images,
+                photoLibrary: .shared()) {
+                    KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        .resizable()
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(64)
+                        .overlay {
+                            Circle()
+                                .stroke(lineWidth: 1.5)
+                                .foregroundColor(.black)
+                        }
+                        .overlay {
+                            Circle()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white)
+                                .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+                                .overlay {
+                                    Image(systemName: "camera.circle.fill")
+                                        .resizable()
+                                        .frame(width: 26, height: 26)
+                                        .foregroundColor(.black)
+                                        .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+                                }
+                        }
+        
+                }
+                .onChange(of: selectedItem) { newItem in
+                    Task {
+                        if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                            selectedImageData = data
+                        }
                     }
-                    .overlay {
-                        Circle()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.white)
-                            .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
-                            .overlay {
-                                Image(systemName: "camera.circle.fill")
-                                    .resizable()
-                                    .frame(width: 26, height: 26)
-                                    .foregroundColor(.black)
-                                    .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
-                            }
-                    }
-            }
+                }
             
             //MARK: 닉네임, 소개 변경 텍스트 필드
             VStack{

@@ -121,7 +121,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                EditCameraView(userVM: userVM)
+                EditCameraView()
             } label: {
                 HStack {
                     Image(systemName: "camera")

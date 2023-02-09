@@ -32,35 +32,98 @@ struct CameraLenseFilmModalView: View {
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     @State private var selection: String?
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack {
+            //MARK:
             Rectangle()
                 .fill(Color(UIColor.systemGray5))
                 .frame(width: Screen.maxWidth, height: 1)
             
-            Text("카메라 바디")
-                .bold()
-                .padding(.leading)
-            List(myCamera, id: \.self, selection: $selectedCamera) { camera in
-                Text(camera)
+            HStack {
+                Image("cameraBody")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Screen.maxWidth * 0.1, height: Screen.maxHeight * 0.1)
+                Text("카메라 바디")
+                    .bold()
+                    .padding()
             }
-            .listStyle(.plain)
+            .padding(.horizontal)
+            if userVM.currentUsers?.myCamera.arrayValue.values == [] {
+                //카메라 바디없을때 보여줄 뷰
+                Text("등록된카메라없음")
+            } else {
+                Picker("카메라 바디 선택", selection: $selectedCamera) {
+                    ForEach(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self) {
+                        Text($0.stringValue)
+                    }
+                }.pickerStyle(.wheel)
+//                List(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self, selection: $selectedCamera) { camera in
+//                    Text(camera.stringValue)
+//                }
+//                .listStyle(.plain)
+//                Spacer()
+            }
+            
             Divider()
-            Text("렌즈")
-                .bold()
-                .padding(.leading)
-            List(myLense, id: \.self, selection: $selectedLense) { lense in
-                Text(lense)
+            
+            HStack {
+                Image("cameraLens")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Screen.maxWidth * 0.1, height: Screen.maxHeight * 0.1)
+                Text("렌즈")
+                    .bold()
+                    .padding(.leading)
             }
-            .listStyle(.plain)
+            .padding(.horizontal)
+            
+            if userVM.currentUsers?.myLens.arrayValue.values == [] {
+                //필름없을때 보여줄 뷰
+            } else {
+                Picker("카메라 렌즈 선택", selection: $selectedLense) {
+                    ForEach(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self) {
+                        Text($0.stringValue)
+                    }
+                }.pickerStyle(.wheel)
+//                List(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self, selection: $selectedLense) { lense in
+//                    Text(lense.stringValue)
+//                }
+//                .listStyle(.plain)
+//                Spacer()
+            }
+            
+            
             Divider()
-            Text("필름")
-                .bold()
-                .padding(.leading)
-            List(myFilm, id: \.self, selection: $selectedFilm) { film in
-                Text(film)
+            
+            HStack {
+                Image(systemName: "film.stack.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Screen.maxWidth * 0.1, height: Screen.maxHeight * 0.1)
+                Text("필름")
+                    .bold()
+                    .padding(.leading)
             }
-            .listStyle(.plain)
+            .padding(.horizontal)
+            
+            if userVM.currentUsers?.myFilm.arrayValue.values == [] {
+                //렌즈없을때 보여줄 뷰
+            } else {
+                Picker("카메라 필름 선택", selection: $selectedFilm) {
+                    ForEach(userVM.currentUsers?.myFilm.arrayValue.values ?? [], id: \.self) {
+                        Text($0.stringValue)
+                    }
+                }.pickerStyle(.wheel)
+//                List(userVM.currentUsers?.myFilm.arrayValue.values ?? [], id: \.self, selection: $selectedFilm) { film in
+//                    Text(film.stringValue)
+//                }
+//                .listStyle(.plain)
+//                Spacer()
+            }
+            
         }
+        .navigationTitle("내장비")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
                 Button {
@@ -75,6 +138,7 @@ struct CameraLenseFilmModalView: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
+
                     //MARK: 글쓰기 완료 액션
                     // data.field에 데이터 저장
                     var docId = UUID().uuidString
@@ -117,7 +181,7 @@ struct CameraLenseFilmModalView: View {
                     
                     // insertMagazine 호출
                     magazineVM.insertMagazine(data: data, images: selectedImages)
-                    
+
                     presented.toggle()
                 } label: {
                     Text("완료")
@@ -128,9 +192,9 @@ struct CameraLenseFilmModalView: View {
         }
         .onAppear {
             userVM.fetchCurrentUser(userID: docID ?? "")
-//            selectedCamera = myCamera[0]
-//            selectedLense = myLense[0]
-//            selectedFilm = myFilm[0]
+            //            selectedCamera = myCamera[0]
+            //            selectedLense = myLense[0]
+            //            selectedFilm = myFilm[0]
         }
         
     }

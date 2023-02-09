@@ -13,24 +13,22 @@ import NMapsMap
 struct ContentView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
     @StateObject var communityVM = CommunityViewModel()
+    @StateObject var mapVM = MapViewModel()
+    @StateObject var magazineVM = MagazineViewModel()
     
     @State private var tabSelection: Int = 0
     @State var selectedIndex = 0
     @State var magazineViewPresented : Bool = false
     @State var presented = false
-    
-    // add 버튼 눌렀을때 상태처리 변수
     @State var ispushedAddButton = false
-    
-    //정훈
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     @State var clikedMagazineData : MagazineDocument?
-
+    
     let icons = ["film", "text.bubble", "plus","map", "person"]
-    let labels = ["필름", "커뮤니티", "", "지도", "마이"]
-    @StateObject var mapVM = MapViewModel()
-    @StateObject var magazineVM = MagazineViewModel()
-
+    let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
+    
+    @AppStorage("docID") private var docID : String?
+    @StateObject var userVM = UserViewModel()
     var body: some View {
         VStack{
             switch authenticationStore.authenticationState {
@@ -42,25 +40,20 @@ struct ContentView: View {
             case.authenticated:
                 VStack{
                     Spacer()
-                    //EditorView()
                     ZStack {
-                        Spacer().fullScreenCover(isPresented: $presented) {
-                            VStack {
-                                
-                                SelectPostView(presented: $presented, communityVM: communityVM, updateNumber: updateNumber)
-//                                if self.selectedIndex == 0 {
-//                                    MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
-//                                } else if self.selectedIndex == 1 {
-//                                    AddCommunityView(communityVM: communityVM, presented: $presented)
-//                                }
-                                Spacer()
+                        Spacer()
+                            .fullScreenCover(isPresented: $presented) {
+                                VStack {
+                                    SelectPostView(presented: $presented,
+                                                   communityVM: communityVM,
+                                                   updateNumber: updateNumber)
+                                }
                             }
-                        }
                         
                         switch selectedIndex {
                         case 0:
                             NavigationStack {
-                                MagazineMainView()
+                                MagazineMainView(currentUsers: userVM.currentUsers)
                             }
                         case 1:
                             NavigationStack {
@@ -72,33 +65,28 @@ struct ContentView: View {
                             }
                         case 3:
                             NavigationStack {
-                                MapView(magazineData: $magazineVM.magazines, mapData:$mapVM.mapData, clikedMagazineData: clikedMagazineData)
+                                MapView(magazineData: $magazineVM.magazines,
+                                        mapData:$mapVM.mapData,
+                                        clikedMagazineData: clikedMagazineData)
                             }
                         case 4:
                             NavigationStack {
-                                MyPageView()
+                                MyPageView(magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.userPostedMagazine))
                             }
                         default:
                             NavigationStack {
                                 VStack {
-                                    SelectPostView(presented: $presented, communityVM: communityVM, updateNumber: updateNumber)
-//                                    if self.selectedIndex == 0 {
-//                                        MagazineContentAddView(presented: $presented, updateNumber: NMGLatLng(lat: 0, lng: 0))
-//                                    } else if self.selectedIndex == 1 {
-//                                        AddCommunityView(communityVM: communityVM, presented: $presented)
-//                                    }
+                                    SelectPostView(presented: $presented,
+                                                   communityVM: communityVM,
+                                                   updateNumber: updateNumber)
                                 }
                             }
                         }
                         Spacer()
                     }
                     
-                    Divider()
-                        .padding(.top, -8)
-                    
                     HStack {
                         ForEach(0..<5, id: \.self) { number in
-                            Spacer()
                             Button {
                                 if number == 2 {
                                     presented.toggle()
@@ -108,8 +96,7 @@ struct ContentView: View {
                             } label: {
                                 if number == 2 {
                                     Image(systemName: icons[number])
-                                        .font(.system(size: 25,
-                                                      weight: .regular,  design: .default))
+                                        .font(.title3)
                                         .foregroundColor(.white)
                                         .frame(width: 60, height: 60)
                                         .background(.black)
@@ -118,62 +105,38 @@ struct ContentView: View {
                                 else {
                                     VStack{
                                         Image(systemName: icons[number])
-                                            .font(.system(size: 25,
-                                                          weight: .regular,  design: .default))
+                                            .font(.title3)
                                             .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
-                                            .padding(.vertical, 3)
                                         Text(labels[number])
                                             .font(.caption)
                                             .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
                                     }
-                                }
-                            }
-                            Spacer()
-                        }
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Text("Grain")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(.black)
-                                .padding()
-                        }
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            HStack {
-                                Button {
-                                    //검색
-                                } label: {
-                                    Image(systemName: "magnifyingglass")
-                                        .foregroundColor(.black)
+                                    .frame(width: 60, height: 60)
                                 }
                             }
                         }
                     }
-                }
-                .ignoresSafeArea(.keyboard)
-                .onAppear{
-                    /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
-                    mapVM.fetchMap()
-                    magazineVM.fetchMagazine()
-//                    magazineVM.updateMagazine()
                 }
             }
         }
         .tint(.black)
-//        .splashView {
-//            ZStack{
-//                SplashScreen()
-//            }
-//
-//        }
-
+        .onAppear{
+            /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
+            mapVM.fetchMap()
+            magazineVM.fetchMagazine()
+            userVM.fetchCurrentUser(userID: docID ?? "")
+            //                    magazineVM.updateMagazine()
+        }
+        .ignoresSafeArea(.keyboard)
+        //        .splashView {
+        //            ZStack{
+        //                SplashScreen()
+        //            }
+        //
+        //        }
     }
+    
 }
-
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()

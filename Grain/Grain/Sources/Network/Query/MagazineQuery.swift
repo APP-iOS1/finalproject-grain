@@ -19,7 +19,7 @@ enum MagazineQuery {
                  { "stringValue": "\(images[i])" },
                 """
         }
-        
+
         //FIXME: 강해져서 돌아오기!!
 //        for i in 0..<data.fields.comment.arrayValue.values.count{
 //            comment += """
@@ -120,8 +120,9 @@ enum MagazineQuery {
             """
         }
         str.removeLast()
+
         //        comment.removeLast()
-        
+
         return
         """
         {
@@ -158,10 +159,10 @@ enum MagazineQuery {
                   "stringValue": "\(data.fields.content.stringValue)"
                 },
                 "latitude": {
-                  "doubleValue": "\(0)"
+                  "doubleValue": \(latitude)
                 },
                 "longitude": {
-                  "doubleValue": \(0)
+                  "doubleValue": \(longitude)
                 },
                 "nickName": {
                   "stringValue": "\(data.fields.nickName.stringValue)"

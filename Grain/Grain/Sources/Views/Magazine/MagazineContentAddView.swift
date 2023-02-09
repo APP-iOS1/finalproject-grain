@@ -127,6 +127,8 @@ struct MagazineContentAddView: View {
                     }
                 Spacer()
             }
+            .navigationTitle("글쓰기")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
                     Button {

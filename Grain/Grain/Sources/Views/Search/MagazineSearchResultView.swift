@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct MagazineSearchResultView: View {
-    @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
-    
     @State private var isShownProgress:Bool = true
     
     @Binding var searchWord: String
@@ -18,12 +16,13 @@ struct MagazineSearchResultView: View {
         return string.replacingOccurrences(of: " ", with: "")
     }
     
+    let magazine: MagazineViewModel
+    
     var body: some View {
             ZStack{
-                
                 VStack{
                     List{
-                        ForEach(magazineViewModel.magazines.filter {
+                        ForEach(magazine.magazines.filter {
                             ignoreSpaces(in: $0.fields.title.stringValue)
                                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                             ignoreSpaces(in: $0.fields.content.stringValue)
@@ -56,7 +55,7 @@ struct MagazineSearchResultView: View {
                             }
                         }
                     }
-                    .emptyPlaceholder(magazineViewModel.magazines.filter {
+                    .emptyPlaceholder(magazine.magazines.filter {
                         ignoreSpaces(in: $0.fields.title.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
@@ -83,13 +82,13 @@ struct MagazineSearchResultView: View {
             .navigationTitle("\(searchWord)")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear{
-                magazineViewModel.fetchMagazine()
+//                magazineViewModel.fetchMagazine()
             }
     }
 }
 
 struct MagazineSearchResultView_Previews: PreviewProvider {
     static var previews: some View {
-        MagazineSearchResultView(searchWord: .constant(""))
+        MagazineSearchResultView(searchWord: .constant(""), magazine: MagazineViewModel())
     }
 }

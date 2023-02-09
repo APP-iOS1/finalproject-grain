@@ -16,6 +16,15 @@ struct MagazineDocument: Codable,Hashable {
     var name: String
     var createTime: String
     var updateTime: String
+    
+    var createdDate: Date? {
+        let startIndex = createTime.startIndex
+        let endIndex = createTime.index(createTime.startIndex, offsetBy: 9)
+        let range = startIndex...endIndex
+        //2023-02-08형태의 String
+        let createdAt = String(createTime[range])
+        return createdAt.toDate()
+    }
 }
 
 struct MagazineFields: Codable,Hashable{
@@ -28,6 +37,7 @@ struct MagazineFields: Codable,Hashable{
     var likedNum: LikedNum
     var latitude: MagazineLocation
     var content, nickName, roadAddress, cameraInfo: MagazineString
+    
 }
 
 struct MagazineString: Codable ,Hashable{

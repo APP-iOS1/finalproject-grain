@@ -31,7 +31,7 @@ struct MagazineDetailView: View {
                                 Text(data.fields.nickName.stringValue)
                                     .bold()
                                 HStack {
-                                    Text("1분전")
+                                    Text(data.createdDate?.renderTime() ?? "")
                                     Spacer()
                                     Text(data.fields.customPlaceName.stringValue)
                                 }

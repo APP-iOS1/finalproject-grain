@@ -41,7 +41,7 @@ struct CommunityDetailView: View {
                             Text(community.fields.nickName.stringValue)
                                 .font(.title3)
                                 .bold()
-                            Text("1분전")
+                            Text(community.createdDate?.renderTime() ?? "")
                                 .font(.caption)
                         }
                         Spacer()

@@ -29,9 +29,12 @@ final class UserViewModel: ObservableObject {
     // 유저가 저장한 매거진 id 담는 배열
     @Published var currentUserBookmarkedStringValue: [CurrentUserStringValue] = [] // 변환만 하기 위해
     @Published var userBookmarkedMagazine : [String] = [] //string값만
-
     @Published var likedMagazineIdArr : [String] = [] //string값만
-
+   
+    
+    // 유저가 저장한 커뮤니티
+    @Published var userBookmarkedCommunity : [String] = [] //string값만
+    @Published var likedCommunityIdArr : [String] = [] // -> DB에서 만들어야됨
     
     var fetchUsersSuccess = PassthroughSubject<(), Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
@@ -52,33 +55,43 @@ final class UserViewModel: ObservableObject {
         UserService.getCurrentUser(userID: userID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-        } receiveValue: { (data: CurrentUserResponse) in
-            self.currentUsers = data.fields
-//            print(" 확인 \(data.createTime)") -> 시간 값 나중에 써먹을수 있을듯
-            // user가 포스팅한 매거진 필터링
-            
-            
-            self.currentUserStringValue.append(contentsOf: data.fields.postedMagazineID.arrayValue.values)
-            for i in self.currentUserStringValue{
-                self.userPostedMagazine.append(i.stringValue)
-            }
-            for i in self.currentUsers?.myCamera.arrayValue.values ?? [] {
-                self.cameraList.append(i.stringValue)
-            }
-            for i in self.currentUsers?.myLens.arrayValue.values ?? [] {
-                self.lensList.append(i.stringValue)
-            }
-            for i in self.currentUsers?.myFilm.arrayValue.values ?? [] {
-                self.filmList.append(i.stringValue)
-            }            
-            self.currentUserBookmarkedStringValue.append(contentsOf: data.fields.bookmarkedMagazineID.arrayValue.values)
-            for i in self.currentUserBookmarkedStringValue{
-                self.userBookmarkedMagazine.append(i.stringValue)
-            }
-            
-            for i in data.fields.likedMagazineID.arrayValue.values{
-                self.likedMagazineIdArr.append(i.stringValue)
-            }
+            } receiveValue: { (data: CurrentUserResponse) in
+                self.currentUsers = data.fields
+                //            print(" 확인 \(data.createTime)") -> 시간 값 나중에 써먹을수 있을듯
+                // user가 포스팅한 매거진 필터링
+                
+                
+                self.currentUserStringValue.append(contentsOf: data.fields.postedMagazineID.arrayValue.values)
+                for i in self.currentUserStringValue{
+                    self.userPostedMagazine.append(i.stringValue)
+                }
+                
+                for i in self.currentUsers?.myCamera.arrayValue.values ?? [] {
+                    self.cameraList.append(i.stringValue)
+                }
+                for i in self.currentUsers?.myLens.arrayValue.values ?? [] {
+                    self.lensList.append(i.stringValue)
+                }
+                for i in self.currentUsers?.myFilm.arrayValue.values ?? [] {
+                    self.filmList.append(i.stringValue)
+                }
+                self.currentUserBookmarkedStringValue.append(contentsOf: data.fields.bookmarkedMagazineID.arrayValue.values)
+                for i in self.currentUserBookmarkedStringValue{
+                    self.userBookmarkedMagazine.append(i.stringValue)
+                }
+                
+                for i in data.fields.likedMagazineID.arrayValue.values{
+                    self.likedMagazineIdArr.append(i.stringValue)
+                }
+                // 저장한 커뮤니티 북마크
+//                for i in data.fields.bookmarkedCommunityID.arrayValue.values{
+//                    self.userBookmarkedCommunity.append(i.stringValue)
+//                    print(i.stringValue)
+//                }
+                // 저장한 커뮤니티 좋아요
+//                for i in data.fields.likedCommunityID.arrayValue.values{
+//                    self.likedCommunityIdArr.append(i.stringValue)
+//                }
 
             self.fetchUsersSuccess.send()
         }.store(in: &subscription)
@@ -106,8 +119,6 @@ final class UserViewModel: ObservableObject {
     }
     
     func updateUserUsingSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
-
-        
         let db = Firestore.firestore()
         let documentRef = db.collection("User").document("\(updateDocument)")
         if isArray{
@@ -131,20 +142,18 @@ final class UserViewModel: ObservableObject {
                 print("Error updating document: \(error)")
             }
         }
-       
-        
     }
     
-    
-    func deleteUserSDK(updateDocument: String, deleteKey: String,isArray: Bool) async {
+    func deleteUserUsingSDK(updateDocument: String, deleteKey: String, deleteIndex: String, isArray: Bool) async {
         let db = Firestore.firestore()
         let documentRef = db.collection("User").document("\(updateDocument)")
-    
         if isArray{
             do{
                 try? await documentRef.updateData(
                     [
-                        "\(deleteKey)": FieldValue.delete()
+                        "\(deleteKey)": FieldValue.arrayRemove([
+                            "\(deleteIndex)"
+                        ])
                     ]
                 )
             }catch let error {

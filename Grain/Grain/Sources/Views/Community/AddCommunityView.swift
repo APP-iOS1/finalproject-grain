@@ -158,8 +158,8 @@ struct AddCommunityView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     //글쓰기 함수
-                    communityVM.insertCommunity(profileImage: "profileImage", nickName: "nickName", category: selectedTab.rawValue, image: "image", userID: "userID", title: inputTitle, content: inputContent)
-                    communityVM.fetchCommunity()
+//                    communityVM.insertCommunity(profileImage: "profileImage", nickName: "nickName", category: selectedTab.rawValue, image: "image", userID: "userID", title: inputTitle, content: inputContent)
+//                    communityVM.fetchCommunity()
                     presented.toggle()
                 } label: {
                     Text("완료")

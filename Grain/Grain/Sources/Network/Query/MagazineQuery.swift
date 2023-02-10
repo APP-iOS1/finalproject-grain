@@ -20,22 +20,15 @@ enum MagazineQuery {
                 """
         }
 
+        str.removeLast()
         //FIXME: 강해져서 돌아오기!!
 //        for i in 0..<data.fields.comment.arrayValue.values.count{
 //            comment += """
 //                  { "stringValue": "\(data.fields.comment.arrayValue.values[i].stringValue)" }
 //            """
 //        }
-        
-        // 임시 댓글 데이터
-        for _ in 0..<1{
-            comment += """
-                          { "stringValue": "사진 예뿌다." }
-                    """
-        }
-        
-        str.removeLast()
-        //        comment.removeLast()
+//
+//        comment.removeLast()
         
         return
                 """
@@ -81,15 +74,6 @@ enum MagazineQuery {
                         "nickName": {
                           "stringValue": "\(data.nickName.stringValue)"
                         },
-                        "comment": {
-                          "arrayValue": {
-                            "values": [
-                              
-                                 \(comment)
-                              
-                            ]
-                          }
-                        },
                         "roadAddress": {
                           "stringValue": "\(data.roadAddress.stringValue)"
                         },
@@ -105,7 +89,6 @@ enum MagazineQuery {
     //MARK: - 매거진 DB에 update 쿼리 리턴 메소드
     static func updateMagazineQuery(data: MagazineDocument, docID: String) -> Data?{
         var str : String = ""
-        var comment : String = ""
         
         for i in 0..<data.fields.image.arrayValue.values.count {
             str += """
@@ -113,15 +96,7 @@ enum MagazineQuery {
                 """
         }
         
-        //FIXME: 강해져서 돌아오기!!
-        for i in 0..<data.fields.comment.arrayValue.values.count{
-            comment += """
-                  { "stringValue": "\(data.fields.comment.arrayValue.values[i].stringValue)" }
-            """
-        }
         str.removeLast()
-
-        //        comment.removeLast()
 
         return
         """
@@ -167,15 +142,6 @@ enum MagazineQuery {
                 "nickName": {
                   "stringValue": "\(data.fields.nickName.stringValue)"
                 },
-                "comment": {
-                  "arrayValue": {
-                    "values": [
-                      
-                         \(comment)
-                      
-                    ]
-                  }
-                },
                 "roadAddress": {
                   "stringValue": "\(data.fields.roadAddress.stringValue)"
                 },
@@ -187,4 +153,11 @@ enum MagazineQuery {
         }
         """.data(using: .utf8)
     }
+    
+    
+    //FIXME: 댓글 update 메소드 구현 "해줘"
+//    static func updateMagazineComment(data: MagazineDocument, comments: [Comment], docID: String) {
+//
+//    }
+    
 }

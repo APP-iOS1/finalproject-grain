@@ -58,8 +58,6 @@ enum MagazineService {
         print("FirebaseService updateMagazine start")
         
         do {
-            let docID: String = data.fields.id.stringValue
-//            let suffixedId: String = String(docID.suffix(20))
             let request = try MagazineRouter.patch(putData: data, docID: docID).asURLRequest()
             print(request)
             return URLSession
@@ -77,9 +75,7 @@ enum MagazineService {
         print("FirebaseService deleteMagazine start")
         
         do {
-            let suffixedId: String = String(docID.suffix(20))
-            let request = try MagazineRouter.delete(docID: suffixedId).asURLRequest()
-            print(request)
+            let request = try MagazineRouter.delete(docID: docID).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

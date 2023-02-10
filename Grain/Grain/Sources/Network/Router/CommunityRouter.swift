@@ -11,9 +11,9 @@ import Foundation
 enum CommunityRouter {
     
     case get
-    case post(profileImage: String, nickName: String, category: String, image: String, userID: String, title: String, content: String)
-    case delete
-    case put
+    case post(communityData: CommunityFields, images: [String], docID: String)
+    case delete(docID : String)
+    case patch(putData: CommunityDocument, docID: String)
     
     private var baseURL: URL {
         let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
@@ -23,14 +23,14 @@ enum CommunityRouter {
     private enum HTTPMethod {
         case get
         case post
-        case put
+        case patch
         case delete
         
         var value: String {
             switch self {
             case .get: return "GET"
             case .post: return "POST"
-            case .put: return "PUT"
+            case .patch: return "PATCH"
             case .delete: return "DELETE"
             }
         }
@@ -38,8 +38,23 @@ enum CommunityRouter {
     
     private var endPoint: String {
         switch self {
+        case let .patch(_, docID):
+            return "/Magazine/\(docID)"
+        case let .delete(docID):
+            return "/Magazine/\(docID)"
         default:
             return "/Community"
+        }
+    }
+    
+    var parameters: URLQueryItem? {
+        switch self {
+        case let .post(_ , _ , docID):
+            let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
+            return params
+        default :
+            let params: URLQueryItem? = nil
+            return params
         }
     }
     
@@ -52,14 +67,16 @@ enum CommunityRouter {
         case .delete:
             return .delete
         default:
-            return .put
+            return .patch
         }
     }
     
     private var data: Data? {
         switch self {
-        case let .post(profileImage, nickName, category, image, userID, title, content):
-            return CommunityQuery.insertCommunityQuery(profileImage: profileImage, nickName: nickName, category: category, image: image, userID: userID, title: title, content: content)
+        case let .post(communityData, images, docID):
+            return CommunityQuery.insertCommunityQuery(data: communityData, images: images, docID: docID)
+        case let .patch(putData, docID):
+            return CommunityQuery.updateCommunityQuery(data: putData, docID: docID)
         default:
             return nil
         }
@@ -68,7 +85,13 @@ enum CommunityRouter {
     func asURLRequest() throws -> URLRequest {
         let url = baseURL.appendingPathComponent(endPoint)
         
-        var request = URLRequest(url: url)
+        var component = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        
+        if let param = parameters {
+            component.queryItems = [param]
+        }
+        
+        var request = URLRequest(url: component.url!)
         
         request.httpMethod = method.value
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")

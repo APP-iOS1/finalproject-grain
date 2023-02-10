@@ -77,9 +77,7 @@ enum MagazineRouter {
             print( String(decoding: magazinequery, as: UTF8.self))
             return MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID)
         case let .patch(putData, docID):
-            // FIXME: 변수명 고치기
-            let structData = MagazineDocument(fields: putData.fields, name: putData.name, createTime: putData.createTime, updateTime: putData.updateTime)
-            return MagazineQuery.updateMagazineQuery(data: structData, docID: docID)
+            return MagazineQuery.updateMagazineQuery(data: putData, docID: docID)
         default:
             return nil
         }

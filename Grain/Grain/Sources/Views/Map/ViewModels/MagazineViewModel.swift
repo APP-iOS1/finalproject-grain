@@ -50,7 +50,7 @@ final class MagazineViewModel: ObservableObject {
     // MARK: update
     /// 사용방법:  원래 데이터 수정해서  MagazineDocument형식으로 data 에 넣고, docID에는 메거진 id 넣어서 updateMagazine 호출.
     /// 사용 1: 메거진 게시물 수정하기 - title, content 수정해서 update
-    /// 사용 2: 메거진 좋아요수, 저장수(?) - 해당 메거진 원래 좋아요수 +1 해서 update
+    /// 사용 2: 메거진 좋아요수 - 해당 메거진 원래 좋아요수 +1 해서 update
     func updateMagazine(data: MagazineDocument, docID: String){
         MagazineService.updateMagazine(data: data, docID: docID)
             .receive(on: DispatchQueue.main)

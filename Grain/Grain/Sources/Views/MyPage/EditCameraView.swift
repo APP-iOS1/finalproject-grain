@@ -32,6 +32,7 @@ struct EditCameraView: View {
 //    var userVM: UserViewModel
     @StateObject var userVM: UserViewModel = UserViewModel()
     
+    @Environment(\.dismiss) var dismiss
     @Environment(\.presentationMode) var presentationMode
     
     // editMode
@@ -76,49 +77,49 @@ struct EditCameraView: View {
 //            ZStack(alignment: .bottomTrailing){
                 VStack {
                     
-                    // MARK: 상단 바
-                    HStack{
-                        Button {
-                            if trimNewBodyItem.count > 0 || trimNewLensItem.count > 0 || trimNewFilmItem.count > 0 {
-                                showAlert.toggle()
-                            } else {
-                                presentationMode.wrappedValue.dismiss()
-
-                            }
-
-                        } label: {
-                            HStack {
-                                Image(systemName: "chevron.left")
-                                Text("설정")
-                            }
-                        }
-                        .alert(isPresented: $showAlert) {
-                            Alert(title: Text("변경 내용을 삭제하시겠어요?"),
-                                  message: Text("지금 돌어가면 입력하신 정보가 삭제됩니다."),
-                                  primaryButton: .destructive(
-                                    Text("변경 내용 삭제")
-                                  ){
-                                      presentationMode.wrappedValue.dismiss()
-                                  },
-                                  secondaryButton: .default(
-                                    Text("수정 계속하기")
-                                  ))
-                        }
-
-                        Spacer()
-
-                        Text("나의 장비 정보")
-                            .font(.system(size: 17))
-                            .bold()
-                            .padding(.trailing, 21)
-
-                        Spacer()
-
-                        EditButton()
-
-                    }
-                    .padding(.horizontal)
-                    .accentColor(.black)
+//                    // MARK: 상단 바
+//                    HStack{
+//                        Button {
+//                            if trimNewBodyItem.count > 0 || trimNewLensItem.count > 0 || trimNewFilmItem.count > 0 {
+//                                showAlert.toggle()
+//                            } else {
+//                                presentationMode.wrappedValue.dismiss()
+//
+//                            }
+//
+//                        } label: {
+//                            HStack {
+//                                Image(systemName: "chevron.left")
+//                                Text("설정")
+//                            }
+//                        }
+//                        .alert(isPresented: $showAlert) {
+//                            Alert(title: Text("변경 내용을 삭제하시겠어요?"),
+//                                  message: Text("지금 돌어가면 입력하신 정보가 삭제됩니다."),
+//                                  primaryButton: .destructive(
+//                                    Text("변경 내용 삭제")
+//                                  ){
+//                                      presentationMode.wrappedValue.dismiss()
+//                                  },
+//                                  secondaryButton: .default(
+//                                    Text("수정 계속하기")
+//                                  ))
+//                        }
+//
+//                        Spacer()
+//
+//                        Text("나의 장비 정보")
+//                            .font(.system(size: 17))
+//                            .bold()
+//                            .padding(.trailing, 21)
+//
+//                        Spacer()
+//
+//                        EditButton()
+//
+//                    }
+//                    .padding(.horizontal)
+//                    .accentColor(.black)
                     
                     List{
                         // MARK: 카메라 바디 섹션
@@ -134,13 +135,38 @@ struct EditCameraView: View {
                     .scrollContentBackground(.hidden)
                     
                 }
-//                .navigationTitle("나의 장비 정보")
-//                .navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("나의 장비 정보")
+                .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
-                .navigationBarHidden(true)
+//                .navigationBarHidden(true)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Text("설정")
+                        Button {
+                            if trimNewBodyItem.count > 0 || trimNewLensItem.count > 0 || trimNewFilmItem.count > 0 {
+                                showAlert.toggle()
+                            } else {
+                                dismiss()
+                            }
+                        } label: {
+                            HStack(spacing: 4){
+                                Image(systemName: "chevron.left")
+                                    .font(.system(size: 17, weight: .semibold))
+                                Text("설정")
+                                    .font(.system(size: 17))
+                            }
+                        }
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text("변경 내용을 삭제하시겠어요?"),
+                                  message: Text("지금 돌어가면 입력하신 정보가 삭제됩니다."),
+                                  primaryButton: .destructive(
+                                    Text("변경 내용 삭제")
+                                  ){
+                                      presentationMode.wrappedValue.dismiss()
+                                  },
+                                  secondaryButton: .default(
+                                    Text("수정 계속하기")
+                                  ))
+                        }
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         EditButton()
@@ -337,7 +363,7 @@ struct LensList: View {
                     }
                 }
                 
-                // 바디 추가하기 버튼
+                // 렌즈 추가하기 버튼
                 HStack{
                     Spacer()
                     Button{
@@ -350,7 +376,7 @@ struct LensList: View {
                         } else {
                             HStack{
                                 Image(systemName: "plus.circle")
-                                Text("바디 추가하기")
+                                Text("렌즈 추가하기")
                             }
                             .foregroundColor(Color(UIColor.systemGray))
                             .font(.subheadline)
@@ -432,7 +458,7 @@ struct FilmList: View {
                     }
                 }
                 
-                // 바디 추가하기 버튼
+                // 필름 추가하기 버튼
                 HStack{
                     Spacer()
                     Button{
@@ -445,7 +471,7 @@ struct FilmList: View {
                         } else {
                             HStack{
                                 Image(systemName: "plus.circle")
-                                Text("바디 추가하기")
+                                Text("필름 추가하기")
                             }
                             .foregroundColor(Color(UIColor.systemGray))
                             .font(.subheadline)

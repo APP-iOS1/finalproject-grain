@@ -35,7 +35,9 @@ final class MagazineViewModel: ObservableObject {
         
     }
     
-    // MARK: 메거진 데이터 업로드 메소드
+    // MARK: 메거진 데이터 업로드 메소드 (MagazineAddView에서 사용)
+    /// 해당 메거진 게시물 Data를 MagazineFields 구조체 형식으로 넣어주고, 게시글의 이미지배열은 따로 UIImage배열로 넣어줍니다.
+    /// 이렇게 호출해주면 새로운 메거진 게시물이 업로드 됩니다.
     func insertMagazine(data: MagazineFields, images: [UIImage]) {
         MagazineService.insertMagazine(data: data, images: images)
             .receive(on: DispatchQueue.main)
@@ -48,7 +50,7 @@ final class MagazineViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-    // MARK: 메거진 데이터 전체 업데이트 메소드(메거진 수정하기에 사용)
+    // MARK: 메거진 데이터 전체 업데이트 메소드(MagazineEditView에서 사용)
     /// 사용방법:  원래 데이터 수정해서  MagazineDocument형식으로 data 에 넣고, docID에는 메거진 id 넣어서 updateMagazine 호출.
     /// ex) 메거진 게시물 수정하기 - title, content 수정해서 update
     func updateMagazine(data: MagazineDocument, docID: String){
@@ -75,7 +77,8 @@ final class MagazineViewModel: ObservableObject {
     }
     
     
-    // MARK: delete
+    // MARK: 매거진 삭제 메소드(MagazineDetailView에서 게시물 삭제시 사용)
+    /// 해당 메거진 게시물의 docID를 넣어주고 호출하면 그 게시물이 삭제됩니다.
     func deleteMagazine(docID: String) {
         MagazineService.deleteMagazine(docID: docID)
             .receive(on: DispatchQueue.main)

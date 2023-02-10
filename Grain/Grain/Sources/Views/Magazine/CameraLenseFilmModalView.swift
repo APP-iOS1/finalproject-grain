@@ -7,6 +7,8 @@
 
 import SwiftUI
 import NMapsMap
+import FirebaseAuth
+
 struct CameraLenseFilmModalView: View {
     
     var myCamera = ["camera1asdasdasd", "camera2", "camera3"]
@@ -28,7 +30,7 @@ struct CameraLenseFilmModalView: View {
     @Binding var selectedImages: [UIImage]
     @Binding var inputCustomPlace: String
     @Binding var presented : Bool
-    @AppStorage("docID") private var docID : String?
+    
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     @State private var selection: String?
     @State private var showingAlert = false
@@ -202,7 +204,7 @@ struct CameraLenseFilmModalView: View {
             }
         }
         .onAppear {
-            userVM.fetchCurrentUser(userID: docID ?? "")
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             //            selectedCamera = myCamera[0]
             //            selectedLense = myLense[0]
             //            selectedFilm = myFilm[0]

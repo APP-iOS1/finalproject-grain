@@ -8,6 +8,7 @@
 import SwiftUI
 import NMapsMap
 import PhotosUI
+import FirebaseAuth
 
 struct MagazineContentAddView: View {
     @State private var inputTitle: String = ""
@@ -33,7 +34,7 @@ struct MagazineContentAddView: View {
     @State private var selectedImageData: Data? = nil
     
     // 유저 데이터
-    @AppStorage("docID") private var docID : String?
+    
     @StateObject var userVM = UserViewModel()
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
@@ -168,7 +169,7 @@ struct MagazineContentAddView: View {
                 }
             }
             .onAppear {
-                userVM.fetchCurrentUser(userID: docID ?? "")
+                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             }
             
         }

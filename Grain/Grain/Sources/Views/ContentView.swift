@@ -9,6 +9,7 @@ import SwiftUI
 
 import FirebaseAuth
 import NMapsMap
+import FirebaseAuth
 
 struct ContentView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
@@ -27,7 +28,7 @@ struct ContentView: View {
     let icons = ["film", "text.bubble", "plus","map", "person"]
     let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
     
-    @AppStorage("docID") private var docID : String?
+    
     @StateObject var userVM = UserViewModel()
     var body: some View {
         VStack{
@@ -124,7 +125,7 @@ struct ContentView: View {
             /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
             mapVM.fetchMap()
             magazineVM.fetchMagazine()
-            userVM.fetchCurrentUser(userID: docID ?? "")
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             //                    magazineVM.updateMagazine()
         }
         .ignoresSafeArea(.keyboard)

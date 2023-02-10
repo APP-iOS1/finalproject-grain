@@ -41,6 +41,7 @@ final class UserViewModel: ObservableObject {
     var updateUsersSuccess = PassthroughSubject<(), Never>()
     var deleteUsersSuccess = PassthroughSubject<(), Never>()
 
+    var fetchCurrentUsersSuccess = PassthroughSubject<(), Never>()
     func fetchUser() {
         UserService.getUser()
             .receive(on: DispatchQueue.main)
@@ -57,15 +58,17 @@ final class UserViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CurrentUserResponse) in
                 self.currentUsers = data.fields
-                //            print(" 확인 \(data.createTime)") -> 시간 값 나중에 써먹을수 있을듯
-                // user가 포스팅한 매거진 필터링
+                
+               
+//                            print(" 확인 \(data.createTime)") -> 시간 값 나중에 써먹을수 있을듯
+//                 user가 포스팅한 매거진 필터링
                 
                 
                 self.currentUserStringValue.append(contentsOf: data.fields.postedMagazineID.arrayValue.values)
                 for i in self.currentUserStringValue{
                     self.userPostedMagazine.append(i.stringValue)
                 }
-                
+
                 for i in self.currentUsers?.myCamera.arrayValue.values ?? [] {
                     self.cameraList.append(i.stringValue)
                 }
@@ -79,21 +82,21 @@ final class UserViewModel: ObservableObject {
                 for i in self.currentUserBookmarkedStringValue{
                     self.userBookmarkedMagazine.append(i.stringValue)
                 }
-                
+
                 for i in data.fields.likedMagazineID.arrayValue.values{
                     self.likedMagazineIdArr.append(i.stringValue)
                 }
-                // 저장한 커뮤니티 북마크
-//                for i in data.fields.bookmarkedCommunityID.arrayValue.values{
-//                    self.userBookmarkedCommunity.append(i.stringValue)
-//                    print(i.stringValue)
-//                }
-                // 저장한 커뮤니티 좋아요
+//                 저장한 커뮤니티 북마크
+                for i in data.fields.bookmarkedCommunityID.arrayValue.values{
+                    self.userBookmarkedCommunity.append(i.stringValue)
+                    print(i.stringValue)
+                }
+//                 저장한 커뮤니티 좋아요
 //                for i in data.fields.likedCommunityID.arrayValue.values{
 //                    self.likedCommunityIdArr.append(i.stringValue)
 //                }
 
-            self.fetchUsersSuccess.send()
+            self.fetchCurrentUsersSuccess.send()
         }.store(in: &subscription)
       
     }

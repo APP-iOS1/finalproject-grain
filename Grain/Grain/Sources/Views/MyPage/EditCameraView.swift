@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import FirebaseAuth
 /*
  @Environment(\.editMode) private var editMode
 
@@ -28,7 +28,7 @@ import SwiftUI
 //}
 
 struct EditCameraView: View {
-    @AppStorage("docID") private var docID : String?
+
 //    var userVM: UserViewModel
     @StateObject var userVM: UserViewModel = UserViewModel()
     
@@ -151,7 +151,7 @@ struct EditCameraView: View {
 
         }
         .onAppear{
-            userVM.fetchCurrentUser(userID: docID ?? "")
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
     }
 

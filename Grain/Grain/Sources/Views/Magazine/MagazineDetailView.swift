@@ -7,7 +7,8 @@ struct MagazineDetailView: View {
     
     @State var isHeartToggle: Bool = false    // 하트 눌림 상황
     @StateObject var userVM = UserViewModel()
-    @AppStorage("docID") private var docID : String?
+    @StateObject var authVM = AuthenticationStore()
+    
     var currentUsers : CurrentUserFields?
     
     @State private var isBookMarked: Bool = false
@@ -72,7 +73,7 @@ struct MagazineDetailView: View {
                             HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
                                 .padding(.leading)
                             NavigationLink {
-                                MagazineCommentView()
+                                MagazineCommentView(currentUser: userVM.currentUsers)
                             } label: {
                                 Image(systemName: "bubble.right")
                                     .font(.system(size: 24))
@@ -87,6 +88,12 @@ struct MagazineDetailView: View {
                                     .foregroundColor(.black)
                             }
                             Spacer()
+                            Button {
+                                authVM.googleLogout()
+                            } label: {
+                                Text("로그아웃")
+                            }
+
                         }
                     }//VStack
                     .frame(minHeight: 350)
@@ -108,25 +115,33 @@ struct MagazineDetailView: View {
             .onAppear{
                 /// 뷰가 처음 생길떄 fetch 한번 한다.
                 /// 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
-                userVM.fetchCurrentUser(userID: docID ?? "")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
-
-                    if userVM.likedMagazineIdArr.contains(where: { item in
-                        item == data.fields.id.stringValue})
-                    {
-                        isHeartToggle = true
-                    }else{
-                        isHeartToggle = false
-                    }
-                    
-                    if userVM.userBookmarkedMagazine.contains(where: { item in
-                        item == data.fields.id.stringValue})
-                    {
-                        isBookMarked = true
-                    }else{
-                        isBookMarked = false
-                    }
+                userVM.fetchUser()
+//                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+//                print(Auth.auth().currentUser?.uid ?? "")
+                print(userVM.users)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 10){
+//                    print(userVM.currentUsers)
+                    print(userVM.users)
+//                    print(userVM.currentUsers?.profileImage.stringValue)
                 }
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+//
+//                    if userVM.likedMagazineIdArr.contains(where: { item in
+//                        item == data.fields.id.stringValue})
+//                    {
+//                        isHeartToggle = true
+//                    }else{
+//                        isHeartToggle = false
+//                    }
+//
+//                    if userVM.userBookmarkedMagazine.contains(where: { item in
+//                        item == data.fields.id.stringValue})
+//                    {
+//                        isBookMarked = true
+//                    }else{
+//                        isBookMarked = false
+//                    }
+//                }
                 
             }
             
@@ -136,17 +151,17 @@ struct MagazineDetailView: View {
                     // 유저 DB에 좋아요 상태 저장/삭제
                     if isHeartToggle {
                         /// 추가 부분
-                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
+                        await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
                     }else{
                         /// 삭제부분
-                        await userVM.deleteUserUsingSDK(updateDocument: docID ?? "", deleteKey: "likedMagazineId", deleteIndex: data.fields.id.stringValue, isArray: true)
+                        await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "likedMagazineId", deleteIndex: data.fields.id.stringValue, isArray: true)
                     }
                     
                     // 유저 DB에 북마크 상태 저장/삭제
                     if isBookMarked {
-                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "bookmarkedMagazineID", updateValue: data.fields.id.stringValue, isArray: true)
+                        await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "bookmarkedMagazineID", updateValue: data.fields.id.stringValue, isArray: true)
                     }else{
-                        await userVM.deleteUserUsingSDK(updateDocument: docID ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: data.fields.id.stringValue, isArray: true)
+                        await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: data.fields.id.stringValue, isArray: true)
                     }
                 }
             }
@@ -206,8 +221,3 @@ struct MagazineDetailHeader: View {
 //    }
 //}
 
-
-//123 == 123 t
-//123 == 1234 f
-//12345 == 12345 f
-//

@@ -13,7 +13,7 @@ struct UserSearchDetailView: View {
         GridItem(.adaptive(minimum: 100))
     ]
     // MARK: docID -> 파이어스토어 User -> 문서ID 값 유저마다 고유의 값으로 들어가야 될듯
-    @AppStorage("docID") private var docID : String?
+   
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
     
     let user: UserDocument

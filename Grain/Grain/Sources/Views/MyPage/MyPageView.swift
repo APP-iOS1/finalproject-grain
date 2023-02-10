@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Kingfisher
+import FirebaseAuth
 
 struct MyPageView: View {
 //    var images: [Image] = [Image("1"), Image("2"), Image("3"), Image("test"), Image("sampleImage"), Image("testImage")]
@@ -14,7 +15,7 @@ struct MyPageView: View {
         GridItem(.adaptive(minimum: 100))
     ]
     // MARK: docID -> 파이어스토어 User -> 문서ID 값 유저마다 고유의 값으로 들어가야 될듯
-    @AppStorage("docID") private var docID : String?
+    
     @StateObject var userVM = UserViewModel()
     
     var magazineDocument: [MagazineDocument]
@@ -55,7 +56,7 @@ struct MyPageView: View {
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장
-                userVM.fetchCurrentUser(userID: "j78qzOgxohWAGy2CkhY7UR93BTo2")
+                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

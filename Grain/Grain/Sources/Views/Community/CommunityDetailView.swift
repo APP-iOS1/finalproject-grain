@@ -7,11 +7,12 @@
 
 import SwiftUI
 import UIKit
+import FirebaseAuth
 
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
     let community: CommunityDocument
-    @AppStorage("docID") private var docID : String?
+    
     @StateObject var communityVM = CommunityViewModel()
     @StateObject var userVM = UserViewModel()
     @Environment(\.presentationMode) var presentationMode
@@ -153,7 +154,7 @@ struct CommunityDetailView: View {
             //.isHidden(isHiddenComment)
         }
         .onAppear{
-            userVM.fetchCurrentUser(userID: docID ?? "")
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             DispatchQueue.main.asyncAfter(deadline: .now() + 1){
 
                 // 유저가 좋아요를 눌렀는지
@@ -190,9 +191,9 @@ struct CommunityDetailView: View {
                 
 //                 유저 DB에 북마크 상태 저장/삭제
                 if isBookMarked {
-                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "bookmarkedMagazineID", updateValue: community.fields.id.stringValue, isArray: true)
+                    await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "bookmarkedMagazineID", updateValue: community.fields.id.stringValue, isArray: true)
                 }else{
-                    await userVM.deleteUserUsingSDK(updateDocument: docID ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: community.fields.id.stringValue, isArray: true)
+                    await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: community.fields.id.stringValue, isArray: true)
                 }
             }
         }

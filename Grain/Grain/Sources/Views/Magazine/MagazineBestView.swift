@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct MagazineBestView: View {
     @StateObject var magazineVM = MagazineViewModel()
     
     @StateObject var userVM = UserViewModel()
-    @AppStorage("docID") private var docID : String?
+    
     var currentUsers : CurrentUserFields?
     
     var body: some View {
@@ -51,7 +52,7 @@ struct MagazineBestView: View {
                 } // scroll view
             }//vstack
             .onAppear{
-                userVM.fetchCurrentUser(userID: docID ?? "")
+                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 magazineVM.fetchMagazine()
             }
         }

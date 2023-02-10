@@ -18,7 +18,7 @@ private enum FocusableField: Hashable {
 }
 
 struct EditMyPageView: View {
-    @AppStorage("docID") private var docID : String?
+    
     var userVM: UserViewModel
     
     @Environment(\.presentationMode) var presentationMode

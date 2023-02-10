@@ -20,6 +20,7 @@ final class CommunityViewModel: ObservableObject {
     var fetchCommunitySuccess = PassthroughSubject<[CommunityDocument], Never>()
     var insertCommunitySuccess = PassthroughSubject<(), Never>()
     var updateCommunitySuccess = PassthroughSubject<(), Never>()
+    var updateCommunityStateSuccess = PassthroughSubject<(), Never>()
     var deleteCommunitySuccess = PassthroughSubject<(), Never>()
     
     //MARK: - 커뮤니티 데이터 가져오기 메소드
@@ -45,8 +46,8 @@ final class CommunityViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-    // MARK: 커뮤니티 데이터 전체 업데이트 메소드(MagazineEditView에서 사용)
-    /// 사용방법:  원래 데이터 수정해서  CommunityDocument형식으로 data 에 넣고, docID에는 메거진 id 넣어서 updateMagazine 호출.
+    // MARK: 커뮤니티 데이터 전체 업데이트 메소드(CommunityEditView에서 사용)
+    /// 사용방법:  원래 데이터 수정해서  CommunityDocument형식으로 data 에 넣고, docID에는 커뮤니티 id 넣어서 updateMagazine 호출.
     /// ex) 커뮤니티 게시글 수정하기 - title, content 수정해서 update
     func updateCommunity(data: CommunityDocument, docID: String) {
         CommunityService.updateCommunity(data: data, docID: docID)
@@ -57,7 +58,19 @@ final class CommunityViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-    // MARK: 커뮤니티 삭제 메소드(MagazineDetailView에서 게시물 삭제시 사용)
+    // MARK: 커뮤니티 데이터 모집상태 업데이트 메소드(CommunityDetailView에서 사용)
+    /// 사용방법:  모집중 -> 모집마감 이라면 state : "모집 마감" 이렇게 넣어주면 됩니다.
+    /// ex) updateCommunityState(state: "모집마감", docID: 커뮤니티ID )
+    func updateCommunityState(state: String, docID: String) {
+        CommunityService.updateCommunityState(state: state, docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: CommunityResponse) in
+                self.updateCommunityStateSuccess.send()
+            }.store(in: &subscription)
+    }
+    
+    // MARK: 커뮤니티 삭제 메소드(CommunityDetailView에서 게시물 삭제시 사용)
     /// 해당 커뮤니티 게시물의 docID를 넣어주고 호출하면 그 게시물이 삭제됩니다.
     func deleteCommunity(docID: String) {
         CommunityService.deleteMagazine(docID: docID)

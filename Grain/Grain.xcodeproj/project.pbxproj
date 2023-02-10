@@ -62,6 +62,7 @@
 		9955E113297A52E200265D14 /* MagazineAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E112297A52E200265D14 /* MagazineAddView.swift */; };
 		9955E115297A538900265D14 /* MagazineDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E114297A538900265D14 /* MagazineDetailView.swift */; };
 		9955E117297A6D5900265D14 /* MagazineContentAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E116297A6D5900265D14 /* MagazineContentAddView.swift */; };
+		995645A12996C33200D0471F /* LoginProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995645A02996C33200D0471F /* LoginProgressView.swift */; };
 		9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AF72297778D800A51DA9 /* GrainApp.swift */; };
 		9958AF75297778D800A51DA9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AF74297778D800A51DA9 /* ContentView.swift */; };
 		9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9958AF76297778D900A51DA9 /* Assets.xcassets */; };
@@ -209,6 +210,7 @@
 		9955E112297A52E200265D14 /* MagazineAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineAddView.swift; sourceTree = "<group>"; };
 		9955E114297A538900265D14 /* MagazineDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDetailView.swift; sourceTree = "<group>"; };
 		9955E116297A6D5900265D14 /* MagazineContentAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineContentAddView.swift; sourceTree = "<group>"; };
+		995645A02996C33200D0471F /* LoginProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginProgressView.swift; sourceTree = "<group>"; };
 		9958AF6F297778D800A51DA9 /* Grain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grain.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9958AF72297778D800A51DA9 /* GrainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GrainApp.swift; sourceTree = "<group>"; };
 		9958AF74297778D800A51DA9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 		9958AFB62977BB5500A51DA9 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		9958AFB82977D56000A51DA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9958AFB92977D80200A51DA9 /* AuthenticationTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationTestView.swift; sourceTree = "<group>"; };
+		995EBDCE29966F18002C1686 /* Grain.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grain.entitlements; sourceTree = "<group>"; };
 		9962CDC82979246500E834C3 /* AllTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTabView.swift; sourceTree = "<group>"; };
 		9962CDCA297924A000E834C3 /* MatchingTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingTabView.swift; sourceTree = "<group>"; };
 		9962CDCC297924BF00E834C3 /* ClassTabView .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClassTabView .swift"; sourceTree = "<group>"; };
@@ -489,6 +492,7 @@
 		9958AF71297778D800A51DA9 /* Grain */ = {
 			isa = PBXGroup;
 			children = (
+				995EBDCE29966F18002C1686 /* Grain.entitlements */,
 				9958AFB82977D56000A51DA9 /* Info.plist */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
 				A71680E3298B3B3B0050549D /* GoogleService-Info.plist */,
@@ -612,6 +616,7 @@
 			children = (
 				9958AFB42977B0C500A51DA9 /* AuthenticationView.swift */,
 				9958AFB92977D80200A51DA9 /* AuthenticationTestView.swift */,
+				995645A02996C33200D0471F /* LoginProgressView.swift */,
 			);
 			path = AuthenticationViews;
 			sourceTree = "<group>";
@@ -945,6 +950,7 @@
 				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,
 				99B21EC329938CD7006933BB /* MagazineCommentView.swift in Sources */,
 				998847D8299226EC00004066 /* UserSearchResultView.swift in Sources */,
+				995645A12996C33200D0471F /* LoginProgressView.swift in Sources */,
 				99B21EC529940AF5006933BB /* MainRecentSearchView.swift in Sources */,
 				998847D6299226CB00004066 /* MagazineSearchDetailView.swift in Sources */,
 				0693B4C72992849600F9CDE2 /* Error.swift in Sources */,
@@ -1089,6 +1095,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Grain/Grain.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Grain/Preview Content\"";
@@ -1126,6 +1133,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Grain/Grain.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Grain/Preview Content\"";

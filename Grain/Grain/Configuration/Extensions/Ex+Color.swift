@@ -27,4 +27,5 @@ extension Color { // 사용법: Color(hex: "#439F47")
     static let middlebrightGray = Color(hex: "9a9a9a")
     static let middleDarkGray = Color(hex: "616161")
     static let middleDarkRed = Color(hex: "d61500")
+    static let googleBackground = Color(hex: "4285F4")
 }

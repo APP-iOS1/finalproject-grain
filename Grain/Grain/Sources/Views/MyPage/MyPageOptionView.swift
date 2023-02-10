@@ -259,7 +259,8 @@ struct SupportSection: View {
 
 //MARK: - 정보 섹션
 struct InfoSection: View {
-    @StateObject var authVM = AuthenticationStore()
+    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
+    @ObservedObject var kakoAuthVM: KakaoAuthenticationStore = KakaoAuthenticationStore()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
@@ -283,7 +284,8 @@ struct InfoSection: View {
                     
                     Spacer()
                     
-                    Image(systemName: "chevron.right")                    .font(.title3)
+                    Image(systemName: "chevron.right")
+                        .font(.title3)
                     
                 }
                 .foregroundColor(.black)
@@ -314,7 +316,17 @@ struct InfoSection: View {
             .padding(.horizontal)
             
             Button {
-                authVM.googleLogout()
+                if authVM.logInCompanyState == .appleLogIn {
+                    authVM.appleLogout()
+                } else if authVM.logInCompanyState == .googleLogIn {
+                    authVM.googleLogout()
+                } else if authVM.logInCompanyState == .kakaoLogIn {
+                    kakoAuthVM.kakaoLogOut()
+                } else {
+                    authVM.appleLogout()
+                    authVM.googleLogout()
+                    kakoAuthVM.kakaoLogOut()
+                }
             } label: {
                 HStack {
                     Image(systemName: "rectangle.portrait.and.arrow.right")

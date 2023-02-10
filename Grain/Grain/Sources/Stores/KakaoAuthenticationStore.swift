@@ -51,13 +51,14 @@ final class KakaoAuthenticationStore: ObservableObject {
                     }
                     //do something
                     //                    _ = oauthToken
-                    self.authenticationStore.authenticationState = .authenticated
+                    self.authenticationStore.authenticationState = .authenticating
                     self.authenticationStore.logInCompanyState = .kakaoLogIn
                     
                 }
             }
         }
     }
+    
     func fetchingFirebase(){
         UserApi.shared.me() {(user, error) in
             if let error = error {
@@ -74,6 +75,7 @@ final class KakaoAuthenticationStore: ObservableObject {
                         print("Firebase 사용자 생성 성공")
                         let authResult = authResult?.user
                         let currentKakao = user?.kakaoAccount
+                        // setData 하는 부분
                         Firestore.firestore().collection("User").document(authResult?.uid ?? "").setData([
                             "userEmail" : currentKakao?.email ?? "",
                             "userNickname" : currentKakao?.profile?.nickname ?? "",
@@ -105,6 +107,17 @@ final class KakaoAuthenticationStore: ObservableObject {
         }
         catch {
             print(error.localizedDescription)
+        }
+    }
+}
+
+func unlinkKakao(){
+    UserApi.shared.unlink {(error) in
+        if let error = error {
+            print(error)
+        }
+        else {
+            print("unlink() success.")
         }
     }
 }

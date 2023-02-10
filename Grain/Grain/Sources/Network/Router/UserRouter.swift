@@ -12,8 +12,9 @@ enum UserRouter {
 
     case get
     case post(myFilm: String, bookmarkedMagazineID: String,email: String, myCamera: String, postedCommunityID: String, postedMagazineID: String, likedMagazineId: String, lastSearched: String, bookmarkedCommunityID: String, recentSearch: String, id: String, following: String, myLens : String, profileImage: String, name: String, follower: String, nickName: String)
+    case patchArr(type: String, arr: [String],  docID: String)
+    case patchString(type: String, string: String, docID: String)
     case delete(docID: String)
-    case patch(putData: CurrentUserFields, docID: String)
     
     private var baseURL: URL {
         let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
@@ -23,14 +24,16 @@ enum UserRouter {
     private enum HTTPMethod {
         case get
         case post
-        case patch
+        case patchArr
+        case patchString
         case delete
         
         var value: String {
             switch self {
             case .get: return "GET"
             case .post: return "POST"
-            case .patch: return "PATCH"
+            case .patchArr: return "PATCH"
+            case .patchString: return "PATCH"
             case .delete: return "DELETE"
             }
         }
@@ -38,7 +41,9 @@ enum UserRouter {
     
     private var endPoint: String {
         switch self {
-        case let .patch(_, docID):
+        case let .patchArr(_,_, docID):
+            return "/User/\(docID)"
+        case let .patchString(_,_, docID):
             return "/User/\(docID)"
         case let .delete(docID: docID):
             return "/User/\(docID)"
@@ -51,6 +56,13 @@ enum UserRouter {
         switch self {
         case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID, postedMagazineID, likedMagazineId, lastSearched, bookmarkedCommunityID, recentSearch, id, following, myLens , profileImage, name, follower, nickName):
             let params: URLQueryItem = URLQueryItem(name: "documentId", value: id)
+            return params
+            
+        case let .patchArr(type, _, _):
+            let params: URLQueryItem = URLQueryItem(name: "updateMask.fieldPaths", value: type)
+            return params
+        case let .patchString(type, _, _):
+            let params: URLQueryItem = URLQueryItem(name: "updateMask.fieldPaths", value: type)
             return params
         default :
             let params: URLQueryItem? = nil
@@ -66,19 +78,21 @@ enum UserRouter {
             return .post
         case .delete:
             return .delete
+        case .patchArr:
+            return .patchArr
         default:
-            return .patch
+            return .patchString
         }
     }
-   
+    
     private var data: Data? {
         switch self {
         case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId,lastSearched,bookmarkedCommunityID, recentSearch, id, following,myLens,profileImage,name,follower,nickName):
             return UserQuery.insertUserQuery(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID, postedMagazineID: postedMagazineID, likedMagazineId: likedMagazineId, lastSearched: lastSearched, bookmarkedCommunityID: bookmarkedCommunityID, recentSearch: recentSearch, id: id, following: following, myLens: myLens, profileImage: profileImage, name: name, follower: follower, nickName: nickName)
-        case let .patch(putData, docID):
-            var data = UserQuery.updateUserQuery(userData: putData, docID: docID)
-            print(String(decoding: data!, as: UTF8.self))
-            return UserQuery.updateUserQuery(userData: putData, docID: docID)
+        case let .patchArr(type, arr, _):
+            return UserQuery.updateUserArray(type: type, arr: arr)
+        case let .patchString(type, string, _):
+            return UserQuery.updateUserString(type: type, string: string)
         default:
             return nil
         }

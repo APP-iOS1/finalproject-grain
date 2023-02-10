@@ -38,6 +38,7 @@ struct UserFields: Codable,Hashable {
 struct UserArrayKey: Codable,Hashable {
     let arrayValue: UserArrayValue
 }
+
 struct UserArrayValue: Codable,Hashable{
     let values: [UserStringValue]
 }

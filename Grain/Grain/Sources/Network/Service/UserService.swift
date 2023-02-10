@@ -49,11 +49,25 @@ enum UserService {
         }
     }
 
-    // MARK: - 유저정보 업데이트 메소드
-    static func updateCurrentUser(userData: CurrentUserFields, docID: String) -> AnyPublisher<UserDocument, Error>  {
+    static func updateCurrentUserArray(type: String, arr: [String], docID: String) -> AnyPublisher<UserDocument, Error>  {
         print("updateCurrentUser Service Start")
         do {
-            let request = try UserRouter.patch(putData: userData, docID: docID).asURLRequest()
+            let request = try UserRouter.patchArr(type: type, arr: arr, docID: docID).asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: UserDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
+    }
+    
+    static func updateCurrentUserString(type: String, string: String, docID: String) -> AnyPublisher<UserDocument, Error>  {
+        print("updateCurrentUser Service Start")
+        do {
+            let request = try UserRouter.patchString(type: type, string: string, docID: docID).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

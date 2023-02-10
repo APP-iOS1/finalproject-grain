@@ -38,7 +38,8 @@ final class UserViewModel: ObservableObject {
     
     var fetchUsersSuccess = PassthroughSubject<(), Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
-    var updateUsersSuccess = PassthroughSubject<(), Never>()
+    var updateUsersArraySuccess = PassthroughSubject<(), Never>()
+    var updateUsersStringSuccess = PassthroughSubject<(), Never>()
     var deleteUsersSuccess = PassthroughSubject<(), Never>()
 
     var fetchCurrentUsersSuccess = PassthroughSubject<(), Never>()
@@ -98,19 +99,31 @@ final class UserViewModel: ObservableObject {
 
             self.fetchCurrentUsersSuccess.send()
         }.store(in: &subscription)
-      
     }
     
-
-    func updateCurrentUser(userData: CurrentUserFields, docID: String) {
+    // MARK: - 유저정보 업데이트 메소드 (string 타입값 업데이트할때 사용)
+    /// ex) type: likedMagazineId , string: ["1234", "45346346", "56456456"], docID: 현재로그인한유저아이디 -> 유저가 좋아요누른 메거진 아이디 리스트 배열을 ["1234", "45346346", "56456456"] 로 바꾸겠다. !!!
+    func updateCurrentUserArray(type: String, arr: [String], docID: String){
         print("updateCurrentUser Service Start")
-        UserService.updateCurrentUser(userData: userData, docID: docID)
+        UserService.updateCurrentUserArray(type: type, arr: arr, docID: docID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
         } receiveValue: { (data: UserDocument) in
-            self.updateUsersSuccess.send()
+            self.updateUsersArraySuccess.send()
         }.store(in: &subscription)
     }
+    
+    // MARK: - 유저정보 업데이트 메소드 (string 타입값 업데이트할때 사용)
+    /// ex) type: id , string: "1234", docID: 현재로그인한유저아이디 -> 유저의  id 를 1234로 바꾸겠댜!!!
+    func updateCurrentUserString(type: String, string: String, docID: String) {
+        UserService.updateCurrentUserString(type: type, string: string, docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+        } receiveValue: { (data: UserDocument) in
+            self.updateUsersStringSuccess.send()
+        }.store(in: &subscription)
+    }
+    
     
     func deleteUser(docID: String) {
         UserService.deleteUser(docID: docID)

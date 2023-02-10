@@ -185,7 +185,7 @@ struct EditMyPageView: View {
                         if var currentUser = userVM.currentUsers {
                             let docID = currentUser.id.stringValue
                             currentUser.nickName.stringValue = editedNickname
-                            userVM.updateCurrentUser(userData: currentUser, docID: docID)
+//                            userVM.updateCurrentUser(userData: currentUser, docID: docID)
                             print("testnickname: \( currentUser.nickName)")
                             print("testname: \(currentUser.name)")
                         }

@@ -54,9 +54,9 @@ struct MyPageView: View {
                 }
                 MyPageMyFeedView(magazineDocument: magazineDocument)
             }
-            onAppear{
+            .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장
-//                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

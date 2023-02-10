@@ -55,7 +55,7 @@ struct MapView: View {
                 VStack{
                     HStack{
                         // FIXME: onSubmit 하고 버튼 눌러야함
-                        TextField("🔍 위치를 검색해주세요", text: $searchText)
+                        TextField("🔍 ex) 서울시 종로구 사직동", text: $searchText)
                             .padding()
                             .background(.white)
                             .cornerRadius(15)
@@ -82,9 +82,10 @@ struct MapView: View {
                         /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
                         MapCategoryCellView(categoryString: $categoryString)
                     }.padding(.leading , 7) // -> 검증 필요
+                        .offset(y: -15)
                 }
                 .zIndex(1)
-                .offset(y:-250)
+                .offset(y: -250)
                 
                 // MARK: 지도 뷰
                 /// 카테고리 버튼 별로 해당하는 지도 뷰가 보여줌
@@ -234,29 +235,38 @@ struct UIMapView: UIViewRepresentable,View {
             marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
             switch item.fields.category.stringValue{
             case "포토스팟":
-                marker.iconImage = NMF_MARKER_IMAGE_PINK
-                marker.width = 25
-                marker.height = 35
+                marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
+                marker.width = 40
+                marker.height = 40
                 // MARK: 아이콘 캡션 - 포토스팟 글씨
                 marker.captionText = item.fields.category.stringValue
+                marker.captionColor = UIColor(red: 248.0/255.0, green: 188.0/255.0, blue: 36.0/255.0, alpha: 1)
+                marker.captionTextSize = 12
+                marker.captionHaloColor = UIColor(.gray)
                 // MARK: URL링크 정보 받기
                 marker.userInfo = ["magazine": item.fields.magazineID.arrayValue.values[0].stringValue]
                 // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
                 marker.tag = 0
             case "현상소":
-                marker.iconImage = NMF_MARKER_IMAGE_RED
-                marker.width = 25
-                marker.height = 35
+                marker.iconImage = NMFOverlayImage(name: "stationMarker")
+                marker.width = 40
+                marker.height = 40
                 // MARK: 아이콘 캡션 - 현상소 글씨
                 marker.captionText = item.fields.category.stringValue
+                marker.captionColor = UIColor(red: 245.0/255.0, green: 136.0/255.0, blue: 0.0/255.0, alpha: 1)
+                marker.captionTextSize = 12
+                marker.captionHaloColor = UIColor(.gray)
                 marker.userInfo = ["url" :  item.fields.url.stringValue]
                 marker.tag = 1
             case "수리점":
-                marker.iconImage = NMF_MARKER_IMAGE_YELLOW
-                marker.width = 25
-                marker.height = 35
+                marker.iconImage = NMFOverlayImage(name: "repairShopMarker")
+                marker.width = 40
+                marker.height = 40
                 // MARK: 아이콘 캡션 - 수리점 글씨
                 marker.captionText = item.fields.category.stringValue
+                marker.captionColor = UIColor(red: 38.0/255.0, green: 104.0/255.0, blue: 103.0/255.0, alpha: 1)
+                marker.captionTextSize = 12
+                marker.captionHaloColor = UIColor(.gray)
                 marker.userInfo = ["url" :  item.fields.url.stringValue]
                 marker.tag = 2
                 // MARK: 캡션 글씨 색상 컬러

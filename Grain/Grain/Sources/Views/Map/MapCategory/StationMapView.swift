@@ -70,15 +70,16 @@ struct StationUIMapView: UIViewRepresentable,View {
             if item.fields.category.stringValue == "현상소"{
                 let marker = NMFMarker()
                 marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
-                marker.iconImage = NMF_MARKER_IMAGE_RED
-                marker.width = 25
-                marker.height = 35
-                // MARK: 아이콘 캡션 - 포토스팟 글씨
+                marker.iconImage = NMFOverlayImage(name: "stationMarker")
+                marker.width = 40
+                marker.height = 40
+                // MARK: 아이콘 캡션 - 현상소 글씨
                 marker.captionText = item.fields.category.stringValue
-                // MARK: URL링크 정보 받기
-                marker.userInfo = ["url" : item.fields.url.stringValue]
-                // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
-                marker.tag = 0
+                marker.captionColor = UIColor(red: 245.0/255.0, green: 136.0/255.0, blue: 0.0/255.0, alpha: 1)
+                marker.captionTextSize = 12
+                marker.captionHaloColor = UIColor(.gray)
+                marker.userInfo = ["url" :  item.fields.url.stringValue]
+                marker.tag = 1
                 // MARK: 마커 클릭시
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {

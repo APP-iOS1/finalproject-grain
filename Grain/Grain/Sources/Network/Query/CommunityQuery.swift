@@ -44,6 +44,9 @@ enum CommunityQuery {
                         "userID": {
                             "stringValue": "\(data.userID.stringValue)"
                         },
+                        "state": {
+                            "stringValue": "\(data.state.stringValue)"
+                        },
                         "id": {
                             "stringValue": "\(docID)"
                         },
@@ -83,6 +86,9 @@ enum CommunityQuery {
                                     \(str)
                                 ]
                             }
+                        },
+                        "state": {
+                            "stringValue": "\(data.fields.state.stringValue)"
                         },
                         "userID": {
                             "stringValue": "\(data.fields.userID.stringValue)"

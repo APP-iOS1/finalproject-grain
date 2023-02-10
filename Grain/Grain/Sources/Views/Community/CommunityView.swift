@@ -46,66 +46,47 @@ struct CommunityView: View {
                 } // hstack
                 
                 //MARK: 소희님이 공유해주신 제스쳐 탭이동 없애기부분 (적용하면 툴바 사용할수없음)
-//                switch(selectedIndex) {
-//                case 0:
-//                    AllTabView(community: communityVM.communities)
-//                case 1:
-//                    MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"))
-//                case 2:
-//                    ClassTabView(community: communityVM.returnCategoryCommunity(category: "마켓"))
-//                case 3:
-//                    MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"))
-//                case 4:
-//                    InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"))
-//                }
-                TabView(selection: $selectedIndex) {
+                switch(selectedIndex) {
+                case 0:
                     AllTabView(community: communityVM.communities)
-                        .tag(0)
+                case 1:
                     MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"))
-                        .tag(1)
+                case 2:
                     ClassTabView(community: communityVM.returnCategoryCommunity(category: "마켓"))
-                        .tag(2)
+                case 3:
                     MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"))
-                        .tag(3)
+                default:
                     InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"))
-                        .tag(4)
-                    
-                }
-                .tabViewStyle(.page(indexDisplayMode: .never))
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Text("GRAIN")
-                            .font(.title)
-                            .bold()
-                            .kerning(7)
-                    }
-    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            self.isSearchViewShown.toggle()
-                        } label: {
-                            Image(systemName: "magnifyingglass")
-                                .foregroundColor(.black)
-                        }
-
-                    }
-                }
-                .navigationDestination(isPresented: $isSearchViewShown) {
-                    MainSearchView()
                 }
             } // 최상단 vstack
         } // navi stack
+        .navigationDestination(isPresented: $isSearchViewShown) {
+            MainSearchView()
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Text("GRAIN")
+                    .font(.title)
+                    .bold()
+                    .kerning(7)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    self.isSearchViewShown.toggle()
+                } label: {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.black)
+                }
+            }
+        }
         .onAppear {
             // 커뮤니티 데이터 fetch
             communityVM.fetchCommunity()
-
             // MARK: 커뮤니티 업데이트 메서드 부분 필요시 확인하고 사용하기!
             /// isArray 업데이트 해야하는 값이 배열이면 true로 전달
 //            Task{
 //                await communityVM.updateCommunity(updateDocument: "PQGsHYXGjF8QkeQol8sz", updateKey: "name", updateValue: "123131", isArray: false)
 //            }
-            
-
             self.isSearchViewShown = false
 
         }

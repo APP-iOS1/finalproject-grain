@@ -50,7 +50,7 @@ struct CommunityRowView: View {
                                 .foregroundColor(Color(hex: "F8BC24"))
                                 .overlay{
                                     Text("모집중")
-                                        .foregroundColor(.black)
+                                        .foregroundColor(Color(hex: "616161"))
                                         .bold()
                                         .font(.caption)
                                 }
@@ -79,11 +79,9 @@ struct CommunityRowView: View {
                            // String.toDate(community.createTime)
                             Text(community.createdDate?.renderTime() ?? "")
                             Spacer()
-                            
-                            Image(systemName: "heart")
-                            Text("\(50)")
                             Image(systemName: "text.bubble")
                             Text("\(12)")
+                                .padding(.leading, -5)
                         }
                         .padding(.bottom, 4)
                         .foregroundColor(.secondary)

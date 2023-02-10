@@ -22,9 +22,6 @@ struct HeartButton: View {
                 .scaleEffect(self.imageScale)
                 
         }
-        .onAppear{
-                print("isHeartToggle: 파일 안에\(isHeartToggle)")
-        }
         .onTapGesture {
            
             withAnimation(.interpolatingSpring(mass: 0.8, stiffness: 100, damping: 10, initialVelocity: 0)) {

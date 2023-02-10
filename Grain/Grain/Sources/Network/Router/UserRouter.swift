@@ -14,6 +14,7 @@ enum UserRouter {
     case post(myFilm: String, bookmarkedMagazineID: String,email: String, myCamera: String, postedCommunityID: String, postedMagazineID: String, likedMagazineId: String, lastSearched: String, bookmarkedCommunityID: String, recentSearch: String, id: String, following: String, myLens : String, profileImage: String, name: String, follower: String, nickName: String, introduce: String)
     case patchArr(type: String, arr: [String],  docID: String)
     case patchString(type: String, string: String, docID: String)
+    case patchProfile(profileImage: String, nickName: String, introduce: String, docID: String)
     case delete(docID: String)
     
     private var baseURL: URL {
@@ -26,6 +27,7 @@ enum UserRouter {
         case post
         case patchArr
         case patchString
+        case patchProfile
         case delete
         
         var value: String {
@@ -34,6 +36,7 @@ enum UserRouter {
             case .post: return "POST"
             case .patchArr: return "PATCH"
             case .patchString: return "PATCH"
+            case .patchProfile: return "PATCH"
             case .delete: return "DELETE"
             }
         }
@@ -45,6 +48,8 @@ enum UserRouter {
             return "/User/\(docID)"
         case let .patchString(_,_, docID):
             return "/User/\(docID)"
+        case let .patchProfile(_,_,_, docID):
+            return "/User/\(docID)"
         case let .delete(docID: docID):
             return "/User/\(docID)"
         default:
@@ -52,20 +57,28 @@ enum UserRouter {
         }
     }
     
-    var parameters: URLQueryItem? {
+    var parameters: [URLQueryItem]? {
         switch self {
         case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID, postedMagazineID, likedMagazineId, lastSearched, bookmarkedCommunityID, recentSearch, id, following, myLens , profileImage, name, follower, nickName, introduce):
-            let params: URLQueryItem = URLQueryItem(name: "documentId", value: id)
+            var params: [URLQueryItem] = [URLQueryItem(name: "documentId", value: id)]
             return params
             
         case let .patchArr(type, _, _):
-            let params: URLQueryItem = URLQueryItem(name: "updateMask.fieldPaths", value: type)
+            let params: [URLQueryItem] = [URLQueryItem(name: "updateMask.fieldPaths", value: type)]
             return params
         case let .patchString(type, _, _):
-            let params: URLQueryItem = URLQueryItem(name: "updateMask.fieldPaths", value: type)
+            let params: [URLQueryItem] = [URLQueryItem(name: "updateMask.fieldPaths", value: type)]
             return params
+        case .patchProfile:
+            let param1 = URLQueryItem(name: "updateMask.fieldPaths", value: "profileImage")
+            let param2 = URLQueryItem(name: "updateMask.fieldPaths", value: "nickName")
+            let param3 = URLQueryItem(name: "updateMask.fieldPaths", value: "introduce")
+            
+            let params: [URLQueryItem] = [param1, param2, param3]
+            return params
+            
         default :
-            let params: URLQueryItem? = nil
+            let params: [URLQueryItem]? = nil
             return params
         }
     }
@@ -93,6 +106,8 @@ enum UserRouter {
             return UserQuery.updateUserArray(type: type, arr: arr)
         case let .patchString(type, string, _):
             return UserQuery.updateUserString(type: type, string: string)
+        case let .patchProfile(profileImage, nickName, introduce, _):
+            return UserQuery.updateUserProfile(profileImage: profileImage, nickName: nickName, introduce: introduce)
         default:
             return nil
         }
@@ -104,7 +119,7 @@ enum UserRouter {
         var component = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         
         if let param = parameters {
-            component.queryItems = [param]
+            component.queryItems = param
         }
         
         var request = URLRequest(url: component.url!)

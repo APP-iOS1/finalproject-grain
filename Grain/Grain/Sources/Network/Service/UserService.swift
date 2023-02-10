@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 // TODO: 유저가 좋아요 누른 게시물 id update method [x]
 // TODO: 유저가 좋아요 누른 커뮤니티 글 id update method [x]
@@ -38,6 +39,33 @@ enum UserService {
         
         do {
             let request = try requestRouter.asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: UserDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
+    }
+    
+    static func updateCurrentUserProfile(profileImage: [UIImage], nickName: String, introduce: String, docID: String) -> AnyPublisher<UserDocument, Error> {
+        print("updateCurrentUser Service Start")
+        
+        // UIImage -> URLString 으로 변환
+        var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "param", fileName: "file", image: profileImage)
+        
+        var profileImageURL: String = imageUrlArr[0]
+        
+        if imageUrlArr.count > 0 {
+            // imageURLImage에서 index Out of range Error 방지용! -> 배열안에 profile image가 들어있으면 request 만들기.
+            // 뷰에서 profileImage가 들어있는지 확인 후 적용시키는게 좋을듯.
+            profileImageURL = imageUrlArr[0]
+        }
+        
+        do {
+            let request = try UserRouter.patchProfile(profileImage: profileImageURL, nickName: nickName, introduce: introduce, docID: docID).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

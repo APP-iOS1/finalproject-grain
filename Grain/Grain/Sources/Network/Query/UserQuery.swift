@@ -146,6 +146,26 @@ enum UserQuery {
         """.data(using: .utf8)
     }
     
+    /// 프로필 Edit 에서 사용 : nickName, introduce, profileImage 변경
+    static func updateUserProfile(profileImage: String, nickName: String, introduce: String ) -> Data? {
+        let query = """
+                    {
+                      "fields": {
+                           "profileImage": {
+                                "stringValue": "\(profileImage)"
+                    },
+                            "nickName": {
+                                "stringValue": "\(nickName)"
+                    },
+                            "introduce": {
+                                "stringValue": "\(introduce)"
+                    }
+                }
+            }
+            """.data(using: .utf8)
+        
+        return query
+    }
     
     
     /// String 타입에 사용: ex) 닉네임 update -> type: nickName, string: "히갱"

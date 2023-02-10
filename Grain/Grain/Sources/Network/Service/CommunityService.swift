@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 enum CommunityService {
 
@@ -28,10 +29,13 @@ enum CommunityService {
     }
     
     //MARK: - 커뮤니티 데이터 넣기
-    static func insertCommunity(profileImage: String, nickName: String,category: String,image: String,userID: String,title: String,content: String ) -> AnyPublisher<CommunityResponse, Error> {
+    static func insertCommunity(data: CommunityFields, images: [UIImage]) -> AnyPublisher<CommunityResponse, Error> {
        
+        let docID: String = data.id.stringValue
+        var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "param", fileName: "file", image: images)
+        
         do {
-            let requestRouter = CommunityRouter.post(profileImage: profileImage, nickName: nickName, category: category, image: image, userID: userID, title: title, content: content)
+            let requestRouter = CommunityRouter.post(communityData: data, images: imageUrlArr, docID: docID)
             let request = try requestRouter.asURLRequest()
             return URLSession
                 .shared

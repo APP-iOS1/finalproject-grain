@@ -96,11 +96,10 @@ final class AuthenticationStore: ObservableObject {
                 dump("\(#function) - DEBUG \(error.localizedDescription)")
             } else {
                 guard let profile = user?.profile else { return }
-                
-                
+
                 insertUser(myFilm: "선택", bookmarkedMagazineID: "", email: profile.email, myCamera: "필수", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: uid ?? "", following: "", myLens: "선택", profileImage: "", name: profile.name, follower: "", nickName: "", introduce: "")
                 
-                self.authenticationState = .authenticating
+                self.authStateAuthenticated(user: CurrentUser(id: uid ?? "", name: profile.name, email: profile.email))
                 self.logInCompanyState = .googleLogIn
             }
         }
@@ -207,7 +206,6 @@ final class AuthenticationStore: ObservableObject {
     
     /// 구글 로그아웃
     public func googleLogout() {
-        
         do {
             try authPath.signOut()
             GIDSignIn.sharedInstance.signOut()
@@ -217,6 +215,10 @@ final class AuthenticationStore: ObservableObject {
             print(error.localizedDescription)
         }
     }
+    
+    public func authStateAuthenticated(user: CurrentUser) {
+           self.authenticationState = .authenticated
+       }
     // MARK: - 회원탈퇴 확인해봐야함
     func googleDisconnect() {
         GIDSignIn.sharedInstance.disconnect()

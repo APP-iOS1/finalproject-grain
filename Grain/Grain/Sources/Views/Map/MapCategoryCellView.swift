@@ -51,70 +51,115 @@ struct MapCategoryCellView: View {
     var body: some View {
         // MARK: 카테고리 버튼
         HStack{
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(allButtonClickedBool ? .blue : .white)
-                .frame(width: 69, height: 40)
-                .overlay{
-                    Button {
-                        allButtonClickedBool.toggle()
-                        categoryString = "전체"
-                        buttonSwitch(index: categoryString)
-                    } label: {
-                        
-                        Text("전체")
-                            .fontWeight(.bold)
-                            .foregroundColor(.black)
-                        
-                    }
-                }
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(photoButtonClickedBool ? .blue : .white)
-                .frame(width: 69, height: 40)
-                .overlay{
-                    Button {
-                        photoButtonClickedBool.toggle()
-                        categoryString = "포토스팟"
-                        buttonSwitch(index: categoryString)
-                    } label: {
-                        
-                        Text("포토스팟")
-                            .fontWeight(.bold)
-                            .foregroundColor(.black)
-                        
-                    }
-                }
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(StationButtonClickedBool ? .blue : .white)
-                .frame(width: 69, height: 40)
-                .overlay{
-                    Button {
-                        StationButtonClickedBool.toggle()
-                        categoryString = "현상소"
-                        buttonSwitch(index: categoryString)
-                    } label: {
-                        
-                        Text("현상소")
-                            .fontWeight(.bold)
-                            .foregroundColor(.black)
-                        
-                    }
-                }
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundColor(repairButtonClickedBool ? .blue : .white)
-                .frame(width: 69, height: 40)
-                .overlay{
-                    Button {
-                        repairButtonClickedBool.toggle()
-                        categoryString = "수리점"
-                        buttonSwitch(index: categoryString)
-                    } label: {
-                        
-                        Text("수리점")
-                            .fontWeight(.bold)
-                            .foregroundColor(.black)
-                        
-                    }
-                }
+            Button {
+                allButtonClickedBool.toggle()
+                categoryString = "전체"
+                buttonSwitch(index: categoryString)
+            } label: {
+                
+                Rectangle()
+                    .foregroundColor(allButtonClickedBool ? Color(hex: "1A4645") : .white)
+                    .overlay{
+                        HStack{
+                            if !allButtonClickedBool{
+                                Image("allMarker")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 30)
+                            }
+                            Text("전체")
+                                .fontWeight(.bold)
+                                .font(.caption) //살짝 키우기
+                                .foregroundColor(allButtonClickedBool ? .white : .gray)
+                        }
+                       
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(allButtonClickedBool ? Color(hex: "1A4645") : .white , lineWidth: 5)
+                    }.cornerRadius(10)
+                    .frame(width:89, height:40)
+                    
+            }
+            
+            Button {
+                photoButtonClickedBool.toggle()
+                categoryString = "포토스팟"
+                buttonSwitch(index: categoryString)
+            } label: {
+                Rectangle()
+                    .foregroundColor(photoButtonClickedBool ? Color(hex: "F8BC24") : .white)
+                    .overlay{
+                        HStack{
+                            if !photoButtonClickedBool{
+                                Image("photoSpotMarker")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 30)
+                            }
+                            Text("포토스팟")
+                                .fontWeight(.bold)
+                                .font(.caption)
+                                .foregroundColor(photoButtonClickedBool ? .white : .gray)
+                        }
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(photoButtonClickedBool ? Color(hex: "F8BC24") : .white , lineWidth: 5)
+                    }.cornerRadius(10)
+                    .frame(width:89, height:40)
+                    
+            }
+            
+            Button {
+                StationButtonClickedBool.toggle()
+                categoryString = "현상소"
+                buttonSwitch(index: categoryString)
+            } label: {
+                Rectangle()
+                    .foregroundColor(StationButtonClickedBool ? Color(hex: "F58800") : .white)
+                    .overlay{
+                        HStack{
+                            if !StationButtonClickedBool{
+                                Image("stationMarker")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 30)
+                            }
+                            Text("현상소")
+                                .fontWeight(.bold)
+                                .font(.caption)
+                                .foregroundColor(StationButtonClickedBool ? .white : .gray)
+                        }
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(StationButtonClickedBool ? Color(hex: "F58800") : .white , lineWidth: 5)
+                    }.cornerRadius(10)
+                    .frame(width:89, height:40)
+                    
+            }
+            
+            Button {
+                repairButtonClickedBool.toggle()
+                categoryString = "수리점"
+                buttonSwitch(index: categoryString)
+            } label: {
+                Rectangle()
+                    .foregroundColor(repairButtonClickedBool ? Color(hex: "266867") : .white)
+                    .overlay{
+                        HStack{
+                            if !repairButtonClickedBool{
+                                Image("repairShopMarker")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 30)
+                            }
+                            Text("수리점")
+                                .fontWeight(.bold)
+                                .font(.caption)
+                                .foregroundColor(repairButtonClickedBool ? .white : .gray)
+                        }
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(repairButtonClickedBool ? Color(hex: "266867") : .white , lineWidth: 5)
+                    }.cornerRadius(10)
+                    .frame(width:89, height:40)
+                    
+            }
         }
     }
 }

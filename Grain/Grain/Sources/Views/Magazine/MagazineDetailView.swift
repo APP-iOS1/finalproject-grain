@@ -7,7 +7,6 @@ struct MagazineDetailView: View {
     
     @State var isHeartToggle: Bool = false    // 하트 눌림 상황
     @StateObject var userVM = UserViewModel()
-    @StateObject var authVM = AuthenticationStore()
     
     var currentUsers : CurrentUserFields?
     
@@ -88,12 +87,6 @@ struct MagazineDetailView: View {
                                     .foregroundColor(.black)
                             }
                             Spacer()
-                            Button {
-                                authVM.googleLogout()
-                            } label: {
-                                Text("로그아웃")
-                            }
-
                         }
                     }//VStack
                     .frame(minHeight: 350)

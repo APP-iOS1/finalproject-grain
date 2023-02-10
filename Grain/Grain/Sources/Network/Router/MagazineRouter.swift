@@ -13,6 +13,7 @@ enum MagazineRouter {
     case post(magazineData: MagazineFields, images: [String], docID: String)
     case delete(docID : String)
     case patch(putData: MagazineDocument, docID: String)
+    case patchLikedNum(likedNum: String, docID: String)
     
     private var baseURL: URL {
         let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
@@ -23,6 +24,7 @@ enum MagazineRouter {
         case get
         case post
         case patch
+        case patchLikedNum
         case delete
         
         var value: String {
@@ -30,6 +32,7 @@ enum MagazineRouter {
             case .get: return "GET"
             case .post: return "POST"
             case .patch: return "PATCH"
+            case .patchLikedNum: return "PATCH"
             case .delete: return "DELETE"
             }
         }
@@ -38,6 +41,8 @@ enum MagazineRouter {
     private var endPoint: String {
         switch self {
         case let .patch(_, docID):
+            return "/Magazine/\(docID)"
+        case let .patchLikedNum(_, docID):
             return "/Magazine/\(docID)"
         case let .delete(docID):
             return "/Magazine/\(docID)"
@@ -50,6 +55,9 @@ enum MagazineRouter {
         switch self {
         case let .post(_ , _ , docID):
             let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
+            return params
+        case let .patchLikedNum(_, docID):
+            let params: URLQueryItem = URLQueryItem(name: "updateMask.fieldPaths", value: docID)
             return params
         default :
             let params: URLQueryItem? = nil
@@ -78,6 +86,8 @@ enum MagazineRouter {
             return MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID)
         case let .patch(putData, docID):
             return MagazineQuery.updateMagazineQuery(data: putData, docID: docID)
+        case let .patchLikedNum(likedNum, _):
+            return MagazineQuery.updateLikedNumQuery(num: likedNum)
         default:
             return nil
         }

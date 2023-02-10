@@ -12,7 +12,6 @@ enum MagazineQuery {
     // MARK: - 매거진 DB에 데이터 저장 메소드
     static func insertMagazineQuery(data: MagazineFields, images: [String], docID: String) -> Data? {
         var str : String = ""
-        var comment : String = ""
         
         for i in 0..<images.count {
             str += """
@@ -21,15 +20,7 @@ enum MagazineQuery {
         }
 
         str.removeLast()
-        //FIXME: 강해져서 돌아오기!!
-//        for i in 0..<data.fields.comment.arrayValue.values.count{
-//            comment += """
-//                  { "stringValue": "\(data.fields.comment.arrayValue.values[i].stringValue)" }
-//            """
-//        }
-//
-//        comment.removeLast()
-        
+
         return
                 """
                 {
@@ -87,7 +78,7 @@ enum MagazineQuery {
     }
     
     //MARK: - 매거진 DB에 update 쿼리 리턴 메소드
-    static func updateMagazineQuery(data: MagazineDocument, docID: String) -> Data?{
+    static func updateMagazineQuery(data: MagazineDocument, docID: String) -> Data? {
         var str : String = ""
         
         for i in 0..<data.fields.image.arrayValue.values.count {
@@ -154,10 +145,20 @@ enum MagazineQuery {
         """.data(using: .utf8)
     }
     
-    
-    //FIXME: 댓글 update 메소드 구현 "해줘"
-//    static func updateMagazineComment(data: MagazineDocument, comments: [Comment], docID: String) {
-//
-//    }
+    //MARK: - 매거진 DB에 매거진의 좋아요 수 update 쿼리 리턴 메소드
+    static func updateLikedNumQuery(num: String) -> Data?
+    {
+        let query = """
+                    {
+                      "fields": {
+                           "likedNum": {
+                                "stringValue": "\(num)"
+                    }
+                }
+            }
+            """.data(using: .utf8)
+        
+        return query
+    }
     
 }

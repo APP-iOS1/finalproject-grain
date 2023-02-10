@@ -11,10 +11,10 @@ enum CommentRouter {
     /// docID:  우리가 만들어줄 UUID
     /// collectionName: 콜렉션 이름 ex) Magazine , Community
     /// collectionDocId: 콜렉션 하위 문서ID  ex) Magazine - 1BA19CE5-119C-4898-9EC2-0BB920EAC64D
-    case get
+    case get(collectionName: String, collectionDocId: String)
     case post(collectionName: String, collectionDocId: String, docID: String, commentData: CommentFields )
     case delete(collectionName: String, collectionDocId: String, docID: String)
-    case patch(collectionName: String, collectionDocId: String, docID: String, putData: CommentDocument)
+    case patch(collectionName: String, collectionDocId: String, docID: String, updateComment: String, data: CommentFields )
     
     private var baseURL: URL {
         let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
@@ -39,9 +39,11 @@ enum CommentRouter {
     
     private var endPoint: String {
         switch self {
+        case let .get(collectionName, collectionDocId):
+            return "/\(collectionName)/\(collectionDocId)/Comment"
         case let .post(collectionName, collectionDocId, docID, _):
             return "/\(collectionName)/\(collectionDocId)/Comment"
-        case let .patch(collectionName, collectionDocId, docID, _):
+        case let .patch(collectionName, collectionDocId, docID, _, _):
             return "/\(collectionName)/\(collectionDocId)/Comment/\(docID)"
         case let .delete(collectionName, collectionDocId, docID):
             return "/\(collectionName)/\(collectionDocId)/Comment/\(docID)"
@@ -79,10 +81,9 @@ enum CommentRouter {
             //FIXME: - 주석 정리하기
 //            guard let printTest = CommentQuery.insertCommentQuery(data: commentData) else { return nil }
 //            print( String(decoding: printTest, as: UTF8.self))
-            
             return CommentQuery.insertCommentQuery(data: commentData)
-        case let .patch(_, _, docID, putData):
-            return CommentQuery.insertCommentQuery(data: putData.fields)
+        case let .patch(_, _, docID, updateComment, data):
+            return CommentQuery.updateCommentQuery(updateComment: updateComment, data: data)
         default:
             return nil
         }

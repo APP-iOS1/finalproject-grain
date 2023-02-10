@@ -50,7 +50,7 @@ struct CommunityRowView: View {
                                 .foregroundColor(Color(hex: "F8BC24"))
                                 .overlay{
                                     Text("모집중")
-                                        .foregroundColor(.black)
+                                        .foregroundColor(Color(hex: "616161"))
                                         .bold()
                                         .font(.caption)
                                 }
@@ -79,11 +79,9 @@ struct CommunityRowView: View {
                            // String.toDate(community.createTime)
                             Text(community.createdDate?.renderTime() ?? "")
                             Spacer()
-                            
-                            Image(systemName: "heart")
-                            Text("\(50)")
                             Image(systemName: "text.bubble")
                             Text("\(12)")
+                                .padding(.leading, -5)
                         }
                         .padding(.bottom, 4)
                         .foregroundColor(.secondary)
@@ -107,9 +105,9 @@ struct CommunityRowView: View {
     }
 }
 
-struct CommunityRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        CommunityRowView(community: CommunityDocument(name: "abc", fields: CommunityFields(title: CommunityCategory(stringValue: "임시 타이틀입니다 줄을 길게 해볼거에요 라인리미트를 2줄로 할거거덩요"), category: CommunityCategory(stringValue: "매칭중"), content: CommunityCategory(stringValue: "content"), profileImage: CommunityCategory(stringValue: "test"), nickName: CommunityCategory(stringValue: "han"), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "abc")])), userID: CommunityCategory(stringValue: "seungsoo"), id: CommunityCategory(stringValue: "123")), createTime: "2023-02-03", updateTime: "방금"))
-    }
-}
+//struct CommunityRowView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CommunityRowView(community: CommunityDocument(name: "abc", fields: CommunityFields(title: CommunityCategory(stringValue: "임시 타이틀입니다 줄을 길게 해볼거에요 라인리미트를 2줄로 할거거덩요"), category: CommunityCategory(stringValue: "매칭중"), content: CommunityCategory(stringValue: "content"), profileImage: CommunityCategory(stringValue: "test"), nickName: CommunityCategory(stringValue: "han"), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "abc")])), userID: CommunityCategory(stringValue: "seungsoo"), id: CommunityCategory(stringValue: "123")), createTime: "2023-02-03", updateTime: "방금"))
+//    }
+//}
 

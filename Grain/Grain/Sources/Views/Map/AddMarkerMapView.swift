@@ -136,7 +136,7 @@ struct AddMarkerMapView: View {
                     }
                     //                    .zIndex(1)
                     
-                    Image("TestBlackMarker")
+                    Image("uploadMarker")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 56,height: 56)
@@ -278,9 +278,10 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         if markerAddButtonBool{
             
             
-            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 408))
-            addUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
-            addUserMarker.zIndex = 100
+            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 411))
+            addUserMarker.iconImage = NMFOverlayImage(name: "uploadMarker")
+            addUserMarker.width = 55
+            addUserMarker.height = 55
             addUserMarker.mapView = uiView.mapView
             
             // 업로드에 위치 정보 넘겨줌

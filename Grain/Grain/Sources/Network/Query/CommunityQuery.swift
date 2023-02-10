@@ -44,6 +44,9 @@ enum CommunityQuery {
                         "userID": {
                             "stringValue": "\(data.userID.stringValue)"
                         },
+                        "state": {
+                            "stringValue": "모집중"
+                        },
                         "id": {
                             "stringValue": "\(docID)"
                         },
@@ -84,6 +87,9 @@ enum CommunityQuery {
                                 ]
                             }
                         },
+                        "state": {
+                            "stringValue": "\(data.fields.state.stringValue)"
+                        },
                         "userID": {
                             "stringValue": "\(data.fields.userID.stringValue)"
                         },
@@ -99,12 +105,22 @@ enum CommunityQuery {
                     }
         }
         """.data(using: .utf8)
+        
     }
     
-    //FIXME: 댓글 update 메소드 구현 "해줘"
-//    static func updateCommunityComment(data: MagazineDocument, comments: [Comment], docID: String) {
-//
-//    }
-    
-    
+    //MARK: - 커뮤니티 DB에 모집중 <-> 모집마감 상태 update 쿼리 리턴 메소드
+    static func updateCommunityStateQuery(state: String) -> Data? {
+        let query = """
+                        {
+                          "fields": {
+                               "state": {
+                                    "stringValue": "\(state)"
+                        }
+                    }
+                }
+                """.data(using: .utf8)
+        
+        return query
+    }
 }
+

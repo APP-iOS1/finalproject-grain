@@ -59,7 +59,7 @@ struct CommunitySearchDetailView: View {
                     
                     //MARK: 작성자 정보
                     HStack {
-                        ProfileImage(imageName: "sampleImage", width: 45, height: 45)
+                        ProfileImage(imageName: "sampleImage")
                         Text(community.fields.nickName.stringValue)
                             .font(.title3)
                             .bold()
@@ -110,8 +110,8 @@ struct CommunitySearchDetailView: View {
                     .padding(.vertical, 1)
             
                     //FIXME: 고치기
-                    CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "악!", comment: "가나다라마바사아자차카타파하거너더러머버서어저처커터처허 가나다라마바사아자차카타파하아라", createdAt: Date()))
-                        .padding(.horizontal, 10)
+//                    CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "악!", comment: "가나다라마바사아자차카타파하거너더러머버서어저처커터처허 가나다라마바사아자차카타파하아라", createdAt: Date()))
+//                        .padding(.horizontal, 10)
                 } // top vstack
             } //scroll view
             
@@ -156,8 +156,8 @@ struct CommunitySearchDetailView: View {
     }
 }
 
-struct CommunitySearchDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        CommunitySearchDetailView(community: CommunityDocument(name: "승수", fields: CommunityFields(title: CommunityCategory(stringValue: "임시 제목"), category: CommunityCategory(stringValue: "클래스"), content: CommunityCategory(stringValue: "가나다라마바사아자차카타파하갸냐댜랴먀뱌샤야쟈챠캬탸퍄햐 거너더러머버서어저처커터퍼허 겨녀뎌려며벼셔여져쳐켜텨벼혀"), profileImage: CommunityCategory(stringValue: "test"), nickName: CommunityCategory(stringValue: "seungsoo"), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "abc")])), userID: CommunityCategory(stringValue: "클래스"), id: CommunityCategory(stringValue: "han")), createTime: "2023-02-03", updateTime: "지금"))
-    }
-}
+//struct CommunitySearchDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CommunitySearchDetailView(community: CommunityDocument(name: "승수", fields: CommunityFields(title: CommunityCategory(stringValue: "임시 제목"), category: CommunityCategory(stringValue: "클래스"), content: CommunityCategory(stringValue: "가나다라마바사아자차카타파하갸냐댜랴먀뱌샤야쟈챠캬탸퍄햐 거너더러머버서어저처커터퍼허 겨녀뎌려며벼셔여져쳐켜텨벼혀"), profileImage: CommunityCategory(stringValue: "test"), nickName: CommunityCategory(stringValue: "seungsoo"), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "abc")])), userID: CommunityCategory(stringValue: "클래스"), id: CommunityCategory(stringValue: "han")), createTime: "2023-02-03", updateTime: "지금"))
+//    }
+//}

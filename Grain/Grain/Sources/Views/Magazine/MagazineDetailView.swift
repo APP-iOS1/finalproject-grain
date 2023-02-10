@@ -72,7 +72,7 @@ struct MagazineDetailView: View {
                             HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
                                 .padding(.leading)
                             NavigationLink {
-                                MagazineCommentView(currentUser: userVM.currentUsers)
+                                MagazineCommentView(currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
                             } label: {
                                 Image(systemName: "bubble.right")
                                     .font(.system(size: 24))
@@ -108,33 +108,25 @@ struct MagazineDetailView: View {
             .onAppear{
                 /// 뷰가 처음 생길떄 fetch 한번 한다.
                 /// 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
-                userVM.fetchUser()
-//                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-//                print(Auth.auth().currentUser?.uid ?? "")
-                print(userVM.users)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10){
-//                    print(userVM.currentUsers)
-                    print(userVM.users)
-//                    print(userVM.currentUsers?.profileImage.stringValue)
+                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+
+                    if userVM.likedMagazineIdArr.contains(where: { item in
+                        item == data.fields.id.stringValue})
+                    {
+                        isHeartToggle = true
+                    }else{
+                        isHeartToggle = false
+                    }
+
+                    if userVM.userBookmarkedMagazine.contains(where: { item in
+                        item == data.fields.id.stringValue})
+                    {
+                        isBookMarked = true
+                    }else{
+                        isBookMarked = false
+                    }
                 }
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
-//
-//                    if userVM.likedMagazineIdArr.contains(where: { item in
-//                        item == data.fields.id.stringValue})
-//                    {
-//                        isHeartToggle = true
-//                    }else{
-//                        isHeartToggle = false
-//                    }
-//
-//                    if userVM.userBookmarkedMagazine.contains(where: { item in
-//                        item == data.fields.id.stringValue})
-//                    {
-//                        isBookMarked = true
-//                    }else{
-//                        isBookMarked = false
-//                    }
-//                }
                 
             }
             

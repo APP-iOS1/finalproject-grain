@@ -17,6 +17,9 @@ struct CommunityDetailView: View {
     @StateObject var userVM = UserViewModel()
     @Environment(\.presentationMode) var presentationMode
     
+    // 댓글 관련
+    @StateObject var commentVm = CommentViewModel()
+    
     @State private var isBookMarked: Bool = false
     @State private var isliked: Bool = false
     @State private var comment: String = ""
@@ -27,20 +30,20 @@ struct CommunityDetailView: View {
         VStack {
             ScrollView {
                 VStack(alignment: .leading){
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }, label: {
-                            HStack {
-                                Image(systemName: "chevron.left")
-                                Text("커뮤니티")
-                            }
-                            .padding(.horizontal, 10)
-                        })
-                        .accentColor(.black)
-                        
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                            Text("커뮤니티")
+                        }
+                        .padding(.horizontal, 10)
+                    })
+                    .accentColor(.black)
+                    
                     // MARK: 닉네임 헤더
                     HStack {
-                        ProfileImage(imageName: "sampleImage", width: 40, height: 40)
+                        ProfileImage(imageName: "sampleImage")
                         VStack(alignment: .leading) {
                             Text(community.fields.nickName.stringValue)
                                 .font(.title3)
@@ -115,10 +118,17 @@ struct CommunityDetailView: View {
                             }
                         }
                     }
-                    //FIXME: 고치기
-                    CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "악!", comment: "가나다라마바사아자차카타파하거너더러머버서어저처커터처허 가나다라마바사아자차카타파하아라", createdAt: Date()))
-                        .padding(.horizontal, 10)
-
+                    Divider()
+                    // MARK: - 커뮤니티 댓글 뷰
+                    VStack{
+                        ForEach(commentVm.comment,id: \.self){ item in
+                            CommentView(comment: Comment(id: item.fields.id.stringValue
+                                                         , userID: item.fields.userID.stringValue, profileImage: item.fields.profileImage.stringValue, nickName: item.fields.nickName.stringValue, comment: item.fields.comment.stringValue, createdAt: Date()))
+                               
+                        }
+                        
+                    }
+                    
                     // top vstack
                 }
             } //scroll view
@@ -139,7 +149,9 @@ struct CommunityDetailView: View {
                         }
                     Spacer()
                     Button {
-                        // 댓글추가 동작 함수
+                        
+                        // MARK: 댓글 업로드 긴 ㅇ
+                        commentVm.insertComment(collectionName: "Community", collectionDocId: "5NVtNKFIaiYneBUZTl4T", data: CommentFields(comment: CommentString(stringValue: comment), profileImage: CommentString(stringValue: community.fields.profileImage.stringValue), nickName: CommentString(stringValue: community.fields.nickName.stringValue), userID: CommentString(stringValue: community.fields.userID.stringValue), id: CommentString(stringValue: community.fields.id.stringValue)))
                         self.hideKeyboard()
                         isHiddenComment = true
                         comment = ""
@@ -155,46 +167,47 @@ struct CommunityDetailView: View {
         }
         .onAppear{
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
-
-                // 유저가 좋아요를 눌렀는지
-//                if userVM.likedMagazineIdArr.contains(where: { item in
-//                    item == community.fields.id?.stringValue})
-//                {
-//                    isliked = true
-//                }else{
-//                    isliked = false
-//                }
-                
-                // 유저가 저장을 눌렀는지
-                if userVM.userBookmarkedCommunity.contains(where: { item in
-                    item == community.fields.id.stringValue})
-                {
-                    print(isBookMarked)
-                    isBookMarked = true
-                }else{
-                    isBookMarked = false
-                }
-            }
+            commentVm.fetchComment(collectionName: "Community",
+                                   collectionDocId: community.fields.id.stringValue)
+            //            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
+            // 유저가 좋아요를 눌렀는지
+            //                if userVM.likedMagazineIdArr.contains(where: { item in
+            //                    item == community.fields.id?.stringValue})
+            //                {
+            //                    isliked = true
+            //                }else{
+            //                    isliked = false
+            //                }
+            
+            // 유저가 저장을 눌렀는지
+            //                if userVM.userBookmarkedCommunity.contains(where: { item in
+            //                    item == community.fields.id.stringValue})
+            //                {
+            //                    print(isBookMarked)
+            //                    isBookMarked = true
+            //                }else{
+            //                    isBookMarked = false
+            //                }
+            //            }
             
         }
         .onDisappear{
             Task{
-
-//                if isliked {
-//                    /// 추가 부분
-//                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "bookmarkedCommunityID", updateValue: community.fields.id?.stringValue ?? "", isArray: true)
-//                }else{
-//                    /// 삭제부분
-//                    await userVM.deleteUserSDK(updateDocument: docID ?? "", deleteKey: "bookmarkedCommunityID", deleteIndex: community.fields.id?.stringValue ?? "", isArray: true)
-//                }
                 
-//                 유저 DB에 북마크 상태 저장/삭제
-                if isBookMarked {
-                    await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "bookmarkedMagazineID", updateValue: community.fields.id.stringValue, isArray: true)
-                }else{
-                    await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: community.fields.id.stringValue, isArray: true)
-                }
+                //                if isliked {
+                //                    /// 추가 부분
+                //                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "bookmarkedCommunityID", updateValue: community.fields.id?.stringValue ?? "", isArray: true)
+                //                }else{
+                //                    /// 삭제부분
+                //                    await userVM.deleteUserSDK(updateDocument: docID ?? "", deleteKey: "bookmarkedCommunityID", deleteIndex: community.fields.id?.stringValue ?? "", isArray: true)
+                //                }
+                
+                //                 유저 DB에 북마크 상태 저장/삭제
+                //                if isBookMarked {
+                //                    await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "bookmarkedMagazineID", updateValue: community.fields.id.stringValue, isArray: true)
+                //                }else{
+                //                    await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: community.fields.id.stringValue, isArray: true)
+                //                }
             }
         }
         .navigationBarHidden(true)
@@ -215,7 +228,7 @@ struct CommunityDetailHeader: View {
                 .font(.title2)
                 .bold()
                 .padding(.horizontal)
-           Spacer()
+            Spacer()
         }
         .frame(minWidth: 0, maxWidth: .infinity)
         .frame(height: 40)
@@ -223,8 +236,8 @@ struct CommunityDetailHeader: View {
     }
 }
 
-struct CommunityDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        CommunityDetailView(community: CommunityDocument(name: "승수", fields: CommunityFields(title: CommunityCategory(stringValue: "임시 제목"), category: CommunityCategory(stringValue: "클래스"), content: CommunityCategory(stringValue: "가나다라마바사아자차카타파하갸냐댜랴먀뱌샤야쟈챠캬탸퍄햐 거너더러머버서어저처커터퍼허 겨녀뎌려며벼셔여져쳐켜텨벼혀"), profileImage: CommunityCategory(stringValue: "test"), nickName: CommunityCategory(stringValue: "seungsoo"), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "abc")])), userID: CommunityCategory(stringValue: "클래스"), id: CommunityCategory(stringValue: "han")), createTime: "2023-02-03", updateTime: "지금"))
-    }
-}
+//struct CommunityDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CommunityDetailView(community: CommunityDocument(name: "승수", fields: CommunityFields(title: CommunityCategory(stringValue: "임시 제목"), category: CommunityCategory(stringValue: "클래스"), content: CommunityCategory(stringValue: "가나다라마바사아자차카타파하갸냐댜랴먀뱌샤야쟈챠캬탸퍄햐 거너더러머버서어저처커터퍼허 겨녀뎌려며벼셔여져쳐켜텨벼혀"), profileImage: CommunityCategory(stringValue: "test"), nickName: CommunityCategory(stringValue: "seungsoo"), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "abc")])), userID: CommunityCategory(stringValue: "클래스"), id: CommunityCategory(stringValue: "han")), createTime: "2023-02-03", updateTime: "지금"))
+//    }
+//}

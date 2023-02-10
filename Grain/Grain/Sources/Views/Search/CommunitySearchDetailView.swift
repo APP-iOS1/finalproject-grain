@@ -59,7 +59,7 @@ struct CommunitySearchDetailView: View {
                     
                     //MARK: 작성자 정보
                     HStack {
-                        ProfileImage(imageName: "sampleImage", width: 45, height: 45)
+                        ProfileImage(imageName: "sampleImage")
                         Text(community.fields.nickName.stringValue)
                             .font(.title3)
                             .bold()
@@ -110,8 +110,8 @@ struct CommunitySearchDetailView: View {
                     .padding(.vertical, 1)
             
                     //FIXME: 고치기
-                    CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "악!", comment: "가나다라마바사아자차카타파하거너더러머버서어저처커터처허 가나다라마바사아자차카타파하아라", createdAt: Date()))
-                        .padding(.horizontal, 10)
+//                    CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "악!", comment: "가나다라마바사아자차카타파하거너더러머버서어저처커터처허 가나다라마바사아자차카타파하아라", createdAt: Date()))
+//                        .padding(.horizontal, 10)
                 } // top vstack
             } //scroll view
             

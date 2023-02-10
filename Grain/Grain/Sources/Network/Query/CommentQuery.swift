@@ -10,9 +10,9 @@ import Foundation
 enum CommentQuery {
     
     // MARK: Comment 컬렉션에 저장할 데이터 JSON 구조 쿼리 만듬
-    /// .data(using: .utf8)을 이용하여 문자열을 데이터 형식?으로 바꿔줌 
-        static func insertCommentQuery(data: CommentFields ) -> Data? {
-  
+    /// .data(using: .utf8)을 이용하여 문자열을 데이터 형식?으로 바꿔줌
+    static func insertCommentQuery(data: CommentFields ) -> Data? {
+        
         return
         """
         {
@@ -28,6 +28,9 @@ enum CommentQuery {
                 },
                 "comment": {
                     "stringValue": "\(data.comment.stringValue)"
+                },
+                "id": {
+                    "stringValue": "\(data.id.stringValue)"
                 }
             }
         }

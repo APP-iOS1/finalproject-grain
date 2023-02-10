@@ -40,7 +40,7 @@ enum CommentRouter {
     private var endPoint: String {
         switch self {
         case let .post(collectionName, collectionDocId, docID, _):
-            return "/\(collectionName)/\(collectionDocId)/Comment/\(docID)"
+            return "/\(collectionName)/\(collectionDocId)/Comment"
         case let .patch(collectionName, collectionDocId, docID, _):
             return "/\(collectionName)/\(collectionDocId)/Comment/\(docID)"
         case let .delete(collectionName, collectionDocId, docID):
@@ -49,17 +49,16 @@ enum CommentRouter {
             return "/Comment"       //default값 몰루?
         }
     }
-    
-//    var parameters: URLQueryItem? {
-//        switch self {
-//        case let .post(_ , _ , docID, _):
-//            let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
-//            return params
-//        default :
-//            let params: URLQueryItem? = nil
-//            return params
-//        }
-//    }
+    var parameters: URLQueryItem? {
+        switch self {
+        case let .post(_ , _ , docID, _):
+            let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
+            return params
+        default :
+            let params: URLQueryItem? = nil
+            return params
+        }
+    }
     
     private var method: HTTPMethod {
         switch self {
@@ -77,6 +76,10 @@ enum CommentRouter {
     private var data: Data? {
         switch self {
         case let .post(_, _, docID, commentData ):
+            //FIXME: - 주석 정리하기
+//            guard let printTest = CommentQuery.insertCommentQuery(data: commentData) else { return nil }
+//            print( String(decoding: printTest, as: UTF8.self))
+            
             return CommentQuery.insertCommentQuery(data: commentData)
         case let .patch(_, _, docID, putData):
             return CommentQuery.insertCommentQuery(data: putData.fields)
@@ -93,7 +96,7 @@ enum CommentRouter {
         if let param = parameters {
             component.queryItems = [param]
         }
-        
+
         var request = URLRequest(url: component.url!)
         
         request.httpMethod = method.value

@@ -22,7 +22,7 @@ struct CommentDocument: Codable {
     let createTime, updateTime: String
 }
 struct CommentFields: Codable {
-    let comment, profileImage, nickName, userID: CommentString
+    let comment, profileImage, nickName, userID, id: CommentString
 }
 // FIXME: - stringValue 통합해야 할듯
 struct CommentString: Codable {

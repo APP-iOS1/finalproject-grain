@@ -22,6 +22,7 @@ struct UserFields: Codable,Hashable {
     let id: UserStringValue
     let myLens, myFilm, postedCommunityID: UserArrayKey
     let nickName: UserStringValue
+    let introduce: UserStringValue
     let following: UserArrayKey
     let profileImage: UserStringValue
     let recentSearch, bookmarkedCommunityID, follower, lastSearched: UserArrayKey
@@ -31,7 +32,7 @@ struct UserFields: Codable,Hashable {
     
     enum CodingKeys: String, CodingKey {
         case likedMagazineID = "likedMagazineId"
-        case id, myLens, myFilm, postedCommunityID, nickName, following, profileImage, recentSearch, bookmarkedCommunityID, follower, lastSearched, email, postedMagazineID, myCamera, bookmarkedMagazineID, name
+        case id, myLens, myFilm, postedCommunityID, nickName, introduce, following, profileImage, recentSearch, bookmarkedCommunityID, follower, lastSearched, email, postedMagazineID, myCamera, bookmarkedMagazineID, name
     }
 }
 

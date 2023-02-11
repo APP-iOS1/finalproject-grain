@@ -183,7 +183,6 @@ enum UserQuery {
         return query
     }
     
-    
     /// Array 타입에 사용: ex) 내가 올린 메거진 id 업데이트 -> type: postedMagazineID, arr: [새로 올린 메거진 id 추가한 string arr ]
     static func updateUserArray(type: String, arr: [String]) -> Data? {
         
@@ -210,6 +209,7 @@ enum UserQuery {
         return query
         
     }
+    
     
 }
 

@@ -42,11 +42,11 @@ enum CommunityRouter {
     private var endPoint: String {
         switch self {
         case let .patch(_, docID):
-            return "/Magazine/\(docID)"
+            return "/Community/\(docID)"
         case let .patchState(_, docID):
-            return "/Magazine/\(docID)"
+            return "/Community/\(docID)"
         case let .delete(docID):
-            return "/Magazine/\(docID)"
+            return "/Community/\(docID)"
         default:
             return "/Community"
         }

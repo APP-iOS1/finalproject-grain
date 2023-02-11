@@ -12,7 +12,7 @@ import PhotosUI
 struct AddCommunityView: View {
     
     @StateObject var communityVM : CommunityViewModel
-    
+    @StateObject var userVM = UserViewModel()
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
     //    @State private var inputCustomPlace: String = ""
@@ -144,6 +144,9 @@ struct AddCommunityView: View {
                 }
             Spacer()
         }
+        .onAppear{
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+        }
         .toolbar {
             ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
                 Button {
@@ -158,9 +161,10 @@ struct AddCommunityView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     //글쓰기 함수
-//                    communityVM.insertCommunity(profileImage: "profileImage", nickName: "nickName", category: selectedTab.rawValue, image: "image", userID: "userID", title: inputTitle, content: inputContent)
-//                    communityVM.fetchCommunity()
+                    var data = CommunityFields(title: CommunityCategory(stringValue: inputTitle), category: CommunityCategory(stringValue: selectedTab.rawValue), content: CommunityCategory(stringValue: inputContent), profileImage: CommunityCategory(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""), introduce: CommunityCategory(stringValue: userVM.currentUsers?.introduce.stringValue ?? ""), state: CommunityCategory(stringValue: ""), nickName: CommunityCategory(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "")])), userID: CommunityCategory(stringValue: userVM.currentUsers?.id.stringValue ?? ""), id: CommunityCategory(stringValue: UUID().uuidString))
+                    communityVM.insertCommunity(data: data, images: selectedImages)
                     presented.toggle()
+                    communityVM.fetchCommunity()        // 필요한지?
                 } label: {
                     Text("완료")
                     .foregroundColor(.black)

@@ -111,7 +111,7 @@ struct MagazineDetailView: View {
                 userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
 
-                    if userVM.likedMagazineIdArr.contains(where: { item in
+                    if userVM.likedMagazineID.contains(where: { item in
                         item == data.fields.id.stringValue})
                     {
                         isHeartToggle = true
@@ -119,7 +119,7 @@ struct MagazineDetailView: View {
                         isHeartToggle = false
                     }
 
-                    if userVM.userBookmarkedMagazine.contains(where: { item in
+                    if userVM.bookmarkedMagazineID.contains(where: { item in
                         item == data.fields.id.stringValue})
                     {
                         isBookMarked = true

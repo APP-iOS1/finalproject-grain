@@ -26,6 +26,22 @@ struct EditMyPageView: View {
     @State private var editedNickname = ""
     @State private var editedIntroduce = ""
     
+    var nickName: String {
+        var nickName: String = ""
+        if let currentUser = self.userVM.currentUsers {
+            nickName = currentUser.nickName.stringValue
+        }
+        return nickName
+    }
+    
+    var introduce: String {
+        var introduce: String = ""
+        if let currentUser = self.userVM.currentUsers {
+            introduce = currentUser.introduce.stringValue
+        }
+        return introduce
+    }
+    
     let nickNameLimit = 8
     let introduceLimit = 20
     
@@ -113,7 +129,7 @@ struct EditMyPageView: View {
                 .padding(.horizontal)
                 
                 HStack{
-                    TextField("변경할 닉네임을 입력해주세요", text: $editedNickname)
+                    TextField("\(nickName)", text: $editedNickname)
                         .focused($focus, equals: .nickName)
                         .disableAutocorrection(true)
                         .autocapitalization(.none)
@@ -148,7 +164,7 @@ struct EditMyPageView: View {
                 .padding(.horizontal)
                 
                 HStack{
-                    TextField("소개글을 입력해주세요", text: $editedIntroduce)
+                    TextField("\(introduce)", text: $editedIntroduce)
                         .focused($focus, equals: .introduce)
                         .disableAutocorrection(true)
                         .autocapitalization(.none)
@@ -180,17 +196,20 @@ struct EditMyPageView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                if editedNickname.count > 0 {
-                    Button{
+                if editedNickname.count > 0 || editedNickname.count > 0 {
+                    Button {
                         if var currentUser = userVM.currentUsers {
                             let docID = currentUser.id.stringValue
                             currentUser.nickName.stringValue = editedNickname
+                            
+                            userVM.updateCurrentUserProfile(profileImage: selectedImages, nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : introduce, docID: docID)
 //                            userVM.updateCurrentUser(userData: currentUser, docID: docID)
                             print("testnickname: \( currentUser.nickName)")
                             print("testname: \(currentUser.name)")
                         }
                     }label: {
                         Text("저장")
+                            .foregroundColor(.black)
                     }
                 } else {
                     Text("저장")

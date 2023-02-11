@@ -73,7 +73,7 @@ final class UserViewModel: ObservableObject {
     //MARK: - 구독한 사람들의 메거진만 필터링해서 리턴해주는 메서드(홈뷰 구독탭에서 가져다 쓰시면 됩니다. ^^ 갖다쓰기만해 ~ )
     /// 홈뷰에서 fetch 한 모든 게시물 데이터 MagazineVM.magazines 넘겨서 호출해주면 됩니다.
     /// 그러면 알아서 구독한 사람들의 게시물만 던져줍니다.
-    /// 주의사항: 구독기능은 로그인을 해야만 가능하고, 현재 fetchCurrentUser가 호출이 되어있는 상태여야지만 가능합니다. 
+    /// 주의사항: 구독기능은 로그인을 해야만 가능하고, 현재 fetchCurrentUser가 호출이 되어있는 상태여야지만 가능합니다.
     func returnSubscribedMagazines(magazines: [MagazineDocument]) -> [MagazineDocument]{
         var subscribedMagazines: [MagazineDocument] = []
         /// 모든 메거진 중에서 나의 팔로잉 리스트에 있는 유저가 쓴 메거진인지 판단하고

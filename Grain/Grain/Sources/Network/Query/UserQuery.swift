@@ -59,6 +59,9 @@ enum UserQuery {
                                 "nickName": {
                                     "stringValue": "\(nickName)"
                                 },
+                                "introduce": {
+                                        "stringValue": "\(introduce)"
+                                },
                                 "recentSearch": {
                                     "arrayValue": {
                                         "values": [

@@ -77,28 +77,17 @@ final class UserViewModel: ObservableObject {
         let myFollowing = self.following
     }
     
-    //MARK: - 구독한 사람들의 메거진id 만 리턴해주는 메서드
+    
+    //MARK: - 구독한 사람들의 메거진만 필터링해서 리턴해주는 메서드
     func returnSubscribedMagazines(magazines: [MagazineDocument]) -> [MagazineDocument]{
-        var followingUsersMagazineID: [String] = []
         var subscribedMagazines: [MagazineDocument] = []
-        /// 모든 유저들 중에서 나의 팔로잉 리스트에 있는 유저인지 판단하고
-        /// 맞다면 팔로잉한 유저의 메거진 리스트들을 꺼내서 followingUsersMagazineID 에 append 한다.
-        for i in users {
-            if following.contains(i.fields.id.stringValue) {
-                for j in i.fields.postedMagazineID.arrayValue.values {
-                    followingUsersMagazineID.append(j.stringValue)
-                }
-            }
-        }
-        
-        /// 팔로잉한 유저들의 메거진 아이디 배열과, 모든 받아온 메거진 배열의 아이디값과 같은지 비교하고(내가 구독한 사람의 메거진인지 판단)
-        /// 맞다면 subscribedMagazines에 append 한다.
+        /// 모든 메거진 중에서 나의 팔로잉 리스트에 있는 유저가 쓴 메거진인지 판단하고
+        /// 맞다면 팔로잉한 유저의 메거진 리스트들을 subscribedMagazines 에 append 한다.
         for i in magazines {
-            if followingUsersMagazineID.contains( i.fields.id.stringValue ) {
+            if following.contains( i.fields.userID.stringValue ) {
                 subscribedMagazines.append(i)
             }
         }
-        
         return subscribedMagazines
     }
     

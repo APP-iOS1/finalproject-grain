@@ -76,6 +76,7 @@ struct CommunityView: View {
                 } label: {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.black)
+//
                 }
             }
         }

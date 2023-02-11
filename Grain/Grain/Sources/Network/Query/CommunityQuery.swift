@@ -29,10 +29,10 @@ enum CommunityQuery {
                             "stringValue": "\(data.profileImage.stringValue)"
                         },
                         "nickName": {
-                            "stringValue": "\(data.nickName.stringValue))"
+                            "stringValue": "\(data.nickName.stringValue)"
                         },
                         "category": {
-                            "stringValue": "\(data.category.stringValue))"
+                            "stringValue": "\(data.category.stringValue)"
                         },
                         "image": {
                             "arrayValue": {
@@ -43,6 +43,9 @@ enum CommunityQuery {
                         },
                         "userID": {
                             "stringValue": "\(data.userID.stringValue)"
+                        },
+                        "introduce": {
+                            "stringValue": "\(data.introduce.stringValue)"
                         },
                         "state": {
                             "stringValue": "모집중"
@@ -86,6 +89,9 @@ enum CommunityQuery {
                                     \(str)
                                 ]
                             }
+                        },
+                        "introduce": {
+                            "stringValue": "\(data.fields.introduce.stringValue)"
                         },
                         "state": {
                             "stringValue": "\(data.fields.state.stringValue)"

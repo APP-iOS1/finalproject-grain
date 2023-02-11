@@ -8,6 +8,7 @@
 import SwiftUI
 import UIKit
 import FirebaseAuth
+import Kingfisher
 
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
@@ -22,7 +23,7 @@ struct CommunityDetailView: View {
     
     @State private var isBookMarked: Bool = false
     @State private var isliked: Bool = false
-    @State private var comment: String = ""
+    @State private var commentText: String = ""
     @State private var isHiddenComment: Bool = true
     @FocusState private var textFieldFocused: Bool
     
@@ -43,7 +44,7 @@ struct CommunityDetailView: View {
                     
                     // MARK: 닉네임 헤더
                     HStack {
-                        ProfileImage(imageName: "sampleImage")
+                        ProfileImage(imageName: community.fields.profileImage.stringValue)
                         VStack(alignment: .leading) {
                             Text(community.fields.nickName.stringValue)
                                 .font(.title3)
@@ -64,8 +65,8 @@ struct CommunityDetailView: View {
                     
                     //MARK: 사진
                     TabView {
-                        //FIXME: 고치기
-                        Image("sampleImage")
+                        //FIXME: 고치기 - 여러개인가?
+                        KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
@@ -121,13 +122,14 @@ struct CommunityDetailView: View {
                     Divider()
                     // MARK: - 커뮤니티 댓글 뷰
                     VStack{
+                        
                         ForEach(commentVm.comment,id: \.self){ item in
-                            CommentView(comment: Comment(id: item.fields.id.stringValue
-                                                         , userID: item.fields.userID.stringValue, profileImage: item.fields.profileImage.stringValue, nickName: item.fields.nickName.stringValue, comment: item.fields.comment.stringValue, createdAt: Date()))
-                               
+                            // FIXME: Comment 어디서 만든건지 찾아야함
+                            CommentView(comment: item.fields, commentText: commentText,collectionDocId: community.fields.id.stringValue)
+
                         }
                         
-                    }
+                    }.padding()
                     
                     // top vstack
                 }
@@ -137,7 +139,7 @@ struct CommunityDetailView: View {
             //MARK: 댓글입력 창
             if !isHiddenComment {
                 HStack {
-                    TextField("댓글을 입력해주세요", text: $comment)
+                    TextField("댓글을 입력해주세요", text: $commentText)
                         .disableAutocorrection(true)
                         .autocapitalization(.none)
                         .padding()
@@ -145,16 +147,16 @@ struct CommunityDetailView: View {
                         .onSubmit {
                             self.hideKeyboard()
                             isHiddenComment = true
-                            comment = ""
+                            commentText = ""
                         }
                     Spacer()
                     Button {
                         
                         // MARK: 댓글 업로드 긴 ㅇ
-                        commentVm.insertComment(collectionName: "Community", collectionDocId: "5NVtNKFIaiYneBUZTl4T", data: CommentFields(comment: CommentString(stringValue: comment), profileImage: CommentString(stringValue: community.fields.profileImage.stringValue), nickName: CommentString(stringValue: community.fields.nickName.stringValue), userID: CommentString(stringValue: community.fields.userID.stringValue), id: CommentString(stringValue: community.fields.id.stringValue)))
+                        commentVm.insertComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, data: CommentFields(comment: CommentString(stringValue: commentText), profileImage: CommentString(stringValue: community.fields.profileImage.stringValue), nickName: CommentString(stringValue: community.fields.nickName.stringValue), userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""), id: CommentString(stringValue: UUID().uuidString)))
                         self.hideKeyboard()
                         isHiddenComment = true
-                        comment = ""
+                        commentText = ""
                     } label: {
                         Image(systemName: "paperplane")
                             .foregroundColor(.blue)
@@ -169,6 +171,7 @@ struct CommunityDetailView: View {
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
+            print(community.fields.image.arrayValue.values[0].stringValue)
             //            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
             // 유저가 좋아요를 눌렀는지
             //                if userVM.likedMagazineIdArr.contains(where: { item in
@@ -215,7 +218,7 @@ struct CommunityDetailView: View {
         .onTapGesture {
             self.hideKeyboard()
             isHiddenComment = true
-            comment = ""
+            commentText = ""
         }
     }
 }

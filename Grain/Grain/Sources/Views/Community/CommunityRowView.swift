@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseFirestore
+import Kingfisher
 /*
  id:String
  category: Int
@@ -25,7 +26,7 @@ struct CommunityRowView: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Image("sampleImage")
+                KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                     .resizable()
                     .frame(width: 130 , height: 100)
                     .padding(.horizontal, 13)

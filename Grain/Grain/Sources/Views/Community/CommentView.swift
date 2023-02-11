@@ -8,18 +8,20 @@
 import SwiftUI
 
 struct CommentView: View {
-    var comment: Comment
-    
+    var comment: CommentFields
+    var commentText: String
+    @StateObject var commentVm = CommentViewModel()
+    var collectionDocId : String
     var body: some View {
         HStack(alignment: .top) {
             
-            ProfileImage(imageName: comment.profileImage)
+            ProfileImage(imageName: comment.profileImage.stringValue)
             
             VStack(alignment: .leading) {
-                Text("\(comment.nickName)")
+                Text("\(comment.nickName.stringValue)")
                     .bold()
                     .padding(.bottom, 1)
-                Text("\(comment.comment)")
+                Text("\(comment.comment.stringValue)")
                     .lineLimit(Int.max)
                 
                 //MARK: 댓글 에디트
@@ -31,11 +33,12 @@ struct CommentView: View {
                     }
                     Button{
                         
+                        commentVm.updateComment(collectionName: "Community", collectionDocId: collectionDocId, docID: comment.id.stringValue, updateComment: commentText,data: comment)
                     } label: {
                         Text("수정")
                     }
                     Button{
-                        
+                        commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: comment.id.stringValue)
                     } label: {
                         Text("삭제")
                     }
@@ -45,6 +48,8 @@ struct CommentView: View {
                 .foregroundColor(.gray)
                 .padding(.top, 1)
             }
+        }.onAppear{
+            commentVm.fetchComment(collectionName: "Community", collectionDocId: comment.id.stringValue)
         }
         //            Rectangle()
         //                .frame(width: Screen.maxWidth - 30, height: 0.5)

@@ -150,7 +150,39 @@ struct MagazineDetailView: View {
 //                        await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: data.fields.id.stringValue, isArray: true)
 //                    }
 //                }
+                if isHeartToggle {
+                    // 좋아요 누름
+                    if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
+                        userVM.likedMagazineID.append(data.fields.id.stringValue)
+                        let arr = userVM.likedMagazineID
+                        let docID = data.fields.id.stringValue
+                        userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
+                    }
+                } else {
+                    // 좋아요 취소
+                    if userVM.likedMagazineID.contains(data.fields.id.stringValue){
+                        let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
+                        let docID = data.fields.id.stringValue
+                        userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
+                    }
+                }
                 
+                if isBookMarked {
+                    // 저장 누름
+                    if !userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
+                        userVM.bookmarkedMagazineID.append(data.fields.id.stringValue)
+                        let arr = userVM.bookmarkedMagazineID
+                        let docID = data.fields.id.stringValue
+                        userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
+                    }
+                } else {
+                    // 저장 취소
+                    if userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
+                        let arr = userVM.bookmarkedMagazineID.filter {$0 != data.fields.id.stringValue}
+                        let docID = data.fields.id.stringValue
+                        userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
+                    }
+                }
                 
             }
             .padding(.top, 1)

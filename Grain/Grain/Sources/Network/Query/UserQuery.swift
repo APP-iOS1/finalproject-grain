@@ -208,16 +208,34 @@ enum UserQuery {
     
     /// Array 타입에 사용: ex) 내가 올린 메거진 id 업데이트 -> type: postedMagazineID, arr: [새로 올린 메거진 id 추가한 string arr ]
     static func updateUserArray(type: String, arr: [String]) -> Data? {
-        
-        var str : String = ""
-        for i in 0..<arr.count {
-            str += """
-                 { "stringValue": "\(arr[i])" },
-                """
+        var query: Data?
+        if arr.isEmpty {
+            query =  """
+            {
+              "fields": {
+                  "\(type)": {
+                        "arrayValue": {
+                                    "values": [
+                                            {
+                                                "stringValue": ""
+                                            }
+                                    ]
+                            }
+                      }
+                 }
+             }
+            """.data(using: .utf8)
         }
-        str.removeLast()
-        
-        let query =  """
+        else {
+            var str : String = ""
+            for i in 0..<arr.count {
+                str += """
+                                { "stringValue": "\(arr[i])" },
+                """
+            }
+            str.removeLast()
+            
+            query =  """
         {
           "fields": {
               "\(type)": {
@@ -228,6 +246,7 @@ enum UserQuery {
              }
          }
         """.data(using: .utf8)
+        }
         
         return query
         

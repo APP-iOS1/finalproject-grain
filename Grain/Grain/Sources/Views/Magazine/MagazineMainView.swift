@@ -12,6 +12,8 @@ struct MagazineMainView: View {
     @State private var selectedIndex: Int = 0
     @State private var isSearchViewShown: Bool = false
     var currentUsers : CurrentUserFields?
+    var userVM: UserViewModel
+    
     var body: some View {
         NavigationStack {
             VStack{
@@ -41,9 +43,9 @@ struct MagazineMainView: View {
                 }//HS
                 switch selectedIndex {
                 case 0:
-                    MagazineBestView(currentUsers: currentUsers)
+                    MagazineBestView(userVM: userVM, currentUsers: currentUsers)
                 default:
-                    MagazineFeedView(currentUsers: currentUsers)
+                    MagazineFeedView(currentUsers: currentUsers, userVM: userVM)
                 }
                 //                TabView(selection: $selectedIndex) {
                 //                    // MARK: 베스트뷰 이동

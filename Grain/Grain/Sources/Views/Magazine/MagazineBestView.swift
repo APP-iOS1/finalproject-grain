@@ -10,8 +10,7 @@ import FirebaseAuth
 
 struct MagazineBestView: View {
     @StateObject var magazineVM = MagazineViewModel()
-    
-    @StateObject var userVM = UserViewModel()
+    var userVM: UserViewModel
     
     var currentUsers : CurrentUserFields?
     
@@ -35,7 +34,7 @@ struct MagazineBestView: View {
                     .padding([.leading, .top])
                     ForEach(magazineVM.magazines, id: \.self ){ data in
                         NavigationLink {
-                            MagazineDetailView(currentUsers: currentUsers, data: data)
+                            MagazineDetailView(isHeartToggle: userVM.isLikedMagazine(magazine: data), isBookMarked: userVM.isBookMarkedMagazine(magazine: data), data: data)
                         } label: {
                             Top10View(data: data)
                                 .padding(.vertical, 7)
@@ -52,7 +51,7 @@ struct MagazineBestView: View {
                 } // scroll view
             }//vstack
             .onAppear{
-                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+//                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 magazineVM.fetchMagazine()
             }
         }

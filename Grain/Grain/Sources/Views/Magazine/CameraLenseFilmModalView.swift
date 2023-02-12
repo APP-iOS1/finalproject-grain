@@ -57,7 +57,7 @@ struct CameraLenseFilmModalView: View {
                 Text("등록된카메라없음")
             } else {
                 Picker("카메라 바디 선택", selection: $selectedCamera) {
-                    ForEach(userVM.cameraList, id: \.self) {
+                    ForEach(userVM.myCamera, id: \.self) {
                         Text($0)
                     }
                 }
@@ -91,7 +91,7 @@ struct CameraLenseFilmModalView: View {
                 //필름없을때 보여줄 뷰
             } else {
                 Picker("카메라 렌즈 선택", selection: $selectedLense) {
-                    ForEach(userVM.lensList, id: \.self) {
+                    ForEach(userVM.myLens, id: \.self) {
                         Text($0)
                     }
                 }.pickerStyle(.wheel)
@@ -120,7 +120,7 @@ struct CameraLenseFilmModalView: View {
                 //렌즈없을때 보여줄 뷰
             } else {
                 Picker("카메라 필름 선택", selection: $selectedFilm) {
-                    ForEach(userVM.filmList, id: \.self) {
+                    ForEach(userVM.myFilm, id: \.self) {
                         Text($0)
                     }
                 }.pickerStyle(.wheel)

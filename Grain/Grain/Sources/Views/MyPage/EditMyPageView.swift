@@ -26,6 +26,32 @@ struct EditMyPageView: View {
     @State private var editedNickname = ""
     @State private var editedIntroduce = ""
     
+    // 수정전 nickName
+    var nickName: String {
+        var nickName: String = ""
+        if let currentUser = self.userVM.currentUsers {
+            nickName = currentUser.nickName.stringValue
+        }
+        return nickName
+    }
+    
+    // 수정전 introduce
+    var introduce: String {
+        var introduce: String = ""
+        if let currentUser = self.userVM.currentUsers {
+            introduce = currentUser.introduce.stringValue
+        }
+        return introduce
+    }
+    
+    var profileImage: String {
+        var profileImage: String = ""
+        if let currentUser = self.userVM.currentUsers {
+            profileImage = currentUser.profileImage.stringValue
+        }
+        return profileImage
+    }
+    
     let nickNameLimit = 8
     let introduceLimit = 20
     
@@ -99,6 +125,10 @@ struct EditMyPageView: View {
                         if let data = try? await newItem?.loadTransferable(type: Data.self) {
                             selectedImageData = data
                         }
+                        // MARK: 선택한 이미지 selectedImages배열에 넣어주기
+                        if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+                            selectedImages.append(uiImage)
+                        }
                     }
                 }
             
@@ -113,7 +143,7 @@ struct EditMyPageView: View {
                 .padding(.horizontal)
                 
                 HStack{
-                    TextField("변경할 닉네임을 입력해주세요", text: $editedNickname)
+                    TextField("\(nickName)", text: $editedNickname)
                         .focused($focus, equals: .nickName)
                         .disableAutocorrection(true)
                         .autocapitalization(.none)
@@ -148,7 +178,7 @@ struct EditMyPageView: View {
                 .padding(.horizontal)
                 
                 HStack{
-                    TextField("소개글을 입력해주세요", text: $editedIntroduce)
+                    TextField("\(introduce)", text: $editedIntroduce)
                         .focused($focus, equals: .introduce)
                         .disableAutocorrection(true)
                         .autocapitalization(.none)
@@ -174,23 +204,31 @@ struct EditMyPageView: View {
             }
             
             Spacer()
+            
+            Button {
+                print("nickName: \(nickName), editintro: \(editedIntroduce)")
+            } label: {
+                Text("testtest")
+            }
+
 
         }
         .navigationTitle("프로필 편집")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                if editedNickname.count > 0 {
-                    Button{
+                if editedNickname.count > 0 || editedNickname.count > 0 {
+                    Button {
                         if var currentUser = userVM.currentUsers {
                             let docID = currentUser.id.stringValue
                             currentUser.nickName.stringValue = editedNickname
-//                            userVM.updateCurrentUser(userData: currentUser, docID: docID)
-                            print("testnickname: \( currentUser.nickName)")
-                            print("testname: \(currentUser.name)")
+                            
+                            userVM.updateCurrentUserProfile(profileImage: selectedImages.count > 0 ? selectedImages : [], nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : introduce, docID: docID)
+                            print("selectedImages:\(selectedImages)")
                         }
                     }label: {
                         Text("저장")
+                            .foregroundColor(.black)
                     }
                 } else {
                     Text("저장")

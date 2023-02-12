@@ -19,18 +19,20 @@ final class UserViewModel: ObservableObject {
     // 현재 유저 데이터 값
     @Published var currentUsers : CurrentUserFields?
     
-    // 유저가 포스팅한 매거진 id 담는 배열
-    @Published var currentUserStringValue: [CurrentUserStringValue] = [] // 변환만 하기 위해
-    @Published var userPostedMagazine : [String] = [] //string값만
-    @Published var cameraList: [String] = []
-    @Published var lensList: [String] = []
-    @Published var filmList: [String] = []
+    // 유저 데이터 string 배열 타입 값
+    @Published var likedMagazineID : [String] = []
+    @Published var myLens : [String] = []
+    @Published var myFilm : [String] = []
+    @Published var myCamera : [String] = []
+    @Published var postedCommunityID : [String] = []
+    @Published var postedMagazineID : [String] = []
+    @Published var bookmarkedMagazineID : [String] = []
+    @Published var bookmarkedCommunityID : [String] = []
+    @Published var follower : [String] = []
+    @Published var following : [String] = []
     
-    // 유저가 저장한 매거진 id 담는 배열
-    @Published var currentUserBookmarkedStringValue: [CurrentUserStringValue] = [] // 변환만 하기 위해
-    @Published var userBookmarkedMagazine : [String] = [] //string값만
-    @Published var likedMagazineIdArr : [String] = [] //string값만
-    
+    // 내가 구독한 사람의 게시글만 담은 배열
+    @Published var subscribedMagazines: [String] = []
     
     // 유저가 저장한 커뮤니티
     @Published var userBookmarkedCommunity : [String] = [] //string값만
@@ -61,46 +63,45 @@ final class UserViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CurrentUserResponse) in
                 self.currentUsers = data.fields
-                
-                
-                //                            print(" 확인 \(data.createTime)") -> 시간 값 나중에 써먹을수 있을듯
-                //                 user가 포스팅한 매거진 필터링
-                
-                
-                self.currentUserStringValue.append(contentsOf: data.fields.postedMagazineID.arrayValue.values)
-                for i in self.currentUserStringValue{
-                    self.userPostedMagazine.append(i.stringValue)
+                if let currentUsers = self.currentUsers {
+                    self.parsingUserDataToStringArr(currentUserData: currentUsers)
+                    self.fetchCurrentUsersSuccess.send()
                 }
-                
-                for i in self.currentUsers?.myCamera.arrayValue.values ?? [] {
-                    self.cameraList.append(i.stringValue)
-                }
-                for i in self.currentUsers?.myLens.arrayValue.values ?? [] {
-                    self.lensList.append(i.stringValue)
-                }
-                for i in self.currentUsers?.myFilm.arrayValue.values ?? [] {
-                    self.filmList.append(i.stringValue)
-                }
-                self.currentUserBookmarkedStringValue.append(contentsOf: data.fields.bookmarkedMagazineID.arrayValue.values)
-                for i in self.currentUserBookmarkedStringValue{
-                    self.userBookmarkedMagazine.append(i.stringValue)
-                }
-                
-                for i in data.fields.likedMagazineID.arrayValue.values{
-                    self.likedMagazineIdArr.append(i.stringValue)
-                }
-                //                 저장한 커뮤니티 북마크
-                for i in data.fields.bookmarkedCommunityID.arrayValue.values{
-                    self.userBookmarkedCommunity.append(i.stringValue)
-                    print(i.stringValue)
-                }
-                //                 저장한 커뮤니티 좋아요
-                //                for i in data.fields.likedCommunityID.arrayValue.values{
-                //                    self.likedCommunityIdArr.append(i.stringValue)
-                //                }
-                
-                self.fetchCurrentUsersSuccess.send()
             }.store(in: &subscription)
+    }
+   
+    //MARK: - 구독한 사람들의 메거진만 필터링해서 리턴해주는 메서드(홈뷰 구독탭에서 가져다 쓰시면 됩니다. ^^ 갖다쓰기만해 ~ )
+    /// 홈뷰에서 fetch 한 모든 게시물 데이터 MagazineVM.magazines 넘겨서 호출해주면 됩니다.
+    /// 그러면 알아서 구독한 사람들의 게시물만 던져줍니다.
+    /// 주의사항: 구독기능은 로그인을 해야만 가능하고, 현재 fetchCurrentUser가 호출이 되어있는 상태여야지만 가능합니다.
+    func returnSubscribedMagazines(magazines: [MagazineDocument]) -> [MagazineDocument]{
+        var subscribedMagazines: [MagazineDocument] = []
+        /// 모든 메거진 중에서 나의 팔로잉 리스트에 있는 유저가 쓴 메거진인지 판단하고
+        /// 맞다면 팔로잉한 유저의 메거진 리스트들을 subscribedMagazines 에 append 한다.
+        for i in magazines {
+            if following.contains( i.fields.userID.stringValue ) {
+                subscribedMagazines.append(i)
+            }
+        }
+        return subscribedMagazines
+    }
+    
+    /// 좋아요를 누른 메거진인지 Bool 값으로 리턴해주는 메소드
+    func isLikedMagazine(magazine: MagazineDocument) -> Bool {
+        if likedMagazineID.contains(magazine.fields.id.stringValue) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    /// 저장을 누른 메거진인지 Bool 값으로 리턴해주는 메소드
+    func isBookMarkedMagazine(magazine: MagazineDocument) -> Bool {
+        if bookmarkedMagazineID.contains(magazine.fields.id.stringValue) {
+            return true
+        } else {
+            return false
+        }
     }
     
     // MARK: - 유저 프로필 업데이트 메소드 (nickName, introduce, profileImage 업데이트할때 ProfileEditView에서 사용)
@@ -115,7 +116,7 @@ final class UserViewModel: ObservableObject {
     }
     
     // MARK: - 유저정보 업데이트 메소드 (string 배열 타입값 업데이트할때 사용 )
-    /// 좋아요누른 게시글 , 저장한 게시글, 저장한 커뮤니티글, 내 장비정보(카메라, 렌즈, 필름), 내가 올린 메거진, 커뮤니티 게시글 업데이트 할때 사용하면 됩니다.
+    /// 좋아요누른 게시글 , 저장한 게시글, 저장한 커뮤니티글, 내 장비정보(카메라, 렌즈, 필름), 내가 올린 메거진, 커뮤니티 게시글 , 팔로워, 팔로잉 업데이트 할때 사용하면 됩니다.
     /// ex) type: likedMagazineId , string: ["1234", "45346346", "56456456"], docID: 현재로그인한유저아이디 -> 유저가 좋아요누른 메거진 아이디 리스트 배열을 ["1234", "45346346", "56456456"] 로 바꾸겠다. !!!
     func updateCurrentUserArray(type: String, arr: [String], docID: String){
         UserService.updateCurrentUserArray(type: type, arr: arr, docID: docID)
@@ -204,6 +205,42 @@ final class UserViewModel: ObservableObject {
         }
     }
     
+    func parsingUserDataToStringArr(currentUserData: CurrentUserFields) {
+        print("currentid: \(currentUserData.id.stringValue)")
+        for i in currentUserData.likedMagazineID.arrayValue.values {
+            print("likedMagazineID: \(i.stringValue)")
+            self.likedMagazineID.append(i.stringValue)
+        }
+        for i in currentUserData.myLens.arrayValue.values {
+            self.myLens.append(i.stringValue)
+        }
+        for i in currentUserData.myFilm.arrayValue.values {
+            self.myFilm.append(i.stringValue)
+        }
+        for i in currentUserData.myCamera.arrayValue.values {
+            self.myCamera.append(i.stringValue)
+        }
+        for i in currentUserData.postedCommunityID.arrayValue.values {
+            self.postedCommunityID.append(i.stringValue)
+        }
+        for i in currentUserData.postedMagazineID.arrayValue.values {
+            self.postedMagazineID.append(i.stringValue)
+        }
+        for i in currentUserData.bookmarkedMagazineID.arrayValue.values {
+            self.bookmarkedMagazineID.append(i.stringValue)
+        }
+        for i in currentUserData.bookmarkedCommunityID.arrayValue.values {
+            self.bookmarkedCommunityID.append(i.stringValue)
+        }
+        for i in currentUserData.follower.arrayValue.values {
+            self.follower.append(i.stringValue)
+        }
+        for i in currentUserData.following.arrayValue.values {
+            self.following.append(i.stringValue)
+        }
+        
+        print("bookmarkedMagazineID: \(self.bookmarkedMagazineID)")
+    }
     
 }
 

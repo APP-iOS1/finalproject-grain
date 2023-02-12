@@ -59,6 +59,9 @@ enum UserQuery {
                                 "nickName": {
                                     "stringValue": "\(nickName)"
                                 },
+                                "introduce": {
+                                        "stringValue": "\(introduce)"
+                                },
                                 "recentSearch": {
                                     "arrayValue": {
                                         "values": [
@@ -148,21 +151,41 @@ enum UserQuery {
     
     /// 프로필 Edit 에서 사용 : nickName, introduce, profileImage 변경
     static func updateUserProfile(profileImage: String, nickName: String, introduce: String ) -> Data? {
-        let query = """
-                    {
-                      "fields": {
-                           "profileImage": {
-                                "stringValue": "\(profileImage)"
-                    },
-                            "nickName": {
-                                "stringValue": "\(nickName)"
-                    },
-                            "introduce": {
-                                "stringValue": "\(introduce)"
+        
+        let query: Data?
+        
+        // profileImage도 변경했을때
+        if profileImage == "" {
+                query = """
+                            {
+                                "fields": {
+                                    "nickName": {
+                                        "stringValue": "\(nickName)"
+                            },
+                                        "introduce": {
+                                            "stringValue": "\(introduce)"
+                            }
+                        }
+                    }
+                    """.data(using: .utf8)
+        } else {
+            // profileImage는 변경 안했을때
+            query = """
+                        {
+                          "fields": {
+                               "profileImage": {
+                                    "stringValue": "\(profileImage)"
+                        },
+                                "nickName": {
+                                    "stringValue": "\(nickName)"
+                        },
+                                "introduce": {
+                                    "stringValue": "\(introduce)"
+                        }
                     }
                 }
-            }
-            """.data(using: .utf8)
+                """.data(using: .utf8)
+        }
         
         return query
     }
@@ -182,7 +205,6 @@ enum UserQuery {
         
         return query
     }
-    
     
     /// Array 타입에 사용: ex) 내가 올린 메거진 id 업데이트 -> type: postedMagazineID, arr: [새로 올린 메거진 id 추가한 string arr ]
     static func updateUserArray(type: String, arr: [String]) -> Data? {
@@ -210,6 +232,7 @@ enum UserQuery {
         return query
         
     }
+    
     
 }
 

@@ -29,7 +29,7 @@ struct MagazineSearchResultView: View {
                                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                         },id: \.self) { item in
                             NavigationLink {
-                                MagazineDetailView(data: item)
+//                                MagazineDetailView(data: item)
                             } label: {
                                 HStack{
                                     Rectangle()

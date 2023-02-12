@@ -54,7 +54,7 @@ struct ContentView: View {
                         switch selectedIndex {
                         case 0:
                             NavigationStack {
-                                MagazineMainView(currentUsers: userVM.currentUsers)
+                                MagazineMainView(currentUsers: userVM.currentUsers, userVM: userVM)
                             }
                         case 1:
                             NavigationStack {
@@ -72,7 +72,7 @@ struct ContentView: View {
                             }
                         case 4:
                             NavigationStack {
-                                MyPageView(magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.userPostedMagazine), boomarkedMagazineDocument: magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.userBookmarkedMagazine))
+                                MyPageView(magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), boomarkedMagazineDocument: magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID))
                             }
                         default:
                             NavigationStack {

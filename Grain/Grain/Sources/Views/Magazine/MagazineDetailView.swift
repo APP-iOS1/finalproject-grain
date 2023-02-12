@@ -4,13 +4,13 @@ import Kingfisher
 
 struct MagazineDetailView: View {
     @StateObject var magazineVM = MagazineViewModel()
-    
-    @State var isHeartToggle: Bool = false    // 하트 눌림 상황
     @StateObject var userVM = UserViewModel()
+    
+    @State var isHeartToggle: Bool // 하트 눌림 상황
+    @State var isBookMarked: Bool
     
     var currentUsers : CurrentUserFields?
     
-    @State private var isBookMarked: Bool = false
     @State private var isHeartAnimation: Bool = false
     @State private var heartOpacity: Double = 0
     
@@ -69,6 +69,8 @@ struct MagazineDetailView: View {
                                 .opacity(heartOpacity)
                         }
                         HStack{
+                            // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
+                            // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
                             HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
                                 .padding(.leading)
                             NavigationLink {
@@ -109,46 +111,79 @@ struct MagazineDetailView: View {
                 /// 뷰가 처음 생길떄 fetch 한번 한다.
                 /// 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
                 userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
-
-                    if userVM.likedMagazineIdArr.contains(where: { item in
-                        item == data.fields.id.stringValue})
-                    {
-                        isHeartToggle = true
-                    }else{
-                        isHeartToggle = false
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+//
+//                    if userVM.likedMagazineID.contains(where: { item in
+//                        item == data.fields.id.stringValue})
+//                    {
+//                        isHeartToggle = true
+//                    }else{
+//                        isHeartToggle = false
+//                    }
+//
+//                    if userVM.bookmarkedMagazineID.contains(where: { item in
+//                        item == data.fields.id.stringValue})
+//                    {
+//                        isBookMarked = true
+//                    }else{
+//                        isBookMarked = false
+//                    }
+//                }
+                
+            }
+            .onDisappear{
+                /// restAPI 방식으로 수정 해야할 부분
+//                Task{
+//                    // 유저 DB에 좋아요 상태 저장/삭제
+//                    if isHeartToggle {
+//                        /// 추가 부분
+//                        await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
+//                    }else{
+//                        /// 삭제부분
+//                        await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "likedMagazineId", deleteIndex: data.fields.id.stringValue, isArray: true)
+//                    }
+//
+//                    // 유저 DB에 북마크 상태 저장/삭제
+//                    if isBookMarked {
+//                        await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "bookmarkedMagazineID", updateValue: data.fields.id.stringValue, isArray: true)
+//                    }else{
+//                        await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: data.fields.id.stringValue, isArray: true)
+//                    }
+//                }
+                if isHeartToggle {
+                    // 좋아요 누름
+                    if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
+                        userVM.likedMagazineID.append(data.fields.id.stringValue)
+                        let arr = userVM.likedMagazineID
+                        let docID = data.fields.id.stringValue
+                        userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
                     }
-
-                    if userVM.userBookmarkedMagazine.contains(where: { item in
-                        item == data.fields.id.stringValue})
-                    {
-                        isBookMarked = true
-                    }else{
-                        isBookMarked = false
+                } else {
+                    // 좋아요 취소
+                    if userVM.likedMagazineID.contains(data.fields.id.stringValue){
+                        let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
+                        let docID = data.fields.id.stringValue
+                        userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
                     }
                 }
                 
-            }
-            
-            .onDisappear{
-                /// restAPI 방식으로 수정 해야할 부분
-                Task{
-                    // 유저 DB에 좋아요 상태 저장/삭제
-                    if isHeartToggle {
-                        /// 추가 부분
-                        await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
-                    }else{
-                        /// 삭제부분
-                        await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "likedMagazineId", deleteIndex: data.fields.id.stringValue, isArray: true)
+                if isBookMarked {
+                    // 저장 누름
+                    if !userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
+                        userVM.bookmarkedMagazineID.append(data.fields.id.stringValue)
+                        let arr = userVM.bookmarkedMagazineID
+                        let docID = data.fields.id.stringValue
+                        userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
                     }
-                    
-                    // 유저 DB에 북마크 상태 저장/삭제
-                    if isBookMarked {
-                        await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "bookmarkedMagazineID", updateValue: data.fields.id.stringValue, isArray: true)
-                    }else{
-                        await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: data.fields.id.stringValue, isArray: true)
+                } else {
+                    // 저장 취소
+                    if userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
+                        let arr = userVM.bookmarkedMagazineID.filter {$0 != data.fields.id.stringValue}
+                        let docID = data.fields.id.stringValue
+                        userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
                     }
                 }
+                
             }
             .padding(.top, 1)
         }

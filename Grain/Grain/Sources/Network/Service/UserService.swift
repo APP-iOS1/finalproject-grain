@@ -56,7 +56,7 @@ enum UserService {
         // UIImage -> URLString 으로 변환
         var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "param", fileName: "file", image: profileImage)
         
-        var profileImageURL: String = imageUrlArr[0]
+        var profileImageURL: String = ""
         
         if imageUrlArr.count > 0 {
             // imageURLImage에서 index Out of range Error 방지용! -> 배열안에 profile image가 들어있으면 request 만들기.

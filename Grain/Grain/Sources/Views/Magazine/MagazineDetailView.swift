@@ -4,18 +4,16 @@ import Kingfisher
 
 struct MagazineDetailView: View {
     @StateObject var magazineVM = MagazineViewModel()
-    var userVM: UserViewModel
     
-    @State var isHeartToggle: Bool // 하트 눌림 상황
-    @State var isBookMarked: Bool
-    
-    var currentUsers : CurrentUserFields?
-    
+    @State private var isHeartToggle: Bool = false// 하트 눌림 상황
+    @State private var isBookMarked: Bool = true
     @State private var isHeartAnimation: Bool = false
     @State private var heartOpacity: Double = 0
     
     @Environment(\.dismiss) private var dismiss // <- 임시 방편
     
+    let userVM: UserViewModel
+    let currentUsers : CurrentUserFields?
     let data : MagazineDocument
     
    
@@ -80,6 +78,33 @@ struct MagazineDetailView: View {
                                     .font(.system(size: 24))
                                     .foregroundColor(.black)
                             }
+                            Button {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+                                    
+                                    if userVM.likedMagazineID.contains(where: { item in
+                                        item == data.fields.id.stringValue})
+                                    {
+                                        isHeartToggle = true
+                                        print("트루")
+                                    }else{
+                                        isHeartToggle = false
+                                        print("폴스")
+                                    }
+                                    print("\(userVM.likedMagazineID)")
+//                                    if userVM.bookmarkedMagazineID.contains(where: { item in
+//                                        item == data.fields.id.stringValue})
+//                                    {
+//                                        isBookMarked = true
+//                                        print("트루")
+//                                    }else{
+//                                        isBookMarked = false
+//                                        print("폴스")
+//                                    }
+                                }
+                            } label: {
+                                Text("테스트")
+                            }
+
                             //MARK: 북마크 버튼
                             Button {
                                 isBookMarked.toggle()
@@ -116,28 +141,18 @@ struct MagazineDetailView: View {
                 }//VStack
             }//스크롤뷰
             .onAppear{
+           
                 /// 뷰가 처음 생길떄 fetch 한번 한다.
                 /// 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
-//                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
-//
+                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            
 //                    if userVM.likedMagazineID.contains(where: { item in
 //                        item == data.fields.id.stringValue})
 //                    {
-//                        isHeartToggle = true
+//                        self.isHeartToggle = true
 //                    }else{
-//                        isHeartToggle = false
+//                        self.isHeartToggle = false
 //                    }
-//
-//                    if userVM.bookmarkedMagazineID.contains(where: { item in
-//                        item == data.fields.id.stringValue})
-//                    {
-//                        isBookMarked = true
-//                    }else{
-//                        isBookMarked = false
-//                    }
-//                }
-                
             }
             .onDisappear{
                 /// restAPI 방식으로 수정 해야할 부분

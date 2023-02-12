@@ -10,11 +10,26 @@ import Combine
 
 enum MapService {
     
-    // MARK: - 스토리지 이미지 가져오기
+    
     static func getMap() -> AnyPublisher<MapResponse, Error> {
         
         do {
             let request = try MapRouter.get.asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data}
+                .decode(type: MapResponse.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
+    }
+    
+    static func getNextPageMap(nextPageToken: String) -> AnyPublisher<MapResponse, Error> {
+        
+        do {
+            let request = try MapRouter.getNext(nextPageToken: nextPageToken).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -43,4 +58,5 @@ enum MapService {
             return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
     }
+    
 }

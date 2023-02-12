@@ -10,6 +10,7 @@ import Foundation
 enum MapRouter {
 
     case get
+    case getNext(nextPageToken: String)
     case post(latitude: Double,url: String,id: String,category: Int,magazineId: String,longitude: Double)
     case delete
     case put
@@ -39,13 +40,15 @@ enum MapRouter {
     private var endPoint: String {
         switch self {
         default:
-            return "/Map"
+            return "/MapData"
         }
     }
     
     private var method: HTTPMethod {
         switch self {
         case .get :
+            return .get
+        case .getNext :     //getNext로 불러오면 get 사용
             return .get
         case .post :
             return .post
@@ -55,6 +58,18 @@ enum MapRouter {
             return .put
         }
     }
+    
+    var parameters: URLQueryItem? {
+        switch self {
+        case let .getNext(nextPageToken):
+            let params: URLQueryItem = URLQueryItem(name: "pageToken", value: nextPageToken)
+            return params
+        default :
+            let params: URLQueryItem? = nil
+            return params
+        }
+    }
+    
    
     private var data: Data? {
         switch self {

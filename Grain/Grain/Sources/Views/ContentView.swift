@@ -54,7 +54,7 @@ struct ContentView: View {
                         switch selectedIndex {
                         case 0:
                             NavigationStack {
-                                MagazineMainView(currentUsers: userVM.currentUsers)
+                                MagazineMainView(currentUsers: userVM.currentUsers, userVM: userVM)
                             }
                         case 1:
                             NavigationStack {

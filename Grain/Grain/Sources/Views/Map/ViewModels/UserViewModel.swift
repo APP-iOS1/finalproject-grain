@@ -86,6 +86,24 @@ final class UserViewModel: ObservableObject {
         return subscribedMagazines
     }
     
+    /// 좋아요를 누른 메거진인지 Bool 값으로 리턴해주는 메소드
+    func isLikedMagazine(magazine: MagazineDocument) -> Bool {
+        if likedMagazineID.contains(magazine.fields.id.stringValue) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    /// 저장을 누른 메거진인지 Bool 값으로 리턴해주는 메소드
+    func isBookMarkedMagazine(magazine: MagazineDocument) -> Bool {
+        if bookmarkedMagazineID.contains(magazine.fields.id.stringValue) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     // MARK: - 유저 프로필 업데이트 메소드 (nickName, introduce, profileImage 업데이트할때 ProfileEditView에서 사용)
     /// ex) profileImage :프로필 UIImage를 UIImage 타입 그대로 배열에 넣어서 넘겨줍니다, 또 nickName, introduce, docID는 그대로 String 타입으로 넘겨주면 자동으로 update 될겁니다.
     func updateCurrentUserProfile(profileImage: [UIImage], nickName: String, introduce: String, docID: String) {
@@ -188,38 +206,40 @@ final class UserViewModel: ObservableObject {
     }
     
     func parsingUserDataToStringArr(currentUserData: CurrentUserFields) {
-        
+        print("currentid: \(currentUserData.id.stringValue)")
         for i in currentUserData.likedMagazineID.arrayValue.values {
+            print("likedMagazineID: \(i.stringValue)")
             self.likedMagazineID.append(i.stringValue)
         }
         for i in currentUserData.myLens.arrayValue.values {
-            self.likedMagazineID.append(i.stringValue)
+            self.myLens.append(i.stringValue)
         }
         for i in currentUserData.myFilm.arrayValue.values {
-            self.likedMagazineID.append(i.stringValue)
+            self.myFilm.append(i.stringValue)
         }
         for i in currentUserData.myCamera.arrayValue.values {
-            self.likedMagazineID.append(i.stringValue)
+            self.myCamera.append(i.stringValue)
         }
         for i in currentUserData.postedCommunityID.arrayValue.values {
-            self.likedMagazineID.append(i.stringValue)
+            self.postedCommunityID.append(i.stringValue)
         }
         for i in currentUserData.postedMagazineID.arrayValue.values {
-            self.likedMagazineID.append(i.stringValue)
+            self.postedMagazineID.append(i.stringValue)
         }
         for i in currentUserData.bookmarkedMagazineID.arrayValue.values {
-            self.likedMagazineID.append(i.stringValue)
+            self.bookmarkedMagazineID.append(i.stringValue)
         }
         for i in currentUserData.bookmarkedCommunityID.arrayValue.values {
-            self.likedMagazineID.append(i.stringValue)
+            self.bookmarkedCommunityID.append(i.stringValue)
         }
         for i in currentUserData.follower.arrayValue.values {
-            self.likedMagazineID.append(i.stringValue)
+            self.follower.append(i.stringValue)
         }
         for i in currentUserData.following.arrayValue.values {
-            self.likedMagazineID.append(i.stringValue)
+            self.following.append(i.stringValue)
         }
         
+        print("bookmarkedMagazineID: \(self.bookmarkedMagazineID)")
     }
     
 }

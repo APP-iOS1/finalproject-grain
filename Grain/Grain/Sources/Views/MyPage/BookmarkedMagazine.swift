@@ -12,6 +12,7 @@ struct BookmarkedMagazine: View {
     @Environment(\.presentationMode) var presentationMode
     
     var bookmarkedMagazineDocument: [MagazineDocument]
+    @StateObject var userVM = UserViewModel()
 
     // 테스트 이미지 배열
     var images: [Image] = [Image("1"), Image("2"), Image("3"), Image("test"), Image("sampleImage"), Image("testImage")]
@@ -42,7 +43,7 @@ struct BookmarkedMagazine: View {
                 LazyVGrid(columns: columns, spacing: 1) {
                     ForEach(bookmarkedMagazineDocument, id: \.self) { item in
                         NavigationLink {
-                            MagazineDetailView(data: item)
+                            MagazineDetailView(isHeartToggle: userVM.isLikedMagazine(magazine: item), isBookMarked: userVM.isBookMarkedMagazine(magazine: item), data: item)
                         } label: {
                             KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                .resizable()

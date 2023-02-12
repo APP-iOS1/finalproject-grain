@@ -26,6 +26,7 @@ struct EditMyPageView: View {
     @State private var editedNickname = ""
     @State private var editedIntroduce = ""
     
+    // 수정전 nickName
     var nickName: String {
         var nickName: String = ""
         if let currentUser = self.userVM.currentUsers {
@@ -34,12 +35,21 @@ struct EditMyPageView: View {
         return nickName
     }
     
+    // 수정전 introduce
     var introduce: String {
         var introduce: String = ""
         if let currentUser = self.userVM.currentUsers {
             introduce = currentUser.introduce.stringValue
         }
         return introduce
+    }
+    
+    var profileImage: String {
+        var profileImage: String = ""
+        if let currentUser = self.userVM.currentUsers {
+            profileImage = currentUser.profileImage.stringValue
+        }
+        return profileImage
     }
     
     let nickNameLimit = 8
@@ -114,6 +124,10 @@ struct EditMyPageView: View {
                     Task {
                         if let data = try? await newItem?.loadTransferable(type: Data.self) {
                             selectedImageData = data
+                        }
+                        // MARK: 선택한 이미지 selectedImages배열에 넣어주기
+                        if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+                            selectedImages.append(uiImage)
                         }
                     }
                 }
@@ -190,6 +204,13 @@ struct EditMyPageView: View {
             }
             
             Spacer()
+            
+            Button {
+                print("nickName: \(nickName), editintro: \(editedIntroduce)")
+            } label: {
+                Text("testtest")
+            }
+
 
         }
         .navigationTitle("프로필 편집")
@@ -202,10 +223,8 @@ struct EditMyPageView: View {
                             let docID = currentUser.id.stringValue
                             currentUser.nickName.stringValue = editedNickname
                             
-                            userVM.updateCurrentUserProfile(profileImage: selectedImages, nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : introduce, docID: docID)
-//                            userVM.updateCurrentUser(userData: currentUser, docID: docID)
-                            print("testnickname: \( currentUser.nickName)")
-                            print("testname: \(currentUser.name)")
+                            userVM.updateCurrentUserProfile(profileImage: selectedImages.count > 0 ? selectedImages : [], nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : introduce, docID: docID)
+                            print("selectedImages:\(selectedImages)")
                         }
                     }label: {
                         Text("저장")

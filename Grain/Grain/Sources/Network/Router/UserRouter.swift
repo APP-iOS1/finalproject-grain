@@ -69,14 +69,17 @@ enum UserRouter {
         case let .patchString(type, _, _):
             let params: [URLQueryItem] = [URLQueryItem(name: "updateMask.fieldPaths", value: type)]
             return params
-        case .patchProfile:
+        case let .patchProfile(profileImage, _, _, _):
             let param1 = URLQueryItem(name: "updateMask.fieldPaths", value: "profileImage")
             let param2 = URLQueryItem(name: "updateMask.fieldPaths", value: "nickName")
             let param3 = URLQueryItem(name: "updateMask.fieldPaths", value: "introduce")
-            
-            let params: [URLQueryItem] = [param1, param2, param3]
+            var params: [URLQueryItem] = []
+            if profileImage == "" {
+                params = [param2, param3]
+            } else {
+                params = [param1, param2, param3]
+            }
             return params
-            
         default :
             let params: [URLQueryItem]? = nil
             return params

@@ -23,7 +23,7 @@ struct MyPageView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
+            VStack(alignment: .leading) {
                 VStack(alignment: .leading){
                     HStack{
                         //MARK: 프로필 이미지
@@ -38,7 +38,7 @@ struct MyPageView: View {
                             .padding(.trailing)
                         
                         VStack(alignment: .leading){
-                            Text("자기소개 글 blah blahblahblahblahblahblah")
+                            Text(userVM.currentUsers?.introduce.stringValue ?? "자기소개를 작성해보세요")
                                 .lineLimit(3)
                                 .padding(.top, 2)
                         }
@@ -52,6 +52,7 @@ struct MyPageView: View {
                         .bold()
                         .padding(.leading, 8)
                 }
+                .padding(.leading, 30)
                 MyPageMyFeedView(magazineDocument: magazineDocument)
             }
             .onAppear{
@@ -72,8 +73,8 @@ struct MyPageView: View {
     }
 }
 
-//struct MyPageView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MyPageView(magazineDocument: [], boomarkedMagazineDocument: [])
-//    }
-//}
+struct MyPageView_Previews: PreviewProvider {
+    static var previews: some View {
+        MyPageView(magazineDocument: [], boomarkedMagazineDocument: [])
+    }
+}

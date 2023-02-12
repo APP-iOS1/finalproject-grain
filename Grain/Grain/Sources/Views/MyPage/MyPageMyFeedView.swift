@@ -25,12 +25,22 @@ struct MyPageMyFeedView: View {
                 Button{
                     showGridOrList.toggle()
                 } label: {
-                    Image(systemName: "square.grid.2x2")
+                    if showGridOrList {
+                        Image(systemName: "square.grid.2x2")
+                    } else {
+                        Image(systemName: "square.grid.2x2")
+                            .foregroundColor(.brightGray)
+                    }
                 }
                 Button{
                     showGridOrList.toggle()
                 } label:{
-                    Image(systemName: "list.bullet")
+                    if showGridOrList {
+                        Image(systemName: "list.bullet")
+                            .foregroundColor(.brightGray)
+                    } else {
+                        Image(systemName: "list.bullet")
+                    }
                 }
                 Spacer()
                 

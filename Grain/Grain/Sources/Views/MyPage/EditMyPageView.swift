@@ -21,6 +21,7 @@ struct EditMyPageView: View {
     
     var userVM: UserViewModel
     
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.presentationMode) var presentationMode
     
     @State private var editedNickname = ""
@@ -61,6 +62,7 @@ struct EditMyPageView: View {
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImageData: Data? = nil
     @State private var selectedImages: [UIImage] = []
+    @State private var selectedImage = UIImage()
 
     var body: some View {
         VStack {
@@ -225,6 +227,8 @@ struct EditMyPageView: View {
                             
                             userVM.updateCurrentUserProfile(profileImage: selectedImages.count > 0 ? selectedImages : [], nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : introduce, docID: docID)
                             print("selectedImages:\(selectedImages)")
+                            
+                            dismiss()
                         }
                     }label: {
                         Text("저장")
@@ -239,6 +243,7 @@ struct EditMyPageView: View {
         .onAppear{
             focus = .nickName
             editedNickname = userVM.currentUsers?.nickName.stringValue ?? ""
+            editedIntroduce = userVM.currentUsers?.introduce.stringValue ?? ""
         }
     }
     

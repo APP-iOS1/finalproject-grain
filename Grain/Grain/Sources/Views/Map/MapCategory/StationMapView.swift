@@ -15,9 +15,13 @@ import UIKit
 
 struct StationMapView: View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
+    @State var isShowingWebView: Bool = false   // 현상소, 수리점 모달 띄워주는 Bool
+    @State var bindingWebURL : String = ""      // UIMapView 에서 마커에서 나오는 정보 가져오기 위해
     var body: some View {
         ZStack{
-            StationUIMapView(mapData: $mapData)
+            StationUIMapView(isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL,mapData: $mapData)
+        }.sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
+            WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium])
         }
     }
 }
@@ -26,6 +30,9 @@ struct StationMapView: View {
 // FIXME: 네이버 지도
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct StationUIMapView: UIViewRepresentable,View {
+    @Binding var isShowingWebView: Bool
+    @Binding var bindingWebURL : String
+    
     
 //    @ObservedObject var viewModel = MapSceneViewModel()
     @StateObject var locationManager = LocationManager()
@@ -83,7 +90,8 @@ struct StationUIMapView: UIViewRepresentable,View {
                 // MARK: 마커 클릭시
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {
-                        print("현상소 클릭")
+                        isShowingWebView.toggle()
+                        bindingWebURL = marker.userInfo["url"] as! String
                     }
                     return true
                 }

@@ -15,10 +15,14 @@ import UIKit
 
 struct RepairShopMapView: View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
+    @State var isShowingWebView: Bool = false   // 현상소, 수리점 모달 띄워주는 Bool
+    @State var bindingWebURL : String = ""      // UIMapView 에서 마커에서 나오는 정보 가져오기 위해
     var body: some View {
         ZStack{
 
-            RepairShopUIMapView(mapData: $mapData)
+            RepairShopUIMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL)
+        }.sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
+            WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium])
         }
         
     }
@@ -31,7 +35,8 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
     
     @StateObject var locationManager = LocationManager()
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
-   
+    @Binding var isShowingWebView: Bool
+    @Binding var bindingWebURL : String
     
     //TODO: 지금 현재 위치를 못 받아오는거 같음
     var userLatitude: Double {
@@ -85,7 +90,8 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
                 // MARK: 마커 클릭시
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {
-                        print("수리점 클릭")
+                        isShowingWebView.toggle()
+                        bindingWebURL = marker.userInfo["url"] as! String
                     }
                     return true
                 }

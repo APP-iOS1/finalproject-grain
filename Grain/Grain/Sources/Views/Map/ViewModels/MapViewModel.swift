@@ -28,14 +28,14 @@ final class MapViewModel: ObservableObject {
             //  MARK: - 다음 페이지 토큰이 있을시
 //                for _ in 0...2{
             var nextPageToken = data.nextPageToken!
-                
-            for _ in 0...5{
-                nextPageToken = fetchNextPageMap(nextPageToken: nextPageToken)
-                if nextPageToken == "end"{
-                    print("end로 끝나야됨")
-                    break
-                }
-            }
+            self.fetchMapSuccess.send()
+//            for _ in 0...5{
+//                nextPageToken = fetchNextPageMap(nextPageToken: nextPageToken)
+//                if nextPageToken == "end"{
+//                    print("end로 끝나야됨")
+//                    break
+//                }
+//            }
                 
                 
 //                if !(data.nextPageToken == nil) {

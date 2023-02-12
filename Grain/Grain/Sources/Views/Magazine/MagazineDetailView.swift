@@ -4,7 +4,7 @@ import Kingfisher
 
 struct MagazineDetailView: View {
     @StateObject var magazineVM = MagazineViewModel()
-    @StateObject var userVM = UserViewModel()
+    var userVM: UserViewModel
     
     @State var isHeartToggle: Bool // 하트 눌림 상황
     @State var isBookMarked: Bool
@@ -118,7 +118,7 @@ struct MagazineDetailView: View {
             .onAppear{
                 /// 뷰가 처음 생길떄 fetch 한번 한다.
                 /// 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
-                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+//                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
 //                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
 //
 //                    if userVM.likedMagazineID.contains(where: { item in
@@ -173,9 +173,14 @@ struct MagazineDetailView: View {
                     // 좋아요 취소
                     if userVM.likedMagazineID.contains(data.fields.id.stringValue){
                         if let user = userVM.currentUsers {
-                            let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
+                            if userVM.likedMagazineID.contains(data.fields.id.stringValue) {
+                               let index = userVM.likedMagazineID.firstIndex(of: data.fields.id.stringValue)
+                                userVM.likedMagazineID.remove(at: index!)
+                                print("likedMagazineIDARR: \(userVM.likedMagazineID)")
+                            }
+//                            let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
                             let docID = user.id.stringValue
-                            userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
+                            userVM.updateCurrentUserArray(type: "likedMagazineId", arr: userVM.likedMagazineID, docID: docID)
                         }
                     }
                 }

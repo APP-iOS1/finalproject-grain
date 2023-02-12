@@ -34,7 +34,7 @@ struct MagazineBestView: View {
                     .padding([.leading, .top])
                     ForEach(magazineVM.magazines, id: \.self ){ data in
                         NavigationLink {
-                            MagazineDetailView(isHeartToggle: userVM.isLikedMagazine(magazine: data), isBookMarked: userVM.isBookMarkedMagazine(magazine: data), data: data)
+                            MagazineDetailView(userVM: userVM, isHeartToggle: userVM.isLikedMagazine(magazine: data), isBookMarked: userVM.isBookMarkedMagazine(magazine: data), data: data)
                         } label: {
                             Top10View(data: data)
                                 .padding(.vertical, 7)

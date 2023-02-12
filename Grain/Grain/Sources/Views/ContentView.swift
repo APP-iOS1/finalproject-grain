@@ -126,6 +126,7 @@ struct ContentView: View {
             mapVM.fetchMap()
             magazineVM.fetchMagazine()
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            print("contentViewPrint")
             //                    magazineVM.updateMagazine()
         }
         .ignoresSafeArea(.keyboard)

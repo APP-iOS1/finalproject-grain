@@ -80,9 +80,9 @@ enum CommunityService {
     }
     
     //MARK: - 커뮤니티 데이터 삭제
-    static func deleteMagazine(docID: String) -> AnyPublisher<CommunityResponse, Error> {
+    static func deleteCommunity(docID: String) -> AnyPublisher<CommunityResponse, Error> {
         do {
-            let request = try MagazineRouter.delete(docID: docID).asURLRequest()
+            let request = try CommunityRouter.delete(docID: docID).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

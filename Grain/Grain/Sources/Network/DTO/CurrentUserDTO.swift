@@ -17,7 +17,8 @@ struct CurrentUserFields: Codable {
     var myFilm: CurrentUserUpperArrayValue
     var name: CurrentUserStringValue
     var myLens: CurrentUserUpperArrayValue
-    var nickName, introduce: CurrentUserStringValue
+    var nickName: CurrentUserStringValue
+    var introduce: CurrentUserStringValue      // 추가됨
     var bookmarkedMagazineID, myCamera: CurrentUserUpperArrayValue
     var profileImage: CurrentUserStringValue
     var postedCommunityID: CurrentUserUpperArrayValue

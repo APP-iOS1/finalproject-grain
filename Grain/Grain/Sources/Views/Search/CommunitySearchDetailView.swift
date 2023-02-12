@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CommunitySearchDetailView: View {
     @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
@@ -48,11 +49,10 @@ struct CommunitySearchDetailView: View {
                     .padding(.horizontal, 10)
                     
                     TabView {
-            
-                        Image("sampleImage")
+                        KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
+                            .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)                        
                     } //이미지 뷰
                     .tabViewStyle(.page)
                     .frame(height: Screen.maxHeight * 0.3)

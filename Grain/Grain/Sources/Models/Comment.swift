@@ -4,17 +4,17 @@
 //
 //  Created by 조형구 on 2023/01/18.
 //
-
-import Foundation
-
-struct Comment: Hashable, Identifiable, Codable {
-    var id: String
-    var userID: String
-    var profileImage: String
-    var nickName: String
-    var comment: String
-    var createdAt: Date
-}
+//
+//import Foundation
+//
+//struct Comment: Hashable, Identifiable, Codable {
+//    var id: String
+//    var userID: String
+//    var profileImage: String
+//    var nickName: String
+//    var comment: String
+//    var createdAt: Date
+//}
 
 /*
  comment

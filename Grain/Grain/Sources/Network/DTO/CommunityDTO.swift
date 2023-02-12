@@ -36,7 +36,7 @@ struct CommunityDocument: Codable,Hashable{
 }
 
 struct CommunityFields: Codable,Hashable{
-    let title, category, content, profileImage: CommunityCategory
+    let title, category, content, profileImage, introduce: CommunityCategory
     let state: CommunityCategory
     let nickName: CommunityCategory
     let image: CommunityImage

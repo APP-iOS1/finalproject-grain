@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-import FirebaseAuth
 import NMapsMap
 import FirebaseAuth
 
@@ -54,7 +53,7 @@ struct ContentView: View {
                         switch selectedIndex {
                         case 0:
                             NavigationStack {
-                                MagazineMainView(currentUsers: userVM.currentUsers, userVM: userVM)
+                                MagazineMainView(userViewModel: UserViewModel(), magazineVM: magazineVM)
                             }
                         case 1:
                             NavigationStack {
@@ -126,6 +125,7 @@ struct ContentView: View {
             mapVM.fetchMap()
             magazineVM.fetchMagazine()
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            print("컨텐트뷰")
             //                    magazineVM.updateMagazine()
         }
         .ignoresSafeArea(.keyboard)

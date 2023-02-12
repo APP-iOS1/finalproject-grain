@@ -7,12 +7,16 @@
 
 import SwiftUI
 
+import FirebaseAuth
+
 struct MagazineMainView: View {
-    let titles: [String] = ["인기", "피드"]
+    @ObservedObject var userViewModel: UserViewModel
+    let magazineVM: MagazineViewModel
+    
     @State private var selectedIndex: Int = 0
     @State private var isSearchViewShown: Bool = false
-    var currentUsers : CurrentUserFields?
-    var userVM: UserViewModel
+   
+    let titles: [String] = ["인기", "피드"]
     
     var body: some View {
         NavigationStack {
@@ -43,27 +47,20 @@ struct MagazineMainView: View {
                 }//HS
                 switch selectedIndex {
                 case 0:
-                    MagazineBestView(userVM: userVM, currentUsers: currentUsers)
+                    MagazineBestView(magazineVM: magazineVM, userVM: userViewModel, currentUsers: userViewModel.currentUsers)
                 default:
-                    MagazineFeedView(currentUsers: currentUsers, userVM: userVM)
+                    MagazineFeedView(currentUsers: userViewModel.currentUsers, userVM: userViewModel)
                 }
-                //                TabView(selection: $selectedIndex) {
-                //                    // MARK: 베스트뷰 이동
-                //                    MagazineBestView()
-                //                        .tag(0)
-                //                    // MARK: 피드뷰 이동
-                //                    MagazineFeedView()
-                //                        .tag(1)
-                //                }
-                // .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
             .navigationDestination(isPresented: $isSearchViewShown) {
                 MainSearchView()
             }
         }
-      
         .onAppear {
             self.isSearchViewShown = false
+            print("메인 뷰 ")
+            userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            magazineVM.fetchMagazine()
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

@@ -43,7 +43,7 @@ struct BookmarkedMagazine: View {
                 LazyVGrid(columns: columns, spacing: 1) {
                     ForEach(bookmarkedMagazineDocument, id: \.self) { item in
                         NavigationLink {
-                            MagazineDetailView(isHeartToggle: userVM.isLikedMagazine(magazine: item), isBookMarked: userVM.isBookMarkedMagazine(magazine: item), data: item)
+                            MagazineDetailView(userVM: userVM, currentUsers: userVM.currentUsers, data: item)
                         } label: {
                             KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                .resizable()

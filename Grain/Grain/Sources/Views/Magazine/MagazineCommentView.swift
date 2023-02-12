@@ -18,7 +18,6 @@ struct MagazineCommentView: View {
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     var body: some View {
-        
         VStack() {
             Divider()
             ScrollView() {

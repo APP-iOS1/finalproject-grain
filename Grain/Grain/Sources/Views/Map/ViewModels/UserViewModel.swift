@@ -66,6 +66,7 @@ final class UserViewModel: ObservableObject {
                 if let currentUsers = self.currentUsers {
                     self.parsingUserDataToStringArr(currentUserData: currentUsers)
                     print("bookmarkedID: \(self.bookmarkedMagazineID)")
+                    print("패치 유저데이터 123")
                     self.fetchCurrentUsersSuccess.send()
                 }
             }.store(in: &subscription)
@@ -124,7 +125,6 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
-                self.fetchCurrentUser(userID: self.currentUsers?.id.stringValue ?? "")
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)
     }
@@ -207,8 +207,24 @@ final class UserViewModel: ObservableObject {
         }
     }
     
+    func removeAll() {
+        self.likedMagazineID.removeAll()
+        self.myLens.removeAll()
+        self.myFilm.removeAll()
+        self.myCamera.removeAll()
+        self.postedCommunityID.removeAll()
+        self.postedMagazineID.removeAll()
+        self.bookmarkedMagazineID.removeAll()
+        self.bookmarkedCommunityID.removeAll()
+        self.follower.removeAll()
+        self.following.removeAll()
+    }
+    
     func parsingUserDataToStringArr(currentUserData: CurrentUserFields) {
         print("currentid: \(currentUserData.id.stringValue)")
+        
+        removeAll()
+        
         for i in currentUserData.likedMagazineID.arrayValue.values {
             print("likedMagazineID: \(i.stringValue)")
             self.likedMagazineID.append(i.stringValue)

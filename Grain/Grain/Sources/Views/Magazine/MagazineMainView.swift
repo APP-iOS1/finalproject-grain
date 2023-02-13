@@ -10,13 +10,13 @@ import SwiftUI
 import FirebaseAuth
 
 struct MagazineMainView: View {
-    @ObservedObject var userViewModel: UserViewModel
-    let magazineVM: MagazineViewModel
+    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+    @ObservedObject var magazineVM: MagazineViewModel = MagazineViewModel()
     
     @State private var selectedIndex: Int = 0
     @State private var isSearchViewShown: Bool = false
    
-    let titles: [String] = ["인기", "피드"]
+    let titles: [String] = ["인기", "실시간"]
     
     var body: some View {
         NavigationStack {
@@ -40,11 +40,14 @@ struct MagazineMainView: View {
                                 Spacer()
                                 Rectangle()
                                     .fill(Color.black)
-                                    .frame(height: 1)
+                                    .frame(height: 2)
+                                    .transition(.slide)
+                                    .animation(.easeInOut, value: selectedIndex)
                             }
                         })
                     Spacer()
                 }//HS
+                .padding(.leading)
                 switch selectedIndex {
                 case 0:
                     MagazineBestView(magazineVM: magazineVM, userVM: userViewModel, currentUsers: userViewModel.currentUsers)
@@ -58,9 +61,7 @@ struct MagazineMainView: View {
         }
         .onAppear {
             self.isSearchViewShown = false
-            print("메인 뷰 ")
             userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            magazineVM.fetchMagazine()
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

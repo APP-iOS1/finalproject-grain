@@ -29,6 +29,7 @@ final class MapViewModel: ObservableObject {
 //                for _ in 0...2{
             var nextPageToken = data.nextPageToken!
             self.fetchMapSuccess.send()
+
 //            for _ in 0...5{
 //                nextPageToken = fetchNextPageMap(nextPageToken: nextPageToken)
 //                if nextPageToken == "end"{

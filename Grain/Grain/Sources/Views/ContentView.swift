@@ -53,7 +53,7 @@ struct ContentView: View {
                         switch selectedIndex {
                         case 0:
                             NavigationStack {
-                                MagazineMainView(userViewModel: UserViewModel(), magazineVM: magazineVM)
+                                MagazineMainView(userViewModel: userVM, magazineVM: magazineVM)
                             }
                         case 1:
                             NavigationStack {
@@ -126,6 +126,7 @@ struct ContentView: View {
             mapVM.fetchMap()
             magazineVM.fetchMagazine()
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+
             //                    magazineVM.updateMagazine()
         }
         .ignoresSafeArea(.keyboard)

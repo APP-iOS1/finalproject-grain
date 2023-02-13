@@ -13,7 +13,7 @@ import UIKit
 
 struct MapView: View {
     
-    
+    @StateObject var mapVM = MapViewModel()
     @StateObject var magazineVM = MagazineViewModel()
     @Binding var magazineData: [MagazineDocument]   //매거진 데이터 전달 받기
     
@@ -43,8 +43,11 @@ struct MapView: View {
     
     @State var searchResponseBool : Bool = false    // 검색하기 버튼 Bool
     
+    
     @State var markerAddButtonBool: Bool = false     //???
     @State var changeMap: CGPoint = CGPoint(x: 0, y: 0) // 클러스팅 할때 쓰일 예정
+    
+    
     
     var body: some View {
         VStack{
@@ -87,33 +90,51 @@ struct MapView: View {
                 .offset(y: -250)
                 
                 // MARK: 모달이 띄워질때 뒷 배경 어둡게
-                if isShowingWebView{
+                if isShowingWebView {
                     Rectangle()
                         .zIndex(1)
                         .opacity(0.7)
                 }
                 
+                NavigationLink {
+                    
+                } label: {
+                    
+                }
+
                 // MARK: 지도 뷰
                 /// 카테고리 버튼 별로 해당하는 지도 뷰가 보여줌
                 switch categoryString{
-                case "전체":
-                    UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
-                        .zIndex(0)
-                        .ignoresSafeArea()
                     
-                case "포토스팟":
-                    PhotoSpotMapView(mapData: $mapData)
-                        .zIndex(0)
+                case "전체":
+                    NavigationStack{
+                        UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
+                            .zIndex(0)
+                            .ignoresSafeArea()
+                    }
+                case "필름스팟":
+                    NavigationStack{
+                        PhotoSpotMapView(mapData: $mapData,searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
+                            .zIndex(0)
+                    }
                 case "현상소":
-                    StationMapView(mapData: $mapData)
-                        .zIndex(0)
+                    NavigationStack{
+                        StationMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
+                            .zIndex(0)
+                    }
                 case "수리점":
-                    RepairShopMapView(mapData: $mapData)
-                        .zIndex(0)
+                    NavigationStack{
+                        RepairShopMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
+                            .zIndex(0)
+                    }
+                    
                 default:
-                    UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
-                        .zIndex(0)
-                        .ignoresSafeArea()
+                    NavigationStack{
+                        UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
+                            .zIndex(0)
+                            .ignoresSafeArea()
+                    }
+                    
                 }
                 
                 // 이지역 재 검색 버튼
@@ -153,6 +174,7 @@ struct MapView: View {
             })
             .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
                 WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium, .large])
+                    .background(Color.black.opacity(0.5))   // <- 적용이 안된듯
             }
         }
     }
@@ -181,6 +203,10 @@ struct UIMapView: UIViewRepresentable,View {
     
     @Binding var markerAddButtonBool: Bool
     @Binding var changeMap: CGPoint
+    
+    @Binding var searchResponseBool: Bool
+    @Binding var searchResponse : [Address]
+    
     //TODO: 지금 현재 위치를 못 받아오는거 같음
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
@@ -243,7 +269,7 @@ struct UIMapView: UIViewRepresentable,View {
             let marker = NMFMarker()
             marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
             switch item.fields.category.stringValue{
-            case "포토스팟":
+            case "필름스팟":
                 marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
                 marker.width = 40
                 marker.height = 40
@@ -424,6 +450,14 @@ struct UIMapView: UIViewRepresentable,View {
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
         // 연구 중
         //        print(changeMap)
+        if searchResponseBool{
+            // MARK: 위치를 검색해주세요 버튼 누를시 장소로 이동
+            /// x -> latitude / y -> longitude
+            for i in searchResponse{
+                uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo:NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude) ))
+            }
+            searchResponseBool.toggle()
+        }
     }
     
     func makeCoordinator() -> Coordinator {

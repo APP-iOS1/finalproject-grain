@@ -14,10 +14,14 @@ import UIKit
 
 struct PhotoSpotMapView: View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
-    
+    @Binding var searchResponseBool: Bool
+    @Binding var searchResponse: [Address]
+
     var body: some View {
+        // 뒷배경 어둡게
+    
         ZStack{
-            PhotoSpotUIMapView(mapData: $mapData)
+            PhotoSpotUIMapView(mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse)
         }
         
     }
@@ -32,8 +36,9 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
     @StateObject var locationManager = LocationManager()
     
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
+    @Binding var searchResponseBool: Bool
+    @Binding var searchResponse: [Address]
     
-
     //TODO: 지금 현재 위치를 못 받아오는거 같음
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
@@ -68,7 +73,7 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
         view.mapView.moveCamera(cameraUpdate)
         
         for item in mapData{
-            if item.fields.category.stringValue == "포토스팟"{
+            if item.fields.category.stringValue == "필름스팟"{
                 let marker = NMFMarker()
                 marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
                 
@@ -88,7 +93,7 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
                 // MARK: 마커 클릭시
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {
-                        print("포토스팟 클릭")
+                        print("필름스팟 클릭")
                     }
                     return true
                 }
@@ -101,6 +106,14 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
     }
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
+        if searchResponseBool{
+            // MARK: 위치를 검색해주세요 버튼 누를시 장소로 이동
+            /// x -> latitude / y -> longitude
+            for i in searchResponse{
+                uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo:NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude) ))
+            }
+            searchResponseBool.toggle()
+        }
     }
     
 //    func makeCoordinator() -> Coordinator {

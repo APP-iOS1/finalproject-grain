@@ -15,13 +15,23 @@ import UIKit
 
 struct RepairShopMapView: View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
-    @State var isShowingWebView: Bool = false   // 현상소, 수리점 모달 띄워주는 Bool
+//    @State var isShowingWebView: Bool = false   // 현상소, 수리점 모달 띄워주는 Bool
     @State var bindingWebURL : String = ""      // UIMapView 에서 마커에서 나오는 정보 가져오기 위해
+    @Binding var isShowingWebView: Bool
+    @Binding var searchResponseBool: Bool
+    @Binding var searchResponse: [Address]
+
     var body: some View {
         ZStack{
-
-            RepairShopUIMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL)
-        }.sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
+            // 뒷배경 어둡게
+            if isShowingWebView{
+                Rectangle()
+                    .zIndex(1)
+                    .opacity(0.3)
+            }
+            RepairShopUIMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse)
+        }
+        .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
             WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium])
         }
         
@@ -37,7 +47,8 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     @Binding var isShowingWebView: Bool
     @Binding var bindingWebURL : String
-    
+    @Binding var searchResponseBool: Bool
+    @Binding var searchResponse: [Address]
     //TODO: 지금 현재 위치를 못 받아오는거 같음
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
@@ -103,6 +114,14 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
     }
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
+        if searchResponseBool{
+            // MARK: 위치를 검색해주세요 버튼 누를시 장소로 이동
+            /// x -> latitude / y -> longitude
+            for i in searchResponse{
+                uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo:NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude) ))
+            }
+            searchResponseBool.toggle()
+        }
     }
     
 //    func makeCoordinator() -> Coordinator {

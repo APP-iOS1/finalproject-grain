@@ -18,6 +18,9 @@ final class MagazineViewModel: ObservableObject {
     @Published var magazines = [MagazineDocument]()
     @Published var updateMagazineData : MagazineDocument?
     
+    @Published var sortedRecentMagazineData = [MagazineDocument]()    // 매거진 게시물 최신순으로
+    @Published var sortedTopLikedMagazineData = [MagazineDocument]()    // 매거진 게시물 좋아오 높은순
+    
     var fetchMagazineSuccess = PassthroughSubject<(), Never>()
     var insertMagazineSuccess = PassthroughSubject<(), Never>()
     var updateMagazineSuccess = PassthroughSubject<(), Never>()
@@ -86,6 +89,23 @@ final class MagazineViewModel: ObservableObject {
             } receiveValue: { (data: MagazineDocument) in
                 self.fetchMagazineSuccess.send()
             }.store(in: &subscription)
+    }
+    
+    
+    // MARK: - 최신순으로 정렬하기 아마 그럴꺼임
+    func sortByRecentMagazine(){
+        for _ in self.magazines{
+            var sortData = self.magazines.sorted{ $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()}
+            sortedRecentMagazineData = sortData
+        }
+    }
+    
+    // MARK: - 좋아요순으로 정렬하기
+    func sortByLikedMagazine(){
+        for _ in self.magazines{
+            var sortData = self.magazines.sorted{ $0.fields.likedNum.integerValue > $1.fields.likedNum.integerValue}
+            sortedTopLikedMagazineData = sortData
+        }
     }
     
     // MARK: update -> Firebase Store SDK 사용

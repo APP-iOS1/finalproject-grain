@@ -40,9 +40,12 @@ struct CommunityDetailView: View {
                                 Text(community.fields.nickName.stringValue)
                                     .font(.title3)
                                     .bold()
-                                //MARK: 옵셔널 처리 고민
-                                Text(community.createdDate?.renderTime() ?? "")
+                                // FIXME: - 아래 코드가 고장 난거 같아 이 코드 적용했더니 되는 거 같음
+                                Text(community.createTime.toDate()?.renderTime() ?? "")
                                     .font(.caption)
+                                //MARK: 옵셔널 처리 고민
+//                                Text(community.createdDate?.renderTime() ?? "")
+//                                    .font(.caption)
                             }
                             Spacer()
                         }//HS

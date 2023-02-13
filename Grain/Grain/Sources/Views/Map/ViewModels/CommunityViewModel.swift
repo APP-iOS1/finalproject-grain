@@ -73,7 +73,7 @@ final class CommunityViewModel: ObservableObject {
     // MARK: 커뮤니티 삭제 메소드(CommunityDetailView에서 게시물 삭제시 사용)
     /// 해당 커뮤니티 게시물의 docID를 넣어주고 호출하면 그 게시물이 삭제됩니다.
     func deleteCommunity(docID: String) {
-        CommunityService.deleteMagazine(docID: docID)
+        CommunityService.deleteCommunity(docID: docID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommunityResponse) in

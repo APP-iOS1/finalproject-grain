@@ -22,6 +22,8 @@ import Kingfisher
 
 struct CommunityRowView: View {
     
+    @StateObject var commentVm: CommentViewModel = CommentViewModel()
+    
     var community: CommunityDocument
     var body: some View {
         VStack(alignment: .leading){
@@ -72,17 +74,16 @@ struct CommunityRowView: View {
                             .padding(.top, -2)
                             
     //                        .padding(.bottom, 3)
-                            
-                       // Spacer()
+                        
+                        // Spacer()
                         
                         HStack {
-                            
-                           // String.toDate(community.createTime)
+                            // String.toDate(community.createTime)
                             Text(community.createdDate?.renderTime() ?? "")
                             Spacer()
                             Image(systemName: "text.bubble")
-                            Text("\(12)")
-                                .padding(.leading, -5)
+                            Text("\(commentVm.comment.count)")
+                                    .padding(.leading, -5)
                         }
                         .padding(.bottom, 4)
                         .foregroundColor(.secondary)
@@ -92,17 +93,17 @@ struct CommunityRowView: View {
                     .frame(height: 100)
                     .padding(.trailing, 13)
                     .padding(.leading, -3)
-                   
-                }
-                
-               
-                //vstack
+                }//vstack
             }
             Divider()
                 .padding(.top, 5)
-                
+            
         }
         .padding(.top, 5)
+        .onAppear{
+            commentVm.fetchComment(collectionName: "Community",
+                                   collectionDocId: community.fields.id.stringValue)
+        }
     }
 }
 

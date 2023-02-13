@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
+import Kingfisher
 
-// TODO: 포토스팟 마커 클릭시 넘어올 뷰
+
 struct PhotoSpotDetailView: View {
     
     @State private var isBookMarked: Bool = false
@@ -27,7 +28,7 @@ struct PhotoSpotDetailView: View {
                                 Text(data.fields.nickName.stringValue)
                                     .bold()
                                 HStack {
-                                    Text("1분전")
+                                    Text(data.createdDate?.renderTime() ?? "")
                                     Spacer()
                                     Text(data.fields.customPlaceName.stringValue)
                                 }
@@ -48,11 +49,13 @@ struct PhotoSpotDetailView: View {
                         //                .resizable()
                         //                .frame(width: Screen.maxWidth, height: 0.3)
                         TabView{
-                            ForEach(1..<4, id: \.self) { i in
-                                Image("\(i)")
+                        
+                            ForEach(data.fields.image.arrayValue.values, id: \.self) { i in
+                                KFImage(URL(string: i.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                     .resizable()
                                     .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
                                     .aspectRatio(contentMode: .fit)
+
                             }
                         }
                         .tabViewStyle(.page)

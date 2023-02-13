@@ -119,13 +119,14 @@ struct ContentView: View {
                 }
             }
         }
+        .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
         .tint(.black)
         .onAppear{
             /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
             mapVM.fetchMap()
             magazineVM.fetchMagazine()
-//            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            print("컨텐트뷰")
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+
             //                    magazineVM.updateMagazine()
         }
         .ignoresSafeArea(.keyboard)

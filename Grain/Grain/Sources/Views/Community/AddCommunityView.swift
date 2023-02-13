@@ -35,143 +35,175 @@ struct AddCommunityView: View {
     @State private var selectedImageData: Data? = nil
     @State private var selectedImages: [UIImage] = []
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
-
+    @State private var isShowingAlert = false
+    
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     
     var body: some View {
-        VStack {
-            Rectangle()
-                .fill(Color(UIColor.systemGray5))
-                .frame(width: Screen.maxWidth, height: 1)
-            HStack {
-                PhotosPicker(
-                    selection: $selectedItem,
-                    matching: .images,
-                    photoLibrary: .shared()) {
-                        HStack{
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color(UIColor.systemGray4))
-                                .frame(width: 70, height: 70)
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(.white)
-                                        .frame(width: 68, height: 68)
-                                    Image(systemName: "photo.on.rectangle")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .foregroundColor(.black)
+        ZStack(alignment: .bottom) {
+            VStack {
+                Rectangle()
+                    .fill(Color(UIColor.systemGray5))
+                    .frame(width: Screen.maxWidth, height: 1)
+                HStack {
+                    PhotosPicker(
+                        selection: $selectedItem,
+                        matching: .images,
+                        photoLibrary: .shared()) {
+                            HStack{
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color(UIColor.systemGray4))
+                                    .frame(width: 70, height: 70)
+                                    .overlay {
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(.white)
+                                            .frame(width: 68, height: 68)
+                                        Image(systemName: "photo.on.rectangle")
+                                            .resizable()
+                                            .frame(width: 30, height: 30)
+                                            .foregroundColor(.black)
+                                    }
+                            }
+                        }
+                    // MARK: 이미지가 선택 되었을때
+                        .onChange(of: selectedItem) { newItem in
+                            Task {
+                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                    selectedImageData = data
                                 }
-                        }
-                    }
-                // MARK: 이미지가 선택 되었을때
-                    .onChange(of: selectedItem) { newItem in
-                        Task {
-                            if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                selectedImageData = data
-                            }
-                            // MARK: 선택한 이미지 selectedImages배열에 넣어주기
-                            /// 이미지 선택 버튼 우측으로 이미지 정렬
-                            if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
-                                selectedImages.append(uiImage)
+                                // MARK: 선택한 이미지 selectedImages배열에 넣어주기
+                                /// 이미지 선택 버튼 우측으로 이미지 정렬
+                                if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+                                    selectedImages.append(uiImage)
+                                }
                             }
                         }
-                    }
-                    .frame(width: 100,height: 100)
-                
-                ScrollView(.horizontal) {
-                    HStack {
-                        // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
-                        ForEach(selectedImages, id: \.self) { img in
-                            Image(uiImage: img)
-                                .resizable()
-                                .frame(width: 70, height: 70)
-                                .cornerRadius(8)
+                        .frame(width: 100,height: 100)
+                    
+                    ScrollView(.horizontal) {
+                        HStack {
+                            // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
+                            ForEach(selectedImages, id: \.self) { img in
+                                Image(uiImage: img)
+                                    .resizable()
+                                    .frame(width: 70, height: 70)
+                                    .cornerRadius(8)
+                            }
                         }
                     }
+                    Spacer()
+                    
                 }
+                .padding(.horizontal)
+                
+                //MARK: 이미지피커와 제목 구분선
+                Rectangle()
+                    .fill(Color(UIColor.systemGray5))
+                    .frame(width: Screen.maxWidth * 0.95, height: 1)
+                
+                HStack{
+                    Picker("Tab", selection: $selectedTab){
+                        ForEach(CommunityTabs.allCases){ tab in
+                            Text(tab.rawValue)
+                        }
+                    }
+                    .colorMultiply(.black)
+                    Spacer()
+                }
+                
+                Rectangle()
+                    .fill(Color(UIColor.systemGray5))
+                    .frame(width: Screen.maxWidth * 0.95, height: 1)
+                
+                TextField("글 제목", text: $inputTitle)
+                    .keyboardType(.asciiCapable)
+                    .textContentType(.init(rawValue: ""))
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+                    .padding(.horizontal, 15)
+                    .onSubmit {
+                        hideKeyboard()
+                    }
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button {
+                                hideKeyboard()
+                            } label: {
+                                Text("Done")
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                    }
+                
+                Rectangle()
+                    .fill(Color(UIColor.systemGray5))
+                    .frame(width: Screen.maxWidth * 0.95, height: 1)
+                
+                TextField("내용을 작성해 주세요.", text: $inputContent, axis: .vertical)
+                    .keyboardType(.alphabet)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+                    .lineLimit(10, reservesSpace: true)
+                    .padding(.horizontal, 15)
+                    .onSubmit {
+                        hideKeyboard()
+                    }
                 Spacer()
                 
             }
-            .padding(.horizontal)
-            
-            HStack{
-                Picker("Tab", selection: $selectedTab){
-                    ForEach(CommunityTabs.allCases){ tab in
-                        Text(tab.rawValue)
-                    }
-                }
-                .colorMultiply(.black)
-                Spacer()
+            .navigationTitle("커뮤니티")
+            .navigationBarTitleDisplayMode(.inline)
+            .onAppear{
+                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             }
-            
-            Rectangle()
-                .fill(Color(UIColor.systemGray5))
-                .frame(width: Screen.maxWidth * 0.95, height: 1)
-            
-            TextField("글 제목", text: $inputTitle)
-                .keyboardType(.asciiCapable)
-                .textContentType(.init(rawValue: ""))
-                .textInputAutocapitalization(.never)
-                .disableAutocorrection(true)
-                .padding(.horizontal, 15)
-                .onSubmit {
-                    hideKeyboard()
-                }
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        Spacer()
-                        Button {
-                            hideKeyboard()
-                        } label: {
-                            Text("Done")
-                                .foregroundColor(.blue)
-                        }
+            .toolbar {
+                ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
+                    Button {
+                        self.mode.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.black)
+                            .bold()
                     }
                 }
-            
-            Rectangle()
-                .fill(Color(UIColor.systemGray5))
-                .frame(width: Screen.maxWidth * 0.95, height: 1)
-            
-            TextField("내용을 작성해 주세요.", text: $inputContent, axis: .vertical)
-                .keyboardType(.alphabet)
-                .textInputAutocapitalization(.never)
-                .disableAutocorrection(true)
-                .lineLimit(...25)
-                .padding(.horizontal, 15)
-                .onSubmit {
-                    hideKeyboard()
-                }
-            Spacer()
-        }
-        .onAppear{
-            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-        }
-        .toolbar {
-            ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
+            }
+            if inputTitle.count == 0 || inputContent.count == 0 {
                 Button {
-                    self.mode.wrappedValue.dismiss()
+                    isShowingAlert = true
                 } label: {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.black)
-                        .bold()
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(.black)
+                        .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                        .overlay {
+                            Text("작성 완료")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                        }
                 }
-
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
+                .alert(isPresented: $isShowingAlert) {
+                    Alert(title: Text("알림"), message: Text("제목, 내용은 필수 입력 항목입니다."), dismissButton: .default(Text("확인")))
+                    
+                }
+            } else {
                 Button {
-                    //글쓰기 함수
                     var data = CommunityFields(title: CommunityCategory(stringValue: inputTitle), category: CommunityCategory(stringValue: selectedTab.rawValue), content: CommunityCategory(stringValue: inputContent), profileImage: CommunityCategory(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""), introduce: CommunityCategory(stringValue: userVM.currentUsers?.introduce.stringValue ?? ""), state: CommunityCategory(stringValue: ""), nickName: CommunityCategory(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "")])), userID: CommunityCategory(stringValue: userVM.currentUsers?.id.stringValue ?? ""), id: CommunityCategory(stringValue: UUID().uuidString))
                     communityVM.insertCommunity(data: data, images: selectedImages)
                     presented.toggle()
                     communityVM.fetchCommunity()        // 필요한지?
                 } label: {
-                    Text("완료")
-                    .foregroundColor(.black)
-                    .bold()
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(.black)
+                        .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                        .overlay {
+                            Text("작성 완료")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                        }
                 }
             }
         }
+        .ignoresSafeArea(.keyboard)
     }
 }
 //struct AddCommunityView_Previews: PreviewProvider {

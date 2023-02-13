@@ -120,7 +120,15 @@ struct MapView: View {
                         .zIndex(1)
                         .opacity(0.7)
                 }
-                
+                // MARK: 필름스팟 띄워질때 뒷 배경 어둡게
+                if isShowingPhotoSpot{
+                    Rectangle()
+                        .zIndex(1)
+                        .opacity(0.7)
+                        .onTapGesture {
+                            isShowingPhotoSpot.toggle()
+                        }
+                }
                
                 // MARK:
                 if isSheetPresented{
@@ -132,11 +140,11 @@ struct MapView: View {
                         NavigationStack{
                             UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
                                 .zIndex(0)
-                                .ignoresSafeArea()
+                                
                         }
                     case "필름스팟":
                         NavigationStack{
-                            PhotoSpotMapView(mapData: $mapData,searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
+                            PhotoSpotMapView(mapData: $mapData,searchResponseBool: $searchResponseBool,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot, magazineData: $magazineData)
                                 .zIndex(0)
                         }
                     case "현상소":
@@ -154,7 +162,7 @@ struct MapView: View {
                         NavigationStack{
                             UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
                                 .zIndex(0)
-                                .ignoresSafeArea()
+                                
                         }
                         
                     }
@@ -195,12 +203,14 @@ struct MapView: View {
                     /// 그럼 메서드에서 for in 두번 돌려 필요한 값만 전달
                     /// 이 과정에서 DB 연관 없다고 생각 듬! -> 확인  필요
                     NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineData, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData)
-                        .offset(x:40,y: 250)
-                    //  FIXME: offset x:40 없애기 화면상에서 가운데 정렬 시켜야함
+                        .zIndex(1)
+                        .offset(y: 250)
+                        .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
                 }
                 
                 
             }
+            .ignoresSafeArea()
             .ignoresSafeArea(.keyboard)
             .fullScreenCover(isPresented: $visitButton, content: {
                 PhotoSpotDetailView(data: clikedMagazineData!)
@@ -361,9 +371,11 @@ struct UIMapView: UIViewRepresentable,View {
                         }
                     case 1: //현상소
                         isShowingWebView.toggle()
+                        isShowingPhotoSpot = false
                         bindingWebURL = marker.userInfo["url"] as! String
                     case 2: //수리점
                         isShowingWebView.toggle()
+                        isShowingPhotoSpot = false
                         bindingWebURL = marker.userInfo["url"] as! String
                     default:    //없음
                         print("없음")
@@ -487,6 +499,20 @@ struct UIMapView: UIViewRepresentable,View {
             /// x -> latitude / y -> longitude
             for i in searchResponse{
                 uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo:NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude) ))
+                let marker = NMFMarker()
+                marker.position = NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude)
+                marker.iconImage = NMFOverlayImage(name: "allMarker")
+                marker.width = 40
+                marker.height = 40
+                marker.captionText = "검색 결과 위치"
+                marker.captionColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
+                marker.captionTextSize = 12
+                marker.captionHaloColor = UIColor(.gray)
+                
+                marker.mapView = uiView.mapView
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    marker.mapView = nil
+                }
             }
             searchResponseBool.toggle()
         }
@@ -587,6 +613,3 @@ class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, 
 class MapSceneViewModel: ObservableObject {
     
 }
-
-
-

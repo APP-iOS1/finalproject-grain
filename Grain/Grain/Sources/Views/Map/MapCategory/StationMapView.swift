@@ -123,6 +123,20 @@ struct StationUIMapView: UIViewRepresentable,View {
             /// x -> latitude / y -> longitude
             for i in searchResponse{
                 uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo:NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude) ))
+                let marker = NMFMarker()
+                marker.position = NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude)
+                marker.iconImage = NMFOverlayImage(name: "allMarker")
+                marker.width = 40
+                marker.height = 40
+                marker.captionText = "검색 결과 위치"
+                marker.captionColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
+                marker.captionTextSize = 12
+                marker.captionHaloColor = UIColor(.gray)
+                
+                marker.mapView = uiView.mapView
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    marker.mapView = nil
+                }
             }
             searchResponseBool.toggle()
         }

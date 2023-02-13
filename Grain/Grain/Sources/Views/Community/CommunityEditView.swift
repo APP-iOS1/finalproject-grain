@@ -7,17 +7,22 @@
 
 import SwiftUI
 import FirebaseAuth
+import Kingfisher
 
 struct CommunityEditView: View {
-    @State var community : CommunityDocument
+    @Environment(\.presentationMode) var presentationMode
+    
     @StateObject var communityVM = CommunityViewModel()
 
+    @State var community : CommunityDocument
     @State var editTitle : String = ""
     @State var editContent : String = ""
     @State var editCustomPlace : String = ""
     
     @State var clickedContent : Bool = false    // 텍스트 클릭 Bool
     @State var clickedCustomPlace : Bool = false    // 텍스트 클릭 Bool
+    @State private var showAlert: Bool = false
+    @State private var showSuccessAlert: Bool = false
     
     var body: some View {
         NavigationView{
@@ -25,44 +30,41 @@ struct CommunityEditView: View {
                 VStack{
                     VStack {
                         HStack {
-                            Circle()
-                                .frame(width: 40)
+                            ProfileImage(imageName: community.fields.profileImage.stringValue)
                             VStack(alignment: .leading) {
                                 Text(community.fields.nickName.stringValue)
+                                    .font(.title3)
                                     .bold()
                                 //MARK: 옵셔널 처리 고민
-                                HStack {
-                                    Text(community.createdDate?.renderTime() ?? "")
-                                    Spacer()
-                                }
-                                .font(.caption)
+                                Text(community.createdDate?.renderTime() ?? "")
+                                    .font(.caption)
                             }
                             Spacer()
-                        }
-                        .padding()
-                        .padding(.top, -15)
+                        }//HS
+                        .padding(.vertical, 5)
                         Divider()
                             .frame(maxWidth: Screen.maxWidth * 0.9)
                             .background(Color.black)
                             .padding(.top, -5)
                             .padding(.bottom, -10)
+                            .padding(.leading, Screen.maxWidth * 0.04)
 
                         //            Image("line")
                         //                .resizable()
                         //                .frame(width: Screen.maxWidth, height: 0.3)
+                        //MARK: 사진
                         TabView{
-                            ForEach(1..<4, id: \.self) { i in
-                                Image("\(i)")
+                            ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
+                                KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                     .resizable()
-                                    .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
-                                    .aspectRatio(contentMode: .fit)
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
                             }
                         }
                         .tabViewStyle(.page)
-                        .frame(maxHeight: Screen.maxHeight * 0.27)
+                        .frame(height: Screen.maxHeight * 0.27)
                         .padding()
                     }
-                    .frame(minHeight: 350)
 
                     LazyVStack(pinnedViews: [.sectionHeaders]) {
                         Section(header: CommunityEditHeader(community: community, editTitle: $editTitle) ){
@@ -80,16 +82,18 @@ struct CommunityEditView: View {
                                             clickedContent.toggle()
                                         }
                                 }else{
-                                    Text(community.fields.content.stringValue)
-                                        .lineSpacing(4.0)
-                                        .padding(.vertical, -9)
-                                        .padding()
-                                        .foregroundColor(Color.textGray)
-                                        .onTapGesture {
-                                            clickedContent.toggle()
-                                        }
+                                    HStack{
+                                        Text(community.fields.content.stringValue)
+                                            .lineSpacing(4.0)
+                                            .padding(.vertical, -20)
+                                            .padding()
+                                            .foregroundColor(Color.textGray)
+                                            .onTapGesture {
+                                                clickedContent.toggle()
+                                            }
+                                        Spacer()
+                                    }
                                 }
-                                
                             }
                         }
                     }
@@ -102,14 +106,51 @@ struct CommunityEditView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack{
                     Button {
-                        var docId = String(community.name.suffix(20))
-                        community.fields.title.stringValue = editTitle
-                        community.fields.content.stringValue = editContent
-                        communityVM.updateCommunity(data: community, docID: docId)
+                        //MARK: 안바뀌었으면 기존 값이 가도록
+                        //클릭 여부를 알아보고 분기처리 해줘야할듯함
+                        //수정사항 없으면 수정한 내용 없다는 alert
+                        if editTitle.isEmpty && editContent.isEmpty {
+                            showAlert.toggle()
+                            print("머지")
+                        } else {
+                            //title이 바뀐게 있다면 바뀐거 넣어주고 없으면 그대로 전송하기
+                            if editTitle.count > 0 {
+                                community.fields.title.stringValue = editTitle
+                            }else{
+                                community.fields.title.stringValue = community.fields.title.stringValue
+                            }
+                            //content가 바뀐게 있다면 바뀐거 넣어주고 없으면 그대로 전송하기
+                            if editContent.count > 0 {
+                                community.fields.content.stringValue = editContent
+                            }else{
+                                community.fields.content.stringValue = community.fields.content.stringValue
+                            }
+                            communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
+                            showSuccessAlert.toggle()
+                        }
                     } label: {
                         Text("수정완료")
                     }
-
+                    //변경 안됐을때 Alert
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text("변경된 내용이 없습니다."),
+                              message: Text("수정하실 내용을 입력해주세요."),
+                              dismissButton: .destructive(
+                                Text("확인")
+                              ){
+                                  
+                              })
+                    }
+                    //변경완료 됐을때 Alert
+                    .alert(isPresented: $showSuccessAlert) {
+                        Alert(title: Text("수정이 완료되었습니다."),
+                              message: Text(""),
+                              dismissButton: .destructive(
+                                Text("확인")
+                              ){
+                                  presentationMode.wrappedValue.dismiss()
+                              })
+                    }
                 }
             }
         }

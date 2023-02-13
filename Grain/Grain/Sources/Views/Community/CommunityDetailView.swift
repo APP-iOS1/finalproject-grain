@@ -25,6 +25,7 @@ struct CommunityDetailView: View {
     @State private var isliked: Bool = false
     @State private var commentText: String = ""
     @State private var isHiddenComment: Bool = true
+    
     @FocusState private var textFieldFocused: Bool
     
     var body: some View {
@@ -39,31 +40,41 @@ struct CommunityDetailView: View {
                                 Text(community.fields.nickName.stringValue)
                                     .font(.title3)
                                     .bold()
+                                //MARK: 옵셔널 처리 고민
                                 Text(community.createdDate?.renderTime() ?? "")
                                     .font(.caption)
                             }
                             Spacer()
-                        }
-                        .padding()
-                        .padding(.top, -15)
+                        }//HS
+                        .padding(.vertical, 5)
                         Divider()
                             .frame(maxWidth: Screen.maxWidth * 0.92)
                             .background(Color.black)
                             .padding(.top, -5)
                             .padding(.bottom, -10)
                             .padding(.leading, Screen.maxWidth * 0.04)
-                        
+//                        TabView{
+//                            ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
+//                                KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+//                                    .resizable()
+//                                    .aspectRatio(contentMode: .fill)
+//                                    .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
+//                            }
+//                        }
                         //MARK: 사진
-                        TabView {
-                            //FIXME: 고치기 - 여러개인가?
-                            KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
+                        TabView{
+                            ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
+                                KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
+                     
+                            }
                         } //이미지 뷰
                         .tabViewStyle(.page)
                         .frame(height: Screen.maxHeight * 0.27)
                         .padding()
+                        .padding(.top, -10)
                         
                         //MARK: 댓글
                         Button {
@@ -81,11 +92,12 @@ struct CommunityDetailView: View {
                         // MARK: 스티키 헤더 제목과 건텐츠
                         LazyVStack(pinnedViews: [.sectionHeaders]) {
                             Section(header: CommunityDetailHeader(community: community) ){
-                                VStack {
+                                HStack {
                                     Text(community.fields.content.stringValue)
                                         .lineSpacing(4.0)
                                         .padding(.vertical, -20)
                                         .padding()
+                                    Spacer()
                                 }
                             }
                         }
@@ -93,14 +105,12 @@ struct CommunityDetailView: View {
                         Divider()
                         // MARK: - 커뮤니티 댓글 뷰
                         VStack{
-                            
                             ForEach(commentVm.comment,id: \.self){ item in
                                 // FIXME: Comment 어디서 만든건지 찾아야함
                                 CommentView(comment: item.fields, commentText: commentText,collectionDocId: community.fields.id.stringValue)
-                                
                             }
                             
-                        }.padding()
+                        }.padding(.vertical)
                         
                         // top vstack
                     }
@@ -152,21 +162,18 @@ struct CommunityDetailView: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
-                    //if community.fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                    if community.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                     Menu {
                         Button {
-                            
+                            //저장시 코드
                         } label: {
                             Text("저장")
                         }
-                        
                         NavigationLink {
                             CommunityEditView(community: community)
                         }label: {
                             Text("수정")
                         }
-                        
-                        
                         Button {
                             communityVM.deleteCommunity(docID: community.fields.id.stringValue)
                             presentationMode.wrappedValue.dismiss()
@@ -180,8 +187,19 @@ struct CommunityDetailView: View {
                     }
                     .accentColor(.black)
                     .padding(.trailing, Screen.maxWidth * 0.04)
-                    //  }
-                    
+                    } else {
+                        Menu {
+                            Button {
+                             //저장시 코드
+                            } label: {
+                                Text("저장")
+                            }
+                        } label: {
+                            Label("더보기", systemImage: "ellipsis")
+                        }
+                        .accentColor(.black)
+                        .padding(.trailing, Screen.maxWidth * 0.04)
+                    }
                 }
             }
         }
@@ -189,7 +207,6 @@ struct CommunityDetailView: View {
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
-            print(community.fields.image.arrayValue.values[0].stringValue)
             //            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
             // 유저가 좋아요를 눌렀는지
             //                if userVM.likedMagazineIdArr.contains(where: { item in

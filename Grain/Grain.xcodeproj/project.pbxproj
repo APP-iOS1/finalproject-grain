@@ -45,6 +45,7 @@
 		8B10F43429948BF900582D27 /* PrivacyPolicyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F43329948BF900582D27 /* PrivacyPolicyView.swift */; };
 		8B10F4362994906A00582D27 /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F4352994906A00582D27 /* TermsOfServiceView.swift */; };
 		8B5E09312989FBA200862700 /* FloatingMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E09302989FBA200862700 /* FloatingMenu.swift */; };
+		8BA44F842999EF9500B8928C /* GridToScrollTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA44F832999EF9500B8928C /* GridToScrollTest.swift */; };
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
 		8BCF31E2297A500900EB6188 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31E1297A500900EB6188 /* CommentView.swift */; };
@@ -194,6 +195,7 @@
 		8B10F43329948BF900582D27 /* PrivacyPolicyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyView.swift; sourceTree = "<group>"; };
 		8B10F4352994906A00582D27 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
 		8B5E09302989FBA200862700 /* FloatingMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingMenu.swift; sourceTree = "<group>"; };
+		8BA44F832999EF9500B8928C /* GridToScrollTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridToScrollTest.swift; sourceTree = "<group>"; };
 		8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityAddView.swift; sourceTree = "<group>"; };
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		8BCF31E1297A500900EB6188 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 				334699D82988DE3F004153A6 /* EditCameraView.swift */,
 				8B0BA0A1298A4197000A7090 /* CameraModalView.swift */,
 				8B0BA0A3298A4C15000A7090 /* ListTestView.swift */,
+				8BA44F832999EF9500B8928C /* GridToScrollTest.swift */,
 				8B5E09302989FBA200862700 /* FloatingMenu.swift */,
 				334699DA2988DE51004153A6 /* StoredPostView.swift */,
 			);
@@ -836,6 +839,7 @@
 				A7AF1A0B2995E78A007E6D43 /* CommentViewModel.swift in Sources */,
 				A7D9F300298962B900B39218 /* MapDTO.swift in Sources */,
 				9955E117297A6D5900265D14 /* MagazineContentAddView.swift in Sources */,
+				8BA44F842999EF9500B8928C /* GridToScrollTest.swift in Sources */,
 				A739C63D2982EAFE0093D71C /* AddMarkerMapView.swift in Sources */,
 				A7D9F2FA2989046000B39218 /* StorageRouter.swift in Sources */,
 				998847D22992171400004066 /* CommunitySearchDetailView.swift in Sources */,

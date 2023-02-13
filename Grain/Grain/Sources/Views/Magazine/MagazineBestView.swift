@@ -7,52 +7,52 @@
 
 import SwiftUI
 import FirebaseAuth
+enum timePeriod {
+    case daily
+    case weekly
+    case monthly
+}
 
 struct MagazineBestView: View {
     @ObservedObject var magazineVM: MagazineViewModel = MagazineViewModel()
+ 
     let userVM: UserViewModel
     let currentUsers : CurrentUserFields?
     
     var body: some View {
-            VStack {
-                ScrollView {
+        VStack {
+            ScrollView {
+                NavigationLink {
+                    EditorView()
+                } label: {
+                    EditorViewCell()
+                }
+                HStack{
+                    Text("인기 게시글")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Image("line")
+                        .resizable()
+                        .frame(width: 240, height: 3.5)
+                }
+                .padding([.leading, .top])
+                ForEach(magazineVM.magazines.prefix(10), id: \.self ){ data in
                     NavigationLink {
-                        EditorView()
+                        MagazineDetailView(userVM: userVM, currentUsers: currentUsers, data: data)
                     } label: {
-                        EditorViewCell()
+                        Top10View(data: data)
+                            .padding(.vertical, 7)
+                            .padding(.horizontal)
+                           
+                        
                     }
-                    HStack{
-                        Text("인기 게시글")
-                            .font(.title)
-                            .fontWeight(.bold)
-                        Image("line")
-                            .resizable()
-                            .frame(width: 240, height: 3.5)
-                    }
-                    .padding([.leading, .top])
-                    ForEach(magazineVM.magazines, id: \.self ){ data in
-                        NavigationLink {
-                            MagazineDetailView(userVM: userVM, currentUsers: currentUsers, data: data)
-                        } label: {
-                            Top10View(data: data)
-                                .padding(.vertical, 7)
-                                .padding(.horizontal)
-                                .frame(height: Screen.maxHeight * 0.6)
-                            
-                        }
-                    }
-                    
-//                    4: 3 비율 -=> 가로 40  세로 30
-
-                    // 4: 3 비율로 올린 사진이 가로일수도 있고, 새로일수도있거든요 ?
-                    
-                } // scroll view
-            }//vstack
-            .onAppear{
-                print("베스트")
-                magazineVM.fetchMagazine()
-                
-            }
+                }
+            } // scroll view
+        }//vstack
+        .onAppear{
+            magazineVM.fetchMagazine()
+            
+        }
         
     }
 }

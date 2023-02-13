@@ -28,4 +28,16 @@ extension Color { // 사용법: Color(hex: "#439F47")
     static let middleDarkGray = Color(hex: "616161")
     static let middleDarkRed = Color(hex: "d61500")
     static let googleBackground = Color(hex: "4285F4")
+    static let vivaMagenta = Color(hex: "BB2649")
+    static let illuminating = Color(hex: "F5DF4D")
+    static let classicBlue = Color(hex: "0F4C81")
+    static let livingCoral = Color(hex: "FF6F61")
+    static let ultraViolet = Color(hex: "5F4B8B")
+    
+    static let colorSetOne = Color(hex: "051821")
+    static let colorSetTwo = Color(hex: "1A4645")
+    static let colorSetThree = Color(hex: "266867")
+    static let colorSetFour = Color(hex: "F58800")
+    static let colorSetFive = Color(hex: "F8BC24")
+    
 }

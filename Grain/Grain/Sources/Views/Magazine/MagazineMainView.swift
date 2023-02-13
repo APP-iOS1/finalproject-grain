@@ -10,8 +10,8 @@ import SwiftUI
 import FirebaseAuth
 
 struct MagazineMainView: View {
-    @ObservedObject var userViewModel: UserViewModel
-    let magazineVM: MagazineViewModel
+    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+    @ObservedObject var magazineVM: MagazineViewModel = MagazineViewModel()
     
     @State private var selectedIndex: Int = 0
     @State private var isSearchViewShown: Bool = false
@@ -60,7 +60,7 @@ struct MagazineMainView: View {
             self.isSearchViewShown = false
             print("메인 뷰 ")
             userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            magazineVM.fetchMagazine()
+            //            magazineVM.fetchMagazine()
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

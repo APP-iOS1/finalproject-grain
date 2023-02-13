@@ -53,7 +53,7 @@ struct ContentView: View {
                         switch selectedIndex {
                         case 0:
                             NavigationStack {
-                                MagazineMainView(userViewModel: UserViewModel(), magazineVM: magazineVM)
+                                MagazineMainView(userViewModel: userVM, magazineVM: magazineVM)
                             }
                         case 1:
                             NavigationStack {
@@ -124,7 +124,7 @@ struct ContentView: View {
             /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
             mapVM.fetchMap()
             magazineVM.fetchMagazine()
-            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+//            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             print("컨텐트뷰")
             //                    magazineVM.updateMagazine()
         }

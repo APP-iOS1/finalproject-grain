@@ -9,12 +9,11 @@ import SwiftUI
 import FirebaseAuth
 
 struct MagazineBestView: View {
-    let magazineVM: MagazineViewModel
+    @ObservedObject var magazineVM: MagazineViewModel = MagazineViewModel()
     let userVM: UserViewModel
     let currentUsers : CurrentUserFields?
     
     var body: some View {
-        NavigationStack {
             VStack {
                 ScrollView {
                     NavigationLink {
@@ -52,8 +51,9 @@ struct MagazineBestView: View {
             .onAppear{
                 print("베스트")
                 magazineVM.fetchMagazine()
+                
             }
-        }
+        
     }
 }
 //struct MagazineBestView_Previews: PreviewProvider {

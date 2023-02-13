@@ -18,7 +18,7 @@ struct MagazineDetailView: View {
     
    
     var body: some View {
-        NavigationStack{
+      
             ScrollView {
                 VStack{
                     VStack {
@@ -90,7 +90,7 @@ struct MagazineDetailView: View {
                                         isHeartToggle = false
                                         print("폴스")
                                     }
-                                    print("\(userVM.likedMagazineID)")
+                                    print("테스트 \(userVM.likedMagazineID)")
 //                                    if userVM.bookmarkedMagazineID.contains(where: { item in
 //                                        item == data.fields.id.stringValue})
 //                                    {
@@ -144,8 +144,16 @@ struct MagazineDetailView: View {
            
                 /// 뷰가 처음 생길떄 fetch 한번 한다.
                 /// 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
-                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            
+//                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+                if userVM.likedMagazineID.contains(where: { item in
+                    item == data.fields.id.stringValue})
+                {
+                    isHeartToggle = true
+                    print("트루")
+                }else{
+                    isHeartToggle = false
+                    print("폴스")
+                }
 //                    if userVM.likedMagazineID.contains(where: { item in
 //                        item == data.fields.id.stringValue})
 //                    {
@@ -174,56 +182,56 @@ struct MagazineDetailView: View {
 //                    }
 //                }
                 
-                if isHeartToggle {
-                    // 좋아요 누름
-                    if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
-                        userVM.likedMagazineID.append(data.fields.id.stringValue)
-                        if let user = userVM.currentUsers {
-                            let arr = userVM.likedMagazineID
-                            let docID =  user.id.stringValue
-                            userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
-                        }
-                    }
-                } else {
-                    // 좋아요 취소
-                    if userVM.likedMagazineID.contains(data.fields.id.stringValue){
-                        if let user = userVM.currentUsers {
-                            if userVM.likedMagazineID.contains(data.fields.id.stringValue) {
-                               let index = userVM.likedMagazineID.firstIndex(of: data.fields.id.stringValue)
-                                userVM.likedMagazineID.remove(at: index!)
-                                print("likedMagazineIDARR: \(userVM.likedMagazineID)")
-                            }
-//                            let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
-                            let docID = user.id.stringValue
-                            userVM.updateCurrentUserArray(type: "likedMagazineId", arr: userVM.likedMagazineID, docID: docID)
-                        }
-                    }
-                }
-                
-                if isBookMarked {
-                    // 저장 누름
-                    if !userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
-                        userVM.bookmarkedMagazineID.append(data.fields.id.stringValue)
-                        if let user = userVM.currentUsers {
-                            let arr = userVM.bookmarkedMagazineID
-                            let docID = user.id.stringValue
-                            userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
-                        }
-                    }
-                } else {
-                    // 저장 취소
-                    if userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
-                        if let user = userVM.currentUsers {
-                            let arr = userVM.bookmarkedMagazineID.filter {$0 != data.fields.id.stringValue}
-                            let docID = user.id.stringValue
-                            userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
-                        }
-                    }
-                }
+//                if isHeartToggle {
+//                    // 좋아요 누름
+//                    if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
+//                        userVM.likedMagazineID.append(data.fields.id.stringValue)
+//                        if let user = userVM.currentUsers {
+//                            let arr = userVM.likedMagazineID
+//                            let docID =  user.id.stringValue
+//                            userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
+//                        }
+//                    }
+//                } else {
+//                    // 좋아요 취소
+//                    if userVM.likedMagazineID.contains(data.fields.id.stringValue){
+//                        if let user = userVM.currentUsers {
+//                            if userVM.likedMagazineID.contains(data.fields.id.stringValue) {
+//                               let index = userVM.likedMagazineID.firstIndex(of: data.fields.id.stringValue)
+//                                userVM.likedMagazineID.remove(at: index!)
+//                                print("likedMagazineIDARR: \(userVM.likedMagazineID)")
+//                            }
+////                            let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
+//                            let docID = user.id.stringValue
+//                            userVM.updateCurrentUserArray(type: "likedMagazineId", arr: userVM.likedMagazineID, docID: docID)
+//                        }
+//                    }
+//                }
+//
+//                if isBookMarked {
+//                    // 저장 누름
+//                    if !userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
+//                        userVM.bookmarkedMagazineID.append(data.fields.id.stringValue)
+//                        if let user = userVM.currentUsers {
+//                            let arr = userVM.bookmarkedMagazineID
+//                            let docID = user.id.stringValue
+//                            userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
+//                        }
+//                    }
+//                } else {
+//                    // 저장 취소
+//                    if userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
+//                        if let user = userVM.currentUsers {
+//                            let arr = userVM.bookmarkedMagazineID.filter {$0 != data.fields.id.stringValue}
+//                            let docID = user.id.stringValue
+//                            userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
+//                        }
+//                    }
+//                }
                 
             }
             .padding(.top, 1)
-        }
+        
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack{

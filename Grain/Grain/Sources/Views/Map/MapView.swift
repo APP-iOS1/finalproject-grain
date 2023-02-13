@@ -47,8 +47,25 @@ struct MapView: View {
     @State var markerAddButtonBool: Bool = false     //???
     @State var changeMap: CGPoint = CGPoint(x: 0, y: 0) // 클러스팅 할때 쓰일 예정
     
+    @State var allButtonClickedBool : Bool = false
     
+  
+    @State private var isSheetPresented = true
     
+    func changeStroke(categoryString : String) -> Color {
+        switch categoryString{
+        case "전체":
+            return Color(hex: "1A4645")
+        case "필름스팟":
+            return Color(hex: "F8BC24")
+        case "현상소":
+            return Color(hex: "F58800")
+        case "수리점":
+            return Color(hex: "266867")
+        default :
+            return Color(hex: "1A4645")
+        }
+    }
     var body: some View {
         VStack{
             
@@ -56,7 +73,7 @@ struct MapView: View {
             ZStack(alignment: .center){
                 VStack{
                     HStack{
-                        // FIXME: onSubmit 하고 버튼 눌러야함
+                        
                         TextField("🔍 ex) 서울시 종로구 사직동", text: $searchText)
                             .padding()
                             .background(.white)
@@ -64,22 +81,30 @@ struct MapView: View {
                             .onSubmit {
                                 // MARK: Geocode API 실행
                                 naverVM.fetchGeocode(requestAddress: searchText)
-                                
                             }
+                            .onTapGesture {
+                                allButtonClickedBool.toggle()
+                            }
+                            .overlay{
+                                // FIXME: onSubmit 하고 버튼 눌러야함
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(changeStroke(categoryString: categoryString), lineWidth: 3)
+                            }.padding()
                         
+                        // 검색 확인 버튼
                         RoundedRectangle(cornerRadius: 10)
-                        //                            .stroke(Color(.black),lineWidth: 2)
-                            .foregroundColor(.white)
+                            .foregroundColor(changeStroke(categoryString: categoryString))
                             .frame(width: 50, height: 51)
                             .overlay{
                                 Image(systemName: "location.magnifyingglass")
+                                    .foregroundColor(.white)
                                     .onTapGesture {
                                         searchResponse = naverVM.addresses
                                         searchResponseBool.toggle()
                                     }
-                            }
-                    }.padding()
-                    
+                            }.padding(.trailing, 10)
+                        
+                    }
                     HStack{
                         /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
                         MapCategoryCellView(categoryString: $categoryString)
@@ -96,59 +121,67 @@ struct MapView: View {
                         .opacity(0.7)
                 }
                 
-                NavigationLink {
-                    
-                } label: {
-                    
+               
+                // MARK:
+                if isSheetPresented{
+                    // MARK: 지도 뷰
+                    /// 카테고리 버튼 별로 해당하는 지도 뷰가 보여줌
+                    switch categoryString{
+                        
+                    case "전체":
+                        NavigationStack{
+                            UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
+                                .zIndex(0)
+                                .ignoresSafeArea()
+                        }
+                    case "필름스팟":
+                        NavigationStack{
+                            PhotoSpotMapView(mapData: $mapData,searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
+                                .zIndex(0)
+                        }
+                    case "현상소":
+                        NavigationStack{
+                            StationMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
+                                .zIndex(0)
+                        }
+                    case "수리점":
+                        NavigationStack{
+                            RepairShopMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
+                                .zIndex(0)
+                        }
+                        
+                    default:
+                        NavigationStack{
+                            UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
+                                .zIndex(0)
+                                .ignoresSafeArea()
+                        }
+                        
+                    }
                 }
-
-                // MARK: 지도 뷰
-                /// 카테고리 버튼 별로 해당하는 지도 뷰가 보여줌
-                switch categoryString{
-                    
-                case "전체":
-                    NavigationStack{
-                        UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
-                            .zIndex(0)
-                            .ignoresSafeArea()
-                    }
-                case "필름스팟":
-                    NavigationStack{
-                        PhotoSpotMapView(mapData: $mapData,searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
-                            .zIndex(0)
-                    }
-                case "현상소":
-                    NavigationStack{
-                        StationMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
-                            .zIndex(0)
-                    }
-                case "수리점":
-                    NavigationStack{
-                        RepairShopMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
-                            .zIndex(0)
-                    }
-                    
-                default:
-                    NavigationStack{
-                        UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
-                            .zIndex(0)
-                            .ignoresSafeArea()
-                    }
-                    
+                else{
+                    SearchProgress()
                 }
+               
                 
                 // 이지역 재 검색 버튼
                 RoundedRectangle(cornerRadius: 17)
                     .frame(width: Screen.maxWidth * 0.4, height: 40)
-                //                            .stroke(Color(.black),lineWidth: 2)
-                    .foregroundColor(.white)
+                    .foregroundColor(changeStroke(categoryString: categoryString))
                     .overlay{
                         HStack{
                             Image(systemName: "arrow.clockwise")
+                                .foregroundColor(.white)
                             Text("이 지역 재검색")
+                                .foregroundColor(.white)
                                 .fontWeight(.bold)
                         }.onTapGesture {
-                            // 액션
+                            print("tap")
+                            isSheetPresented.toggle()
+                            mapVM.fetchMap()    //-> FIXME: fetch를 걸어줄지 고민
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                isSheetPresented.toggle()
+                            }
                         }
                         
                     }
@@ -224,10 +257,10 @@ struct UIMapView: UIViewRepresentable,View {
         // 처음에 맵이 생성될떄 줌 레벨
         // 숫자가 작을수록 축소
         // 숫자가 클수록 확대
-        //        view.mapView.zoomLevel = 12
+                view.mapView.zoomLevel = 12
         // TODO: 최대 최소 줌 레벨 알아보기
-        //        view.mapView.minZoomLevel = 10
-        //        view.mapView.maxZoomLevel = 16
+                view.mapView.minZoomLevel = 10
+                view.mapView.maxZoomLevel = 16
         // MARK: 지도 회전 잠금
         view.mapView.isRotateGestureEnabled = false
         //        view.mapView.mapType = .hybrid
@@ -245,8 +278,7 @@ struct UIMapView: UIViewRepresentable,View {
         // MARK: 지도가 그려질때 현재 유저 GPS 위치로 카메라 움직임
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLatitude, lng: userLongitude))
         view.mapView.moveCamera(cameraUpdate)
-        
-        
+
         // TODO: 마커를 MarkerCustomInfo형식 배열로 만들꺼면 효율 좋은 사용법 찾아내기
         //        var markers: [MarkerCustomInfo] = []
         //        for i in mapData{
@@ -556,8 +588,5 @@ class MapSceneViewModel: ObservableObject {
     
 }
 
-struct SectionMarkerInfo {
-    var point : CGPoint
-    var count : Int
-    var index : Int
-}
+
+

@@ -160,6 +160,7 @@ struct MapCategoryCellView: View {
                     .frame(width:89, height:40)
                     
             }
+            .padding(.trailing, 5)
         }
     }
 }

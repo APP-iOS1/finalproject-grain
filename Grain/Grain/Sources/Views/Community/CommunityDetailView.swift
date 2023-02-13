@@ -110,7 +110,7 @@ struct CommunityDetailView: View {
                         VStack{
                             ForEach(commentVm.comment,id: \.self){ item in
                                 // FIXME: Comment 어디서 만든건지 찾아야함
-                                CommentView(comment: item.fields, commentText: commentText,collectionDocId: community.fields.id.stringValue)
+                                CommentView(comment: item.fields, commentTime: item.updateTime, commentText: commentText, collectionDocId: community.fields.id.stringValue)
                             }
                             
                         }.padding(.vertical)
@@ -210,6 +210,7 @@ struct CommunityDetailView: View {
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
+            commentVm.sortByRecentComment()
             //            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
             // 유저가 좋아요를 눌렀는지
             //                if userVM.likedMagazineIdArr.contains(where: { item in

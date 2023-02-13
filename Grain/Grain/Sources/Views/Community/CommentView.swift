@@ -9,28 +9,30 @@ import SwiftUI
 
 struct CommentView: View {
     var comment: CommentFields
+    var commentTime : String        //시간 값 넘어오는 것
     var commentText: String
     @StateObject var commentVm = CommentViewModel()
     var collectionDocId : String
+    
     var body: some View {
         HStack(alignment: .top) {
             
             ProfileImage(imageName: comment.profileImage.stringValue)
             
             VStack(alignment: .leading) {
-                Text("\(comment.nickName.stringValue)")
-                    .bold()
-                    .padding(.bottom, 1)
+                HStack{
+                    Text("\(comment.nickName.stringValue)")
+                        .bold()
+                        .padding(.bottom, 1)
+                    Text("-")
+                    Text(commentTime.toDate()?.renderTime() ?? "")      //시간 값
+                        .font(.caption)
+                }
                 Text("\(comment.comment.stringValue)")
                     .lineLimit(Int.max)
                 
                 //MARK: 댓글 에디트
                 HStack {
-                    Button{
-                        
-                    } label: {
-                        Text("답글쓰기")
-                    }
                     Button{
                         
                         commentVm.updateComment(collectionName: "Community", collectionDocId: collectionDocId, docID: comment.id.stringValue, updateComment: commentText,data: comment)

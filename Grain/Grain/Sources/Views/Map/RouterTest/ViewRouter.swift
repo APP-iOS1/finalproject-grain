@@ -19,9 +19,9 @@ enum Page {
 //    case mapView    // FIX
 //    case photoSpotDetailView    // FIX
     case webkitView // FIX
-    case stationMapView
-    case repairShopMapView
-    case photoSpotMapView
+//    case stationMapView
+//    case repairShopMapView
+//    case photoSpotMapView
 //    case addMarkerMapView
     case magazineContentAddView
 }

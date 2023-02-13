@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct NearbyPostsComponent: View {
     @State var isliked : Bool = false
@@ -25,19 +26,26 @@ struct NearbyPostsComponent: View {
                         .overlay{
                             VStack{
                                 HStack{
-                                    Image("test")
+                                    Image(systemName: "x.circle")
+                                        .foregroundColor(Color(hex: "F8BC24"))
+                                        .offset(x: 275 , y: -40)
+                                        .onTapGesture {
+                                            isShowingPhotoSpot.toggle()
+                                        }
+                                    KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .cornerRadius(15)
-                                        .frame(width:Screen.maxWidth * 0.20 ,height: Screen.maxHeight * 0.20)
+                                        .frame(width:Screen.maxWidth * 0.3 ,height: Screen.maxHeight * 0.35)
                                     
                                     VStack(alignment: .leading){
                                         Text(item.fields.title.stringValue)
                                             .lineLimit(2)   // 적용이 될지
                                             .fontWeight(.bold)
-                                            .font(.title2)
+                                            .font(.system(size: 16))
+                                        // MAKR: 취소 버트
                                         Text(item.fields.customPlaceName.stringValue)
-                                            .font(.title3)
+                                            .font(.system(size: 9))
                                             .foregroundColor(.gray)
                                         
                                         HStack{
@@ -73,7 +81,8 @@ struct NearbyPostsComponent: View {
                                                             .font(.system(size: 13))
                                                             .offset(x: 6)
                                                         
-                                                    }.onTapGesture {
+                                                    }.padding(.trailing, 5)
+                                                    .onTapGesture {
                                                         // MARK: Bool 값을 넘겨 지도 상에서 디테일 뷰 보여주기
                                                         clikedMagazineData = item
                                                         isShowingPhotoSpot.toggle()
@@ -84,11 +93,14 @@ struct NearbyPostsComponent: View {
                                             
                                         }
                                     }
+                                    .padding()
                                 }
                                 .frame(width: Screen.maxWidth * 0.75, height: Screen.maxWidth * 0.3)
                             }
-                            
-                        }
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color(hex: "F8BC24"), lineWidth: 5)
+
+                        }.padding()
                 }
             }
         }

@@ -21,7 +21,8 @@ struct Switchingview: View {
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     @StateObject var mapVM = MapViewModel()
     @StateObject var magazineVM = MagazineViewModel()
-
+    @State var isShowingWebView : Bool = false
+ 
     var body: some View {
         switch viewRouter.currentPage{
         case .contentView:
@@ -32,12 +33,12 @@ struct Switchingview: View {
             //            PhotoSpotDetailView(data: magazineVM.magazines) //임시
         case .webkitView:
             WebkitView(bindingWebURL: $bindingWebURL)   //TODO: 임시코드 <- 리팩토링 하기
-        case .photoSpotMapView:
-            PhotoSpotMapView(mapData: $mapVM.mapData)
-        case .stationMapView:
-            StationMapView(mapData: $mapVM.mapData)
-        case .repairShopMapView:
-            RepairShopMapView(mapData: $mapVM.mapData)
+//        case .photoSpotMapView:
+//            PhotoSpotMapView(mapData: $mapVM.mapData)
+//        case .stationMapView:
+//            StationMapView(mapData: $mapVM.mapData, isShowingWebView: $isShowingWebView)
+//        case .repairShopMapView:
+//            RepairShopMapView(mapData: $mapVM.mapData, isShowingWebView: $isShowingWebView)
 //        case .addMarkerMapView:
 //            AddMarkerMapView(updateNumber: $updateNumber)
         case .magazineContentAddView:

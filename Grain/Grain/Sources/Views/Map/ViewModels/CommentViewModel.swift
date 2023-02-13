@@ -24,8 +24,8 @@ final class CommentViewModel: ObservableObject {
     
     ///  REST API 방식 CRUD
     // MARK: Read
-    func fetchComment() {
-        CommentService.getComment()
+    func fetchComment(collectionName: String, collectionDocId: String) {
+        CommentService.getComment(collectionName: collectionName, collectionDocId: collectionDocId)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
                 
@@ -33,7 +33,7 @@ final class CommentViewModel: ObservableObject {
                 self.comment = data.documents
                 self.fetchCommentSuccess.send()
             }.store(in: &subscription)
-        
+        print(fetchCommentSuccess)
     }
     
     // MARK: Create
@@ -49,8 +49,8 @@ final class CommentViewModel: ObservableObject {
     }
     
     // MARK: Update
-    func updateComment(collectionName: String, collectionDocId: String, docID: String, putData: CommentDocument){
-        CommentService.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: docID, putData: putData)
+    func updateComment(collectionName: String, collectionDocId: String, docID: String, updateComment: String, data: CommentFields ){
+        CommentService.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: docID, updateComment: updateComment, data: data)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
@@ -59,11 +59,11 @@ final class CommentViewModel: ObservableObject {
     }
     
     // MARK: Delete
-    func deleteMagazine(docID: String) {
-        MagazineService.deleteMagazine(docID: docID)
+    func deleteComment(collectionName: String, collectionDocId: String, docID: String) {
+        CommentService.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: docID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-            } receiveValue: { (data: MagazineDocument) in
+            } receiveValue: { (data: CommentDocument) in
                 self.deleteCommentSuccess.send()
             }.store(in: &subscription)
     }

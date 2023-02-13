@@ -25,14 +25,13 @@ struct SelectPostView: View {
                 HStack {
                     Text("나만의 경험을 사람들과 공유해보세요")
                         .font(.title)
+                        .foregroundColor(.black)
                         .bold()
                     Spacer()
                 }
                 .padding(.leading)
                 .padding(.top)
-                
-                Spacer()
-                
+                                
                 //MARK: 매거진 작성 네비게이션 링크
                 NavigationLink {
                     MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
@@ -40,7 +39,7 @@ struct SelectPostView: View {
                 } label: {
                     Image("magazineSelect")
                         .resizable()
-                        .frame(width: Screen.maxWidth * 0.8, height: Screen.maxHeight * 0.2)
+                        .frame(width: Screen.maxWidth * 0.8, height: Screen.maxHeight * 0.25)
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(12)
                         .blur(radius: 0.5)
@@ -73,7 +72,7 @@ struct SelectPostView: View {
                 } label: {
                     Image("communitySelect")
                         .resizable()
-                        .frame(width: Screen.maxWidth * 0.8, height: Screen.maxHeight * 0.2)
+                        .frame(width: Screen.maxWidth * 0.8, height: Screen.maxHeight * 0.25)
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(12)
                         .blur(radius: 0.5)
@@ -112,6 +111,7 @@ struct SelectPostView: View {
                     }
                 }
             }
+            //.background(Color(hex: "F58800"))
         }
     }
 }

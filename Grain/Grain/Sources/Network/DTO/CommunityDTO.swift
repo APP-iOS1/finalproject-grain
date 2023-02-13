@@ -9,12 +9,12 @@ import Foundation
 
 
 struct CommunityResponse: Codable {
-    let documents: [CommunityDocument]
+    var documents: [CommunityDocument]
 }
 
 struct CommunityDocument: Codable,Hashable{
-    let name: String
-    let fields: CommunityFields
+    var name: String
+    var fields: CommunityFields
     var createTime, updateTime: String
     // MARK: 로직
     // renderTime()을 쓰기 위한 노력: Date타입에 쓸 수 있음 Date -> String (ex."n시간 전")
@@ -36,23 +36,24 @@ struct CommunityDocument: Codable,Hashable{
 }
 
 struct CommunityFields: Codable,Hashable{
-    let title, category, content, profileImage: CommunityCategory
-    let nickName: CommunityCategory
-    let image: CommunityImage
-    let userID: CommunityCategory
-    let id: CommunityCategory
+    var title, category, content, profileImage, introduce: CommunityCategory
+    var state: CommunityCategory
+    var nickName: CommunityCategory
+    var image: CommunityImage
+    var userID: CommunityCategory
+    var id: CommunityCategory
 }
 
 struct CommunityCategory: Codable,Hashable {
-    let stringValue: String
+    var stringValue: String
 }
 
 struct CommunityImage: Codable,Hashable {
-    let arrayValue: CommunityArrayValue
+    var arrayValue: CommunityArrayValue
 }
 
 struct CommunityArrayValue: Codable,Hashable{
-    let values: [CommunityCategory]
+    var values: [CommunityCategory]
 }
 
 

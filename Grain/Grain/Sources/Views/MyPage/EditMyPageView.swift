@@ -21,13 +21,47 @@ struct EditMyPageView: View {
     
     var userVM: UserViewModel
     
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.presentationMode) var presentationMode
     
     @State private var editedNickname = ""
     @State private var editedIntroduce = ""
     
+    // 수정전 nickName
+    var nickName: String {
+        var nickName: String = ""
+        if let currentUser = self.userVM.currentUsers {
+            nickName = currentUser.nickName.stringValue
+        }
+        return nickName
+    }
+    
+    // 수정전 introduce
+    var introduce: String {
+        var introduce: String = ""
+        if let currentUser = self.userVM.currentUsers {
+            introduce = currentUser.introduce.stringValue
+        }
+        return introduce
+    }
+    
+    var profileImage: String {
+        var profileImage: String = ""
+        if let currentUser = self.userVM.currentUsers {
+            profileImage = currentUser.profileImage.stringValue
+        }
+        return profileImage
+    }
+    
     let nickNameLimit = 8
-    let introduceLimit = 20
+    let introduceLimit = 50
+    
+    // 닉네임 정규식
+    func checkNicknameRule(string: String) -> Bool {
+        let nicknameRegex = "^[a-zA-Z0-9]{4,15}$"
+        return  NSPredicate(format: "SELF MATCHES %@", nicknameRegex).evaluate(with: string)
+    }
+//    let regex = "^[a-zA-Z0-9]{4,15}$"
     
     @FocusState private var focus: FocusableField?
     
@@ -35,7 +69,7 @@ struct EditMyPageView: View {
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImageData: Data? = nil
     @State private var selectedImages: [UIImage] = []
-
+    
     var body: some View {
         VStack {
 //            //MARK: 프로필 이미지 변경 버튼
@@ -70,28 +104,54 @@ struct EditMyPageView: View {
                 selection: $selectedItem,
                 matching: .images,
                 photoLibrary: .shared()) {
-                    KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                        .resizable()
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(64)
-                        .overlay {
-                            Circle()
-                                .stroke(lineWidth: 1.5)
-                                .foregroundColor(.black)
-                        }
-                        .overlay {
-                            Circle()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.white)
-                                .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
-                                .overlay {
-                                    Image(systemName: "camera.circle.fill")
-                                        .resizable()
-                                        .frame(width: 26, height: 26)
-                                        .foregroundColor(.black)
-                                        .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
-                                }
-                        }
+                    if selectedImages.count == 0{
+                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                            .cornerRadius(64)
+                            .overlay {
+                                Circle()
+                                    .stroke(lineWidth: 1.2)
+                                    .foregroundColor(.black)
+                            }
+                            .overlay {
+                                Circle()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.white)
+                                    .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+                                    .overlay {
+                                        Image(systemName: "camera.circle.fill")
+                                            .resizable()
+                                            .frame(width: 26, height: 26)
+                                            .foregroundColor(.black)
+                                            .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+                                    }
+                            }
+                    } else {
+//                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        Image(uiImage: selectedImages[selectedImages.count - 1])
+                            .resizable()
+                            .frame(width: 100, height: 100)
+                            .cornerRadius(64)
+                            .overlay {
+                                Circle()
+                                    .stroke(lineWidth: 1.2)
+                                    .foregroundColor(.black)
+                            }
+                            .overlay {
+                                Circle()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.white)
+                                    .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+                                    .overlay {
+                                        Image(systemName: "camera.circle.fill")
+                                            .resizable()
+                                            .frame(width: 26, height: 26)
+                                            .foregroundColor(.black)
+                                            .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+                                    }
+                            }
+                    }
         
                 }
                 .onChange(of: selectedItem) { newItem in
@@ -99,6 +159,12 @@ struct EditMyPageView: View {
                         if let data = try? await newItem?.loadTransferable(type: Data.self) {
                             selectedImageData = data
                         }
+                        // MARK: 선택한 이미지 selectedImages배열에 넣어주기
+                        if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+                            selectedImages.append(uiImage)
+                        }
+                        
+                        print("selectedImages?:\(selectedImages)")
                     }
                 }
             
@@ -112,43 +178,70 @@ struct EditMyPageView: View {
                 }
                 .padding(.horizontal)
                 
-                HStack{
-                    TextField("변경할 닉네임을 입력해주세요", text: $editedNickname)
-                        .focused($focus, equals: .nickName)
-                        .disableAutocorrection(true)
-                        .autocapitalization(.none)
-                        .onReceive(Just(editedNickname)) { _ in
-                            limitNickname(nickNameLimit)
-                        }
-                    
-                    if (focus == .nickName) || editedNickname.count > 0 {
-                        HStack{
-                            Button {
-                                self.editedNickname = ""
-                            } label: {
-                                Image(systemName: "x.circle.fill")
+                VStack(alignment: .leading){
+                    HStack{
+                        TextField("\(nickName)", text: $editedNickname)
+                            .focused($focus, equals: .nickName)
+                            .disableAutocorrection(true)
+                            .autocapitalization(.none)
+                            .onReceive(Just(editedNickname)) { _ in
+                                limitNickname(nickNameLimit)
                             }
-                            .tint(.gray)
-                            .padding(.trailing, 7)
-                            .animation(.easeInOut, value: focus)
+                        
+                        if (focus == .nickName) || editedNickname.count > 0 {
+                            HStack{
+                                Button {
+                                    self.editedNickname = ""
+                                } label: {
+                                    Image(systemName: "x.circle.fill")
+                                }
+                                .tint(.gray)
+                                .padding(.trailing, 7)
+                                .animation(.easeInOut, value: focus)
+                            }
                         }
                     }
+                    .underlineTextField()
+                    .padding(.bottom, 30)
+                    
+//                    if editedNickname.range(of: regex, options: .regularExpression) == nil {
+//                        Text("맞아요")
+//                            .padding(.leading)
+//                            .padding(.bottom)
+//                    } else {
+//                        Text("틀려요")
+//                            .padding(.leading)
+//                            .padding(.bottom)
+//                    }
+                    if !editedNickname.isEmpty && checkNicknameRule(string: editedNickname) {
+                        Text("올바른 형식입니다")
+                            .font(.subheadline)
+                            .padding(.horizontal, 20)
+                            .padding(.top, -20)
+                            .padding(.bottom)
+                            .foregroundColor(.black)
+                        
+                    } else {
+                        Text("영문, 숫자를 포함하여 4~15 글자로 작성해주세요")
+                            .font(.subheadline)
+                            .padding(.horizontal, 20)
+                            .padding(.top, -20)
+                            .padding(.bottom)
+                            .foregroundColor(.middlebrightGray)
+                    }
                 }
-                .underlineTextField()
-                .padding(.bottom, 30)
-
 
                 
                 HStack {
                     Text("소개")
                         .padding(.horizontal, 3)
                     Spacer()
-                    Text("\(editedIntroduce.count)/20")
+                    Text("\(editedIntroduce.count)/50")
                 }
                 .padding(.horizontal)
                 
                 HStack{
-                    TextField("소개글을 입력해주세요", text: $editedIntroduce)
+                    TextField("\(introduce)", text: $editedIntroduce)
                         .focused($focus, equals: .introduce)
                         .disableAutocorrection(true)
                         .autocapitalization(.none)
@@ -159,7 +252,7 @@ struct EditMyPageView: View {
                     if (focus == .introduce) || editedIntroduce.count > 0 {
                         HStack{
                             Button {
-                                self.editedNickname = ""
+                                self.editedIntroduce = ""
                             } label: {
                                 Image(systemName: "x.circle.fill")
                             }
@@ -174,33 +267,45 @@ struct EditMyPageView: View {
             }
             
             Spacer()
+            
+            Button {
+                print("nickName: \(nickName), editintro: \(editedIntroduce)")
+            } label: {
+                Text("testtest")
+            }
+
 
         }
         .navigationTitle("프로필 편집")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                if editedNickname.count > 0 {
-                    Button{
+                if (editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) {
+                    Button {
                         if var currentUser = userVM.currentUsers {
                             let docID = currentUser.id.stringValue
                             currentUser.nickName.stringValue = editedNickname
-                            userVM.updateCurrentUser(userData: currentUser, docID: docID)
-                            print("testnickname: \( currentUser.nickName)")
-                            print("testname: \(currentUser.name)")
+                            
+                            userVM.updateCurrentUserProfile(profileImage: selectedImages.count > 0 ? selectedImages : [], nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : introduce, docID: docID)
+                            print("selectedImages:\(selectedImages)")
+                            
+                            dismiss()
                         }
                     }label: {
                         Text("저장")
+                            .foregroundColor(.black)
                     }
                 } else {
                     Text("저장")
-                        .foregroundColor(.textGray)
+                        .foregroundColor(.brightGray)
                 }
             }
         }
         .onAppear{
             focus = .nickName
             editedNickname = userVM.currentUsers?.nickName.stringValue ?? ""
+            editedIntroduce = userVM.currentUsers?.introduce.stringValue ?? ""
+            print("selectedImages:\(selectedImages)")
         }
     }
     

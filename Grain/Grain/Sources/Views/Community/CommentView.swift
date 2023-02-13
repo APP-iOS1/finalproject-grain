@@ -8,18 +8,20 @@
 import SwiftUI
 
 struct CommentView: View {
-    var comment: Comment
-    
+    var comment: CommentFields
+    var commentText: String
+    @StateObject var commentVm = CommentViewModel()
+    var collectionDocId : String
     var body: some View {
         HStack(alignment: .top) {
             
-            ProfileImage(imageName: comment.profileImage, width: 45, height: 45)
+            ProfileImage(imageName: comment.profileImage.stringValue)
             
             VStack(alignment: .leading) {
-                Text("\(comment.nickName)")
+                Text("\(comment.nickName.stringValue)")
                     .bold()
                     .padding(.bottom, 1)
-                Text("\(comment.comment)")
+                Text("\(comment.comment.stringValue)")
                     .lineLimit(Int.max)
                 
                 //MARK: 댓글 에디트
@@ -31,11 +33,12 @@ struct CommentView: View {
                     }
                     Button{
                         
+                        commentVm.updateComment(collectionName: "Community", collectionDocId: collectionDocId, docID: comment.id.stringValue, updateComment: commentText,data: comment)
                     } label: {
                         Text("수정")
                     }
                     Button{
-                        
+                        commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: comment.id.stringValue)
                     } label: {
                         Text("삭제")
                     }
@@ -45,6 +48,8 @@ struct CommentView: View {
                 .foregroundColor(.gray)
                 .padding(.top, 1)
             }
+        }.onAppear{
+            commentVm.fetchComment(collectionName: "Community", collectionDocId: comment.id.stringValue)
         }
         //            Rectangle()
         //                .frame(width: Screen.maxWidth - 30, height: 0.5)
@@ -53,8 +58,8 @@ struct CommentView: View {
     }
 }
 
-struct CommentView_Previews: PreviewProvider {
-    static var previews: some View {
-        CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "승수", comment: "동해물가 백두산이 마르고 닿도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이보전하세", createdAt: Date()))
-    }
-}
+//struct CommentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "승수", comment: "동해물가 백두산이 마르고 닿도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이보전하세", createdAt: Date()))
+//    }
+//}

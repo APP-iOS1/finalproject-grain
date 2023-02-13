@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseFirestore
+import Kingfisher
 /*
  id:String
  category: Int
@@ -21,11 +22,13 @@ import FirebaseFirestore
 
 struct CommunityRowView: View {
     
+    @StateObject var commentVm: CommentViewModel = CommentViewModel()
+    
     var community: CommunityDocument
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Image("sampleImage")
+                KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                     .resizable()
                     .frame(width: 130 , height: 100)
                     .padding(.horizontal, 13)
@@ -50,7 +53,7 @@ struct CommunityRowView: View {
                                 .foregroundColor(Color(hex: "F8BC24"))
                                 .overlay{
                                     Text("모집중")
-                                        .foregroundColor(.black)
+                                        .foregroundColor(Color(hex: "616161"))
                                         .bold()
                                         .font(.caption)
                                 }
@@ -71,19 +74,16 @@ struct CommunityRowView: View {
                             .padding(.top, -2)
                             
     //                        .padding(.bottom, 3)
-                            
-                       // Spacer()
+                        
+                        // Spacer()
                         
                         HStack {
-                            
-                           // String.toDate(community.createTime)
+                            // String.toDate(community.createTime)
                             Text(community.createdDate?.renderTime() ?? "")
                             Spacer()
-                            
-                            Image(systemName: "heart")
-                            Text("\(50)")
                             Image(systemName: "text.bubble")
-                            Text("\(12)")
+                            Text("\(commentVm.comment.count)")
+                                    .padding(.leading, -5)
                         }
                         .padding(.bottom, 4)
                         .foregroundColor(.secondary)
@@ -93,23 +93,23 @@ struct CommunityRowView: View {
                     .frame(height: 100)
                     .padding(.trailing, 13)
                     .padding(.leading, -3)
-                   
-                }
-                
-               
-                //vstack
+                }//vstack
             }
             Divider()
                 .padding(.top, 5)
-                
+            
         }
         .padding(.top, 5)
+        .onAppear{
+            commentVm.fetchComment(collectionName: "Community",
+                                   collectionDocId: community.fields.id.stringValue)
+        }
     }
 }
 
-struct CommunityRowView_Previews: PreviewProvider {
-    static var previews: some View {
-        CommunityRowView(community: CommunityDocument(name: "abc", fields: CommunityFields(title: CommunityCategory(stringValue: "임시 타이틀입니다 줄을 길게 해볼거에요 라인리미트를 2줄로 할거거덩요"), category: CommunityCategory(stringValue: "매칭중"), content: CommunityCategory(stringValue: "content"), profileImage: CommunityCategory(stringValue: "test"), nickName: CommunityCategory(stringValue: "han"), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "abc")])), userID: CommunityCategory(stringValue: "seungsoo"), id: CommunityCategory(stringValue: "123")), createTime: "2023-02-03", updateTime: "방금"))
-    }
-}
+//struct CommunityRowView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CommunityRowView(community: CommunityDocument(name: "abc", fields: CommunityFields(title: CommunityCategory(stringValue: "임시 타이틀입니다 줄을 길게 해볼거에요 라인리미트를 2줄로 할거거덩요"), category: CommunityCategory(stringValue: "매칭중"), content: CommunityCategory(stringValue: "content"), profileImage: CommunityCategory(stringValue: "test"), nickName: CommunityCategory(stringValue: "han"), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "abc")])), userID: CommunityCategory(stringValue: "seungsoo"), id: CommunityCategory(stringValue: "123")), createTime: "2023-02-03", updateTime: "방금"))
+//    }
+//}
 

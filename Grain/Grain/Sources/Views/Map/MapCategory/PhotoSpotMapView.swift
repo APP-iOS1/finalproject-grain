@@ -14,11 +14,42 @@ import UIKit
 
 struct PhotoSpotMapView: View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
+    @Binding var searchResponseBool: Bool
+    @Binding var searchResponse: [Address]
+    @Binding var isShowingPhotoSpot:  Bool
+    @State var nearbyPostsArr : [String] = []
+    @State var visitButton : Bool = false
+    @StateObject var magazineVM = MagazineViewModel()
+    @Binding var magazineData: [MagazineDocument]
+    @State var clikedMagazineData : MagazineDocument?
     
     var body: some View {
+        // 뒷배경 어둡게
+    
         ZStack{
-            PhotoSpotUIMapView(mapData: $mapData)
+            if isShowingPhotoSpot{
+                Rectangle()
+                    .zIndex(1)
+                    .opacity(0.3)
+            }
+            PhotoSpotUIMapView(mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot ,nearbyPostsArr: $nearbyPostsArr , visitButton: $visitButton)
+            
+            
+            if isShowingPhotoSpot{
+                /// nearbyMagazineData -> NearbyPostsComponent뷰에서 ForEach을 위한 Magazine 데이터
+                /// magazineVM.nearbyPostsFilter메서드 호출 반환 값으로 [MagazineDocument]
+                /// 매개변수로는 contentView에서 전달 받은 magazineData 값 전달 / nearbyPostsArr : 포토스팟 클릭 마커
+                /// 그럼 메서드에서 for in 두번 돌려 필요한 값만 전달
+                /// 이 과정에서 DB 연관 없다고 생각 듬! -> 확인  필요
+                NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineData, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData)
+                    .zIndex(1)
+                    .offset(y: 250)
+                    .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
+            }
         }
+        .fullScreenCover(isPresented: $visitButton, content: {
+            PhotoSpotDetailView(data: clikedMagazineData!)
+        })
         
     }
 }
@@ -32,8 +63,13 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
     @StateObject var locationManager = LocationManager()
     
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
+    @Binding var searchResponseBool: Bool
+    @Binding var searchResponse: [Address]
+    @Binding var isShowingPhotoSpot: Bool
+    @Binding var nearbyPostsArr : [String]
+    @Binding var visitButton : Bool
     
-
+    
     //TODO: 지금 현재 위치를 못 받아오는거 같음
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
@@ -68,22 +104,35 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
         view.mapView.moveCamera(cameraUpdate)
         
         for item in mapData{
-            if item.fields.category.stringValue == "포토스팟"{
+            if item.fields.category.stringValue == "필름스팟"{
                 let marker = NMFMarker()
                 marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
-                marker.iconImage = NMF_MARKER_IMAGE_PINK
-                marker.width = 25
-                marker.height = 35
+                
+                marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
+                marker.width = 40
+                marker.height = 40
                 // MARK: 아이콘 캡션 - 포토스팟 글씨
                 marker.captionText = item.fields.category.stringValue
+                marker.captionColor = UIColor(red: 248.0/255.0, green: 188.0/255.0, blue: 36.0/255.0, alpha: 1)
+                marker.captionTextSize = 12
+                marker.captionHaloColor = UIColor(.gray)
                 // MARK: URL링크 정보 받기
-                marker.userInfo = ["url" : item.fields.url.stringValue]
+                marker.userInfo = ["magazine": item.fields.magazineID.arrayValue.values[0].stringValue]
                 // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
                 marker.tag = 0
+
                 // MARK: 마커 클릭시
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {
-                        print("포토스팟 클릭")
+                        isShowingPhotoSpot.toggle()
+                        nearbyPostsArr.removeAll()
+                        for pickable in view.mapView.pickAll(view.mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng)), withTolerance: 30){
+                            if let marker = pickable as? NMFMarker{
+                                if marker.tag == 0 {
+                                    nearbyPostsArr.append(marker.userInfo["magazine"] as! String)
+                                }
+                            }
+                        }
                     }
                     return true
                 }
@@ -96,6 +145,28 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
     }
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
+        if searchResponseBool{
+            // MARK: 위치를 검색해주세요 버튼 누를시 장소로 이동
+            /// x -> latitude / y -> longitude
+            for i in searchResponse{
+                uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo:NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude) ))
+                let marker = NMFMarker()
+                marker.position = NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude)
+                marker.iconImage = NMFOverlayImage(name: "allMarker")
+                marker.width = 40
+                marker.height = 40
+                marker.captionText = "검색 결과 위치"
+                marker.captionColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
+                marker.captionTextSize = 12
+                marker.captionHaloColor = UIColor(.gray)
+                
+                marker.mapView = uiView.mapView
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    marker.mapView = nil
+                }
+            }
+            searchResponseBool.toggle()
+        }
     }
     
 //    func makeCoordinator() -> Coordinator {

@@ -13,11 +13,11 @@ import UIKit
 enum CommentService {
     
     // MARK: - 매거진 데이터 가져오기
-    static func getComment() -> AnyPublisher<CommentResponse, Error> {
+    static func getComment(collectionName: String, collectionDocId: String) -> AnyPublisher<CommentResponse, Error> {
         print("FirebaseService getComment start")
         do {
-            let request = try MagazineRouter.get.asURLRequest()
-            print("get request: \(request.url)")
+            let request = try CommentRouter.get(collectionName: collectionName, collectionDocId: collectionDocId).asURLRequest()
+            print("get request: \(request)")
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -54,13 +54,13 @@ enum CommentService {
         
     }
     
-    static func updateComment(collectionName: String,collectionDocId: String, docID: String, putData: CommentDocument) -> AnyPublisher<CommentDocument, Error> {
+    static func updateComment(collectionName: String,collectionDocId: String, docID: String, updateComment: String, data: CommentFields ) -> AnyPublisher<CommentDocument, Error> {
         print("FirebaseService updateComment start")
         
         do {
             // FIXME: - 검증 필요
-            let docID: String = putData.fields.id.stringValue
-            let request = try CommentRouter.patch(collectionName: collectionName, collectionDocId: collectionDocId, docID: docID, putData: putData).asURLRequest()
+            let docID: String = docID
+            let request = try CommentRouter.patch(collectionName: collectionName, collectionDocId: collectionDocId, docID: docID, updateComment: updateComment, data: data ).asURLRequest()
             
             print("update request: \(request)")
             return URLSession
@@ -74,11 +74,10 @@ enum CommentService {
         }
     }
     
-    static func deleteComment(docID: String) -> AnyPublisher<CommentDocument, Error> {
+    static func deleteComment(collectionName: String, collectionDocId: String, docID: String) -> AnyPublisher<CommentDocument, Error> {
         
         do {
-            let suffixedId: String = String(docID.suffix(20))
-            let request = try MagazineRouter.delete(docID: suffixedId).asURLRequest()
+            let request = try CommentRouter.delete(collectionName: collectionName, collectionDocId: collectionDocId, docID: docID).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

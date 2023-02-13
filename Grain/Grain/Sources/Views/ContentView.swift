@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-import FirebaseAuth
 import NMapsMap
 import FirebaseAuth
 
@@ -54,7 +53,7 @@ struct ContentView: View {
                         switch selectedIndex {
                         case 0:
                             NavigationStack {
-                                MagazineMainView(currentUsers: userVM.currentUsers)
+                                MagazineMainView(userViewModel: userVM, magazineVM: magazineVM)
                             }
                         case 1:
                             NavigationStack {
@@ -72,7 +71,7 @@ struct ContentView: View {
                             }
                         case 4:
                             NavigationStack {
-                                MyPageView(magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.userPostedMagazine), boomarkedMagazineDocument: magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.userBookmarkedMagazine))
+                                MyPageView(magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), boomarkedMagazineDocument: magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID))
                             }
                         default:
                             NavigationStack {
@@ -120,12 +119,14 @@ struct ContentView: View {
                 }
             }
         }
+        .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
         .tint(.black)
         .onAppear{
             /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
             mapVM.fetchMap()
             magazineVM.fetchMagazine()
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+
             //                    magazineVM.updateMagazine()
         }
         .ignoresSafeArea(.keyboard)

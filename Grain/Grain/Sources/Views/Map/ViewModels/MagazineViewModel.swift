@@ -22,6 +22,7 @@ final class MagazineViewModel: ObservableObject {
     var insertMagazineSuccess = PassthroughSubject<(), Never>()
     var updateMagazineSuccess = PassthroughSubject<(), Never>()
     
+    // MARK: 메거진 데이터 가져오기 메소드
     func fetchMagazine() {
         MagazineService.getMagazine()
             .receive(on: DispatchQueue.main)
@@ -34,7 +35,9 @@ final class MagazineViewModel: ObservableObject {
         
     }
     
-    // MARK: upload
+    // MARK: 메거진 데이터 업로드 메소드 (MagazineAddView에서 사용)
+    /// 해당 메거진 게시물 Data를 MagazineFields 구조체 형식으로 넣어주고, 게시글의 이미지배열은 따로 UIImage배열로 넣어줍니다.
+    /// 이렇게 호출해주면 새로운 메거진 게시물이 업로드 됩니다.
     func insertMagazine(data: MagazineFields, images: [UIImage]) {
         MagazineService.insertMagazine(data: data, images: images)
             .receive(on: DispatchQueue.main)
@@ -47,10 +50,9 @@ final class MagazineViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-    // MARK: update
+    // MARK: 메거진 데이터 전체 업데이트 메소드(MagazineEditView에서 사용)
     /// 사용방법:  원래 데이터 수정해서  MagazineDocument형식으로 data 에 넣고, docID에는 메거진 id 넣어서 updateMagazine 호출.
-    /// 사용 1: 메거진 게시물 수정하기 - title, content 수정해서 update
-    /// 사용 2: 메거진 좋아요수 - 해당 메거진 원래 좋아요수 +1 해서 update
+    /// ex) 메거진 게시물 수정하기 - title, content 수정해서 update
     func updateMagazine(data: MagazineDocument, docID: String){
         MagazineService.updateMagazine(data: data, docID: docID)
             .receive(on: DispatchQueue.main)
@@ -61,7 +63,22 @@ final class MagazineViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-    // MARK: delete
+    // MARK: 매거진 좋아요 수 업데이트 메소드(사용자가 해당 매거진 게시글에 좋아요 눌렀을때 유저정보 수정과 동시에 이 메거진의 좋아요수도 같이 업데이트할때 사용)
+    /// 사용방법:  원래 데이터 수정해서  MagazineDocument형식으로 data 에 넣고, docID에는 메거진 id 넣어서 updateMagazine 호출.
+    /// ex)  원래 좋아요 수 + 1해서 num에 string 타입으로 넣어주고 , docID에는 AuthID 넣어줌.
+    func updateMagazine(num: String, docID: String){
+        MagazineService.updateMagazineLikedNum(num: num, docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+                
+            } receiveValue: { (data: MagazineDocument) in
+                self.fetchMagazineSuccess.send()
+            }.store(in: &subscription)
+    }
+    
+    
+    // MARK: 매거진 삭제 메소드(MagazineDetailView에서 게시물 삭제시 사용)
+    /// 해당 메거진 게시물의 docID를 넣어주고 호출하면 그 게시물이 삭제됩니다.
     func deleteMagazine(docID: String) {
         MagazineService.deleteMagazine(docID: docID)
             .receive(on: DispatchQueue.main)

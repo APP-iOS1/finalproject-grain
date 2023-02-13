@@ -9,6 +9,7 @@ import Foundation
 
 struct MapResponse: Codable {
     let documents: [MapDocument]
+    let nextPageToken: String?   // DB에 데이터가 많을 때 다음 페이지로 쿼리를 날려야 하기 때문에 선언!
 }
 
 struct MapDocument: Codable,Hashable {

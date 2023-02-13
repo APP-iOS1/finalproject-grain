@@ -69,7 +69,7 @@ struct UserSearchFeedView: View {
                         }, id: \.self){ data in
                             NavigationLink {
                                 // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
-                                MagazineDetailView(data: data)
+//                                MagazineDetailView(data: data)
                             } label: {
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
                                 MagazineViewCell(data: data)

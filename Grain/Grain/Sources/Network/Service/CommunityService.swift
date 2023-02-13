@@ -64,10 +64,25 @@ enum CommunityService {
         }
     }
     
-    //MARK: - 커뮤니티 데이터 삭제
-    static func deleteMagazine(docID: String) -> AnyPublisher<CommunityResponse, Error> {
+    //MARK: - 커뮤니티 모집 상태 데이터 수정
+    static func updateCommunityState(state: String, docID: String) -> AnyPublisher<CommunityResponse, Error> {
         do {
-            let request = try MagazineRouter.delete(docID: docID).asURLRequest()
+            let request = try CommunityRouter.patchState(state: state, docID: docID).asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: CommunityResponse.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
+    }
+    
+    //MARK: - 커뮤니티 데이터 삭제
+    static func deleteCommunity(docID: String) -> AnyPublisher<CommunityResponse, Error> {
+        do {
+            let request = try CommunityRouter.delete(docID: docID).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

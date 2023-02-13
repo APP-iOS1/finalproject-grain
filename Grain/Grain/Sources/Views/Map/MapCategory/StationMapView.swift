@@ -15,9 +15,26 @@ import UIKit
 
 struct StationMapView: View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
+//    @State var isShowingWebView: Bool = false   // 현상소, 수리점 모달 띄워주는 Bool
+    @State var bindingWebURL : String = ""      // UIMapView 에서 마커에서 나오는 정보 가져오기 위해
+    @Binding var isShowingWebView: Bool
+    
+    @Binding var searchResponseBool: Bool
+    @Binding var searchResponse: [Address]
+
     var body: some View {
         ZStack{
-            StationUIMapView(mapData: $mapData)
+            
+            // 뒷배경 어둡게
+            if isShowingWebView{
+                Rectangle()
+                    .zIndex(1)
+                    .opacity(0.3)
+            }
+            StationUIMapView(isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL,mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse)
+        }
+        .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
+            WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium])
         }
     }
 }
@@ -26,12 +43,17 @@ struct StationMapView: View {
 // FIXME: 네이버 지도
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct StationUIMapView: UIViewRepresentable,View {
+    @Binding var isShowingWebView: Bool
+    @Binding var bindingWebURL : String
+    
     
 //    @ObservedObject var viewModel = MapSceneViewModel()
     @StateObject var locationManager = LocationManager()
     
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
-
+    
+    @Binding var searchResponseBool: Bool
+    @Binding var searchResponse: [Address]
     
     //TODO: 지금 현재 위치를 못 받아오는거 같음
     var userLatitude: Double {
@@ -70,19 +92,21 @@ struct StationUIMapView: UIViewRepresentable,View {
             if item.fields.category.stringValue == "현상소"{
                 let marker = NMFMarker()
                 marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
-                marker.iconImage = NMF_MARKER_IMAGE_RED
-                marker.width = 25
-                marker.height = 35
-                // MARK: 아이콘 캡션 - 포토스팟 글씨
+                marker.iconImage = NMFOverlayImage(name: "stationMarker")
+                marker.width = 40
+                marker.height = 40
+                // MARK: 아이콘 캡션 - 현상소 글씨
                 marker.captionText = item.fields.category.stringValue
-                // MARK: URL링크 정보 받기
-                marker.userInfo = ["url" : item.fields.url.stringValue]
-                // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
-                marker.tag = 0
+                marker.captionColor = UIColor(red: 245.0/255.0, green: 136.0/255.0, blue: 0.0/255.0, alpha: 1)
+                marker.captionTextSize = 12
+                marker.captionHaloColor = UIColor(.gray)
+                marker.userInfo = ["url" :  item.fields.url.stringValue]
+                marker.tag = 1
                 // MARK: 마커 클릭시
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {
-                        print("현상소 클릭")
+                        isShowingWebView.toggle()
+                        bindingWebURL = marker.userInfo["url"] as! String
                     }
                     return true
                 }
@@ -94,6 +118,28 @@ struct StationUIMapView: UIViewRepresentable,View {
     }
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
+        if searchResponseBool{
+            // MARK: 위치를 검색해주세요 버튼 누를시 장소로 이동
+            /// x -> latitude / y -> longitude
+            for i in searchResponse{
+                uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo:NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude) ))
+                let marker = NMFMarker()
+                marker.position = NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude)
+                marker.iconImage = NMFOverlayImage(name: "allMarker")
+                marker.width = 40
+                marker.height = 40
+                marker.captionText = "검색 결과 위치"
+                marker.captionColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
+                marker.captionTextSize = 12
+                marker.captionHaloColor = UIColor(.gray)
+                
+                marker.mapView = uiView.mapView
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    marker.mapView = nil
+                }
+            }
+            searchResponseBool.toggle()
+        }
     }
     
 //    func makeCoordinator() -> Coordinator {

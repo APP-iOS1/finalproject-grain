@@ -7,11 +7,17 @@
 
 import SwiftUI
 
+import FirebaseAuth
+
 struct MagazineMainView: View {
-    let titles: [String] = ["인기", "피드"]
+    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+    @ObservedObject var magazineVM: MagazineViewModel = MagazineViewModel()
+    
     @State private var selectedIndex: Int = 0
     @State private var isSearchViewShown: Bool = false
-    var currentUsers : CurrentUserFields?
+   
+    let titles: [String] = ["인기", "실시간"]
+    
     var body: some View {
         NavigationStack {
             VStack{
@@ -34,34 +40,28 @@ struct MagazineMainView: View {
                                 Spacer()
                                 Rectangle()
                                     .fill(Color.black)
-                                    .frame(height: 1)
+                                    .frame(height: 2)
+                                    .transition(.slide)
+                                    .animation(.easeInOut, value: selectedIndex)
                             }
                         })
                     Spacer()
                 }//HS
+                .padding(.leading)
                 switch selectedIndex {
                 case 0:
-                    MagazineBestView(currentUsers: currentUsers)
+                    MagazineBestView(magazineVM: magazineVM, userVM: userViewModel, currentUsers: userViewModel.currentUsers)
                 default:
-                    MagazineFeedView(currentUsers: currentUsers)
+                    MagazineFeedView(currentUsers: userViewModel.currentUsers, userVM: userViewModel)
                 }
-                //                TabView(selection: $selectedIndex) {
-                //                    // MARK: 베스트뷰 이동
-                //                    MagazineBestView()
-                //                        .tag(0)
-                //                    // MARK: 피드뷰 이동
-                //                    MagazineFeedView()
-                //                        .tag(1)
-                //                }
-                // .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
             .navigationDestination(isPresented: $isSearchViewShown) {
                 MainSearchView()
             }
         }
-      
         .onAppear {
             self.isSearchViewShown = false
+            userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

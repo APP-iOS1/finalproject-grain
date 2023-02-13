@@ -48,11 +48,7 @@ struct AddMarkerMapView: View {
     @State var isDragging = false
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     @State private var showingAlert = false
-    var drag: some Gesture {
-        DragGesture()
-            .onChanged{ _ in self.isDragging = true}
-            .onEnded{ _ in self.isDragging = false}
-    }
+    @State private var isFinishedSpot = false
     
     var body: some View {
         NavigationView {
@@ -67,12 +63,6 @@ struct AddMarkerMapView: View {
                             hideKeyboard()
                             //markerAddButtonBool.toggle()
                         }
-                    //                    .onChange(of: isDragging) { newValue in
-                    //                        markerAddButtonBool.toggle()
-                    //                    }
-                    
-                    
-                    
                     VStack {
                         
                         //MARK: 맵뷰 상단 검색바
@@ -99,50 +89,72 @@ struct AddMarkerMapView: View {
                         }
                         .padding()
                         .shadow(radius: 1)
-                        //.offset(y:-300)
-                        
-                        
-                        
-                        
-                        //                    .position(CGPoint(x: 196, y: 330))  //수정 필요
-                        //.zIndex(1)
-                        
                         Spacer()
-                        //MARK: 마커가 찍힌 주소 출력 부분
-                        Text(updateReverseGeocodeResult1)
-                            .foregroundColor(.red)
-                        
-                        //MARK: 추가하기 버튼
-                        Text("\(updateNumber.lat)")
-                        Text("\(updateNumber.lng)")
-                        Button {
-                            markerAddButtonBool.toggle()
-                            print("추가하기 클릭")
-                        } label: {
-                            RoundedRectangle(cornerRadius: 12)
-                                .foregroundColor(.white)
-                                .shadow(radius: 2)
-                                .frame(width: Screen.maxWidth * 0.1, height: Screen.maxHeight * 0.1)
-                                .overlay {
-                                    Text("요기!")
-                                        .foregroundColor(.black)
-                                }
-                        }
-                        
-                        
-                        
-                        //                        .offset(y: 270)
-                        //                        .zIndex(1)
+
                     }
-                    //                    .zIndex(1)
                     
-                    Image("TestBlackMarker")
+                    Image("uploadMarker")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 56,height: 56)
                         .position(CGPoint(x: 196, y: 285))
                 }
-                
+                HStack {
+                    Text("포토 스팟으로 핀을 이동하세요")
+                    .font(.headline)
+                    Spacer()
+                }
+                .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.05)
+                HStack {
+                    Image(systemName: "pin.fill")
+                    if updateReverseGeocodeResult1.count == 0 {
+                        Text("-")
+                    } else {
+                        Text(updateReverseGeocodeResult1)
+                    }
+                    Spacer()
+                    if isFinishedSpot {
+                        Button {
+                            updateReverseGeocodeResult1 = ""
+                            isFinishedSpot = false
+                        } label: {
+                            Image(systemName: "x.circle")
+                        }
+
+                    }
+                }
+                .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.05)
+                if isFinishedSpot { //핀이 찍혔을 경우
+                    NavigationLink {
+                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
+                            .navigationBarBackButtonHidden(true)
+                    } label: {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(.black)
+                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                            .overlay {
+                                Text("다음")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                            }
+                    }
+                } else { //핀이 안찍혔을 경우
+                    Button {
+                        markerAddButtonBool.toggle()
+                        isFinishedSpot = true
+                    } label: {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(.black)
+                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                            .overlay {
+                                Text("포토스팟 설정")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                            }
+                    }
+                }
+
+
             }
             .toolbar {
                 ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
@@ -156,37 +168,9 @@ struct AddMarkerMapView: View {
                             .shadow(radius: 1)
                     }
                 }
-                if updateNumber.lat == 0 && updateNumber.lng == 0 { //마커를 지정안했을 경우
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            showingAlert = true
-                        } label: {
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.black)
-                                .bold()
-                                .opacity(1)
-                                .shadow(radius: 1)
-                        }
-                        .alert(isPresented: $showingAlert) {
-                            Alert(title: Text("알림"), message: Text("위치를 지정해주세요."), dismissButton: .default(Text("확인")))
-                        }
-                    }
-                } else {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink {
-                            CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
-                                .navigationBarBackButtonHidden(true)
-                        } label: {
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.black)
-                                .bold()
-                                .opacity(1)
-                                .shadow(radius: 1)
-                        }
-                    }
-                }
             }
             .ignoresSafeArea(.keyboard)
+            
         }
     }
 }
@@ -278,9 +262,10 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         if markerAddButtonBool{
             
             
-            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 408))
-            addUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
-            addUserMarker.zIndex = 100
+            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 411))
+            addUserMarker.iconImage = NMFOverlayImage(name: "uploadMarker")
+            addUserMarker.width = 55
+            addUserMarker.height = 55
             addUserMarker.mapView = uiView.mapView
             
             // 업로드에 위치 정보 넘겨줌

@@ -38,140 +38,164 @@ struct MagazineContentAddView: View {
     @StateObject var userVM = UserViewModel()
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
+    @FocusState private var focusField: Fields?
     
     var body: some View {
         /// 지도뷰로 이동하기 위해 전체적으로 걸어줌
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
         NavigationView{
-            VStack {
-                Rectangle()
-                    .fill(Color(UIColor.systemGray5))
-                    .frame(width: Screen.maxWidth, height: 1)
-                // MARK: 이미지 피커 쪽인거 같음 확인 필요
-                HStack {
-                    PhotosPicker(
-                        selection: $selectedItem,
-                        matching: .images,
-                        photoLibrary: .shared()) {
-                            HStack{
-                                RoundedRectangle(cornerRadius: 8)
-                                    .fill(Color(UIColor.systemGray4))
-                                    .frame(width: 70, height: 70)
-                                    .overlay {
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(.white)
-                                            .frame(width: 68, height: 68)
-                                        Image(systemName: "photo.on.rectangle")
-                                            .resizable()
-                                            .frame(width: 30, height: 30)
-                                            .foregroundColor(.black)
-                                    }
-                            }
-                        }
-                    // MARK: 이미지가 선택 되었을때
-                        .onChange(of: selectedItem) { newItem in
-                            Task {
-                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                    selectedImageData = data
-                                }
-                                // MARK: 선택한 이미지 selectedImages배열에 넣어주기
-                                /// 이미지 선택 버튼 우측으로 이미지 정렬
-                                if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
-                                    selectedImages.append(uiImage)
-                                }
-                            }
-                        }
-                        .frame(width: 100,height: 100)
+            ZStack(alignment: .bottom) {
+                VStack {
                     
-                    ScrollView(.horizontal) {
-                        HStack {
-                            // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
-                            ForEach(selectedImages, id: \.self) { img in
-                                Image(uiImage: img)
-                                    .resizable()
-                                    .frame(width: 70, height: 70)
-                                    .cornerRadius(8)
+                    //MARK: 네비게이션바와 이미지피커 구분선
+                    Rectangle()
+                        .fill(Color(UIColor.systemGray5))
+                        .frame(width: Screen.maxWidth, height: 1)
+                    
+                    // MARK: 이미지 피커
+                    HStack {
+                        PhotosPicker(
+                            selection: $selectedItem,
+                            matching: .images,
+                            photoLibrary: .shared()) {
+                                HStack{
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(Color(UIColor.systemGray4))
+                                        .frame(width: 70, height: 70)
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(.white)
+                                                .frame(width: 68, height: 68)
+                                            Image(systemName: "photo.on.rectangle")
+                                                .resizable()
+                                                .frame(width: 30, height: 30)
+                                                .foregroundColor(.black)
+                                        }
+                                }
+                            }
+                        // MARK: 이미지가 선택 되었을때
+                            .onChange(of: selectedItem) { newItem in
+                                Task {
+                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                        selectedImageData = data
+                                    }
+                                    // MARK: 선택한 이미지 selectedImages배열에 넣어주기
+                                    /// 이미지 선택 버튼 우측으로 이미지 정렬
+                                    if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+                                        selectedImages.append(uiImage)
+                                    }
+                                }
+                            }
+                            .frame(width: 100,height: 100)
+                        
+                        ScrollView(.horizontal) {
+                            HStack {
+                                // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
+                                ForEach(selectedImages, id: \.self) { img in
+                                    Image(uiImage: img)
+                                        .resizable()
+                                        .frame(width: 70, height: 70)
+                                        .cornerRadius(8)
+                                }
                             }
                         }
                     }
-                }
-                .padding(.horizontal)
-                
-                Rectangle()
-                    .fill(Color(UIColor.systemGray5))
-                    .frame(width: Screen.maxWidth * 0.95, height: 1)
-                
-                // MARK: 게시물 제목 작성 란
-                //Text(updateReverseGeocodeResult1)
-                TextField("글 제목", text: $inputTitle)
-                    .keyboardType(.default)
-                    .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
-                    .padding(.horizontal, 15)
-                    .onSubmit {
-                        hideKeyboard()
-                    }
-                
-                
-                Rectangle()
-                    .fill(Color(UIColor.systemGray5))
-                    .frame(width: Screen.maxWidth * 0.95, height: 1)
-                
-                // MARK: 게시물 내용 작성 란
-                TextField("내용을 작성해 주세요.", text: $inputContent, axis: .vertical)
-                    .textInputAutocapitalization(.never)
-                    .keyboardType(.default)
-                    .disableAutocorrection(true)
-                    .lineLimit(...25)
-                    .padding(.horizontal, 15)
-                    .onSubmit {
-                        hideKeyboard()
-                    }
-                Spacer()
-            }
-            .navigationTitle("글쓰기")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
-                    Button {
-                        self.mode.wrappedValue.dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.black)
-                            .bold()
-                    }
-
-                }
-                if selectedImages.isEmpty {
-                    ToolbarItem(placement: .navigationBarTrailing) {
+                    .padding(.horizontal)
+                    
+                    //MARK: 이미지피커와 제목 구분선
+                    Rectangle()
+                        .fill(Color(UIColor.systemGray5))
+                        .frame(width: Screen.maxWidth * 0.95, height: 1)
+                    
+                    // MARK: 게시물 제목 작성 란
+                    TextField("글 제목", text: $inputTitle)
+                        .keyboardType(.default)
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                        .padding(.horizontal, 15)
+                        .onSubmit {
+                            hideKeyboard()
+                        }
+                        .submitLabel(.done)
+                    
+                    //MARK: 제목과 게시물 내용 구분선
+                    Rectangle()
+                        .fill(Color(UIColor.systemGray5))
+                        .frame(width: Screen.maxWidth * 0.95, height: 1)
+                    
+                    // MARK: 게시물 내용 작성 란
+                    TextField("내용을 작성해 주세요.", text: $inputContent, axis: .vertical)
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.default)
+                        .disableAutocorrection(true)
+                        .lineLimit(10, reservesSpace: true)
+                        .padding(.horizontal, 15)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button {
+                                    hideKeyboard()
+                                } label: {
+                                    Text("Done")
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                        }
+                    Spacer()
+                    
+                } //vstack
+                .navigationTitle("매거진")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
                         Button {
-                            showingAlert = true
+                            self.mode.wrappedValue.dismiss()
                         } label: {
-                            Image(systemName: "chevron.right")
+                            Image(systemName: "chevron.left")
                                 .foregroundColor(.black)
                                 .bold()
                         }
-                        .alert(isPresented: $showingAlert) {
-                            Alert(title: Text("알림"), message: Text("최소 1장 이상의 사진을 업로드하세요."), dismissButton: .default(Text("확인")))
-                        }
+                        
+                    }
+                }
+                .onAppear {
+                    userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+                }
+                
+                //MARK: 다음버튼
+                if selectedImages.count == 0 || inputTitle.count == 0 || inputContent.count == 0 {
+                    Button {
+                        showingAlert = true
+                    } label: {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(.black)
+                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                            .overlay {
+                                Text("다음")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                            }
+                    }
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("알림"), message: Text("제목, 내용, 사진은 필수 입력 항목입니다."), dismissButton: .default(Text("확인")))
                     }
                 } else {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        NavigationLink {
-                            AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
-                                .navigationBarBackButtonHidden(true)
-                        } label: {
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.black)
-                                .bold()
-                        }
+                    NavigationLink {
+                        AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
+                            .navigationBarBackButtonHidden(true)
+                    } label: {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(.black)
+                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                            .overlay {
+                                Text("다음")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                            }
                     }
                 }
             }
-            .onAppear {
-                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            }
-            
+            .ignoresSafeArea(.keyboard)
         }
     }
 }

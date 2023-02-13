@@ -182,31 +182,31 @@ struct MagazineDetailView: View {
 //                    }
 //                }
                 
-//                if isHeartToggle {
-//                    // 좋아요 누름
-//                    if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
-//                        userVM.likedMagazineID.append(data.fields.id.stringValue)
-//                        if let user = userVM.currentUsers {
-//                            let arr = userVM.likedMagazineID
-//                            let docID =  user.id.stringValue
-//                            userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
-//                        }
-//                    }
-//                } else {
-//                    // 좋아요 취소
-//                    if userVM.likedMagazineID.contains(data.fields.id.stringValue){
-//                        if let user = userVM.currentUsers {
-//                            if userVM.likedMagazineID.contains(data.fields.id.stringValue) {
-//                               let index = userVM.likedMagazineID.firstIndex(of: data.fields.id.stringValue)
-//                                userVM.likedMagazineID.remove(at: index!)
-//                                print("likedMagazineIDARR: \(userVM.likedMagazineID)")
-//                            }
-////                            let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
-//                            let docID = user.id.stringValue
-//                            userVM.updateCurrentUserArray(type: "likedMagazineId", arr: userVM.likedMagazineID, docID: docID)
-//                        }
-//                    }
-//                }
+                if isHeartToggle {
+                    // 좋아요 누름
+                    if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
+                        userVM.likedMagazineID.append(data.fields.id.stringValue)
+                        if let user = userVM.currentUsers {
+                            let arr = userVM.likedMagazineID
+                            let docID =  user.id.stringValue
+                            userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
+                        }
+                    }
+                } else {
+                    // 좋아요 취소
+                    if userVM.likedMagazineID.contains(data.fields.id.stringValue){
+                        if let user = userVM.currentUsers {
+                            if userVM.likedMagazineID.contains(data.fields.id.stringValue) {
+                               let index = userVM.likedMagazineID.firstIndex(of: data.fields.id.stringValue)
+                                userVM.likedMagazineID.remove(at: index!)
+                                print("likedMagazineIDARR: \(userVM.likedMagazineID)")
+                            }
+//                            let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
+                            let docID = user.id.stringValue
+                            userVM.updateCurrentUserArray(type: "likedMagazineId", arr: userVM.likedMagazineID, docID: docID)
+                        }
+                    }
+                }
 //
 //                if isBookMarked {
 //                    // 저장 누름

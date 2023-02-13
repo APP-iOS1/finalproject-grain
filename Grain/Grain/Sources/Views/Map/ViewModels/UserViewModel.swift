@@ -207,8 +207,24 @@ final class UserViewModel: ObservableObject {
         }
     }
     
+    func removeAll() {
+        self.likedMagazineID.removeAll()
+        self.myLens.removeAll()
+        self.myFilm.removeAll()
+        self.myCamera.removeAll()
+        self.postedCommunityID.removeAll()
+        self.postedMagazineID.removeAll()
+        self.bookmarkedMagazineID.removeAll()
+        self.bookmarkedCommunityID.removeAll()
+        self.follower.removeAll()
+        self.following.removeAll()
+    }
+    
     func parsingUserDataToStringArr(currentUserData: CurrentUserFields) {
         print("currentid: \(currentUserData.id.stringValue)")
+        
+        removeAll()
+        
         for i in currentUserData.likedMagazineID.arrayValue.values {
             print("likedMagazineID: \(i.stringValue)")
             self.likedMagazineID.append(i.stringValue)

@@ -89,6 +89,16 @@ final class CommunityViewModel: ObservableObject {
         return categoryData
     }
     
+    @Published var sortedCommunityData = [CommunityDocument]()
+    // MARK: - 최신순? 오래된 순? 확인해야함
+    func sortByCommunity(){
+        for _ in self.communities{
+            var sortData = self.communities.sorted{ $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()}
+            sortedCommunityData = sortData
+        }
+        
+    }
+    
     
     // MARK: Update -> Firebase Store SDK 사용
     func updateCommunitySDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {

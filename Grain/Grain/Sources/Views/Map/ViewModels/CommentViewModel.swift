@@ -15,7 +15,7 @@ final class CommentViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
     
     @Published var comment = [CommentDocument]()
-    
+    @Published var sortedRecentComment = [CommentDocument]()
     
     var fetchCommentSuccess = PassthroughSubject<(), Never>()
     var insertCommentSuccess = PassthroughSubject<(), Never>()
@@ -68,6 +68,15 @@ final class CommentViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
+    // MARK: - 최신순으로 댓글 정렬
+    func sortByRecentComment(){
+        for _ in self.comment{
+            var sortData = self.comment.sorted{ $0.updateTime.toDate() ?? Date() > $1.updateTime.toDate() ?? Date()}
+            sortedRecentComment = sortData
+        }
+    }
+    
+
     // MARK: 검증이 필요할때만 사용하기
     // MARK: Update -> Firebase Store SDK 사용
     func updateUserUsingSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {

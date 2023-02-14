@@ -40,9 +40,12 @@ struct CommunityDetailView: View {
                                 Text(community.fields.nickName.stringValue)
                                     .font(.title3)
                                     .bold()
-                                //MARK: 옵셔널 처리 고민
-                                Text(community.createdDate?.renderTime() ?? "")
+                                // FIXME: - 아래 코드가 고장 난거 같아 이 코드 적용했더니 되는 거 같음
+                                Text(community.createTime.toDate()?.renderTime() ?? "")
                                     .font(.caption)
+                                //MARK: 옵셔널 처리 고민
+//                                Text(community.createdDate?.renderTime() ?? "")
+//                                    .font(.caption)
                             }
                             Spacer()
                         }//HS
@@ -107,7 +110,7 @@ struct CommunityDetailView: View {
                         VStack{
                             ForEach(commentVm.comment,id: \.self){ item in
                                 // FIXME: Comment 어디서 만든건지 찾아야함
-                                CommentView(comment: item.fields, commentText: commentText,collectionDocId: community.fields.id.stringValue)
+                                CommentView(comment: item.fields, commentTime: item.updateTime, commentText: commentText, collectionDocId: community.fields.id.stringValue)
                             }
                             
                         }.padding(.vertical)
@@ -207,6 +210,7 @@ struct CommunityDetailView: View {
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
+            commentVm.sortByRecentComment()
             //            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
             // 유저가 좋아요를 눌렀는지
             //                if userVM.likedMagazineIdArr.contains(where: { item in

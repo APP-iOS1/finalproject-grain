@@ -10,7 +10,7 @@ import SwiftUI
 struct ClassTabView: View {
     
     var community: [CommunityDocument]
-    
+    @StateObject var communityVM: CommunityViewModel
     var body: some View {
                     VStack {
                 ScrollView{
@@ -23,6 +23,9 @@ struct ClassTabView: View {
                     }
                 }
             }// vstack
+                    .refreshable {
+                        communityVM.fetchCommunity()
+                    }
         
     }
 }

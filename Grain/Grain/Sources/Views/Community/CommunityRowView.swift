@@ -23,6 +23,35 @@ import Kingfisher
 struct CommunityRowView: View {
     
     @StateObject var commentVm: CommentViewModel = CommentViewModel()
+    var color: String {
+        switch community.fields.category.stringValue {
+        case "매칭":
+            return "#FF8701"
+        case "마켓":
+            return "#006400"
+        case "클래스":
+            return "#3960DB"
+        case "정보":
+            return "#7B3EFA"
+        default:
+            return "black"
+        }
+    }
+    
+    var subColor: String {
+        switch community.fields.category.stringValue {
+        case "매칭":
+            return "#FFCE95"
+        case "마켓":
+            return "#AAEEBD"
+        case "클래스":
+            return "#9AB1DB"
+        case "정보":
+            return "#C8B1FA"
+        default:
+            return "black"
+        }
+    }
     
     var community: CommunityDocument
     var body: some View {
@@ -30,7 +59,9 @@ struct CommunityRowView: View {
             HStack{
                 KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                     .resizable()
-                    .frame(width: 130 , height: 100)
+                    .scaledToFill()
+                    .frame(width: Screen.maxWidth*0.27, height: Screen.maxWidth*0.27)
+                    .clipped()
                     .padding(.horizontal, 13)
                     //.padding(.top, 5)
                 
@@ -47,6 +78,7 @@ struct CommunityRowView: View {
                                         .bold()
                                         .font(.caption)
                                 }
+                                
                                 .padding(.leading, -3)
                             RoundedRectangle(cornerRadius: 20)
                                 .frame(width: 45, height: 25)

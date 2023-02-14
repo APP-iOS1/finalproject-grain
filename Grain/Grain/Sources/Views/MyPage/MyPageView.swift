@@ -21,6 +21,10 @@ struct MyPageView: View {
     var magazineDocument: [MagazineDocument]
     var boomarkedMagazineDocument: [MagazineDocument]
     
+    @State private var showDevices: Bool = false
+    @State private var angle: Double = 0
+//    @State var transitionView: Bool = false
+
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
@@ -29,6 +33,7 @@ struct MyPageView: View {
                         //MARK: 프로필 이미지
                         KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                             .resizable()
+                            .scaledToFill()
                             .frame(width: 85, height: 85)
                             .cornerRadius(64)
                             .overlay {
@@ -61,6 +66,57 @@ struct MyPageView: View {
                         .padding(.leading, 9)
                         .padding(.top, -5)
                         .font(.footnote)
+                        .foregroundColor(.textGray)
+                        
+//                        HStack{
+//                            Text("바디")
+//                            Text("|")
+//                            Text("Leica CM")
+//                            Text("바디")
+//                            Text("|")
+//                            Text("Leica CM")
+//                            Text("바디")
+//                            Text("|")
+//                            Text("Leica CM")
+//                        }
+//                        .padding(.leading, 9)
+//                        .padding(.top, -5)
+//                        .font(.subheadline)
+//                        .foregroundColor(.textGray)
+                        
+                        VStack{
+                            Button{
+                                showDevices.toggle()
+//                                transitionView.toggle()
+                            } label: {
+                                VStack(alignment: .leading){
+                                    HStack{
+                                        Text("장비 보기")
+                                            .font(.subheadline)
+                                            .bold()
+                                        Image(systemName: "chevron.right")
+                                            .font(.subheadline)
+                                            .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
+                                            .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
+                                    }
+                                    
+                                    if showDevices {
+                                        VStack(alignment: .leading){
+                                            Text("바디 | \(userVM.currentUsers?.myCamera.arrayValue.values[1].stringValue ?? "")")
+                                            Text("렌즈 | \(userVM.currentUsers?.myLens.arrayValue.values[1].stringValue ?? "")")
+                                            Text("필름 | \(userVM.currentUsers?.myFilm.arrayValue.values[1].stringValue ?? "")")
+                                        }
+                                        .font(.subheadline)
+                                        .bold()
+                                        .padding(.top, -5)
+                                    }
+                                }
+                                .padding(.top, 5)
+                            }
+
+                        }
+                        .padding(.leading, 9)
+                        .padding(.top, -5)
                         .foregroundColor(.textGray)
 
                     }
@@ -120,7 +176,11 @@ struct MyPageView: View {
 //                        .padding(.bottom, 30)
 //                        .padding(.trailing, 100)
 //                    }.foregroundColor(.white)
-                                
+                Rectangle()
+                    .frame(height: 1)
+                    .padding(.horizontal, 10)
+                    .padding(.top, 10)
+                    .foregroundColor(.middlebrightGray)
                 MyPageMyFeedView(magazineDocument: magazineDocument)
 //                    .padding(.top, -80)
             }

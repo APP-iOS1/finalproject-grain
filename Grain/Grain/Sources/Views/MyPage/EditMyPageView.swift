@@ -53,8 +53,8 @@ struct EditMyPageView: View {
         return profileImage
     }
     
-    let nickNameLimit = 8
-    let introduceLimit = 50
+    let nickNameLimit = 15
+    let introduceLimit = 30
     
     // 닉네임 정규식
     func checkNicknameRule(string: String) -> Bool {
@@ -107,6 +107,7 @@ struct EditMyPageView: View {
                     if selectedImages.count == 0{
                         KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                             .resizable()
+                            .scaledToFill()
                             .frame(width: 100, height: 100)
                             .cornerRadius(64)
                             .overlay {
@@ -174,7 +175,7 @@ struct EditMyPageView: View {
                     Text("닉네임")
                         .padding(.horizontal, 3)
                     Spacer()
-                    Text("\(editedNickname.count)/8")
+                    Text("\(editedNickname.count)/15")
                 }
                 .padding(.horizontal)
                 
@@ -287,6 +288,7 @@ struct EditMyPageView: View {
                             currentUser.nickName.stringValue = editedNickname
                             
                             userVM.updateCurrentUserProfile(profileImage: selectedImages.count > 0 ? selectedImages : [], nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : introduce, docID: docID)
+                            
                             print("selectedImages:\(selectedImages)")
                             
                             dismiss()

@@ -334,7 +334,7 @@ struct LensList: View {
             .onDelete(perform: removeLensList(at:))
             
             if editMode?.wrappedValue.isEditing == true {
-                // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
+                // 렌즈 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
                 if showAddLens {
                     HStack {
                         TextField("장비를 입력하세요", text: $newItem)
@@ -343,21 +343,33 @@ struct LensList: View {
                             .disableAutocorrection(true)
                             .onSubmit {
                                 if trimNewItem.count > 0 {
-                                    Task{
-                                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myLens", updateValue: newItem, isArray: true)
+//                                    Task{
+//                                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myLens", updateValue: newItem, isArray: true)
+                                        userVM.myLens.append(newItem)
+                                        if let user = userVM.currentUsers {
+                                            let arr = userVM.myLens
+                                            let docID =  user.id.stringValue
+                                            userVM.updateCurrentUserArray(type: "myLens", arr: arr, docID: docID)
+                                        }
                                         newItem = ""
-                                        userVM.fetchCurrentUser(userID: docID ?? "")
-                                    }
+                                        userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+//                                    }
                                 }
                             }
                         
                         Button{
                             if trimNewItem.count > 0{
                                 Task{
-                                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myLens", updateValue: newItem, isArray: true)
+                                    userVM.myLens.append(newItem)
+                                    if let user = userVM.currentUsers {
+                                        let arr = userVM.myLens
+                                        let docID =  user.id.stringValue
+                                        userVM.updateCurrentUserArray(type: "myLens", arr: arr, docID: docID)
+                                    }
                                     newItem = ""
                                     userVM.fetchCurrentUser(userID: docID ?? "")
-                                }                            }
+                                }
+                            }
                         } label: {
                             Image(systemName: "plus.circle")
                         }
@@ -428,7 +440,7 @@ struct FilmList: View {
             .onDelete(perform: removeFilmList(at:))
             
             if editMode?.wrappedValue.isEditing == true {
-                // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
+                // 필름 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
                 if showAddFilm {
                     HStack {
                         TextField("장비를 입력하세요", text: $newItem)

@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct MagazineFeedView: View {
-    @ObservedObject var magazineVM = MagazineViewModel()
+//    @ObservedObject var magazineVM: MagazineViewModel = MagazineViewModel()
     
     let currentUsers : CurrentUserFields?
     let userVM: UserViewModel
+    let magazineVM: MagazineViewModel
     
     var body: some View {
-        ScrollView{
-            LazyVStack{
+        VStack {
+            ScrollView{
+             
                 ForEach(magazineVM.magazines, id: \.self){ data in
                     NavigationLink {
                         // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
@@ -24,14 +26,16 @@ struct MagazineFeedView: View {
                         // MARK: fetch해온 데이터 cell뷰로 보여주기
                         MagazineViewCell(data: data)
                     }
-
+                    
                 }
-            
+                
+                
             }
-        }.onAppear{
+        }
+        .onAppear{
             // MARK: fetch 데이터 시작
-            magazineVM.fetchMagazine()
-            
+//            magazineVM.fetchMagazine()
+            print("피드뷰")
         }
     }
 }

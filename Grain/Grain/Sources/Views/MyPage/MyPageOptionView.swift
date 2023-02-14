@@ -261,7 +261,10 @@ struct SupportSection: View {
 struct InfoSection: View {
     @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
     @ObservedObject var kakoAuthVM: KakaoAuthenticationStore = KakaoAuthenticationStore()
-
+   
+    // Alert 변수
+    @State private var showAlert: Bool = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
             Text("정보")
@@ -316,17 +319,19 @@ struct InfoSection: View {
             .padding(.horizontal)
             
             Button {
-                if authVM.logInCompanyState == .appleLogIn {
-                    authVM.appleLogout()
-                } else if authVM.logInCompanyState == .googleLogIn {
-                    authVM.googleLogout()
-                } else if authVM.logInCompanyState == .kakaoLogIn {
-                    kakoAuthVM.kakaoLogOut()
-                } else {
-                    authVM.appleLogout()
-                    authVM.googleLogout()
-                    kakoAuthVM.kakaoLogOut()
-                }
+//                if authVM.logInCompanyState == .appleLogIn {
+//                    authVM.appleLogout()
+//                } else if authVM.logInCompanyState == .googleLogIn {
+//                    authVM.googleLogout()
+//                } else if authVM.logInCompanyState == .kakaoLogIn {
+//                    kakoAuthVM.kakaoLogOut()
+//                } else {
+//                    authVM.appleLogout()
+//                    authVM.googleLogout()
+//                    kakoAuthVM.kakaoLogOut()
+//                }
+                showAlert.toggle()
+                
             } label: {
                 HStack {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
@@ -346,7 +351,27 @@ struct InfoSection: View {
                 .padding(.horizontal)
             }
             .padding(.horizontal)
-            
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("로그아웃 하시겠습니까?"),
+                      primaryButton: .destructive(
+                        Text("네")
+                      ){
+                          if authVM.logInCompanyState == .appleLogIn {
+                              authVM.appleLogout()
+                          } else if authVM.logInCompanyState == .googleLogIn {
+                              authVM.googleLogout()
+                          } else if authVM.logInCompanyState == .kakaoLogIn {
+                              kakoAuthVM.kakaoLogOut()
+                          } else {
+                              authVM.appleLogout()
+                              authVM.googleLogout()
+                              kakoAuthVM.kakaoLogOut()
+                          }
+                      },
+                      secondaryButton: .default(
+                        Text("아니오")
+                      ))
+            }
         }
     }
 }

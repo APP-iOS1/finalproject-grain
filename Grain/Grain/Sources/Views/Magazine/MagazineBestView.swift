@@ -49,6 +49,7 @@ struct MagazineBestView: View {
                 }
             } // scroll view
         }//vstack
+        .background(Color.ultraBrightGray)
         .onAppear{
             magazineVM.fetchMagazine()
             

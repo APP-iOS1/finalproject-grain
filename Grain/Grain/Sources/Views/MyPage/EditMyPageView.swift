@@ -54,7 +54,7 @@ struct EditMyPageView: View {
     }
     
     let nickNameLimit = 15
-    let introduceLimit = 30
+    let introduceLimit = 50
     
     // 닉네임 정규식
     func checkNicknameRule(string: String) -> Bool {
@@ -287,10 +287,14 @@ struct EditMyPageView: View {
                             let docID = currentUser.id.stringValue
                             currentUser.nickName.stringValue = editedNickname
                             
-                            userVM.updateCurrentUserProfile(profileImage: selectedImages.count > 0 ? selectedImages : [], nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : introduce, docID: docID)
-                            
+                            // 선택된 이미지 배열에서 마지막 요소만 반환
+                            if selectedImages.count > 0{
+                                selectedImages.removeSubrange(0 ..< selectedImages.count - 1)
+                            }
+                            userVM.updateCurrentUserProfile(profileImage: selectedImages.count > 0 ? selectedImages : [], nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : "", docID: docID)
+
                             print("selectedImages:\(selectedImages)")
-                            
+    
                             dismiss()
                         }
                     }label: {

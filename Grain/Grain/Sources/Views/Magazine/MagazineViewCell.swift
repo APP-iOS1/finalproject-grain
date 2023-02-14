@@ -6,83 +6,69 @@
 //
 
 import SwiftUI
+
 import Kingfisher
 
 struct MagazineViewCell: View {
     var data : MagazineDocument
+    
     var body: some View {
         VStack {
-            HStack {
-                Circle()
-                    .frame(width: 40)
-                    .foregroundColor(.black)
-                VStack(alignment: .leading) {
-                    Text(data.fields.nickName.stringValue)
-                        .bold()
-                        .foregroundColor(.black)
-                    
-                    HStack {
-                        Text("1분전")
-                            .foregroundColor(.black)
-                        Spacer()
-                        Text(data.fields.customPlaceName.stringValue)
-                            .foregroundColor(.black)
-                    }
-                    .font(.caption)
+            Rectangle()
+                .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.9)
+                .foregroundColor(.black)
+                .overlay{
+                    KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.9 )
+                        .clipShape(Rectangle())
+                      
                 }
-                
-                Spacer()
-                
-            }
-            .padding()
+            
+            Text(data.fields.title.stringValue)
+                .fontWeight(.bold)
+                .foregroundColor(.black)
+                .font(.title2)
+                .frame(alignment: .leading)
+                .multilineTextAlignment(.leading)
+                .padding(.top,5)
+                .padding(.bottom, 3)
+                .frame(width: Screen.maxWidth * 0.9, alignment: .leading)
             
             Divider()
-                .frame(maxWidth: Screen.maxWidth * 0.9)
-                .background(Color.black)
-                .padding(.top, -5)
-                .padding(.bottom, -10)
             
-            //            Image("line")
-            //                .resizable()
-            //                .frame(width: Screen.maxWidth, height: 0.3)
-            TabView{
-                ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
-                    KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                       .resizable()
-                       .aspectRatio(contentMode: .fit)
-                       .frame(width: 100)
-                }
-            }
-            .tabViewStyle(.page)
-            .frame(maxHeight: Screen.maxHeight * 0.27)
-            .padding()
-            Group{
-                HStack{
-                    Text(data.fields.title.stringValue)
-                        .foregroundColor(.black)
-                        .font(.title2)
-                        .bold()
-                    
-                    Spacer()
-                }
-                .padding(.vertical, -30)
+            HStack{
+                Text("by")
+                    .foregroundColor(.middleDarkGray)
+                    .frame(alignment: .leading)
+                    .multilineTextAlignment(.leading)
+                    .font(.subheadline)
+                   
                 
-                Text(data.fields.content.stringValue)
-                    .lineLimit(2)
-                    .padding(.vertical, -30)
-                    .foregroundColor(Color.textGray)
-                
+                Divider()
+                Text(data.fields.nickName.stringValue)
+                    .font(.subheadline)
+                    .bold()
+                Spacer()
+                Text(data.createTime.toDate()?.renderTime() ?? "")
+                    .font(.caption)
+                    .foregroundColor(.middleDarkGray)
             }
-            .padding()
+            .padding(.horizontal,5)
+           
+            
             
             Spacer()
         }
-        .frame(height: Screen.maxHeight * 0.5)
+        .padding()
+        .padding(.bottom, 20)
+        
     }
 }
 
-//struct MagazineViewCell_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MagazineViewCell()
-//    }
-//}
+struct MagazineViewCell_Previews: PreviewProvider {
+    static var previews: some View {
+        MagazineViewCell(data: MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: 0), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), likedNum: LikedNum(integerValue: ""), latitude: MagazineLocation(doubleValue: 0), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: "")), name: "", createTime: "", updateTime: ""))
+    }
+}

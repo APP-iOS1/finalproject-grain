@@ -14,7 +14,9 @@ struct UserSearchResultView: View {
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
+    
     let user: UserViewModel
+    
     var body: some View {
             ZStack {
                 VStack{

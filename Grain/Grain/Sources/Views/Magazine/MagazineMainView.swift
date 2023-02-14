@@ -50,9 +50,9 @@ struct MagazineMainView: View {
                 .padding(.leading)
                 switch selectedIndex {
                 case 0:
-                    MagazineBestView(magazineVM: magazineVM, userVM: userViewModel, currentUsers: userViewModel.currentUsers)
+                    MagazineBestView(userVM: userViewModel, currentUsers: userViewModel.currentUsers, magazineVM: magazineVM)
                 default:
-                    MagazineFeedView(currentUsers: userViewModel.currentUsers, userVM: userViewModel)
+                    MagazineFeedView(currentUsers: userViewModel.currentUsers, userVM: userViewModel, magazineVM: magazineVM)
                 }
             }
             .navigationDestination(isPresented: $isSearchViewShown) {
@@ -62,6 +62,8 @@ struct MagazineMainView: View {
         .onAppear {
             self.isSearchViewShown = false
             userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            userViewModel.fetchUser()
+            magazineVM.fetchMagazine()
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

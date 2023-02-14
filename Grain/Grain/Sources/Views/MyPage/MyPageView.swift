@@ -68,21 +68,21 @@ struct MyPageView: View {
                         .font(.footnote)
                         .foregroundColor(.textGray)
                         
-//                        HStack{
-//                            Text("바디")
-//                            Text("|")
-//                            Text("Leica CM")
-//                            Text("바디")
-//                            Text("|")
-//                            Text("Leica CM")
-//                            Text("바디")
-//                            Text("|")
-//                            Text("Leica CM")
-//                        }
-//                        .padding(.leading, 9)
-//                        .padding(.top, -5)
-//                        .font(.subheadline)
-//                        .foregroundColor(.textGray)
+                        HStack{
+                            Text("바디")
+                            Text("|")
+                            Text("Leica CM")
+                            Text("바디")
+                            Text("|")
+                            Text("Leica CM")
+                            Text("바디")
+                            Text("|")
+                            Text("Leica CM")
+                        }
+                        .padding(.leading, 9)
+                        .padding(.top, -5)
+                        .font(.subheadline)
+                        .foregroundColor(.textGray)
                         
                         VStack{
                             Button{

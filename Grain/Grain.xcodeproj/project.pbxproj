@@ -107,6 +107,7 @@
 		998847DC299239D600004066 /* UserSearchFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847DB299239D600004066 /* UserSearchFeedView.swift */; };
 		998847FC2992D65400004066 /* SearchProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847FB2992D65400004066 /* SearchProgress.swift */; };
 		998847FE2992F37A00004066 /* MainSearchPlaceHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847FD2992F37A00004066 /* MainSearchPlaceHolder.swift */; };
+		9996A461299B580E00065435 /* MagazineProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9996A460299B580E00065435 /* MagazineProfileImage.swift */; };
 		99B21EC329938CD7006933BB /* MagazineCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B21EC229938CD7006933BB /* MagazineCommentView.swift */; };
 		99B21EC529940AF5006933BB /* MainRecentSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B21EC429940AF5006933BB /* MainRecentSearchView.swift */; };
 		A71516BA29926233009A0780 /* MagazineEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71516B929926233009A0780 /* MagazineEditView.swift */; };
@@ -260,6 +261,7 @@
 		998847DB299239D600004066 /* UserSearchFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchFeedView.swift; sourceTree = "<group>"; };
 		998847FB2992D65400004066 /* SearchProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchProgress.swift; sourceTree = "<group>"; };
 		998847FD2992F37A00004066 /* MainSearchPlaceHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSearchPlaceHolder.swift; sourceTree = "<group>"; };
+		9996A460299B580E00065435 /* MagazineProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineProfileImage.swift; sourceTree = "<group>"; };
 		99B21EC229938CD7006933BB /* MagazineCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineCommentView.swift; sourceTree = "<group>"; };
 		99B21EC429940AF5006933BB /* MainRecentSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRecentSearchView.swift; sourceTree = "<group>"; };
 		A71516B929926233009A0780 /* MagazineEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineEditView.swift; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 				A71516B929926233009A0780 /* MagazineEditView.swift */,
 				99B21EC229938CD7006933BB /* MagazineCommentView.swift */,
 				33CFBCA32993A14C00DD2707 /* HeartButton.swift */,
+				9996A460299B580E00065435 /* MagazineProfileImage.swift */,
 			);
 			path = Magazine;
 			sourceTree = "<group>";
@@ -931,6 +934,7 @@
 				A7D957DD297AAFC8001D2401 /* CommunityService.swift in Sources */,
 				99233D4C2977F34200A875B1 /* MapStore.swift in Sources */,
 				99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */,
+				9996A461299B580E00065435 /* MagazineProfileImage.swift in Sources */,
 				9958AF9329777D7700A51DA9 /* Community.swift in Sources */,
 				A7AF1A03299566EF007E6D43 /* CommentDTO.swift in Sources */,
 				9958AFB52977B0C500A51DA9 /* AuthenticationView.swift in Sources */,

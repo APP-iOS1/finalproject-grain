@@ -10,7 +10,7 @@ import SwiftUI
 struct MarketTabView: View {
     
     var community: [CommunityDocument]
-    
+    @StateObject var communityVM: CommunityViewModel
     var body: some View {
        
             VStack {
@@ -24,7 +24,9 @@ struct MarketTabView: View {
                     }
                 }
             }// vstack
-        
+            .refreshable {
+                communityVM.fetchCommunity()
+            }
     }
 }
 

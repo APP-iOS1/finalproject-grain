@@ -10,7 +10,7 @@ import SwiftUI
 struct AllTabView: View {
     
     var community: [CommunityDocument]
-    
+    @StateObject var communityVM: CommunityViewModel
     var body: some View {
         NavigationView{
             VStack {
@@ -25,6 +25,9 @@ struct AllTabView: View {
                     }
                 }
             }// vstack
+        }
+        .refreshable {
+            communityVM.fetchCommunity()
         }
     }
 }

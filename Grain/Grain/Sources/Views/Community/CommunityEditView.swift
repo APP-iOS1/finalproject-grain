@@ -13,14 +13,13 @@ struct CommunityEditView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @StateObject var communityVM = CommunityViewModel()
-
+    
     @State var community : CommunityDocument
     @State var editTitle : String = ""
     @State var editContent : String = ""
-    @State var editCustomPlace : String = ""
     
-    @State var clickedContent : Bool = false    // 텍스트 클릭 Bool
-    @State var clickedCustomPlace : Bool = false    // 텍스트 클릭 Bool
+    @State var clickedTitle : Bool = false
+    @State var clickedContent : Bool = false
     @State private var showAlert: Bool = false
     @State private var showSuccessAlert: Bool = false
     
@@ -30,25 +29,57 @@ struct CommunityEditView: View {
                 VStack{
                     VStack {
                         HStack {
+                            // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
+                            if clickedTitle{
+                                VStack{
+                                    TextField(community.fields.title.stringValue, text: $editTitle)
+                                        .font(.title)
+                                        .padding(.horizontal)
+                                        .padding(.vertical, 3)
+                                        .padding(.bottom, 3)
+                                        .bold()
+                                        .onSubmit {
+                                            community.fields.title.stringValue = editTitle
+                                            clickedTitle.toggle()
+                                        }
+                                }
+                                .padding(.top, 1)
+                                
+                            }else{
+                                Text(community.fields.title.stringValue)
+                                    .font(.title)
+                                    .padding(.horizontal)
+                                    .padding(.top, 5)
+                                    .bold()
+                                   // .border(.blue)
+                                    .onTapGesture {
+                                        clickedTitle.toggle()
+                                    }
+                            }
+                            Spacer()
+                        }
+                        .padding(.top, 5)
+                        
+                        HStack {
                             ProfileImage(imageName: community.fields.profileImage.stringValue)
                             VStack(alignment: .leading) {
                                 Text(community.fields.nickName.stringValue)
-                                    .font(.title3)
-                                    .bold()
+                                
+                                
                                 //MARK: 옵셔널 처리 고민
-                                Text(community.createdDate?.renderTime() ?? "")
+                                Text(community.createTime.toDate()?.renderTime() ?? "")
                                     .font(.caption)
                             }
                             Spacer()
                         }//HS
-                        .padding(.vertical, 5)
-                        Divider()
-                            .frame(maxWidth: Screen.maxWidth * 0.9)
-                            .background(Color.black)
-                            .padding(.top, -5)
-                            .padding(.bottom, -10)
-                            .padding(.leading, Screen.maxWidth * 0.04)
-
+                        
+                        //                        Divider()
+                        //                            .frame(maxWidth: Screen.maxWidth * 0.9)
+                        //                            .background(Color.black)
+                        //                            .padding(.top, -5)
+                        //                            .padding(.bottom, -10)
+                        //.padding(.leading, Screen.maxWidth * 0.04)
+                        
                         //            Image("line")
                         //                .resizable()
                         //                .frame(width: Screen.maxWidth, height: 0.3)
@@ -64,40 +95,40 @@ struct CommunityEditView: View {
                         .tabViewStyle(.page)
                         .frame(height: Screen.maxHeight * 0.27)
                         .padding()
+                        .padding(.top, -15)
                     }
-
-                    LazyVStack(pinnedViews: [.sectionHeaders]) {
-                        Section(header: CommunityEditHeader(community: community, editTitle: $editTitle) ){
-                            VStack {
-                                
-                                // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
-                                if clickedContent{
-                                    TextField(community.fields.content.stringValue, text: $editContent)
-                                        .lineSpacing(4.0)
-                                        .padding(.vertical, -9)
-                                        .padding()
-                                        .foregroundColor(Color.textGray)
-                                        .onSubmit {
-                                            community.fields.content.stringValue = editContent
-                                            clickedContent.toggle()
-                                        }
-                                }else{
-                                    HStack{
-                                        Text(community.fields.content.stringValue)
-                                            .lineSpacing(4.0)
-                                            .padding(.vertical, -20)
-                                            .padding()
-                                            .foregroundColor(Color.textGray)
-                                            .onTapGesture {
-                                                clickedContent.toggle()
-                                            }
-                                        Spacer()
+                    
+                        // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
+                    HStack{
+                        if clickedContent{
+                            VStack{
+                                TextField(community.fields.content.stringValue, text: $editContent)
+                                    .lineSpacing(4.0)
+                                    .padding(.vertical, -15)
+                                    .padding()
+                                    .foregroundColor(Color.textGray)
+                                    .onSubmit {
+                                        community.fields.content.stringValue = editContent
+                                        clickedContent.toggle()
                                     }
-                                }
                             }
+                            .padding(.top, -8)
+                            
+                        }else{
+                            Text(community.fields.content.stringValue)
+                                .lineSpacing(4.0)
+                                .padding(.vertical, -20)
+                                .padding()
+                                .onTapGesture {
+                                    clickedContent.toggle()
+                                }
                         }
+                        Spacer()
                     }
-                    Spacer()
+                    //.padding(.top, 27)
+                    
+                       
+                    //Spacer()
                 }
             }
             .padding(.top, 1)
@@ -105,15 +136,23 @@ struct CommunityEditView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack{
-                    Button {
-                        //MARK: 안바뀌었으면 기존 값이 가도록
-                        //클릭 여부를 알아보고 분기처리 해줘야할듯함
-                        //수정사항 없으면 수정한 내용 없다는 alert
-                        if editTitle.isEmpty && editContent.isEmpty {
+                    if editTitle.isEmpty && editContent.isEmpty {
+                        Button {
                             showAlert.toggle()
-                            print("머지")
-                        } else {
-                            //title이 바뀐게 있다면 바뀐거 넣어주고 없으면 그대로 전송하기
+                        } label: {
+                            Text("수정완료")
+                        }//변경 안됐을때 Alert
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text("변경된 내용이 없습니다."),
+                                  message: Text("수정하실 내용을 입력해주세요."),
+                                  dismissButton: .destructive(
+                                    Text("확인")
+                                  ){
+                                      
+                                  })
+                        }
+                    }else{
+                        Button {
                             if editTitle.count > 0 {
                                 community.fields.title.stringValue = editTitle
                             }else{
@@ -127,29 +166,17 @@ struct CommunityEditView: View {
                             }
                             communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
                             showSuccessAlert.toggle()
+                        } label: {
+                            Text("수정완료")
+                        }.alert(isPresented: $showSuccessAlert) {
+                            Alert(title: Text("수정이 완료되었습니다."),
+                                  message: Text(""),
+                                  dismissButton: .destructive(
+                                    Text("확인")
+                                  ){
+                                      presentationMode.wrappedValue.dismiss()
+                                  })
                         }
-                    } label: {
-                        Text("수정완료")
-                    }
-                    //변경 안됐을때 Alert
-                    .alert(isPresented: $showAlert) {
-                        Alert(title: Text("변경된 내용이 없습니다."),
-                              message: Text("수정하실 내용을 입력해주세요."),
-                              dismissButton: .destructive(
-                                Text("확인")
-                              ){
-                                  
-                              })
-                    }
-                    //변경완료 됐을때 Alert
-                    .alert(isPresented: $showSuccessAlert) {
-                        Alert(title: Text("수정이 완료되었습니다."),
-                              message: Text(""),
-                              dismissButton: .destructive(
-                                Text("확인")
-                              ){
-                                  presentationMode.wrappedValue.dismiss()
-                              })
                     }
                 }
             }
@@ -163,9 +190,7 @@ struct CommunityEditHeader: View {
     @State var clickedTitle : Bool = false  // 텍스트 클릭 Bool
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Spacer()
-            
+        HStack {
             // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
             if clickedTitle{
                 TextField(community.fields.title.stringValue, text: $editTitle)
@@ -185,12 +210,10 @@ struct CommunityEditHeader: View {
                         clickedTitle.toggle()
                     }
             }
-            
             Spacer()
-            Divider()
         }
         .frame(minWidth: 0, maxWidth: .infinity)
-        .frame(height: 56)
+        .frame(height: 40)
         .background(Rectangle().foregroundColor(.white))
     }
 }

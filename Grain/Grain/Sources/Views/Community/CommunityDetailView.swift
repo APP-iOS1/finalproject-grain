@@ -16,6 +16,7 @@ struct CommunityDetailView: View {
     
     @StateObject var communityVM = CommunityViewModel()
     @StateObject var userVM = UserViewModel()
+    
     @Environment(\.presentationMode) var presentationMode
     
     // 댓글 관련
@@ -33,13 +34,19 @@ struct CommunityDetailView: View {
             VStack {
                 ScrollView {
                     VStack(alignment: .leading){
+                        HStack{
+                            Text(community.fields.title.stringValue)
+                                .font(.title)
+                                .bold()
+                                .padding(.horizontal)
+                            Spacer()
+                        }
+                        .padding(.top, 5)
                         // MARK: 닉네임 헤더
                         HStack {
                             ProfileImage(imageName: community.fields.profileImage.stringValue)
                             VStack(alignment: .leading) {
                                 Text(community.fields.nickName.stringValue)
-                                    .font(.title3)
-                                    .bold()
                                 // FIXME: - 아래 코드가 고장 난거 같아 이 코드 적용했더니 되는 거 같음
                                 Text(community.createTime.toDate()?.renderTime() ?? "")
                                     .font(.caption)
@@ -49,13 +56,13 @@ struct CommunityDetailView: View {
                             }
                             Spacer()
                         }//HS
-                        .padding(.vertical, 5)
-                        Divider()
-                            .frame(maxWidth: Screen.maxWidth * 0.92)
-                            .background(Color.black)
-                            .padding(.top, -5)
-                            .padding(.bottom, -10)
-                            .padding(.leading, Screen.maxWidth * 0.04)
+                        //.padding(.vertical, 5)
+//                        Divider()
+//                            .frame(maxWidth: Screen.maxWidth * 0.9)
+//                            .background(Color.black)
+//                            .padding(.top, -5)
+//                            .padding(.bottom, -10)
+//                            .padding(.leading, Screen.maxWidth * 0.04)
 //                        TabView{
 //                            ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
 //                                KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
@@ -77,7 +84,7 @@ struct CommunityDetailView: View {
                         .tabViewStyle(.page)
                         .frame(height: Screen.maxHeight * 0.27)
                         .padding()
-                        .padding(.top, -10)
+                        .padding(.top, -15)
                         
                         //MARK: 댓글
                         Button {
@@ -85,16 +92,21 @@ struct CommunityDetailView: View {
                             isHiddenComment.toggle()
                             textFieldFocused = true
                         } label: {
-                            Image(systemName: "message")
-                                .font(.title3)
-                                .foregroundColor(.black)
+                            HStack{
+                                Image(systemName: "message")
+                                    .font(.title3)
+                                    .foregroundColor(.black)
+                                Text("댓글 달기")
+                                    .foregroundColor(.textGray)
+                                    .padding(.top, 2)
+                            }
                         }
                         .padding(.leading, Screen.maxWidth * 0.04)
                         .padding(.top, -10)
                         // MARK: 게시글(디테일뷰) 제목
                         // MARK: 스티키 헤더 제목과 건텐츠
-                        LazyVStack(pinnedViews: [.sectionHeaders]) {
-                            Section(header: CommunityDetailHeader(community: community) ){
+//                        LazyVStack(pinnedViews: [.sectionHeaders]) {
+//                            Section(header: CommunityDetailHeader(community: community) ){
                                 HStack {
                                     Text(community.fields.content.stringValue)
                                         .lineSpacing(4.0)
@@ -102,8 +114,8 @@ struct CommunityDetailView: View {
                                         .padding()
                                     Spacer()
                                 }
-                            }
-                        }
+//                            }
+//                        }
                         .padding(.top, 10)
                         Divider()
                         // MARK: - 커뮤니티 댓글 뷰
@@ -211,15 +223,7 @@ struct CommunityDetailView: View {
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
             commentVm.sortByRecentComment()
-            //            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
-            // 유저가 좋아요를 눌렀는지
-            //                if userVM.likedMagazineIdArr.contains(where: { item in
-            //                    item == community.fields.id?.stringValue})
-            //                {
-            //                    isliked = true
-            //                }else{
-            //                    isliked = false
-            //                }
+       
             
             // 유저가 저장을 눌렀는지
             //                if userVM.userBookmarkedCommunity.contains(where: { item in

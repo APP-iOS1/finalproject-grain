@@ -72,6 +72,38 @@ struct MyPageView: View {
                     .padding(.horizontal, 5)
 
                     VStack(alignment: .leading){
+
+                        Text(userVM.currentUsers?.nickName.stringValue ?? "닉네임 없음")
+                            .font(.headline)
+                            .padding(.leading, 8)
+
+                        HStack{
+                            Text("팔로워 123124")
+                            Text("|")
+                            Text("팔로잉 123")
+                        }
+                        .padding(.leading, 9)
+                        .padding(.top, -5)
+                        .font(.footnote)
+                        .foregroundColor(.textGray)
+                        
+                        HStack{
+                            Text("바디")
+                            Text("|")
+                            Text("Leica CM")
+                            Text("바디")
+                            Text("|")
+                            Text("Leica CM")
+                            Text("바디")
+                            Text("|")
+                            Text("Leica CM")
+                        }
+                        .padding(.leading, 9)
+                        .padding(.top, -5)
+                        .font(.subheadline)
+                        .foregroundColor(.textGray)
+                        
+
                         VStack{
                             Button{
                                 showDevices.toggle()

@@ -17,6 +17,7 @@ struct MagazineSearchResultView: View {
     }
     
     let magazine: MagazineViewModel
+    let userViewModel: UserViewModel
     
     var body: some View {
             ZStack{
@@ -29,7 +30,7 @@ struct MagazineSearchResultView: View {
                                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                         },id: \.self) { item in
                             NavigationLink {
-//                                MagazineDetailView(data: item)
+                                MagazineDetailView(userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item)
                             } label: {
                                 HStack{
                                     Rectangle()
@@ -89,6 +90,6 @@ struct MagazineSearchResultView: View {
 
 struct MagazineSearchResultView_Previews: PreviewProvider {
     static var previews: some View {
-        MagazineSearchResultView(searchWord: .constant(""), magazine: MagazineViewModel())
+        MagazineSearchResultView(searchWord: .constant(""), magazine: MagazineViewModel(), userViewModel: UserViewModel())
     }
 }

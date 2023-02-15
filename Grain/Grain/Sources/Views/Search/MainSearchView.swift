@@ -117,15 +117,18 @@ struct MainSearchView: View {
                                     .padding(.horizontal, 20)
                                     .padding(.vertical, 8)
                                     .bold()
-                                    .frame(width: Screen.maxWidth * 0.27)
+                                    .frame(width: Screen.maxWidth * 0.28)
                             },
                             selection: {
                                 VStack(spacing: 0) {
                                     Spacer()
                                     Rectangle()
                                         .fill(Color.black)
-                                        .frame(height: 1)
+                                        .frame(width: Screen.maxWidth * 0.2, height: 1)
+                                        .transition(.slide)
+                                        .animation(.easeInOut, value: selectedIndex)
                                 }
+                                
                             })
                         .onChange(of: selectedIndex) { value in
                             self.isShownPickerProgress = true

@@ -96,7 +96,7 @@ struct ContentView: View {
                             } label: {
                                 if number == 2 {
                                     Image(systemName: icons[number])
-                                        .font(.title3)
+                                        .font(.title2)
                                         .foregroundColor(.white)
                                         .frame(width: 60, height: 60)
                                         .background(.black)
@@ -105,13 +105,13 @@ struct ContentView: View {
                                 else {
                                     VStack{
                                         Image(systemName: icons[number])
-                                            .font(.title3)
+                                            .font(.title2)
                                             .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
                                         Text(labels[number])
                                             .font(.caption)
                                             .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
                                     }
-                                    .frame(width: 60, height: 60)
+                                    .frame(width: 67, height: 60)
                                 }
                             }
                         }

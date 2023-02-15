@@ -10,6 +10,7 @@ struct MagazineDetailView: View {
     @State private var isHeartAnimation: Bool = false
     @State private var heartOpacity: Double = 0
     @State private var saveOpacity: Double = 0
+    @State private var showDevices: Bool = false
     
     @Environment(\.dismiss) private var dismiss
     
@@ -45,6 +46,7 @@ struct MagazineDetailView: View {
                                 .foregroundColor(.textGray)
                                 .font(.caption)
                                 .padding(.trailing , Screen.maxWidth * 0.03)
+
                         }
                     }
                     .padding(5)
@@ -94,39 +96,83 @@ struct MagazineDetailView: View {
                         .animation(.easeInOut, value: isBookMarked)
                         .opacity(saveOpacity)
                     }
-                    HStack{
-                        // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
-                        // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
-                        HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
-                            .padding(.leading)
-                        
-                        NavigationLink {
-                            MagazineCommentView(currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
-                        } label: {
-                            Image(systemName: "bubble.right")
-                                .font(.system(size: 24))
-                                .foregroundColor(.black)
-                                .padding(.top, 2)
-                        }
-                        
-                        Spacer()
-                        
-                        //MARK: 북마크 버튼
-                        
-                        Button {
-                            self.isBookMarked.toggle()
-                            self.saveOpacity = 1
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                self.saveOpacity = 0
+
+                    VStack(alignment: .leading){
+                        HStack{
+                            VStack{
+                                Button{
+                                    showDevices.toggle()
+                                    //                                transitionView.toggle()
+                                } label: {
+                                    VStack(alignment: .leading){
+                                        HStack{
+                                            Text("장비 정보")
+                                                .font(.subheadline)
+                                            Image(systemName: "chevron.right")
+                                                .font(.caption)
+                                                .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
+                                                .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
+                                        }
+                                        .bold()
+                                    }
+                                    .padding(.top, 5)
+                                }
+                                
                             }
-                        } label: {
-                            Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
-                                .font(.system(size: 25))
-                                .foregroundColor(.black)
+                            .padding(.leading, 20)
+                            .padding(.top, -5)
+                            .foregroundColor(.textGray)
+                            
+                            Spacer()
+                            // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
+                            // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
+                            HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
+                                .padding(.leading)
+                            
+                            NavigationLink {
+                                MagazineCommentView(currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
+                            } label: {
+                                Image(systemName: "bubble.right")
+                                    .font(.system(size: 23))
+                                    .foregroundColor(.black)
+                                    .padding(.top, 2)
+                            }
+                            
+                            //                        Spacer()
+                            
+                            //MARK: 북마크 버튼
+                            
+                            Button {
+                                self.isBookMarked.toggle()
+                                self.saveOpacity = 1
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    self.saveOpacity = 0
+                                }
+                            } label: {
+                                Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
+                                    .font(.system(size: 22))
+                                    .foregroundColor(.black)
+                            }
+                            .padding(.trailing)
+
                         }
-                        .padding(.trailing)
+                        .padding(.top, 5)
+                        
+                        if showDevices {
+                            VStack(alignment: .leading){
+                                userVM.myCamera.count > 1 ? Text("바디 | \(userVM.myCamera[1])") : nil
+                                
+                                userVM.myLens.count > 1 ? Text("렌즈 | \(userVM.myLens[1])") : nil
+                                
+                                userVM.myFilm.count > 1 ? Text("필름 | \(userVM.myFilm[1])") : nil
+                                
+                            }
+                            .font(.subheadline)
+                            .foregroundColor(.textGray)
+                            .padding(.top, -9)
+                            .padding(.leading, 20)
+                        }
                     }
-                    .padding(.top, 5)
                 }//VStack
                 .frame(minHeight: 350)
                 
@@ -219,63 +265,63 @@ struct MagazineDetailView: View {
         .padding(.top, 1)
         .navigationBarBackButtonHidden(true)
         .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(action: {
-                                dismiss()
-                            }, label: {
-                                HStack {
-                                    Image(systemName: "chevron.left")
-                                    Text("매거진")
-                                }
-                            })
-                            .accentColor(.black)
-                        }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    dismiss()
+                }, label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text("매거진")
+                    }
+                })
+                .accentColor(.black)
+            }
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
-//                if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
-                    Menu {
-                        Button {
-                            //저장시 코드
-                            self.isBookMarked.toggle()
-                            self.saveOpacity = 1
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                self.saveOpacity = 0
-                            }
-                        } label: {
-                            Text("저장")
+                //                if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                Menu {
+                    Button {
+                        //저장시 코드
+                        self.isBookMarked.toggle()
+                        self.saveOpacity = 1
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.saveOpacity = 0
                         }
-                        NavigationLink {
-                            MagazineEditView(data: data)
-                        }label: {
-                            Text("수정")
-                        }
-                        Button {
-                            magazineVM.deleteMagazine(docID: data.name)
-                            dismiss()
-                        } label: {
-                            Text("삭제")
-                        }
-                        
                     } label: {
-                        Label("더보기", systemImage: "ellipsis")
-                        
+                        Text("저장")
                     }
-                    .accentColor(.black)
-                    //.padding(.trailing, Screen.maxWidth * 0.04)
-//                } else {
-//                    Menu {
-//                        Button {
-//                            //저장시 코드
-//                        } label: {
-//                            Text("저장")
-//                        }
-//                    } label: {
-//                        Label("더보기", systemImage: "ellipsis")
-//                    }
-//                    .accentColor(.black)
-//                    .padding(.trailing, Screen.maxWidth * 0.04)
-//                }
+                    NavigationLink {
+                        MagazineEditView(data: data)
+                    }label: {
+                        Text("수정")
+                    }
+                    Button {
+                        magazineVM.deleteMagazine(docID: data.name)
+                        dismiss()
+                    } label: {
+                        Text("삭제")
+                    }
+                    
+                } label: {
+                    Label("더보기", systemImage: "ellipsis")
+                    
+                }
+                .accentColor(.black)
+                //.padding(.trailing, Screen.maxWidth * 0.04)
+                //                } else {
+                //                    Menu {
+                //                        Button {
+                //                            //저장시 코드
+                //                        } label: {
+                //                            Text("저장")
+                //                        }
+                //                    } label: {
+                //                        Label("더보기", systemImage: "ellipsis")
+                //                    }
+                //                    .accentColor(.black)
+                //                    .padding(.trailing, Screen.maxWidth * 0.04)
+                //                }
             }
         }
     }

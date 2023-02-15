@@ -84,7 +84,7 @@ struct CommunityRowView: View {
                                 .frame(width: 45, height: 25)
                                 .foregroundColor(Color(hex: "F8BC24"))
                                 .overlay{
-                                    Text("모집중")
+                                    Text(community.fields.state.stringValue)
                                         .foregroundColor(Color(hex: "616161"))
                                         .bold()
                                         .font(.caption)

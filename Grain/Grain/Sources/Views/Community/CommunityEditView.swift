@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseAuth
 import Kingfisher
+import Introspect
 
 struct CommunityEditView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -16,13 +17,13 @@ struct CommunityEditView: View {
     
     @State var community : CommunityDocument
     @State var editTitle : String = ""
-    @State var editContent : String = ""
+    @State private var editContent : String = ""
     
     @State var clickedTitle : Bool = false
     @State var clickedContent : Bool = false
     @State private var showAlert: Bool = false
     @State private var showSuccessAlert: Bool = false
-    
+ 
     var body: some View {
         NavigationView{
             ScrollView {
@@ -94,14 +95,14 @@ struct CommunityEditView: View {
 //                        .padding()
 //                        .padding(.top, -15)
                         //.padding()
-                        .padding(.bottom, 10)
+                        .padding(.bottom, 15)
                     }
                     
                         // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
                     HStack{
                         if clickedContent{
                             VStack{
-                                TextField(community.fields.content.stringValue, text: $editContent)
+                                TextField(community.fields.content.stringValue, text: $editContent, axis: .vertical)
                                     .lineSpacing(4.0)
                                     .padding(.vertical, -15)
                                     .padding()
@@ -111,7 +112,7 @@ struct CommunityEditView: View {
                                         clickedContent.toggle()
                                     }
                             }
-                            .padding(.top, -8)
+                            .padding(.top, -5)
                             
                         }else{
                             Text(community.fields.content.stringValue)
@@ -124,7 +125,7 @@ struct CommunityEditView: View {
                         }
                         Spacer()
                     }
-                    //.padding(.top, 27)
+                    .padding(.top, 6)
                     
                        
                     //Spacer()

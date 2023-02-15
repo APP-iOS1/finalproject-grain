@@ -45,6 +45,7 @@ final class CommentViewModel: ObservableObject {
             } receiveValue: { (data: CommentDocument) in
                 self.insertCommentSuccess.send()
                 print("id: \(data.name)")
+                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
             }.store(in: &subscription)
     }
     

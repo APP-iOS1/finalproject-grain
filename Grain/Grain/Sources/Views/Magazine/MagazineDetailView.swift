@@ -302,6 +302,7 @@ struct MagazineDetailView: View {
                     } label: {
                         Text("삭제")
                     }
+
                     
                 } label: {
                     Label("더보기", systemImage: "ellipsis")

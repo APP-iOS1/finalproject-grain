@@ -135,8 +135,7 @@ struct EditCameraView: View {
                     .listStyle(.sidebar)
                     .scrollContentBackground(.hidden)
                     
-                    Text("프로필에 보여질 장비를 첫 번째로 옮겨주세요.")
-                    Text("최상단에 위치한 장비가 프로필에 보여집니다.")
+
                     Text("첫 번째 장비가 프로필에 보여집니다.")
                         .font(.subheadline)
                         .foregroundColor(.textGray)

@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import FirebaseAuth
+import Kingfisher
 
 struct MagazineEditView: View {
     @State var data : MagazineDocument
@@ -30,7 +31,7 @@ struct MagazineEditView: View {
                                 Text(data.fields.nickName.stringValue)
                                     .bold()
                                 HStack {
-                                    Text("1분전")
+                                    Text(data.createTime.toDate()?.renderTime() ?? "")
                                     Spacer()
                                     if clickedCustomPlace{
                                         TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
@@ -62,16 +63,19 @@ struct MagazineEditView: View {
                         //                .resizable()
                         //                .frame(width: Screen.maxWidth, height: 0.3)
                         TabView{
-                            ForEach(1..<4, id: \.self) { i in
-                                Image("\(i)")
-                                    .resizable()
-                                    .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
-                                    .aspectRatio(contentMode: .fit)
+                            ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
+                                Rectangle()
+                                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                                    .overlay{
+                                        KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    }
+                                
                             }
                         }
+                        .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                         .tabViewStyle(.page)
-                        .frame(maxHeight: Screen.maxHeight * 0.27)
-                        .padding()
                     }
                     .frame(minHeight: 350)
 

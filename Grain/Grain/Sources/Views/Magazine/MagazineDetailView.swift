@@ -19,137 +19,133 @@ struct MagazineDetailView: View {
     
     var body: some View {
         ScrollView {
-                VStack{
-                    VStack {
-                        // MARK: 닉네임 헤더
-                        HStack {
-                            ForEach(userVM.users.filter{
-                                $0.fields.id.stringValue == data.fields.userID.stringValue
-                            }, id: \.self){ item in
-                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue )
-                                
-                            }
+            VStack{
+                VStack {
+                    // MARK: 닉네임 헤더
+                    HStack {
+                        ForEach(userVM.users.filter{
+                            $0.fields.id.stringValue == data.fields.userID.stringValue
+                        }, id: \.self){ item in
+                            MagazineProfileImage(imageName: item.fields.profileImage.stringValue )
                             
-                            VStack(alignment: .leading){
-                                Text(data.fields.nickName.stringValue)
-                                    .bold()
-                                Text(data.createTime.toDate()?.renderTime() ?? "")
-                                    .font(.caption)
-                                    .foregroundColor(.textGray)
-                            }
-                            
-                            Spacer()
-                            VStack{
-                                Spacer()
-                                Text(data.fields.customPlaceName.stringValue)
-                                    .foregroundColor(.textGray)
-                                    .font(.caption)
-                            }
                         }
-                        .padding(5)
-                        .padding(.trailing, 5)
                         
-                        // MARK: 이미지
-                        TabView{
-                            ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
-                                Rectangle()
-                                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                                    .overlay{
-                                        KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                    }
-                                
-                            }
+                        VStack(alignment: .leading){
+                            Text(data.fields.nickName.stringValue)
+                                .bold()
+                            Text(data.createTime.toDate()?.renderTime() ?? "")
+                                .font(.caption)
+                                .foregroundColor(.textGray)
                         }
-                        .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                        .tabViewStyle(.page)
-                        .overlay{
-                            
-                            Image(systemName: "heart.fill")
-                                .foregroundColor(.white)
-                                .font(.system(size: isHeartAnimation ? 110 : 70 ))
-                                .opacity(heartOpacity)
-                        }
-                        .overlay{
-                            Group{
-                                
-                                Rectangle()
-                                    .frame(width:
-                                            Screen.maxWidth * 0.3, height: Screen.maxWidth * 0.3, alignment: .center)
-                                    .foregroundColor(.black)
-                                    .cornerRadius(7)
-                                    .opacity(0.8)
-                                    .overlay{
-                                        VStack{
-                                            
-                                            Image(systemName: "bookmark.fill")
-                                                .foregroundColor(.white)
-                                                .font(.title)
-                                                .padding(.bottom,5)
-                                            Text("저장됨")
-                                                .foregroundColor(.white)
-                                                .bold()
-                                        }
-                                    }
-                            }
-                            .animation(.easeInOut, value: isBookMarked)
-                            .opacity(saveOpacity)
-                        }
-                        HStack{
-                            // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
-                            // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
-                            HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
-                                .padding(.leading)
-                            NavigationLink {
-                                MagazineCommentView(currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
-                            } label: {
-                                Image(systemName: "bubble.right")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(.black)
-                            }
-                            
+                        
+                        Spacer()
+                        VStack{
                             Spacer()
-                            
-                            //MARK: 북마크 버튼
-                            
-                            Button {
-                                self.isBookMarked.toggle()
-                                self.saveOpacity = 1
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    self.saveOpacity = 0
-                                }
-                            } label: {
-                                Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
-                                    .font(.system(size: 25))
-                                    .foregroundColor(.black)
-                            }
-                            .padding(.trailing)
+                            Text(data.fields.customPlaceName.stringValue)
+                                .foregroundColor(.textGray)
+                                .font(.caption)
                         }
-                        .padding(.top, 5)
-                    }//VStack
-                    .frame(minHeight: 350)
-                   
-                    // MARK: 제목
-                    Text(data.fields.title.stringValue)
-                        .font(.title2)
-                        .bold()
-                        .padding(.horizontal)
-                        .frame(width: Screen.maxWidth , alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .padding(.top)
-                        .padding(.bottom, 6)
+                    }
+                    .padding(5)
+                    //.padding(.trailing, Screen.maxWidth*0.03)
                     
-                    // MARK: 내용
-                    Text(data.fields.content.stringValue)
-                        .lineSpacing(7.0)
-                        .padding(.horizontal)
-                        .foregroundColor(Color.textGray)
-                    
-                    
-                    
-                    Spacer()
+                    // MARK: 이미지
+                    TabView{
+                        ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
+                            Rectangle()
+                                .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                                .overlay{
+                                    KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                }
+                            
+                        }
+                    }
+                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                    .tabViewStyle(.page)
+                    .overlay{
+                        Image(systemName: "heart.fill")
+                            .foregroundColor(.white)
+                            .font(.system(size: isHeartAnimation ? 95 : 60 ))
+                            .opacity(heartOpacity)
+                    }
+                    .overlay{
+                        Group{
+                            Rectangle()
+                                .frame(width:
+                                        Screen.maxWidth * 0.3, height: Screen.maxWidth * 0.3, alignment: .center)
+                                .foregroundColor(.black)
+                                .cornerRadius(7)
+                                .opacity(0.8)
+                                .overlay{
+                                    VStack{
+                                        Image(systemName: "bookmark.fill")
+                                            .foregroundColor(.white)
+                                            .font(.title)
+                                            .padding(.bottom,5)
+                                        Text("저장됨")
+                                            .foregroundColor(.white)
+                                            .bold()
+                                    }
+                                }
+                        }
+                        .animation(.easeInOut, value: isBookMarked)
+                        .opacity(saveOpacity)
+                    }
+                    HStack{
+                        // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
+                        // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
+                        HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
+                            .padding(.leading)
+                           
+                        NavigationLink {
+                            MagazineCommentView(currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
+                        } label: {
+                            Image(systemName: "bubble.right")
+                                .font(.system(size: 24))
+                                .foregroundColor(.black)
+                                .padding(.top, 2)
+                        }
+                        
+                        Spacer()
+                        
+                        //MARK: 북마크 버튼
+                        
+                        Button {
+                            self.isBookMarked.toggle()
+                            self.saveOpacity = 1
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.saveOpacity = 0
+                            }
+                        } label: {
+                            Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
+                                .font(.system(size: 25))
+                                .foregroundColor(.black)
+                        }
+                        .padding(.trailing)
+                    }
+                    .padding(.top, 5)
                 }//VStack
+                .frame(minHeight: 350)
+                
+                // MARK: 제목
+                Text(data.fields.title.stringValue)
+                    .font(.title2)
+                    .bold()
+                    .padding(.horizontal)
+                    .frame(width: Screen.maxWidth , alignment: .leading)
+                    .multilineTextAlignment(.leading)
+                    .padding(.top)
+                    .padding(.bottom, 6)
+                
+                // MARK: 내용
+                Text(data.fields.content.stringValue)
+                    .lineSpacing(7.0)
+                    .padding(.horizontal)
+                    .foregroundColor(Color.textGray)
+                Spacer()
+            }//VStack
         }//스크롤뷰
         .onAppear{
             // 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
@@ -222,31 +218,93 @@ struct MagazineDetailView: View {
         .padding(.top, 1)
         
         .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(action: {
+                                dismiss()
+                            }, label: {
+                                HStack {
+                                    Image(systemName: "chevron.left")
+                                    Text("매거진")
+                                }
+                            })
+                            .accentColor(.black)
+                        }
+            
             ToolbarItem(placement: .navigationBarTrailing) {
-                HStack{
-                    // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
-                    if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
+//                if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                    Menu {
+                        Button {
+                            //저장시 코드
+                            self.isBookMarked.toggle()
+                            self.saveOpacity = 1
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.saveOpacity = 0
+                            }
+                        } label: {
+                            Text("저장")
+                        }
                         NavigationLink {
                             MagazineEditView(data: data)
-                        } label: {
-                            Image(systemName: "square.and.pencil")
-                                .foregroundColor(.blue)
+                        }label: {
+                            Text("수정")
                         }
-                        
                         Button {
-                            //삭제
                             magazineVM.deleteMagazine(docID: data.name)
                             dismiss()
                         } label: {
-                            Image(systemName: "trash")
-                                .foregroundColor(.blue)
+                            Text("삭제")
                         }
+                        
+                    } label: {
+                        Label("더보기", systemImage: "ellipsis")
+                        
                     }
-                }
+                    .accentColor(.black)
+                    //.padding(.trailing, Screen.maxWidth * 0.04)
+//                } else {
+//                    Menu {
+//                        Button {
+//                            //저장시 코드
+//                        } label: {
+//                            Text("저장")
+//                        }
+//                    } label: {
+//                        Label("더보기", systemImage: "ellipsis")
+//                    }
+//                    .accentColor(.black)
+//                    .padding(.trailing, Screen.maxWidth * 0.04)
+//                }
             }
         }
     }
+    //        .toolbar {
+    //            ToolbarItem(placement: .navigationBarTrailing) {
+    //                HStack{
+    //                    // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
+    //                    if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
+    //                        NavigationLink {
+    //                            MagazineEditView(data: data)
+    //                        } label: {
+    //                            Image(systemName: "square.and.pencil")
+    //                                .foregroundColor(.blue)
+    //                        }
+    //
+    //                        Button {
+    //                            //삭제
+    //                            magazineVM.deleteMagazine(docID: data.name)
+    //                            dismiss()
+    //                        } label: {
+    //                            Image(systemName: "trash")
+    //                                .foregroundColor(.blue)
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
 }
+
+
 
 //struct MagazineDetailView_Previews: PreviewProvider {
 //    static var previews: some View {

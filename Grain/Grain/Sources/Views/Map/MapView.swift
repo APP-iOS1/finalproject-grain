@@ -51,21 +51,21 @@ struct MapView: View {
     
   
     @State private var isSheetPresented = true
-    
-    func changeStroke(categoryString : String) -> Color {
-        switch categoryString{
-        case "전체":
-            return Color(hex: "1A4645")
-        case "필름스팟":
-            return Color(hex: "F8BC24")
-        case "현상소":
-            return Color(hex: "F58800")
-        case "수리점":
-            return Color(hex: "266867")
-        default :
-            return Color(hex: "1A4645")
-        }
-    }
+    // MARK: - 색상 변경
+//    func changeStroke(categoryString : String) -> Color {
+//        switch categoryString{
+//        case "전체":
+//            return Color(hex: "1A4645")
+//        case "필름스팟":
+//            return Color(hex: "F8BC24")
+//        case "현상소":
+//            return Color(hex: "F58800")
+//        case "수리점":
+//            return Color(hex: "266867")
+//        default :
+//            return Color(hex: "1A4645")
+//        }
+//    }
     var body: some View {
         VStack{
             
@@ -88,12 +88,12 @@ struct MapView: View {
                             .overlay{
                                 // FIXME: onSubmit 하고 버튼 눌러야함
                                 RoundedRectangle(cornerRadius: 10)
-                                    .stroke(changeStroke(categoryString: categoryString), lineWidth: 3)
+                                    .stroke(.black, lineWidth: 3)
                             }.padding()
                         
                         // 검색 확인 버튼
                         RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(changeStroke(categoryString: categoryString))
+                            .foregroundColor(.black)
                             .frame(width: 50, height: 51)
                             .overlay{
                                 Image(systemName: "location.magnifyingglass")
@@ -175,7 +175,7 @@ struct MapView: View {
                 // 이지역 재 검색 버튼
                 RoundedRectangle(cornerRadius: 17)
                     .frame(width: Screen.maxWidth * 0.4, height: 40)
-                    .foregroundColor(changeStroke(categoryString: categoryString))
+                    .foregroundColor(.black)
                     .overlay{
                         HStack{
                             Image(systemName: "arrow.clockwise")
@@ -252,10 +252,10 @@ struct UIMapView: UIViewRepresentable,View {
     
     //TODO: 지금 현재 위치를 못 받아오는거 같음
     var userLatitude: Double {
-        return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
+        return locationManager.lastLocation?.coordinate.latitude ?? 37.5069671
     }
     var userLongitude: Double {
-        return locationManager.lastLocation?.coordinate.longitude ?? 127.07766400
+        return locationManager.lastLocation?.coordinate.longitude ?? 127.0556671
     }
     
     // UIView 기반 컴포넌트의 인스턴스 생성하고 필요한 초기화 작업을 수행한 뒤 반환한다.

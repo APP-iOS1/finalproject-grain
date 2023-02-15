@@ -32,7 +32,7 @@ struct MagazineContentAddView: View {
     // 이미지 앨범에서 가져오기
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImageData: Data? = nil
-    
+    @State private var selectedItems: [PhotosPickerItem] = []
     // 유저 데이터
     
     @StateObject var userVM = UserViewModel()
@@ -105,7 +105,7 @@ struct MagazineContentAddView: View {
                         .padding(.top)
                     
                     // MARK: 게시물 제목 작성 란
-                    TextField("임시", text: $inputTitle)
+                    TextField("제목을 입력해주세요", text: $inputTitle)
                         .font(.title3)
                         .keyboardType(.default)
                         .textInputAutocapitalization(.never)
@@ -122,12 +122,12 @@ struct MagazineContentAddView: View {
                         .frame(width: Screen.maxWidth * 0.95,height: 1)
 
                     // MARK: 게시물 내용 작성 란
-                    TextField("임시", text: $inputContent, axis: .vertical)
+                    TextField("소중한 추억을 기록해주세요", text: $inputContent, axis: .vertical)
                         .font(.title3)
                         .textInputAutocapitalization(.never)
                         .keyboardType(.default)
                         .disableAutocorrection(true)
-                        .lineLimit(12)
+                        .lineLimit(7)
                         .padding(.horizontal, 15)
                         .toolbar {
                             ToolbarItemGroup(placement: .keyboard) {
@@ -140,7 +140,7 @@ struct MagazineContentAddView: View {
                                 }
                             }
                         }
-                        .frame(height: Screen.maxHeight * 0.4)
+                        .frame(height: Screen.maxHeight * 0.4, alignment: .top)
                     
 
                     Spacer()
@@ -178,7 +178,7 @@ struct MagazineContentAddView: View {
                     }
                 } //vstack
 
-                .navigationTitle("임시")
+                .navigationTitle("매거진")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {

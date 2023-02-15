@@ -116,7 +116,7 @@ struct AddCommunityView: View {
                     .frame(width: Screen.maxWidth * 0.95,height: 1)
                 
                 //MARK: 게시물 제목 작성 란
-                TextField("임시", text: $inputTitle)
+                TextField("제목을 입력해주세요", text: $inputTitle)
                     .font(.title3)
                     .keyboardType(.default)
                     .textInputAutocapitalization(.never)
@@ -134,12 +134,12 @@ struct AddCommunityView: View {
                     .border(.black)
                 
                 // MARK: 게시물 내용 작성 란
-                TextField("임시", text: $inputContent, axis: .vertical)
+                TextField("내용을 입력해주세요", text: $inputContent, axis: .vertical)
                     .font(.title3)
                     .textInputAutocapitalization(.never)
                     .keyboardType(.default)
                     .disableAutocorrection(true)
-                    .lineLimit(12)
+                    .lineLimit(7)
                     .padding(.horizontal, 15)
                     .toolbar {
                         ToolbarItemGroup(placement: .keyboard) {
@@ -152,7 +152,7 @@ struct AddCommunityView: View {
                             }
                         }
                     }
-                    .frame(height: Screen.maxHeight * 0.4)
+                    .frame(height: Screen.maxHeight * 0.4, alignment: .top)
 
                 Spacer()
                 
@@ -192,7 +192,7 @@ struct AddCommunityView: View {
                     }
                 }
             }
-            .navigationTitle("임시")
+            .navigationTitle("커뮤니티")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

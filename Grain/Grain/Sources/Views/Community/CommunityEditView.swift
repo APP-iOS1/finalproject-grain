@@ -8,7 +8,7 @@
 import SwiftUI
 import FirebaseAuth
 import Kingfisher
-import Introspect
+//import Introspect
 
 struct CommunityEditView: View {
     @Environment(\.presentationMode) var presentationMode

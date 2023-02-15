@@ -18,5 +18,4 @@ target 'Grain' do
   pod 'KakaoSDKAuth'
   pod 'KakaoSDKUser'
   pod 'Kingfisher'
-  pod 'Introspect'
 end

@@ -98,7 +98,7 @@ struct MagazineDetailView: View {
                         // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
                         HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
                             .padding(.leading)
-                           
+                        
                         NavigationLink {
                             MagazineCommentView(currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
                         } label: {
@@ -216,7 +216,7 @@ struct MagazineDetailView: View {
             
         }
         .padding(.top, 1)
-        
+        .navigationBarBackButtonHidden(true)
         .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button(action: {

@@ -17,7 +17,7 @@ struct HeartButton: View {
     var body: some View {
         ZStack {
             Image(systemName: isHeartToggle ? "heart.fill" : "heart")
-                .font(.system(size: 25))
+                .font(.system(size: 24))
                 .foregroundColor(isHeartToggle ? .red : .black)
                 .scaleEffect(self.imageScale)
                 

@@ -44,6 +44,7 @@ struct MagazineDetailView: View {
                             Text(data.fields.customPlaceName.stringValue)
                                 .foregroundColor(.textGray)
                                 .font(.caption)
+                                .padding(.trailing , Screen.maxWidth * 0.03)
                         }
                     }
                     .padding(5)

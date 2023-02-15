@@ -60,8 +60,10 @@ struct CommentView: View {
     }
 }
 
-//struct CommentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CommentView(comment: Comment(id: "ddd", userID: "ddd", profileImage: "1", nickName: "승수", comment: "동해물가 백두산이 마르고 닿도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려강산 대한사람 대한으로 길이보전하세", createdAt: Date()))
-//    }
-//}
+struct CommentView_Previews: PreviewProvider {
+    @StateObject var communityVM = CommunityViewModel()
+
+    static var previews: some View {
+        CommentView(comment: CommentFields(comment: CommentString(stringValue: "dfda"), profileImage: CommentString(stringValue: "dfsd"), nickName: CommentString(stringValue: "bldf"), userID: CommentString(stringValue: "sdddu"), id: CommentString(stringValue: "dafdf")), commentTime: "", commentText: "", collectionDocId: "")
+    }
+}

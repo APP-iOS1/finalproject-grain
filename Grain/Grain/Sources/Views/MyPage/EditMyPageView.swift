@@ -53,7 +53,7 @@ struct EditMyPageView: View {
         return profileImage
     }
     
-    let nickNameLimit = 8
+    let nickNameLimit = 15
     let introduceLimit = 50
     
     // 닉네임 정규식
@@ -107,6 +107,7 @@ struct EditMyPageView: View {
                     if selectedImages.count == 0{
                         KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                             .resizable()
+                            .scaledToFill()
                             .frame(width: 100, height: 100)
                             .cornerRadius(64)
                             .overlay {
@@ -174,7 +175,7 @@ struct EditMyPageView: View {
                     Text("닉네임")
                         .padding(.horizontal, 3)
                     Spacer()
-                    Text("\(editedNickname.count)/8")
+                    Text("\(editedNickname.count)/15")
                 }
                 .padding(.horizontal)
                 
@@ -286,9 +287,14 @@ struct EditMyPageView: View {
                             let docID = currentUser.id.stringValue
                             currentUser.nickName.stringValue = editedNickname
                             
-                            userVM.updateCurrentUserProfile(profileImage: selectedImages.count > 0 ? selectedImages : [], nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : introduce, docID: docID)
+                            // 선택된 이미지 배열에서 마지막 요소만 반환
+                            if selectedImages.count > 0{
+                                selectedImages.removeSubrange(0 ..< selectedImages.count - 1)
+                            }
+                            userVM.updateCurrentUserProfile(profileImage: selectedImages.count > 0 ? selectedImages : [], nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : "", docID: docID)
+
                             print("selectedImages:\(selectedImages)")
-                            
+    
                             dismiss()
                         }
                     }label: {

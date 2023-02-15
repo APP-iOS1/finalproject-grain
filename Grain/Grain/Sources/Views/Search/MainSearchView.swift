@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 private enum FocusableField: Hashable {
     case search
@@ -19,7 +20,7 @@ enum SearchState: Hashable {
 struct MainSearchView: View {
     @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
     @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
-    @StateObject var userViewModel: UserViewModel = UserViewModel()
+    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
     
     @State private var searchWord: String = ""
     @State private var searchList: [String] =  ["카메라", "명소", " 출사"]
@@ -116,15 +117,18 @@ struct MainSearchView: View {
                                     .padding(.horizontal, 20)
                                     .padding(.vertical, 8)
                                     .bold()
-                                    .frame(width: Screen.maxWidth * 0.27)
+                                    .frame(width: Screen.maxWidth * 0.28)
                             },
                             selection: {
                                 VStack(spacing: 0) {
                                     Spacer()
                                     Rectangle()
                                         .fill(Color.black)
-                                        .frame(height: 1)
+                                        .frame(width: Screen.maxWidth * 0.2, height: 1)
+                                        .transition(.slide)
+                                        .animation(.easeInOut, value: selectedIndex)
                                 }
+                                
                             })
                         .onChange(of: selectedIndex) { value in
                             self.isShownPickerProgress = true
@@ -164,7 +168,7 @@ struct MainSearchView: View {
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                                     }.prefix(3),id: \.self) { item in
                                         NavigationLink {
-//                                            MagazineDetailView(data: item)
+                                            MagazineDetailView(userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item)
                                         } label: {
                                             VStack(alignment: .leading){
                                                 Text(item.fields.title.stringValue)
@@ -383,7 +387,7 @@ struct MainSearchView: View {
             }
         }
         .navigationDestination(isPresented: $isMagazineSearchResultShown){
-            MagazineSearchResultView(searchWord: $searchWord, magazine: magazineViewModel)
+            MagazineSearchResultView(searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
         }
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
             CommunitySearchResultView(searchWord: $searchWord, community: communtyViewModel)
@@ -393,7 +397,7 @@ struct MainSearchView: View {
         }
         .onAppear{
             self.focus = .search
-            
+            userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             communtyViewModel.fetchCommunity()
             magazineViewModel.fetchMagazine()
             userViewModel.fetchUser()

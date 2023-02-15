@@ -127,6 +127,9 @@ struct EditCameraView: View {
                         
                         // MARK: 카메라 렌즈 섹션
                         LensList(userVM: userVM, myLenses: $myLenses, showAddLens: $showAddLens, newItem: $newLensItem)
+                            .task {
+                                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+                            }
                         
                         // MARK: 카메라 필름 섹션
                         FilmList(userVM: userVM, myFilms: $myFilms, showAddFilm: $showAddFilm, newItem: $newFilmItem)
@@ -215,7 +218,7 @@ struct BodyList: View {
     @FocusState private var focus: Bool
     
     var body: some View {
-        Section(header: Text("바디").bold()){
+        Section(header: Text("바디").font(.subheadline).bold()){
             
             // 유저의 바디 정보가 담긴 배열로 부터 리스트 생성
             ForEach(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self) { camera in
@@ -323,18 +326,19 @@ struct LensList: View {
     @FocusState private var focus: Bool
 
     var body: some View {
-        Section(header: Text("렌즈").bold()){
+        Section(header: Text("렌즈").font(.subheadline).bold()){
             
             // 유저의 렌즈 정보가 담긴 배열로 부터 리스트 생성
-            ForEach(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self) { lens in
-                if lens.stringValue != "선택" {
-                    Text(lens.stringValue)
+            ForEach(userVM.myLens , id: \.self) { lens in
+                if lens != "선택" {
+                    Text(lens)
                 }
             }
             .onDelete(perform: removeLensList(at:))
+            .onMove(perform: moveList)
             
             if editMode?.wrappedValue.isEditing == true {
-                // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
+                // 렌즈 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
                 if showAddLens {
                     HStack {
                         TextField("장비를 입력하세요", text: $newItem)
@@ -343,10 +347,13 @@ struct LensList: View {
                             .disableAutocorrection(true)
                             .onSubmit {
                                 if trimNewItem.count > 0 {
-                                    Task{
-                                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myLens", updateValue: newItem, isArray: true)
+                                        userVM.myLens.append(newItem)
+                                        if let user = userVM.currentUsers {
+                                            let arr = userVM.myLens
+                                            let docID =  user.id.stringValue
+                                            userVM.updateCurrentUserArray(type: "myLens", arr: arr, docID: docID)
                                         newItem = ""
-                                        userVM.fetchCurrentUser(userID: docID ?? "")
+                                        userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                                     }
                                 }
                             }
@@ -354,10 +361,16 @@ struct LensList: View {
                         Button{
                             if trimNewItem.count > 0{
                                 Task{
-                                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myLens", updateValue: newItem, isArray: true)
+                                    userVM.myLens.append(newItem)
+                                    if let user = userVM.currentUsers {
+                                        let arr = userVM.myLens
+                                        let docID =  user.id.stringValue
+                                        userVM.updateCurrentUserArray(type: "myLens", arr: arr, docID: docID)
+                                    }
                                     newItem = ""
                                     userVM.fetchCurrentUser(userID: docID ?? "")
-                                }                            }
+                                }
+                            }
                         } label: {
                             Image(systemName: "plus.circle")
                         }
@@ -397,8 +410,22 @@ struct LensList: View {
     
     // MARK: 렌즈 삭제 함수
     func removeLensList(at offsets: IndexSet) {
-        myLenses.remove(atOffsets: offsets)
-        
+        if let user = userVM.currentUsers {
+            userVM.myLens.remove(atOffsets: offsets)
+//            print("likedMagazineIDARR: \(userVM.likedMagazineID)")
+            let docID = user.id.stringValue
+            userVM.updateCurrentUserArray(type: "myLens", arr: userVM.myLens, docID: docID)
+        }
+    }
+    
+    // MARK: 렌즈 위치 변경 함수
+    func moveList(from source: IndexSet, to destination: Int) {
+        if let user = userVM.currentUsers {
+            userVM.myLens.move(fromOffsets: source, toOffset: destination)
+//            print("likedMagazineIDARR: \(userVM.likedMagazineID)")
+            let docID = user.id.stringValue
+            userVM.updateCurrentUserArray(type: "myLens", arr: userVM.myLens, docID: docID)
+        }
     }
 }
 
@@ -419,7 +446,7 @@ struct FilmList: View {
     @FocusState private var focus: Bool
 
     var body: some View {
-        Section(header: Text("필름").bold()){
+        Section(header: Text("필름").font(.subheadline).bold()){
             ForEach(userVM.currentUsers?.myFilm.arrayValue.values ?? [], id: \.self) { film in
                 if film.stringValue != "선택" {
                     Text(film.stringValue)
@@ -428,7 +455,7 @@ struct FilmList: View {
             .onDelete(perform: removeFilmList(at:))
             
             if editMode?.wrappedValue.isEditing == true {
-                // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
+                // 필름 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
                 if showAddFilm {
                     HStack {
                         TextField("장비를 입력하세요", text: $newItem)

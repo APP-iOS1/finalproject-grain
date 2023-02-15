@@ -13,6 +13,7 @@ struct MyPageOptionView: View {
 //    @StateObject var authVM = AuthenticationStore()
     var userVM: UserViewModel
     var bookmarkedMagazineDocument: [MagazineDocument]
+    var bookmarkedCommunityDoument: [CommunityDocument]
     
     @StateObject var communityVM: CommunityViewModel = CommunityViewModel()
     
@@ -44,7 +45,7 @@ struct MyPageOptionView: View {
             
             ScrollView{
                 //MARK: 계정 섹션
-                AccountSection(userVM: userVM, community: communityVM.communities, bookmarkedMagazineDocument: bookmarkedMagazineDocument)
+                AccountSection(userVM: userVM, bookmarkedMagazineDocument: bookmarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
                 
                 //MARK: 지원 섹션
                 SupportSection()
@@ -88,8 +89,9 @@ extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate 
 //MARK: - 계정 섹션
 struct AccountSection: View {
     var userVM: UserViewModel
-    var community: [CommunityDocument]
+//    var community: [CommunityDocument]
     var bookmarkedMagazineDocument: [MagazineDocument]
+    var bookmarkedCommunityDoument: [CommunityDocument]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
@@ -168,7 +170,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedCommunityView(community: community)
+                BookmarkedCommunityView(bookmarkedCommunityDoument: bookmarkedCommunityDoument)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")
@@ -261,7 +263,10 @@ struct SupportSection: View {
 struct InfoSection: View {
     @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
     @ObservedObject var kakoAuthVM: KakaoAuthenticationStore = KakaoAuthenticationStore()
-
+   
+    // Alert 변수
+    @State private var showAlert: Bool = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
             Text("정보")
@@ -316,17 +321,19 @@ struct InfoSection: View {
             .padding(.horizontal)
             
             Button {
-                if authVM.logInCompanyState == .appleLogIn {
-                    authVM.appleLogout()
-                } else if authVM.logInCompanyState == .googleLogIn {
-                    authVM.googleLogout()
-                } else if authVM.logInCompanyState == .kakaoLogIn {
-                    kakoAuthVM.kakaoLogOut()
-                } else {
-                    authVM.appleLogout()
-                    authVM.googleLogout()
-                    kakoAuthVM.kakaoLogOut()
-                }
+//                if authVM.logInCompanyState == .appleLogIn {
+//                    authVM.appleLogout()
+//                } else if authVM.logInCompanyState == .googleLogIn {
+//                    authVM.googleLogout()
+//                } else if authVM.logInCompanyState == .kakaoLogIn {
+//                    kakoAuthVM.kakaoLogOut()
+//                } else {
+//                    authVM.appleLogout()
+//                    authVM.googleLogout()
+//                    kakoAuthVM.kakaoLogOut()
+//                }
+                showAlert.toggle()
+                
             } label: {
                 HStack {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
@@ -346,7 +353,27 @@ struct InfoSection: View {
                 .padding(.horizontal)
             }
             .padding(.horizontal)
-            
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("로그아웃 하시겠습니까?"),
+                      primaryButton: .destructive(
+                        Text("네")
+                      ){
+                          if authVM.logInCompanyState == .appleLogIn {
+                              authVM.appleLogout()
+                          } else if authVM.logInCompanyState == .googleLogIn {
+                              authVM.googleLogout()
+                          } else if authVM.logInCompanyState == .kakaoLogIn {
+                              kakoAuthVM.kakaoLogOut()
+                          } else {
+                              authVM.appleLogout()
+                              authVM.googleLogout()
+                              kakoAuthVM.kakaoLogOut()
+                          }
+                      },
+                      secondaryButton: .default(
+                        Text("아니오")
+                      ))
+            }
         }
     }
 }

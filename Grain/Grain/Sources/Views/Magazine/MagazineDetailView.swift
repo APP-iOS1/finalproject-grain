@@ -9,180 +9,168 @@ struct MagazineDetailView: View {
     @State private var isBookMarked: Bool = true
     @State private var isHeartAnimation: Bool = false
     @State private var heartOpacity: Double = 0
+    @State private var saveOpacity: Double = 0
     
-    @Environment(\.dismiss) private var dismiss // <- 임시 방편
+    @Environment(\.dismiss) private var dismiss
     
     let userVM: UserViewModel
     let currentUsers : CurrentUserFields?
     let data : MagazineDocument
     
-    
     var body: some View {
-        
         ScrollView {
-            VStack{
-                VStack {
-                    // MARK: 닉네임 헤더
-                    HStack {
-                        Circle()
-                            .frame(width: 40)
-                        VStack(alignment: .leading) {
-                            Text(data.fields.nickName.stringValue)
-                                .bold()
-                            HStack {
-                                Text(data.createdDate?.renderTime() ?? "")
+                VStack{
+                    VStack {
+                        // MARK: 닉네임 헤더
+                        HStack {
+                            ForEach(userVM.users.filter{
+                                $0.fields.id.stringValue == data.fields.userID.stringValue
+                            }, id: \.self){ item in
+                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue )
+                                
+                            }
+                            
+                            VStack(alignment: .leading){
+                                Text(data.fields.nickName.stringValue)
+                                    .bold()
+                                Text(data.createTime.toDate()?.renderTime() ?? "")
+                                    .font(.caption)
+                                    .foregroundColor(.textGray)
+                            }
+                            
+                            Spacer()
+                            VStack{
                                 Spacer()
                                 Text(data.fields.customPlaceName.stringValue)
+                                    .foregroundColor(.textGray)
+                                    .font(.caption)
                             }
-                            .font(.caption)
                         }
-                        Spacer()
-                    }
-                    .padding()
-                    .padding(.top, -15)
-//                    Divider()
-//                        .background(Color.black)
-//                        .padding(.top, -5)
-//                        .padding(.bottom, -10)
-//                    
-                    // MARK: 이미지
-                    TabView{
-                        ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
-                            Rectangle()
-                                .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                                .overlay{
-                                    KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                }
-                            
-                        }
-                    }
-                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                    .tabViewStyle(.page)
-                    .overlay{
+                        .padding(5)
+                        .padding(.trailing, 5)
                         
-                        Image(systemName: "heart.fill")
-                            .foregroundColor(.white)
-                            .font(.system(size: isHeartAnimation ? 110 : 70 ))
-                            .opacity(heartOpacity)
-                    }
-                    HStack{
-                        // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
-                        // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
-                        HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
-                            .padding(.leading)
-                        NavigationLink {
-                            MagazineCommentView(currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
-                        } label: {
-                            Image(systemName: "bubble.right")
-                                .font(.system(size: 24))
-                                .foregroundColor(.black)
-                        }
-                        Button {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+                        // MARK: 이미지
+                        TabView{
+                            ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
+                                Rectangle()
+                                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                                    .overlay{
+                                        KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    }
                                 
-                                if userVM.likedMagazineID.contains(where: { item in
-                                    item == data.fields.id.stringValue})
-                                {
-                                    isHeartToggle = true
-                                    print("트루")
-                                }else{
-                                    isHeartToggle = false
-                                    print("폴스")
-                                }
-                                print("테스트 \(userVM.likedMagazineID)")
-                                //                                    if userVM.bookmarkedMagazineID.contains(where: { item in
-                                //                                        item == data.fields.id.stringValue})
-                                //                                    {
-                                //                                        isBookMarked = true
-                                //                                        print("트루")
-                                //                                    }else{
-                                //                                        isBookMarked = false
-                                //                                        print("폴스")
-                                //                                    }
                             }
-                        } label: {
-                            Text("테스트")
                         }
-                        
-                        //MARK: 북마크 버튼
-                        Button {
-                            isBookMarked.toggle()
-                        } label: {
-                            Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
-                                .font(.system(size: 25))
-                                .foregroundColor(.black)
+                        .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                        .tabViewStyle(.page)
+                        .overlay{
+                            
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.white)
+                                .font(.system(size: isHeartAnimation ? 110 : 70 ))
+                                .opacity(heartOpacity)
                         }
-                        Spacer()
-                        
-                        Button {
-                            print("user: \(userVM.currentUsers?.id.stringValue ?? "")")
-                        } label: {
-                            Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
-                                .font(.system(size: 25))
-                                .foregroundColor(.black)
+                        .overlay{
+                            Group{
+                                
+                                Rectangle()
+                                    .frame(width:
+                                            Screen.maxWidth * 0.3, height: Screen.maxWidth * 0.3, alignment: .center)
+                                    .foregroundColor(.black)
+                                    .cornerRadius(7)
+                                    .opacity(0.8)
+                                    .overlay{
+                                        VStack{
+                                            
+                                            Image(systemName: "bookmark.fill")
+                                                .foregroundColor(.white)
+                                                .font(.title)
+                                                .padding(.bottom,5)
+                                            Text("저장됨")
+                                                .foregroundColor(.white)
+                                                .bold()
+                                        }
+                                    }
+                            }
+                            .animation(.easeInOut, value: isBookMarked)
+                            .opacity(saveOpacity)
                         }
-                    }
+                        HStack{
+                            // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
+                            // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
+                            HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
+                                .padding(.leading)
+                            NavigationLink {
+                                MagazineCommentView(currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
+                            } label: {
+                                Image(systemName: "bubble.right")
+                                    .font(.system(size: 24))
+                                    .foregroundColor(.black)
+                            }
+                            
+                            Spacer()
+                            
+                            //MARK: 북마크 버튼
+                            
+                            Button {
+                                self.isBookMarked.toggle()
+                                self.saveOpacity = 1
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    self.saveOpacity = 0
+                                }
+                            } label: {
+                                Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
+                                    .font(.system(size: 25))
+                                    .foregroundColor(.black)
+                            }
+                            .padding(.trailing)
+                        }
+                        .padding(.top, 5)
+                    }//VStack
+                    .frame(minHeight: 350)
+                   
+                    // MARK: 제목
+                    Text(data.fields.title.stringValue)
+                        .font(.title2)
+                        .bold()
+                        .padding(.horizontal)
+                        .frame(width: Screen.maxWidth , alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                        .padding(.top)
+                        .padding(.bottom, 6)
+                    
+                    // MARK: 내용
+                    Text(data.fields.content.stringValue)
+                        .lineSpacing(7.0)
+                        .padding(.horizontal)
+                        .foregroundColor(Color.textGray)
+                    
+                    
+                    
+                    Spacer()
                 }//VStack
-                .frame(minHeight: 350)
-                // MARK: 스티키 헤더 제목과 건텐츠
-                LazyVStack(pinnedViews: [.sectionHeaders]) {
-                    Section(header: MagazineDetailHeader(data: data) ){
-                        VStack {
-                            Text(data.fields.content.stringValue)
-                                .lineSpacing(4.0)
-                                .padding(.vertical, -9)
-                                .padding()
-                                .foregroundColor(Color.textGray)
-                        }
-                    }
-                }
-                Spacer()
-            }//VStack
         }//스크롤뷰
         .onAppear{
-            
-            /// 뷰가 처음 생길떄 fetch 한번 한다.
-            /// 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
-            //                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            // 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
+            // 좋아요 버튼
+            userVM.fetchUser()
             if userVM.likedMagazineID.contains(where: { item in
                 item == data.fields.id.stringValue})
             {
                 isHeartToggle = true
-                print("트루")
             }else{
                 isHeartToggle = false
-                print("폴스")
             }
-            //                    if userVM.likedMagazineID.contains(where: { item in
-            //                        item == data.fields.id.stringValue})
-            //                    {
-            //                        self.isHeartToggle = true
-            //                    }else{
-            //                        self.isHeartToggle = false
-            //                    }
+            if userVM.bookmarkedMagazineID.contains(where: { item in
+                item == data.fields.id.stringValue})
+            {
+                isBookMarked = true
+            }else{
+                isBookMarked = false
+            }
         }
         .onDisappear{
-            /// restAPI 방식으로 수정 해야할 부분
-            //                Task{
-            //                    // 유저 DB에 좋아요 상태 저장/삭제
-            //                    if isHeartToggle {
-            //                        /// 추가 부분
-            //                        await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "likedMagazineId", updateValue: data.fields.id.stringValue, isArray: true)
-            //                    }else{
-            //                        /// 삭제부분
-            //                        await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "likedMagazineId", deleteIndex: data.fields.id.stringValue, isArray: true)
-            //                    }
-            //
-            //                    // 유저 DB에 북마크 상태 저장/삭제
-            //                    if isBookMarked {
-            //                        await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "bookmarkedMagazineID", updateValue: data.fields.id.stringValue, isArray: true)
-            //                    }else{
-            //                        await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: data.fields.id.stringValue, isArray: true)
-            //                    }
-            //                }
-            
             if isHeartToggle {
                 // 좋아요 누름
                 if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
@@ -208,27 +196,27 @@ struct MagazineDetailView: View {
                     }
                 }
             }
-            //
-            //                if isBookMarked {
-            //                    // 저장 누름
-            //                    if !userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
-            //                        userVM.bookmarkedMagazineID.append(data.fields.id.stringValue)
-            //                        if let user = userVM.currentUsers {
-            //                            let arr = userVM.bookmarkedMagazineID
-            //                            let docID = user.id.stringValue
-            //                            userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
-            //                        }
-            //                    }
-            //                } else {
-            //                    // 저장 취소
-            //                    if userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
-            //                        if let user = userVM.currentUsers {
-            //                            let arr = userVM.bookmarkedMagazineID.filter {$0 != data.fields.id.stringValue}
-            //                            let docID = user.id.stringValue
-            //                            userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
-            //                        }
-            //                    }
-            //                }
+            
+            if isBookMarked {
+                // 저장 누름
+                if !userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
+                    userVM.bookmarkedMagazineID.append(data.fields.id.stringValue)
+                    if let user = userVM.currentUsers {
+                        let arr = userVM.bookmarkedMagazineID
+                        let docID = user.id.stringValue
+                        userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
+                    }
+                }
+            } else {
+                // 저장 취소
+                if userVM.bookmarkedMagazineID.contains(data.fields.id.stringValue){
+                    if let user = userVM.currentUsers {
+                        let arr = userVM.bookmarkedMagazineID.filter {$0 != data.fields.id.stringValue}
+                        let docID = user.id.stringValue
+                        userVM.updateCurrentUserArray(type: "bookmarkedMagazineID", arr: arr, docID: docID)
+                    }
+                }
+            }
             
         }
         .padding(.top, 1)
@@ -257,24 +245,6 @@ struct MagazineDetailView: View {
                 }
             }
         }
-    }
-}
-
-struct MagazineDetailHeader: View {
-    var data : MagazineDocument
-    var body: some View {
-        VStack(alignment: .leading) {
-            Spacer()
-            Text(data.fields.title.stringValue)
-                .font(.title2)
-                .bold()
-                .padding(.horizontal)
-            Spacer()
-            Divider()
-        }
-        .frame(minWidth: 0, maxWidth: .infinity)
-        .frame(height: 56)
-        .background(Rectangle().foregroundColor(.white))
     }
 }
 

@@ -58,15 +58,10 @@ struct MapCategoryCellView: View {
             } label: {
                 
                 Rectangle()
-                    .foregroundColor(allButtonClickedBool ? Color(hex: "1A4645") : .white)
+
+                    .foregroundColor(allButtonClickedBool ? .black : .white)
                     .overlay{
                         HStack{
-                            if !allButtonClickedBool{
-                                Image("allMarker")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 30)
-                            }
                             Text("전체")
                                 .fontWeight(.bold)
                                 .font(.caption) //살짝 키우기
@@ -74,7 +69,7 @@ struct MapCategoryCellView: View {
                         }
                        
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(allButtonClickedBool ? Color(hex: "1A4645") : .white , lineWidth: 5)
+                            .stroke(allButtonClickedBool ? .black : .white , lineWidth: 5)
                     }.cornerRadius(10)
                     .frame(width:89, height:40)
                     
@@ -86,22 +81,16 @@ struct MapCategoryCellView: View {
                 buttonSwitch(index: categoryString)
             } label: {
                 Rectangle()
-                    .foregroundColor(photoButtonClickedBool ? Color(hex: "F8BC24") : .white)
+                    .foregroundColor(photoButtonClickedBool ? .black : .white)
                     .overlay{
                         HStack{
-                            if !photoButtonClickedBool{
-                                Image("photoSpotMarker")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 30)
-                            }
                             Text("필름스팟")
                                 .fontWeight(.bold)
                                 .font(.caption)
                                 .foregroundColor(photoButtonClickedBool ? .white : .gray)
                         }
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(photoButtonClickedBool ? Color(hex: "F8BC24") : .white , lineWidth: 5)
+                            .stroke(photoButtonClickedBool ? .black : .white , lineWidth: 5)
                     }.cornerRadius(10)
                     .frame(width:89, height:40)
                     
@@ -113,25 +102,20 @@ struct MapCategoryCellView: View {
                 buttonSwitch(index: categoryString)
             } label: {
                 Rectangle()
-                    .foregroundColor(StationButtonClickedBool ? Color(hex: "F58800") : .white)
+                    .foregroundColor(StationButtonClickedBool ? .black : .white)
                     .overlay{
                         HStack{
-                            if !StationButtonClickedBool{
-                                Image("stationMarker")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 30)
-                            }
+                           
                             Text("현상소")
                                 .fontWeight(.bold)
                                 .font(.caption)
                                 .foregroundColor(StationButtonClickedBool ? .white : .gray)
                         }
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(StationButtonClickedBool ? Color(hex: "F58800") : .white , lineWidth: 5)
+                            .stroke(StationButtonClickedBool ? .black : .white , lineWidth: 5)
                     }.cornerRadius(10)
                     .frame(width:89, height:40)
-                    
+
             }
             
             Button {
@@ -140,22 +124,17 @@ struct MapCategoryCellView: View {
                 buttonSwitch(index: categoryString)
             } label: {
                 Rectangle()
-                    .foregroundColor(repairButtonClickedBool ? Color(hex: "266867") : .white)
+                    .foregroundColor(repairButtonClickedBool ? .black : .white)
                     .overlay{
                         HStack{
-                            if !repairButtonClickedBool{
-                                Image("repairShopMarker")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 30)
-                            }
+                            
                             Text("수리점")
                                 .fontWeight(.bold)
                                 .font(.caption)
                                 .foregroundColor(repairButtonClickedBool ? .white : .gray)
                         }
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(repairButtonClickedBool ? Color(hex: "266867") : .white , lineWidth: 5)
+                            .stroke(repairButtonClickedBool ? .black : .white , lineWidth: 5)
                     }.cornerRadius(10)
                     .frame(width:89, height:40)
                     

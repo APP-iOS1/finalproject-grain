@@ -44,36 +44,32 @@ struct MagazineContentAddView: View {
         /// 지도뷰로 이동하기 위해 전체적으로 걸어줌
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
         NavigationView{
-            ZStack(alignment: .bottom) {
+            GeometryReader { geo in
                 VStack {
-                    
-                    //MARK: 네비게이션바와 이미지피커 구분선
-                    Rectangle()
-                        .fill(Color(UIColor.systemGray5))
-                        .frame(width: Screen.maxWidth, height: 1)
-                    
-                    // MARK: 이미지 피커
                     HStack {
                         PhotosPicker(
                             selection: $selectedItem,
                             matching: .images,
                             photoLibrary: .shared()) {
-                                HStack{
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .fill(Color(UIColor.systemGray4))
-                                        .frame(width: 70, height: 70)
-                                        .overlay {
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .fill(.white)
-                                                .frame(width: 68, height: 68)
-                                            Image(systemName: "photo.on.rectangle")
-                                                .resizable()
-                                                .frame(width: 30, height: 30)
+                                Rectangle()
+                                    .fill(.white)
+                                    .border(.gray)
+                                    .frame(width: 100, height: 100)
+                                    .overlay {
+                                        VStack {
+                                            Spacer()
+                                            Image(systemName: "plus.circle.fill")
+                                                .font(.title3)
                                                 .foregroundColor(.black)
+                                            Spacer()
+                                            Text("사진추가")
+                                                .font(.headline)
+                                                .foregroundColor(.black)
+                                            Spacer()
                                         }
-                                }
+                                    }
+                                    .padding(.leading)
                             }
-                        // MARK: 이미지가 선택 되었을때
                             .onChange(of: selectedItem) { newItem in
                                 Task {
                                     if let data = try? await newItem?.loadTransferable(type: Data.self) {
@@ -86,29 +82,31 @@ struct MagazineContentAddView: View {
                                     }
                                 }
                             }
-                            .frame(width: 100,height: 100)
-                        
+                            
+                        // MARK: 선택한 이미지를 보여주는 부분
                         ScrollView(.horizontal) {
                             HStack {
                                 // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
                                 ForEach(selectedImages, id: \.self) { img in
                                     Image(uiImage: img)
                                         .resizable()
-                                        .frame(width: 70, height: 70)
-                                        .cornerRadius(8)
+                                        .frame(width: 100, height: 100)
                                 }
                             }
                         }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
+                    .padding(.top)
                     
-                    //MARK: 이미지피커와 제목 구분선
-                    Rectangle()
-                        .fill(Color(UIColor.systemGray5))
-                        .frame(width: Screen.maxWidth * 0.95, height: 1)
+                    //MARK: 제목과 게시물 내용 구분선
+                    Image("line")
+                        .resizable()
+                        .frame(width: Screen.maxWidth * 0.95,height: 1)
+                        .padding(.top)
                     
                     // MARK: 게시물 제목 작성 란
-                    TextField("글 제목", text: $inputTitle)
+                    TextField("임시", text: $inputTitle)
+                        .font(.title3)
                         .keyboardType(.default)
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
@@ -119,16 +117,17 @@ struct MagazineContentAddView: View {
                         .submitLabel(.done)
                     
                     //MARK: 제목과 게시물 내용 구분선
-                    Rectangle()
-                        .fill(Color(UIColor.systemGray5))
-                        .frame(width: Screen.maxWidth * 0.95, height: 1)
-                    
+                    Image("line")
+                        .resizable()
+                        .frame(width: Screen.maxWidth * 0.95,height: 1)
+
                     // MARK: 게시물 내용 작성 란
-                    TextField("내용을 작성해 주세요.", text: $inputContent, axis: .vertical)
+                    TextField("임시", text: $inputContent, axis: .vertical)
+                        .font(.title3)
                         .textInputAutocapitalization(.never)
                         .keyboardType(.default)
                         .disableAutocorrection(true)
-                        .lineLimit(10, reservesSpace: true)
+                        .lineLimit(12)
                         .padding(.horizontal, 15)
                         .toolbar {
                             ToolbarItemGroup(placement: .keyboard) {
@@ -141,10 +140,45 @@ struct MagazineContentAddView: View {
                                 }
                             }
                         }
-                    Spacer()
+                        .frame(height: Screen.maxHeight * 0.4)
                     
+
+                    Spacer()
+                    //MARK: 다음버튼
+                    if selectedImages.count == 0 || inputTitle.count == 0 || inputContent.count == 0 {
+                        Button {
+                            showingAlert = true
+                        } label: {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.black)
+                                .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                                .overlay {
+                                    Text("다음")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                }
+                        }
+                        .alert(isPresented: $showingAlert) {
+                            Alert(title: Text("알림"), message: Text("제목, 내용, 사진은 필수 입력 항목입니다."), dismissButton: .default(Text("확인")))
+                        }
+                    } else {
+                        NavigationLink {
+                            AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
+                                .navigationBarBackButtonHidden(true)
+                        } label: {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.black)
+                                .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                                .overlay {
+                                    Text("다음")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                }
+                        }
+                    }
                 } //vstack
-                .navigationTitle("매거진")
+
+                .navigationTitle("임시")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
@@ -161,41 +195,8 @@ struct MagazineContentAddView: View {
                 .onAppear {
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 }
-                
-                //MARK: 다음버튼
-                if selectedImages.count == 0 || inputTitle.count == 0 || inputContent.count == 0 {
-                    Button {
-                        showingAlert = true
-                    } label: {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(.black)
-                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
-                            .overlay {
-                                Text("다음")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                            }
-                    }
-                    .alert(isPresented: $showingAlert) {
-                        Alert(title: Text("알림"), message: Text("제목, 내용, 사진은 필수 입력 항목입니다."), dismissButton: .default(Text("확인")))
-                    }
-                } else {
-                    NavigationLink {
-                        AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
-                            .navigationBarBackButtonHidden(true)
-                    } label: {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(.black)
-                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
-                            .overlay {
-                                Text("다음")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                            }
-                    }
-                }
+                //.ignoresSafeArea(.keyboard)
             }
-            .ignoresSafeArea(.keyboard)
         }
     }
 }

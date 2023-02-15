@@ -89,6 +89,16 @@ final class CommunityViewModel: ObservableObject {
         return categoryData
     }
     
+    @Published var sortedCommunityData = [CommunityDocument]()
+    // MARK: - 최신순? 오래된 순? 확인해야함
+    func sortByCommunity(){
+        for _ in self.communities{
+            var sortData = self.communities.sorted{ $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()}
+            sortedCommunityData = sortData
+        }
+        
+    }
+    
     
     // MARK: Update -> Firebase Store SDK 사용
     func updateCommunitySDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
@@ -146,5 +156,23 @@ final class CommunityViewModel: ObservableObject {
                 print("Error updating document: \(error)")
             }
         }
+    }
+    
+    // 유저가 저장한 커뮤니티 필터링
+    func userBookmarkedCommunityFilter(communityData: [CommunityDocument], userBookmarkedCommunityArr: [String]) -> [CommunityDocument] {
+        // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
+        print("communityData: \(communityData)")
+        var userBookmarkedCommunityFilterArr: [CommunityDocument] = []
+        /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
+    //        이거 넣었더니 터짐
+        for arrData in userBookmarkedCommunityArr{
+            for magazineIdValue in communityData{
+                if arrData == magazineIdValue.fields.id.stringValue{
+                    userBookmarkedCommunityFilterArr.append(magazineIdValue)
+                    continue
+                }
+            }
+        }
+        return userBookmarkedCommunityFilterArr
     }
 }

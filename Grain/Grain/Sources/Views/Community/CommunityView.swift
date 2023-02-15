@@ -9,11 +9,12 @@ import SwiftUI
 
 struct CommunityView: View {
     @StateObject var communityVM: CommunityViewModel
-    
+    let colors: [String] = ["", "#807EFC", "#6CD9B7", "E3F084", "FA98E0"]
     let titles: [String] = ["전체", "매칭", "마켓", "클래스", "정보"]
     @State private var selectedIndex: Int = 0
     @State private var isAddViewShown: Bool = false
     @State private var isSearchViewShown: Bool = false
+    
     
     var body: some View {
         NavigationStack{
@@ -39,24 +40,25 @@ struct CommunityView: View {
                                 Rectangle()
                                     .fill(Color.black)
                                     .frame(height: 1)
+                                    .transition(.slide)
+                                    .animation(.easeInOut, value: selectedIndex)
                             }
                         })
                     
                     Spacer()
                 } // hstack
                 
-                //MARK: 소희님이 공유해주신 제스쳐 탭이동 없애기부분 (적용하면 툴바 사용할수없음)
                 switch(selectedIndex) {
                 case 0:
-                    AllTabView(community: communityVM.communities)
+                    AllTabView(community: communityVM.communities, communityVM: communityVM)
                 case 1:
-                    MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"))
+                    MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"), communityVM: communityVM)
                 case 2:
-                    ClassTabView(community: communityVM.returnCategoryCommunity(category: "마켓"))
+                    ClassTabView(community: communityVM.returnCategoryCommunity(category: "마켓"), communityVM: communityVM)
                 case 3:
-                    MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"))
+                    MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"), communityVM: communityVM)
                 default:
-                    InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"))
+                    InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"), communityVM: communityVM)
                 }
             } // 최상단 vstack
         } // navi stack

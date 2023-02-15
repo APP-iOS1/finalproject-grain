@@ -27,7 +27,7 @@ struct ContentView: View {
     let icons = ["film", "text.bubble", "plus","map", "person"]
     let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
     
-    
+    @State var modalSize = Screen.maxHeight * 0.25
     @StateObject var userVM = UserViewModel()
     var body: some View {
         VStack{
@@ -42,6 +42,10 @@ struct ContentView: View {
                     Spacer()
                     ZStack {
                         Spacer()
+//                            .sheet(isPresented: $presented, content: {
+//                                SelectPostView(presented: $presented, communityVM: communityVM, updateNumber: updateNumber, modalSize: $modalSize)
+//                                    .presentationDetents([.height(modalSize)])
+//                            })
                             .fullScreenCover(isPresented: $presented) {
                                 VStack {
                                     SelectPostView(presented: $presented,
@@ -71,7 +75,7 @@ struct ContentView: View {
                             }
                         case 4:
                             NavigationStack {
-                                MyPageView(magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), boomarkedMagazineDocument: magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID))
+                                MyPageView(magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), boomarkedMagazineDocument: magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID), bookmarkedCommunityDoument: communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID))
                             }
                         default:
                             NavigationStack {
@@ -96,7 +100,7 @@ struct ContentView: View {
                             } label: {
                                 if number == 2 {
                                     Image(systemName: icons[number])
-                                        .font(.title3)
+                                        .font(.title2)
                                         .foregroundColor(.white)
                                         .frame(width: 60, height: 60)
                                         .background(.black)
@@ -105,13 +109,13 @@ struct ContentView: View {
                                 else {
                                     VStack{
                                         Image(systemName: icons[number])
-                                            .font(.title3)
+                                            .font(.title2)
                                             .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
                                         Text(labels[number])
                                             .font(.caption)
                                             .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
                                     }
-                                    .frame(width: 60, height: 60)
+                                    .frame(width: 67, height: 60)
                                 }
                             }
                         }
@@ -125,6 +129,7 @@ struct ContentView: View {
             /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
             mapVM.fetchMap()
             magazineVM.fetchMagazine()
+            communityVM.fetchCommunity()
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
 
             //                    magazineVM.updateMagazine()

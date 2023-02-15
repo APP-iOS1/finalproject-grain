@@ -9,70 +9,79 @@ import SwiftUI
 import Kingfisher
 
 struct Top10View: View {
-    var data : MagazineDocument
-    @State private var colorSet:[Color] = [Color.colorSetOne, Color.colorSetTwo, Color.colorSetThree, Color.colorSetFour, Color.colorSetFive]
+    let data : MagazineDocument
+
     var body: some View {
         VStack{
             Rectangle()
                 .foregroundColor(.black)
-                .frame(width: Screen.maxWidth * 0.9, height: Screen.maxHeight * 0.53)
-//                .cornerRadius(15)
-                
+                .frame(width: Screen.maxWidth * 0.9, height: Screen.maxHeight * 0.465)
                 .overlay(
                     VStack{
                         let url = URL(string: data.fields.image.arrayValue.values[0].stringValue)
                         //MARK: KingFisher를 사용하여 이미지 캐싱 처리
                         //url이 없을때 보여줄 이미지(placeholder) 정해서 지금 스트링값에 주소 넣어주면 될것같습니다
                        Rectangle()
-                            .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.63 )
+                            .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.6 )
                             .overlay{
                                 KFImage.url(url ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg")!)
                                     .resizable()
                                       .scaledToFill()
-                                      .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.63 )
+                                      .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.6 )
                                       .clipShape(Rectangle())
                                       .overlay{
-                                          LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(0), Color.black.opacity(0.3), Color.black.opacity(1)]), startPoint: .top, endPoint: .bottom)
+                                          LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(0), Color.black.opacity(0),  Color.black.opacity(0.3), Color.black.opacity(1)]), startPoint: .top, endPoint: .bottom)
                                       }
                                  
                             }
                         Text(data.fields.title.stringValue)
-                            .bold()
+                            .fontWeight(.bold)
                             .foregroundColor(Color.white)
-                            .font(.title)
+                            .font(.title2)
                             .frame(maxWidth:.infinity, alignment:.leading)
                             .padding(.horizontal)
-                            .padding(.vertical, -5)
+                            .padding(.bottom, 0)
                             .multilineTextAlignment(.leading)
-                            .lineLimit(2)
+                            .lineLimit(1)
                         HStack{
+                            Text("by")
+                                .font(.subheadline)
+                                .bold()
+                                .foregroundColor(.ultraBrightGray)
+                                .frame( alignment:.leading)
+                                
+                            Divider()
+                                .overlay(Color.white)
+                                .frame(width: 1.5, height: 16)
                             
                             Text(data.fields.nickName.stringValue)
-                                .font(.body)
+                                .font(.subheadline)
                                 .bold()
-                                .foregroundColor(.brightGray)
-                                .frame(maxWidth:.infinity, alignment:.leading)
-                                .padding(.horizontal)
-                                .padding(.vertical, -5)
-                            Divider()
-                                .background(Color.white)
+                                .foregroundColor(.white)
+                                .frame( alignment:.leading)
+                               
+                            Spacer()
                         }
+                        .padding(.horizontal)
+                        .padding(.vertical)
+                        .frame(height:25)
                         
                         Text(data.fields.content.stringValue)
-                            .bold()
+                            .multilineTextAlignment(.leading)
+                            .font(.subheadline)
+                            .font(.body)
                             .foregroundColor(.white)
                             .frame(maxWidth:.infinity, alignment:.leading)
-                            .padding(.bottom, 30)
                             .padding(.horizontal)
-                            .lineLimit(1)
+                            .padding(.vertical, 6)
+                            .lineLimit(2)
+                            .lineSpacing(6)
                         Spacer()
                     },
                     alignment: .top
                 )
         }
         .padding(.bottom)
-//        .cornerRadius(15)
-        .shadow(radius: 2)
     }
 }
 

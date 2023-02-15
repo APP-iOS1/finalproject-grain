@@ -6,19 +6,21 @@
 //
 
 import SwiftUI
+
 import FirebaseAuth
-enum timePeriod {
+
+fileprivate  enum timePeriod {
     case daily
     case weekly
     case monthly
 }
 
 struct MagazineBestView: View {
-    @ObservedObject var magazineVM: MagazineViewModel = MagazineViewModel()
+//    @ObservedObject var magazineVM: MagazineViewModel = MagazineViewModel()
  
     let userVM: UserViewModel
     let currentUsers : CurrentUserFields?
-    
+    let magazineVM: MagazineViewModel
     var body: some View {
         VStack {
             ScrollView {
@@ -50,12 +52,13 @@ struct MagazineBestView: View {
             } // scroll view
         }//vstack
         .onAppear{
-            magazineVM.fetchMagazine()
+//            magazineVM.fetchMagazine()
+            print("베스트 뷰")
             
         }
-        
     }
 }
+
 //struct MagazineBestView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        MagazineBestView()

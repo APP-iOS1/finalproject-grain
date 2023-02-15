@@ -16,6 +16,7 @@ struct CommunityDetailView: View {
     
     @StateObject var communityVM = CommunityViewModel()
     @StateObject var userVM = UserViewModel()
+    
     @Environment(\.presentationMode) var presentationMode
     
     // 댓글 관련
@@ -33,26 +34,36 @@ struct CommunityDetailView: View {
             VStack {
                 ScrollView {
                     VStack(alignment: .leading){
+                        HStack{
+                            Text(community.fields.title.stringValue)
+                                .font(.title2)
+                                .bold()
+                                .padding(.horizontal)
+                                .padding(.top, 5)
+                            Spacer()
+                        }
+                        .padding(.top, 5)
                         // MARK: 닉네임 헤더
                         HStack {
                             ProfileImage(imageName: community.fields.profileImage.stringValue)
                             VStack(alignment: .leading) {
                                 Text(community.fields.nickName.stringValue)
-                                    .font(.title3)
-                                    .bold()
+                                    .font(.subheadline)
+                                // FIXME: - 아래 코드가 고장 난거 같아 이 코드 적용했더니 되는 거 같음
                                 //MARK: 옵셔널 처리 고민
-                                Text(community.createdDate?.renderTime() ?? "")
+                                Text(community.createTime.toDate()?.renderTime() ?? "")
                                     .font(.caption)
                             }
                             Spacer()
                         }//HS
-                        .padding(.vertical, 5)
+                        //.padding(.vertical, 5)
                         Divider()
-                            .frame(maxWidth: Screen.maxWidth * 0.92)
+                            .frame(maxWidth: Screen.maxWidth * 0.94)
                             .background(Color.black)
-                            .padding(.top, -5)
-                            .padding(.bottom, -10)
+                            .padding(.top, 5)
+                            .padding(.bottom, 15)
                             .padding(.leading, Screen.maxWidth * 0.04)
+                        
 //                        TabView{
 //                            ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
 //                                KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
@@ -61,37 +72,45 @@ struct CommunityDetailView: View {
 //                                    .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
 //                            }
 //                        }
+                        
                         //MARK: 사진
                         TabView{
                             ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
-                                KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
-                     
+                                Rectangle()
+                                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                                    .overlay{
+                                        KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    }
                             }
                         } //이미지 뷰
                         .tabViewStyle(.page)
-                        .frame(height: Screen.maxHeight * 0.27)
-                        .padding()
-                        .padding(.top, -10)
+                        .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                       
+                        .padding(.bottom, 10)
                         
                         //MARK: 댓글
-                        Button {
-                            //댓글 입력 키보드 팝업
-                            isHiddenComment.toggle()
-                            textFieldFocused = true
-                        } label: {
-                            Image(systemName: "message")
-                                .font(.title3)
-                                .foregroundColor(.black)
-                        }
-                        .padding(.leading, Screen.maxWidth * 0.04)
-                        .padding(.top, -10)
+//                        Button {
+//                            //댓글 입력 키보드 팝업
+//                            isHiddenComment.toggle()
+//                            textFieldFocused = true
+//                        } label: {
+//                            HStack{
+//                                Image(systemName: "message")
+//                                    .font(.title3)
+//                                    .foregroundColor(.black)
+//                                Text("댓글 달기")
+//                                    .foregroundColor(.textGray)
+//                                    .padding(.top, 2)
+//                            }
+//                        }
+//                        .padding(.leading, Screen.maxWidth * 0.04)
+//                        .padding(.top, -10)
                         // MARK: 게시글(디테일뷰) 제목
                         // MARK: 스티키 헤더 제목과 건텐츠
-                        LazyVStack(pinnedViews: [.sectionHeaders]) {
-                            Section(header: CommunityDetailHeader(community: community) ){
+//                        LazyVStack(pinnedViews: [.sectionHeaders]) {
+//                            Section(header: CommunityDetailHeader(community: community) ){
                                 HStack {
                                     Text(community.fields.content.stringValue)
                                         .lineSpacing(4.0)
@@ -99,15 +118,15 @@ struct CommunityDetailView: View {
                                         .padding()
                                     Spacer()
                                 }
-                            }
-                        }
+//                            }
+//                        }
                         .padding(.top, 10)
                         Divider()
                         // MARK: - 커뮤니티 댓글 뷰
                         VStack{
                             ForEach(commentVm.comment,id: \.self){ item in
                                 // FIXME: Comment 어디서 만든건지 찾아야함
-                                CommentView(comment: item.fields, commentText: commentText,collectionDocId: community.fields.id.stringValue)
+                                CommentView(comment: item.fields, commentTime: item.updateTime, commentText: commentText, collectionDocId: community.fields.id.stringValue)
                             }
                             
                         }.padding(.vertical)
@@ -117,34 +136,35 @@ struct CommunityDetailView: View {
                 } //scroll view
                 .padding(.top, 1)
                 
+                CommunityCommentView(community: community)
                 //MARK: 댓글입력 창
-                if !isHiddenComment {
-                    HStack {
-                        TextField("댓글을 입력해주세요", text: $commentText)
-                            .disableAutocorrection(true)
-                            .autocapitalization(.none)
-                            .padding()
-                            .focused($textFieldFocused)
-                            .onSubmit {
-                                self.hideKeyboard()
-                                isHiddenComment = true
-                                commentText = ""
-                            }
-                        Spacer()
-                        Button {
-                            // MARK: 댓글 업로드 긴 ㅇ
-                            commentVm.insertComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, data: CommentFields(comment: CommentString(stringValue: commentText), profileImage: CommentString(stringValue: community.fields.profileImage.stringValue), nickName: CommentString(stringValue: community.fields.nickName.stringValue), userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""), id: CommentString(stringValue: UUID().uuidString)))
-                            self.hideKeyboard()
-                            isHiddenComment = true
-                            commentText = ""
-                        } label: {
-                            Image(systemName: "paperplane")
-                                .foregroundColor(.blue)
-                                .font(.title3)
-                                .padding()
-                        }
-                    }
-                }
+//                if !isHiddenComment {
+//                    HStack {
+//                        TextField("댓글을 입력해주세요", text: $commentText)
+//                            .disableAutocorrection(true)
+//                            .autocapitalization(.none)
+//                            .padding()
+//                            .focused($textFieldFocused)
+//                            .onSubmit {
+//                                self.hideKeyboard()
+//                                isHiddenComment = true
+//                                commentText = ""
+//                            }
+//                        Spacer()
+//                        Button {
+//                            // MARK: 댓글 업로드 긴 ㅇ
+//                            commentVm.insertComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, data: CommentFields(comment: CommentString(stringValue: commentText), profileImage: CommentString(stringValue: community.fields.profileImage.stringValue), nickName: CommentString(stringValue: community.fields.nickName.stringValue), userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""), id: CommentString(stringValue: UUID().uuidString)))
+//                            self.hideKeyboard()
+//                            isHiddenComment = true
+//                            commentText = ""
+//                        } label: {
+//                            Image(systemName: "paperplane")
+//                                .foregroundColor(.blue)
+//                                .font(.title3)
+//                                .padding()
+//                        }
+//                    }
+//                }
                 //.isHidden(isHiddenComment)
             }
             .toolbar {
@@ -207,15 +227,8 @@ struct CommunityDetailView: View {
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
-            //            DispatchQueue.main.asyncAfter(deadline: .now() + 1){
-            // 유저가 좋아요를 눌렀는지
-            //                if userVM.likedMagazineIdArr.contains(where: { item in
-            //                    item == community.fields.id?.stringValue})
-            //                {
-            //                    isliked = true
-            //                }else{
-            //                    isliked = false
-            //                }
+            commentVm.sortByRecentComment()
+       
             
             // 유저가 저장을 눌렀는지
             //                if userVM.userBookmarkedCommunity.contains(where: { item in

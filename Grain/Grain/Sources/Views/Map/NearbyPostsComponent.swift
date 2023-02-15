@@ -27,7 +27,7 @@ struct NearbyPostsComponent: View {
                             VStack{
                                 HStack{
                                     Image(systemName: "x.circle")
-                                        .foregroundColor(Color(hex: "F8BC24"))
+                                        .foregroundColor(.black)
                                         .offset(x: 275 , y: -40)
                                         .onTapGesture {
                                             isShowingPhotoSpot.toggle()
@@ -98,7 +98,7 @@ struct NearbyPostsComponent: View {
                                 .frame(width: Screen.maxWidth * 0.75, height: Screen.maxWidth * 0.3)
                             }
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color(hex: "F8BC24"), lineWidth: 5)
+                                .stroke(.black, lineWidth: 2)
 
                         }.padding()
                 }

@@ -178,6 +178,7 @@ final class MagazineViewModel: ObservableObject {
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
 //        이거 넣었더니 터짐
         for arrData in userBookmarkedPostedArr{
+            print("userbookmared: \(userBookmarkedPostedArr)")
             for magazineIdValue in magazineData{
                 if arrData == magazineIdValue.fields.id.stringValue{
                     userBookmarkedPostFilterArr.append(magazineIdValue)

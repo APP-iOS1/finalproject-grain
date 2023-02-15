@@ -10,12 +10,12 @@ import SwiftUI
 struct BookmarkedCommunityView: View {
     @Environment(\.presentationMode) var presentationMode
     
-    var community: [CommunityDocument]
+    var bookmarkedCommunityDoument: [CommunityDocument]
 
     var body: some View {
         VStack{
             ScrollView{
-                ForEach(community, id: \.self) { data in
+                ForEach(bookmarkedCommunityDoument, id: \.self) { data in
                     NavigationLink {
                         CommunityDetailView(community: data)
                     } label: {

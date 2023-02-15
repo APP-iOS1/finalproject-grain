@@ -127,6 +127,9 @@ struct EditCameraView: View {
                         
                         // MARK: 카메라 렌즈 섹션
                         LensList(userVM: userVM, myLenses: $myLenses, showAddLens: $showAddLens, newItem: $newLensItem)
+                            .task {
+                                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+                            }
                         
                         // MARK: 카메라 필름 섹션
                         FilmList(userVM: userVM, myFilms: $myFilms, showAddFilm: $showAddFilm, newItem: $newFilmItem)
@@ -326,9 +329,9 @@ struct LensList: View {
         Section(header: Text("렌즈").font(.subheadline).bold()){
             
             // 유저의 렌즈 정보가 담긴 배열로 부터 리스트 생성
-            ForEach(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self) { lens in
-                if lens.stringValue != "선택" {
-                    Text(lens.stringValue)
+            ForEach(userVM.myLens , id: \.self) { lens in
+                if lens != "선택" {
+                    Text(lens)
                 }
             }
             .onDelete(perform: removeLensList(at:))

@@ -57,11 +57,11 @@ struct StationUIMapView: UIViewRepresentable,View {
     
     //TODO: 지금 현재 위치를 못 받아오는거 같음
     var userLatitude: Double {
-        return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
+        return locationManager.lastLocation?.coordinate.latitude ?? 37.5069671
     }
     
     var userLongitude: Double {
-        return locationManager.lastLocation?.coordinate.longitude ?? 127.07766400
+        return locationManager.lastLocation?.coordinate.longitude ?? 127.0556671
     }
     
     // UIView 기반 컴포넌트의 인스턴스 생성하고 필요한 초기화 작업을 수행한 뒤 반환한다.

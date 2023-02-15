@@ -47,8 +47,9 @@ struct BookmarkedMagazine: View {
                         } label: {
                             KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                .resizable()
-                               .aspectRatio(contentMode: .fit)
-                               .frame(width: 100)
+                               .scaledToFill()
+                               .frame(width: Screen.maxWidth / 3 - 1, height: Screen.maxWidth / 3 - 1)
+                               .clipped()
                         }
                         
                     }

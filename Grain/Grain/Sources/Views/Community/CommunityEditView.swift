@@ -33,7 +33,7 @@ struct CommunityEditView: View {
                             if clickedTitle{
                                 VStack{
                                     TextField(community.fields.title.stringValue, text: $editTitle)
-                                        .font(.title)
+                                        .font(.title2)
                                         .padding(.horizontal)
                                         .padding(.vertical, 3)
                                         .padding(.bottom, 3)
@@ -47,7 +47,7 @@ struct CommunityEditView: View {
                                 
                             }else{
                                 Text(community.fields.title.stringValue)
-                                    .font(.title)
+                                    .font(.title2)
                                     .padding(.horizontal)
                                     .padding(.top, 5)
                                     .bold()
@@ -59,13 +59,10 @@ struct CommunityEditView: View {
                             Spacer()
                         }
                         .padding(.top, 5)
-                        
                         HStack {
                             ProfileImage(imageName: community.fields.profileImage.stringValue)
                             VStack(alignment: .leading) {
                                 Text(community.fields.nickName.stringValue)
-                                
-                                
                                 //MARK: 옵셔널 처리 고민
                                 Text(community.createTime.toDate()?.renderTime() ?? "")
                                     .font(.caption)
@@ -73,29 +70,31 @@ struct CommunityEditView: View {
                             Spacer()
                         }//HS
                         
-                        //                        Divider()
-                        //                            .frame(maxWidth: Screen.maxWidth * 0.9)
-                        //                            .background(Color.black)
-                        //                            .padding(.top, -5)
-                        //                            .padding(.bottom, -10)
-                        //.padding(.leading, Screen.maxWidth * 0.04)
+                        Divider()
+                            .frame(maxWidth: Screen.maxWidth * 0.94)
+                            .background(Color.black)
+                            .padding(.top, 5)
+                            .padding(.bottom, 15)
+                            //.padding(.leading, Screen.maxWidth * 0.03)
                         
-                        //            Image("line")
-                        //                .resizable()
-                        //                .frame(width: Screen.maxWidth, height: 0.3)
                         //MARK: 사진
                         TabView{
                             ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
-                                KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
+                                Rectangle()
+                                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                                    .overlay{
+                                        KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    }
                             }
-                        }
+                        } //이미지 뷰
                         .tabViewStyle(.page)
-                        .frame(height: Screen.maxHeight * 0.27)
-                        .padding()
-                        .padding(.top, -15)
+                        .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+//                        .padding()
+//                        .padding(.top, -15)
+                        //.padding()
+                        .padding(.bottom, 10)
                     }
                     
                         // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장

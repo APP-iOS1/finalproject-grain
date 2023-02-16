@@ -23,33 +23,25 @@ import Kingfisher
 struct CommunityRowView: View {
     
     @StateObject var commentVm: CommentViewModel = CommentViewModel()
-    var color: String {
-        switch community.fields.category.stringValue {
-        case "매칭":
-            return "#FF8701"
-        case "마켓":
-            return "#006400"
-        case "클래스":
-            return "#3960DB"
-        case "정보":
-            return "#7B3EFA"
+    var tagColor: String {
+        switch community.fields.state.stringValue {
+        case "모집중", "판매중", "Tip":
+            return "#F8BC24"
+        case "모집완료", "판매완료":
+            return "#A0A0A0"
         default:
-            return "black"
+            return "F8BC24"
         }
     }
     
-    var subColor: String {
-        switch community.fields.category.stringValue {
-        case "매칭":
-            return "#FFCE95"
-        case "마켓":
-            return "#AAEEBD"
-        case "클래스":
-            return "#9AB1DB"
-        case "정보":
-            return "#C8B1FA"
+    var tagNameColor: String {
+        switch community.fields.state.stringValue {
+        case "모집중", "판매중", "Tip":
+            return "#616161"
+        case "모집완료", "판매완료":
+            return "#FFFFFF"
         default:
-            return "black"
+            return "616161"
         }
     }
     
@@ -82,10 +74,10 @@ struct CommunityRowView: View {
                                 .padding(.leading, -3)
                             RoundedRectangle(cornerRadius: 20)
                                 .frame(width: 45, height: 25)
-                                .foregroundColor(Color(hex: "F8BC24"))
+                                .foregroundColor(Color(hex: tagColor))
                                 .overlay{
                                     Text(community.fields.state.stringValue)
-                                        .foregroundColor(Color(hex: "616161"))
+                                        .foregroundColor(Color(hex: tagNameColor))
                                         .bold()
                                         .font(.caption)
                                 }

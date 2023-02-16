@@ -160,12 +160,16 @@ struct MagazineDetailView: View {
                         
                         if showDevices {
                             VStack(alignment: .leading){
-                                userVM.myCamera.count > 1 ? Text("바디 | \(userVM.myCamera[1])") : nil
-                                
-                                userVM.myLens.count > 1 ? Text("렌즈 | \(userVM.myLens[1])") : nil
-                                
-                                userVM.myFilm.count > 1 ? Text("필름 | \(userVM.myFilm[1])") : nil
-                                
+                                ForEach(userVM.users.filter{
+                                    $0.fields.id.stringValue == data.fields.userID.stringValue
+                                }, id: \.self) { item in
+                                    
+                                    item.fields.myCamera.arrayValue.values.count > 1 ? Text("바디 | \(item.fields.myCamera.arrayValue.values[1].stringValue)") : nil
+                                    
+                                    item.fields.myLens.arrayValue.values.count > 1 ? Text("렌즈 | \(item.fields.myLens.arrayValue.values[1].stringValue)") : nil
+                                    
+                                    item.fields.myFilm.arrayValue.values.count > 1 ? Text("필름 | \(item.fields.myFilm.arrayValue.values[1].stringValue)") : nil
+                                }
                             }
                             .font(.subheadline)
                             .foregroundColor(.textGray)

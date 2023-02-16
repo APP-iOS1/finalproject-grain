@@ -93,12 +93,30 @@ final class MagazineViewModel: ObservableObject {
     
     
     // MARK: - 최신순으로 정렬하기 아마 그럴꺼임
-    func sortByRecentMagazine(){
-        for _ in self.magazines{
+    func sortByRecentMagazine(magazines: [MagazineDocument]) -> [MagazineDocument]{
+//        var sortedRecentMagazineData: [MagazineDocument] = []
+        print("magazines: \(magazines)")
+        for _ in magazines{
             var sortData = self.magazines.sorted{ $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()}
             sortedRecentMagazineData = sortData
+            print("recentmagazin1: \(sortedRecentMagazineData)")
+
         }
+        print("recentmagazin: \(sortedRecentMagazineData)")
+        return sortedRecentMagazineData
     }
+//    func sortByRecentMagazine(magazines: [MagazineDocument]) -> [MagazineDocument]{
+//        var sortedRecentMagazineData: [MagazineDocument] = []
+//        print("magazines: \(magazines)")
+//        for _ in magazines{
+//            var sortData = self.magazines.sorted{ $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()}
+//            sortedRecentMagazineData = sortData
+//            print("recentmagazin1: \(sortedRecentMagazineData)")
+//
+//        }
+//        print("recentmagazin: \(sortedRecentMagazineData)")
+//        return sortedRecentMagazineData
+//    }
     
     // MARK: - 좋아요순으로 정렬하기
     func sortByLikedMagazine(){

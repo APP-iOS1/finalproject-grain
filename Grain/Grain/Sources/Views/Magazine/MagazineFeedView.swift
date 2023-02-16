@@ -14,11 +14,13 @@ struct MagazineFeedView: View {
     let userVM: UserViewModel
     let magazineVM: MagazineViewModel
     
+    var recentMagazines: [MagazineDocument] = []
+    
     var body: some View {
         VStack {
             ScrollView{
              
-                ForEach(magazineVM.magazines, id: \.self){ data in
+                ForEach(magazineVM.sortedRecentMagazineData, id: \.self){ data in
                     NavigationLink {
                         // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
                         MagazineDetailView(userVM: userVM, currentUsers: currentUsers, data: data)
@@ -34,7 +36,7 @@ struct MagazineFeedView: View {
         }
         .onAppear{
             // MARK: fetch 데이터 시작
-//            magazineVM.fetchMagazine()
+//            magazineVM.sortByRecentMagazine()
             print("피드뷰")
         }
     }

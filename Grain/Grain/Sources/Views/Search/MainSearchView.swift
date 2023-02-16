@@ -23,7 +23,7 @@ struct MainSearchView: View {
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
     
     @State private var searchWord: String = ""
-    @State private var searchList: [String] =  ["카메라", "명소", " 출사"]
+    @State private var searchList: [String] =  ["카메라", "명소", "출사"]
     @State private var isMagazineSearchResultShown: Bool = false
     @State private var isCommunitySearchResultShown: Bool = false
     @State private var isUserSearchResultShown: Bool = false

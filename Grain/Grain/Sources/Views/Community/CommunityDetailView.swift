@@ -26,6 +26,7 @@ struct CommunityDetailView: View {
     @State private var isliked: Bool = false
     @State private var commentText: String = ""
     @State private var isHiddenComment: Bool = true
+    @State private var editFetch: Bool = false
     
     @FocusState private var textFieldFocused: Bool
     
@@ -174,9 +175,12 @@ struct CommunityDetailView: View {
                             Text("저장")
                         }
                         NavigationLink {
-                            CommunityEditView(community: community)
+                            CommunityEditView(communityVM: communityVM, community: community, editFetch: $editFetch)
                         }label: {
                             Text("수정")
+                        }
+                        .onChange(of: editFetch) { _ in
+                            communityVM.fetchCommunity()
                         }
                         Button {
                             communityVM.deleteCommunity(docID: community.fields.id.stringValue)
@@ -212,7 +216,7 @@ struct CommunityDetailView: View {
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
             commentVm.sortByRecentComment()
-       
+            communityVM.fetchCommunity()
             
             // 유저가 저장을 눌렀는지
             //                if userVM.userBookmarkedCommunity.contains(where: { item in

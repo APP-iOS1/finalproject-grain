@@ -15,6 +15,7 @@ struct MagazineCommentView: View {
     @State var commentText: String = "" // 댓글 작성 텍스트 필드
     @StateObject var commentVm = CommentViewModel() //댓글 뷰 모델 사용
     @State var editButtonShowing : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
+    @State var summitComment : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
@@ -152,7 +153,10 @@ struct MagazineCommentView: View {
                             .stroke(lineWidth: 0.5)
                     }
                     .padding(.leading)
-                MagazineCommentTextField(commentText: $commentText, currentUser: currentUser,collectionName: collectionName, collectionDocId: collectionDocId)
+                MagazineCommentTextField(commentText: $commentText, summitComment: $summitComment, currentUser: currentUser,collectionName: collectionName, collectionDocId: collectionDocId)
+                    .onChange(of: summitComment) { _ in
+                        commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                    }
             }.onAppear{
                 
             }
@@ -167,6 +171,7 @@ struct MagazineCommentView: View {
 }
 struct MagazineCommentTextField: View {
     @Binding var commentText: String
+    @Binding var summitComment: Bool
 //    @State var uploadButtonShowing : Bool = false
     var currentUser : CurrentUserFields?
     var collectionName : String
@@ -262,7 +267,7 @@ struct MagazineCommentTextField: View {
                         commentText = ""        //댓글 텍스트 필드 초기화
                         
                         commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                        
+                        self.summitComment.toggle()
                     } label: {
                         //                            Image(systemName: "checkmark")
                         //                                .foregroundColor(.blue)

@@ -13,7 +13,7 @@ import Kingfisher
 struct CommunityEditView: View {
     @Environment(\.presentationMode) var presentationMode
     
-    @StateObject var communityVM = CommunityViewModel()
+    let communityVM: CommunityViewModel
     
     @State var community : CommunityDocument
     @State var editTitle : String = ""
@@ -24,8 +24,10 @@ struct CommunityEditView: View {
     @State private var showAlert: Bool = false
     @State private var showSuccessAlert: Bool = false
  
+    @Binding var editFetch: Bool
+    
     var body: some View {
-        NavigationView{
+        
             ScrollView {
                 VStack{
                     VStack {
@@ -131,14 +133,18 @@ struct CommunityEditView: View {
                     //Spacer()
                 }
             }
-            .padding(.top, 1)
+            .onDisappear{
+                communityVM.fetchCommunity()
         }
+            .padding(.top, 1)
+        
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack{
                     if editTitle.isEmpty && editContent.isEmpty {
                         Button {
                             showAlert.toggle()
+                            editFetch.toggle()
                         } label: {
                             Text("수정완료")
                         }//변경 안됐을때 Alert

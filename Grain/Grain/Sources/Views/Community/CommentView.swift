@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//MARK: 입력된 댓글 레이아웃
 struct CommentView: View {
     var comment: CommentFields
     var commentTime : String        //시간 값 넘어오는 것
@@ -22,14 +23,21 @@ struct CommentView: View {
             VStack(alignment: .leading) {
                 HStack{
                     Text("\(comment.nickName.stringValue)")
-                        .bold()
-                        .padding(.bottom, 1)
-                    Text("-")
-                    Text(commentTime.toDate()?.renderTime() ?? "")      //시간 값
-                        .font(.caption)
+                        .font(.footnote)
+                        .fontWeight(.bold)
+//                        .bold()
+//                        .padding(.bottom, 1)
+                    HStack{
+                        Text("・")
+                            .padding(.trailing, -5)
+                        Text(commentTime.toDate()?.renderTime() ?? "")      //시간 값
+                    }
+                    .font(.caption2)
                 }
                 Text("\(comment.comment.stringValue)")
+                    .font(.callout)
                     .lineLimit(Int.max)
+                    .padding(.top, -7)
                 
                 //MARK: 댓글 에디트
                 HStack {
@@ -47,8 +55,9 @@ struct CommentView: View {
 
                 }
                 .font(.caption)
-                .foregroundColor(.gray)
-                .padding(.top, 1)
+                .foregroundColor(.textGray)
+                .padding(.top, -5)
+                .padding(.bottom, -3)
             }
         }.onAppear{
             commentVm.fetchComment(collectionName: "Community", collectionDocId: comment.id.stringValue)

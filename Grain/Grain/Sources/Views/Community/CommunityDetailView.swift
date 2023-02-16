@@ -120,7 +120,7 @@ struct CommunityDetailView: View {
                 } //scroll view
                 .padding(.top, 1)
                 
-                CommunityCommentView(community: community)
+                CommunityCommentView(currentUser: userVM.currentUsers,community: community)
                 //MARK: 댓글입력 창
 //                if !isHiddenComment {
 //                    HStack {

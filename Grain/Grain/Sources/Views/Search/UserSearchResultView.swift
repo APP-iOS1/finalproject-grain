@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct UserSearchResultView: View {
     @State private var isShownProgress: Bool = true
@@ -31,16 +32,25 @@ struct UserSearchResultView: View {
                                 UserSearchDetailView(user: item)
                             } label: {
                                 HStack{
+//                                    KFImage(URL(string: item.fields.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+//                                        .resizable()
+//                                        .frame(width: 47, height: 47)
+//                                        .cornerRadius(30)
+//                                        .overlay {
+//                                            Circle()
+//                                                .stroke(lineWidth: 0.5)
+//                                        }
                                     Circle()
                                         .stroke(lineWidth: 1)
                                         .frame(width: 47, height: 47)
                                         .foregroundColor(.black)
                                         .overlay(
-                                            Image(systemName: "person.fill")
+                                            KFImage(URL(string: item.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                                 .resizable()
                                                 .foregroundColor(.brightGray)
-                                                .aspectRatio(contentMode: .fit)
-                                                .padding(9)
+//                                                .aspectRatio(contentMode: .fit)
+                                                .scaledToFill()
+//                                                .padding(9)
                                         )
                                     VStack(alignment: .leading){
                                         Text(item.fields.nickName.stringValue)

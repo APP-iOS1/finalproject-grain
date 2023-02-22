@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import Kingfisher
 
 private enum FocusableField: Hashable {
     case search
@@ -23,7 +24,7 @@ struct MainSearchView: View {
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
     
     @State private var searchWord: String = ""
-    @State private var searchList: [String] =  ["카메라", "명소", " 출사"]
+    @State private var searchList: [String] =  ["카메라", "명소", "출사"]
     @State private var isMagazineSearchResultShown: Bool = false
     @State private var isCommunitySearchResultShown: Bool = false
     @State private var isUserSearchResultShown: Bool = false
@@ -37,7 +38,7 @@ struct MainSearchView: View {
     
     
     
-    private let searchTitles: [String] = ["메거진", "커뮤니티", "계정"]
+    private let searchTitles: [String] = ["매거진", "커뮤니티", "계정"]
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
@@ -296,17 +297,26 @@ struct MainSearchView: View {
                                         } label: {
                                             VStack{
                                                 HStack{
-                                                    Circle()
-                                                        .stroke(lineWidth: 1)
+                                                    KFImage(URL(string: item.fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                                        .resizable()
                                                         .frame(width: 47, height: 47)
-                                                        .foregroundColor(.black)
-                                                        .overlay(
-                                                            Image(systemName: "person.fill")
-                                                                .resizable()
-                                                                .foregroundColor(.brightGray)
-                                                                .aspectRatio(contentMode: .fit)
-                                                                .padding(9)
-                                                        )
+                                                        .cornerRadius(30)
+                                                        .overlay {
+                                                            Circle()
+                                                                .stroke(lineWidth: 0.5)
+                                                        }
+                                                        .padding(.trailing, -10)
+//                                                    Circle()
+//                                                        .stroke(lineWidth: 1)
+//                                                        .frame(width: 47, height: 47)
+//                                                        .foregroundColor(.black)
+//                                                        .overlay(
+//                                                            KFImage(URL(string: item.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))          .resizable()
+//                                                                .foregroundColor(.brightGray)
+////                                                                .aspectRatio(contentMode: .fill)
+//                                                                .scaledToFill()
+////                                                                .padding(9)
+//                                                        )
                                                     VStack(alignment: .leading){
                                                         Text(item.fields.nickName.stringValue)
                                                             .font(.body)

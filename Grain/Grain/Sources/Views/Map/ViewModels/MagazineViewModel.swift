@@ -93,12 +93,30 @@ final class MagazineViewModel: ObservableObject {
     
     
     // MARK: - 최신순으로 정렬하기 아마 그럴꺼임
-    func sortByRecentMagazine(){
-        for _ in self.magazines{
+    func sortByRecentMagazine(magazines: [MagazineDocument]) -> [MagazineDocument]{
+//        var sortedRecentMagazineData: [MagazineDocument] = []
+        print("magazines: \(magazines)")
+        for _ in magazines{
             var sortData = self.magazines.sorted{ $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()}
             sortedRecentMagazineData = sortData
+            print("recentmagazin1: \(sortedRecentMagazineData)")
+
         }
+        print("recentmagazin: \(sortedRecentMagazineData)")
+        return sortedRecentMagazineData
     }
+//    func sortByRecentMagazine(magazines: [MagazineDocument]) -> [MagazineDocument]{
+//        var sortedRecentMagazineData: [MagazineDocument] = []
+//        print("magazines: \(magazines)")
+//        for _ in magazines{
+//            var sortData = self.magazines.sorted{ $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()}
+//            sortedRecentMagazineData = sortData
+//            print("recentmagazin1: \(sortedRecentMagazineData)")
+//
+//        }
+//        print("recentmagazin: \(sortedRecentMagazineData)")
+//        return sortedRecentMagazineData
+//    }
     
     // MARK: - 좋아요순으로 정렬하기
     func sortByLikedMagazine(){
@@ -169,6 +187,25 @@ final class MagazineViewModel: ObservableObject {
             }
         }
         return userPostFilterArr
+    }
+    
+    func otherUserPostsFilter(magazineData: [MagazineDocument], userPostedArr: [UserStringValue]) -> [MagazineDocument] {
+        // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
+        var otherUserPostFilterArr: [MagazineDocument] = []
+        /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
+//        이거 넣었더니 터짐
+        print("userPostedArr: \(userPostedArr)")
+        print("magazineData: \(magazineData)")
+        for arrData in userPostedArr{
+            for magazineIdValue in magazineData{
+                if arrData.stringValue == magazineIdValue.fields.id.stringValue{
+                    otherUserPostFilterArr.append(magazineIdValue)
+                    continue
+                }
+            }
+        }
+        print("otherUserPostFilterArr: \(otherUserPostFilterArr)")
+        return otherUserPostFilterArr
     }
     
     // 유저가 저장한 매거진 필터링

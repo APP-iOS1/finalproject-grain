@@ -123,7 +123,7 @@ struct MapView: View {
                 // MARK: 필름스팟 띄워질때 뒷 배경 어둡게
                 if isShowingPhotoSpot{
                     Rectangle()
-                        .zIndex(1)
+                        .zIndex(0)
                         .opacity(0.7)
                         .onTapGesture {
                             isShowingPhotoSpot.toggle()
@@ -171,29 +171,31 @@ struct MapView: View {
                     SearchProgress()
                 }
                
-                
-                // 이지역 재 검색 버튼
-                RoundedRectangle(cornerRadius: 17)
-                    .frame(width: Screen.maxWidth * 0.4, height: 40)
-                    .foregroundColor(.black)
-                    .overlay{
-                        HStack{
-                            Image(systemName: "arrow.clockwise")
-                                .foregroundColor(.white)
-                            Text("이 지역 재검색")
-                                .foregroundColor(.white)
-                                .fontWeight(.bold)
-                        }.onTapGesture {
-                            print("tap")
-                            isSheetPresented.toggle()
-                            mapVM.fetchMap()    //-> FIXME: fetch를 걸어줄지 고민
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                if isShowingPhotoSpot == false {
+                    
+                    // 이지역 재 검색 버튼
+                    RoundedRectangle(cornerRadius: 17)
+                        .frame(width: Screen.maxWidth * 0.4, height: 40)
+                        .foregroundColor(.black)
+                        .overlay{
+                            HStack{
+                                Image(systemName: "arrow.clockwise")
+                                    .foregroundColor(.white)
+                                Text("이 지역 재검색")
+                                    .foregroundColor(.white)
+                                    .fontWeight(.bold)
+                            }.onTapGesture {
+                                print("tap")
                                 isSheetPresented.toggle()
+                                mapVM.fetchMap()    //-> FIXME: fetch를 걸어줄지 고민
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    isSheetPresented.toggle()
+                                }
                             }
+                            
                         }
-                        
-                    }
-                    .offset(y:280)
+                        .offset(y:280)
+                }
                 
                 
                 if isShowingPhotoSpot{

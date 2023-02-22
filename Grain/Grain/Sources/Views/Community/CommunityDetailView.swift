@@ -26,6 +26,7 @@ struct CommunityDetailView: View {
     @State private var isliked: Bool = false
     @State private var commentText: String = ""
     @State private var isHiddenComment: Bool = true
+    @State private var editFetch: Bool = false
     
     @FocusState private var textFieldFocused: Bool
     
@@ -49,7 +50,6 @@ struct CommunityDetailView: View {
                             VStack(alignment: .leading) {
                                 Text(community.fields.nickName.stringValue)
                                     .font(.subheadline)
-                                // FIXME: - 아래 코드가 고장 난거 같아 이 코드 적용했더니 되는 거 같음
                                 //MARK: 옵셔널 처리 고민
                                 Text(community.createTime.toDate()?.renderTime() ?? "")
                                     .font(.caption)
@@ -62,17 +62,8 @@ struct CommunityDetailView: View {
                             .background(Color.black)
                             .padding(.top, 5)
                             .padding(.bottom, 15)
-                            .padding(.leading, Screen.maxWidth * 0.04)
-                        
-//                        TabView{
-//                            ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
-//                                KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                                    .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)
-//                            }
-//                        }
-                        
+                            .padding(.horizontal, Screen.maxWidth * 0.04)
+                                                
                         //MARK: 사진
                         TabView{
                             ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
@@ -87,7 +78,6 @@ struct CommunityDetailView: View {
                         } //이미지 뷰
                         .tabViewStyle(.page)
                         .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                       
                         .padding(.bottom, 10)
                         
                         //MARK: 댓글
@@ -107,10 +97,7 @@ struct CommunityDetailView: View {
 //                        }
 //                        .padding(.leading, Screen.maxWidth * 0.04)
 //                        .padding(.top, -10)
-                        // MARK: 게시글(디테일뷰) 제목
-                        // MARK: 스티키 헤더 제목과 건텐츠
-//                        LazyVStack(pinnedViews: [.sectionHeaders]) {
-//                            Section(header: CommunityDetailHeader(community: community) ){
+                        // MARK: 게시글(디테일뷰) 내용
                                 HStack {
                                     Text(community.fields.content.stringValue)
                                         .lineSpacing(4.0)
@@ -118,8 +105,6 @@ struct CommunityDetailView: View {
                                         .padding()
                                     Spacer()
                                 }
-//                            }
-//                        }
                         .padding(.top, 10)
                         Divider()
                         // MARK: - 커뮤니티 댓글 뷰
@@ -136,7 +121,7 @@ struct CommunityDetailView: View {
                 } //scroll view
                 .padding(.top, 1)
                 
-                CommunityCommentView(community: community)
+                CommunityCommentView(currentUser: userVM.currentUsers,community: community)
                 //MARK: 댓글입력 창
 //                if !isHiddenComment {
 //                    HStack {
@@ -190,9 +175,12 @@ struct CommunityDetailView: View {
                             Text("저장")
                         }
                         NavigationLink {
-                            CommunityEditView(community: community)
+                            CommunityEditView(communityVM: communityVM, community: community, editFetch: $editFetch)
                         }label: {
                             Text("수정")
+                        }
+                        .onChange(of: editFetch) { _ in
+                            communityVM.fetchCommunity()
                         }
                         Button {
                             communityVM.deleteCommunity(docID: community.fields.id.stringValue)
@@ -228,7 +216,7 @@ struct CommunityDetailView: View {
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
             commentVm.sortByRecentComment()
-       
+            communityVM.fetchCommunity()
             
             // 유저가 저장을 눌렀는지
             //                if userVM.userBookmarkedCommunity.contains(where: { item in
@@ -242,6 +230,12 @@ struct CommunityDetailView: View {
             //            }
             
         }
+        .onChange(of: commentVm.comment, perform: { value in
+            commentVm.fetchComment(collectionName: "Community",
+                                   collectionDocId: community.fields.id.stringValue)
+            print("실행?")
+        })
+                  
         .onDisappear{
             Task{
                 

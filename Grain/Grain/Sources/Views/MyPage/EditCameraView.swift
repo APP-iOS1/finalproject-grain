@@ -123,19 +123,22 @@ struct EditCameraView: View {
                     
                     List{
                         // MARK: 카메라 바디 섹션
-                        BodyList(userVM: userVM, myBodies: $myBodies, newItem: $newBodyItem)
+                        BodyList(userVM: userVM, myBodies: $myBodies, showAddBody: $showAddBody, newItem: $newBodyItem)
                         
                         // MARK: 카메라 렌즈 섹션
                         LensList(userVM: userVM, myLenses: $myLenses, showAddLens: $showAddLens, newItem: $newLensItem)
-                            .task {
-                                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-                            }
+
                         
                         // MARK: 카메라 필름 섹션
                         FilmList(userVM: userVM, myFilms: $myFilms, showAddFilm: $showAddFilm, newItem: $newFilmItem)
                     }
                     .listStyle(.sidebar)
                     .scrollContentBackground(.hidden)
+                    
+
+                    Text("첫 번째 장비가 프로필에 보여집니다.")
+                        .font(.subheadline)
+                        .foregroundColor(.textGray)
                     
                 }
 //                .navigationTitle("나의 장비 정보")
@@ -204,13 +207,9 @@ struct BodyList: View {
     @Environment(\.editMode) private var editMode
 
     @Binding var  myBodies: [String]
-//    @Binding var myBodies: [CurrentUserStringValue]
-//    @Binding var showAddBody: Bool
-    @State private var showAddBody: Bool = false
+    @Binding var showAddBody: Bool
     @Binding var newItem: String
-    
-//    @State private var isAdded: Bool = false
-    
+        
     var trimNewItem: String {
         self.newItem.trimmingCharacters(in: .whitespaces)
     }
@@ -221,12 +220,13 @@ struct BodyList: View {
         Section(header: Text("바디").font(.subheadline).bold()){
             
             // 유저의 바디 정보가 담긴 배열로 부터 리스트 생성
-            ForEach(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self) { camera in
-                if camera.stringValue != "필수" { //계정 등록 시 장비정보에 기본으로 들어가는 "필수" 안보여주기위함
-                    Text(camera.stringValue)
+            ForEach(userVM.myCamera, id: \.self) { camera in
+                if camera != "필수" { //계정 등록 시 장비정보에 기본으로 들어가는 "필수" 안보여주기위함
+                    Text(camera)
                 }
             }
             .onDelete(perform: removeCameraList(at:))
+            .onMove(perform: moveCameraList)
 
             if editMode?.wrappedValue.isEditing == true {
                 // 바디 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
@@ -238,24 +238,27 @@ struct BodyList: View {
                             .disableAutocorrection(true)
                             .onSubmit {
                                 if trimNewItem.count > 0 {
-                                    Task{
-                                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myCamera", updateValue: newItem, isArray: true)
+                                        userVM.myCamera.append(newItem)
+                                        if let user = userVM.currentUsers {
+                                            let arr = userVM.myCamera
+                                            let docID =  user.id.stringValue
+                                            userVM.updateCurrentUserArray(type: "myCamera", arr: arr, docID: docID)
+                                        }
                                         newItem = ""
                                         userVM.fetchCurrentUser(userID: docID ?? "")
-                                        
-                                    }
                                 }
                             }
                         
                         Button{
                             if trimNewItem.count > 0{
-//                                addCamera()
-                                Task{
-                                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myCamera", updateValue: newItem, isArray: true)
+                                    userVM.myCamera.append(newItem)
+                                    if let user = userVM.currentUsers {
+                                        let arr = userVM.myCamera
+                                        let docID =  user.id.stringValue
+                                        userVM.updateCurrentUserArray(type: "myCamera", arr: arr, docID: docID)
+                                    }
                                     newItem = ""
                                     userVM.fetchCurrentUser(userID: docID ?? "")
-                                    
-                                }
                             }
                         } label: {
                             Image(systemName: "plus.circle")
@@ -290,20 +293,22 @@ struct BodyList: View {
         
     }
     
-    // MARK: 바디 추가 함수 - 필요 없을 듯...
-    func addCamera(docID: String, newItem: String) async {
-//        CurrentUserStringValue(stringValue: newItem)
-//        myBodies.append(newItem)
-        await userVM.updateUserUsingSDK(updateDocument: docID , updateKey: "myCamera", updateValue: newItem, isArray: true)
-
-//        userVM.fetchCurrentUser(userID: userID)
-        return self.newItem = ""
-        
-    }
-    
     // MARK: 바디 삭제 함수
     func removeCameraList(at offsets: IndexSet) {
-        self.myBodies.remove(atOffsets: offsets)
+        if let user = userVM.currentUsers {
+            userVM.myCamera.remove(atOffsets: offsets)
+            let docID = user.id.stringValue
+            userVM.updateCurrentUserArray(type: "myCamera", arr: userVM.myCamera, docID: docID)
+        }
+    }
+    
+    // MARK: 카메라 위치 변경 함수
+    func moveCameraList(from source: IndexSet, to destination: Int) {
+        if let user = userVM.currentUsers {
+            userVM.myCamera.move(fromOffsets: source, toOffset: destination)
+            let docID = user.id.stringValue
+            userVM.updateCurrentUserArray(type: "myCamera", arr: userVM.myCamera, docID: docID)
+        }
     }
     
 }
@@ -335,7 +340,7 @@ struct LensList: View {
                 }
             }
             .onDelete(perform: removeLensList(at:))
-            .onMove(perform: moveList)
+            .onMove(perform: moveLensList)
             
             if editMode?.wrappedValue.isEditing == true {
                 // 렌즈 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
@@ -352,15 +357,14 @@ struct LensList: View {
                                             let arr = userVM.myLens
                                             let docID =  user.id.stringValue
                                             userVM.updateCurrentUserArray(type: "myLens", arr: arr, docID: docID)
+                                        }
                                         newItem = ""
-                                        userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-                                    }
+                                        userVM.fetchCurrentUser(userID: docID ?? "")
                                 }
                             }
                         
                         Button{
                             if trimNewItem.count > 0{
-                                Task{
                                     userVM.myLens.append(newItem)
                                     if let user = userVM.currentUsers {
                                         let arr = userVM.myLens
@@ -369,7 +373,6 @@ struct LensList: View {
                                     }
                                     newItem = ""
                                     userVM.fetchCurrentUser(userID: docID ?? "")
-                                }
                             }
                         } label: {
                             Image(systemName: "plus.circle")
@@ -402,11 +405,6 @@ struct LensList: View {
             }
         }
     }
-    // MARK: 렌즈 추가 함수 .. 필요 없을 듯
-    func addLens() {
-        myLenses.append(newItem)
-        newItem = ""
-    }
     
     // MARK: 렌즈 삭제 함수
     func removeLensList(at offsets: IndexSet) {
@@ -419,7 +417,7 @@ struct LensList: View {
     }
     
     // MARK: 렌즈 위치 변경 함수
-    func moveList(from source: IndexSet, to destination: Int) {
+    func moveLensList(from source: IndexSet, to destination: Int) {
         if let user = userVM.currentUsers {
             userVM.myLens.move(fromOffsets: source, toOffset: destination)
 //            print("likedMagazineIDARR: \(userVM.likedMagazineID)")
@@ -447,12 +445,13 @@ struct FilmList: View {
 
     var body: some View {
         Section(header: Text("필름").font(.subheadline).bold()){
-            ForEach(userVM.currentUsers?.myFilm.arrayValue.values ?? [], id: \.self) { film in
-                if film.stringValue != "선택" {
-                    Text(film.stringValue)
+            ForEach(userVM.myFilm, id: \.self) { film in
+                if film != "선택" {
+                    Text(film)
                 }
             }
             .onDelete(perform: removeFilmList(at:))
+            .onMove(perform: moveFilmList)
             
             if editMode?.wrappedValue.isEditing == true {
                 // 필름 추가하기 버튼 누르면 입력할 수 있는 창이 나타남
@@ -464,21 +463,27 @@ struct FilmList: View {
                             .disableAutocorrection(true)
                             .onSubmit {
                                 if trimNewItem.count > 0 {
-                                    Task{
-                                        await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myFilm", updateValue: newItem, isArray: true)
-                                        newItem = ""
-                                        userVM.fetchCurrentUser(userID: docID ?? "")
+                                    userVM.myFilm.append(newItem)
+                                    if let user = userVM.currentUsers {
+                                        let arr = userVM.myFilm
+                                        let docID =  user.id.stringValue
+                                        userVM.updateCurrentUserArray(type: "myFilm", arr: arr, docID: docID)
                                     }
+                                    newItem = ""
+                                    userVM.fetchCurrentUser(userID: docID ?? "")
                                 }
                             }
                         
                         Button{
                             if trimNewItem.count > 0{
-                                Task{
-                                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "myFilm", updateValue: newItem, isArray: true)
-                                    newItem = ""
-                                    userVM.fetchCurrentUser(userID: docID ?? "")
+                                userVM.myFilm.append(newItem)
+                                if let user = userVM.currentUsers {
+                                    let arr = userVM.myFilm
+                                    let docID =  user.id.stringValue
+                                    userVM.updateCurrentUserArray(type: "myFilm", arr: arr, docID: docID)
                                 }
+                                newItem = ""
+                                userVM.fetchCurrentUser(userID: docID ?? "")
                             }
                         } label: {
                             Image(systemName: "plus.circle")
@@ -511,14 +516,22 @@ struct FilmList: View {
             }
         }
     }
-    // MARK: 필름 추가 함수
-    func addFilm() {
-        myFilms.append(newItem)
-        newItem = ""
-    }
     
     // MARK: 필름 삭제 함수
     func removeFilmList(at offsets: IndexSet) {
-        myFilms.remove(atOffsets: offsets)
+        if let user = userVM.currentUsers {
+            userVM.myFilm.remove(atOffsets: offsets)
+            let docID = user.id.stringValue
+            userVM.updateCurrentUserArray(type: "myFilm", arr: userVM.myFilm, docID: docID)
+        }
+    }
+    
+    // MARK: 필름 위치 변경 함수
+    func moveFilmList(from source: IndexSet, to destination: Int) {
+        if let user = userVM.currentUsers {
+            userVM.myFilm.move(fromOffsets: source, toOffset: destination)
+            let docID = user.id.stringValue
+            userVM.updateCurrentUserArray(type: "myFilm", arr: userVM.myFilm, docID: docID)
+        }
     }
 }

@@ -14,7 +14,9 @@ struct NearbyPostsComponent: View {
     @Binding var isShowingPhotoSpot : Bool
     var  nearbyMagazineData : [MagazineDocument]    // 값을 받아옴
     @Binding var clikedMagazineData : MagazineDocument?
-//    @StateObject var magazineVM = MagazineViewModel()
+    
+    @StateObject var userVM = UserViewModel()
+    
     var body: some View {
         
         ScrollView(.horizontal) {
@@ -62,11 +64,12 @@ struct NearbyPostsComponent: View {
                                                         .font(.title2)
                                                 }
                                             }
-                                            Text("1")
-                                                .offset(x: -5)
-                                            Button {
-                                                
-                                            } label: {
+//                                            Text("1")
+//                                                .offset(x: -5)
+                                            
+                                            NavigationLink {
+                                                MagazineDetailView(userVM: userVM, currentUsers: userVM.currentUsers, data: item)
+                                            }  label: {
                                                 RoundedRectangle(cornerRadius: 10)
                                                     .stroke(Color(.black),lineWidth: 2)
                                                     .foregroundColor(.black)
@@ -90,6 +93,34 @@ struct NearbyPostsComponent: View {
                                                         
                                                     }
                                             }
+
+                                            
+//                                            Button {
+//
+//                                            } label: {
+//                                                RoundedRectangle(cornerRadius: 10)
+//                                                    .stroke(Color(.black),lineWidth: 2)
+//                                                    .foregroundColor(.black)
+//                                                    .frame(width: 80,height: 25)
+//                                                    .overlay{
+//                                                        Image(systemName:"pin.fill")
+//                                                            .foregroundColor(.black)
+//                                                            .font(.system(size: 13))
+//                                                            .offset(x: -27)
+//                                                        Text("보러가기")
+//                                                            .foregroundColor(.black)
+//                                                            .font(.system(size: 13))
+//                                                            .offset(x: 6)
+//
+//                                                    }.padding(.trailing, 5)
+//                                                    .onTapGesture {
+//                                                        // MARK: Bool 값을 넘겨 지도 상에서 디테일 뷰 보여주기
+//                                                        clikedMagazineData = item
+//                                                        isShowingPhotoSpot.toggle()
+//                                                        visitButton.toggle()
+//
+//                                                    }
+//                                            }
                                             
                                         }
                                     }

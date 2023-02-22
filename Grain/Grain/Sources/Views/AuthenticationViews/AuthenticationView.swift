@@ -80,7 +80,7 @@ struct AuthenticationView: View {
             
             // MARK: - 카카오 로그인
             Button{
-                kakaoAuthenticationStore.kakaoSignIn()
+//                kakaoAuthenticationStore.kakaoSignIn()    
                 authenticationStore.changeLogInCompanyToKakao()
             } label: {
                 Image("kakaoLoginLarge")

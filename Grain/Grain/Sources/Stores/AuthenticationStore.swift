@@ -38,7 +38,8 @@ final class AuthenticationStore: ObservableObject {
     @Published var errorMessage = ""
     fileprivate var currentNonce: String?
     
-    let userDatabasePath = Firestore.firestore().collection("User")
+    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
+//    let userDatabasePath = Firestore.firestore().collection("User")
     let authPath = Auth.auth()
     
     init() {

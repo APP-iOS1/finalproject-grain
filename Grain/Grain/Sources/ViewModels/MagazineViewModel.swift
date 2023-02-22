@@ -7,7 +7,7 @@
 
 import Foundation
 import Combine
-import FirebaseFirestore
+//import FirebaseFirestore  /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
 import UIKit
 
 
@@ -126,35 +126,36 @@ final class MagazineViewModel: ObservableObject {
         }
     }
     
+    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
     // MARK: update -> Firebase Store SDK 사용
-    func updateMagazineSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
-        let db = Firestore.firestore()
-        
-        let documentRef = db.collection("Magazine").document("\(updateDocument)")
-        
-        if isArray{
-            do{
-                try? await documentRef.updateData(
-                    [
-                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
-                    ]
-                )
-            }catch let error {
-                print("Error updating document: \(error)")
-            }
-        }else{
-            do{
-                try? await documentRef.updateData(
-                    [
-                        "\(updateKey)" : "\(updateValue)"
-                    ]
-                )
-            }catch let error {
-                print("Error updating document: \(error)")
-            }
-        }
-        
-    }
+//    func updateMagazineSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+//        let db = Firestore.firestore()
+//
+//        let documentRef = db.collection("Magazine").document("\(updateDocument)")
+//
+//        if isArray{
+//            do{
+//                try? await documentRef.updateData(
+//                    [
+//                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
+//                    ]
+//                )
+//            }catch let error {
+//                print("Error updating document: \(error)")
+//            }
+//        }else{
+//            do{
+//                try? await documentRef.updateData(
+//                    [
+//                        "\(updateKey)" : "\(updateValue)"
+//                    ]
+//                )
+//            }catch let error {
+//                print("Error updating document: \(error)")
+//            }
+//        }
+//
+//    }
     
     func nearbyPostsFilter(magazineData: [MagazineDocument],nearbyPostsArr: [String]) -> [MagazineDocument] {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각

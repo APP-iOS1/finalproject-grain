@@ -22,10 +22,6 @@ struct MapView: View {
     
     @State var categoryString : String = "전체"   // 카테고리 버튼 default : 전체
     
-    //중단
-    @EnvironmentObject var viewRouter: ViewRouter
-    
-    
     @StateObject var naverVM = NaverAPIViewModel()  // 네이버 API 관련
     @State var searchResponse : [Address] = [Address(roadAddress: "", jibunAddress: "", englishAddress: "", x: "", y: "", distance: 0)]
     
@@ -238,8 +234,6 @@ struct UIMapView: UIViewRepresentable,View {
     //FIXME: Set으로 만들어보기
     //    var nearbyPostsArr = Set<String>()
     @Binding var nearbyPostsArr : [String]  //주변 게시물 저장
-    
-    @EnvironmentObject var viewRouter: ViewRouter
     //모달뷰
     @Binding var isShowingPhotoSpot: Bool
     

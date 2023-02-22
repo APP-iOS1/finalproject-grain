@@ -23,8 +23,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct GrainApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject var viewRouter = ViewRouter()  // FIX
-    
     init() {
            // Kakao SDK 초기화
             let kakaoAppKey = Bundle.main.infoDictionary?["KAKAO_NATIVE_APP_KEY"] ?? ""
@@ -33,11 +31,9 @@ struct GrainApp: App {
     
     var body: some Scene {
         WindowGroup {
-            // viewRouter작업하기 위해 넣은 코드 <- 머지 할때 "지정훈" 불러주세요~
-            Switchingview().environmentObject(viewRouter)
-//            ContentView()
-//                .environmentObject(AuthenticationStore())
-//                .environmentObject(viewRouter)  // FIX
+            ContentView().environmentObject(AuthenticationStore()).environmentObject(KakaoAuthenticationStore())
+
         }
     }
 }
+

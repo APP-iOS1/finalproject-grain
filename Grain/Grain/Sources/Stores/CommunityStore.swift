@@ -7,50 +7,52 @@
 
 import Foundation
 import SwiftUI
-import FirebaseStorage
-import FirebaseFirestore
+//import FirebaseStorage    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
+//import FirebaseFirestore  /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
 
 
 class CommunityStore: ObservableObject {
     @Published var communities: [Community] = []
     @Published var images: [UIImage] = []
     
-    let database = Firestore.firestore()
-    let storage = Storage.storage()
+//    let database = Firestore.firestore()
+//    let storage = Storage.storage()
+//
+//    init() {
+//        communities = []
+//    }
     
-    init() {
-        communities = []
-    }
-    
+    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
+    // FIXME - 불필요한 코드 검토 바람!
     // MARK: - 다이어리 데이터 가져오기 메소드
-    func fetchCommunities() {
-        database.collection("Community")
-            .getDocuments { (snapshot, error) in
-                self.communities.removeAll()
-                
-                if let snapshot {
-                    for document in snapshot.documents {
-                        
-                        let docData = document.data()
-                        
-                        let id: String = docData["id"] as? String ?? ""
-                        let category: Int = docData["category"] as? Int ?? 0
-                        let userID: String = docData["userID"] as? String ?? ""
-                        let image: [String] = docData["image"] as? [String] ?? []
-                        let title: String = docData["title"] as? String ?? ""
-                        let profileImage: String = docData["profileImage"] as? String ?? ""
-                        let nickName: String = docData["nickName"] as? String ?? ""
-                        let location: String = docData["location"] as? String ?? ""
-                        let content: String = docData["content"] as? String ?? ""
-                        let createdAt: Timestamp = docData["createdAt"] as! Timestamp
-                        
-                        let community: Community = Community(id: id, category: category, userID: userID, image: image, title: title, profileImage: profileImage, nickName: nickName, location: location, content: content, createdAt: createdAt.dateValue())
-                        
-                        self.communities.append(community)
-                    }
-                }
-            }
-    }
+//    func fetchCommunities() {
+//        database.collection("Community")
+//            .getDocuments { (snapshot, error) in
+//                self.communities.removeAll()
+//
+//                if let snapshot {
+//                    for document in snapshot.documents {
+//
+//                        let docData = document.data()
+//
+//                        let id: String = docData["id"] as? String ?? ""
+//                        let category: Int = docData["category"] as? Int ?? 0
+//                        let userID: String = docData["userID"] as? String ?? ""
+//                        let image: [String] = docData["image"] as? [String] ?? []
+//                        let title: String = docData["title"] as? String ?? ""
+//                        let profileImage: String = docData["profileImage"] as? String ?? ""
+//                        let nickName: String = docData["nickName"] as? String ?? ""
+//                        let location: String = docData["location"] as? String ?? ""
+//                        let content: String = docData["content"] as? String ?? ""
+//                        let createdAt: Timestamp = docData["createdAt"] as! Timestamp
+//
+//                        let community: Community = Community(id: id, category: category, userID: userID, image: image, title: title, profileImage: profileImage, nickName: nickName, location: location, content: content, createdAt: createdAt.dateValue())
+//
+//                        self.communities.append(community)
+//                    }
+//                }
+//            }
+//    }
     
     //    // MARK: - 스토리지에서 이미지 가져오는 메소드
     //    @MainActor // 메인 스레드에서 실행
@@ -101,46 +103,50 @@ class CommunityStore: ObservableObject {
     //        }
     //    }
     
+    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
+    // FIXME - 불필요한 코드 검토 바람!
     // MARK: - 다이어리 추가 메소드
-    func addCommunity(_ community: Community) async {
-        do {
-            //            uploadImages(diaryId: diary.id, image: diaryImages.image)
-            
-            try await  database.collection("Community")
-                .document(community.id)
-                .setData([               "id": community.id,
-                                         "category": community.category,
-                                         "userID": community.userID,
-                                         "image": community.image,
-                                         "title": community.title,
-                                         "profileImage": community.profileImage,
-                                         "nickName": community.nickName,
-                                         "location": community.location,
-                                         "content": community.content,
-                                         "createdAt": community.createdAt])
-            
-            fetchCommunities()
-        } catch {
-            print("\(error.localizedDescription)")
-        }
-        
-    }
+//    func addCommunity(_ community: Community) async {
+//        do {
+//            //            uploadImages(diaryId: diary.id, image: diaryImages.image)
+//
+//            try await  database.collection("Community")
+//                .document(community.id)
+//                .setData([               "id": community.id,
+//                                         "category": community.category,
+//                                         "userID": community.userID,
+//                                         "image": community.image,
+//                                         "title": community.title,
+//                                         "profileImage": community.profileImage,
+//                                         "nickName": community.nickName,
+//                                         "location": community.location,
+//                                         "content": community.content,
+//                                         "createdAt": community.createdAt])
+//
+//            fetchCommunities()
+//        } catch {
+//            print("\(error.localizedDescription)")
+//        }
+//
+//    }
     
+    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
+    // FIXME - 불필요한 코드 검토 바람!
     // MARK: - 다이어리 삭제 메소드
-    func removeCommunity(_ community: Community) {
-        database.collection("Community")
-            .document(community.id).delete()
-        
-        //        let imagesRef = storage.reference().child("\(diary.id)/")
-        //        imagesRef.delete { error in
-        //            if let error = error {
-        //                print("Error removing image from storage\n\(error.localizedDescription)")
-        //            } else {
-        //                print("images directory deleted successfully")
-        //            }
-        //        }
-        //
-        fetchCommunities()
-    }
+//    func removeCommunity(_ community: Community) {
+//        database.collection("Community")
+//            .document(community.id).delete()
+//
+//                let imagesRef = storage.reference().child("\(diary.id)/")
+//                imagesRef.delete { error in
+//                    if let error = error {
+//                        print("Error removing image from storage\n\(error.localizedDescription)")
+//                    } else {
+//                        print("images directory deleted successfully")
+//                    }
+//                }
+//
+//        fetchCommunities()
+//    }
     
 }

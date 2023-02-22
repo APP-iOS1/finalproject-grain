@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import FirebaseFirestore
+//import FirebaseFirestore  /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
 import Kingfisher
 /*
  id:String

@@ -8,7 +8,8 @@
 
 import Foundation
 import Combine
-import FirebaseFirestore
+import UIKit
+//import FirebaseFirestore  /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
 
 // FIXME: (희경) ViewModel 코드 구조화 할 수 있을거같음. 같은 코드 중복되는부분 나중에 리펙토링해보자.
 final class CommunityViewModel: ObservableObject {
@@ -99,64 +100,65 @@ final class CommunityViewModel: ObservableObject {
         
     }
     
-    
+    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
     // MARK: Update -> Firebase Store SDK 사용
-    func updateCommunitySDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
-        
-        let db = Firestore.firestore()
-        let documentRef = db.collection("Community").document("\(updateDocument)")
-        if isArray{
-            do{
-                try? await documentRef.updateData(
-                    [
-                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
-                    ]
-                )
-            }catch let error {
-                print("Error updating document: \(error)")
-            }
-        }else{
-            do{
-                try? await documentRef.updateData(
-                    [
-                        "\(updateKey)" : "\(updateValue)"
-                    ]
-                )
-            }catch let error {
-                print("Error updating document: \(error)")
-            }
-        }
-    }
+//    func updateCommunitySDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+//
+//        let db = Firestore.firestore()
+//        let documentRef = db.collection("Community").document("\(updateDocument)")
+//        if isArray{
+//            do{
+//                try? await documentRef.updateData(
+//                    [
+//                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
+//                    ]
+//                )
+//            }catch let error {
+//                print("Error updating document: \(error)")
+//            }
+//        }else{
+//            do{
+//                try? await documentRef.updateData(
+//                    [
+//                        "\(updateKey)" : "\(updateValue)"
+//                    ]
+//                )
+//            }catch let error {
+//                print("Error updating document: \(error)")
+//            }
+//        }
+//    }
     
+    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
     // MARK: Delete -> Firebase Store SDK 사용
-    func deleteCommunitySDK(updateDocument: String, deleteKey: String, deleteIndex: String, isArray: Bool) async {
-        let db = Firestore.firestore()
-        let documentRef = db.collection("Community").document("\(updateDocument)")
-        
-        if isArray{
-            do{
-                try? await documentRef.updateData(
-                    [
-                        "\(deleteKey)": FieldValue.arrayRemove([
-                            "\(deleteIndex)"
-                        ])
-                    ]
-                )
-            }catch let error {
-                print("Error updating document: \(error)")
-            }
-        }else{
-            do{
-                try? await documentRef.updateData(
-                    [
-                        "\(deleteKey)" : FieldValue.delete()
-                    ]
-                )
-            }catch let error {
-                print("Error updating document: \(error)")
-            }
-        }
-    }
+//    func deleteCommunitySDK(updateDocument: String, deleteKey: String, deleteIndex: String, isArray: Bool) async {
+//        let db = Firestore.firestore()
+//        let documentRef = db.collection("Community").document("\(updateDocument)")
+//        
+//        if isArray{
+//            do{
+//                try? await documentRef.updateData(
+//                    [
+//                        "\(deleteKey)": FieldValue.arrayRemove([
+//                            "\(deleteIndex)"
+//                        ])
+//                    ]
+//                )
+//            }catch let error {
+//                print("Error updating document: \(error)")
+//            }
+//        }else{
+//            do{
+//                try? await documentRef.updateData(
+//                    [
+//                        "\(deleteKey)" : FieldValue.delete()
+//                    ]
+//                )
+//            }catch let error {
+//                print("Error updating document: \(error)")
+//            }
+//        }
+//    }
     
     // 유저가 저장한 커뮤니티 필터링
     func userBookmarkedCommunityFilter(communityData: [CommunityDocument], userBookmarkedCommunityArr: [String]) -> [CommunityDocument] {

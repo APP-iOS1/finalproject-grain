@@ -25,7 +25,7 @@ struct GrainApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     init() {
            // Kakao SDK 초기화
-            let kakaoAppKey = Bundle.main.infoDictionary?["KAKAO_NATIVE_APP_KEY"] ?? ""
+            let kakaoAppKey = Bundle.main.infoDictionary?["KakaoNativeAppKey"] ?? ""
             KakaoSDK.initSDK(appKey: kakaoAppKey as! String)
        }
     

@@ -35,11 +35,17 @@ enum GeocodeRouter {
         let queryURL = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=\(requestAddress)"
         let encodeQueryURL = queryURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
+        let clientID = Bundle.main.infoDictionary?["NaverClientID"] ?? ""
+        let clientSecret = Bundle.main.infoDictionary?["NaverClientSecret"] ?? ""
+
+        
         var request = URLRequest(url: URL(string: encodeQueryURL)!)
-        request.setValue(NaverAPIEnum.naverApI.clientID, forHTTPHeaderField: NaverAPIEnum.naverApI.clientHeaderKeyID)
-        request.setValue(NaverAPIEnum.naverApI.clientSecret, forHTTPHeaderField: NaverAPIEnum.naverApI.clientHeaderSecretID)
+        request.setValue(clientID as! String, forHTTPHeaderField: NaverAPIEnum.naverApI.clientHeaderKeyID)
+        request.setValue(clientSecret as! String, forHTTPHeaderField: NaverAPIEnum.naverApI.clientHeaderSecretID)
         request.httpMethod = method.value
         return request
     }
     
 }
+
+

@@ -34,9 +34,12 @@ enum ReverseGeocodeRouter {
         let queryURL = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?request=coordsToaddr&coords=\(longitude),\(latitude)&sourcecrs=epsg:4326&output=json&orders=legalcode"
         let encodeQueryURL = queryURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         
+        let clientID = Bundle.main.infoDictionary?["NaverClientID"] ?? ""
+        let clientSecret = Bundle.main.infoDictionary?["NaverClientSecret"] ?? ""
+        
         var request = URLRequest(url: URL(string: encodeQueryURL)!)
-        request.setValue(NaverAPIEnum.naverApI.clientID, forHTTPHeaderField: NaverAPIEnum.naverApI.clientHeaderKeyID)
-        request.setValue(NaverAPIEnum.naverApI.clientSecret, forHTTPHeaderField: NaverAPIEnum.naverApI.clientHeaderSecretID)
+        request.setValue(clientID as! String, forHTTPHeaderField: NaverAPIEnum.naverApI.clientHeaderKeyID)
+        request.setValue(clientSecret as! String, forHTTPHeaderField: NaverAPIEnum.naverApI.clientHeaderSecretID)
         request.httpMethod = method.value
         return request
     }

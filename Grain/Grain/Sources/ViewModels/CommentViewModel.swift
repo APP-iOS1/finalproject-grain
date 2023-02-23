@@ -6,7 +6,7 @@
 //
 import Foundation
 import Combine
-import FirebaseFirestore
+//import FirebaseFirestore  /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
 import UIKit
 
 
@@ -78,62 +78,62 @@ final class CommentViewModel: ObservableObject {
     }
     
 
-    // MARK: 검증이 필요할때만 사용하기
+    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
     // MARK: Update -> Firebase Store SDK 사용
-    func updateUserUsingSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
-        let db = Firestore.firestore()
-        let documentRef = db.collection("User").document("\(updateDocument)")
-        if isArray{
-            do{
-                try? await documentRef.updateData(
-                    [
-                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
-                    ]
-                )
-            }catch let error {
-                print("Error updating document: \(error)")
-            }
-        }else{
-            do{
-                try? await documentRef.updateData(
-                    [
-                         "\(updateKey)" : "\(updateValue)"
-                    ]
-                )
-            }catch let error {
-                print("Error updating document: \(error)")
-            }
-        }
-    }
+//    func updateUserUsingSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
+//        let db = Firestore.firestore()
+//        let documentRef = db.collection("User").document("\(updateDocument)")
+//        if isArray{
+//            do{
+//                try? await documentRef.updateData(
+//                    [
+//                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
+//                    ]
+//                )
+//            }catch let error {
+//                print("Error updating document: \(error)")
+//            }
+//        }else{
+//            do{
+//                try? await documentRef.updateData(
+//                    [
+//                         "\(updateKey)" : "\(updateValue)"
+//                    ]
+//                )
+//            }catch let error {
+//                print("Error updating document: \(error)")
+//            }
+//        }
+//    }
     
     // MARK: Delete -> Firebase Store SDK 사용
-    func deleteUserUsingSDK(updateDocument: String, deleteKey: String, deleteIndex: String, isArray: Bool) async {
-        let db = Firestore.firestore()
-        let documentRef = db.collection("User").document("\(updateDocument)")
-        if isArray{
-            do{
-                try? await documentRef.updateData(
-                    [
-                        "\(deleteKey)": FieldValue.arrayRemove([
-                            "\(deleteIndex)"
-                        ])
-                    ]
-                )
-            }catch let error {
-                print("Error updating document: \(error)")
-            }
-        }else{
-            do{
-                try? await documentRef.updateData(
-                    [
-                        "\(deleteKey)" : FieldValue.delete()
-                    ]
-                )
-            }catch let error {
-                print("Error updating document: \(error)")
-            }
-        }
-    }
+//    func deleteUserUsingSDK(updateDocument: String, deleteKey: String, deleteIndex: String, isArray: Bool) async {
+//        let db = Firestore.firestore()
+//        let documentRef = db.collection("User").document("\(updateDocument)")
+//        if isArray{
+//            do{
+//                try? await documentRef.updateData(
+//                    [
+//                        "\(deleteKey)": FieldValue.arrayRemove([
+//                            "\(deleteIndex)"
+//                        ])
+//                    ]
+//                )
+//            }catch let error {
+//                print("Error updating document: \(error)")
+//            }
+//        }else{
+//            do{
+//                try? await documentRef.updateData(
+//                    [
+//                        "\(deleteKey)" : FieldValue.delete()
+//                    ]
+//                )
+//            }catch let error {
+//                print("Error updating document: \(error)")
+//            }
+//        }
+//    }
     
 }
 

@@ -17,19 +17,23 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao106206a11790ef8bfad7f03f5daadff7</string>
+				<string>kakao$(KAKAKO_NATIVE_APP_KEY_CONFIG)</string>
 			</array>
 		</dict>
 	</array>
-	<key>KAKAO_NATIVE_APP_KEY</key>
-	<string>106206a11790ef8bfad7f03f5daadff7</string>
+	<key>NaverClientID</key>
+	<string>$(NAVER_CLIENT_ID_CONFIG)</string>
+	<key>NaverClientSecret</key>
+	<string>$(NAVER_CLIENT_SECRET_CONFIG)</string>
+	<key>NMFClientId</key>
+	<string>$(NAVER_MAP_CLIENT_ID_CONFIG)</string>
+	<key>KakaoNativeAppKey</key>
+	<string>$(KAKAKO_NATIVE_APP_KEY_CONFIG)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
 	</array>
-	<key>NMFClientId</key>
-	<string>e74pxe65j7</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

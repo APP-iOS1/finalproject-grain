@@ -14,7 +14,7 @@ class MapStore : ObservableObject{
     init(){
         mapData = []
     }
-    let firebase = Firestore.firestore()
+//    let firebase = Firestore.firestore()
     
     // MARK: Map 콜렉션이 있는 데이터를 전부 fetch하여 우선 Marker찍기
 //    @MainActor
@@ -36,31 +36,31 @@ class MapStore : ObservableObject{
 //        }
 //        print(self.mapData)
 //    }
-    
-    func fetchMapData() {
-        self.mapData.removeAll()
-        firebase.collection("Map").getDocuments { snapshot, error in
-            if let snapshot{
-                for document in snapshot.documents{
-                    
-                    let docData = document.data()
-                    
-                    //TODO: 전체적으로 수정 필요
-                    var category = docData["category"] as? Int ?? 0
-//                    let id    //보류
-                    var latitude = docData["latitude"] as? Double ?? 0.0
-                    var longitude = docData["longitude"] as? Double ?? 0.0
-//                    var magazineId = docData["magazineId"] as? Array ?? []
-                    var url = docData["url"] as? String ?? ""
-
-                    let data = Map(category: category, latitude: latitude, longitude: longitude,url: url)
-                    self.mapData.append(data)
-
-                }
-            }
-        }
-//        print(self.mapData)
-    }
+    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
+//    func fetchMapData() {
+//        self.mapData.removeAll()
+//        firebase.collection("Map").getDocuments { snapshot, error in
+//            if let snapshot{
+//                for document in snapshot.documents{
+//                    
+//                    let docData = document.data()
+//                    
+//                    //TODO: 전체적으로 수정 필요
+//                    var category = docData["category"] as? Int ?? 0
+////                    let id    //보류
+//                    var latitude = docData["latitude"] as? Double ?? 0.0
+//                    var longitude = docData["longitude"] as? Double ?? 0.0
+////                    var magazineId = docData["magazineId"] as? Array ?? []
+//                    var url = docData["url"] as? String ?? ""
+//
+//                    let data = Map(category: category, latitude: latitude, longitude: longitude,url: url)
+//                    self.mapData.append(data)
+//
+//                }
+//            }
+//        }
+////        print(self.mapData)
+//    }
     
     
 }

@@ -32,15 +32,4 @@ enum NaverAPIEnum {
         case .naverApI: return "X-NCP-APIGW-API-KEY"
         }
     }
-    
-    var clientID: String {
-        switch self {
-        case .naverApI: return "e74pxe65j7"  // 정훈 <- 개인 키
-        }
-    }
-    var clientSecret: String {
-        switch self {
-        case .naverApI: return "HNFWk0LMeipNl3nYpciGInljCUOzT0tCpPyqQmAa"    // 정훈 <- 개인 키
-        }
-    }
 }

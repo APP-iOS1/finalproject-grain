@@ -1,11 +1,51 @@
-# 📸 Grain 📸
-```
-필름을 위한 필름에 의한 필름사진에 필요한 모든것들을 담은 앱입니다.
-```
-## 목차
 
-- [페르소나](#페르소나)
-- [ADS](#ADS)
+<p align="center">
+<img src="https://user-images.githubusercontent.com/73868968/220879677-ae0611d5-8e1d-4be5-a4e5-f38ee027e65c.png" >
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Swift-F05138?style=for-the-badge&logo=Swift&logoColor=white"/>
+  <img src="https://img.shields.io/badge/SwiftUI-021B97?style=for-the-badge&logo=swift&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=Firebase&logoColor=white"/>
+</p>
+
+
+<br>
+
+### 페르소나
+> 필름카메라를 취미로 갖거나, 직업으로 가진 사람들
+
+### ADS
+> 그레인은 나만의 필름감성을 공유하고, 필름사진과 관련된 정보들을 공유하고, 필름 유저들을 위한 커뮤니티를 제공하는 앱이다.
+
+### 개발 기간 
+> 2023.01.16 ~ 2023.02.16
+
+<br>
+
+## How to build 🧐
+### 설치 / 실행 방법
+
+### 1단계
+* 아래 파일은 필수 파일이므로 파일을 요청해주세요 😄
+```
+- Config.xcconfig       
+```
+### 2단계
+Firebase 콘솔 세팅을 진행해주세요 😄
+```
+- 번들ID: com.pkkyung26.Grain
+```
+### 3단계
+Podfile 확인 후 pod 파일을 설치해 주세요 😊
+```sh
+$ pod install
+```
+### 4단계
+Grain.xcworkspace 파일을 열어서 실행해주시면 됩니다 😁
+
+
+## 목차
 - [주요기능과 스크린샷](#주요기능과-스크린샷)
     - [매거진 탭](#매거진-탭)
     - [커뮤니티](#커뮤니티-탭)
@@ -15,13 +55,6 @@
 - [프로젝트 정보](#프로젝트-정보) 
 - [참여자](#참여자)
 - [라이센스](#라이센스) 
-
-## 페르소나
-필름카메라를 취미로 갖거나, 직업으로 가진 사람들
-
-## ADS
- 그레인은 나만의 필름감성을 공유하고, 필름사진과 관련된 정보들을 공유하고, 필름 유저들을 위한 커뮤니티를 제공하는 앱이다.  
-
 
 ## 주요기능과 스크린샷
 ### 매거진 탭
@@ -49,8 +82,6 @@
 - 설정에 들어가서 로그아웃, 본인의 카메라 정보를 등록과 편집 할 수 있습니다.
 ## 사용자 시나리오
 <img src="https://user-images.githubusercontent.com/114155215/213328229-b23f15d1-f79a-4e4d-b786-d3e1853a7d32.png" width="60%">
-## 프로젝트 정보
-- 설치/실행 방법
 
 ## 참여자
 <div align="center">

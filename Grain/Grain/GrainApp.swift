@@ -28,7 +28,6 @@ struct GrainApp: App {
             let kakaoAppKey = Bundle.main.infoDictionary?["KakaoNativeAppKey"] ?? ""
             KakaoSDK.initSDK(appKey: kakaoAppKey as! String)
        }
-    
     var body: some Scene {
         WindowGroup {
             ContentView().environmentObject(AuthenticationStore()).environmentObject(KakaoAuthenticationStore())

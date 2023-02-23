@@ -95,3 +95,7 @@ Pods/
 # 프로젝트의 모든 경로에서 .DS_Store 파일을 포함하지 않도록 함
 **/.DS_Store
 Grain/Podfile.lock
+
+
+ **/GoogleService-Info.plist
+.xcconfig

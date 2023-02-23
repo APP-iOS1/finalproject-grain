@@ -97,5 +97,5 @@ Pods/
 Grain/Podfile.lock
 
 
- **/GoogleService-Info.plist
-.xcconfig
+**/GoogleService-Info.plist
+*.xcconfig

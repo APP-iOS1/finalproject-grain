@@ -124,6 +124,8 @@
 		A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */; };
 		A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */; };
 		A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */; };
+		A784BB8F29A7583A0096628B /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A784BB8E29A7583A0096628B /* Config.xcconfig */; };
+		A784BB9129A758400096628B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A784BB9029A758400096628B /* GoogleService-Info.plist */; };
 		A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */; };
 		A7AF1A03299566EF007E6D43 /* CommentDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A02299566EF007E6D43 /* CommentDTO.swift */; };
 		A7AF1A0529956A12007E6D43 /* CommentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A0429956A12007E6D43 /* CommentQuery.swift */; };
@@ -277,6 +279,8 @@
 		A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeService.swift; sourceTree = "<group>"; };
 		A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeDTO.swift; sourceTree = "<group>"; };
 		A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeRouter.swift; sourceTree = "<group>"; };
+		A784BB8E29A7583A0096628B /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		A784BB9029A758400096628B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeDTO.swift; sourceTree = "<group>"; };
 		A7AF1A02299566EF007E6D43 /* CommentDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDTO.swift; sourceTree = "<group>"; };
 		A7AF1A0429956A12007E6D43 /* CommentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentQuery.swift; sourceTree = "<group>"; };
@@ -490,6 +494,7 @@
 			children = (
 				995EBDCE29966F18002C1686 /* Grain.entitlements */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
+				A784BB9029A758400096628B /* GoogleService-Info.plist */,
 				9958AFB82977D56000A51DA9 /* Info.plist */,
 				9958AF812977793700A51DA9 /* Configuration */,
 				9958AF80297778FD00A51DA9 /* Sources */,
@@ -630,6 +635,7 @@
 		A784BB8C29A73D830096628B /* Setting */ = {
 			isa = PBXGroup;
 			children = (
+				A784BB8E29A7583A0096628B /* Config.xcconfig */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -774,7 +780,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A784BB8F29A7583A0096628B /* Config.xcconfig in Resources */,
 				9936E2B0299097F0006F3333 /* MainSearchView.swift in Resources */,
+				A784BB9129A758400096628B /* GoogleService-Info.plist in Resources */,
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
 			);
@@ -1095,6 +1103,7 @@
 		};
 		9958AF7E297778D900A51DA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A784BB8E29A7583A0096628B /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1131,6 +1140,7 @@
 		};
 		9958AF7F297778D900A51DA9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A784BB8E29A7583A0096628B /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

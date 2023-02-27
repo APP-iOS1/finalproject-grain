@@ -30,6 +30,8 @@ enum MapService {
         
         do {
             let request = try MapRouter.getNext(nextPageToken: nextPageToken).asURLRequest()
+            print("request")
+            print(request)
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

@@ -17,8 +17,9 @@ enum CommunityRouter {
     case patchState(state: String, docID: String)
     
     private var baseURL: URL {
-        let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
-        return URL(string: baseUrlString)!
+        
+        let baseUrlString = Bundle.main.infoDictionary?["FireStore"] ?? ""
+        return URL(string: baseUrlString as! String)!
     }
     
     private enum HTTPMethod {

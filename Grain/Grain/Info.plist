@@ -29,6 +29,10 @@
 	<string>$(NAVER_MAP_CLIENT_ID_CONFIG)</string>
 	<key>KakaoNativeAppKey</key>
 	<string>$(KAKAKO_NATIVE_APP_KEY_CONFIG)</string>
+	<key>FireStore</key>
+	<string>$(FireStoreBaseURL)</string>
+	<key>FireStorage</key>
+	<string>$(FireStorageBaseURL)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>

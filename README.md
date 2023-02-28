@@ -128,4 +128,4 @@ Grain.xcworkspace 파일을 열어서 실행해주시면 됩니다 😁
 </div>
 
 ## 라이센스
-
+GRAIN is released under the MIT license. See [LICENSE](https://github.com/APPSCHOOL1-REPO/finalproject-grain/tree/main/LICENSE) for details.

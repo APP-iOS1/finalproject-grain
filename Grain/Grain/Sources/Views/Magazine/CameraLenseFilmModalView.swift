@@ -16,7 +16,10 @@ struct CameraLenseFilmModalView: View {
     var myFilm = ["film1", "film2", "film3", "film4"]
     
     @ObservedObject var magazineVM = MagazineViewModel()
+    
     @StateObject var userVM = UserViewModel()
+    @StateObject var mapVM = MapViewModel()
+    
     
     @State private var selectedCamera: String = ""
     @State private var selectedLense: String = ""
@@ -191,6 +194,7 @@ struct CameraLenseFilmModalView: View {
                         data.comment.arrayValue = MagazineArrayValue(values: [])
                         data.image.arrayValue = MagazineArrayValue(values: [])
                         magazineVM.insertMagazine(data: data, images: selectedImages)
+                        mapVM.insertMap(data: data)
                         presented.toggle()
                     }
                 } label: {

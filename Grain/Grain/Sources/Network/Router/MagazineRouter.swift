@@ -16,9 +16,13 @@ enum MagazineRouter {
     case patchLikedNum(likedNum: String, docID: String)
     
     private var baseURL: URL {
-        let baseUrlString = Bundle.main.infoDictionary?["FireStore"] ?? ""
-        
-        return URL(string: baseUrlString as! String)!
+        var baseUrlString : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FireStore"] as? String {
+                baseUrlString += url
+            }
+        }
+        return URL(string: baseUrlString) ?? URL(string: "")!
     }
     
     private enum HTTPMethod {
@@ -82,8 +86,7 @@ enum MagazineRouter {
     private var data: Data? {
         switch self {
         case let .post(magazineData, images, docID):
-            guard let magazinequery = MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID) else { return nil }
-            print( String(decoding: magazinequery, as: UTF8.self))
+            
             return MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID)
         case let .patch(putData, docID):
             return MagazineQuery.updateMagazineQuery(data: putData, docID: docID)

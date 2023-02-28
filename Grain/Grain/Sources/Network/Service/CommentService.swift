@@ -41,7 +41,6 @@ enum CommentService {
         
         do {
             let request = try requestRouter.asURLRequest()
-            print(request)
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

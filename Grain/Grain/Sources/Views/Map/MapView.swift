@@ -15,10 +15,6 @@ struct MapView: View {
     
     @StateObject var mapVM = MapViewModel()
     @StateObject var magazineVM = MagazineViewModel()
-    @Binding var magazineData: [MagazineDocument]   //매거진 데이터 전달 받기
-    
-    @Binding var mapData: [MapDocument]         // 맵 데이터 전달 받기
-    
     
     @State var categoryString : String = "전체"   // 카테고리 버튼 default : 전체
     
@@ -47,21 +43,7 @@ struct MapView: View {
     
   
     @State private var isSheetPresented = true
-    // MARK: - 색상 변경
-//    func changeStroke(categoryString : String) -> Color {
-//        switch categoryString{
-//        case "전체":
-//            return Color(hex: "1A4645")
-//        case "필름스팟":
-//            return Color(hex: "F8BC24")
-//        case "현상소":
-//            return Color(hex: "F58800")
-//        case "수리점":
-//            return Color(hex: "266867")
-//        default :
-//            return Color(hex: "1A4645")
-//        }
-//    }
+
     var body: some View {
         VStack{
             
@@ -134,29 +116,29 @@ struct MapView: View {
                         
                     case "전체":
                         NavigationStack{
-                            UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
+                            UIMapView(mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
                                 .zIndex(0)
                                 
                         }
                     case "필름스팟":
                         NavigationStack{
-                            PhotoSpotMapView(mapData: $mapData,searchResponseBool: $searchResponseBool,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot, magazineData: $magazineData)
+                            PhotoSpotMapView(mapData: $mapVM.mapData,searchResponseBool: $searchResponseBool,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot, magazineData: $magazineVM.magazines)
                                 .zIndex(0)
                         }
                     case "현상소":
                         NavigationStack{
-                            StationMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
+                            StationMapView(mapData: $mapVM.mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
                                 .zIndex(0)
                         }
                     case "수리점":
                         NavigationStack{
-                            RepairShopMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
+                            RepairShopMapView(mapData: $mapVM.mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse)
                                 .zIndex(0)
                         }
                         
                     default:
                         NavigationStack{
-                            UIMapView(mapData: $mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
+                            UIMapView(mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse)
                                 .zIndex(0)
                                 
                         }
@@ -181,10 +163,9 @@ struct MapView: View {
                                     .foregroundColor(.white)
                                     .fontWeight(.bold)
                             }.onTapGesture {
-                                print("tap")
                                 isSheetPresented.toggle()
-//                                mapVM.fetchMap()    //-> FIXME: fetch를 걸어줄지 고민
                                 mapVM.fetchNextPageMap(nextPageToken: "")
+                                magazineVM.fetchMagazine()
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     isSheetPresented.toggle()
                                 }
@@ -201,7 +182,7 @@ struct MapView: View {
                     /// 매개변수로는 contentView에서 전달 받은 magazineData 값 전달 / nearbyPostsArr : 포토스팟 클릭 마커
                     /// 그럼 메서드에서 for in 두번 돌려 필요한 값만 전달
                     /// 이 과정에서 DB 연관 없다고 생각 듬! -> 확인  필요
-                    NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineData, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData)
+                    NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData)
                         .zIndex(1)
                         .offset(y: 250)
                         .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
@@ -218,6 +199,10 @@ struct MapView: View {
                 WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium, .large])
                     .background(Color.black.opacity(0.5))   // <- 적용이 안된듯
             }
+        }
+        .onAppear{
+            mapVM.fetchNextPageMap(nextPageToken: "")
+            magazineVM.fetchMagazine()
         }
     }
 }
@@ -261,17 +246,13 @@ struct UIMapView: UIViewRepresentable,View {
         let view = NMFNaverMapView()
         view.showZoomControls = false
         view.mapView.positionMode = .direction
-        // 처음에 맵이 생성될떄 줌 레벨
-        // 숫자가 작을수록 축소
-        // 숫자가 클수록 확대
-                view.mapView.zoomLevel = 12
-        // TODO: 최대 최소 줌 레벨 알아보기
-                view.mapView.minZoomLevel = 10
-                view.mapView.maxZoomLevel = 16
-        // MARK: 지도 회전 잠금
-        view.mapView.isRotateGestureEnabled = false
-        //        view.mapView.mapType = .hybrid
-        // MARK: 델리게이트 패턴 채택
+        
+        /// 숫자가 작을수록 축소 , 숫자가 클수록 확대
+        view.mapView.zoomLevel = 12
+        view.mapView.minZoomLevel = 10
+        view.mapView.maxZoomLevel = 16
+        view.mapView.isRotateGestureEnabled = false // 지도 회전 잠금
+        
         /// 임시 주석
         view.mapView.touchDelegate = context.coordinator
         
@@ -304,83 +285,85 @@ struct UIMapView: UIViewRepresentable,View {
         
         // MARK: Combine 이용 Content뷰에서 처음에 불러온 데이터 고정
         // MARK: Map 컬렉션 DB에서 위치 정보를 받아와 마커로 표시
-        for item in mapData{
-            let marker = NMFMarker()
-            marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
-            switch item.fields.category.stringValue{
-            case "필름스팟":
-                marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
-                marker.width = 40
-                marker.height = 40
-                // MARK: 아이콘 캡션 - 포토스팟 글씨
-                marker.captionText = item.fields.category.stringValue
-                marker.captionColor = UIColor(red: 248.0/255.0, green: 188.0/255.0, blue: 36.0/255.0, alpha: 1)
-                marker.captionTextSize = 12
-                marker.captionHaloColor = UIColor(.gray)
-                // MARK: URL링크 정보 받기
-                marker.userInfo = ["magazine": item.fields.magazineID.arrayValue.values[0].stringValue]
-                // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
-                marker.tag = 0
-            case "현상소":
-                marker.iconImage = NMFOverlayImage(name: "stationMarker")
-                marker.width = 40
-                marker.height = 40
-                // MARK: 아이콘 캡션 - 현상소 글씨
-                marker.captionText = item.fields.category.stringValue
-                marker.captionColor = UIColor(red: 245.0/255.0, green: 136.0/255.0, blue: 0.0/255.0, alpha: 1)
-                marker.captionTextSize = 12
-                marker.captionHaloColor = UIColor(.gray)
-                marker.userInfo = ["url" :  item.fields.url.stringValue]
-                marker.tag = 1
-            case "수리점":
-                marker.iconImage = NMFOverlayImage(name: "repairShopMarker")
-                marker.width = 40
-                marker.height = 40
-                // MARK: 아이콘 캡션 - 수리점 글씨
-                marker.captionText = item.fields.category.stringValue
-                marker.captionColor = UIColor(red: 38.0/255.0, green: 104.0/255.0, blue: 103.0/255.0, alpha: 1)
-                marker.captionTextSize = 12
-                marker.captionHaloColor = UIColor(.gray)
-                marker.userInfo = ["url" :  item.fields.url.stringValue]
-                marker.tag = 2
-                // MARK: 캡션 글씨 색상 컬러
-                // TODO: 디자인 고려해보기
-                //                    marker.captionColor = UIColor.blue
-                //                    marker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 200.0/255.0, alpha: 1)
-            default:
-                marker.iconImage = NMF_MARKER_IMAGE_BLACK
-            }
-            
-            // MARK: 마커 클릭시
-            marker.touchHandler = { (overlay) in
-                if let marker = overlay as? NMFMarker {
-                    switch marker.tag{
-                    case 0: //포토스팟
-                        // MARK: 포토스팟 컴포넌트 띄워주기
-                        isShowingPhotoSpot.toggle()
-                        nearbyPostsArr.removeAll()
-                        for pickable in view.mapView.pickAll(view.mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng)), withTolerance: 30){
-                            if let marker = pickable as? NMFMarker{
-                                if marker.tag == 0 {
-                                    nearbyPostsArr.append(marker.userInfo["magazine"] as! String)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+            for item in mapData{
+                let marker = NMFMarker()
+                marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
+                switch item.fields.category.stringValue{
+                case "필름스팟":
+                    marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
+                    marker.width = 40
+                    marker.height = 40
+                    // MARK: 아이콘 캡션 - 포토스팟 글씨
+                    marker.captionText = item.fields.category.stringValue
+                    marker.captionColor = UIColor(red: 248.0/255.0, green: 188.0/255.0, blue: 36.0/255.0, alpha: 1)
+                    marker.captionTextSize = 12
+                    marker.captionHaloColor = UIColor(.gray)
+                    // MARK: URL링크 정보 받기
+                    marker.userInfo = ["magazine": item.fields.magazineID.arrayValue.values[0].stringValue]
+                    // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
+                    marker.tag = 0
+                case "현상소":
+                    marker.iconImage = NMFOverlayImage(name: "stationMarker")
+                    marker.width = 40
+                    marker.height = 40
+                    // MARK: 아이콘 캡션 - 현상소 글씨
+                    marker.captionText = item.fields.category.stringValue
+                    marker.captionColor = UIColor(red: 245.0/255.0, green: 136.0/255.0, blue: 0.0/255.0, alpha: 1)
+                    marker.captionTextSize = 12
+                    marker.captionHaloColor = UIColor(.gray)
+                    marker.userInfo = ["url" :  item.fields.url.stringValue]
+                    marker.tag = 1
+                case "수리점":
+                    marker.iconImage = NMFOverlayImage(name: "repairShopMarker")
+                    marker.width = 40
+                    marker.height = 40
+                    // MARK: 아이콘 캡션 - 수리점 글씨
+                    marker.captionText = item.fields.category.stringValue
+                    marker.captionColor = UIColor(red: 38.0/255.0, green: 104.0/255.0, blue: 103.0/255.0, alpha: 1)
+                    marker.captionTextSize = 12
+                    marker.captionHaloColor = UIColor(.gray)
+                    marker.userInfo = ["url" :  item.fields.url.stringValue]
+                    marker.tag = 2
+                    // MARK: 캡션 글씨 색상 컬러
+                    // TODO: 디자인 고려해보기
+                    //                    marker.captionColor = UIColor.blue
+                    //                    marker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 200.0/255.0, alpha: 1)
+                default:
+                    marker.iconImage = NMF_MARKER_IMAGE_BLACK
+                }
+                
+                // MARK: 마커 클릭시
+                marker.touchHandler = { (overlay) in
+                    if let marker = overlay as? NMFMarker {
+                        switch marker.tag{
+                        case 0: //포토스팟
+                            // MARK: 포토스팟 컴포넌트 띄워주기
+                            isShowingPhotoSpot.toggle()
+                            nearbyPostsArr.removeAll()
+                            for pickable in view.mapView.pickAll(view.mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng)), withTolerance: 30){
+                                if let marker = pickable as? NMFMarker{
+                                    if marker.tag == 0 {
+                                        nearbyPostsArr.append(marker.userInfo["magazine"] as! String)
+                                    }
                                 }
                             }
+                        case 1: //현상소
+                            isShowingWebView.toggle()
+                            isShowingPhotoSpot = false
+                            bindingWebURL = marker.userInfo["url"] as! String
+                        case 2: //수리점
+                            isShowingWebView.toggle()
+                            isShowingPhotoSpot = false
+                            bindingWebURL = marker.userInfo["url"] as! String
+                        default:    //없음
+                            print("없음")
                         }
-                    case 1: //현상소
-                        isShowingWebView.toggle()
-                        isShowingPhotoSpot = false
-                        bindingWebURL = marker.userInfo["url"] as! String
-                    case 2: //수리점
-                        isShowingWebView.toggle()
-                        isShowingPhotoSpot = false
-                        bindingWebURL = marker.userInfo["url"] as! String
-                    default:    //없음
-                        print("없음")
                     }
+                    return true
                 }
-                return true
+                marker.mapView = view.mapView
             }
-            marker.mapView = view.mapView
         }
         
         

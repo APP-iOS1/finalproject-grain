@@ -30,8 +30,7 @@ enum MapService {
         
         do {
             let request = try MapRouter.getNext(nextPageToken: nextPageToken).asURLRequest()
-            print("request")
-            print(request)
+            
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -44,17 +43,24 @@ enum MapService {
     }
     
     // MARK: - 맵 데이터 넣기
-    static func insertMap(latitude: Double,url: String,id: String,category: Int,magazineId: String,longitude: Double) -> AnyPublisher<MapResponse, Error> {
+    static func insertMap(data: MagazineFields) -> AnyPublisher<MagazineDocument, Error> {
         
-        let requestRouter = MapRouter.post(latitude: latitude,url: url,id: id,category: category,magazineId: magazineId,longitude: longitude)
+        // 문서 생성 Uid
+        let docID: String = UUID().uuidString
+     
+        let requestRouter = MapRouter.post(magazineData: data, docID: docID)
+        
         
         do {
             let request = try requestRouter.asURLRequest()
+            print("request")
+            print(request)
+            
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
                 .map{ $0.data }
-                .decode(type: MapResponse.self, decoder: JSONDecoder())
+                .decode(type: MagazineDocument.self, decoder: JSONDecoder())
                 .eraseToAnyPublisher()
         } catch {
             return Fail(error: HTTPError.requestError).eraseToAnyPublisher()

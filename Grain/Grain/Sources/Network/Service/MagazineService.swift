@@ -33,7 +33,7 @@ enum MagazineService {
     
     // MARK: - 매거진 데이터 넣기
     static func insertMagazine(data: MagazineFields, images: [UIImage]) -> AnyPublisher<MagazineDocument, Error> {
-        print("FirebaseService insertMagazine start")
+       
         
         let docID: String = data.id.stringValue
         var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "param", fileName: "file", image: images)
@@ -42,6 +42,8 @@ enum MagazineService {
         
         do {
             let request = try requestRouter.asURLRequest()
+            print("매거진 ")
+            print(request)
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

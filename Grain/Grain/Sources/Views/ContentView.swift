@@ -69,9 +69,9 @@ struct ContentView: View {
                             }
                         case 3:
                             NavigationStack {
-                                MapView(magazineData: $magazineVM.magazines,
-                                        mapData:$mapVM.mapData,
+                                MapView(
                                         clikedMagazineData: clikedMagazineData)
+                                
                             }
                         case 4:
                             NavigationStack {
@@ -127,8 +127,6 @@ struct ContentView: View {
         .tint(.black)
         .onAppear{
             /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
-//            mapVM.fetchMap()
-            mapVM.fetchNextPageMap(nextPageToken: "")
             magazineVM.fetchMagazine()
             communityVM.fetchCommunity()
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")

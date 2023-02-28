@@ -64,7 +64,6 @@ struct MagazineMainView: View {
             userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             userViewModel.fetchUser()
             magazineVM.fetchMagazine()
-            magazineVM.sortByRecentMagazine(magazines: magazineVM.magazines)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

@@ -33,6 +33,19 @@ final class MagazineViewModel: ObservableObject {
                 
             } receiveValue: { (data: MagazineResponse) in
                 self.magazines = data.documents
+                // MARK: 매거진 데이터 최신순 정렬 메서드 호출
+//                self.sortByRecentMagazine(magazines: data.documents)
+                
+                self.sortedRecentMagazineData = data.documents.sorted(by: {
+                    return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+                })
+                
+                
+                self.sortedTopLikedMagazineData = data.documents.sorted(by: {
+                    // MARK: String -> Int로 바꾸기 
+                    return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
+                })
+                
                 self.fetchMagazineSuccess.send()
             }.store(in: &subscription)
         
@@ -93,18 +106,16 @@ final class MagazineViewModel: ObservableObject {
     
     
     // MARK: - 최신순으로 정렬하기 아마 그럴꺼임
-    func sortByRecentMagazine(magazines: [MagazineDocument]) -> [MagazineDocument]{
-//        var sortedRecentMagazineData: [MagazineDocument] = []
-        print("magazines: \(magazines)")
-        for _ in magazines{
-            var sortData = self.magazines.sorted{ $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()}
-            sortedRecentMagazineData = sortData
-            print("recentmagazin1: \(sortedRecentMagazineData)")
-
-        }
-        print("recentmagazin: \(sortedRecentMagazineData)")
-        return sortedRecentMagazineData
-    }
+//    func sortByRecentMagazine(magazines: [MagazineDocument]){
+//        print("sortByRecentMagazine start")
+//        var sortedArray : [MagazineDocument] = []
+//
+//        self.sortedRecentMagazineData = magazines.sorted(by: {
+//            return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+//        })
+//
+//
+//    }
 //    func sortByRecentMagazine(magazines: [MagazineDocument]) -> [MagazineDocument]{
 //        var sortedRecentMagazineData: [MagazineDocument] = []
 //        print("magazines: \(magazines)")
@@ -119,12 +130,12 @@ final class MagazineViewModel: ObservableObject {
 //    }
     
     // MARK: - 좋아요순으로 정렬하기
-    func sortByLikedMagazine(){
-        for _ in self.magazines{
-            var sortData = self.magazines.sorted{ $0.fields.likedNum.integerValue > $1.fields.likedNum.integerValue}
-            sortedTopLikedMagazineData = sortData
-        }
-    }
+//    func sortByLikedMagazine(){
+//        for _ in self.magazines{
+//            var sortData = self.magazines.sorted{ $0.fields.likedNum.integerValue > $1.fields.likedNum.integerValue}
+//            sortedTopLikedMagazineData = sortData
+//        }
+//    }
     
     /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
     // MARK: update -> Firebase Store SDK 사용

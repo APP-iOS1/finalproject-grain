@@ -183,7 +183,8 @@ struct MapView: View {
                             }.onTapGesture {
                                 print("tap")
                                 isSheetPresented.toggle()
-                                mapVM.fetchMap()    //-> FIXME: fetch를 걸어줄지 고민
+//                                mapVM.fetchMap()    //-> FIXME: fetch를 걸어줄지 고민
+                                mapVM.fetchNextPageMap(nextPageToken: "")
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     isSheetPresented.toggle()
                                 }

@@ -17,7 +17,7 @@ enum MapRouter {
     
     private var baseURL: URL {
         let baseUrlString = Bundle.main.infoDictionary?["FireStore"] ?? ""
-        print(baseUrlString)
+
         return URL(string: baseUrlString as! String)!
     }
     

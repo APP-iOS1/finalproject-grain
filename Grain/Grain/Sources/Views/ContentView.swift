@@ -127,7 +127,8 @@ struct ContentView: View {
         .tint(.black)
         .onAppear{
             /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
-            mapVM.fetchMap()
+//            mapVM.fetchMap()
+            mapVM.fetchNextPageMap(nextPageToken: "")
             magazineVM.fetchMagazine()
             communityVM.fetchCommunity()
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")

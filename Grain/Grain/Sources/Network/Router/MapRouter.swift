@@ -17,7 +17,7 @@ enum MapRouter {
     
     private var baseURL: URL {
         let baseUrlString = Bundle.main.infoDictionary?["FireStore"] ?? ""
-        print(baseUrlString)
+
         return URL(string: baseUrlString as! String)!
     }
     
@@ -26,13 +26,14 @@ enum MapRouter {
             case post
             case put
             case delete
-            
+            case getNext
             var value: String {
                 switch self {
                 case .get: return "GET"
                 case .post: return "POST"
                 case .put: return "PUT"
                 case .delete: return "DELETE"
+                case .getNext: return "GET"
                 }
             }
         }
@@ -83,7 +84,13 @@ enum MapRouter {
     func asURLRequest() throws -> URLRequest {
         let url = baseURL.appendingPathComponent(endPoint)
         
-        var request = URLRequest(url: url)
+        var component = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+        
+        if let param = parameters {
+            component.queryItems = [param]
+        }
+        
+        var request = URLRequest(url: component.url!)
         
         request.httpMethod = method.value
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")

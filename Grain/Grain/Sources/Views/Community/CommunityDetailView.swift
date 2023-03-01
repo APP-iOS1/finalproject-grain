@@ -12,7 +12,7 @@ import Kingfisher
 
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
-    let community: CommunityDocument
+    @State var community: CommunityDocument
     
     @StateObject var communityVM = CommunityViewModel()
     @StateObject var userVM = UserViewModel()
@@ -28,6 +28,8 @@ struct CommunityDetailView: View {
     @State private var isHiddenComment: Bool = true
     @State private var editFetch: Bool = false
     
+    @State private var postStatus : String = "" // 게시글 상태 값
+    @State private var postStatusString : String = "" // 게시글 상태 변경 표시글
     @FocusState private var textFieldFocused: Bool
     
     var body: some View {
@@ -169,6 +171,14 @@ struct CommunityDetailView: View {
                     // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
                     if community.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                     Menu {
+                        if !(postStatus == ""){
+                            Button{
+                                community.fields.state.stringValue = postStatus
+                                communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
+                            }label: {
+                                Text(postStatusString)
+                            }
+                        }
                         Button {
                             //저장시 코드
                         } label: {
@@ -189,9 +199,28 @@ struct CommunityDetailView: View {
                             Text("삭제")
                         }
                         
+                        
                     } label: {
                         Label("더보기", systemImage: "ellipsis")
                         
+                    }
+                    .onAppear{
+                        switch community.fields.state.stringValue{
+                        case "모집중":
+                            postStatusString = "모집완료 으로 변경"
+                            postStatus = "모집완료"
+                        case "판매중":
+                            postStatusString = "판매완료 으로 변경"
+                            postStatus = "판매완료"
+                        case "모집완료":
+                            postStatusString = "모집중 으로 변경"
+                            postStatus = "모집중"
+                        case "판매완료":
+                            postStatusString = "판매중 으로 변경"
+                            postStatus = "판매중"
+                        default:
+                            postStatus = ""
+                        }
                     }
                     .accentColor(.black)
                     .padding(.trailing, Screen.maxWidth * 0.04)
@@ -228,7 +257,6 @@ struct CommunityDetailView: View {
             //                    isBookMarked = false
             //                }
             //            }
-            
         }
         .onChange(of: commentVm.comment, perform: { value in
             commentVm.fetchComment(collectionName: "Community",

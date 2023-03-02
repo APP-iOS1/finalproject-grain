@@ -127,6 +127,7 @@
 		A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */; };
 		A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */; };
 		A78C2AF529AF2B1800AC1492 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A78C2AF429AF2B1800AC1492 /* Config.xcconfig */; };
+		A7A1AA3A29B092F200B2D70B /* MagazineRecommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A1AA3929B092F200B2D70B /* MagazineRecommentView.swift */; };
 		A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */; };
 		A7AF1A03299566EF007E6D43 /* CommentDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A02299566EF007E6D43 /* CommentDTO.swift */; };
 		A7AF1A0529956A12007E6D43 /* CommentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A0429956A12007E6D43 /* CommentQuery.swift */; };
@@ -284,6 +285,7 @@
 		A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeDTO.swift; sourceTree = "<group>"; };
 		A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeRouter.swift; sourceTree = "<group>"; };
 		A78C2AF429AF2B1800AC1492 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Config.xcconfig; path = "../../../../세팅파일/Config.xcconfig"; sourceTree = "<group>"; };
+		A7A1AA3929B092F200B2D70B /* MagazineRecommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineRecommentView.swift; sourceTree = "<group>"; };
 		A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeDTO.swift; sourceTree = "<group>"; };
 		A7AF1A02299566EF007E6D43 /* CommentDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDTO.swift; sourceTree = "<group>"; };
 		A7AF1A0429956A12007E6D43 /* CommentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentQuery.swift; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 				0C70BCFA298CA692004A4DB0 /* EditorView.swift */,
 				A71516B929926233009A0780 /* MagazineEditView.swift */,
 				99B21EC229938CD7006933BB /* MagazineCommentView.swift */,
+				A7A1AA3929B092F200B2D70B /* MagazineRecommentView.swift */,
 				33CFBCA32993A14C00DD2707 /* HeartButton.swift */,
 				9996A460299B580E00065435 /* MagazineProfileImage.swift */,
 			);
@@ -990,6 +993,7 @@
 				A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */,
 				A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */,
 				A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */,
+				A7A1AA3A29B092F200B2D70B /* MagazineRecommentView.swift in Sources */,
 				A75BB990297EA25C004FE6FA /* WebkitView.swift in Sources */,
 				0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */,
 				99233D482977F2F900A875B1 /* LocationManager.swift in Sources */,

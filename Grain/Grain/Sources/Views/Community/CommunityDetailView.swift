@@ -81,24 +81,7 @@ struct CommunityDetailView: View {
                         .tabViewStyle(.page)
                         .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                         .padding(.bottom, 10)
-                        
-                        //MARK: 댓글
-//                        Button {
-//                            //댓글 입력 키보드 팝업
-//                            isHiddenComment.toggle()
-//                            textFieldFocused = true
-//                        } label: {
-//                            HStack{
-//                                Image(systemName: "message")
-//                                    .font(.title3)
-//                                    .foregroundColor(.black)
-//                                Text("댓글 달기")
-//                                    .foregroundColor(.textGray)
-//                                    .padding(.top, 2)
-//                            }
-//                        }
-//                        .padding(.leading, Screen.maxWidth * 0.04)
-//                        .padding(.top, -10)
+   
                         // MARK: 게시글(디테일뷰) 내용
                                 HStack {
                                     Text(community.fields.content.stringValue)
@@ -109,50 +92,28 @@ struct CommunityDetailView: View {
                                 }
                         .padding(.top, 10)
                         Divider()
+                            .frame(maxWidth: Screen.maxWidth * 0.94)
+                            .background(Color.black)
+                            .padding(.top, 5)
+                            .padding(.bottom, 15)
+                            .padding(.horizontal, Screen.maxWidth * 0.04)
                         // MARK: - 커뮤니티 댓글 뷰
-                        VStack{
-                            ForEach(commentVm.comment,id: \.self){ item in
+                        VStack(alignment: .leading ){
+                            ForEach(commentVm.sortedRecentComment ,id: \.self){ item in
                                 // FIXME: Comment 어디서 만든건지 찾아야함
                                 CommentView(comment: item.fields, commentTime: item.updateTime, commentText: commentText, collectionDocId: community.fields.id.stringValue)
+                                Divider()
                             }
-                            
-                        }.padding(.vertical)
-                        
-                        // top vstack
+                        }
                     }
-                } //scroll view
+                }
+                .refreshable {
+                    communityVM.fetchCommunity()
+                    commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                }
                 .padding(.top, 1)
-                
+                // MARK: 댓글 달기
                 CommunityCommentView(currentUser: userVM.currentUsers,community: community)
-                //MARK: 댓글입력 창
-//                if !isHiddenComment {
-//                    HStack {
-//                        TextField("댓글을 입력해주세요", text: $commentText)
-//                            .disableAutocorrection(true)
-//                            .autocapitalization(.none)
-//                            .padding()
-//                            .focused($textFieldFocused)
-//                            .onSubmit {
-//                                self.hideKeyboard()
-//                                isHiddenComment = true
-//                                commentText = ""
-//                            }
-//                        Spacer()
-//                        Button {
-//                            // MARK: 댓글 업로드 긴 ㅇ
-//                            commentVm.insertComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, data: CommentFields(comment: CommentString(stringValue: commentText), profileImage: CommentString(stringValue: community.fields.profileImage.stringValue), nickName: CommentString(stringValue: community.fields.nickName.stringValue), userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""), id: CommentString(stringValue: UUID().uuidString)))
-//                            self.hideKeyboard()
-//                            isHiddenComment = true
-//                            commentText = ""
-//                        } label: {
-//                            Image(systemName: "paperplane")
-//                                .foregroundColor(.blue)
-//                                .font(.title3)
-//                                .padding()
-//                        }
-//                    }
-//                }
-                //.isHidden(isHiddenComment)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -244,7 +205,6 @@ struct CommunityDetailView: View {
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
-            commentVm.sortByRecentComment()
             communityVM.fetchCommunity()
             
             // 유저가 저장을 눌렀는지

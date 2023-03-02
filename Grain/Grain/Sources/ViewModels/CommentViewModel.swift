@@ -16,12 +16,13 @@ final class CommentViewModel: ObservableObject {
     
     @Published var comment = [CommentDocument]()
     @Published var sortedRecentComment = [CommentDocument]()
-    
+    @Published var sortedRecentRecomment = [CommentDocument]()  // 대댓글 최신순으로 정렬
     var fetchCommentSuccess = PassthroughSubject<(), Never>()
     var insertCommentSuccess = PassthroughSubject<(), Never>()
     var updateCommentSuccess = PassthroughSubject<(), Never>()
     var deleteCommentSuccess = PassthroughSubject<(), Never>()
-    
+    var insertRecommentSuccess = PassthroughSubject<(), Never>()    // 대댓글
+    var fetchRecommentSuccess = PassthroughSubject<(), Never>()
     ///  REST API 방식 CRUD
     // MARK: Read
     func fetchComment(collectionName: String, collectionDocId: String) {
@@ -31,9 +32,12 @@ final class CommentViewModel: ObservableObject {
                 
             } receiveValue: { (data: CommentResponse) in
                 self.comment = data.documents
+                self.sortedRecentComment = data.documents.sorted(by: {
+                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                })
+                
                 self.fetchCommentSuccess.send()
             }.store(in: &subscription)
-        print(fetchCommentSuccess)
     }
     
     // MARK: Create
@@ -44,7 +48,6 @@ final class CommentViewModel: ObservableObject {
                 
             } receiveValue: { (data: CommentDocument) in
                 self.insertCommentSuccess.send()
-                print("id: \(data.name)")
                 self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
             }.store(in: &subscription)
     }
@@ -56,6 +59,7 @@ final class CommentViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
                 self.updateCommentSuccess.send()
+                
             }.store(in: &subscription)
     }
     
@@ -66,18 +70,37 @@ final class CommentViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
                 self.deleteCommentSuccess.send()
+                
             }.store(in: &subscription)
     }
     
-    // MARK: - 최신순으로 댓글 정렬
-    func sortByRecentComment(){
-        for _ in self.comment{
-            var sortData = self.comment.sorted{ $0.updateTime.toDate() ?? Date() > $1.updateTime.toDate() ?? Date()}
-            sortedRecentComment = sortData
-        }
+    // MARK: 대댓글 Create
+    func insertRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String, data: CommentFields) {
+        CommentService.insertRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, data: data)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: CommentDocument) in
+                self.insertRecommentSuccess.send()
+               
+            }.store(in: &subscription)
     }
     
+    // MARK: Read
+    func fetchRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String) {
+        CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: CommentResponse) in
+                self.sortedRecentRecomment = data.documents.sorted(by: {
+                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                })
+                print("대댓글")
+                print(self.sortedRecentRecomment)
+                self.fetchRecommentSuccess.send()
+            }.store(in: &subscription)
 
+    }
+    
     /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
     // MARK: Update -> Firebase Store SDK 사용
 //    func updateUserUsingSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {

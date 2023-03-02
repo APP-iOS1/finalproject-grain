@@ -39,7 +39,11 @@ final class UserViewModel: ObservableObject {
     @Published var userBookmarkedCommunity : [String] = [] //string값만
     @Published var likedCommunityIdArr : [String] = [] // -> DB에서 만들어야됨
     
-    var fetchUsersSuccess = PassthroughSubject<(), Never>()
+    // 유저의 팔로워, 팔로잉 리스트
+    @Published var followerList = [UserDocument]()
+    @Published var followingList = [UserDocument]()
+    
+    var fetchUsersSuccess = PassthroughSubject<[UserDocument], Never>()
     var fetchCurrentUsersSuccess = PassthroughSubject<(), Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
     var updateUsersArraySuccess = PassthroughSubject<(), Never>()
@@ -54,7 +58,7 @@ final class UserViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
                 self.users = data.documents
-                self.fetchUsersSuccess.send()
+                self.fetchUsersSuccess.send(data.documents)
             }.store(in: &subscription)
     }
     
@@ -66,11 +70,24 @@ final class UserViewModel: ObservableObject {
                 self.currentUsers = data.fields
                 if let currentUsers = self.currentUsers {
                     self.parsingUserDataToStringArr(currentUserData: currentUsers)
-                    print("bookmarkedID: \(self.bookmarkedMagazineID)")
-                    print("패치 유저데이터 123")
+//                    self.filterCurrentUsersFollow()
                     self.fetchCurrentUsersSuccess.send()
                 }
             }.store(in: &subscription)
+    }
+    
+    func filterCurrentUsersFollow() {
+        print("followers: !!! \(follower)")
+        self.followerList = users.filter {
+            follower.contains($0.fields.id.stringValue)
+        }
+        
+        self.followingList = users.filter {
+            following.contains($0.fields.id.stringValue)
+        }
+        
+        print("FollowerList: \(followerList)")
+        
     }
    
     //MARK: - 구독한 사람들의 메거진만 필터링해서 리턴해주는 메서드(홈뷰 구독탭에서 가져다 쓰시면 됩니다. ^^ 갖다쓰기만해 ~ )

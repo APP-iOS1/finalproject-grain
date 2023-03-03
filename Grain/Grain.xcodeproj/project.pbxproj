@@ -103,6 +103,7 @@
 		9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD6297A224700E834C3 /* MagazineViewCell.swift */; };
 		9970FBC629ADC30E0002A370 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		9970FBC829ADC4E30002A370 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9970FBC729ADC4E30002A370 /* GoogleService-Info.plist */; };
+		9970FC3629AF8FCF0002A370 /* EX+pinchAndPanGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9970FC3529AF8FCF0002A370 /* EX+pinchAndPanGesture.swift */; };
 		998847D22992171400004066 /* CommunitySearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D12992171400004066 /* CommunitySearchDetailView.swift */; };
 		998847D4299226AE00004066 /* MagazineSearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D3299226AE00004066 /* MagazineSearchResultView.swift */; };
 		998847D6299226CB00004066 /* MagazineSearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D5299226CB00004066 /* MagazineSearchDetailView.swift */; };
@@ -259,6 +260,7 @@
 		9962CDD4297A215900E834C3 /* MagazineFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineFeedView.swift; sourceTree = "<group>"; };
 		9962CDD6297A224700E834C3 /* MagazineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewCell.swift; sourceTree = "<group>"; };
 		9970FBC729ADC4E30002A370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		9970FC3529AF8FCF0002A370 /* EX+pinchAndPanGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+pinchAndPanGesture.swift"; sourceTree = "<group>"; };
 		998847D12992171400004066 /* CommunitySearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySearchDetailView.swift; sourceTree = "<group>"; };
 		998847D3299226AE00004066 /* MagazineSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchResultView.swift; sourceTree = "<group>"; };
 		998847D5299226CB00004066 /* MagazineSearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchDetailView.swift; sourceTree = "<group>"; };
@@ -554,6 +556,7 @@
 				9958AFAF2977817C00A51DA9 /* Ex+Color.swift */,
 				06FD6ABA2977B45600B4A859 /* Ex+View.swift */,
 				9936E2B429915B04006F3333 /* Ex+EmptyPlaceholder.swift */,
+				9970FC3529AF8FCF0002A370 /* EX+pinchAndPanGesture.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -865,6 +868,7 @@
 				A7D9F3042989645D00B39218 /* MapService.swift in Sources */,
 				998847D4299226AE00004066 /* MagazineSearchResultView.swift in Sources */,
 				A7D957DB297AAFBD001D2401 /* MagazineService.swift in Sources */,
+				9970FC3629AF8FCF0002A370 /* EX+pinchAndPanGesture.swift in Sources */,
 				9962CDC92979246500E834C3 /* AllTabView.swift in Sources */,
 				8B0BA0A2298A4197000A7090 /* CameraModalView.swift in Sources */,
 				0C5204A52989F5D4002623FB /* SplashView.swift in Sources */,
@@ -1117,7 +1121,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Grain/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6R3M7VGRP2;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_HARDENED_RUNTIME = NO;
 				ENABLE_PREVIEWS = YES;

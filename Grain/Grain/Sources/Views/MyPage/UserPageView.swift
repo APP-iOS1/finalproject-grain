@@ -193,7 +193,7 @@ struct UserPageView: View {
                     MyPageMyFeedView(magazineDocument: magazines)
                 }
             }
-            .onAppear{
+            .onAppear {
                 userVM.fetchUser()
                 userVM.fetchUserProfile(userID: userID)
                 magazineVM.fetchMagazine()
@@ -218,7 +218,7 @@ struct UserPageView: View {
                 self.magazines = magazineVM.filterUserMagazine(userID: userID)
             })
             .onDisappear {
-                /// 희경: userViewModel 에 메소드로 따로 빼주는게 보기 좋을듯.
+                /// 희경:  userViewModel 에 메소드로 따로 빼주는게 보기 좋을듯.
                 if isFollowingUser {
                     // "구독중" 상태이고, 내 팔로잉 리스트에 없는 경우 => 구독
                     if !userVM.following.contains(userID) {
@@ -260,4 +260,3 @@ struct UserPageView: View {
         }
     }
 }
-

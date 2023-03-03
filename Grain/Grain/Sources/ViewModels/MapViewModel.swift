@@ -35,13 +35,11 @@ final class MapViewModel: ObservableObject {
 //    }
     
     func fetchNextPageMap(nextPageToken: String){
-        print("fetchNextPageMap 호출 @@@@")
         MapService.getNextPageMap(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: MapResponse) in
                 self.mapData.append(contentsOf: data.documents)
-                print(data.documents)
                 if !(data.nextPageToken == nil) {
                     var nextPageToken : String = ""
                     nextPageToken = data.nextPageToken!

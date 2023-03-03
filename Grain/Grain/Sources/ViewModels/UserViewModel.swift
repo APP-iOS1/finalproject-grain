@@ -78,11 +78,13 @@ final class UserViewModel: ObservableObject {
     }
     
     func fetchUserProfile(userID: String) {
+        print("FetchUserProfile Service start ")
         UserService.getCurrentUser(userID: userID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CurrentUserResponse) in
                 self.user = data.fields
+                print("fetchUserProfile~~~~ \(self.user)")
             }.store(in: &subscription)
     }
     

@@ -69,9 +69,9 @@ struct ContentView: View {
                             }
                         case 3:
                             NavigationStack {
-                                MapView(magazineData: $magazineVM.magazines,
-                                        mapData:$mapVM.mapData,
-                                        clikedMagazineData: clikedMagazineData)
+//                                MapView(magazineData: $magazineVM.magazines,
+//                                        mapData:$mapVM.mapData,
+//                                        clikedMagazineData: clikedMagazineData)
                             }
                         case 4:
                             NavigationStack {

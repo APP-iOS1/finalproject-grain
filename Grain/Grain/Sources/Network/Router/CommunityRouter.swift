@@ -26,7 +26,6 @@ enum CommunityRouter {
         }
         return URL(string: baseUrlString) ?? URL(string: "")!
     }
-    
     private enum HTTPMethod {
         case get
         case post

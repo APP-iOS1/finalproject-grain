@@ -86,8 +86,7 @@ enum MagazineRouter {
     private var data: Data? {
         switch self {
         case let .post(magazineData, images, docID):
-            guard let magazinequery = MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID) else { return nil }
-            print( String(decoding: magazinequery, as: UTF8.self))
+            
             return MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID)
         case let .patch(putData, docID):
             return MagazineQuery.updateMagazineQuery(data: putData, docID: docID)

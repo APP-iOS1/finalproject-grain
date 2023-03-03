@@ -17,13 +17,14 @@ final class CommunityViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
     
     @Published var communities = [CommunityDocument]()
+    @Published var sortedRecentCommunityData = [CommunityDocument]()    // 매거진 게시물 최신순으로
     
     var fetchCommunitySuccess = PassthroughSubject<[CommunityDocument], Never>()
     var insertCommunitySuccess = PassthroughSubject<(), Never>()
     var updateCommunitySuccess = PassthroughSubject<(), Never>()
     var updateCommunityStateSuccess = PassthroughSubject<(), Never>()
     var deleteCommunitySuccess = PassthroughSubject<(), Never>()
-    
+
     //MARK: - 커뮤니티 데이터 가져오기 메소드
     func fetchCommunity() {
         CommunityService.getCommunity()
@@ -31,6 +32,12 @@ final class CommunityViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommunityResponse) in
                 self.communities = data.documents
+                
+                // MARK: 커뮤니티 최신순으로 정렬
+                self.sortedRecentCommunityData = data.documents.sorted(by: {
+                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                })
+                
                 self.fetchCommunitySuccess.send(data.documents)
             }.store(in: &subscription)
     }
@@ -85,19 +92,9 @@ final class CommunityViewModel: ObservableObject {
     // 카테고리별 데이터를 filtering 해서 리턴하는 함수
     func returnCategoryCommunity(category: String) -> [CommunityDocument] {
         var categoryData: [CommunityDocument] = []
-        categoryData = communities.filter { $0.fields.category.stringValue == "\(category)"}
+        categoryData = sortedRecentCommunityData.filter { $0.fields.category.stringValue == "\(category)"}
         
         return categoryData
-    }
-    
-    @Published var sortedCommunityData = [CommunityDocument]()
-    // MARK: - 최신순? 오래된 순? 확인해야함
-    func sortByCommunity(){
-        for _ in self.communities{
-            var sortData = self.communities.sorted{ $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()}
-            sortedCommunityData = sortData
-        }
-        
     }
     
     /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )

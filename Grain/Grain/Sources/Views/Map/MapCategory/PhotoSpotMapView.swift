@@ -32,7 +32,7 @@ struct PhotoSpotMapView: View {
                     .zIndex(1)
                     .opacity(0.3)
             }
-            PhotoSpotUIMapView(mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot ,nearbyPostsArr: $nearbyPostsArr , visitButton: $visitButton)
+            PhotoSpotUIMapView(mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot , nearbyPostsArr: $nearbyPostsArr, visitButton: $visitButton)
             
             
             if isShowingPhotoSpot{
@@ -44,7 +44,7 @@ struct PhotoSpotMapView: View {
                 NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineData, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData)
                     .zIndex(1)
                     .offset(y: 250)
-                    .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
+//                    .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
             }
         }
         .fullScreenCover(isPresented: $visitButton, content: {
@@ -67,6 +67,7 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
     @Binding var searchResponse: [Address]
     @Binding var isShowingPhotoSpot: Bool
     @Binding var nearbyPostsArr : [String]
+
     @Binding var visitButton : Bool
     
     

@@ -279,5 +279,14 @@ final class UserViewModel: ObservableObject {
         print("bookmarkedMagazineID: \(self.bookmarkedMagazineID)")
     }
     
+    func parsingFollowerDataToStringArr(data: UserDocument) -> [String] {
+        var follower = [String]()
+        for i in data.fields.follower.arrayValue.values {
+            follower.append(i.stringValue)
+        }
+        
+        return follower
+    }
+    
 }
 

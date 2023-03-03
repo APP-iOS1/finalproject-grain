@@ -12,6 +12,7 @@
 		0693B4C72992849600F9CDE2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0693B4C62992849600F9CDE2 /* Error.swift */; };
 		06A7341A29AF2FA600ABB37B /* FollowerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7341929AF2FA600ABB37B /* FollowerListView.swift */; };
 		06A7341C29AF2FB800ABB37B /* FollowingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7341B29AF2FB800ABB37B /* FollowingListView.swift */; };
+		06A7341E29B0695600ABB37B /* UserPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7341D29B0695600ABB37B /* UserPageView.swift */; };
 		06F0D82A297EB3DC00E7B885 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F0D829297EB3DC00E7B885 /* CommunityViewModel.swift */; };
 		06F0D82C297EB3E700E7B885 /* MagazineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F0D82B297EB3E700E7B885 /* MagazineViewModel.swift */; };
 		06F0D82E297EB3F200E7B885 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F0D82D297EB3F200E7B885 /* MapViewModel.swift */; };
@@ -167,6 +168,7 @@
 		0693B4C62992849600F9CDE2 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		06A7341929AF2FA600ABB37B /* FollowerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerListView.swift; sourceTree = "<group>"; };
 		06A7341B29AF2FB800ABB37B /* FollowingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingListView.swift; sourceTree = "<group>"; };
+		06A7341D29B0695600ABB37B /* UserPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPageView.swift; sourceTree = "<group>"; };
 		06F0D829297EB3DC00E7B885 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
 		06F0D82B297EB3E700E7B885 /* MagazineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewModel.swift; sourceTree = "<group>"; };
 		06F0D82D297EB3F200E7B885 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 			isa = PBXGroup;
 			children = (
 				334699D22988AE26004153A6 /* MyPageView.swift */,
+				06A7341D29B0695600ABB37B /* UserPageView.swift */,
 				8B10F4312992A44300582D27 /* ScrollViewTest.swift */,
 				8B10F429298CD18F00582D27 /* MyPageView2.swift */,
 				334699D42988CB86004153A6 /* MyPageOptionView.swift */,
@@ -976,6 +979,7 @@
 				A7D957D4297AAF74001D2401 /* CommunityRouter.swift in Sources */,
 				A7D9F30E29896D8500B39218 /* UserService.swift in Sources */,
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
+				06A7341E29B0695600ABB37B /* UserPageView.swift in Sources */,
 				334699D32988AE26004153A6 /* MyPageView.swift in Sources */,
 				06A7341A29AF2FA600ABB37B /* FollowerListView.swift in Sources */,
 				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,

@@ -27,8 +27,11 @@ struct MagazineDetailView: View {
                         ForEach(userVM.users.filter{
                             $0.fields.id.stringValue == data.fields.userID.stringValue
                         }, id: \.self){ item in
-                            MagazineProfileImage(imageName: item.fields.profileImage.stringValue )
-                            
+                            NavigationLink {
+                                UserPageView(userVM: userVM, userID: data.fields.userID.stringValue)
+                            } label: {
+                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue )
+                            }
                         }
                         
                         VStack(alignment: .leading){

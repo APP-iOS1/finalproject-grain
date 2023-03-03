@@ -11,7 +11,9 @@ struct MagazineDetailView: View {
     @State private var heartOpacity: Double = 0
     @State private var saveOpacity: Double = 0
     @State private var showDevices: Bool = false
-    
+    @State private var currentAmount: CGFloat = 0
+    @State private var dragOffset = CGSize.zero
+
     @Environment(\.dismiss) private var dismiss
     
     let userVM: UserViewModel
@@ -46,14 +48,13 @@ struct MagazineDetailView: View {
                                 .foregroundColor(.textGray)
                                 .font(.caption)
                                 .padding(.trailing , Screen.maxWidth * 0.03)
-
+                            
                         }
                     }
                     .padding(5)
                     //.padding(.trailing, Screen.maxWidth*0.03)
                     
                     // MARK: 이미지
-                    TabView{
                         ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
                             Rectangle()
                                 .frame(width: Screen.maxWidth , height: Screen.maxWidth)
@@ -64,9 +65,10 @@ struct MagazineDetailView: View {
                                 }
                             
                         }
-                    }
+                    .addPinchZoom()
+                    .ignoresSafeArea()
                     .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                    .tabViewStyle(.page)
+                    
                     .overlay{
                         Image(systemName: "heart.fill")
                             .foregroundColor(.white)
@@ -96,7 +98,8 @@ struct MagazineDetailView: View {
                         .animation(.easeInOut, value: isBookMarked)
                         .opacity(saveOpacity)
                     }
-
+                    .zIndex(2)
+                    
                     VStack(alignment: .leading){
                         HStack{
                             VStack{
@@ -154,7 +157,7 @@ struct MagazineDetailView: View {
                                     .foregroundColor(.black)
                             }
                             .padding(.trailing)
-
+                            
                         }
                         .padding(.top, 5)
                         
@@ -177,25 +180,34 @@ struct MagazineDetailView: View {
                             .padding(.leading, 20)
                         }
                     }
+              
                 }//VStack
                 .frame(minHeight: 350)
-                
-                // MARK: 제목
-                Text(data.fields.title.stringValue)
-                    .font(.title2)
-                    .bold()
-                    .padding(.horizontal)
-                    .frame(width: Screen.maxWidth , alignment: .leading)
-                    .multilineTextAlignment(.leading)
-                    .padding(.top)
-                    .padding(.bottom, 6)
-                
-                // MARK: 내용
-                Text(data.fields.content.stringValue)
-                    .lineSpacing(7.0)
-                    .padding(.horizontal)
-                    .foregroundColor(Color.textGray)
-                Spacer()
+                .zIndex(1)
+             
+                VStack{
+                    
+                    // MARK: 제목
+                    Text(data.fields.title.stringValue)
+                        .font(.title2)
+                        .bold()
+                        .padding(.horizontal)
+                        .frame(width: Screen.maxWidth , alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                        .padding(.top)
+                        .padding(.bottom, 6)
+                    
+                    
+                    // MARK: 내용
+                    Text(data.fields.content.stringValue)
+                        .lineSpacing(7.0)
+                        .padding(.horizontal)
+                        .foregroundColor(Color.textGray)
+                        .frame(width: Screen.maxWidth , alignment: .leading)
+                      
+                    Spacer()
+                }
+                .zIndex(0)
             }//VStack
         }//스크롤뷰
         .onAppear{

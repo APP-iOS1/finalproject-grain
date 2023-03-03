@@ -20,6 +20,7 @@ struct MagazineRecommentView: View {
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
     @Binding var eachBoolArray : [Bool]
+    @Binding var commentText: String
     
     var body: some View {
         
@@ -52,57 +53,60 @@ struct MagazineRecommentView: View {
                                 } label: {
                                     // MARK: 유저 닉네임
                                     Text(commentVm.sortedRecentRecomment[index].fields.nickName.stringValue)
-                                        .font(.footnote)
+                                        .font(.caption)
                                         .fontWeight(.bold)
                                 }
                                 HStack{
                                     Text("・")
+                                        .font(.caption2)
                                         .padding(.trailing, -5)
                                     // MARK: 댓글 생성 날짜
                                     Text(commentVm.sortedRecentRecomment[index].createTime.toDate()?.renderTime() ?? "")
+                                        .font(.caption2)
                                 }
-                                .font(.caption2)
                                 Spacer()
-                                //                                            // FIXME: 고쳐야함!
-                                //                                           if item.fields.userID.stringValue == Auth.auth().currentUser?.uid{
-                                
+                            
                             }
                             .padding(.bottom, -5)
                             //MARK: - 댓글 내용
                             Text(commentVm.sortedRecentRecomment[index].fields.comment.stringValue)
-                                .font(.callout)
-                            
+                                .font(.caption)
                                 .padding(.bottom, -1)
                             
                             // MARK: - 자기가 쓴 댓글일시 보여주는 수정/삭제
                             HStack{
-                                Button {
-                                    //수정 하기 버튼
-                                } label: {
-                                    //                                         item.fields.userID.stringValue == Auth.auth().currentUser?.uid{
-                                    Text("수정")
-                                }
-                                Button {
-                                } label: {
-                                    Text("삭제")
+                                if commentVm.sortedRecentRecomment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                                    Button {
+                                        commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue, updateComment: commentText, data: commentVm.sortedRecentRecomment[index].fields)
+                                        
+                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                                        commentText = ""
+                                    } label: {
+                                        Text("수정")
+                                    }
+                                    Button {
+                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue)
+//                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                                    } label: {
+                                        Text("삭제")
+                                    }
                                 }
                             }
-                            .font(.caption)
+                            .font(.caption2)
                             .foregroundColor(.textGray)
                             .padding(.top, 1)
                             .padding(.bottom, -3)
-                            
-                            
+ 
                         }
                     }
-                    .padding(.vertical, -7)
-                }.padding(7)
+                    
+                }
             }
         }
+        .padding(.leading , -8)
+        
         .onAppear{
             commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
         }
-        .navigationTitle("댓글")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }

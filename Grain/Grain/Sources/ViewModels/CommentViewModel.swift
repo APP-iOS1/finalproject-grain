@@ -21,8 +21,13 @@ final class CommentViewModel: ObservableObject {
     var insertCommentSuccess = PassthroughSubject<(), Never>()
     var updateCommentSuccess = PassthroughSubject<(), Never>()
     var deleteCommentSuccess = PassthroughSubject<(), Never>()
-    var insertRecommentSuccess = PassthroughSubject<(), Never>()    // 대댓글
+    
+    // 대댓글
+    var insertRecommentSuccess = PassthroughSubject<(), Never>()
     var fetchRecommentSuccess = PassthroughSubject<(), Never>()
+    var updateRecommentSuccess = PassthroughSubject<(), Never>()
+    var deleteRecommentSuccess = PassthroughSubject<(), Never>()
+
     ///  REST API 방식 CRUD
     // MARK: Read
     func fetchComment(collectionName: String, collectionDocId: String) {
@@ -81,11 +86,10 @@ final class CommentViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
                 self.insertRecommentSuccess.send()
-               
             }.store(in: &subscription)
     }
     
-    // MARK: Read
+    // MARK: 대댓글 Read
     func fetchRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String) {
         CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId)
             .receive(on: DispatchQueue.main)
@@ -94,12 +98,32 @@ final class CommentViewModel: ObservableObject {
                 self.sortedRecentRecomment = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
                 })
-                print("대댓글")
-                print(self.sortedRecentRecomment)
                 self.fetchRecommentSuccess.send()
             }.store(in: &subscription)
 
     }
+    // MARK: 대댓글 Update
+    func updateRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String, docID: String, updateComment: String, data: CommentFields ){
+        CommentService.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, docID: docID, updateComment: updateComment, data: data)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: CommentDocument) in
+                self.updateRecommentSuccess.send()
+                
+            }.store(in: &subscription)
+    }
+    
+    // MARK: 대댓글 Delete
+    func deleteRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String, docID: String) {
+        CommentService.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: CommentDocument) in
+                self.deleteRecommentSuccess.send()
+                
+            }.store(in: &subscription)
+    }
+    
     
     /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
     // MARK: Update -> Firebase Store SDK 사용

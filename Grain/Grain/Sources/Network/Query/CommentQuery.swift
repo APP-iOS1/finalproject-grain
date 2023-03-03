@@ -62,5 +62,57 @@ enum CommentQuery {
         }
         """.data(using: .utf8)
     }
+    
+    static func insertRecommentQuery(data: CommentFields ) -> Data? {
+        return
+        """
+        {
+            "fields": {
+                "nickName": {
+                    "stringValue": "\(data.nickName.stringValue)"
+                },
+                "profileImage": {
+                    "stringValue": "\(data.profileImage.stringValue)"
+                },
+                "userID": {
+                    "stringValue": "\(data.userID.stringValue)"
+                },
+                "comment": {
+                    "stringValue": "\(data.comment.stringValue)"
+                },
+                "id": {
+                    "stringValue": "\(data.id.stringValue)"
+                }
+            }
+        }
+        """.data(using: .utf8)
+    }
+    
+    
+    static func updateRecommentQuery(updateComment: String, data: CommentFields ) -> Data? {
+        
+        return
+        """
+        {
+            "fields": {
+                "nickName": {
+                    "stringValue": "\(data.nickName.stringValue)"
+                },
+                "profileImage": {
+                    "stringValue": "\(data.profileImage.stringValue)"
+                },
+                "userID": {
+                    "stringValue": "\(data.userID.stringValue)"
+                },
+                "comment": {
+                    "stringValue": "\(updateComment)"
+                },
+                "id": {
+                    "stringValue": "\(data.id.stringValue)"
+                }
+            }
+        }
+        """.data(using: .utf8)
+    }
 }
 

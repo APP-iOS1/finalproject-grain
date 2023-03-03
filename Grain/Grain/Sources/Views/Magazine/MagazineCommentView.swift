@@ -31,11 +31,8 @@ struct MagazineCommentView: View {
         VStack() {
             Divider()
             ScrollView() {
-                // 댓글이 들어갈 자리
                 VStack(alignment: .leading){
-                    // TODO: 댓글 셀뷰 따로 만들기
                     ForEach(commentVm.sortedRecentComment.indices, id: \.self){ index in
-                        // FIXME: 댓글 하나 셀로 만들기
                         HStack(alignment: .top){
                             // MARK: -  유저 프로필 이미지
                             VStack{
@@ -49,6 +46,8 @@ struct MagazineCommentView: View {
                                     }
                                     .padding(.horizontal, 7)
                             }
+                            .frame(width: Screen.maxWidth * 0.1)
+                            
                             VStack(alignment: .leading){
                                 HStack{
                                     NavigationLink {
@@ -56,32 +55,31 @@ struct MagazineCommentView: View {
                                     } label: {
                                         // MARK: 유저 닉네임
                                         Text(commentVm.sortedRecentComment[index].fields.nickName.stringValue)
-                                            .font(.footnote)
+                                            .font(.caption)
                                             .fontWeight(.bold)
                                     }
                                     HStack{
                                         Text("・")
+                                            .font(.caption2)
                                             .padding(.trailing, -5)
                                         // MARK: 댓글 생성 날짜
                                         Text(commentVm.sortedRecentComment[index].createTime.toDate()?.renderTime() ?? "")
+                                            .font(.caption2)
                                     }
-                                    .font(.caption2)
+                                    
                                     Spacer()
-                                    //                                            // FIXME: 고쳐야함!
-                                    //                                           if item.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                 }
                                 .padding(.bottom, -5)
                                 //MARK: - 댓글 내용
                                 Text(commentVm.sortedRecentComment[index].fields.comment.stringValue)
-                                    .font(.callout)
-
+                                    .font(.footnote)
                                     .padding(.bottom, -1)
                                 
                                 // MARK: - 자기가 쓴 댓글일시 보여주는 수정/삭제
                                 HStack{
                                     Button {
                                         replyComment.toggle()
-//                                        commentText = "@" + item.fields.nickName.stringValue  // FIXME: 태그 기능 추가시 주석 풀기
+                                        //                                        commentText = "@" + item.fields.nickName.stringValue  // FIXME: 태그 기능 추가시 주석 풀기
                                         replyCommentText = "@" + commentVm.sortedRecentComment[index].fields.nickName.stringValue
                                         commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
                                     } label: {
@@ -89,59 +87,50 @@ struct MagazineCommentView: View {
                                     }
                                     // MARK: 답글 더보기
                                     Button {
-                                        // 갯수만큼 만들어주기
                                         makeEachBool(count:commentVm.sortedRecentComment.count)
                                         readMoreComments.toggle()
                                         eachBool[index] = true
                                     } label: {
                                         Text("답글 더보기 ")
                                     }
-
                                     
-                                    Button {
-                                        //수정 하기 버튼
-                                        commentVm.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue, updateComment: commentText,data: commentVm.sortedRecentComment[index].fields)
-                                        commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                                        commentText = ""
-                                        
-                                    } label: {
-                                        // 이 부분 빼면 빌드 빨라지는거 같음
-                                        // FIXME: 셀 단위면 좋아요, 구독 처럼 하나씩 판별해서 true, false 할수 있을거 같은데
-                                        // FIXME: 고쳐야함!
-                                        //                                            if item.fields.userID.stringValue == Auth.auth().currentUser?.uid{
-                                        Text("수정")
-                                        
-                                        //                                            }
+                                    if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                                        Button {
+                                            //수정 하기 버튼
+                                            commentVm.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue, updateComment: commentText,data: commentVm.sortedRecentComment[index].fields)
+                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                            commentText = ""
+                                            
+                                        } label: {
+                                            Text("수정")
+                                        }
+                                        //                                    .padding(.trailing, 5)
+                                        //  MARK: 삭제
+                                        Button {
+                                            commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue)
+                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                        } label: {
+                                            Text("삭제")
+                                        }
                                     }
-                                    //                                    .padding(.trailing, 5)
-                                    //  MARK: 삭제
-                                    Button {
-                                        commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue)
-                                        commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                                    } label: {
-                                        // FIXME: 고쳐야함!
-                                        //                                            if item.fields.userID.stringValue == Auth.auth().currentUser?.uid{
-                                        Text("삭제")
-                                        
-                                        //                                            }
-                                    }
-                                    //                                    .padding(.trailing, 5)
                                 }
-                                .font(.caption)
-                                //                                .fontWeight(.bold)
+                                .font(.caption2)
                                 .foregroundColor(.textGray)
                                 .padding(.top, 1)
                                 .padding(.bottom, -3)
-  
-                                if readMoreComments && eachBool[index]{
-                                    MagazineRecommentView(currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, eachBoolArray: $eachBool)
-                                }
                                 
+                                VStack{
+                                    if readMoreComments && eachBool[index]{
+                                        MagazineRecommentView(currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, eachBoolArray: $eachBool, commentText: $commentText)
+                                    }
+                                }
                             }
+                            .frame(width: Screen.maxWidth * 0.8)
                         }
-                        .padding(.vertical, -7)
+//                        .padding(.vertical, -7)
                         Divider()
-                    }.padding(7)
+                    }
+                    .padding(7)
                 }
                 
             }.refreshable {
@@ -247,8 +236,9 @@ struct MagazineCommentTextField: View {
                                                         id: CommentString(stringValue: UUID().uuidString)
                                                         )
                                                       )
-                            commentText = ""        //댓글 텍스트 필드 초기화
-                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                            commentText = ""        
+
+//                            commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
                             self.summitComment.toggle()
                             replyComment = false
                         } label: {

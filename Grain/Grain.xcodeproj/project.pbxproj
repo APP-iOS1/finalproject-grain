@@ -258,8 +258,6 @@
 		9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineMainView.swift; sourceTree = "<group>"; };
 		9962CDD4297A215900E834C3 /* MagazineFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineFeedView.swift; sourceTree = "<group>"; };
 		9962CDD6297A224700E834C3 /* MagazineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewCell.swift; sourceTree = "<group>"; };
-		9970FBBD29ADB7EE0002A370 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		9970FBBF29ADB9040002A370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		9970FBC729ADC4E30002A370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		998847D12992171400004066 /* CommunitySearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySearchDetailView.swift; sourceTree = "<group>"; };
 		998847D3299226AE00004066 /* MagazineSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchResultView.swift; sourceTree = "<group>"; };
@@ -483,7 +481,6 @@
 				9958AF71297778D800A51DA9 /* Grain */,
 				9958AF70297778D800A51DA9 /* Products */,
 				F61456074BBE7B028FF22877 /* Pods */,
-				9970FBC129ADBC570002A370 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -627,15 +624,6 @@
 				995645A02996C33200D0471F /* LoginProgressView.swift */,
 			);
 			path = AuthenticationViews;
-			sourceTree = "<group>";
-		};
-		9970FBC129ADBC570002A370 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				9970FBBF29ADB9040002A370 /* GoogleService-Info.plist */,
-				9970FBBD29ADB7EE0002A370 /* Config.xcconfig */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		9970FBC429ADC2E10002A370 /* Setting */ = {

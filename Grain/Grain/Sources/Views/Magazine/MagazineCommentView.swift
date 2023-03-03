@@ -24,9 +24,10 @@ struct MagazineCommentView: View {
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
     @State var eachBool : [Bool] = []
-    func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬
+    func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬 예) 댓글 3개면 [ false, false, false ]
         eachBool = Array(repeating: false, count: count)
     }
+    
     var body: some View {
         VStack() {
             Divider()
@@ -75,7 +76,7 @@ struct MagazineCommentView: View {
                                     .font(.footnote)
                                     .padding(.bottom, -1)
                                 
-                                // MARK: - 자기가 쓴 댓글일시 보여주는 수정/삭제
+                                // MARK: - 답글달기, 답글 더보기, 수정 , 삭제
                                 HStack{
                                     Button {
                                         replyComment.toggle()
@@ -91,7 +92,7 @@ struct MagazineCommentView: View {
                                         readMoreComments.toggle()
                                         eachBool[index] = true
                                     } label: {
-                                        Text("답글 더보기 ")
+                                        Text("답글 더보기")
                                     }
                                     
                                     if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
@@ -121,7 +122,7 @@ struct MagazineCommentView: View {
                                 
                                 VStack{
                                     if readMoreComments && eachBool[index]{
-                                        MagazineRecommentView(currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, eachBoolArray: $eachBool, commentText: $commentText)
+                                        MagazineRecommentView(currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, commentText: $commentText)
                                     }
                                 }
                             }
@@ -136,8 +137,7 @@ struct MagazineCommentView: View {
             }.refreshable {
                 commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
             }
-            
-            
+
             VStack(alignment: .leading){
                 // MARK: 답글달기 클릭시 활성화 되는 구역
                 if replyComment {
@@ -156,11 +156,8 @@ struct MagazineCommentView: View {
                                 } label: {
                                     Image(systemName: "xmark")
                                 }
-                                
                             }.padding(10)
-                            
                         }
-                    
                 }
                 // MARK: 댓글 구역
                 HStack{
@@ -181,8 +178,7 @@ struct MagazineCommentView: View {
             }
         }
         .onAppear{
-            // 해당하는 매거진 댓글 정보 가져오기
-            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)    // 해당하는 매거진 댓글 정보 가져오기
         }
         .navigationTitle("댓글")
         .navigationBarTitleDisplayMode(.inline)
@@ -193,7 +189,7 @@ struct MagazineCommentTextField: View {
     @Binding var summitComment: Bool
     @Binding var replyComment : Bool
     @Binding var commentCollectionDocId : String
-    //    @State var uploadButtonShowing : Bool = false
+  
     var currentUser : CurrentUserFields?
     var collectionName : String
     var collectionDocId : String
@@ -217,8 +213,7 @@ struct MagazineCommentTextField: View {
                             .frame(height: 35)
                     }
                 Spacer()
-                
-                //                        if uploadButtonShowing{
+ 
                 if trimComment.count > 0 {
                     
                     // MARK: 답글달기 활성화 True이면 대댓글 쓰기
@@ -236,9 +231,7 @@ struct MagazineCommentTextField: View {
                                                         id: CommentString(stringValue: UUID().uuidString)
                                                         )
                                                       )
-                            commentText = ""        
-
-//                            commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                            commentText = ""
                             self.summitComment.toggle()
                             replyComment = false
                         } label: {
@@ -264,10 +257,7 @@ struct MagazineCommentTextField: View {
                                     id: CommentString(stringValue: UUID().uuidString)
                                 )
                             )
-                            
-                            //                        uploadButtonShowing.toggle()
-                            commentText = ""        //댓글 텍스트 필드 초기화
-                            
+                            commentText = ""
                             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                             self.summitComment.toggle()
                             replyComment = false
@@ -281,8 +271,6 @@ struct MagazineCommentTextField: View {
                         }
                     }
                 }
-                //                        .offset(x: 130)
-                //                            .padding(.leading,260)
                 else {
                     Text("등록")
                         .font(.subheadline)
@@ -293,10 +281,7 @@ struct MagazineCommentTextField: View {
                 }
                 
             }
-            .onTapGesture {
-                //                uploadButtonShowing.toggle()
-            }
-            
+
         }
         .frame(minWidth: 0, maxWidth: .infinity)
         .frame(height: 56)
@@ -304,41 +289,3 @@ struct MagazineCommentTextField: View {
     }
 }
 
-//struct MagazineCommentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NavigationStack {
-//            MagazineCommentView(collectionName: "", collectionDocId: "")
-//        }
-//    }
-//}
-//
-
-//struct ContentView: View {
-//    @State private var toggleStates = Array(repeating: false, count: 3) // initialize the toggle states
-//
-//    let items = ["Item 1", "Item 2", "Item 3"]
-//
-//    var body: some View {
-//        VStack {
-//            ForEach(items.indices, id: \.self) { index in
-//                Toggle(isOn: $toggleStates[index]) {
-//                    Text(items[index])
-//                }
-//            }
-//        }
-//    }
-//}
-//struct ContentView: View {
-//    let items = ["Item 1", "Item 2", "Item 3"]
-//
-//    var body: some View {
-//        VStack {
-//            ForEach(items.indices, id: \.self) { index in
-//                Text(items[index])
-//                    .onTapGesture {
-//                        print("Cell \(index) clicked")
-//                    }
-//            }
-//        }
-//    }
-//}

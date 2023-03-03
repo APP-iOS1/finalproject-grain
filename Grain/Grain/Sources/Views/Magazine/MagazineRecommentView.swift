@@ -19,19 +19,20 @@ struct MagazineRecommentView: View {
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
-    @Binding var eachBoolArray : [Bool]
-    @Binding var commentText: String
+
+    @Binding var commentText: String // 답글 입력 텍스트 필드 값
     
     var body: some View {
         
         VStack(alignment: .leading){
-            // TODO: 댓글 셀뷰 따로 만들기
+            
+            // 댓글이 없으면 빈칸
             if commentVm.sortedRecentRecomment.count < 1 {
                 
-            }else{
+            }
+            // 댓글이 한개 이상 존재하면 Foreach 구문 실행
+            else{
                 ForEach(commentVm.sortedRecentRecomment.indices, id: \.self){ index in
-                    
-                    // FIXME: 댓글 하나 셀로 만들기
                     Divider()
                     HStack(alignment: .top){
                         // MARK: -  유저 프로필 이미지
@@ -86,7 +87,6 @@ struct MagazineRecommentView: View {
                                     }
                                     Button {
                                         commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue)
-//                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
                                     } label: {
                                         Text("삭제")
                                     }
@@ -104,7 +104,6 @@ struct MagazineRecommentView: View {
             }
         }
         .padding(.leading , -8)
-        
         .onAppear{
             commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
         }

@@ -19,6 +19,7 @@ final class UserViewModel: ObservableObject {
     @Published var users = [UserDocument]()
     // 현재 유저 데이터 값
     @Published var currentUsers : CurrentUserFields?
+    @Published var user: CurrentUserFields?
     
     // 유저 데이터 string 배열 타입 값
     @Published var likedMagazineID : [String] = []
@@ -45,6 +46,7 @@ final class UserViewModel: ObservableObject {
     
     var fetchUsersSuccess = PassthroughSubject<[UserDocument], Never>()
     var fetchCurrentUsersSuccess = PassthroughSubject<(), Never>()
+    var fetchUserProfileSuccess = PassthroughSubject<(), Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
     var updateUsersArraySuccess = PassthroughSubject<(), Never>()
     var updateUsersStringSuccess = PassthroughSubject<(), Never>()
@@ -70,9 +72,17 @@ final class UserViewModel: ObservableObject {
                 self.currentUsers = data.fields
                 if let currentUsers = self.currentUsers {
                     self.parsingUserDataToStringArr(currentUserData: currentUsers)
-//                    self.filterCurrentUsersFollow()
                     self.fetchCurrentUsersSuccess.send()
                 }
+            }.store(in: &subscription)
+    }
+    
+    func fetchUserProfile(userID: String) {
+        UserService.getCurrentUser(userID: userID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: CurrentUserResponse) in
+                self.user = data.fields
             }.store(in: &subscription)
     }
     
@@ -286,6 +296,15 @@ final class UserViewModel: ObservableObject {
         }
         
         return follower
+    }
+    
+    func parsingDataToStringArr(data: CurrentUserFields) -> [String] {
+        var strArr = [String]()
+        for i in data.follower.arrayValue.values {
+            strArr.append(i.stringValue)
+        }
+        
+        return strArr
     }
     
 }

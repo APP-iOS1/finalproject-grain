@@ -35,167 +35,169 @@ struct UserPageView: View {
     // 팔로우 버튼 눌렀을때 팔로워 팔로잉 각각 유저정보 update해줘야함.
     
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading) {
-                VStack(alignment: .leading){
-                    HStack{
-                        //MARK: 프로필 이미지
-                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 85, height: 85)
-                            .cornerRadius(64)
-                            .overlay {
-                                Circle()
-                                    .stroke(lineWidth: 0.1)
-                            }
-                            .padding(.trailing, 10)
-                        
-                        HStack {
-                            VStack(alignment: .leading){
-                                Text(userVM.currentUsers?.nickName.stringValue ?? "123456789101789")
-                                    .font(.title3)
-                                    .bold()
-                                    .padding(.leading, 8)
-                                    .padding(.bottom, 1)
+        if let user = userVM.user {
+            NavigationStack {
+                VStack(alignment: .leading) {
+                    VStack(alignment: .leading){
+                        HStack{
+                            //MARK: 프로필 이미지
+                            KFImage(URL(string: user.profileImage.stringValue))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 85, height: 85)
+                                .cornerRadius(64)
+                                .overlay {
+                                    Circle()
+                                        .stroke(lineWidth: 0.1)
+                                }
+                                .padding(.trailing, 10)
+                            
+                            HStack {
+                                VStack(alignment: .leading){
+                                    Text(user.nickName.stringValue)
+                                        .font(.title3)
+                                        .bold()
+                                        .padding(.leading, 8)
+                                        .padding(.bottom, 1)
+                                    
+                                    VStack(alignment: .leading){
+                                        HStack{
+                                            Text("매거진")
+                                            Text("\(magazines.count)")
+                                                .padding(.leading, -5)
+                                                .bold()
+                                        }
+                                        .padding(.leading, 9)
+                                        .padding(.bottom, 1)
+                                        .foregroundColor(.textGray)
+                                        .font(.footnote)
+                                        
+                                        HStack{
+                                            NavigationLink {
+                                                FollowerListView(userVM: userVM)
+                                            } label: {
+                                                Text("구독자")
+                                            }
+                                            
+                                            Text("\(user.follower.arrayValue.values.count == 1 ? 0 : userVM.follower.count-1)")
+                                                .padding(.leading, -5)
+                                                .bold()
+                                            
+                                            Text("|")
+                                            
+                                            NavigationLink {
+                                                FollowingListView(userVM: userVM)
+                                            } label: {
+                                                Text("구독중")
+                                            }
+                                            
+                                            Text("\(user.following.arrayValue.values.count == 1 ? 0 : userVM.following.count-1)")
+                                                .padding(.leading, -5)
+                                                .bold()
+                                                .padding(.leading, 9)
+                                                .font(.footnote)
+                                                .foregroundColor(.textGray)
+                                        }
+                                    }
+                                    
+                                } // vstack
                                 
+                                if !isMyProfile {
+                                    Button {
+                                        // userData update
+                                        isFollowingUser.toggle()
+                                    } label: {
+                                        if isFollowingUser {
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .frame(width: 45, height: 25)
+                                                .foregroundColor(.white)
+                                                .overlay{
+                                                    Text("구독중")
+                                                        .foregroundColor(.black)
+                                                        .bold()
+                                                        .font(.caption)
+                                                }
+                                        } else {
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .frame(width: 45, height: 25)
+                                                .foregroundColor(.black)
+                                                .overlay{
+                                                    Text("구독")
+                                                        .foregroundColor(.white)
+                                                        .bold()
+                                                        .font(.caption)
+                                                    
+                                                }
+                                        }
+                                    }.border(Color.black, width: 2)
+                                }
+                            }//hstack
+                        }
+                        .padding(.bottom, 15)
+                        //                    .padding(.trailing, 30)
+                        
+                        VStack(alignment: .leading){
+                            Text(user.introduce.stringValue)
+                                .font(.subheadline)
+                                .lineLimit(3)
+                        }
+                        .padding(.horizontal, 5)
+                        
+                        VStack{
+                            Button{
+                                showDevices.toggle()
+                            } label: {
                                 VStack(alignment: .leading){
                                     HStack{
-                                        Text("매거진")
-                                        Text("\(userVM.postedMagazineID.count - 1)")
-                                            .padding(.leading, -5)
-                                            .bold()
+                                        Text("장비 정보")
+                                            .font(.subheadline)
+                                        Image(systemName: "chevron.right")
+                                            .font(.caption)
+                                            .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
+                                            .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
                                     }
-                                    .padding(.leading, 9)
-                                    .padding(.bottom, 1)
-                                    .foregroundColor(.textGray)
-                                    .font(.footnote)
+                                    .bold()
                                     
-                                    HStack{
-                                        NavigationLink {
-                                            FollowerListView(userVM: userVM)
-                                        } label: {
-                                            Text("구독자")
-                                        }
-                                        
-                                        Text("\(userVM.follower.count == 1 ? 0 : userVM.follower.count)")
-                                            .padding(.leading, -5)
-                                            .bold()
-                                        
-                                        Text("|")
-                                        
-                                        NavigationLink {
-                                            FollowingListView(userVM: userVM)
-                                        } label: {
-                                            Text("구독중")
-                                        }
-                                        
-                                        Text("\(userVM.following.count == 1 ? 0 : userVM.following.count)")
-                                            .padding(.leading, -5)
-                                            .bold()
-                                    }
-                                    .padding(.leading, 9)
-                                    .font(.footnote)
-                                    .foregroundColor(.textGray)
-                                }
-                            } // vstack
-                            
-                            if !isMyProfile {
-                                Button {
-                                    // userData update
-                                    isFollowingUser.toggle()
-                                } label: {
-                                    if isFollowingUser {
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .frame(width: 45, height: 25)
-                                            .foregroundColor(.white)
-                                            .overlay{
-                                                Text("구독중")
-                                                    .foregroundColor(.black)
-                                                    .bold()
-                                                    .font(.caption)
-                                            }
-                                    } else {
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .frame(width: 45, height: 25)
-                                            .foregroundColor(.black)
-                                            .overlay{
-                                                Text("구독")
-                                                    .foregroundColor(.white)
-                                                    .bold()
-                                                    .font(.caption)
+                                    
+                                    if showDevices {
+                                        VStack(alignment: .leading){
+                                            if let user = userVM.user {
+                                                user.myCamera.arrayValue.values.count > 1 ? Text("렌즈 | \(user.myLens.arrayValue.values[1].stringValue)") : nil
                                                 
+                                                user.myLens.arrayValue.values.count > 1 ? Text("렌즈 | \(user.myLens.arrayValue.values[1].stringValue)") : nil
+                                                
+                                                user.myCamera.arrayValue.values.count > 1 ? Text("렌즈 | \(user.myLens.arrayValue.values[1].stringValue)") : nil
                                             }
-                                    }
-                                }.border(Color.black, width: 2)
-                            }
-                        }//hstack
-                    }
-                    .padding(.bottom, 15)
-                    //                    .padding(.trailing, 30)
-                    
-                    VStack(alignment: .leading){
-                        Text(userVM.currentUsers?.introduce.stringValue ?? "자기 소개를 작성해보세요")
-                            .font(.subheadline)
-                            .lineLimit(3)
-                    }
-                    .padding(.horizontal, 5)
-                    
-                    
-                    VStack{
-                        Button{
-                            showDevices.toggle()
-                            //                                transitionView.toggle()
-                        } label: {
-                            VStack(alignment: .leading){
-                                HStack{
-                                    Text("장비 정보")
+                                        }
                                         .font(.subheadline)
-                                    Image(systemName: "chevron.right")
-                                        .font(.caption)
-                                        .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
-                                        .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
-                                }
-                                .bold()
-                                
-                                
-                                if showDevices {
-                                    VStack(alignment: .leading){
-                                        userVM.myCamera.count > 1 ? Text("바디 | \(userVM.myCamera[1])") : nil
-                                        
-                                        userVM.myLens.count > 1 ? Text("렌즈 | \(userVM.myLens[1])") : nil
-                                        
-                                        userVM.myFilm.count > 1 ? Text("필름 | \(userVM.myFilm[1])") : nil
-                                        
+                                        .padding(.top, -9)
                                     }
-                                    .font(.subheadline)
-                                    .padding(.top, -9)
                                 }
+                                .padding(.top, 5)
                             }
-                            .padding(.top, 5)
+                            
                         }
+                        .padding(.leading, 5)
+                        .padding(.top, -5)
+                        .foregroundColor(.textGray)
+                        
                         
                     }
-                    .padding(.leading, 5)
-                    .padding(.top, -5)
-                    .foregroundColor(.textGray)
+                    .padding(.leading, 20)
                     
-                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .padding(.horizontal, 10)
+                        .padding(.top, 5)
+                        .foregroundColor(.brightGray)
+                    MyPageMyFeedView(magazineDocument: magazines)
                 }
-                .padding(.leading, 20)
-                
-                Rectangle()
-                    .frame(height: 1)
-                    .padding(.horizontal, 10)
-                    .padding(.top, 5)
-                    .foregroundColor(.brightGray)
-                MyPageMyFeedView(magazineDocument: magazines)
-                
             }
             .onAppear{
                 userVM.fetchUser()
+                userVM.fetchUserProfile(userID: userID)
                 magazineVM.fetchMagazine()
-//                magazineVM.filterUserMagazine(userID: userID)
+                
                 // 나의 following 리스트에 있는 사람인지 확인
                 if userVM.following.contains(userID) {
                     isFollowingUser = true // 구독중
@@ -216,40 +218,41 @@ struct UserPageView: View {
                 self.magazines = magazineVM.filterUserMagazine(userID: userID)
             })
             .onDisappear {
+                /// 희경: userViewModel 에 메소드로 따로 빼주는게 보기 좋을듯.
                 if isFollowingUser {
                     // "구독중" 상태이고, 내 팔로잉 리스트에 없는 경우 => 구독
                     if !userVM.following.contains(userID) {
-                        if let magazineUser = userVM.users.first(where: { $0.fields.id.stringValue == userID}), let currentUser = userVM.currentUsers {
+                        if let user = userVM.user, let currentUser = userVM.currentUsers {
                             
                             var currentUserFollowing: [String] = userVM.following
-                            var magazineUserFollower: [String] = userVM.parsingFollowerDataToStringArr(data: magazineUser)
-                           
+                            var magazineUserFollower: [String] = userVM.parsingDataToStringArr(data: user)
+                            
                             /// 내 팔로잉리스트에 이사람 id 넣어주고
                             currentUserFollowing.append(userID)
                             /// 이사람 팔로워리스트에 내 id 넣어줌.
                             magazineUserFollower.append(currentUser.id.stringValue)
                             
                             userVM.updateCurrentUserArray(type: "following", arr: currentUserFollowing, docID: currentUser.id.stringValue)
-                    
-                            userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: magazineUser.fields.id.stringValue)
+                            
+                            userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: user.id.stringValue)
                         }
                     }
                 } else {
                     // "구독" 상태이고, 내 팔로잉 리스트에 있는경우 => 구독취소
                     if userVM.following.contains(userID) {
-                        if let magazineUser = userVM.users.first(where: { $0.fields.id.stringValue == userID}), let currentUser = userVM.currentUsers {
+                        if let user = userVM.user, let currentUser = userVM.currentUsers {
                             
                             var currentUserFollowing: [String] = userVM.following
-                            var magazineUserFollower: [String] = userVM.parsingFollowerDataToStringArr(data: magazineUser)
-                           
+                            var magazineUserFollower: [String] =  userVM.parsingDataToStringArr(data: user)
+                            
                             /// 내 팔로잉리스트에 이사람 id 삭제
                             currentUserFollowing.removeAll {$0 == userID}
                             /// 이사람 팔로워리스트에 내 id 삭제
                             magazineUserFollower.removeAll {$0 == currentUser.id.stringValue}
                             
                             userVM.updateCurrentUserArray(type: "following", arr: currentUserFollowing, docID: currentUser.id.stringValue)
-                    
-                            userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: magazineUser.fields.id.stringValue)
+                            
+                            userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: user.id.stringValue)
                         }
                     }
                 }

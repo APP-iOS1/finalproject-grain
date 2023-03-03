@@ -8,27 +8,27 @@
 import Foundation
 
 struct UserResponse: Codable {
-    let documents: [UserDocument]
+    var documents: [UserDocument]
 }
 
 struct UserDocument: Codable,Hashable {
-    let name : String
-    let fields: UserFields
-    let createTime, updateTime: String
+    var name : String
+    var fields: UserFields
+    var createTime, updateTime: String
 }
 
 struct UserFields: Codable,Hashable {
-    let likedMagazineID: UserArrayKey
-    let id: UserStringValue
-    let myLens, myFilm, postedCommunityID: UserArrayKey
-    let nickName: UserStringValue
-    let introduce: UserStringValue
-    let following: UserArrayKey
-    let profileImage: UserStringValue
-    let recentSearch, bookmarkedCommunityID, follower, lastSearched: UserArrayKey
-    let email: UserStringValue
-    let postedMagazineID, myCamera, bookmarkedMagazineID: UserArrayKey
-    let name: UserStringValue
+    var likedMagazineID: UserArrayKey
+    var id: UserStringValue
+    var myLens, myFilm, postedCommunityID: UserArrayKey
+    var nickName: UserStringValue
+    var introduce: UserStringValue
+    var following: UserArrayKey
+    var profileImage: UserStringValue
+    var recentSearch, bookmarkedCommunityID, follower, lastSearched: UserArrayKey
+    var email: UserStringValue
+    var postedMagazineID, myCamera, bookmarkedMagazineID: UserArrayKey
+    var name: UserStringValue
     
     enum CodingKeys: String, CodingKey {
         case likedMagazineID = "likedMagazineId"
@@ -37,14 +37,14 @@ struct UserFields: Codable,Hashable {
 }
 
 struct UserArrayKey: Codable,Hashable {
-    let arrayValue: UserArrayValue
+    var arrayValue: UserArrayValue
 }
 
 struct UserArrayValue: Codable,Hashable{
-    let values: [UserStringValue]
+    var values: [UserStringValue]
 }
 
 
 struct UserStringValue: Codable,Hashable{
-    let stringValue: String
+    var stringValue: String
 }

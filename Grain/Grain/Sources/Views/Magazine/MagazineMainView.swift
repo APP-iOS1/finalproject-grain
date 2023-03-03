@@ -65,6 +65,9 @@ struct MagazineMainView: View {
             userViewModel.fetchUser()
             magazineVM.fetchMagazine()
         }
+        .onReceive(userViewModel.fetchUsersSuccess, perform: { newValue in
+            userViewModel.filterCurrentUsersFollow()
+        })
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Text("GRAIN")

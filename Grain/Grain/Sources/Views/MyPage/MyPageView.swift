@@ -60,23 +60,31 @@ struct MyPageView: View {
                                 .font(.footnote)
                                 
                                 HStack{
-                                    Text("구독자")
-                                    Text("\(userVM.follower.count - 1)")
+                                    NavigationLink {
+                                        FollowerListView(userVM: userVM)
+                                    } label: {
+                                        Text("구독자")
+                                    }
+                                    
+                                    Text("\(userVM.follower.count == 1 ? 0 : userVM.follower.count)")
                                         .padding(.leading, -5)
                                         .bold()
 
                                     Text("|")
 
-                                    Text("구독중")
-                                    Text("\(userVM.following.count - 1)")
+                                    NavigationLink {
+                                        FollowingListView(userVM: userVM)
+                                    } label: {
+                                        Text("구독중")
+                                    }
+                                    
+                                    Text("\(userVM.following.count == 1 ? 0 : userVM.following.count)")
                                         .padding(.leading, -5)
                                         .bold()
                                 }
                                 .padding(.leading, 9)
-//                                .padding(.bottom)
                                 .font(.footnote)
                                 .foregroundColor(.textGray)
-//                                .font(.subheadline)
                             }
                         }
                         
@@ -144,8 +152,14 @@ struct MyPageView: View {
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장
+                userVM.fetchUser()
                 userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             }
+            .onReceive(userVM.fetchUsersSuccess, perform: { newValue in
+                // userVM 의 fetchUser가 수행되어 값이 들어왔을때 currentUser의 팔로워, 팔로잉 리스트를 필터링하는 메소드 실행
+                /// 희경: onReceive 메소드 사용 이유: fetchUser 메소드와 fetchCurrentUser메소드를 동시에 실행시키면 fetchUser가 완료되기 전에 fetchCurrentUser가 실행되어 filterCurrentUsersFollow가 제대로 수행되지 않음.
+                userVM.filterCurrentUsersFollow()
+            })
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {

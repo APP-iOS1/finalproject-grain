@@ -71,7 +71,6 @@ struct ContentView: View {
                             NavigationStack {
                                 MapView(
                                         clikedMagazineData: clikedMagazineData)
-                                
                             }
                         case 4:
                             NavigationStack {

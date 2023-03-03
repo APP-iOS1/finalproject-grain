@@ -8,7 +8,7 @@
 import Foundation
 
 enum MapRouter {
-
+    
     case get
     case getNext(nextPageToken: String)
     case post(magazineData: MagazineFields, docID: String)
@@ -26,21 +26,21 @@ enum MapRouter {
     }
     
     private enum HTTPMethod {
-            case get
-            case post
-            case put
-            case delete
-            case getNext
-            var value: String {
-                switch self {
-                case .get: return "GET"
-                case .post: return "POST"
-                case .put: return "PUT"
-                case .delete: return "DELETE"
-                case .getNext: return "GET"
-                }
+        case get
+        case post
+        case put
+        case delete
+        case getNext
+        var value: String {
+            switch self {
+            case .get: return "GET"
+            case .post: return "POST"
+            case .put: return "PUT"
+            case .delete: return "DELETE"
+            case .getNext: return "GET"
             }
         }
+    }
     
     private var endPoint: String {
         switch self {
@@ -78,7 +78,7 @@ enum MapRouter {
         }
     }
     
-   
+    
     private var data: Data? {
         switch self {
         case let .post(magazineData, docID):
@@ -109,7 +109,7 @@ enum MapRouter {
         }
         
         // [x] TODO: Encoding 하는 방식으로 data 넘겨주기
-//        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
+        //        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
         
         return request
     }

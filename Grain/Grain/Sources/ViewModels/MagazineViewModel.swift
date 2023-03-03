@@ -21,9 +21,10 @@ final class MagazineViewModel: ObservableObject {
     @Published var sortedRecentMagazineData = [MagazineDocument]()    // 매거진 게시물 최신순으로
     @Published var sortedTopLikedMagazineData = [MagazineDocument]()    // 매거진 게시물 좋아오 높은순
     
-    var fetchMagazineSuccess = PassthroughSubject<(), Never>()
+    var fetchMagazineSuccess = PassthroughSubject<[MagazineDocument], Never>()
     var insertMagazineSuccess = PassthroughSubject<(), Never>()
     var updateMagazineSuccess = PassthroughSubject<(), Never>()
+    var deleteMagazineSuccess = PassthroughSubject<(), Never>()
     
     // MARK: 메거진 데이터 가져오기 메소드
     func fetchMagazine() {
@@ -46,7 +47,7 @@ final class MagazineViewModel: ObservableObject {
                     return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
                 })
                 
-                self.fetchMagazineSuccess.send()
+                self.fetchMagazineSuccess.send(data.documents)
             }.store(in: &subscription)
         
     }
@@ -73,7 +74,7 @@ final class MagazineViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
                 
             } receiveValue: { (data: MagazineDocument) in
-                self.fetchMagazineSuccess.send()
+                self.updateMagazineSuccess.send()
             }.store(in: &subscription)
     }
     
@@ -86,7 +87,7 @@ final class MagazineViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
                 
             } receiveValue: { (data: MagazineDocument) in
-                self.fetchMagazineSuccess.send()
+                self.updateMagazineSuccess.send()
             }.store(in: &subscription)
     }
     
@@ -98,8 +99,13 @@ final class MagazineViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: MagazineDocument) in
-                self.fetchMagazineSuccess.send()
+                self.deleteMagazineSuccess.send()
             }.store(in: &subscription)
+    }
+    
+    func filterUserMagazine(userID: String) -> [MagazineDocument] {
+        let magazines = magazines.filter { $0.fields.userID.stringValue == userID }
+        return magazines
     }
     
     

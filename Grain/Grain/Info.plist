@@ -33,6 +33,8 @@
 	<string>$(FireStoreBaseURL)</string>
 	<key>FireStorage</key>
 	<string>$(FireStorageBaseURL)</string>
+	<key>PROTOCOL</key>
+	<string>${PROTOCOL}</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>

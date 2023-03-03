@@ -18,8 +18,13 @@ enum CommunityRouter {
     
     private var baseURL: URL {
         
-        let baseUrlString = Bundle.main.infoDictionary?["FireStore"] ?? ""
-        return URL(string: baseUrlString as! String)!
+        var baseUrlString : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FireStore"] as? String {
+                baseUrlString += url
+            }
+        }
+        return URL(string: baseUrlString) ?? URL(string: "")!
     }
     
     private enum HTTPMethod {

@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0635779F29AF101900503222 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0635779E29AF101900503222 /* Config.xcconfig */; };
+		063577A129AF102000503222 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 063577A029AF102000503222 /* GoogleService-Info.plist */; };
 		0693B4C72992849600F9CDE2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0693B4C62992849600F9CDE2 /* Error.swift */; };
+		06A7341A29AF2FA600ABB37B /* FollowerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7341929AF2FA600ABB37B /* FollowerListView.swift */; };
+		06A7341C29AF2FB800ABB37B /* FollowingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7341B29AF2FB800ABB37B /* FollowingListView.swift */; };
+		06A7341E29B0695600ABB37B /* UserPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7341D29B0695600ABB37B /* UserPageView.swift */; };
 		06F0D82A297EB3DC00E7B885 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F0D829297EB3DC00E7B885 /* CommunityViewModel.swift */; };
 		06F0D82C297EB3E700E7B885 /* MagazineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F0D82B297EB3E700E7B885 /* MagazineViewModel.swift */; };
 		06F0D82E297EB3F200E7B885 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F0D82D297EB3F200E7B885 /* MapViewModel.swift */; };
@@ -162,7 +167,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0635779E29AF101900503222 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		063577A029AF102000503222 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0693B4C62992849600F9CDE2 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		06A7341929AF2FA600ABB37B /* FollowerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerListView.swift; sourceTree = "<group>"; };
+		06A7341B29AF2FB800ABB37B /* FollowingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingListView.swift; sourceTree = "<group>"; };
+		06A7341D29B0695600ABB37B /* UserPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPageView.swift; sourceTree = "<group>"; };
 		06F0D829297EB3DC00E7B885 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
 		06F0D82B297EB3E700E7B885 /* MagazineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewModel.swift; sourceTree = "<group>"; };
 		06F0D82D297EB3F200E7B885 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
@@ -262,6 +272,8 @@
 		9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineMainView.swift; sourceTree = "<group>"; };
 		9962CDD4297A215900E834C3 /* MagazineFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineFeedView.swift; sourceTree = "<group>"; };
 		9962CDD6297A224700E834C3 /* MagazineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewCell.swift; sourceTree = "<group>"; };
+		9970FBBD29ADB7EE0002A370 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		9970FBBF29ADB9040002A370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		998847D12992171400004066 /* CommunitySearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySearchDetailView.swift; sourceTree = "<group>"; };
 		998847D3299226AE00004066 /* MagazineSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchResultView.swift; sourceTree = "<group>"; };
 		998847D5299226CB00004066 /* MagazineSearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchDetailView.swift; sourceTree = "<group>"; };
@@ -381,6 +393,7 @@
 			isa = PBXGroup;
 			children = (
 				334699D22988AE26004153A6 /* MyPageView.swift */,
+				06A7341D29B0695600ABB37B /* UserPageView.swift */,
 				8B10F4312992A44300582D27 /* ScrollViewTest.swift */,
 				8B10F429298CD18F00582D27 /* MyPageView2.swift */,
 				334699D42988CB86004153A6 /* MyPageOptionView.swift */,
@@ -398,6 +411,8 @@
 				334699DA2988DE51004153A6 /* StoredPostView.swift */,
 				8BC6C43929ADD6880067BC6F /* OtherUserProfileView.swift */,
 				8BC6C43B29ADDDBB0067BC6F /* FollowingFollowerView.swift */,
+				06A7341929AF2FA600ABB37B /* FollowerListView.swift */,
+				06A7341B29AF2FB800ABB37B /* FollowingListView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -500,7 +515,7 @@
 				995EBDCE29966F18002C1686 /* Grain.entitlements */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
 				9958AFB82977D56000A51DA9 /* Info.plist */,
-				8BC6C43729ADCF180067BC6F /* GoogleService-Info.plist */,
+				063577A029AF102000503222 /* GoogleService-Info.plist */,
 				9970FBC429ADC2E10002A370 /* Setting */,
 				9958AF812977793700A51DA9 /* Configuration */,
 				9958AF80297778FD00A51DA9 /* Sources */,
@@ -631,7 +646,7 @@
 		9970FBC429ADC2E10002A370 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				8BC6C43529ADCF060067BC6F /* Config.xcconfig */,
+				0635779E29AF101900503222 /* Config.xcconfig */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -791,6 +806,7 @@
 				8BC6C43629ADCF060067BC6F /* Config.xcconfig in Resources */,
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
+				063577A129AF102000503222 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -915,6 +931,7 @@
 				A7AF1A0729956CDC007E6D43 /* CommentRouter.swift in Sources */,
 				33728E802990920D00E8AB97 /* SelectPostView.swift in Sources */,
 				A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */,
+				06A7341C29AF2FB800ABB37B /* FollowingListView.swift in Sources */,
 				A7AF1A0529956A12007E6D43 /* CommentQuery.swift in Sources */,
 				A71516BA29926233009A0780 /* MagazineEditView.swift in Sources */,
 				8B10F4302990DD5300582D27 /* BookmarkedCommunityView.swift in Sources */,
@@ -965,7 +982,9 @@
 				A7D957D4297AAF74001D2401 /* CommunityRouter.swift in Sources */,
 				A7D9F30E29896D8500B39218 /* UserService.swift in Sources */,
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
+				06A7341E29B0695600ABB37B /* UserPageView.swift in Sources */,
 				334699D32988AE26004153A6 /* MyPageView.swift in Sources */,
+				06A7341A29AF2FA600ABB37B /* FollowerListView.swift in Sources */,
 				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,
 				99B21EC329938CD7006933BB /* MagazineCommentView.swift in Sources */,
 				998847D8299226EC00004066 /* UserSearchResultView.swift in Sources */,
@@ -1111,7 +1130,7 @@
 		};
 		9958AF7E297778D900A51DA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8BC6C43529ADCF060067BC6F /* Config.xcconfig */;
+			baseConfigurationReference = 0635779E29AF101900503222 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1148,7 +1167,7 @@
 		};
 		9958AF7F297778D900A51DA9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8BC6C43529ADCF060067BC6F /* Config.xcconfig */;
+			baseConfigurationReference = 0635779E29AF101900503222 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

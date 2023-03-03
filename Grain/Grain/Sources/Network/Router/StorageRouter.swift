@@ -18,7 +18,13 @@ enum StorageRouter {
     case delete
     
     static var baseURL: String {
-        let baseUrlString = "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/"
+        
+        var baseUrlString : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FireStorage"] as? String {
+                baseUrlString += url
+            }
+        }
         
         // MARK: 유저 고유의 폴더 경로
         let userAuthString = Auth.auth().currentUser?.uid
@@ -30,6 +36,7 @@ enum StorageRouter {
         
         return firebaseStoragePath
     }
+    
     
     private enum HTTPMethod {
         case get

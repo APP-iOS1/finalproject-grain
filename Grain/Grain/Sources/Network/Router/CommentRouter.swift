@@ -12,9 +12,14 @@ enum CommentRouter {
     /// collectionName: 콜렉션 이름 ex) Magazine , Community
     /// collectionDocId: 콜렉션 하위 문서ID  ex) Magazine - 1BA19CE5-119C-4898-9EC2-0BB920EAC64D
     case get(collectionName: String, collectionDocId: String)
+    case reCommentGet(collectionName: String, collectionDocId: String, commentCollectionName: String,commentCollectionDocId: String)
     case post(collectionName: String, collectionDocId: String, docID: String, commentData: CommentFields )
+    case reCommentPost(collectionName: String, collectionDocId: String, commentCollectionName: String,commentCollectionDocId: String, docID: String, commentData: CommentFields)
     case delete(collectionName: String, collectionDocId: String, docID: String)
+    case reCommentDelete(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String, docID: String)
     case patch(collectionName: String, collectionDocId: String, docID: String, updateComment: String, data: CommentFields )
+    case reCommentPatch(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String, docID: String, updateComment: String, data: CommentFields)
+    
     
     private var baseURL: URL {
         let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
@@ -41,12 +46,20 @@ enum CommentRouter {
         switch self {
         case let .get(collectionName, collectionDocId):
             return "/\(collectionName)/\(collectionDocId)/Comment"
-        case let .post(collectionName, collectionDocId, docID, _):
+        case let .reCommentGet(collectionName, collectionDocId, _,commentCollectionDocId):
+            return "/\(collectionName)/\(collectionDocId)/Comment/\(commentCollectionDocId)/Recomment"
+        case let .post(collectionName, collectionDocId, _, _):
             return "/\(collectionName)/\(collectionDocId)/Comment"
+        case let .reCommentPost(collectionName, collectionDocId, _, commentCollectionDocId, _, _):
+            return "/\(collectionName)/\(collectionDocId)/Comment/\(commentCollectionDocId)/Recomment"
         case let .patch(collectionName, collectionDocId, docID, _, _):
             return "/\(collectionName)/\(collectionDocId)/Comment/\(docID)"
+        case let .reCommentPatch(collectionName, collectionDocId, _, commentCollectionDocId, docID, _, _):
+            return "/\(collectionName)/\(collectionDocId)/Comment/\(commentCollectionDocId)/Recomment/\(docID)"
         case let .delete(collectionName, collectionDocId, docID):
             return "/\(collectionName)/\(collectionDocId)/Comment/\(docID)"
+        case let .reCommentDelete(collectionName, collectionDocId, _, commentCollectionDocId, docID):
+            return "/\(collectionName)/\(collectionDocId)/Comment/\(commentCollectionDocId)/Recomment/\(docID)"
         default:
             return "/Comment"       //default값 몰루?
         }
@@ -54,6 +67,9 @@ enum CommentRouter {
     var parameters: URLQueryItem? {
         switch self {
         case let .post(_ , _ , docID, _):
+            let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
+            return params
+        case let .reCommentPost(_ , _ , _ , _ , docID, _):
             let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
             return params
         default :
@@ -64,12 +80,14 @@ enum CommentRouter {
     
     private var method: HTTPMethod {
         switch self {
-        case .get :
+        case .get,.reCommentGet:
             return .get
-        case .post :
+        case .post,.reCommentPost :
             return .post
-        case .delete:
+        case .delete,.reCommentDelete:
             return .delete
+        case .reCommentPatch:
+            return .patch
         default:
             return .patch
         }
@@ -77,13 +95,14 @@ enum CommentRouter {
    
     private var data: Data? {
         switch self {
-        case let .post(_, _, docID, commentData ):
-            //FIXME: - 주석 정리하기
-//            guard let printTest = CommentQuery.insertCommentQuery(data: commentData) else { return nil }
-//            print( String(decoding: printTest, as: UTF8.self))
+        case let .post(_, _, _, commentData ):
             return CommentQuery.insertCommentQuery(data: commentData)
-        case let .patch(_, _, docID, updateComment, data):
+        case let .reCommentPost( _, _,  _,  _, _ , commentData):
+            return CommentQuery.insertRecommentQuery(data: commentData)
+        case let .patch(_, _, _, updateComment, data):
             return CommentQuery.updateCommentQuery(updateComment: updateComment, data: data)
+        case let .reCommentPatch(_, _, _, _, _, updateComment, data):
+            return CommentQuery.updateRecommentQuery(updateComment: updateComment, data: data)
         default:
             return nil
         }

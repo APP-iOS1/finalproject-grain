@@ -12,7 +12,7 @@ import Kingfisher
 
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
-    let community: CommunityDocument
+    @State var community: CommunityDocument
     
     @StateObject var communityVM = CommunityViewModel()
     @StateObject var userVM = UserViewModel()
@@ -28,6 +28,8 @@ struct CommunityDetailView: View {
     @State private var isHiddenComment: Bool = true
     @State private var editFetch: Bool = false
     
+    @State private var postStatus : String = "" // 게시글 상태 값
+    @State private var postStatusString : String = "" // 게시글 상태 변경 표시글
     @FocusState private var textFieldFocused: Bool
     
     var body: some View {
@@ -79,24 +81,7 @@ struct CommunityDetailView: View {
                         .tabViewStyle(.page)
                         .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                         .padding(.bottom, 10)
-                        
-                        //MARK: 댓글
-//                        Button {
-//                            //댓글 입력 키보드 팝업
-//                            isHiddenComment.toggle()
-//                            textFieldFocused = true
-//                        } label: {
-//                            HStack{
-//                                Image(systemName: "message")
-//                                    .font(.title3)
-//                                    .foregroundColor(.black)
-//                                Text("댓글 달기")
-//                                    .foregroundColor(.textGray)
-//                                    .padding(.top, 2)
-//                            }
-//                        }
-//                        .padding(.leading, Screen.maxWidth * 0.04)
-//                        .padding(.top, -10)
+   
                         // MARK: 게시글(디테일뷰) 내용
                                 HStack {
                                     Text(community.fields.content.stringValue)
@@ -107,50 +92,28 @@ struct CommunityDetailView: View {
                                 }
                         .padding(.top, 10)
                         Divider()
+                            .frame(maxWidth: Screen.maxWidth * 0.94)
+                            .background(Color.black)
+                            .padding(.top, 5)
+                            .padding(.bottom, 15)
+                            .padding(.horizontal, Screen.maxWidth * 0.04)
                         // MARK: - 커뮤니티 댓글 뷰
-                        VStack{
-                            ForEach(commentVm.comment,id: \.self){ item in
+                        VStack(alignment: .leading ){
+                            ForEach(commentVm.sortedRecentComment ,id: \.self){ item in
                                 // FIXME: Comment 어디서 만든건지 찾아야함
                                 CommentView(comment: item.fields, commentTime: item.updateTime, commentText: commentText, collectionDocId: community.fields.id.stringValue)
+                                Divider()
                             }
-                            
-                        }.padding(.vertical)
-                        
-                        // top vstack
+                        }
                     }
-                } //scroll view
+                }
+                .refreshable {
+                    communityVM.fetchCommunity()
+                    commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                }
                 .padding(.top, 1)
-                
+                // MARK: 댓글 달기
                 CommunityCommentView(currentUser: userVM.currentUsers,community: community)
-                //MARK: 댓글입력 창
-//                if !isHiddenComment {
-//                    HStack {
-//                        TextField("댓글을 입력해주세요", text: $commentText)
-//                            .disableAutocorrection(true)
-//                            .autocapitalization(.none)
-//                            .padding()
-//                            .focused($textFieldFocused)
-//                            .onSubmit {
-//                                self.hideKeyboard()
-//                                isHiddenComment = true
-//                                commentText = ""
-//                            }
-//                        Spacer()
-//                        Button {
-//                            // MARK: 댓글 업로드 긴 ㅇ
-//                            commentVm.insertComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, data: CommentFields(comment: CommentString(stringValue: commentText), profileImage: CommentString(stringValue: community.fields.profileImage.stringValue), nickName: CommentString(stringValue: community.fields.nickName.stringValue), userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""), id: CommentString(stringValue: UUID().uuidString)))
-//                            self.hideKeyboard()
-//                            isHiddenComment = true
-//                            commentText = ""
-//                        } label: {
-//                            Image(systemName: "paperplane")
-//                                .foregroundColor(.blue)
-//                                .font(.title3)
-//                                .padding()
-//                        }
-//                    }
-//                }
-                //.isHidden(isHiddenComment)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -169,6 +132,14 @@ struct CommunityDetailView: View {
                     // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
                     if community.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                     Menu {
+                        if !(postStatus == ""){
+                            Button{
+                                community.fields.state.stringValue = postStatus
+                                communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
+                            }label: {
+                                Text(postStatusString)
+                            }
+                        }
                         Button {
                             //저장시 코드
                         } label: {
@@ -189,9 +160,28 @@ struct CommunityDetailView: View {
                             Text("삭제")
                         }
                         
+                        
                     } label: {
                         Label("더보기", systemImage: "ellipsis")
                         
+                    }
+                    .onAppear{
+                        switch community.fields.state.stringValue{
+                        case "모집중":
+                            postStatusString = "모집완료 으로 변경"
+                            postStatus = "모집완료"
+                        case "판매중":
+                            postStatusString = "판매완료 으로 변경"
+                            postStatus = "판매완료"
+                        case "모집완료":
+                            postStatusString = "모집중 으로 변경"
+                            postStatus = "모집중"
+                        case "판매완료":
+                            postStatusString = "판매중 으로 변경"
+                            postStatus = "판매중"
+                        default:
+                            postStatus = ""
+                        }
                     }
                     .accentColor(.black)
                     .padding(.trailing, Screen.maxWidth * 0.04)
@@ -215,7 +205,6 @@ struct CommunityDetailView: View {
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
-            commentVm.sortByRecentComment()
             communityVM.fetchCommunity()
             
             // 유저가 저장을 눌렀는지
@@ -228,7 +217,6 @@ struct CommunityDetailView: View {
             //                    isBookMarked = false
             //                }
             //            }
-            
         }
         .onChange(of: commentVm.comment, perform: { value in
             commentVm.fetchComment(collectionName: "Community",

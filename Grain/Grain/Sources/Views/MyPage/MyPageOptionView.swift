@@ -276,7 +276,7 @@ struct InfoSection: View {
                 .padding(.leading, 5)
             
             NavigationLink {
-                TermsOfServiceView()
+                MyWebView(urlToLoad: "https://statuesque-cast-fac.notion.site/GRAIN-6d71c1363594444b8c9d4ba9ad6b192d")
             } label: {
                 HStack {
                     Image(systemName: "doc")
@@ -300,7 +300,9 @@ struct InfoSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                PrivacyPolicyView()
+//                PrivacyPolicyView()
+                MyWebView(urlToLoad: "https://sites.google.com/view/grain-ios/%ED%99%88")
+
             } label: {
                 HStack {
                     Image(systemName: "shield")
@@ -309,6 +311,27 @@ struct InfoSection: View {
                         .padding(.trailing, 14)
                     
                     Text("개인 정보 처리방침")
+                        .font(.title3)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.title3)
+                }
+                .foregroundColor(.black)
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
+            .padding(.horizontal)
+            
+            NavigationLink {
+                MyWebView(urlToLoad: "https://statuesque-cast-fac.notion.site/Third-Party-Notices-141126a372d64957b9d7a81b02f2f3c1")
+            } label: {
+                HStack {
+                    Image(systemName: "network")
+                        .font(.system(size:23))
+                        .padding(.leading, 2.9)
+                        .padding(.trailing, 14)
+                    
+                    Text("오픈소스 라이선스")
                         .font(.title3)
                     Spacer()
                     Image(systemName: "chevron.right")
@@ -377,3 +400,41 @@ struct InfoSection: View {
         }
     }
 }
+
+
+// WebView로 연결
+import WebKit
+
+// UIViewRepresentable 프로토콜을 구현하면 스유에서 UIView 사용가능하다 (UIView가 무엇이지 공부하기)
+struct MyWebView: UIViewRepresentable {
+    var urlToLoad: String
+    
+    //ui view
+    func makeUIView(context: Context) ->  WKWebView {
+        
+        //unwrapping
+        guard let url = URL(string: self.urlToLoad) else {
+            return WKWebView()
+        }
+        
+        // 인스턴스 생성
+        let webView = WKWebView()
+        
+        // 웹뷰 로드
+        webView.load(URLRequest(url: url))
+        return webView
+    }
+    
+    //업데이트 ui view -> UIViewRepresentable를 따르기 위해 일단 선언한거 같음 (이 함수 선언부를 지우면 프로토콜을 따르지 않는다고 에러가 나타남 / 추후 더 공부해보기)
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        
+    }
+}
+
+/*
+ "This method should not be called on the main thread as it may lead to UI unresponsiveness."
+ 보라색 괴물이 등장하는 이유...
+ 
+ 한 블로거에 의하면 대체적으로 다음버전에서 개선될 가능성이 크다는 의견을 보이는 듯...
+ 일단 무시하고 작업해도 될 듯
+ */

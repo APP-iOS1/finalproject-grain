@@ -35,13 +35,11 @@ final class MapViewModel: ObservableObject {
 //    }
     
     func fetchNextPageMap(nextPageToken: String){
-        print("fetchNextPageMap 호출 @@@@")
         MapService.getNextPageMap(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: MapResponse) in
                 self.mapData.append(contentsOf: data.documents)
-                print(data.documents)
                 if !(data.nextPageToken == nil) {
                     var nextPageToken : String = ""
                     nextPageToken = data.nextPageToken!
@@ -52,6 +50,20 @@ final class MapViewModel: ObservableObject {
             }.store(in: &subscription)
         
     }
+    
+    // MARK: 매거진 게시물 업로드시 맵 데이터도 같이 데이터 넣기
+   
+    func insertMap(data: MagazineFields) {
+        MapService.insertMap(data: data)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: MagazineDocument) in
+
+                self.insertMapSuccess.send()
+                
+            }.store(in: &subscription)
+    }
+    
 
 }
 

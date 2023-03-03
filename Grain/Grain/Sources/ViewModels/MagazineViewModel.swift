@@ -21,9 +21,10 @@ final class MagazineViewModel: ObservableObject {
     @Published var sortedRecentMagazineData = [MagazineDocument]()    // 매거진 게시물 최신순으로
     @Published var sortedTopLikedMagazineData = [MagazineDocument]()    // 매거진 게시물 좋아오 높은순
     
-    var fetchMagazineSuccess = PassthroughSubject<(), Never>()
+    var fetchMagazineSuccess = PassthroughSubject<[MagazineDocument], Never>()
     var insertMagazineSuccess = PassthroughSubject<(), Never>()
     var updateMagazineSuccess = PassthroughSubject<(), Never>()
+    var deleteMagazineSuccess = PassthroughSubject<(), Never>()
     
     // MARK: 메거진 데이터 가져오기 메소드
     func fetchMagazine() {
@@ -37,7 +38,7 @@ final class MagazineViewModel: ObservableObject {
 //                self.sortByRecentMagazine(magazines: data.documents)
                 
                 self.sortedRecentMagazineData = data.documents.sorted(by: {
-                    return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
                 })
                 
                 
@@ -46,7 +47,7 @@ final class MagazineViewModel: ObservableObject {
                     return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
                 })
                 
-                self.fetchMagazineSuccess.send()
+                self.fetchMagazineSuccess.send(data.documents)
             }.store(in: &subscription)
         
     }
@@ -58,11 +59,9 @@ final class MagazineViewModel: ObservableObject {
         MagazineService.insertMagazine(data: data, images: images)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-                
+
             } receiveValue: { (data: MagazineDocument) in
-                print(" gmadfsdfs: \(data)")
                 self.insertMagazineSuccess.send()
-                print("id: \(data.name)")
             }.store(in: &subscription)
     }
     
@@ -75,7 +74,7 @@ final class MagazineViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
                 
             } receiveValue: { (data: MagazineDocument) in
-                self.fetchMagazineSuccess.send()
+                self.updateMagazineSuccess.send()
             }.store(in: &subscription)
     }
     
@@ -88,7 +87,7 @@ final class MagazineViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
                 
             } receiveValue: { (data: MagazineDocument) in
-                self.fetchMagazineSuccess.send()
+                self.updateMagazineSuccess.send()
             }.store(in: &subscription)
     }
     
@@ -100,8 +99,13 @@ final class MagazineViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: MagazineDocument) in
-                self.fetchMagazineSuccess.send()
+                self.deleteMagazineSuccess.send()
             }.store(in: &subscription)
+    }
+    
+    func filterUserMagazine(userID: String) -> [MagazineDocument] {
+        let magazines = magazines.filter { $0.fields.userID.stringValue == userID }
+        return magazines
     }
     
     
@@ -171,8 +175,8 @@ final class MagazineViewModel: ObservableObject {
     func nearbyPostsFilter(magazineData: [MagazineDocument],nearbyPostsArr: [String]) -> [MagazineDocument] {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
         var nearbyPostFilterArr: [MagazineDocument] = []
+        nearbyPostFilterArr.removeAll()
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
-        //        이거 넣었더니 터짐
         for arrData in nearbyPostsArr{
             for magazineIdValue in magazineData{
                 if arrData == magazineIdValue.fields.id.stringValue{
@@ -206,8 +210,7 @@ final class MagazineViewModel: ObservableObject {
         var otherUserPostFilterArr: [MagazineDocument] = []
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
 //        이거 넣었더니 터짐
-        print("userPostedArr: \(userPostedArr)")
-        print("magazineData: \(magazineData)")
+       
         for arrData in userPostedArr{
             for magazineIdValue in magazineData{
                 if arrData.stringValue == magazineIdValue.fields.id.stringValue{
@@ -216,7 +219,7 @@ final class MagazineViewModel: ObservableObject {
                 }
             }
         }
-        print("otherUserPostFilterArr: \(otherUserPostFilterArr)")
+       
         return otherUserPostFilterArr
     }
     
@@ -227,7 +230,7 @@ final class MagazineViewModel: ObservableObject {
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
 //        이거 넣었더니 터짐
         for arrData in userBookmarkedPostedArr{
-            print("userbookmared: \(userBookmarkedPostedArr)")
+           
             for magazineIdValue in magazineData{
                 if arrData == magazineIdValue.fields.id.stringValue{
                     userBookmarkedPostFilterArr.append(magazineIdValue)

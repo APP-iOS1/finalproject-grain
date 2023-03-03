@@ -50,7 +50,7 @@ struct CommunityView: View {
                 
                 switch(selectedIndex) {
                 case 0:
-                    AllTabView(community: communityVM.communities, communityVM: communityVM)
+                    AllTabView(community: communityVM.sortedRecentCommunityData, communityVM: communityVM)
                 case 1:
                     MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"), communityVM: communityVM)
                 case 2:

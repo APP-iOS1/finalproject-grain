@@ -9,39 +9,40 @@ import Foundation
 enum MapQuery {
     
     // MARK: 커뮤니티 DB에 데이터 저장
-    static func insertMapQuery(latitude: Double,url: String,id: String,category: Int,magazineId: String,longitude: Double) -> Data? {
+    static func insertMapQuery(data: MagazineFields , docID: String) -> Data? {
   
         return
         """
         {
         "fields": {
                         "latitude": {
-                            "doubleValue": \(latitude)
+                            "doubleValue": \(data.latitude.doubleValue!)
                         },
                         "url": {
-                            "stringValue": "\(url)"
+                            "stringValue": "default"
                         },
                         "id": {
-                            "stringValue": "id패스"
+                            "stringValue": "\(docID)"
                         },
                         "category": {
-                            "integerValue": \(category)
+                            "stringValue": "필름스팟"
                         },
                         "magazineId": {
                             "arrayValue": {
                                 "values": [
                                     {
-                                        "stringValue": "\(magazineId)"
+                                        "stringValue": "\(data.id.stringValue)"
                                     }
                                 ]
                             }
                         },
                         "longitude": {
-                            "doubleValue": \(longitude)
+                            "doubleValue": \(data.longitude.doubleValue!)
                         }
-                    }
                 }
         }
+        
+        
         """.data(using: .utf8)
     }
 }

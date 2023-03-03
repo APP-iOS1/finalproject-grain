@@ -35,6 +35,15 @@ enum MagazineQuery {
                                 ]
                             }
                         },
+                        "comment": {
+                            "arrayValue": {
+                                "values": [
+                                    {
+                                        "stringValue": "default"
+                                    }
+                                ]
+                            }
+                        },
                         "id": {
                             "stringValue": "\(docID)"
                         },
@@ -57,10 +66,10 @@ enum MagazineQuery {
                           "stringValue": "\(data.content.stringValue)"
                         },
                         "latitude": {
-                          "doubleValue": 0.0
+                          "doubleValue": \(data.latitude.doubleValue!)
                         },
                         "longitude": {
-                          "doubleValue": 0.0
+                          "doubleValue": \(data.longitude.doubleValue!)
                         },
                         "nickName": {
                           "stringValue": "\(data.nickName.stringValue)"

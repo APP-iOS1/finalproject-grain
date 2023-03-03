@@ -8,35 +8,39 @@
 import Foundation
 
 enum MapRouter {
-
+    
     case get
     case getNext(nextPageToken: String)
-    case post(latitude: Double,url: String,id: String,category: Int,magazineId: String,longitude: Double)
+    case post(magazineData: MagazineFields, docID: String)
     case delete
     case put
     
     private var baseURL: URL {
-        let baseUrlString = Bundle.main.infoDictionary?["FireStore"] ?? ""
-
-        return URL(string: baseUrlString as! String)!
+        var baseUrlString : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FireStore"] as? String {
+                baseUrlString += url
+            }
+        }
+        return URL(string: baseUrlString) ?? URL(string: "")!
     }
     
     private enum HTTPMethod {
-            case get
-            case post
-            case put
-            case delete
-            case getNext
-            var value: String {
-                switch self {
-                case .get: return "GET"
-                case .post: return "POST"
-                case .put: return "PUT"
-                case .delete: return "DELETE"
-                case .getNext: return "GET"
-                }
+        case get
+        case post
+        case put
+        case delete
+        case getNext
+        var value: String {
+            switch self {
+            case .get: return "GET"
+            case .post: return "POST"
+            case .put: return "PUT"
+            case .delete: return "DELETE"
+            case .getNext: return "GET"
             }
         }
+    }
     
     private var endPoint: String {
         switch self {
@@ -62,6 +66,9 @@ enum MapRouter {
     
     var parameters: URLQueryItem? {
         switch self {
+        case let .post(_ , docID):
+            let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
+            return params
         case let .getNext(nextPageToken):
             let params: URLQueryItem = URLQueryItem(name: "pageToken", value: nextPageToken)
             return params
@@ -71,11 +78,13 @@ enum MapRouter {
         }
     }
     
-   
+    
     private var data: Data? {
         switch self {
-        case let .post(latitude, url, id, category, magazineId, longitude):
-            return MapQuery.insertMapQuery(latitude: latitude,url: url,id: id,category: category,magazineId: magazineId,longitude: longitude)
+        case let .post(magazineData, docID):
+            guard let magazinequery = MapQuery.insertMapQuery(data: magazineData, docID: docID) else { return nil }
+            print( String(decoding: magazinequery, as: UTF8.self))
+            return MapQuery.insertMapQuery(data: magazineData, docID: docID)
         default:
             return nil
         }
@@ -100,7 +109,7 @@ enum MapRouter {
         }
         
         // [x] TODO: Encoding 하는 방식으로 data 넘겨주기
-//        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
+        //        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
         
         return request
     }

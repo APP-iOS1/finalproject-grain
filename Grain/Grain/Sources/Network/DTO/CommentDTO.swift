@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - CommentResponse: Comment 컬렉션 아래 [ 문서 ID ]
-struct CommentResponse: Codable {
+struct CommentResponse: Codable,Hashable {
     var documents: [CommentDocument]
 }
 // MARK: - CommentDocument: 문서

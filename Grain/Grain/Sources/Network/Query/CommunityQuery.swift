@@ -22,6 +22,17 @@ enum CommunityQuery {
             
             str.removeLast()
             
+            var state : String = ""
+            switch data.category.stringValue{
+            case "매칭","클래스":
+                state = "모집중"
+            case "마켓":
+                state = "판매중"
+            case "정보":
+                state = "Tip"
+            default:
+                state = "default"
+            }
             // FIXME: comment 부분 추가해야함.
             return
             """
@@ -50,7 +61,7 @@ enum CommunityQuery {
                                 "stringValue": "\(data.introduce.stringValue)"
                             },
                             "state": {
-                                "stringValue": "모집중"
+                                "stringValue": "\(state)"
                             },
                             "id": {
                                 "stringValue": "\(docID)"

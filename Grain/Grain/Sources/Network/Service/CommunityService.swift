@@ -52,7 +52,7 @@ enum CommunityService {
     static func updateCommunity(data: CommunityDocument, docID: String) -> AnyPublisher<CommunityResponse, Error> {
         do {
             let request = try CommunityRouter.patch(putData: data, docID: docID).asURLRequest()
-            print(request)
+            
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

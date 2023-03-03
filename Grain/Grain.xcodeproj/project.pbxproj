@@ -101,7 +101,7 @@
 		9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */; };
 		9962CDD5297A215900E834C3 /* MagazineFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD4297A215900E834C3 /* MagazineFeedView.swift */; };
 		9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD6297A224700E834C3 /* MagazineViewCell.swift */; };
-		9970FBC629ADC30E0002A370 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9970FBC529ADC30E0002A370 /* Config.xcconfig */; };
+		9970FBC629ADC30E0002A370 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		9970FBC829ADC4E30002A370 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9970FBC729ADC4E30002A370 /* GoogleService-Info.plist */; };
 		998847D22992171400004066 /* CommunitySearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D12992171400004066 /* CommunitySearchDetailView.swift */; };
 		998847D4299226AE00004066 /* MagazineSearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D3299226AE00004066 /* MagazineSearchResultView.swift */; };
@@ -126,6 +126,8 @@
 		A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */; };
 		A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */; };
 		A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */; };
+		A78C2AF529AF2B1800AC1492 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A78C2AF429AF2B1800AC1492 /* Config.xcconfig */; };
+		A7A1AA3A29B092F200B2D70B /* MagazineRecommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A1AA3929B092F200B2D70B /* MagazineRecommentView.swift */; };
 		A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */; };
 		A7AF1A03299566EF007E6D43 /* CommentDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A02299566EF007E6D43 /* CommentDTO.swift */; };
 		A7AF1A0529956A12007E6D43 /* CommentQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A0429956A12007E6D43 /* CommentQuery.swift */; };
@@ -256,9 +258,6 @@
 		9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineMainView.swift; sourceTree = "<group>"; };
 		9962CDD4297A215900E834C3 /* MagazineFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineFeedView.swift; sourceTree = "<group>"; };
 		9962CDD6297A224700E834C3 /* MagazineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewCell.swift; sourceTree = "<group>"; };
-		9970FBBD29ADB7EE0002A370 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		9970FBBF29ADB9040002A370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		9970FBC529ADC30E0002A370 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		9970FBC729ADC4E30002A370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		998847D12992171400004066 /* CommunitySearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySearchDetailView.swift; sourceTree = "<group>"; };
 		998847D3299226AE00004066 /* MagazineSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchResultView.swift; sourceTree = "<group>"; };
@@ -283,6 +282,8 @@
 		A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeService.swift; sourceTree = "<group>"; };
 		A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeDTO.swift; sourceTree = "<group>"; };
 		A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeRouter.swift; sourceTree = "<group>"; };
+		A78C2AF429AF2B1800AC1492 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Config.xcconfig; path = "../../../../세팅파일/Config.xcconfig"; sourceTree = "<group>"; };
+		A7A1AA3929B092F200B2D70B /* MagazineRecommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineRecommentView.swift; sourceTree = "<group>"; };
 		A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeDTO.swift; sourceTree = "<group>"; };
 		A7AF1A02299566EF007E6D43 /* CommentDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDTO.swift; sourceTree = "<group>"; };
 		A7AF1A0429956A12007E6D43 /* CommentQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentQuery.swift; sourceTree = "<group>"; };
@@ -369,6 +370,7 @@
 				0C70BCFA298CA692004A4DB0 /* EditorView.swift */,
 				A71516B929926233009A0780 /* MagazineEditView.swift */,
 				99B21EC229938CD7006933BB /* MagazineCommentView.swift */,
+				A7A1AA3929B092F200B2D70B /* MagazineRecommentView.swift */,
 				33CFBCA32993A14C00DD2707 /* HeartButton.swift */,
 				9996A460299B580E00065435 /* MagazineProfileImage.swift */,
 			);
@@ -479,7 +481,6 @@
 				9958AF71297778D800A51DA9 /* Grain */,
 				9958AF70297778D800A51DA9 /* Products */,
 				F61456074BBE7B028FF22877 /* Pods */,
-				9970FBC129ADBC570002A370 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -625,19 +626,10 @@
 			path = AuthenticationViews;
 			sourceTree = "<group>";
 		};
-		9970FBC129ADBC570002A370 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				9970FBBF29ADB9040002A370 /* GoogleService-Info.plist */,
-				9970FBBD29ADB7EE0002A370 /* Config.xcconfig */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		9970FBC429ADC2E10002A370 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				9970FBC529ADC30E0002A370 /* Config.xcconfig */,
+				A78C2AF429AF2B1800AC1492 /* Config.xcconfig */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -793,9 +785,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				9936E2B0299097F0006F3333 /* MainSearchView.swift in Resources */,
-				9970FBC629ADC30E0002A370 /* Config.xcconfig in Resources */,
+				9970FBC629ADC30E0002A370 /* (null) in Resources */,
 				9970FBC829ADC4E30002A370 /* GoogleService-Info.plist in Resources */,
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
+				A78C2AF529AF2B1800AC1492 /* Config.xcconfig in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -988,6 +981,7 @@
 				A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */,
 				A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */,
 				A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */,
+				A7A1AA3A29B092F200B2D70B /* MagazineRecommentView.swift in Sources */,
 				A75BB990297EA25C004FE6FA /* WebkitView.swift in Sources */,
 				0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */,
 				99233D482977F2F900A875B1 /* LocationManager.swift in Sources */,
@@ -1115,7 +1109,7 @@
 		};
 		9958AF7E297778D900A51DA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9970FBC529ADC30E0002A370 /* Config.xcconfig */;
+			baseConfigurationReference = A78C2AF429AF2B1800AC1492 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1152,7 +1146,7 @@
 		};
 		9958AF7F297778D900A51DA9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9970FBC529ADC30E0002A370 /* Config.xcconfig */;
+			baseConfigurationReference = A78C2AF429AF2B1800AC1492 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

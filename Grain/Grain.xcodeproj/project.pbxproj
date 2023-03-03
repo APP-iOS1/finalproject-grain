@@ -49,6 +49,10 @@
 		8B10F4362994906A00582D27 /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F4352994906A00582D27 /* TermsOfServiceView.swift */; };
 		8B5E09312989FBA200862700 /* FloatingMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5E09302989FBA200862700 /* FloatingMenu.swift */; };
 		8BA44F842999EF9500B8928C /* GridToScrollTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA44F832999EF9500B8928C /* GridToScrollTest.swift */; };
+		8BC6C43629ADCF060067BC6F /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8BC6C43529ADCF060067BC6F /* Config.xcconfig */; };
+		8BC6C43829ADCF180067BC6F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BC6C43729ADCF180067BC6F /* GoogleService-Info.plist */; };
+		8BC6C43A29ADD6880067BC6F /* OtherUserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC6C43929ADD6880067BC6F /* OtherUserProfileView.swift */; };
+		8BC6C43C29ADDDBB0067BC6F /* FollowingFollowerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC6C43B29ADDDBB0067BC6F /* FollowingFollowerView.swift */; };
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
 		8BCF31E2297A500900EB6188 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31E1297A500900EB6188 /* CommentView.swift */; };
@@ -101,8 +105,6 @@
 		9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */; };
 		9962CDD5297A215900E834C3 /* MagazineFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD4297A215900E834C3 /* MagazineFeedView.swift */; };
 		9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD6297A224700E834C3 /* MagazineViewCell.swift */; };
-		9970FBC629ADC30E0002A370 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9970FBC529ADC30E0002A370 /* Config.xcconfig */; };
-		9970FBC829ADC4E30002A370 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9970FBC729ADC4E30002A370 /* GoogleService-Info.plist */; };
 		998847D22992171400004066 /* CommunitySearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D12992171400004066 /* CommunitySearchDetailView.swift */; };
 		998847D4299226AE00004066 /* MagazineSearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D3299226AE00004066 /* MagazineSearchResultView.swift */; };
 		998847D6299226CB00004066 /* MagazineSearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D5299226CB00004066 /* MagazineSearchDetailView.swift */; };
@@ -201,6 +203,10 @@
 		8B10F4352994906A00582D27 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
 		8B5E09302989FBA200862700 /* FloatingMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingMenu.swift; sourceTree = "<group>"; };
 		8BA44F832999EF9500B8928C /* GridToScrollTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridToScrollTest.swift; sourceTree = "<group>"; };
+		8BC6C43529ADCF060067BC6F /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		8BC6C43729ADCF180067BC6F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8BC6C43929ADD6880067BC6F /* OtherUserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserProfileView.swift; sourceTree = "<group>"; };
+		8BC6C43B29ADDDBB0067BC6F /* FollowingFollowerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingFollowerView.swift; sourceTree = "<group>"; };
 		8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityAddView.swift; sourceTree = "<group>"; };
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		8BCF31E1297A500900EB6188 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
@@ -256,10 +262,6 @@
 		9962CDD2297A1FA500E834C3 /* MagazineMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineMainView.swift; sourceTree = "<group>"; };
 		9962CDD4297A215900E834C3 /* MagazineFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineFeedView.swift; sourceTree = "<group>"; };
 		9962CDD6297A224700E834C3 /* MagazineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewCell.swift; sourceTree = "<group>"; };
-		9970FBBD29ADB7EE0002A370 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		9970FBBF29ADB9040002A370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		9970FBC529ADC30E0002A370 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		9970FBC729ADC4E30002A370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		998847D12992171400004066 /* CommunitySearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySearchDetailView.swift; sourceTree = "<group>"; };
 		998847D3299226AE00004066 /* MagazineSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchResultView.swift; sourceTree = "<group>"; };
 		998847D5299226CB00004066 /* MagazineSearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchDetailView.swift; sourceTree = "<group>"; };
@@ -394,6 +396,8 @@
 				8BA44F832999EF9500B8928C /* GridToScrollTest.swift */,
 				8B5E09302989FBA200862700 /* FloatingMenu.swift */,
 				334699DA2988DE51004153A6 /* StoredPostView.swift */,
+				8BC6C43929ADD6880067BC6F /* OtherUserProfileView.swift */,
+				8BC6C43B29ADDDBB0067BC6F /* FollowingFollowerView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -479,7 +483,6 @@
 				9958AF71297778D800A51DA9 /* Grain */,
 				9958AF70297778D800A51DA9 /* Products */,
 				F61456074BBE7B028FF22877 /* Pods */,
-				9970FBC129ADBC570002A370 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -497,7 +500,7 @@
 				995EBDCE29966F18002C1686 /* Grain.entitlements */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
 				9958AFB82977D56000A51DA9 /* Info.plist */,
-				9970FBC729ADC4E30002A370 /* GoogleService-Info.plist */,
+				8BC6C43729ADCF180067BC6F /* GoogleService-Info.plist */,
 				9970FBC429ADC2E10002A370 /* Setting */,
 				9958AF812977793700A51DA9 /* Configuration */,
 				9958AF80297778FD00A51DA9 /* Sources */,
@@ -625,19 +628,10 @@
 			path = AuthenticationViews;
 			sourceTree = "<group>";
 		};
-		9970FBC129ADBC570002A370 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				9970FBBF29ADB9040002A370 /* GoogleService-Info.plist */,
-				9970FBBD29ADB7EE0002A370 /* Config.xcconfig */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		9970FBC429ADC2E10002A370 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				9970FBC529ADC30E0002A370 /* Config.xcconfig */,
+				8BC6C43529ADCF060067BC6F /* Config.xcconfig */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -792,9 +786,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BC6C43829ADCF180067BC6F /* GoogleService-Info.plist in Resources */,
 				9936E2B0299097F0006F3333 /* MainSearchView.swift in Resources */,
-				9970FBC629ADC30E0002A370 /* Config.xcconfig in Resources */,
-				9970FBC829ADC4E30002A370 /* GoogleService-Info.plist in Resources */,
+				8BC6C43629ADCF060067BC6F /* Config.xcconfig in Resources */,
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
 			);
@@ -850,6 +844,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9936E2B129909846006F3333 /* MainSearchView.swift in Sources */,
+				8BC6C43A29ADD6880067BC6F /* OtherUserProfileView.swift in Sources */,
 				0C5204A92989FFBD002623FB /* Comment.swift in Sources */,
 				0C5204A82989FFB8002623FB /* CommunityRowView2.swift in Sources */,
 				8B10F43429948BF900582D27 /* PrivacyPolicyView.swift in Sources */,
@@ -912,6 +907,7 @@
 				9958AFB02977817C00A51DA9 /* Ex+Color.swift in Sources */,
 				9958AF8B297779C200A51DA9 /* Authentication.swift in Sources */,
 				334699D72988CD44004153A6 /* EditMyPageView.swift in Sources */,
+				8BC6C43C29ADDDBB0067BC6F /* FollowingFollowerView.swift in Sources */,
 				A7D957D1297AA646001D2401 /* CommunityQuery.swift in Sources */,
 				9962CDCB297924A000E834C3 /* MatchingTabView.swift in Sources */,
 				330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */,
@@ -1115,7 +1111,7 @@
 		};
 		9958AF7E297778D900A51DA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9970FBC529ADC30E0002A370 /* Config.xcconfig */;
+			baseConfigurationReference = 8BC6C43529ADCF060067BC6F /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1152,7 +1148,7 @@
 		};
 		9958AF7F297778D900A51DA9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9970FBC529ADC30E0002A370 /* Config.xcconfig */;
+			baseConfigurationReference = 8BC6C43529ADCF060067BC6F /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

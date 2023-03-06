@@ -26,13 +26,13 @@ struct MagazineDetailView: View {
                 VStack {
                     // MARK: 닉네임 헤더
                     HStack {
-                        ForEach(userVM.users.filter{
+                        ForEach(userVM.users.filter {
                             $0.fields.id.stringValue == data.fields.userID.stringValue
                         }, id: \.self){ item in
                             NavigationLink {
-                                UserPageView(userVM: userVM, userID: data.fields.userID.stringValue)
+                                UserDetailView(user: item, userVM: userVM)
                             } label: {
-                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue )
+                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue)
                             }
                         }
                         

@@ -61,7 +61,7 @@ struct MyPageView: View {
                                 
                                 HStack{
                                     NavigationLink {
-                                        FollowerListView(userVM: userVM)
+                                        CurrentUserFollowerListView(userVM: userVM)
                                     } label: {
                                         Text("구독자")
                                     }
@@ -73,7 +73,7 @@ struct MyPageView: View {
                                     Text("|")
 
                                     NavigationLink {
-                                        FollowingListView(userVM: userVM)
+                                        CurrentUserFollowingListView(userVM: userVM)
                                     } label: {
                                         Text("구독중")
                                     }

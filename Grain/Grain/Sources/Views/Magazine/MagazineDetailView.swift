@@ -35,11 +35,6 @@ struct MagazineDetailView: View {
                                 MagazineProfileImage(imageName: item.fields.profileImage.stringValue)
                             }
                             
-                            Button {
-                                print("user: \(item.fields.follower.arrayValue.values)")
-                            } label: {
-                                Text("test")
-                            }
                         }
                         
                         VStack(alignment: .leading){
@@ -50,8 +45,6 @@ struct MagazineDetailView: View {
                                 .foregroundColor(.textGray)
                             
                         }
-                        
-
                         
                         Spacer()
                         VStack{

@@ -18,6 +18,7 @@ final class CommunityViewModel: ObservableObject {
     
     @Published var communities = [CommunityDocument]()
     @Published var sortedRecentCommunityData = [CommunityDocument]()    // 매거진 게시물 최신순으로
+    @Published var isLoading = false
     
     var fetchCommunitySuccess = PassthroughSubject<[CommunityDocument], Never>()
     var insertCommunitySuccess = PassthroughSubject<(), Never>()
@@ -27,12 +28,15 @@ final class CommunityViewModel: ObservableObject {
 
     //MARK: - 커뮤니티 데이터 가져오기 메소드
     func fetchCommunity() {
+        self.isLoading = true
         CommunityService.getCommunity()
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommunityResponse) in
                 self.communities = data.documents
-                
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) { // 스켈레톤 View를 위해
+                    self.isLoading = false
+                }
                 // MARK: 커뮤니티 최신순으로 정렬
                 self.sortedRecentCommunityData = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()

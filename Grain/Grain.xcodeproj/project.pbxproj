@@ -33,6 +33,7 @@
 		0C535C2D2977B68600E20BD9 /* EditorViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2C2977B68600E20BD9 /* EditorViewCell.swift */; };
 		0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */; };
 		0C70BCFB298CA692004A4DB0 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C70BCFA298CA692004A4DB0 /* EditorView.swift */; };
+          0CE63C9E29B21138009D8A2D /* BlinkingAnimatinoModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE63C9D29B21138009D8A2D /* BlinkingAnimatinoModifier.swift */; };
 		330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330B945B297A53C3007F5164 /* AddCommunityView.swift */; };
 		330B9460297A719C007F5164 /* CameraLenseFilmModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */; };
 		334699D32988AE26004153A6 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D22988AE26004153A6 /* MyPageView.swift */; };
@@ -197,6 +198,7 @@
 		0C535C2C2977B68600E20BD9 /* EditorViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewCell.swift; sourceTree = "<group>"; };
 		0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineBestView.swift; sourceTree = "<group>"; };
 		0C70BCFA298CA692004A4DB0 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+          0CE63C9D29B21138009D8A2D /* BlinkingAnimatinoModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkingAnimatinoModifier.swift; sourceTree = "<group>"; };
 		330B945B297A53C3007F5164 /* AddCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommunityView.swift; sourceTree = "<group>"; };
 		330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraLenseFilmModalView.swift; sourceTree = "<group>"; };
 		334699D22988AE26004153A6 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
@@ -462,6 +464,7 @@
 				0C0A21C629995B240018F2D1 /* CommunityEditView.swift */,
 				0C0A21C8299BE91A0018F2D1 /* CommunityCommentView.swift */,
 				0C0A21CC299CA25D0018F2D1 /* txtediton.swift */,
+				0CE63C9D29B21138009D8A2D /* BlinkingAnimatinoModifier.swift */,
 			);
 			path = Community;
 			sourceTree = "<group>";
@@ -911,6 +914,7 @@
 				99233D4E2977F36000A875B1 /* Map.swift in Sources */,
 				A7E3DDE3298D3D5F004DA1F6 /* NearbyPostsComponent.swift in Sources */,
 				8B10F42E2990C3F100582D27 /* BookmarkedMagazine.swift in Sources */,
+				0CE63C9E29B21138009D8A2D /* BlinkingAnimatinoModifier.swift in Sources */,
 				A7D9F3162989840200B39218 /* NaverAPIViewModel.swift in Sources */,
 				9958AF8F29777D3F00A51DA9 /* Magazine.swift in Sources */,
 				A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */,

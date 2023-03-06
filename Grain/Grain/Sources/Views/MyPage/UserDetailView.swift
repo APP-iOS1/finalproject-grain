@@ -185,8 +185,14 @@ struct UserDetailView: View {
             }
             .onAppear{
                 print("userProfileDetail Onappear start")
-                userVM.fetchUser()
+                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 magazineVM.fetchMagazine()
+              
+            }
+            .onReceive(magazineVM.fetchMagazineSuccess, perform: { newValue in
+                self.magazines = magazineVM.filterUserMagazine(userID: user.fields.id.stringValue)
+            })
+            .onReceive(userVM.fetchCurrentUsersSuccess, perform: { _ in
                 
                 // 나의 following 리스트에 있는 사람인지 확인
                 if userVM.following.contains(user.fields.id.stringValue) {
@@ -203,9 +209,6 @@ struct UserDetailView: View {
                         isMyProfile = false
                     }
                 }
-            }
-            .onReceive(magazineVM.fetchMagazineSuccess, perform: { newValue in
-                self.magazines = magazineVM.filterUserMagazine(userID: user.fields.id.stringValue)
             })
             .onDisappear {
                 /// 희경:  userViewModel 에 메소드로 따로 빼주는게 보기 좋을듯.

@@ -45,7 +45,7 @@ final class UserViewModel: ObservableObject {
     @Published var followingList = [UserDocument]()
     
     var fetchUsersSuccess = PassthroughSubject<[UserDocument], Never>()
-    var fetchCurrentUsersSuccess = PassthroughSubject<(), Never>()
+    var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
     var updateUsersArraySuccess = PassthroughSubject<(), Never>()
     var updateUsersStringSuccess = PassthroughSubject<(), Never>()
@@ -58,6 +58,7 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
+                print("UserViewModel fetchUser start ++ 실행완")
                 self.users = data.documents
                 self.fetchUsersSuccess.send(data.documents)
             }.store(in: &subscription)
@@ -71,7 +72,7 @@ final class UserViewModel: ObservableObject {
                 self.currentUsers = data.fields
                 if let currentUsers = self.currentUsers {
                     self.parsingUserDataToStringArr(currentUserData: currentUsers)
-                    self.fetchCurrentUsersSuccess.send()
+                    self.fetchCurrentUsersSuccess.send(data.fields)
                 }
             }.store(in: &subscription)
     }
@@ -172,6 +173,7 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
+                self.fetchUser()
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)
     }

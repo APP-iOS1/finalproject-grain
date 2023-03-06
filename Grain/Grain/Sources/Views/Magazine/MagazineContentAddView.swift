@@ -19,6 +19,7 @@ struct MagazineContentAddView: View {
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
     @State private var showingAlert = false
+    @State private var pickImageCount : Int = 0
     // 모달 내리기
     @Binding var presented : Bool
     // insert
@@ -58,11 +59,11 @@ struct MagazineContentAddView: View {
                                     .overlay {
                                         VStack {
                                             Spacer()
-                                            Image(systemName: "plus.circle.fill")
+                                            Image(systemName: "camera.fill")
                                                 .font(.title3)
                                                 .foregroundColor(.black)
                                             Spacer()
-                                            Text("사진추가")
+                                            Text("\(pickImageCount)/5")
                                                 .font(.headline)
                                                 .foregroundColor(.black)
                                             Spacer()
@@ -79,18 +80,66 @@ struct MagazineContentAddView: View {
                                     /// 이미지 선택 버튼 우측으로 이미지 정렬
                                     if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
                                         selectedImages.append(uiImage)
+                                        pickImageCount = selectedImages.count
                                     }
                                 }
                             }
-                            
+                        
                         // MARK: 선택한 이미지를 보여주는 부분
                         ScrollView(.horizontal) {
+                            
+                           
                             HStack {
                                 // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
-                                ForEach(selectedImages, id: \.self) { img in
-                                    Image(uiImage: img)
-                                        .resizable()
-                                        .frame(width: 100, height: 100)
+                                ForEach(selectedImages.indices, id: \.self) { index in
+                                    GeometryReader { geometry in
+                                        
+                                        Rectangle()
+                                            .fill(.white)
+                                            .frame(width: 100, height: 100)
+                                            .overlay {
+                                                if index == 0 {
+                                                    Image(uiImage: selectedImages[index])
+                                                        .resizable()
+                                                        .cornerRadius(15)
+                                                        .onAppear{
+                                                            print("Upper right coordinates: (\(geometry.size.width), 0)")
+                                                        }
+                                                    Rectangle()
+                                                        .overlay {
+                                                            Text("대표 사진")
+                                                                .font(.caption)
+                                                                .fontWeight(.bold)
+                                                                .foregroundColor(.white)
+                                                        }
+                                                        .frame(height: geometry.size.width/4)
+                                                        .position(CGPoint(x: geometry.size.width/2, y: geometry.size.height-13))
+                                                        .cornerRadius(15)
+                                                    Image(systemName: "x.circle.fill")
+                                                        .position(CGPoint(x: geometry.size.width-2, y: 8))
+                                                        .onTapGesture {
+                                                            selectedImages.remove(at: index)
+                                                            pickImageCount = selectedImages.count
+                                                        }
+                                                }
+                                                else{
+                                                    Image(uiImage: selectedImages[index])
+                                                        .resizable()
+                                                        .cornerRadius(15)
+                                                        .onAppear{
+                                                            print("Upper right coordinates: (\(geometry.size.width), 0)")
+                                                        }
+                                                    Image(systemName: "x.circle.fill")
+                                                        .position(CGPoint(x: geometry.size.width-2, y: 8))
+                                                        .onTapGesture {
+                                                            selectedImages.remove(at: index)
+                                                            pickImageCount = selectedImages.count
+                                                        }
+                                                }
+
+                                            }
+                                    }.frame(width: 100, height: 100)
+                                   
                                 }
                             }
                         }
@@ -120,7 +169,7 @@ struct MagazineContentAddView: View {
                     Image("line")
                         .resizable()
                         .frame(width: Screen.maxWidth * 0.95,height: 1)
-
+                    
                     // MARK: 게시물 내용 작성 란
                     TextField("소중한 추억을 기록해주세요", text: $inputContent, axis: .vertical)
                         .font(.title3)
@@ -142,7 +191,7 @@ struct MagazineContentAddView: View {
                         }
                         .frame(height: Screen.maxHeight * 0.4, alignment: .top)
                     
-
+                    
                     Spacer()
                     //MARK: 다음버튼
                     if selectedImages.count == 0 || inputTitle.count == 0 || inputContent.count == 0 {
@@ -177,7 +226,7 @@ struct MagazineContentAddView: View {
                         }
                     }
                 } //vstack
-
+                
                 .navigationTitle("매거진")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

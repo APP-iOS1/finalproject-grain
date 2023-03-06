@@ -33,6 +33,7 @@ struct CameraLenseFilmModalView: View {
     @Binding var selectedImages: [UIImage]
     @Binding var inputCustomPlace: String
     @Binding var presented : Bool
+    @Binding var writeDownCustomPlaceText: String
     
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     @State private var selection: String?
@@ -178,7 +179,7 @@ struct CameraLenseFilmModalView: View {
                         
                         data.id.stringValue = docId
                         data.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
-                        data.customPlaceName.stringValue = "패스"
+                        data.customPlaceName.stringValue = writeDownCustomPlaceText
                         data.title.stringValue = inputTitle
                         data.content.stringValue = inputContent
                         data.cameraInfo.stringValue = selectedCamera

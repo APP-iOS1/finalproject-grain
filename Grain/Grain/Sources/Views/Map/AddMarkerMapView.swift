@@ -17,8 +17,10 @@ struct AddMarkerMapView: View {
     @State var markerAddButtonBool : Bool = false
     @State var locationcheckBool : Bool = false
     @State var searchResponseBool : Bool = false
-    //임시
-    //    searchMap = data.region.area1.name + data.region.area2.name + data.region.area3.name
+    @State var writeDownCustomPlaceAlert : Bool = false
+    @State var writeDownCustomPlaceCheck : Bool = false
+    @State var writeDownCustomPlaceText : String = ""
+    
     // 네비게이션 뷰 돌아가기
     @Environment(\.dismiss) private var dismiss
     // 경도 위도 값 전달
@@ -90,7 +92,7 @@ struct AddMarkerMapView: View {
                         .padding()
                         .shadow(radius: 1)
                         Spacer()
-
+                        
                     }
                     
                     Image("uploadMarker")
@@ -101,7 +103,7 @@ struct AddMarkerMapView: View {
                 }
                 HStack {
                     Text("포토 스팟으로 핀을 이동하세요")
-                    .font(.headline)
+                        .font(.headline)
                     Spacer()
                 }
                 .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.05)
@@ -120,25 +122,50 @@ struct AddMarkerMapView: View {
                         } label: {
                             Image(systemName: "x.circle")
                         }
-
+                        
                     }
                 }
                 .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.05)
-                if isFinishedSpot { //핀이 찍혔을 경우
+                
+                if (isFinishedSpot && writeDownCustomPlaceCheck){   // 핀과 커스텀 플레이스가 작성이 되었을때
                     NavigationLink {
-                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
+                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, writeDownCustomPlaceText: $writeDownCustomPlaceText)
                             .navigationBarBackButtonHidden(true)
-                    } label: {
+                    } label:{
                         RoundedRectangle(cornerRadius: 12)
                             .fill(.black)
                             .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
                             .overlay {
                                 Text("다음")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                            }
+                                   .font(.headline)
+                                   .foregroundColor(.white)
+                        }
                     }
-                } else { //핀이 안찍혔을 경우
+                }else if isFinishedSpot { //핀이 찍혔을 경우
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(.black)
+                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                            .overlay {
+//
+                                Button {
+                                    showingAlert.toggle()
+                                } label: {
+                                    Text("나만의 장소 이름 설정하기")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                }
+                                .alert("나만의 장소 이름 설정해주세요 😃", isPresented: $showingAlert) {
+                                    TextField("예) 이불 속이 최고야 🛌", text: $writeDownCustomPlaceText)
+                                    Button("설정", action: {
+                                        writeDownCustomPlaceCheck = true
+                                    })
+                                    Button("취소", role: .cancel, action: {})
+                                } message: {
+                                    Text("게시물에 같이 표시될 예정입니다!")
+                                }
+                            }
+                    
+                }else { //핀이 안찍혔을 경우
                     Button {
                         markerAddButtonBool.toggle()
                         isFinishedSpot = true
@@ -153,8 +180,10 @@ struct AddMarkerMapView: View {
                             }
                     }
                 }
-
-
+                
+                
+            }.onAppear{
+                writeDownCustomPlaceCheck = false
             }
             .toolbar {
                 ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {

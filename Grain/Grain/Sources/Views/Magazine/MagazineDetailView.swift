@@ -216,11 +216,12 @@ struct MagazineDetailView: View {
             }//VStack
         }//스크롤뷰
         .onAppear{
+            print("MagazineDetailView onAppear Start")
+            
             // 희경: 유저 팔로워, 팔로잉 업데이트 후 뒤로가기했다가 다시 들어갔을때 바로 반영안되는 issue
             // [해결] magazineDetailView의 onAppear 에서 fetchUser를 해주는 방식에서 userVM의 updateCurrentUserArray 메소드의 receivedValue 블록에 fetchUser 해주는 방식으로 변경
             // [이유] UserDetailView의 onDisappear메소드와 onAppear메소드간의 비동기처리가 문제였던것같다.
             // onDisappear에서 updateUser를 실행하는데 완료되기전에 onAppear를 해준듯.
-            
             // 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
             // 좋아요 버튼
             if userVM.likedMagazineID.contains(where: { item in
@@ -239,6 +240,7 @@ struct MagazineDetailView: View {
             }
         }
         .onDisappear{
+            print("MagazineDetailView onDisappear Start")
             if isHeartToggle {
                 // 좋아요 누름
                 if !userVM.likedMagazineID.contains(data.fields.id.stringValue){

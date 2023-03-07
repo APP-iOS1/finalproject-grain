@@ -184,7 +184,7 @@ struct UserDetailView: View {
                 UserPageUserFeedView(magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))                //                    .padding(.top, -80)
             }
             .onAppear{
-                print("userProfileDetail Onappear start")
+                print("UserDetailView OnAppear Start")
                 userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 magazineVM.fetchMagazine()
               
@@ -211,6 +211,8 @@ struct UserDetailView: View {
                 }
             })
             .onDisappear {
+                print("UserDetailView onDisappear Start")
+                
                 /// 희경:  userViewModel 에 메소드로 따로 빼주는게 보기 좋을듯.
                 if isFollowingUser {
                     // "구독중" 상태이고, 내 팔로잉 리스트에 없는 경우 => 구독

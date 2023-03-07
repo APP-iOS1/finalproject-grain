@@ -39,6 +39,7 @@ struct FollowerListView: View {
                 } // foreach
             } // vstack
         } //scrollview
+        .padding([.leading, .top], 10)
     }
 }
 
@@ -72,6 +73,7 @@ struct CurrentUserFollowerListView: View {
                 } // foreach
             } // vstack
         } //scrollview
+        .padding([.leading, .top], 10)
     }
 }
 

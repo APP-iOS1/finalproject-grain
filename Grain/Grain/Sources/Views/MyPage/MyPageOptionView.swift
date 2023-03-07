@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MessageUI
 
 struct MyPageOptionView: View {
 //    let optionMenu = ["프로필 편집", "카메라 정보", "저장됨", "로그아웃"]
@@ -197,6 +198,8 @@ struct AccountSection: View {
 
 //MARK: - 지원 섹션
 struct SupportSection: View {
+    @State private var isShowingMailView = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
             Text("지원")
@@ -205,8 +208,11 @@ struct SupportSection: View {
                 .padding()
                 .padding(.leading, 5)
             
-            NavigationLink {
-                Text("고객센터")
+            Button {
+//                Text("고객센터")
+                EmailController.shared.sendEmail(subject: "Hello", body: "Hello From ishtiz.com", to: "recipient@example.com")
+                isShowingMailView.toggle()
+
             } label: {
                 HStack {
                     Image(systemName: "message")
@@ -231,6 +237,10 @@ struct SupportSection: View {
                 .padding(.bottom)
             }
             .padding(.horizontal)
+//            .disabled(!MFMailComposeViewController.canSendMail())
+//            .sheet(isPresented: $isShowingMailView) {
+//                MailView(isShowing: $isShowingMailView)
+//            }
             
             NavigationLink {
                 Text("피드백")
@@ -257,6 +267,15 @@ struct SupportSection: View {
             .padding(.horizontal)
         }
     }
+    
+    func createEmailUrl(to: String, subject: String, body: String) -> String {
+        let subjectEncoded = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let bodyEncoded = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+            
+        let defaultUrl = "mailto:\(to)?subject=\(subjectEncoded)&body=\(bodyEncoded)"
+            
+        return defaultUrl
+    }
 }
 
 //MARK: - 정보 섹션
@@ -264,6 +283,9 @@ struct InfoSection: View {
     @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
     @ObservedObject var kakoAuthVM: KakaoAuthenticationStore = KakaoAuthenticationStore()
    
+    // Progress 변수
+    @State private var isShownProgress: Bool = true
+
     // Alert 변수
     @State private var showAlert: Bool = false
     
@@ -276,7 +298,20 @@ struct InfoSection: View {
                 .padding(.leading, 5)
             
             NavigationLink {
-                MyWebView(urlToLoad: "https://statuesque-cast-fac.notion.site/GRAIN-6d71c1363594444b8c9d4ba9ad6b192d")
+                ZStack{
+                    MyWebView(urlToLoad: "https://statuesque-cast-fac.notion.site/GRAIN-6d71c1363594444b8c9d4ba9ad6b192d")
+                    if isShownProgress == true {
+                        ProgressView()
+                            .onAppear{
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    self.isShownProgress = false
+                                }
+                            }
+                    }
+                }
+                .onDisappear{
+                    isShownProgress = true
+                }
             } label: {
                 HStack {
                     Image(systemName: "doc")
@@ -300,8 +335,21 @@ struct InfoSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-//                PrivacyPolicyView()
-                MyWebView(urlToLoad: "https://sites.google.com/view/grain-ios/%ED%99%88")
+                //PrivacyPolicyView()
+                ZStack{
+                    MyWebView(urlToLoad: "https://sites.google.com/view/grain-ios/%ED%99%88")
+                    if isShownProgress == true {
+                        ProgressView()
+                            .onAppear{
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                                    self.isShownProgress = false
+                                }
+                            }
+                    }
+                }
+                .onDisappear{
+                    isShownProgress = true
+                }
 
             } label: {
                 HStack {
@@ -323,7 +371,20 @@ struct InfoSection: View {
             .padding(.horizontal)
             
             NavigationLink {
+                ZStack{
                 MyWebView(urlToLoad: "https://statuesque-cast-fac.notion.site/Third-Party-Notices-141126a372d64957b9d7a81b02f2f3c1")
+                    if isShownProgress == true {
+                        ProgressView()
+                            .onAppear{
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    self.isShownProgress = false
+                                }
+                            }
+                    }
+                }
+                .onDisappear{
+                    isShownProgress = true
+                }
             } label: {
                 HStack {
                     Image(systemName: "network")
@@ -438,3 +499,86 @@ struct MyWebView: UIViewRepresentable {
  한 블로거에 의하면 대체적으로 다음버전에서 개선될 가능성이 크다는 의견을 보이는 듯...
  일단 무시하고 작업해도 될 듯
  */
+
+
+// Mail Send
+class EmailController: NSObject, MFMailComposeViewControllerDelegate {
+    public static let shared = EmailController()
+    private override init() { }
+    
+    func sendEmail(subject:String, body:String, to:String){
+        // Check if the device is able to send emails
+        if !MFMailComposeViewController.canSendMail() {
+           print("This device cannot send emails.")
+           return
+        }
+        // Create the email composer
+        let mailComposer = MFMailComposeViewController()
+        mailComposer.mailComposeDelegate = self
+        mailComposer.setToRecipients([to])
+        mailComposer.setSubject(subject)
+        mailComposer.setMessageBody(body, isHTML: false)
+        EmailController.getRootViewController()?.present(mailComposer, animated: true, completion: nil)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        EmailController.getRootViewController()?.dismiss(animated: true, completion: nil)
+    }
+    
+    static func getRootViewController() -> UIViewController? {
+        // In SwiftUI 2.0
+        UIApplication.shared.windows.first?.rootViewController
+    }
+}
+
+
+// mail test
+struct MailView: UIViewControllerRepresentable {
+    @Binding var isShowing: Bool
+    
+    func makeUIViewController(context: Context) -> MFMailComposeViewController {
+        let mailComposeViewController = MFMailComposeViewController()
+        mailComposeViewController.setToRecipients(["example@example.com"])
+        mailComposeViewController.setSubject("Subject")
+        mailComposeViewController.setMessageBody("Message body", isHTML: false)
+        mailComposeViewController.mailComposeDelegate = context.coordinator
+        return mailComposeViewController
+    }
+    
+    func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {
+        // No update necessary
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(isShowing: $isShowing)
+    }
+    
+    class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
+        @Binding var isShowing: Bool
+        
+        init(isShowing: Binding<Bool>) {
+            _isShowing = isShowing
+        }
+        
+        func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+            defer {
+                isShowing = false
+            }
+            
+            switch result {
+            case .cancelled:
+                print("Mail cancelled")
+            case .saved:
+                print("Mail saved")
+            case .sent:
+                print("Mail sent")
+            case .failed:
+                print("Mail failed: \(String(describing: error))")
+            @unknown default:
+                fatalError()
+            }
+            
+            controller.dismiss(animated: true, completion: nil)
+        }
+    }
+}

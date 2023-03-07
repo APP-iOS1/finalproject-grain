@@ -35,12 +35,16 @@ struct MapView: View {
     
     @State var searchResponseBool : Bool = false    // 검색하기 버튼 Bool
     
+    @State var moreCategoryButton : Bool = true // 카테고리 더보기 버튼 Bool
+    @State var reportButton : Bool = false  // 제보하러가기 버튼 Bool
+    
     
     @State var markerAddButtonBool: Bool = false     //???
     @State var changeMap: CGPoint = CGPoint(x: 0, y: 0) // 클러스팅 할때 쓰일 예정
     
     @State var allButtonClickedBool : Bool = false
     
+    @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0.0, lng: 0.0)
   
     @State private var isSheetPresented = true
 
@@ -55,6 +59,7 @@ struct MapView: View {
                         TextField("🔍 ex) 서울시 종로구 사직동", text: $searchText)
                             .padding()
                             .background(.white)
+                            .frame(width: Screen.maxWidth * 0.75, height:  Screen.maxHeight * 0.0525)
                             .cornerRadius(15)
                             .onSubmit {
                                 // MARK: Geocode API 실행
@@ -72,7 +77,7 @@ struct MapView: View {
                         // 검색 확인 버튼
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundColor(.black)
-                            .frame(width: 50, height: 51)
+                            .frame(width: Screen.maxWidth * 0.125, height:  Screen.maxHeight * 0.0525)
                             .overlay{
                                 Image(systemName: "location.magnifyingglass")
                                     .foregroundColor(.white)
@@ -85,7 +90,17 @@ struct MapView: View {
                     }
                     HStack{
                         /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
-                        MapCategoryCellView(categoryString: $categoryString)
+                        if !moreCategoryButton{
+                            MapCategoryCellView(categoryString: $categoryString, moreCategoryButton: $moreCategoryButton, reportButton: $reportButton)
+                                .padding(.leading, 7)
+                            Spacer()
+                        }else{
+                            MapCategoryCellView(categoryString: $categoryString, moreCategoryButton: $moreCategoryButton, reportButton: $reportButton)
+                                .padding(.leading, 7)
+                            Spacer()
+                        }
+                        
+                        
                     }.padding(.leading , 7) // -> 검증 필요
                         .offset(y: -15)
                 }
@@ -187,8 +202,7 @@ struct MapView: View {
                         .offset(y: 250)
                         .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
                 }
-                
-                
+
             }
             .ignoresSafeArea()
             .ignoresSafeArea(.keyboard)
@@ -198,6 +212,9 @@ struct MapView: View {
             .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
                 WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium, .large])
                     .background(Color.black.opacity(0.5))   // <- 적용이 안된듯
+            }
+            .fullScreenCover(isPresented: $reportButton) {
+                ReportMapView(updateNumber: $updateNumber) // 제보하러 가기 모달 뷰
             }
         }
         .onAppear{

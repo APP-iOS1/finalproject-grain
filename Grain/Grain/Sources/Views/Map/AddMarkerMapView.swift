@@ -305,7 +305,6 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
                 updateReverseGeocodeResult1 = naverVM.reverseGeocodeResult[0].region.area1.name + " " + naverVM.reverseGeocodeResult[0].region.area2.name + " " +
                 naverVM.reverseGeocodeResult[0].region.area3.name
             }
-            
             markerAddButtonBool.toggle()
         }
         

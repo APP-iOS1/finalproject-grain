@@ -97,9 +97,9 @@ struct StationUIMapView: UIViewRepresentable,View {
                 marker.height = 40
                 // MARK: 아이콘 캡션 - 현상소 글씨
                 marker.captionText = item.fields.category.stringValue
-                marker.captionColor = UIColor(red: 245.0/255.0, green: 136.0/255.0, blue: 0.0/255.0, alpha: 1)
+                marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
                 marker.captionTextSize = 12
-                marker.captionHaloColor = UIColor(.gray)
+                marker.captionHaloColor = UIColor(.white)
                 marker.userInfo = ["url" :  item.fields.url.stringValue]
                 marker.tag = 1
                 // MARK: 마커 클릭시
@@ -129,10 +129,9 @@ struct StationUIMapView: UIViewRepresentable,View {
                 marker.width = 40
                 marker.height = 40
                 marker.captionText = "검색 결과 위치"
-                marker.captionColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
+                marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
                 marker.captionTextSize = 12
-                marker.captionHaloColor = UIColor(.gray)
-                
+                marker.captionHaloColor = UIColor(.white)
                 marker.mapView = uiView.mapView
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     marker.mapView = nil

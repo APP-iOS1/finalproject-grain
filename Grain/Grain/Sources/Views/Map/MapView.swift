@@ -313,9 +313,9 @@ struct UIMapView: UIViewRepresentable,View {
                     marker.height = 40
                     // MARK: 아이콘 캡션 - 포토스팟 글씨
                     marker.captionText = item.fields.category.stringValue
-                    marker.captionColor = UIColor(red: 248.0/255.0, green: 188.0/255.0, blue: 36.0/255.0, alpha: 1)
+                    marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
                     marker.captionTextSize = 12
-                    marker.captionHaloColor = UIColor(.gray)
+                    marker.captionHaloColor = UIColor(.white)
                     // MARK: URL링크 정보 받기
                     marker.userInfo = ["magazine": item.fields.magazineID.arrayValue.values[0].stringValue]
                     // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
@@ -326,9 +326,9 @@ struct UIMapView: UIViewRepresentable,View {
                     marker.height = 40
                     // MARK: 아이콘 캡션 - 현상소 글씨
                     marker.captionText = item.fields.category.stringValue
-                    marker.captionColor = UIColor(red: 245.0/255.0, green: 136.0/255.0, blue: 0.0/255.0, alpha: 1)
+                    marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
                     marker.captionTextSize = 12
-                    marker.captionHaloColor = UIColor(.gray)
+                    marker.captionHaloColor = UIColor(.white)
                     marker.userInfo = ["url" :  item.fields.url.stringValue]
                     marker.tag = 1
                 case "수리점":
@@ -337,9 +337,9 @@ struct UIMapView: UIViewRepresentable,View {
                     marker.height = 40
                     // MARK: 아이콘 캡션 - 수리점 글씨
                     marker.captionText = item.fields.category.stringValue
-                    marker.captionColor = UIColor(red: 38.0/255.0, green: 104.0/255.0, blue: 103.0/255.0, alpha: 1)
+                    marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
                     marker.captionTextSize = 12
-                    marker.captionHaloColor = UIColor(.gray)
+                    marker.captionHaloColor = UIColor(.white)
                     marker.userInfo = ["url" :  item.fields.url.stringValue]
                     marker.tag = 2
                     // MARK: 캡션 글씨 색상 컬러

@@ -208,35 +208,71 @@ struct SupportSection: View {
                 .padding()
                 .padding(.leading, 5)
             
-            Button {
-//                Text("고객센터")
-                EmailController.shared.sendEmail(subject: "Hello", body: "Hello From ishtiz.com", to: "recipient@example.com")
-                isShowingMailView.toggle()
-
-            } label: {
-                HStack {
-                    Image(systemName: "message")
-                        .font(.system(size: 19))
-                        .padding(.leading, 3)
-                        .padding(.trailing, 11)
-                    
-                    //                            .resizable()
-                    //                            .frame(width: 20, height: 20)
-                    //                            .aspectRatio(contentMode: .fit)
-                    //                            .padding(.trailing)
-                    Text("고객센터")
-                        .font(.title3)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .font(.title2)
+//            Button {
+////                Text("고객센터")
+//                EmailController.shared.sendEmail(subject: "Hello", body: "Hello From ishtiz.com", to: "recipient@example.com")
+//                isShowingMailView.toggle()
+//
+//            }
+            
+            if let url = URL(string: "mailto:recipient@example.com?subject=Hello&body=How are you?") {
+                if UIApplication.shared.canOpenURL(url) {
+                    Link(destination: url,
+                    label: {
+                        HStack {
+                            Image(systemName: "message")
+                                .font(.system(size: 19))
+                                .padding(.leading, 3)
+                                .padding(.trailing, 11)
+                            
+                            //                            .resizable()
+                            //                            .frame(width: 20, height: 20)
+                            //                            .aspectRatio(contentMode: .fit)
+                            //                            .padding(.trailing)
+                            Text("고객센터")
+                                .font(.title3)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.title2)
+                        }
+                        .foregroundColor(.black)
+                        .padding(.horizontal)
+                        .padding(.bottom)
+                    })
+                    .padding(.horizontal)
+                } else {
+                    Text("Could not open email app.")
                 }
-                .foregroundColor(.black)
-                .padding(.horizontal)
-                .padding(.bottom)
+            } else {
+                Text("Invalid email address")
             }
-            .padding(.horizontal)
+//            Link(destination: url,
+//            label: {
+//                HStack {
+//                    Image(systemName: "message")
+//                        .font(.system(size: 19))
+//                        .padding(.leading, 3)
+//                        .padding(.trailing, 11)
+//
+//                    //                            .resizable()
+//                    //                            .frame(width: 20, height: 20)
+//                    //                            .aspectRatio(contentMode: .fit)
+//                    //                            .padding(.trailing)
+//                    Text("고객센터")
+//                        .font(.title3)
+//
+//                    Spacer()
+//
+//                    Image(systemName: "chevron.right")
+//                        .font(.title2)
+//                }
+//                .foregroundColor(.black)
+//                .padding(.horizontal)
+//                .padding(.bottom)
+//            })
+//            .padding(.horizontal)
 //            .disabled(!MFMailComposeViewController.canSendMail())
 //            .sheet(isPresented: $isShowingMailView) {
 //                MailView(isShowing: $isShowingMailView)

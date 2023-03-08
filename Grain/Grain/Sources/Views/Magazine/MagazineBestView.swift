@@ -51,11 +51,6 @@ struct MagazineBestView: View {
                 }
             } // scroll view
         }//vstack
-        .onAppear{
-//            magazineVM.fetchMagazine()
-            print("베스트 뷰")
-            
-        }
     }
 }
 

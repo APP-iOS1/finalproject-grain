@@ -174,14 +174,13 @@ struct MapCategoryCellView: View {
                         moreCategoryButton.toggle()
                     } label: {
                         Rectangle()
-                            .foregroundColor(repairButtonClickedBool ? .black : .white)
+                            .foregroundColor(.white)
                             .overlay{
                                 HStack{
                                     Image(systemName: "lessthan")
                                         
                                 }
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(repairButtonClickedBool ? .black : .white , lineWidth: 5)
+                                
                             }.cornerRadius(10)
                             .frame(width: Screen.maxWidth * 0.1 , height:  Screen.maxHeight * 0.0525)
                             

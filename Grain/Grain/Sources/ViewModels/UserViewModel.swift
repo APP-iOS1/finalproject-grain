@@ -257,7 +257,6 @@ final class UserViewModel: ObservableObject {
         removeAll()
         
         for i in currentUserData.likedMagazineID.arrayValue.values {
-            print("likedMagazineID: \(i.stringValue)")
             self.likedMagazineID.append(i.stringValue)
         }
         for i in currentUserData.myLens.arrayValue.values {
@@ -287,8 +286,6 @@ final class UserViewModel: ObservableObject {
         for i in currentUserData.following.arrayValue.values {
             self.following.append(i.stringValue)
         }
-        
-        print("bookmarkedMagazineID: \(self.bookmarkedMagazineID)")
     }
     
     func parsingFollowerDataToStringArr(data: UserDocument) -> [String] {

@@ -34,11 +34,6 @@ struct MagazineFeedView: View {
                 
             }
         }
-        .onAppear{
-            // MARK: fetch 데이터 시작
-//            magazineVM.sortByRecentMagazine()
-            print("피드뷰")
-        }
     }
 }
 //

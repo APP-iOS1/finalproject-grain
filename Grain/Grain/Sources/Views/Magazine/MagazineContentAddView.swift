@@ -102,9 +102,7 @@ struct MagazineContentAddView: View {
                                                     Image(uiImage: selectedImages[index])
                                                         .resizable()
                                                         .cornerRadius(15)
-                                                        .onAppear{
-                                                            print("Upper right coordinates: (\(geometry.size.width), 0)")
-                                                        }
+                                                        
                                                     Rectangle()
                                                         .overlay {
                                                             Text("대표 사진")

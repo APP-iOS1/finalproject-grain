@@ -98,8 +98,14 @@ struct AddMarkerMapView: View {
                     Image("uploadMarker")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 56,height: 56)
-                        .position(CGPoint(x: 196, y: 285))
+                        .frame(width: Screen.maxWidth * 0.1,height: Screen.maxHeight * 0.08)
+                        .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
+                    
+//                    Image("uploadMarker")
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fit)
+//                        .frame(width: 56,height: 56)
+//                        .position(CGPoint(x: 196, y: 285))
                 }
                 HStack {
                     Text("포토 스팟으로 핀을 이동하세요")
@@ -251,6 +257,7 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
         view.showCompass = false
         view.showLocationButton = true
+        view.mapView.isRotateGestureEnabled = false
         
         view.mapView.touchDelegate = context.coordinator
         
@@ -290,11 +297,16 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         
         if markerAddButtonBool{
             
-            
-            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: 196, y: 411))
+//            Image("uploadMarker")
+//                .resizable()
+//                .aspectRatio(contentMode: .fit)
+//                .frame(width: Screen.maxWidth * 0.1,height: Screen.maxHeight * 0.08)
+//                .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
+//
+            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.44))
             addUserMarker.iconImage = NMFOverlayImage(name: "uploadMarker")
-            addUserMarker.width = 55
-            addUserMarker.height = 55
+            addUserMarker.width = Screen.maxWidth * 0.1
+            addUserMarker.height = Screen.maxHeight * 0.045
             addUserMarker.mapView = uiView.mapView
             
             // 업로드에 위치 정보 넘겨줌

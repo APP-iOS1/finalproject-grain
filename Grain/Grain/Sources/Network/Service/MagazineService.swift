@@ -19,7 +19,6 @@ enum MagazineService {
         
         do {
             let request = try MagazineRouter.get.asURLRequest()
-            print("request: \(request.url)")
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -42,8 +41,6 @@ enum MagazineService {
         
         do {
             let request = try requestRouter.asURLRequest()
-            print("매거진 ")
-            print(request)
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

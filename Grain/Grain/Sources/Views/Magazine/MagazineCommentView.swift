@@ -23,9 +23,12 @@ struct MagazineCommentView: View {
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
+    @State var reCommentCount : Int = 0
     @State var eachBool : [Bool] = []
+    
     func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬 예) 댓글 3개면 [ false, false, false ]
         eachBool = Array(repeating: false, count: count)
+       
     }
     
     var body: some View {
@@ -88,7 +91,7 @@ struct MagazineCommentView: View {
                                     }
                                     // MARK: 답글 더보기
                                     Button {
-                                        makeEachBool(count:commentVm.sortedRecentComment.count)
+                                        makeEachBool(count: reCommentCount)
                                         readMoreComments.toggle()
                                         eachBool[index] = true
                                     } label: {
@@ -123,6 +126,7 @@ struct MagazineCommentView: View {
                                 VStack{
                                     if readMoreComments && eachBool[index]{
                                         MagazineRecommentView(currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, commentText: $commentText)
+                                            
                                     }
                                 }
                             }
@@ -131,11 +135,17 @@ struct MagazineCommentView: View {
 //                        .padding(.vertical, -7)
                         Divider()
                     }
+                    .onAppear{
+                        reCommentCount = commentVm.sortedRecentComment.count
+                        makeEachBool(count: reCommentCount)
+                    }
                     .padding(7)
                 }
                 
             }.refreshable {
                 commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                reCommentCount = commentVm.sortedRecentComment.count
+                makeEachBool(count: reCommentCount)
             }
 
             VStack(alignment: .leading){
@@ -170,7 +180,7 @@ struct MagazineCommentView: View {
                                 .stroke(lineWidth: 0.5)
                         }
                         .padding(.leading)
-                    MagazineCommentTextField(commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, commentCollectionDocId: $commentCollectionDocId, currentUser: currentUser,collectionName: collectionName, collectionDocId: collectionDocId)
+                    MagazineCommentTextField(commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, commentCollectionDocId: $commentCollectionDocId, reCommentCount: $reCommentCount, eachBool: $eachBool, currentUser: currentUser,collectionName: collectionName, collectionDocId: collectionDocId)
                         .onChange(of: summitComment) { _ in
                             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                         }
@@ -189,7 +199,9 @@ struct MagazineCommentTextField: View {
     @Binding var summitComment: Bool
     @Binding var replyComment : Bool
     @Binding var commentCollectionDocId : String
-  
+    @Binding var reCommentCount : Int
+    @Binding var eachBool : [Bool]
+    
     var currentUser : CurrentUserFields?
     var collectionName : String
     var collectionDocId : String
@@ -261,7 +273,9 @@ struct MagazineCommentTextField: View {
                             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                             self.summitComment.toggle()
                             replyComment = false
-                            
+                            reCommentCount += 1
+                            eachBool.insert(false, at: 0)
+    
                         } label: {
                             Text("등록")
                                 .font(.subheadline)

@@ -196,6 +196,7 @@ struct CameraLenseFilmModalView: View {
                         data.image.arrayValue = MagazineArrayValue(values: [])
                         magazineVM.insertMagazine(data: data, images: selectedImages)
                         mapVM.insertMap(data: data)
+                        magazineVM.fetchMagazine()
                         presented.toggle()
                     }
                 } label: {

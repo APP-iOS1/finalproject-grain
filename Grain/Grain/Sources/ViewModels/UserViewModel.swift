@@ -173,6 +173,7 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
+                print("updateCurrentUserArray start ***")
                 self.fetchUser()
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)

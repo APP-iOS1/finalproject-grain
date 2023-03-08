@@ -32,6 +32,13 @@ struct CommunityDetailView: View {
     @State private var postStatusString : String = "" // 게시글 상태 변경 표시글
     @FocusState private var textFieldFocused: Bool
     
+    var user: UserDocument {
+        let user = userVM.users.filter {
+            $0.fields.id.stringValue == community.fields.userID.stringValue
+        }
+        return user[0]
+    }
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -48,7 +55,15 @@ struct CommunityDetailView: View {
                         .padding(.top, 5)
                         // MARK: 닉네임 헤더
                         HStack {
-                            ProfileImage(imageName: community.fields.profileImage.stringValue)
+                            // item = userData
+                            NavigationLink {
+                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue
+                                }) {
+                                    UserDetailView(user: user, userVM: userVM)
+                                }
+                            } label: {
+                                ProfileImage(imageName: community.fields.profileImage.stringValue)
+                            }
                             VStack(alignment: .leading) {
                                 Text(community.fields.nickName.stringValue)
                                     .font(.subheadline)
@@ -203,6 +218,7 @@ struct CommunityDetailView: View {
         }
         .onAppear{
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            userVM.fetchUser()
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
             communityVM.fetchCommunity()

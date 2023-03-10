@@ -24,10 +24,12 @@ struct ReportMapView: View {
     @State var writeDownStoreName : String = "" // 가게이름 적는 텍스트필드
     
     @StateObject var reportMapVM = ReportMapViewModel()
+    var userLatitude: Double
+    var userLongitude: Double
     
     var body: some View {
         ZStack{
-            ReportUIMapView(clickedReportButtonBool: $clickedReportButtonBool, updateNumber: $updateNumber) //지도 호출
+            ReportUIMapView(clickedReportButtonBool: $clickedReportButtonBool, updateNumber: $updateNumber,  userLatitude: userLatitude , userLongitude: userLongitude) //지도 호출
             
             // MARK: Mapview로 돌아가는 버튼
             Button {
@@ -125,13 +127,9 @@ struct ReportUIMapView: UIViewRepresentable,View {
     @Binding var updateNumber : NMGLatLng
     
     
-    var userLatitude: Double {
-        return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
-    }
+    var userLatitude: Double
     
-    var userLongitude: Double {
-        return locationManager.lastLocation?.coordinate.longitude ?? 127.07766400
-    }
+    var userLongitude: Double 
     
     // UIView 기반 컴포넌트의 인스턴스 생성하고 필요한 초기화 작업을 수행한 뒤 반환한다.
     func makeUIView(context: Context) -> NMFNaverMapView {

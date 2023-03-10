@@ -15,7 +15,6 @@ enum MagazineService {
     
     // MARK: - 매거진 데이터 가져오기
     static func getMagazine() -> AnyPublisher<MagazineResponse, Error> {
-        print("FirebaseService getMagazine start")
         
         do {
             let request = try MagazineRouter.get.asURLRequest()

@@ -41,6 +41,9 @@ struct MagazineContentAddView: View {
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     @FocusState private var focusField: Fields?
     
+    var userLatitude: Double
+    var userLongitude: Double
+    
     var body: some View {
         /// 지도뷰로 이동하기 위해 전체적으로 걸어줌
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
@@ -210,7 +213,7 @@ struct MagazineContentAddView: View {
                         }
                     } else {
                         NavigationLink {
-                            AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented)
+                            AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .navigationBarBackButtonHidden(true)
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
@@ -247,11 +250,11 @@ struct MagazineContentAddView: View {
         }
     }
 }
-struct MagazineContentAddView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        NavigationStack {
-            MagazineContentAddView(presented: .constant(false), updateNumber: NMGLatLng(lat: 0, lng: 0))
-        }
-    }
-}
+//struct MagazineContentAddView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//        NavigationStack {
+//            MagazineContentAddView(presented: .constant(false), updateNumber: NMGLatLng(lat: 0, lng: 0))
+//        }
+//    }
+//}

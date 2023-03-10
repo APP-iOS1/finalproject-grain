@@ -52,13 +52,16 @@ struct AddMarkerMapView: View {
     @State private var showingAlert = false
     @State private var isFinishedSpot = false
     
+    var userLatitude: Double
+    var userLongitude: Double
+    
     var body: some View {
         NavigationView {
             VStack {
                 ZStack(alignment: .top) {
                     
                     //MARK: 네이버맵뷰
-                    AddMarkerUIMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, reMarkerAddButtonBool: $reMarkerAddButtonBool, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult)
+                    AddMarkerUIMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, reMarkerAddButtonBool: $reMarkerAddButtonBool, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult, userLatitude: userLatitude , userLongitude: userLongitude)
                         .zIndex(0)
                         .ignoresSafeArea()
                         .onTapGesture {
@@ -235,13 +238,9 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
     
     @Binding var updateReverseGeocodeResult :  [ReverseGeocodeResult]
     
-    var userLatitude: Double {
-        return locationManager.lastLocation?.coordinate.latitude ?? 37.21230200
-    }
+    var userLatitude: Double 
     
-    var userLongitude: Double {
-        return locationManager.lastLocation?.coordinate.longitude ?? 127.07766400
-    }
+    var userLongitude: Double
     
     // UIView 기반 컴포넌트의 인스턴스 생성하고 필요한 초기화 작업을 수행한 뒤 반환한다.
     func makeUIView(context: Context) -> NMFNaverMapView {

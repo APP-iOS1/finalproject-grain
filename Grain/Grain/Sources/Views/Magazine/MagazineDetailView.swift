@@ -26,7 +26,9 @@ struct MagazineDetailView: View {
                 VStack {
                     // MARK: 닉네임 헤더
                     HStack {
-                        // ForEach로 유저 필터링해서 넘기는 방식으로 유저 프로필뷰에 데이터 유저데이터 넘겨줬을때 유저 프로필에서 넘겨준 user 데이터가 업데이트가 안되는 이슈발생
+                        /// ForEach로 유저 필터링해서 넘기는 방식으로 유저 프로필뷰에 데이터 유저데이터 넘겨줬을때 유저 프로필에서 넘겨준 user 데이터가 업데이트가 안되는 이슈발생
+                        
+                        /// 희경: ForEach로 데이터를 넘겨주면 유저뷰모델의 users가 업데이트 될때 ForEach가 다시 실행되면서, 데이터만 업데이트되는것이 아니라 ForEach안에 NavigationLink가 다시 로드되면서 업데이트가 실행된 뷰가 아닌 다른 뷰가 만들어지는것같음.
                         
 //                        ForEach(userVM.users.filter {
 //                            $0.fields.id.stringValue == data.fields.userID.stringValue

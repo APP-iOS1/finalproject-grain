@@ -7,10 +7,12 @@
 
 import SwiftUI
 
+
 struct BookmarkedCommunityView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var bookmarkedCommunityDoument: [CommunityDocument]
+    @Binding var isLoading: Bool
 
     var body: some View {
         VStack{
@@ -19,7 +21,8 @@ struct BookmarkedCommunityView: View {
                     NavigationLink {
                         CommunityDetailView(community: data)
                     } label: {
-                        CommunityRowView(community: data)
+                        CommunityRowView(community: data, isLoading: $isLoading)
+                        //여기에 isLoading들어가야해서
 
                     }
                 }

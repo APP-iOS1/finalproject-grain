@@ -14,7 +14,6 @@ struct MyPageOptionView: View {
     var userVM: UserViewModel
     var bookmarkedMagazineDocument: [MagazineDocument]
     var bookmarkedCommunityDoument: [CommunityDocument]
-    
     @StateObject var communityVM: CommunityViewModel = CommunityViewModel()
     
     var body: some View {
@@ -45,7 +44,8 @@ struct MyPageOptionView: View {
             
             ScrollView{
                 //MARK: 계정 섹션
-                AccountSection(userVM: userVM, bookmarkedMagazineDocument: bookmarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
+                //이거넣음
+                AccountSection(communityVM: communityVM, userVM: userVM, bookmarkedMagazineDocument: bookmarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
                 
                 //MARK: 지원 섹션
                 SupportSection()
@@ -88,6 +88,8 @@ extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate 
 
 //MARK: - 계정 섹션
 struct AccountSection: View {
+    //이거 넣고
+    @StateObject var communityVM: CommunityViewModel
     var userVM: UserViewModel
 //    var community: [CommunityDocument]
     var bookmarkedMagazineDocument: [MagazineDocument]
@@ -170,7 +172,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedCommunityView(bookmarkedCommunityDoument: bookmarkedCommunityDoument)
+                BookmarkedCommunityView(bookmarkedCommunityDoument: bookmarkedCommunityDoument, isLoading: $communityVM.isLoading)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")

@@ -10,6 +10,7 @@ import SwiftUI
 struct MarketTabView: View {
     
     var community: [CommunityDocument]
+    @Binding var isLoading: Bool
     @StateObject var communityVM: CommunityViewModel
     var body: some View {
        
@@ -19,7 +20,7 @@ struct MarketTabView: View {
                         NavigationLink {
                             CommunityDetailView(community: data)
                         } label: {
-                            CommunityRowView(community: data)
+                            CommunityRowView(community: data, isLoading: $isLoading)
                         }
                     }
                 }

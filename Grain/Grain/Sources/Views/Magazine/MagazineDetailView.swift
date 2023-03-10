@@ -13,6 +13,7 @@ struct MagazineDetailView: View {
     @State private var showDevices: Bool = false
     @State private var currentAmount: CGFloat = 0
     @State private var dragOffset = CGSize.zero
+    @State private var firstImage: Image?
 
     @Environment(\.dismiss) private var dismiss
     
@@ -20,6 +21,11 @@ struct MagazineDetailView: View {
     let currentUsers : CurrentUserFields?
     let data : MagazineDocument
     
+    @SceneStorage("isZooming") var isZooming: Bool = false
+    private let photo = SharingPhoto(image: Image(systemName: "flame"), caption: "This is a flame!")
+    
+//    private let photo = SharingPhoto(image: firstImage, caption: "\(data.fields.title.stringValue)")
+//
     var body: some View {
         ScrollView {
             VStack{
@@ -65,6 +71,12 @@ struct MagazineDetailView: View {
                                     KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
+//                                        .onAppear {
+//                                            // 첫 번째 이미지를 가져옵니다.
+//                                            data.fields.image.arrayValue.values.firstImage { uiImage in
+//                                                          firstImage = Image(uiImage: uiImage)
+//                                                      }
+//                                        }
                                 }
                             
                         }
@@ -101,7 +113,7 @@ struct MagazineDetailView: View {
                         .animation(.easeInOut, value: isBookMarked)
                         .opacity(saveOpacity)
                     }
-                    .zIndex(2)
+                    .zIndex(.infinity)
                     
                     VStack(alignment: .leading){
                         HStack{
@@ -321,7 +333,44 @@ struct MagazineDetailView: View {
                     } label: {
                         Text("삭제")
                     }
+                    
+                    Button("인스타그램에 공유하기") {
+                        guard let instagramUrl = URL(string: "instagram-stories://share") else {return}
+                        
+                        guard let image = ImageRenderer(content: ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
+                           
+                                    KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
 
+                            
+                        }).uiImage else { return }
+                        
+                        guard let imageData = image.pngData() else { return }
+                        
+                        if UIApplication.shared.canOpenURL(instagramUrl) {
+                            let pasteboardItems: [String: Any] = [
+                                "com.instagram.sharedSticker.backgroundImage": imageData,
+                                "com.instagram.sharedSticker.backgroundTopColor" : "#636e72",
+                                "com.instagram.sharedSticker.backgroundBottomColor" : "#b2bec3"
+                            ]
+                            
+                            let pasteboardOptions = [
+                                UIPasteboard.OptionsKey.expirationDate : Date().addingTimeInterval(300)
+                            ]
+                            
+                            UIPasteboard.general.setItems([pasteboardItems], options: pasteboardOptions)
+                            UIApplication.shared.open(instagramUrl)
+                        }
+                        
+                        //                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                    }
+               
+
+                    ShareLink(item: photo,
+                              subject: Text("Flame Photo"),
+                              message: Text("Check it out!"),
+                              preview: SharePreview(photo.caption, image: photo.image))
                     
                 } label: {
                     Label("더보기", systemImage: "ellipsis")
@@ -370,7 +419,14 @@ struct MagazineDetailView: View {
     //            }
     //        }
 }
+struct SharingPhoto: Transferable {
+    static var transferRepresentation: some TransferRepresentation {
+        ProxyRepresentation(exporting: \.image)
+    }
 
+    public var image: Image
+    public var caption: String
+}
 
 
 //struct MagazineDetailView_Previews: PreviewProvider {

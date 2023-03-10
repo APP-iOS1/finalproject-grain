@@ -134,7 +134,7 @@ struct MagazineCommentView: View {
                                 
                                 VStack{
                                     if readMoreComments && eachBool[index]{
-                                        MagazineRecommentView(currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, commentText: $commentText)
+                                        MagazineRecommentView(userVM: userVM, currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, commentText: $commentText)
                                     }
                                 }
                             }

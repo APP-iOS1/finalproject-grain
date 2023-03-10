@@ -31,7 +31,7 @@
 		0C535C2D2977B68600E20BD9 /* EditorViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2C2977B68600E20BD9 /* EditorViewCell.swift */; };
 		0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */; };
 		0C70BCFB298CA692004A4DB0 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C70BCFA298CA692004A4DB0 /* EditorView.swift */; };
-          0CE63C9E29B21138009D8A2D /* BlinkingAnimatinoModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE63C9D29B21138009D8A2D /* BlinkingAnimatinoModifier.swift */; };
+		0CE63C9E29B21138009D8A2D /* BlinkingAnimatinoModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE63C9D29B21138009D8A2D /* BlinkingAnimatinoModifier.swift */; };
 		330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330B945B297A53C3007F5164 /* AddCommunityView.swift */; };
 		330B9460297A719C007F5164 /* CameraLenseFilmModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */; };
 		334699D32988AE26004153A6 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D22988AE26004153A6 /* MyPageView.swift */; };
@@ -41,7 +41,7 @@
 		334699DB2988DE51004153A6 /* StoredPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699DA2988DE51004153A6 /* StoredPostView.swift */; };
 		33728E802990920D00E8AB97 /* SelectPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33728E7F2990920D00E8AB97 /* SelectPostView.swift */; };
 		33CFBCA42993A14C00DD2707 /* HeartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CFBCA32993A14C00DD2707 /* HeartButton.swift */; };
-		5265C1181BDD56B8E8B1F897 /* Pods_Grain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */; };
+		5265C1181BDD56B8E8B1F897 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		8B0BA0A2298A4197000A7090 /* CameraModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0BA0A1298A4197000A7090 /* CameraModalView.swift */; };
 		8B0BA0A4298A4C15000A7090 /* ListTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0BA0A3298A4C15000A7090 /* ListTestView.swift */; };
 		8B10F42A298CD18F00582D27 /* MyPageView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B10F429298CD18F00582D27 /* MyPageView2.swift */; };
@@ -108,6 +108,9 @@
 		9962CDD5297A215900E834C3 /* MagazineFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD4297A215900E834C3 /* MagazineFeedView.swift */; };
 		9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDD6297A224700E834C3 /* MagazineViewCell.swift */; };
 		9970FC3629AF8FCF0002A370 /* EX+pinchAndPanGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9970FC3529AF8FCF0002A370 /* EX+pinchAndPanGesture.swift */; };
+		9970FC8E29BB1FC60002A370 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9970FC8D29BB1FC60002A370 /* Config.xcconfig */; };
+		9970FC9029BB20260002A370 /* GeocodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9970FC8F29BB20260002A370 /* GeocodeRouter.swift */; };
+		9970FC9229BB205E0002A370 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9970FC9129BB205E0002A370 /* GoogleService-Info.plist */; };
 		998847D22992171400004066 /* CommunitySearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D12992171400004066 /* CommunitySearchDetailView.swift */; };
 		998847D4299226AE00004066 /* MagazineSearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D3299226AE00004066 /* MagazineSearchResultView.swift */; };
 		998847D6299226CB00004066 /* MagazineSearchDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998847D5299226CB00004066 /* MagazineSearchDetailView.swift */; };
@@ -167,7 +170,6 @@
 		A7D9F31029897A8D00B39218 /* NaverAPIEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F30F29897A8D00B39218 /* NaverAPIEnum.swift */; };
 		A7D9F31229897C9000B39218 /* GeocodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F31129897C9000B39218 /* GeocodeService.swift */; };
 		A7D9F3162989840200B39218 /* NaverAPIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F3152989840200B39218 /* NaverAPIViewModel.swift */; };
-		A7D9F318298986B000B39218 /* GeocodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F317298986B000B39218 /* GeocodeRouter.swift */; };
 		A7E3DDE3298D3D5F004DA1F6 /* NearbyPostsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3DDE2298D3D5F004DA1F6 /* NearbyPostsComponent.swift */; };
 /* End PBXBuildFile section */
 
@@ -195,7 +197,7 @@
 		0C535C2C2977B68600E20BD9 /* EditorViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewCell.swift; sourceTree = "<group>"; };
 		0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineBestView.swift; sourceTree = "<group>"; };
 		0C70BCFA298CA692004A4DB0 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
-          0CE63C9D29B21138009D8A2D /* BlinkingAnimatinoModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkingAnimatinoModifier.swift; sourceTree = "<group>"; };
+		0CE63C9D29B21138009D8A2D /* BlinkingAnimatinoModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkingAnimatinoModifier.swift; sourceTree = "<group>"; };
 		330B945B297A53C3007F5164 /* AddCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommunityView.swift; sourceTree = "<group>"; };
 		330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraLenseFilmModalView.swift; sourceTree = "<group>"; };
 		334699D22988AE26004153A6 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
@@ -274,6 +276,9 @@
 		9962CDD4297A215900E834C3 /* MagazineFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineFeedView.swift; sourceTree = "<group>"; };
 		9962CDD6297A224700E834C3 /* MagazineViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineViewCell.swift; sourceTree = "<group>"; };
 		9970FC3529AF8FCF0002A370 /* EX+pinchAndPanGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+pinchAndPanGesture.swift"; sourceTree = "<group>"; };
+		9970FC8D29BB1FC60002A370 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		9970FC8F29BB20260002A370 /* GeocodeRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GeocodeRouter.swift; path = ../../../../../../../Downloads/GeocodeRouter.swift; sourceTree = "<group>"; };
+		9970FC9129BB205E0002A370 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		998847D12992171400004066 /* CommunitySearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySearchDetailView.swift; sourceTree = "<group>"; };
 		998847D3299226AE00004066 /* MagazineSearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchResultView.swift; sourceTree = "<group>"; };
 		998847D5299226CB00004066 /* MagazineSearchDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineSearchDetailView.swift; sourceTree = "<group>"; };
@@ -333,7 +338,6 @@
 		A7D9F30F29897A8D00B39218 /* NaverAPIEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverAPIEnum.swift; sourceTree = "<group>"; };
 		A7D9F31129897C9000B39218 /* GeocodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeService.swift; sourceTree = "<group>"; };
 		A7D9F3152989840200B39218 /* NaverAPIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverAPIViewModel.swift; sourceTree = "<group>"; };
-		A7D9F317298986B000B39218 /* GeocodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeRouter.swift; sourceTree = "<group>"; };
 		A7E3DDE2298D3D5F004DA1F6 /* NearbyPostsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyPostsComponent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -342,7 +346,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5265C1181BDD56B8E8B1F897 /* Pods_Grain.framework in Frameworks */,
+				5265C1181BDD56B8E8B1F897 /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,14 +436,6 @@
 			path = AddPost;
 			sourceTree = "<group>";
 		};
-		33FBFCE5803AD110CB6FC1B1 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				D1BE8DB7A02A9F4938D7CE04 /* Pods_Grain.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		99233D432977F25300A875B1 /* Community */ = {
 			isa = PBXGroup;
 			children = (
@@ -506,7 +502,7 @@
 				9958AF71297778D800A51DA9 /* Grain */,
 				9958AF70297778D800A51DA9 /* Products */,
 				F61456074BBE7B028FF22877 /* Pods */,
-				A73CD4A729B5C68F00CAC067 /* Recovered References */,
+				9970FC8C29BB1FA70002A370 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -524,7 +520,7 @@
 				995EBDCE29966F18002C1686 /* Grain.entitlements */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
 				9958AFB82977D56000A51DA9 /* Info.plist */,
-				063577A029AF102000503222 /* GoogleService-Info.plist */,
+				9970FC9129BB205E0002A370 /* GoogleService-Info.plist */,
 				9970FBC429ADC2E10002A370 /* Setting */,
 				9958AF812977793700A51DA9 /* Configuration */,
 				9958AF80297778FD00A51DA9 /* Sources */,
@@ -656,9 +652,16 @@
 		9970FBC429ADC2E10002A370 /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				A78C2AF429AF2B1800AC1492 /* Config.xcconfig */,
+				9970FC8D29BB1FC60002A370 /* Config.xcconfig */,
 			);
 			path = Setting;
+			sourceTree = "<group>";
+		};
+		9970FC8C29BB1FA70002A370 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		A75BB9932981533C004FE6FA /* MapCategory */ = {
@@ -725,6 +728,7 @@
 				0693B4C62992849600F9CDE2 /* Error.swift */,
 				A7AF1A0629956CDC007E6D43 /* CommentRouter.swift */,
 				A7193F9F29B716280049B1AA /* ReportMapRouter.swift */,
+				9970FC8F29BB20260002A370 /* GeocodeRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -748,8 +752,6 @@
 		F61456074BBE7B028FF22877 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				49C4255E9DC24D9E31001CF3 /* Pods-Grain.debug.xcconfig */,
-				E7BB04A94D47AE952B265746 /* Pods-Grain.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -814,9 +816,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9970FC8E29BB1FC60002A370 /* Config.xcconfig in Resources */,
 				9936E2B0299097F0006F3333 /* MainSearchView.swift in Resources */,
+				9970FC9229BB205E0002A370 /* GoogleService-Info.plist in Resources */,
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
-				A78C2AF529AF2B1800AC1492 /* Config.xcconfig in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -895,6 +898,7 @@
 				A7D9F3042989645D00B39218 /* MapService.swift in Sources */,
 				998847D4299226AE00004066 /* MagazineSearchResultView.swift in Sources */,
 				A7D957DB297AAFBD001D2401 /* MagazineService.swift in Sources */,
+				9970FC9029BB20260002A370 /* GeocodeRouter.swift in Sources */,
 				9970FC3629AF8FCF0002A370 /* EX+pinchAndPanGesture.swift in Sources */,
 				9962CDC92979246500E834C3 /* AllTabView.swift in Sources */,
 				8B0BA0A2298A4197000A7090 /* CameraModalView.swift in Sources */,
@@ -928,7 +932,6 @@
 				A7D9F2F62988FD4700B39218 /* StorageDTO.swift in Sources */,
 				A7D9F308298969FC00B39218 /* UserDTO.swift in Sources */,
 				9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */,
-				A7D9F318298986B000B39218 /* GeocodeRouter.swift in Sources */,
 				8B10F42A298CD18F00582D27 /* MyPageView2.swift in Sources */,
 				99233D462977F2C700A875B1 /* MapView.swift in Sources */,
 				0C70BCFB298CA692004A4DB0 /* EditorView.swift in Sources */,
@@ -1150,7 +1153,7 @@
 		};
 		9958AF7E297778D900A51DA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A78C2AF429AF2B1800AC1492 /* Config.xcconfig */;
+			baseConfigurationReference = 9970FC8D29BB1FC60002A370 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1187,7 +1190,7 @@
 		};
 		9958AF7F297778D900A51DA9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A78C2AF429AF2B1800AC1492 /* Config.xcconfig */;
+			baseConfigurationReference = 9970FC8D29BB1FC60002A370 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

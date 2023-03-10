@@ -32,12 +32,6 @@ struct CommunityDetailView: View {
     @State private var postStatusString : String = "" // 게시글 상태 변경 표시글
     @FocusState private var textFieldFocused: Bool
     
-    var user: UserDocument {
-        let user = userVM.users.filter {
-            $0.fields.id.stringValue == community.fields.userID.stringValue
-        }
-        return user[0]
-    }
     
     var body: some View {
         NavigationView {
@@ -64,6 +58,7 @@ struct CommunityDetailView: View {
                             } label: {
                                 ProfileImage(imageName: community.fields.profileImage.stringValue)
                             }
+                            
                             VStack(alignment: .leading) {
                                 Text(community.fields.nickName.stringValue)
                                     .font(.subheadline)

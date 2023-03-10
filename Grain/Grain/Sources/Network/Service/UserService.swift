@@ -51,8 +51,7 @@ enum UserService {
     }
     
     static func updateCurrentUserProfile(profileImage: [UIImage], nickName: String, introduce: String, docID: String) -> AnyPublisher<UserDocument, Error> {
-        print("updateCurrentUser Service Start")
-        
+      
         // UIImage -> URLString 으로 변환
         var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "param", fileName: "file", image: profileImage)
         
@@ -78,7 +77,6 @@ enum UserService {
     }
 
     static func updateCurrentUserArray(type: String, arr: [String], docID: String) -> AnyPublisher<UserDocument, Error>  {
-        print("updateCurrentUser Service Start")
         do {
             let request = try UserRouter.patchArr(type: type, arr: arr, docID: docID).asURLRequest()
             return URLSession
@@ -93,7 +91,7 @@ enum UserService {
     }
     
     static func updateCurrentUserString(type: String, string: String, docID: String) -> AnyPublisher<UserDocument, Error>  {
-        print("updateCurrentUser Service Start")
+
         do {
             let request = try UserRouter.patchString(type: type, string: string, docID: docID).asURLRequest()
             return URLSession

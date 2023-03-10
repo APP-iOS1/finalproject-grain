@@ -55,12 +55,14 @@ struct UserDetailView: View {
                             
                             if !isMyProfile {
                                 Button {
+                                    print("========버튼 눌림====================================")
                                     // userData update
                                     isFollowingUser.toggle()
                                     /// 희경:  userViewModel 에 메소드로 따로 빼주는게 보기 좋을듯.
                                     if isFollowingUser {
                                         // "구독중" 상태이고, 내 팔로잉 리스트에 없는 경우 => 구독
                                         if !userVM.following.contains(user.fields.id.stringValue) {
+                                            print("userVM.following: \(userVM.following)")
                                             if let currentUser = userVM.currentUsers {
                                                 
                                                 var currentUserFollowing: [String] = userVM.following
@@ -230,16 +232,14 @@ struct UserDetailView: View {
             self.magazines = magazineVM.filterUserMagazine(userID: user.fields.id.stringValue)
         })
         .onReceive(userVM.updateUsersArraySuccess, perform: { _ in
+            print("onReceive updateUsersArray")
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         })
         .onReceive(userVM.fetchCurrentUsersSuccess, perform: { _ in
             // 나의 following 리스트에 있는 사람인지 확인
-            print("userID: \(user.fields.id.stringValue)")
             if userVM.following.contains(user.fields.id.stringValue) {
-                print("구독중인 사람입니다")
                 isFollowingUser = true // 구독중
             } else {
-                print("구독하지 않은 사람입니다")
                 isFollowingUser = false // 구독
             }
             

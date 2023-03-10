@@ -26,15 +26,25 @@ struct MagazineDetailView: View {
                 VStack {
                     // MARK: 닉네임 헤더
                     HStack {
-                        ForEach(userVM.users.filter {
-                            $0.fields.id.stringValue == data.fields.userID.stringValue
-                        }, id: \.self){ item in
+                        // ForEach로 유저 필터링해서 넘기는 방식으로 유저 프로필뷰에 데이터 유저데이터 넘겨줬을때 유저 프로필에서 넘겨준 user 데이터가 업데이트가 안되는 이슈발생
+                        
+//                        ForEach(userVM.users.filter {
+//                            $0.fields.id.stringValue == data.fields.userID.stringValue
+//                        }, id: \.self){ item in
+//                            NavigationLink {
+//                                UserDetailView(user: item, userVM: userVM)
+//                            } label: {
+//                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue)
+//                            }
+//                        }
+                        
+                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue})
+                        {
                             NavigationLink {
-                                UserDetailView(user: item, userVM: userVM)
+                                UserDetailView(user: user, userVM: userVM)
                             } label: {
-                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue)
+                                MagazineProfileImage(imageName: user.fields.profileImage.stringValue)
                             }
-                            
                         }
                         
                         VStack(alignment: .leading){

@@ -69,6 +69,7 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CurrentUserResponse) in
+                print("UserViewModel fetchCurrentUser start ++ 실행완")
                 self.currentUsers = data.fields
                 if let currentUsers = self.currentUsers {
                     self.parsingUserDataToStringArr(currentUserData: currentUsers)
@@ -78,7 +79,6 @@ final class UserViewModel: ObservableObject {
     }
     
     func filterCurrentUsersFollow() {
-        print("followers: !!! \(follower)")
         self.followerList = users.filter {
             follower.contains($0.fields.id.stringValue)
         }
@@ -86,8 +86,6 @@ final class UserViewModel: ObservableObject {
         self.followingList = users.filter {
             following.contains($0.fields.id.stringValue)
         }
-        
-        print("FollowerList: \(followerList)")
         
     }
     
@@ -272,12 +270,10 @@ final class UserViewModel: ObservableObject {
     }
     
     func parsingUserDataToStringArr(currentUserData: CurrentUserFields) {
-        print("currentid: \(currentUserData.id.stringValue)")
         
         removeAll()
         
         for i in currentUserData.likedMagazineID.arrayValue.values {
-            print("likedMagazineID: \(i.stringValue)")
             self.likedMagazineID.append(i.stringValue)
         }
         for i in currentUserData.myLens.arrayValue.values {
@@ -308,7 +304,6 @@ final class UserViewModel: ObservableObject {
             self.following.append(i.stringValue)
         }
         
-        print("bookmarkedMagazineID: \(self.bookmarkedMagazineID)")
     }
     
     func parsingFollowerDataToStringArr(data: UserDocument) -> [String] {

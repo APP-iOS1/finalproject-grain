@@ -10,6 +10,7 @@ import SwiftUI
 struct ClassTabView: View {
     
     var community: [CommunityDocument]
+    @Binding var isLoading: Bool
     @StateObject var communityVM: CommunityViewModel
     var body: some View {
                     VStack {
@@ -18,7 +19,7 @@ struct ClassTabView: View {
                         NavigationLink {
                             CommunityDetailView(community: data)
                         } label: {
-                            CommunityRowView(community: data)
+                            CommunityRowView(community: data, isLoading: $isLoading)
                         }
                     }
                 }

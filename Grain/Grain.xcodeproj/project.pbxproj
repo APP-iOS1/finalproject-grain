@@ -33,6 +33,7 @@
 		0C535C2D2977B68600E20BD9 /* EditorViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2C2977B68600E20BD9 /* EditorViewCell.swift */; };
 		0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */; };
 		0C70BCFB298CA692004A4DB0 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C70BCFA298CA692004A4DB0 /* EditorView.swift */; };
+          0CE63C9E29B21138009D8A2D /* BlinkingAnimatinoModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE63C9D29B21138009D8A2D /* BlinkingAnimatinoModifier.swift */; };
 		330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330B945B297A53C3007F5164 /* AddCommunityView.swift */; };
 		330B9460297A719C007F5164 /* CameraLenseFilmModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */; };
 		334699D32988AE26004153A6 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 334699D22988AE26004153A6 /* MyPageView.swift */; };
@@ -125,8 +126,14 @@
 		99B21EC329938CD7006933BB /* MagazineCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B21EC229938CD7006933BB /* MagazineCommentView.swift */; };
 		99B21EC529940AF5006933BB /* MainRecentSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B21EC429940AF5006933BB /* MainRecentSearchView.swift */; };
 		A71516BA29926233009A0780 /* MagazineEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71516B929926233009A0780 /* MagazineEditView.swift */; };
+		A7193F9829B712F70049B1AA /* ReportMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7193F9729B712F70049B1AA /* ReportMapViewModel.swift */; };
+		A7193F9A29B714010049B1AA /* ReportMapDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7193F9929B714010049B1AA /* ReportMapDTO.swift */; };
+		A7193F9C29B715830049B1AA /* ReportMapQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7193F9B29B715830049B1AA /* ReportMapQuery.swift */; };
+		A7193F9E29B715F90049B1AA /* ReportMapService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7193F9D29B715F90049B1AA /* ReportMapService.swift */; };
+		A7193FA029B716280049B1AA /* ReportMapRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7193F9F29B716280049B1AA /* ReportMapRouter.swift */; };
 		A7332EFC298BE726001AE5B0 /* CurrentUserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */; };
 		A739C63D2982EAFE0093D71C /* AddMarkerMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */; };
+		A73CD4A929B5DB2800CAC067 /* ReportMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73CD4A829B5DB2800CAC067 /* ReportMapView.swift */; };
 		A75BB989297E6364004FE6FA /* PhotoSpotDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB988297E6364004FE6FA /* PhotoSpotDetailView.swift */; };
 		A75BB990297EA25C004FE6FA /* WebkitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB98F297EA25C004FE6FA /* WebkitView.swift */; };
 		A75BB99529815361004FE6FA /* PhotoSpotMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB99429815361004FE6FA /* PhotoSpotMapView.swift */; };
@@ -197,6 +204,7 @@
 		0C535C2C2977B68600E20BD9 /* EditorViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewCell.swift; sourceTree = "<group>"; };
 		0C535C2E2977B90700E20BD9 /* MagazineBestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineBestView.swift; sourceTree = "<group>"; };
 		0C70BCFA298CA692004A4DB0 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+          0CE63C9D29B21138009D8A2D /* BlinkingAnimatinoModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlinkingAnimatinoModifier.swift; sourceTree = "<group>"; };
 		330B945B297A53C3007F5164 /* AddCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommunityView.swift; sourceTree = "<group>"; };
 		330B945F297A719C007F5164 /* CameraLenseFilmModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraLenseFilmModalView.swift; sourceTree = "<group>"; };
 		334699D22988AE26004153A6 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
@@ -292,8 +300,14 @@
 		99B21EC229938CD7006933BB /* MagazineCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineCommentView.swift; sourceTree = "<group>"; };
 		99B21EC429940AF5006933BB /* MainRecentSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRecentSearchView.swift; sourceTree = "<group>"; };
 		A71516B929926233009A0780 /* MagazineEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineEditView.swift; sourceTree = "<group>"; };
+		A7193F9729B712F70049B1AA /* ReportMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapViewModel.swift; sourceTree = "<group>"; };
+		A7193F9929B714010049B1AA /* ReportMapDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapDTO.swift; sourceTree = "<group>"; };
+		A7193F9B29B715830049B1AA /* ReportMapQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapQuery.swift; sourceTree = "<group>"; };
+		A7193F9D29B715F90049B1AA /* ReportMapService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapService.swift; sourceTree = "<group>"; };
+		A7193F9F29B716280049B1AA /* ReportMapRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapRouter.swift; sourceTree = "<group>"; };
 		A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserDTO.swift; sourceTree = "<group>"; };
 		A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMarkerMapView.swift; sourceTree = "<group>"; };
+		A73CD4A829B5DB2800CAC067 /* ReportMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapView.swift; sourceTree = "<group>"; };
 		A75BB988297E6364004FE6FA /* PhotoSpotDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSpotDetailView.swift; sourceTree = "<group>"; };
 		A75BB98F297EA25C004FE6FA /* WebkitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebkitView.swift; sourceTree = "<group>"; };
 		A75BB99429815361004FE6FA /* PhotoSpotMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSpotMapView.swift; sourceTree = "<group>"; };
@@ -362,6 +376,7 @@
 				06F0D82F297EB3FD00E7B885 /* UserViewModel.swift */,
 				A7D9F3152989840200B39218 /* NaverAPIViewModel.swift */,
 				A7AF1A0A2995E78A007E6D43 /* CommentViewModel.swift */,
+				A7193F9729B712F70049B1AA /* ReportMapViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -462,6 +477,7 @@
 				0C0A21C629995B240018F2D1 /* CommunityEditView.swift */,
 				0C0A21C8299BE91A0018F2D1 /* CommunityCommentView.swift */,
 				0C0A21CC299CA25D0018F2D1 /* txtediton.swift */,
+				0CE63C9D29B21138009D8A2D /* BlinkingAnimatinoModifier.swift */,
 			);
 			path = Community;
 			sourceTree = "<group>";
@@ -471,6 +487,7 @@
 			children = (
 				A75BB9932981533C004FE6FA /* MapCategory */,
 				99233D452977F2C700A875B1 /* MapView.swift */,
+				A73CD4A829B5DB2800CAC067 /* ReportMapView.swift */,
 				A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */,
 				99233D472977F2F900A875B1 /* LocationManager.swift */,
 				99233D492977F31B00A875B1 /* MapCategoryCellView.swift */,
@@ -507,6 +524,7 @@
 				9958AF71297778D800A51DA9 /* Grain */,
 				9958AF70297778D800A51DA9 /* Products */,
 				F61456074BBE7B028FF22877 /* Pods */,
+				A73CD4A729B5C68F00CAC067 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -695,6 +713,7 @@
 				A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */,
 				A7D9F30F29897A8D00B39218 /* NaverAPIEnum.swift */,
 				A7AF1A02299566EF007E6D43 /* CommentDTO.swift */,
+				A7193F9929B714010049B1AA /* ReportMapDTO.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";
@@ -707,6 +726,7 @@
 				A7D9F3012989638900B39218 /* MapQuery.swift */,
 				A7D9F30929896A4B00B39218 /* UserQuery.swift */,
 				A7AF1A0429956A12007E6D43 /* CommentQuery.swift */,
+				A7193F9B29B715830049B1AA /* ReportMapQuery.swift */,
 			);
 			path = Query;
 			sourceTree = "<group>";
@@ -723,6 +743,7 @@
 				A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */,
 				0693B4C62992849600F9CDE2 /* Error.swift */,
 				A7AF1A0629956CDC007E6D43 /* CommentRouter.swift */,
+				A7193F9F29B716280049B1AA /* ReportMapRouter.swift */,
 			);
 			path = Router;
 			sourceTree = "<group>";
@@ -738,6 +759,7 @@
 				A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */,
 				A7D9F31129897C9000B39218 /* GeocodeService.swift */,
 				A7AF1A082995DBCD007E6D43 /* CommentService.swift */,
+				A7193F9D29B715F90049B1AA /* ReportMapService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -811,11 +833,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BC6C43829ADCF180067BC6F /* GoogleService-Info.plist in Resources */,
 				9936E2B0299097F0006F3333 /* MainSearchView.swift in Resources */,
-				8BC6C43629ADCF060067BC6F /* Config.xcconfig in Resources */,
-				9970FBC629ADC30E0002A370 /* (null) in Resources */,
-				9970FBC829ADC4E30002A370 /* GoogleService-Info.plist in Resources */,
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
 				A78C2AF529AF2B1800AC1492 /* Config.xcconfig in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
@@ -880,6 +898,7 @@
 				9955E113297A52E200265D14 /* MagazineAddView.swift in Sources */,
 				9958AF9F29777F5100A51DA9 /* PlaceStore.swift in Sources */,
 				A7AF1A0B2995E78A007E6D43 /* CommentViewModel.swift in Sources */,
+				A7193FA029B716280049B1AA /* ReportMapRouter.swift in Sources */,
 				A7D9F300298962B900B39218 /* MapDTO.swift in Sources */,
 				9955E117297A6D5900265D14 /* MagazineContentAddView.swift in Sources */,
 				8BA44F842999EF9500B8928C /* GridToScrollTest.swift in Sources */,
@@ -911,6 +930,7 @@
 				99233D4E2977F36000A875B1 /* Map.swift in Sources */,
 				A7E3DDE3298D3D5F004DA1F6 /* NearbyPostsComponent.swift in Sources */,
 				8B10F42E2990C3F100582D27 /* BookmarkedMagazine.swift in Sources */,
+				0CE63C9E29B21138009D8A2D /* BlinkingAnimatinoModifier.swift in Sources */,
 				A7D9F3162989840200B39218 /* NaverAPIViewModel.swift in Sources */,
 				9958AF8F29777D3F00A51DA9 /* Magazine.swift in Sources */,
 				A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */,
@@ -924,6 +944,7 @@
 				9958AFA529777FAF00A51DA9 /* ReCommentStore.swift in Sources */,
 				06FD6AB32977AECE00B4A859 /* CommunityView.swift in Sources */,
 				9955E115297A538900265D14 /* MagazineDetailView.swift in Sources */,
+				A7193F9E29B715F90049B1AA /* ReportMapService.swift in Sources */,
 				A7D9F2F62988FD4700B39218 /* StorageDTO.swift in Sources */,
 				A7D9F308298969FC00B39218 /* UserDTO.swift in Sources */,
 				9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */,
@@ -940,6 +961,7 @@
 				8BC6C43C29ADDDBB0067BC6F /* FollowingFollowerView.swift in Sources */,
 				A7D957D1297AA646001D2401 /* CommunityQuery.swift in Sources */,
 				9962CDCB297924A000E834C3 /* MatchingTabView.swift in Sources */,
+				A7193F9A29B714010049B1AA /* ReportMapDTO.swift in Sources */,
 				330B945C297A53C3007F5164 /* AddCommunityView.swift in Sources */,
 				A75BB99929815391004FE6FA /* RepairShopMapView.swift in Sources */,
 				A7AF1A0729956CDC007E6D43 /* CommentRouter.swift in Sources */,
@@ -987,6 +1009,8 @@
 				A7332EFC298BE726001AE5B0 /* CurrentUserDTO.swift in Sources */,
 				9958AFA82977804700A51DA9 /* BtnModifier.swift in Sources */,
 				8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */,
+				A73CD4A929B5DB2800CAC067 /* ReportMapView.swift in Sources */,
+				A7193F9829B712F70049B1AA /* ReportMapViewModel.swift in Sources */,
 				06F0D82A297EB3DC00E7B885 /* CommunityViewModel.swift in Sources */,
 				33CFBCA42993A14C00DD2707 /* HeartButton.swift in Sources */,
 				9936E2B529915B04006F3333 /* Ex+EmptyPlaceholder.swift in Sources */,
@@ -1020,6 +1044,7 @@
 				A7A1AA3A29B092F200B2D70B /* MagazineRecommentView.swift in Sources */,
 				A75BB990297EA25C004FE6FA /* WebkitView.swift in Sources */,
 				0C535C2F2977B90700E20BD9 /* MagazineBestView.swift in Sources */,
+				A7193F9C29B715830049B1AA /* ReportMapQuery.swift in Sources */,
 				99233D482977F2F900A875B1 /* LocationManager.swift in Sources */,
 				A7D9F30A29896A4B00B39218 /* UserQuery.swift in Sources */,
 				9936E2AE298CD003006F3333 /* CommunitySearchResultView.swift in Sources */,

@@ -14,7 +14,7 @@ enum CommentService {
     
     // MARK: - 댓글 데이터 가져오기
     static func getComment(collectionName: String, collectionDocId: String) -> AnyPublisher<CommentResponse, Error> {
-        print("FirebaseService getComment start")
+        
         do {
             let request = try CommentRouter.get(collectionName: collectionName, collectionDocId: collectionDocId).asURLRequest()
             return URLSession
@@ -30,7 +30,7 @@ enum CommentService {
     
     // MARK: - 댓글 데이터 넣기
     static func insertComment(collectionName: String, collectionDocId: String, data: CommentFields) -> AnyPublisher<CommentDocument, Error> {
-        print("FirebaseService insertComment start")
+       
         
         /// Comment 아래 문서 ID와 필드 안에 있는 id 값이 같아 data.id를 뽑아서 docID로 만들어줌
         let docID: String = data.id.stringValue
@@ -53,7 +53,7 @@ enum CommentService {
     }
     // MARK: - 댓글 데이터 업데이트
     static func updateComment(collectionName: String,collectionDocId: String, docID: String, updateComment: String, data: CommentFields ) -> AnyPublisher<CommentDocument, Error> {
-        print("FirebaseService updateComment start")
+        
         
         do {
             // FIXME: - 검증 필요
@@ -133,8 +133,7 @@ enum CommentService {
             // FIXME: - 검증 필요
             let docID: String = docID
             let request = try CommentRouter.reCommentPatch(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, docID: docID, updateComment: updateComment, data: data).asURLRequest()
-            print("없뎃")
-            print(request)
+            
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

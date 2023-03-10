@@ -30,7 +30,6 @@ struct PinchZoomContext<Content: View>: View {
     let backgroundColor: Color
     
     var body: some View{
-        
         ZStack{
             if scale > 0 {
                 backgroundColor.ignoresSafeArea()
@@ -56,7 +55,7 @@ struct PinchZoomContext<Content: View>: View {
                     .zIndex((scale != 0 || offset != .zero) ? 1000: 0)
                     .onChange(of: scale) { newValue in
                         
-                        isZooming = (scale != 0 && offset != .zero)
+                        isZooming = (scale != 0 || offset != .zero)
                         if scale == -1 {
                             // 애니메이션을 자연스럽게 적용하기 위한 부분
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
@@ -132,7 +131,7 @@ struct ZoomGesture: UIViewRepresentable {
             
             // 최소 scale 은 1
             if (sender.state == .began || sender.state == .changed) && parent.scale > 0 {
-                
+               
                 if let view = sender.view{
                     
                     // 드레그 제스처에 따른 offset 변화값

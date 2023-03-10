@@ -35,6 +35,7 @@ struct AddCommunityView: View {
     @State private var selectedImages: [UIImage] = []
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     @State private var isShowingAlert = false
+    @State private var pickImageCount : Int = 0
     
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     
@@ -54,11 +55,11 @@ struct AddCommunityView: View {
                                 .overlay {
                                     VStack {
                                         Spacer()
-                                        Image(systemName: "plus.circle.fill")
+                                        Image(systemName: "camera.fill")
                                             .font(.title3)
                                             .foregroundColor(.black)
                                         Spacer()
-                                        Text("사진추가")
+                                        Text("\(pickImageCount)/5")
                                             .font(.headline)
                                             .foregroundColor(.black)
                                         Spacer()
@@ -75,6 +76,7 @@ struct AddCommunityView: View {
                                 /// 이미지 선택 버튼 우측으로 이미지 정렬
                                 if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
                                     selectedImages.append(uiImage)
+                                    pickImageCount = selectedImages.count
                                 }
                             }
                         }
@@ -83,10 +85,53 @@ struct AddCommunityView: View {
                     ScrollView(.horizontal) {
                         HStack {
                             // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
-                            ForEach(selectedImages, id: \.self) { img in
-                                Image(uiImage: img)
-                                    .resizable()
-                                    .frame(width: 100, height: 100)
+                            ForEach(selectedImages.indices, id: \.self) { index in
+                                GeometryReader { geometry in
+                                    
+                                    Rectangle()
+                                        .fill(.white)
+                                        .frame(width: 100, height: 100)
+                                        .overlay {
+                                            if index == 0 {
+                                                Image(uiImage: selectedImages[index])
+                                                    .resizable()
+                                                    .cornerRadius(15)
+                                                    
+                                                Rectangle()
+                                                    .overlay {
+                                                        Text("대표 사진")
+                                                            .font(.caption)
+                                                            .fontWeight(.bold)
+                                                            .foregroundColor(.white)
+                                                    }
+                                                    .frame(height: geometry.size.width/4)
+                                                    .position(CGPoint(x: geometry.size.width/2, y: geometry.size.height-13))
+                                                    .cornerRadius(15)
+                                                Image(systemName: "x.circle.fill")
+                                                    .position(CGPoint(x: geometry.size.width-2, y: 8))
+                                                    .onTapGesture {
+                                                        selectedImages.remove(at: index)
+                                                        pickImageCount = selectedImages.count
+                                                    }
+                                            }
+                                            else{
+                                                Image(uiImage: selectedImages[index])
+                                                    .resizable()
+                                                    .cornerRadius(15)
+                                                    .onAppear{
+                                                        print("Upper right coordinates: (\(geometry.size.width), 0)")
+                                                    }
+                                                Image(systemName: "x.circle.fill")
+                                                    .position(CGPoint(x: geometry.size.width-2, y: 8))
+                                                    .onTapGesture {
+                                                        selectedImages.remove(at: index)
+                                                        pickImageCount = selectedImages.count
+                                                    }
+                                            }
+
+                                        }
+                                }.frame(width: 100, height: 100)
+                               
                             }
                         }
                     }

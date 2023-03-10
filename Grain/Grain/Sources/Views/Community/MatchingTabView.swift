@@ -10,6 +10,7 @@ import SwiftUI
 struct MatchingTabView: View {
     
     var community: [CommunityDocument]
+    @Binding var isLoading: Bool
     @StateObject var communityVM: CommunityViewModel
     var body: some View {
        
@@ -20,7 +21,7 @@ struct MatchingTabView: View {
                             
                             CommunityDetailView(community: data)
                         } label: {
-                            CommunityRowView(community: data)
+                            CommunityRowView(community: data, isLoading: $isLoading)
                         }
                     }
                 }

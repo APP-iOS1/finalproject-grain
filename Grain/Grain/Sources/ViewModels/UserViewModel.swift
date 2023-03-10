@@ -303,7 +303,6 @@ final class UserViewModel: ObservableObject {
         for i in currentUserData.following.arrayValue.values {
             self.following.append(i.stringValue)
         }
-        
     }
     
     func parsingFollowerDataToStringArr(data: UserDocument) -> [String] {

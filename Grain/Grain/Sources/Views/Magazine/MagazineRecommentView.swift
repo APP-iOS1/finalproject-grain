@@ -20,7 +20,6 @@ struct MagazineRecommentView: View {
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
-
     @Binding var commentText: String // 답글 입력 텍스트 필드 값
     
     var body: some View {

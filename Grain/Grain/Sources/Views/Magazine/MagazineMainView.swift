@@ -58,6 +58,9 @@ struct MagazineMainView: View {
             .navigationDestination(isPresented: $isSearchViewShown) {
                 MainSearchView()
             }
+            .refreshable {
+                magazineVM.fetchMagazine()
+            }
         }
         .onAppear {
             self.isSearchViewShown = false

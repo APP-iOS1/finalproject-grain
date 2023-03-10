@@ -44,8 +44,10 @@ struct CommunityRowView: View {
             return "616161"
         }
     }
-    
     var community: CommunityDocument
+    @State var opacity : Double = 0.8
+    
+    @Binding var isLoading: Bool
     var body: some View {
         VStack(alignment: .leading){
             HStack{
@@ -54,6 +56,7 @@ struct CommunityRowView: View {
                     .scaledToFill()
                     .frame(width: Screen.maxWidth*0.27, height: Screen.maxWidth*0.27)
                     .clipped()
+                    .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                     .padding(.horizontal, 13)
                     //.padding(.top, 5)
                 
@@ -70,8 +73,9 @@ struct CommunityRowView: View {
                                         .bold()
                                         .font(.caption)
                                 }
-                                
+                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                                 .padding(.leading, -3)
+                                
                             RoundedRectangle(cornerRadius: 20)
                                 .frame(width: 45, height: 25)
                                 .foregroundColor(Color(hex: tagColor))
@@ -81,6 +85,7 @@ struct CommunityRowView: View {
                                         .bold()
                                         .font(.caption)
                                 }
+                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                                 .padding(.leading, 3)
                         } // hstack
                         .padding(.top, 4)
@@ -92,10 +97,13 @@ struct CommunityRowView: View {
                         Text("\(community.fields.title.stringValue)")
                             .font(.callout)
                             .foregroundColor(.black)
+                        
                             .multilineTextAlignment(.leading)
+                            .padding(.top, -2)
+                            .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                             .lineLimit(2)
                             .frame(height: 45)
-                            .padding(.top, -2)
+                            
                             
     //                        .padding(.bottom, 3)
                         
@@ -104,9 +112,12 @@ struct CommunityRowView: View {
                         HStack {
                             // String.toDate(community.createTime)
                             Text(community.createdDate?.renderTime() ?? "")
+                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                             Spacer()
                             Image(systemName: "text.bubble")
+                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                             Text("\(commentVm.comment.count)")
+                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                                     .padding(.leading, -5)
                         }
                         .padding(.bottom, 4)
@@ -127,10 +138,25 @@ struct CommunityRowView: View {
         .onAppear{
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
-            
         }
+        .onAppear(perform: {
+            if isLoading == true {
+                withAnimation(.linear(duration: 1.5).repeatForever(autoreverses: true)) {
+                    self.opacity = opacity == 0.4 ? 0.8 : 0.4
+                }
+            }
+        })
+        .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.17)
     }
 }
+
+//extension CommunityRowView {
+//    fileprivate var loadingView : some View {
+//        Color.black.opacity(0.8).edgesIgnoringSafeArea(.all)
+//            .overlay(ProgressView().tint(.white))
+//    }
+//}
+
 
 //struct CommunityRowView_Previews: PreviewProvider {
 //    static var previews: some View {

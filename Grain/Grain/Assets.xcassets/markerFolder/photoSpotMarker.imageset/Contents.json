@@ -6,12 +6,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "photoSpotMarker2x.png",
+      "filename" : "photoSpotMarker2X.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "photoSpotMarker3x.png",
+      "filename" : "photoSpotMarker3X.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

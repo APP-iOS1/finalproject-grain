@@ -17,7 +17,10 @@ struct SelectPostView: View {
     @Binding var presented : Bool
     @StateObject var communityVM: CommunityViewModel
     @State var updateNumber : NMGLatLng
-    //@Binding var modalSize: CGFloat
+    
+    var userLatitude : Double
+    var userLongitude : Double
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -29,7 +32,7 @@ struct SelectPostView: View {
                                              
                 //MARK: 매거진 작성 네비게이션 링크
                 NavigationLink {
-                    MagazineContentAddView(presented: $presented, updateNumber: updateNumber)
+                    MagazineContentAddView(presented: $presented, updateNumber: updateNumber, userLatitude: userLatitude , userLongitude: userLongitude)
                         .navigationBarBackButtonHidden(true)
                 } label: {
                     VStack {

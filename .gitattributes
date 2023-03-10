@@ -1,2 +1,2 @@
-*.pbxproj binary merge = union
-*.swift   text diff = swift
+*.pbxproj binary merge=union
+*.swift   text diff=swift

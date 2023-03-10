@@ -45,8 +45,7 @@ final class UserViewModel: ObservableObject {
     @Published var followingList = [UserDocument]()
     
     var fetchUsersSuccess = PassthroughSubject<[UserDocument], Never>()
-    var fetchCurrentUsersSuccess = PassthroughSubject<(), Never>()
-    var fetchUserProfileSuccess = PassthroughSubject<(), Never>()
+    var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
     var updateUsersArraySuccess = PassthroughSubject<(), Never>()
     var updateUsersStringSuccess = PassthroughSubject<(), Never>()
@@ -59,6 +58,7 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
+                print("UserViewModel fetchUser start ++ 실행완")
                 self.users = data.documents
                 self.fetchUsersSuccess.send(data.documents)
             }.store(in: &subscription)
@@ -69,27 +69,16 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CurrentUserResponse) in
+                print("UserViewModel fetchCurrentUser start ++ 실행완")
                 self.currentUsers = data.fields
                 if let currentUsers = self.currentUsers {
                     self.parsingUserDataToStringArr(currentUserData: currentUsers)
-                    self.fetchCurrentUsersSuccess.send()
+                    self.fetchCurrentUsersSuccess.send(data.fields)
                 }
             }.store(in: &subscription)
     }
     
-    func fetchUserProfile(userID: String) {
-        print("FetchUserProfile Service start ")
-        UserService.getCurrentUser(userID: userID)
-            .receive(on: DispatchQueue.main)
-            .sink { (completion: Subscribers.Completion<Error>) in
-            } receiveValue: { (data: CurrentUserResponse) in
-                self.user = data.fields
-                print("fetchUserProfile~~~~ \(self.user)")
-            }.store(in: &subscription)
-    }
-    
     func filterCurrentUsersFollow() {
-        print("followers: !!! \(follower)")
         self.followerList = users.filter {
             follower.contains($0.fields.id.stringValue)
         }
@@ -98,9 +87,36 @@ final class UserViewModel: ObservableObject {
             following.contains($0.fields.id.stringValue)
         }
         
-        print("FollowerList: \(followerList)")
-        
     }
+    
+    func filterUserFollow(user: UserDocument) -> [UserDocument] {
+        var followerID: [String] = []
+        
+        for i in user.fields.follower.arrayValue.values {
+            followerID.append(i.stringValue)
+        }
+        
+        let follower = users.filter {
+            followerID.contains($0.fields.id.stringValue)
+        }
+        
+        return follower
+    }
+    
+    func filterUserFollowing(user: UserDocument) -> [UserDocument] {
+        var followingID: [String] = []
+        
+        for i in user.fields.following.arrayValue.values {
+            followingID.append(i.stringValue)
+        }
+        
+        let following = users.filter {
+            followingID.contains($0.fields.id.stringValue)
+        }
+        
+        return following
+    }
+    
    
     //MARK: - 구독한 사람들의 메거진만 필터링해서 리턴해주는 메서드(홈뷰 구독탭에서 가져다 쓰시면 됩니다. ^^ 갖다쓰기만해 ~ )
     /// 홈뷰에서 fetch 한 모든 게시물 데이터 MagazineVM.magazines 넘겨서 호출해주면 됩니다.
@@ -155,6 +171,8 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
+                print("updateCurrentUserArray start ***")
+                self.fetchUser()
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)
     }
@@ -252,7 +270,6 @@ final class UserViewModel: ObservableObject {
     }
     
     func parsingUserDataToStringArr(currentUserData: CurrentUserFields) {
-        print("currentid: \(currentUserData.id.stringValue)")
         
         removeAll()
         
@@ -295,15 +312,6 @@ final class UserViewModel: ObservableObject {
         }
         
         return follower
-    }
-    
-    func parsingDataToStringArr(data: CurrentUserFields) -> [String] {
-        var strArr = [String]()
-        for i in data.follower.arrayValue.values {
-            strArr.append(i.stringValue)
-        }
-        
-        return strArr
     }
     
 }

@@ -9,6 +9,8 @@ import SwiftUI
 
 //MARK: 입력된 댓글 레이아웃
 struct CommentView: View {
+    let userVM: UserViewModel
+    
     var comment: CommentFields
     var commentTime : String        //시간 값 넘어오는 것
     var commentText: String
@@ -20,15 +22,23 @@ struct CommentView: View {
             
             HStack() {
                 
-                ProfileImage(imageName: comment.profileImage.stringValue)
+                VStack{
+                    if let user = userVM.users.first(where: { $0.fields.id.stringValue == comment.userID.stringValue})
+                    {
+                        NavigationLink {
+                            UserDetailView(user: user, userVM: userVM)
+                        } label: {
+                            ProfileImage(imageName: comment.profileImage.stringValue)
+                        }
+                    }
+                }
+                .frame(width: Screen.maxWidth * 0.1)
                 
                 VStack(alignment: .leading) {
                     HStack{
                         Text("\(comment.nickName.stringValue)")
                             .font(.footnote)
                             .fontWeight(.bold)
-                        //                        .bold()
-                        //                        .padding(.bottom, 1)
                         HStack{
                             Text("・")
                                 .padding(.trailing, -5)

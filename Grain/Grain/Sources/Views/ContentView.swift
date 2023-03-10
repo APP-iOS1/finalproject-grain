@@ -29,6 +29,18 @@ struct ContentView: View {
     
     @State var modalSize = Screen.maxHeight * 0.25
     @StateObject var userVM = UserViewModel()
+    
+
+    @SceneStorage("isZooming") var isZooming: Bool = false
+
+    @StateObject var locationManager = LocationManager()
+    var userLatitude: Double {
+        return locationManager.lastLocation?.coordinate.latitude ?? 37.5701759
+    }
+    var userLongitude: Double {
+        return locationManager.lastLocation?.coordinate.longitude ?? 126.9835183
+    }
+
     var body: some View {
         VStack{
             switch authenticationStore.authenticationState {
@@ -50,7 +62,7 @@ struct ContentView: View {
                                 VStack {
                                     SelectPostView(presented: $presented,
                                                    communityVM: communityVM,
-                                                   updateNumber: updateNumber)
+                                                   updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
                                 }
                             }
                         
@@ -69,8 +81,7 @@ struct ContentView: View {
                             }
                         case 3:
                             NavigationStack {
-                                MapView(
-                                        clikedMagazineData: clikedMagazineData)
+                                MapView(clikedMagazineData: clikedMagazineData, userLatitude: userLatitude, userLongitude: userLongitude)
                             }
                         case 4:
                             NavigationStack {
@@ -81,45 +92,50 @@ struct ContentView: View {
                                 VStack {
                                     SelectPostView(presented: $presented,
                                                    communityVM: communityVM,
-                                                   updateNumber: updateNumber)
+                                                   updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
                                 }
                             }
                         }
                         Spacer()
                     }
-                    
-                    HStack {
-                        ForEach(0..<5, id: \.self) { number in
-                            Button {
-                                if number == 2 {
-                                    presented.toggle()
-                                } else {
-                                    self.selectedIndex = number
-                                }
-                            } label: {
-                                if number == 2 {
-                                    Image(systemName: icons[number])
-                                        .font(.title2)
-                                        .foregroundColor(.white)
-                                        .frame(width: 60, height: 60)
-                                        .background(.black)
-                                        .cornerRadius(30)
-                                }
-                                else {
-                                    VStack{
+                    if isZooming == false {
+                        
+                        HStack {
+                            ForEach(0..<5, id: \.self) { number in
+                                Button {
+                                    if number == 2 {
+                                        presented.toggle()
+                                    } else {
+                                        self.selectedIndex = number
+                                    }
+                                } label: {
+                                    if number == 2 {
                                         Image(systemName: icons[number])
                                             .font(.title2)
-                                            .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
-                                        Text(labels[number])
-                                            .font(.caption)
-                                            .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                            .foregroundColor(.white)
+                                            .frame(width: 60, height: 60)
+                                            .background(.black)
+                                            .cornerRadius(30)
                                     }
-                                    .frame(width: 67, height: 60)
+                                    else {
+                                        VStack{
+                                            Image(systemName: icons[number])
+                                                .font(.title2)
+                                                .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                            Text(labels[number])
+                                                .font(.caption)
+                                                .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                        }
+                                        .frame(width: 67, height: 60)
+                                    }
                                 }
                             }
                         }
+                        
+                        .transition(.move(edge: .bottom))
                     }
                 }
+                .animation(.default , value: isZooming)
             }
         }
         .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음

@@ -32,6 +32,7 @@ struct CommunityDetailView: View {
     @State private var postStatusString : String = "" // 게시글 상태 변경 표시글
     @FocusState private var textFieldFocused: Bool
     
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -48,7 +49,16 @@ struct CommunityDetailView: View {
                         .padding(.top, 5)
                         // MARK: 닉네임 헤더
                         HStack {
-                            ProfileImage(imageName: community.fields.profileImage.stringValue)
+                            // item = userData
+                            NavigationLink {
+                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue
+                                }) {
+                                    UserDetailView(user: user, userVM: userVM)
+                                }
+                            } label: {
+                                ProfileImage(imageName: community.fields.profileImage.stringValue)
+                            }
+                            
                             VStack(alignment: .leading) {
                                 Text(community.fields.nickName.stringValue)
                                     .font(.subheadline)
@@ -101,7 +111,7 @@ struct CommunityDetailView: View {
                         VStack(alignment: .leading ){
                             ForEach(commentVm.sortedRecentComment ,id: \.self){ item in
                                 // FIXME: Comment 어디서 만든건지 찾아야함
-                                CommentView(comment: item.fields, commentTime: item.updateTime, commentText: commentText, collectionDocId: community.fields.id.stringValue)
+                                CommentView(userVM: userVM, comment: item.fields, commentTime: item.updateTime, commentText: commentText, collectionDocId: community.fields.id.stringValue)
                                 Divider()
                             }
                         }
@@ -203,6 +213,7 @@ struct CommunityDetailView: View {
         }
         .onAppear{
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            userVM.fetchUser()
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
             communityVM.fetchCommunity()

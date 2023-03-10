@@ -50,15 +50,15 @@ struct CommunityView: View {
                 
                 switch(selectedIndex) {
                 case 0:
-                    AllTabView(community: communityVM.sortedRecentCommunityData, communityVM: communityVM)
+                    AllTabView(community: communityVM.sortedRecentCommunityData, communityVM: communityVM, isLoading: $communityVM.isLoading)
                 case 1:
-                    MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"), communityVM: communityVM)
+                    MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"), isLoading: $communityVM.isLoading, communityVM: communityVM)
                 case 2:
-                    ClassTabView(community: communityVM.returnCategoryCommunity(category: "마켓"), communityVM: communityVM)
+                    ClassTabView(community: communityVM.returnCategoryCommunity(category: "마켓"), isLoading: $communityVM.isLoading, communityVM: communityVM)
                 case 3:
-                    MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"), communityVM: communityVM)
+                    MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"), isLoading: $communityVM.isLoading, communityVM: communityVM)
                 default:
-                    InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"), communityVM: communityVM)
+                    InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"), isLoading: $communityVM.isLoading, communityVM: communityVM)
                 }
             } // 최상단 vstack
         } // navi stack

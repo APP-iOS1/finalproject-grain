@@ -11,6 +11,8 @@ struct AllTabView: View {
     
     var community: [CommunityDocument]
     @StateObject var communityVM: CommunityViewModel
+    @Binding var isLoading: Bool
+    
     var body: some View {
         NavigationView{
             VStack {
@@ -19,8 +21,7 @@ struct AllTabView: View {
                         NavigationLink {
                             CommunityDetailView(community: data)
                         } label: {
-                            CommunityRowView(community: data)
-                            
+                            CommunityRowView(community: data, isLoading: $isLoading)
                         }
                     }
                 }
@@ -32,8 +33,3 @@ struct AllTabView: View {
     }
 }
 
-//struct AllTabView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AllTabView()
-//    }
-//}

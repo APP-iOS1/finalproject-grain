@@ -13,6 +13,7 @@ struct MagazineDetailView: View {
     @State private var showDevices: Bool = false
     @State private var currentAmount: CGFloat = 0
     @State private var dragOffset = CGSize.zero
+    @State private var firstImage: Image?
 
     @Environment(\.dismiss) private var dismiss
     
@@ -20,19 +21,37 @@ struct MagazineDetailView: View {
     let currentUsers : CurrentUserFields?
     let data : MagazineDocument
     
+    @SceneStorage("isZooming") var isZooming: Bool = false
+    private let photo = SharingPhoto(image: Image(systemName: "flame"), caption: "This is a flame!")
+    
+//    private let photo = SharingPhoto(image: firstImage, caption: "\(data.fields.title.stringValue)")
+//
     var body: some View {
         ScrollView {
             VStack{
                 VStack {
                     // MARK: 닉네임 헤더
                     HStack {
-                        ForEach(userVM.users.filter{
-                            $0.fields.id.stringValue == data.fields.userID.stringValue
-                        }, id: \.self){ item in
+                        /// ForEach로 유저 필터링해서 넘기는 방식으로 유저 프로필뷰에 데이터 유저데이터 넘겨줬을때 유저 프로필에서 넘겨준 user 데이터가 업데이트가 안되는 이슈발생
+                        
+                        /// 희경: ForEach로 데이터를 넘겨주면 유저뷰모델의 users가 업데이트 될때 ForEach가 다시 실행되면서, 데이터만 업데이트되는것이 아니라 ForEach안에 NavigationLink가 다시 로드되면서 업데이트가 실행된 뷰가 아닌 다른 뷰가 만들어지는것같음.
+                        
+//                        ForEach(userVM.users.filter {
+//                            $0.fields.id.stringValue == data.fields.userID.stringValue
+//                        }, id: \.self){ item in
+//                            NavigationLink {
+//                                UserDetailView(user: item, userVM: userVM)
+//                            } label: {
+//                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue)
+//                            }
+//                        }
+                        
+                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue})
+                        {
                             NavigationLink {
-                                UserPageView(userVM: userVM, userID: data.fields.userID.stringValue)
+                                UserDetailView(user: user, userVM: userVM)
                             } label: {
-                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue )
+                                MagazineProfileImage(imageName: user.fields.profileImage.stringValue)
                             }
                         }
                         
@@ -42,6 +61,7 @@ struct MagazineDetailView: View {
                             Text(data.createTime.toDate()?.renderTime() ?? "")
                                 .font(.caption)
                                 .foregroundColor(.textGray)
+                            
                         }
                         
                         Spacer()
@@ -65,6 +85,12 @@ struct MagazineDetailView: View {
                                     KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
+//                                        .onAppear {
+//                                            // 첫 번째 이미지를 가져옵니다.
+//                                            data.fields.image.arrayValue.values.firstImage { uiImage in
+//                                                          firstImage = Image(uiImage: uiImage)
+//                                                      }
+//                                        }
                                 }
                             
                         }
@@ -101,7 +127,7 @@ struct MagazineDetailView: View {
                         .animation(.easeInOut, value: isBookMarked)
                         .opacity(saveOpacity)
                     }
-                    .zIndex(2)
+                    .zIndex(.infinity)
                     
                     VStack(alignment: .leading){
                         HStack{
@@ -136,7 +162,7 @@ struct MagazineDetailView: View {
                                 .padding(.leading)
                             
                             NavigationLink {
-                                MagazineCommentView(currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
+                                MagazineCommentView(userVM: userVM, currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
                             } label: {
                                 Image(systemName: "bubble.right")
                                     .font(.system(size: 23))
@@ -214,9 +240,14 @@ struct MagazineDetailView: View {
             }//VStack
         }//스크롤뷰
         .onAppear{
+            print("MagazineDetailView onAppear Start")
+            
+            // 희경: 유저 팔로워, 팔로잉 업데이트 후 뒤로가기했다가 다시 들어갔을때 바로 반영안되는 issue
+            // [해결] magazineDetailView의 onAppear 에서 fetchUser를 해주는 방식에서 userVM의 updateCurrentUserArray 메소드의 receivedValue 블록에 fetchUser 해주는 방식으로 변경
+            // [이유] UserDetailView의 onDisappear메소드와 onAppear메소드간의 비동기처리가 문제였던것같다.
+            // onDisappear에서 updateUser를 실행하는데 완료되기전에 onAppear를 해준듯.
             // 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
             // 좋아요 버튼
-            userVM.fetchUser()
             if userVM.likedMagazineID.contains(where: { item in
                 item == data.fields.id.stringValue})
             {
@@ -233,6 +264,7 @@ struct MagazineDetailView: View {
             }
         }
         .onDisappear{
+            print("MagazineDetailView onDisappear Start")
             if isHeartToggle {
                 // 좋아요 누름
                 if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
@@ -321,7 +353,44 @@ struct MagazineDetailView: View {
                     } label: {
                         Text("삭제")
                     }
+                    
+                    Button("인스타그램에 공유하기") {
+                        guard let instagramUrl = URL(string: "instagram-stories://share") else {return}
+                        
+                        guard let image = ImageRenderer(content: ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
+                           
+                                    KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
 
+                            
+                        }).uiImage else { return }
+                        
+                        guard let imageData = image.pngData() else { return }
+                        
+                        if UIApplication.shared.canOpenURL(instagramUrl) {
+                            let pasteboardItems: [String: Any] = [
+                                "com.instagram.sharedSticker.backgroundImage": imageData,
+                                "com.instagram.sharedSticker.backgroundTopColor" : "#636e72",
+                                "com.instagram.sharedSticker.backgroundBottomColor" : "#b2bec3"
+                            ]
+                            
+                            let pasteboardOptions = [
+                                UIPasteboard.OptionsKey.expirationDate : Date().addingTimeInterval(300)
+                            ]
+                            
+                            UIPasteboard.general.setItems([pasteboardItems], options: pasteboardOptions)
+                            UIApplication.shared.open(instagramUrl)
+                        }
+                        
+                        //                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                    }
+               
+
+                    ShareLink(item: photo,
+                              subject: Text("Flame Photo"),
+                              message: Text("Check it out!"),
+                              preview: SharePreview(photo.caption, image: photo.image))
                     
                 } label: {
                     Label("더보기", systemImage: "ellipsis")
@@ -370,7 +439,14 @@ struct MagazineDetailView: View {
     //            }
     //        }
 }
+struct SharingPhoto: Transferable {
+    static var transferRepresentation: some TransferRepresentation {
+        ProxyRepresentation(exporting: \.image)
+    }
 
+    public var image: Image
+    public var caption: String
+}
 
 
 //struct MagazineDetailView_Previews: PreviewProvider {

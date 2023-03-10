@@ -21,6 +21,9 @@ struct RepairShopMapView: View {
     @Binding var searchResponseBool: Bool
     @Binding var searchResponse: [Address]
 
+    var userLatitude: Double
+    var userLongitude: Double
+    
     var body: some View {
         ZStack{
             // 뒷배경 어둡게
@@ -29,7 +32,7 @@ struct RepairShopMapView: View {
                     .zIndex(1)
                     .opacity(0.3)
             }
-            RepairShopUIMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse)
+            RepairShopUIMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, userLatitude: userLatitude , userLongitude: userLongitude)
         }
         .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
             WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium])
@@ -49,14 +52,9 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
     @Binding var bindingWebURL : String
     @Binding var searchResponseBool: Bool
     @Binding var searchResponse: [Address]
-    //TODO: 지금 현재 위치를 못 받아오는거 같음
-    var userLatitude: Double {
-        return locationManager.lastLocation?.coordinate.latitude ?? 37.5069671
-    }
-    
-    var userLongitude: Double {
-        return locationManager.lastLocation?.coordinate.longitude ?? 127.0556671
-    }
+
+    var userLatitude: Double
+    var userLongitude: Double
     
     // UIView 기반 컴포넌트의 인스턴스 생성하고 필요한 초기화 작업을 수행한 뒤 반환한다.
     func makeUIView(context: Context) -> NMFNaverMapView {
@@ -89,13 +87,13 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
                 let marker = NMFMarker()
                 marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
                 marker.iconImage = NMFOverlayImage(name: "repairShopMarker")
-                marker.width = 40
-                marker.height = 40
+                marker.width = 25
+                marker.height = 25
                 // MARK: 아이콘 캡션 - 수리점 글씨
                 marker.captionText = item.fields.category.stringValue
-                marker.captionColor = UIColor(red: 38.0/255.0, green: 104.0/255.0, blue: 103.0/255.0, alpha: 1)
-                marker.captionTextSize = 12
-                marker.captionHaloColor = UIColor(.gray)
+                marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
+                marker.captionTextSize = 9
+                marker.captionHaloColor = UIColor(.white)
                 marker.userInfo = ["url" :  item.fields.url.stringValue]
                 marker.tag = 2
                 // MARK: 마커 클릭시
@@ -122,12 +120,12 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
                 let marker = NMFMarker()
                 marker.position = NMGLatLng(lat: Double(i.y) ?? userLatitude, lng: Double(i.x) ?? userLongitude)
                 marker.iconImage = NMFOverlayImage(name: "allMarker")
-                marker.width = 40
-                marker.height = 40
+                marker.width = 25
+                marker.height = 25
                 marker.captionText = "검색 결과 위치"
-                marker.captionColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1)
-                marker.captionTextSize = 12
-                marker.captionHaloColor = UIColor(.gray)
+                marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
+                marker.captionTextSize = 9
+                marker.captionHaloColor = UIColor(.white)
                 
                 marker.mapView = uiView.mapView
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {

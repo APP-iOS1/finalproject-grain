@@ -11,6 +11,7 @@ import FirebaseAuth
 
 struct MagazineRecommentView: View {
     
+    let userVM: UserViewModel
     var currentUser : CurrentUserFields?  //현재 유저 받아오기
     
     @StateObject var commentVm = CommentViewModel() //댓글 뷰 모델 사용
@@ -37,16 +38,25 @@ struct MagazineRecommentView: View {
                     HStack(alignment: .top){
                         // MARK: -  유저 프로필 이미지
                         VStack{
-                            KFImage(URL(string: commentVm.sortedRecentRecomment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                .resizable()
-                                .frame(width: 25, height: 25)
-                                .cornerRadius(15)
-                                .overlay {
-                                    Circle()
-                                        .stroke(lineWidth: 0.5)
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
+                            {
+                                NavigationLink {
+                                    UserDetailView(user: user, userVM: userVM)
+                                } label: {
+                                    KFImage(URL(string: commentVm.sortedRecentRecomment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                        .resizable()
+                                        .frame(width: 25, height: 25)
+                                        .cornerRadius(15)
+                                        .overlay {
+                                            Circle()
+                                                .stroke(lineWidth: 0.5)
+                                        }
+                                        .padding(.horizontal, 7)
                                 }
-                                .padding(.horizontal, 7)
+                            }
                         }
+                        .frame(width: Screen.maxWidth * 0.1)
+                    
                         VStack(alignment: .leading){
                             HStack{
                                 NavigationLink {
@@ -69,6 +79,7 @@ struct MagazineRecommentView: View {
                             
                             }
                             .padding(.bottom, -5)
+                            
                             //MARK: - 댓글 내용
                             Text(commentVm.sortedRecentRecomment[index].fields.comment.stringValue)
                                 .font(.caption)

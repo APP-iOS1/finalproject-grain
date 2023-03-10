@@ -150,7 +150,7 @@ struct MagazineDetailView: View {
                                 .padding(.leading)
                             
                             NavigationLink {
-                                MagazineCommentView(currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
+                                MagazineCommentView(userVM: userVM, currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
                             } label: {
                                 Image(systemName: "bubble.right")
                                     .font(.system(size: 23))

@@ -11,6 +11,8 @@ import FirebaseAuth
 
 struct MagazineCommentView: View {
     
+    let userVM: UserViewModel
+    
     var currentUser : CurrentUserFields?  //현재 유저 받아오기
     @State var commentText: String = "" // 댓글 작성 텍스트 필드
     @StateObject var commentVm = CommentViewModel() //댓글 뷰 모델 사용
@@ -37,15 +39,22 @@ struct MagazineCommentView: View {
                         HStack(alignment: .top){
                             // MARK: -  유저 프로필 이미지
                             VStack{
-                                KFImage(URL(string: commentVm.sortedRecentComment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                    .resizable()
-                                    .frame(width: 35, height: 35)
-                                    .cornerRadius(30)
-                                    .overlay {
-                                        Circle()
-                                            .stroke(lineWidth: 0.5)
+                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
+                                {
+                                    NavigationLink {
+                                        UserDetailView(user: user, userVM: userVM)
+                                    } label: {
+                                        KFImage(URL(string: commentVm.sortedRecentComment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                            .resizable()
+                                            .frame(width: 35, height: 35)
+                                            .cornerRadius(30)
+                                            .overlay {
+                                                Circle()
+                                                    .stroke(lineWidth: 0.5)
+                                            }
+                                            .padding(.horizontal, 7)
                                     }
-                                    .padding(.horizontal, 7)
+                                }
                             }
                             .frame(width: Screen.maxWidth * 0.1)
                             
@@ -122,7 +131,7 @@ struct MagazineCommentView: View {
                                 
                                 VStack{
                                     if readMoreComments && eachBool[index]{
-                                        MagazineRecommentView(currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, commentText: $commentText)
+                                        MagazineRecommentView(userVM: userVM, currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, commentText: $commentText)
                                     }
                                 }
                             }

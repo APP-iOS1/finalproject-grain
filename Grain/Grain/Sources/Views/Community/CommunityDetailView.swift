@@ -111,7 +111,7 @@ struct CommunityDetailView: View {
                         VStack(alignment: .leading ){
                             ForEach(commentVm.sortedRecentComment ,id: \.self){ item in
                                 // FIXME: Comment 어디서 만든건지 찾아야함
-                                CommentView(comment: item.fields, commentTime: item.updateTime, commentText: commentText, collectionDocId: community.fields.id.stringValue)
+                                CommentView(userVM: userVM, comment: item.fields, commentTime: item.updateTime, commentText: commentText, collectionDocId: community.fields.id.stringValue)
                                 Divider()
                             }
                         }

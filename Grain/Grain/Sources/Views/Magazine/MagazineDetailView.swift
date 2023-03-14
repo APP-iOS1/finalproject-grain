@@ -240,6 +240,7 @@ struct MagazineDetailView: View {
             }//VStack
         }//스크롤뷰
         .onAppear{
+            
             print("MagazineDetailView onAppear Start")
             
             // 희경: 유저 팔로워, 팔로잉 업데이트 후 뒤로가기했다가 다시 들어갔을때 바로 반영안되는 issue

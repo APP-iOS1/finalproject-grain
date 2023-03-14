@@ -205,8 +205,5 @@ struct UserPageUserFeedView: View {
             }
             
         }
-        .onAppear{
-            print("magazineDocument: \(magazineDocument)")
-        }
     }
 }

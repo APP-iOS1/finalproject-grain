@@ -9,7 +9,7 @@ import SwiftUI
 
 //MARK: 입력된 댓글 레이아웃
 struct CommentView: View {
-    let userVM: UserViewModel
+    @StateObject var userVM: UserViewModel
     
     var comment: CommentFields
     var commentTime : String        //시간 값 넘어오는 것

@@ -21,7 +21,7 @@ enum SearchState: Hashable {
 struct MainSearchView: View {
     @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
     @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
-    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+    @StateObject var userViewModel: UserViewModel = UserViewModel()
     
     @State private var searchWord: String = ""
     @State private var searchList: [String] =  ["카메라", "명소", "출사"]
@@ -33,21 +33,30 @@ struct MainSearchView: View {
     @State private var searchStatus: SearchState = .magazine
     @State private var selectedIndex: Int = 0
     @State private var progress: Double = 0.5
-    
     @FocusState private var focus: FocusableField?
     
-    
+    var searchedUser: [UserDocument] {
+        let arr = userViewModel.users.filter {
+            ignoreSpaces(in: $0.fields.nickName.stringValue)
+                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+            ignoreSpaces(in: $0.fields.name.stringValue)
+                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+        }
+        return Array(arr)
+    }
     
     private let searchTitles: [String] = ["매거진", "커뮤니티", "계정"]
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
+    
     init(){
-        if searchWord.isEmpty{
-            isShownProgress = true
-        }
+//        if searchWord.isEmpty{
+//            isShownProgress = true
+//        }
     }
+    
     var body: some View {
         NavigationStack{
             VStack{
@@ -286,58 +295,87 @@ struct MainSearchView: View {
                                     .padding(.top)
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 7)
-                                    ForEach(userViewModel.users.filter {
-                                        ignoreSpaces(in: $0.fields.nickName.stringValue)
-                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-                                        ignoreSpaces(in: $0.fields.name.stringValue)
-                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                                    }.prefix(4),id: \.self) { item in
-                                        NavigationLink {
-                                            UserSearchDetailView(user: item)
-                                        } label: {
-                                            VStack{
-                                                HStack{
-                                                    KFImage(URL(string: item.fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                                        .resizable()
-                                                        .frame(width: 47, height: 47)
-                                                        .cornerRadius(30)
-                                                        .overlay {
-                                                            Circle()
-                                                                .stroke(lineWidth: 0.5)
+//                                    userViewModel.users.prefix()
+                                    
+                                    if searchedUser.count >= 4 {
+                                        ForEach(0..<4) { i in
+                                            NavigationLink {
+    //                                            UserSearchDetailView(user: item)
+                                                UserDetailView(user: searchedUser[i], userVM: userViewModel)
+                                            } label: {
+                                                VStack{
+                                                    HStack{
+                                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                                            .resizable()
+                                                            .frame(width: 47, height: 47)
+                                                            .cornerRadius(30)
+                                                            .overlay {
+                                                                Circle()
+                                                                    .stroke(lineWidth: 0.5)
+                                                            }
+                                                            .padding(.trailing, -10)
+                                                        VStack(alignment: .leading){
+                                                            Text(searchedUser[i].fields.nickName.stringValue)
+                                                                .font(.body)
+                                                                .bold()
+                                                                .padding(.bottom, 1)
+                                                                .lineLimit(1)
+                                                            Text(searchedUser[i].fields.name.stringValue)
+                                                                .font(.caption)
+                                                                .foregroundColor(.textGray)
+                                                                .frame(alignment: .leading)
                                                         }
-                                                        .padding(.trailing, -10)
-//                                                    Circle()
-//                                                        .stroke(lineWidth: 1)
-//                                                        .frame(width: 47, height: 47)
-//                                                        .foregroundColor(.black)
-//                                                        .overlay(
-//                                                            KFImage(URL(string: item.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))          .resizable()
-//                                                                .foregroundColor(.brightGray)
-////                                                                .aspectRatio(contentMode: .fill)
-//                                                                .scaledToFill()
-////                                                                .padding(9)
-//                                                        )
-                                                    VStack(alignment: .leading){
-                                                        Text(item.fields.nickName.stringValue)
-                                                            .font(.body)
-                                                            .bold()
-                                                            .padding(.bottom, 1)
-                                                            .lineLimit(1)
-                                                        Text(item.fields.name.stringValue)
-                                                            .font(.caption)
-                                                            .foregroundColor(.textGray)
-                                                            .frame(alignment: .leading)
+                                                        .padding(.leading)
+                                                        Spacer()
                                                     }
-                                                    .padding(.leading)
-                                                    Spacer()
+                                                    Divider()
+                                                        .padding(.bottom, 5)
                                                 }
-                                                Divider()
-                                                    .padding(.bottom, 5)
+                                                .padding(.horizontal)
+                                                .padding(.top, 5)
                                             }
-                                            .padding(.horizontal)
-                                            .padding(.top, 5)
                                         }
                                     }
+                                    else if searchedUser.count > 0 && searchedUser.count < 4  {
+                                        ForEach(0..<searchedUser.count) { i in
+                                            NavigationLink {
+    //                                            UserSearchDetailView(user: item)
+                                                UserDetailView(user: searchedUser[i], userVM: userViewModel)
+                                            } label: {
+                                                VStack{
+                                                    HStack{
+                                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                                            .resizable()
+                                                            .frame(width: 47, height: 47)
+                                                            .cornerRadius(30)
+                                                            .overlay {
+                                                                Circle()
+                                                                    .stroke(lineWidth: 0.5)
+                                                            }
+                                                            .padding(.trailing, -10)
+                                                        VStack(alignment: .leading){
+                                                            Text(searchedUser[i].fields.nickName.stringValue)
+                                                                .font(.body)
+                                                                .bold()
+                                                                .padding(.bottom, 1)
+                                                                .lineLimit(1)
+                                                            Text(searchedUser[i].fields.name.stringValue)
+                                                                .font(.caption)
+                                                                .foregroundColor(.textGray)
+                                                                .frame(alignment: .leading)
+                                                        }
+                                                        .padding(.leading)
+                                                        Spacer()
+                                                    }
+                                                    Divider()
+                                                        .padding(.bottom, 5)
+                                                }
+                                                .padding(.horizontal)
+                                                .padding(.top, 5)
+                                            }
+                                        }
+                                    }
+                                 
                                     Button {
                                         self.isCommunitySearchResultShown.toggle()
                                     } label: {
@@ -406,6 +444,9 @@ struct MainSearchView: View {
             UserSearchResultView(searchWord: $searchWord, user: userViewModel)
         }
         .onAppear{
+            if searchWord.isEmpty{
+                        isShownProgress = true
+                    }
             self.focus = .search
             userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             communtyViewModel.fetchCommunity()
@@ -415,10 +456,10 @@ struct MainSearchView: View {
     }
 }
 
-struct MainSearchView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MainSearchView()
-        }
-    }
-}
+//struct MainSearchView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack {
+//            MainSearchView()
+//        }
+//    }
+//}

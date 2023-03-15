@@ -264,7 +264,6 @@ struct MagazineDetailView: View {
             }
         }
         .onDisappear{
-            print("MagazineDetailView onDisappear Start")
             if isHeartToggle {
                 // 좋아요 누름
                 if !userVM.likedMagazineID.contains(data.fields.id.stringValue){

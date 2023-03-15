@@ -20,7 +20,7 @@ struct ProfileImage: View {
                 Circle()
                     .stroke(lineWidth: 0.5)
             }
-            .padding(.leading)
+            .padding(.horizontal, 7)
     }
     
     

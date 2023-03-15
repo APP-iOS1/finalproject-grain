@@ -32,6 +32,10 @@ struct CommunityDetailView: View {
     @State private var postStatusString : String = "" // 게시글 상태 변경 표시글
     @FocusState private var textFieldFocused: Bool
     
+    @State var commentCollectionDocId: String = ""
+    @State var replyCommentText : String = "" // 답글 표시 이름 값
+    @State var replyContent: String = ""
+    @State var replyComment : Bool = false  // 답글 표시 Bool값
     
     var body: some View {
         NavigationView {
@@ -108,22 +112,18 @@ struct CommunityDetailView: View {
                             .padding(.bottom, 15)
                             .padding(.horizontal, Screen.maxWidth * 0.04)
                         // MARK: - 커뮤니티 댓글 뷰
-                        VStack(alignment: .leading ){
-                            ForEach(commentVm.sortedRecentComment ,id: \.self){ item in
-                                // FIXME: Comment 어디서 만든건지 찾아야함
-                                CommentView(userVM: userVM, comment: item.fields, commentTime: item.updateTime, commentText: commentText, collectionDocId: community.fields.id.stringValue)
-                                Divider()
-                            }
-                        }
+//                        VStack(alignment: .leading ){
+                        CommentView(userVM: userVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, currentUser: userVM.currentUsers, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
+//                        }
                     }
                 }
                 .refreshable {
                     communityVM.fetchCommunity()
-                    commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+//                    commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
                 }
                 .padding(.top, 1)
                 // MARK: 댓글 달기
-                CommunityCommentView(currentUser: userVM.currentUsers,community: community)
+                CommunityCommentView(currentUser: userVM.currentUsers,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

@@ -13,7 +13,6 @@ enum CommunityService {
     
     // MARK: - 커뮤니티 데이터 가져오기
     static func getCommunity() -> AnyPublisher<CommunityResponse, Error> {
-        print("FirebaseService getCommunity start")
         
         do {
             let request = try CommunityRouter.get.asURLRequest()

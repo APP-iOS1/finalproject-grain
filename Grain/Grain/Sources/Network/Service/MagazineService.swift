@@ -85,8 +85,6 @@ enum MagazineService {
     }
     
     static func deleteMagazine(docID: String) -> AnyPublisher<MagazineDocument, Error> {
-        print("FirebaseService deleteMagazine start")
-        
         do {
             let request = try MagazineRouter.delete(docID: docID).asURLRequest()
             return URLSession

@@ -20,6 +20,7 @@ struct CommunityRecommentView: View {
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Community - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
+    @Binding var replyContent : String
     var body: some View {
         
         VStack(alignment: .leading){
@@ -85,15 +86,14 @@ struct CommunityRecommentView: View {
                             HStack{
                                 if commentVm.sortedRecentRecomment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                     Button {
-//                                        commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue, updateComment: commentText, data: commentVm.sortedRecentRecomment[index].fields)
-//
+                                        commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue, updateComment: replyContent, data: commentVm.sortedRecentRecomment[index].fields)
 //                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
-//                                        commentText = ""
+                                        replyContent = ""
                                     } label: {
                                         Text("수정")
                                     }
                                     Button {
-//                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue)
+                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue)
                                     } label: {
                                         Text("삭제")
                                     }

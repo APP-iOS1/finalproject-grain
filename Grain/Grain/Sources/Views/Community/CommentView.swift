@@ -85,12 +85,12 @@ struct CommentView: View {
                                 
                                 if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                     Button{
-                                        //                                    commentVm.updateComment(collectionName: "Community", collectionDocId: collectionDocId, docID: comment.id.stringValue, updateComment: commentText,data: comment)
+                                        commentVm.updateComment(collectionName: "Community", collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue, updateComment: replyContent, data: commentVm.sortedRecentComment[index].fields)
                                     } label: {
                                         Text("수정")
                                     }
                                     Button{
-                                        //                                    commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: comment.id.stringValue)
+                                        commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue)
                                     } label: {
                                         Text("삭제")
                                     }
@@ -103,7 +103,7 @@ struct CommentView: View {
                             
                             if readMoreComments && eachBool[index]{
                                 VStack{
-                                    CommunityRecommentView(userVM: userVM, currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                    CommunityRecommentView(userVM: userVM, currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent)
 
                                 }
                             }
@@ -121,7 +121,7 @@ struct CommentView: View {
         }.onAppear{
             commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
                 reCommentCount = commentVm.sortedRecentComment.count
                 makeEachBool(count: reCommentCount)
             }

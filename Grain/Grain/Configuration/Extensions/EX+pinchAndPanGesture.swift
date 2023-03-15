@@ -26,6 +26,7 @@ struct PinchZoomContext<Content: View>: View {
     
     // SecneStorage 을 통해 줌이 작동하는지 안하는지 파악하려고 하는데 잘 안되는듯
     @SceneStorage("isZooming") var isZooming: Bool = false
+    @SceneStorage("index") var selectedIndex: Int = 0
     
     let backgroundColor: Color
     
@@ -37,7 +38,7 @@ struct PinchZoomContext<Content: View>: View {
                     .frame(width: Screen.maxWidth, height: Screen.maxHeight * 3)
             }
             
-            TabView{
+            TabView(selection: $selectedIndex){
                 content()
                 // offset을 지정
                     .offset(x: offset.x, y: offset.y)
@@ -64,7 +65,7 @@ struct PinchZoomContext<Content: View>: View {
                         }
                     }
             }
-            .tabViewStyle(.page(indexDisplayMode: (scale == 0) ? .automatic : .never))
+            .tabViewStyle(.page(indexDisplayMode: isZooming ? .never : .automatic))
             
         }
     }

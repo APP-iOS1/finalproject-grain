@@ -38,7 +38,7 @@ struct MagazineBestView: View {
                         .frame(width: 240, height: 3.5)
                 }
                 .padding([.leading, .top])
-                ForEach(magazineVM.sortedTopLikedMagazineData, id: \.self ){ data in
+                ForEach(Array(magazineVM.sortedTopLikedMagazineData.enumerated()), id: \.1.self ){ (index, data) in
                     NavigationLink {
                         MagazineDetailView(userVM: userVM, currentUsers: currentUsers, data: data)
                     } label: {

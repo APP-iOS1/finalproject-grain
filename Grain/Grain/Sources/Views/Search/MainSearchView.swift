@@ -19,6 +19,7 @@ enum SearchState: Hashable {
 }
 
 struct MainSearchView: View {
+    @StateObject var searchViewModel: SearchViewModel = SearchViewModel()
     @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
     @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
     @StateObject var userViewModel: UserViewModel = UserViewModel()
@@ -196,6 +197,30 @@ struct MainSearchView: View {
                                                     .padding(.bottom, 5)
                                             }
                                             .padding(.horizontal)
+                                        }.onTapGesture {
+                                            // 서치 뷰모델에 업데이트 하는 메소드 호출
+                                            
+                                            if let recentSearch = searchViewModel.recentSearch.first(where: {
+                                                $0.fields.id.stringValue == item.fields.id.stringValue
+                                            }) {
+                                                recentSearch.
+                                            } else {
+                                                
+                                            }
+                                            
+                                            
+//                                            if let user = userViewModel.currentUsers {
+//                                                if userViewModel.recentSearch.contains(where: { $0 == self.searchWord }) {
+//                                                    // 이미 검색한 검색어이면 배열에서 먼저 이미 있는 값 삭제
+//                                                    if let index = userViewModel.recentSearch.firstIndex(of: self.searchWord) {
+//                                                        userViewModel.recentSearch.remove(at: index)
+//                                                    }
+//                                                }
+//                                                
+//                                                // 배열의 첫번째 인덱스에 넣어준다.
+//                                                userViewModel.recentSearch.insert(self.searchWord, at: 0)
+//                                                userViewModel.updateCurrentUserArray(type: "recentSearch", arr: userViewModel.recentSearch, docID: user.id.stringValue)
+//                                            }
                                         }
                                     }
                                     
@@ -241,6 +266,7 @@ struct MainSearchView: View {
                                     }.prefix(3),id: \.self) { item in
                                         NavigationLink {
                                             CommunitySearchDetailView(community: item)
+                                            
                                         } label: {
                                             VStack(alignment: .leading){
                                                 Text(item.fields.title.stringValue)

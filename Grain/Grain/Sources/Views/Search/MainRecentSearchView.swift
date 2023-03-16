@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct MainRecentSearchView: View {
+    @StateObject var searchVM = SearchViewModel()
     @Binding var searchList: [String]
     
     var body: some View {
         VStack{
             HStack {
-                Text("최근 검색어")
+                Text("최근 검색")
                     .fontWeight(.bold)
                     .foregroundColor(.gray)
                 Spacer()

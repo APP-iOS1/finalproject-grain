@@ -32,6 +32,7 @@ final class UserViewModel: ObservableObject {
     @Published var bookmarkedCommunityID : [String] = []
     @Published var follower : [String] = []
     @Published var following : [String] = []
+    @Published var recentSearch: [String] = []
     
     // 내가 구독한 사람의 게시글만 담은 배열
     @Published var subscribedMagazines: [String] = []
@@ -267,6 +268,7 @@ final class UserViewModel: ObservableObject {
         self.bookmarkedCommunityID.removeAll()
         self.follower.removeAll()
         self.following.removeAll()
+        self.recentSearch.removeAll()
     }
     
     func parsingUserDataToStringArr(currentUserData: CurrentUserFields) {
@@ -302,6 +304,9 @@ final class UserViewModel: ObservableObject {
         }
         for i in currentUserData.following.arrayValue.values {
             self.following.append(i.stringValue)
+        }
+        for i in currentUserData.recentSearch.arrayValue.values {
+            self.recentSearch.append(i.stringValue)
         }
     }
     

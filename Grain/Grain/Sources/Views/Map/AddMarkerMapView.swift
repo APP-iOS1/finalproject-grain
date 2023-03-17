@@ -102,7 +102,7 @@ struct AddMarkerMapView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: Screen.maxWidth * 0.1,height: Screen.maxHeight * 0.08)
-                        .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
+                        .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
                     
 //                    Image("uploadMarker")
 //                        .resizable()
@@ -302,7 +302,7 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
 //                .frame(width: Screen.maxWidth * 0.1,height: Screen.maxHeight * 0.08)
 //                .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
 //
-            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.44))
+            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.39))
             addUserMarker.iconImage = NMFOverlayImage(name: "uploadMarker")
             addUserMarker.width = Screen.maxWidth * 0.1
             addUserMarker.height = Screen.maxHeight * 0.045

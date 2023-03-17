@@ -11,8 +11,8 @@ import Kingfisher
 
 struct UserDetailView: View {
 
-    let user: UserDocument
-    var userVM: UserViewModel
+    var user: UserDocument
+    @StateObject var userVM: UserViewModel
     
     @StateObject var magazineVM = MagazineViewModel()
     
@@ -62,7 +62,6 @@ struct UserDetailView: View {
                                     if isFollowingUser {
                                         // "구독중" 상태이고, 내 팔로잉 리스트에 없는 경우 => 구독
                                         if !userVM.following.contains(user.fields.id.stringValue) {
-                                            print("userVM.following: \(userVM.following)")
                                             if let currentUser = userVM.currentUsers {
                                                 
                                                 var currentUserFollowing: [String] = userVM.following
@@ -144,6 +143,14 @@ struct UserDetailView: View {
                                 Text("\(user.fields.follower.arrayValue.values.count == 1 ? 0 : user.fields.follower.arrayValue.values.count-1)")
                                     .padding(.leading, -5)
                                     .bold()
+                                
+//
+//                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == user.fields.id.stringValue})
+//                                {
+//                                    Text("\(user.fields.follower.arrayValue.values.count == 1 ? 0 : user.fields.follower.arrayValue.values.count-1)")
+//                                        .padding(.leading, -5)
+//                                        .bold()
+//                                }
                                 
                                 Text("|")
                                 

@@ -32,6 +32,7 @@ final class UserViewModel: ObservableObject {
     @Published var bookmarkedCommunityID : [String] = []
     @Published var follower : [String] = []
     @Published var following : [String] = []
+    @Published var recentSearch: [String] = []
     
     // 내가 구독한 사람의 게시글만 담은 배열
     @Published var subscribedMagazines: [String] = []
@@ -58,7 +59,6 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
-                print("UserViewModel fetchUser start ++ 실행완")
                 self.users = data.documents
                 self.fetchUsersSuccess.send(data.documents)
             }.store(in: &subscription)
@@ -69,7 +69,6 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CurrentUserResponse) in
-                print("UserViewModel fetchCurrentUser start ++ 실행완")
                 self.currentUsers = data.fields
                 if let currentUsers = self.currentUsers {
                     self.parsingUserDataToStringArr(currentUserData: currentUsers)
@@ -171,7 +170,6 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
-                print("updateCurrentUserArray start ***")
                 self.fetchUser()
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)
@@ -267,6 +265,7 @@ final class UserViewModel: ObservableObject {
         self.bookmarkedCommunityID.removeAll()
         self.follower.removeAll()
         self.following.removeAll()
+        self.recentSearch.removeAll()
     }
     
     func parsingUserDataToStringArr(currentUserData: CurrentUserFields) {
@@ -302,6 +301,9 @@ final class UserViewModel: ObservableObject {
         }
         for i in currentUserData.following.arrayValue.values {
             self.following.append(i.stringValue)
+        }
+        for i in currentUserData.recentSearch.arrayValue.values {
+            self.recentSearch.append(i.stringValue)
         }
     }
     

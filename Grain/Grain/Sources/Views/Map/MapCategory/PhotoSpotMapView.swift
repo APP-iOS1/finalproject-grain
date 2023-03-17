@@ -23,32 +23,34 @@ struct PhotoSpotMapView: View {
     @Binding var magazineData: [MagazineDocument]
     @State var clikedMagazineData : MagazineDocument?
     
+    @Binding var showResearchButton : Bool
     var userLatitude: Double
     var userLongitude: Double
+    @Binding var researchButtonBool : Bool
+    @Binding var researchCGPoint : CGPoint
     
     var body: some View {
         // 뒷배경 어둡게
     
         ZStack{
-            if isShowingPhotoSpot{
-                Rectangle()
-                    .zIndex(1)
-                    .opacity(0.3)
-            }
-            PhotoSpotUIMapView(mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot , nearbyPostsArr: $nearbyPostsArr, visitButton: $visitButton, userLatitude: userLatitude , userLongitude: userLongitude)
+//            if isShowingPhotoSpot{
+//                Rectangle()
+//                    .zIndex(1)
+//                    .opacity(0.3)
+//            }
+            PhotoSpotUIMapView(mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot , nearbyPostsArr: $nearbyPostsArr, visitButton: $visitButton, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
             
             
             if isShowingPhotoSpot{
-                /// nearbyMagazineData -> NearbyPostsComponent뷰에서 ForEach을 위한 Magazine 데이터
-                /// magazineVM.nearbyPostsFilter메서드 호출 반환 값으로 [MagazineDocument]
-                /// 매개변수로는 contentView에서 전달 받은 magazineData 값 전달 / nearbyPostsArr : 포토스팟 클릭 마커
-                /// 그럼 메서드에서 for in 두번 돌려 필요한 값만 전달
-                /// 이 과정에서 DB 연관 없다고 생각 듬! -> 확인  필요
-                NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineData, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData)
+                
+                NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
                     .zIndex(1)
-                    .offset(y: 250)
-//                    .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
+                    .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.75)
+                    .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
             }
+        }
+        .onAppear{
+            isShowingPhotoSpot = false
         }
         .fullScreenCover(isPresented: $visitButton, content: {
             PhotoSpotDetailView(data: clikedMagazineData!)
@@ -73,11 +75,14 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
 
     @Binding var visitButton : Bool
     
+    @Binding var showResearchButton : Bool
+    @State var fetchMarkers: [NMFMarker] = []
     
-    //TODO: 지금 현재 위치를 못 받아오는거 같음
+    
     var userLatitude: Double
     var userLongitude: Double
-    
+    @Binding var researchButtonBool : Bool
+    @Binding var researchCGPoint : CGPoint
     // UIView 기반 컴포넌트의 인스턴스 생성하고 필요한 초기화 작업을 수행한 뒤 반환한다.
     func makeUIView(context: Context) -> NMFNaverMapView {
         // TODO: 비동기 알아보기
@@ -102,28 +107,34 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLatitude, lng: userLongitude))
         view.mapView.moveCamera(cameraUpdate)
         
-        for item in mapData{
-            if item.fields.category.stringValue == "필름스팟"{
-                let marker = NMFMarker()
-                marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+            for item in mapData{
+                if item.fields.category.stringValue == "필름스팟"{
+                    var marker = NMFMarker(position: NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue))
+                    marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
+                    marker.width = 25
+                    marker.height = 25
+                    // MARK: 아이콘 캡션 - 포토스팟 글씨
+                    marker.captionText = item.fields.category.stringValue
+                    marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
+                    marker.captionTextSize = 9
+                    marker.captionHaloColor = UIColor(.white)
+                    // MARK: URL링크 정보 받기
+                    marker.userInfo = ["magazine": item.fields.magazineID.arrayValue.values[0].stringValue]
+                    // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
+                    marker.tag = 0
+                    fetchMarkers.append(marker)
+                }
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+            for marker in fetchMarkers{
+                marker.mapView = view.mapView
                 
-                marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
-                marker.width = 25
-                marker.height = 25
-                // MARK: 아이콘 캡션 - 포토스팟 글씨
-                marker.captionText = item.fields.category.stringValue
-                marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
-                marker.captionTextSize = 9
-                marker.captionHaloColor = UIColor(.white)
-                // MARK: URL링크 정보 받기
-                marker.userInfo = ["magazine": item.fields.magazineID.arrayValue.values[0].stringValue]
-                // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
-                marker.tag = 0
-
-                // MARK: 마커 클릭시
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {
                         isShowingPhotoSpot.toggle()
+                        showResearchButton.toggle()
                         nearbyPostsArr.removeAll()
                         for pickable in view.mapView.pickAll(view.mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng)), withTolerance: 30){
                             if let marker = pickable as? NMFMarker{
@@ -135,9 +146,8 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
                     }
                     return true
                 }
-                marker.mapView = view.mapView
+                
             }
-    
         }
         
         return view
@@ -165,6 +175,37 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
                 }
             }
             searchResponseBool.toggle()
+        }
+        
+        if researchButtonBool{
+           
+            
+            var addUserMarker = NMFMarker()
+            addUserMarker.position = uiView.mapView.projection.latlng(from: researchCGPoint)
+            uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: addUserMarker.position.lat, lng: addUserMarker.position.lng)))
+        
+            researchButtonBool.toggle()
+            
+            // 지도 데이터 마커를 전부 보여줌 처리
+            for marker in fetchMarkers{
+                marker.hidden = false
+            }
+            // 지도 데이터 마커를 전부 숨김 처리
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                for marker in fetchMarkers{
+                    marker.hidden = true
+                }
+                
+            }
+            // 350 반경 마커들만 보여줌 처리
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                for pickable in uiView.mapView.pickAll(researchCGPoint, withTolerance: 350){
+                    if let marker = pickable as? NMFMarker{
+                        marker.hidden = false
+                        
+                    }
+                }
+            }
         }
     }
     

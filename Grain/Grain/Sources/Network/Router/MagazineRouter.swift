@@ -13,7 +13,7 @@ enum MagazineRouter {
     case post(magazineData: MagazineFields, images: [String], docID: String)
     case delete(docID : String)
     case patch(putData: MagazineDocument, docID: String)
-    case patchLikedNum(likedNum: String, docID: String)
+    case patchLikedNum(likedNum: Int, docID: String)
     
     private var baseURL: URL {
         var baseUrlString : String = "https://"
@@ -61,8 +61,8 @@ enum MagazineRouter {
         case let .post(_ , _ , docID):
             let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
             return params
-        case let .patchLikedNum(_, docID):
-            let params: URLQueryItem = URLQueryItem(name: "updateMask.fieldPaths", value: docID)
+        case let .patchLikedNum(_, _):
+            let params: URLQueryItem = URLQueryItem(name: "updateMask.fieldPaths", value: "likedNum")
             return params
         default :
             let params: URLQueryItem? = nil
@@ -86,9 +86,10 @@ enum MagazineRouter {
     private var data: Data? {
         switch self {
         case let .post(magazineData, images, docID):
-            
             return MagazineQuery.insertMagazineQuery(data: magazineData, images: images, docID: docID)
         case let .patch(putData, docID):
+//            guard let magazinequery = MagazineQuery.updateMagazineQuery(data: putData, docID: docID) else { return nil }
+//            print( String(decoding: magazinequery, as: UTF8.self))
             return MagazineQuery.updateMagazineQuery(data: putData, docID: docID)
         case let .patchLikedNum(likedNum, _):
             return MagazineQuery.updateLikedNumQuery(num: likedNum)

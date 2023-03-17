@@ -136,7 +136,6 @@ enum UserRouter {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         if let data = data {
-            print("query: \(data)")
             request.httpBody = data
         }
         

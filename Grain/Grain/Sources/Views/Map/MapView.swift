@@ -35,9 +35,7 @@ struct MapView: View {
     
     @State var searchResponseBool : Bool = false    // 검색하기 버튼 Bool
     
-    @State var moreCategoryButton : Bool = true // 카테고리 더보기 버튼 Bool
     @State var reportButton : Bool = false  // 제보하러가기 버튼 Bool
-    
     
     @State var markerAddButtonBool: Bool = false     //???
     @State var changeMap: CGPoint = CGPoint(x: 0, y: 0) // 클러스팅 할때 쓰일 예정
@@ -45,105 +43,81 @@ struct MapView: View {
     @State var allButtonClickedBool : Bool = false
     
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0.0, lng: 0.0)
-  
+    
     @State private var isSheetPresented = true
-
+    
     @State var researchButtonBool : Bool = false
     @State var researchCGPoint : CGPoint = CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.5)
     
-    @State private var searchFocus : Bool = false
+    @State private var searchFocus : Bool = false   // 검색 창 클릭시 bool
+    @State var showResearchButton : Bool = true // 이 지역 재 검색 나타내는 bool
     
     var userLatitude : Double
     var userLongitude : Double
-        
+    
     var body: some View {
         VStack{
             
             // MARK: 지도 탭의 상단
             ZStack(alignment: .center){
                 
+                HStack{
+                    
+                    TextField("🔍 ex) 서울시 종로구 사직동", text: $searchText)
+                        .padding()
+                        .background(.white)
+                        .frame(width: Screen.maxWidth * 0.75, height:  Screen.maxHeight * 0.0525)
+                        .cornerRadius(15)
+                        .onSubmit {
+                            // MARK: Geocode API 실행
+                            naverVM.fetchGeocode(requestAddress: searchText)
+                        }
+                        .onTapGesture {
+                            searchFocus.toggle()
+                            allButtonClickedBool.toggle()
+                        }
+                        .overlay{
+                            // FIXME: onSubmit 하고 버튼 눌러야함
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(.black, lineWidth: 3)
+                        }.padding()
+                    
+                    // 검색 확인 버튼
+                    RoundedRectangle(cornerRadius: 10)
+                        .foregroundColor(.black)
+                        .frame(width: Screen.maxWidth * 0.125, height:  Screen.maxHeight * 0.0525)
+                        .onTapGesture {
+                            searchFocus = false
+                        }
+                        .overlay{
+                            Image(systemName: "location.magnifyingglass")
+                                .foregroundColor(.white)
+                                .onTapGesture {
+                                    searchResponse = naverVM.addresses
+                                    searchResponseBool.toggle()
+                                }
+                        }
+                        .onTapGesture {
+                            searchFocus = false
+                        }
+                        .padding(.trailing, 10)
+                    
+                }
+                .zIndex(1)
+                .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.1)
+                
+                if !searchFocus{
                     HStack{
-                        
-                        TextField("🔍 ex) 서울시 종로구 사직동", text: $searchText)
-                            .padding()
-                            .background(.white)
-                            .frame(width: Screen.maxWidth * 0.75, height:  Screen.maxHeight * 0.0525)
-                            .cornerRadius(15)
-                            .onSubmit {
-                                // MARK: Geocode API 실행
-                                naverVM.fetchGeocode(requestAddress: searchText)
-                            }
-                            .onTapGesture {
-                                searchFocus.toggle()
-                                allButtonClickedBool.toggle()
-                            }
-                            .overlay{
-                                // FIXME: onSubmit 하고 버튼 눌러야함
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.black, lineWidth: 3)
-                            }.padding()
-                        
-                        // 검색 확인 버튼
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(.black)
-                            .frame(width: Screen.maxWidth * 0.125, height:  Screen.maxHeight * 0.0525)
-                            .onTapGesture {
-                                searchFocus = false
-                            }
-                            .overlay{
-                                Image(systemName: "location.magnifyingglass")
-                                    .foregroundColor(.white)
-                                    .onTapGesture {
-                                        searchResponse = naverVM.addresses
-                                        searchResponseBool.toggle()
-                                    }
-                            }
-                            .onTapGesture {
-                                searchFocus = false
-                            }
-                            .padding(.trailing, 10)
-                            
+                        /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
+                        MapCategoryCellView(categoryString: $categoryString, reportButton: $reportButton)
+                            .padding(.leading, 7)
+                        Spacer()
                     }
                     .zIndex(1)
-                    .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.1)
-                    if !searchFocus{
-                        HStack{
-                            /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
-                            if !moreCategoryButton{
-                                MapCategoryCellView(categoryString: $categoryString, moreCategoryButton: $moreCategoryButton, reportButton: $reportButton)
-                                    .padding(.leading, 7)
-                                Spacer()
-                            }else{
-                                MapCategoryCellView(categoryString: $categoryString, moreCategoryButton: $moreCategoryButton, reportButton: $reportButton)
-                                    .padding(.leading, 7)
-                                Spacer()
-                            }
-
-                        }
-                        .zIndex(1)
-                        .padding(.leading , 7) // -> 검증 필요
-                        .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.17)
-                    }
-                
-                
-
-                
-                // MARK: 모달이 띄워질때 뒷 배경 어둡게
-                if isShowingWebView {
-                    Rectangle()
-                        .zIndex(1)
-                        .opacity(0.7)
+                    .padding(.leading , 7) // -> 검증 필요
+                    .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.17)
                 }
-                // MARK: 필름스팟 띄워질때 뒷 배경 어둡게
-                if isShowingPhotoSpot{
-                    Rectangle()
-                        .zIndex(0)
-                        .opacity(0.7)
-                        .onTapGesture {
-                            isShowingPhotoSpot.toggle()
-                        }
-                }
-               
+                
                 // MARK:
                 if isSheetPresented{
                     // MARK: 지도 뷰
@@ -152,68 +126,71 @@ struct MapView: View {
                         
                     case "전체":
                         NavigationStack{
-                            UIMapView(mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, userLatitude: userLatitude , userLongitude: userLongitude)
+                            UIMapView(mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .zIndex(0)
-                                
                         }
                     case "필름스팟":
                         NavigationStack{
-                            PhotoSpotMapView(mapData: $mapVM.mapData,searchResponseBool: $searchResponseBool,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot, magazineData: $magazineVM.magazines, userLatitude: userLatitude , userLongitude: userLongitude)
+                            PhotoSpotMapView(mapData: $mapVM.mapData
+                                             ,searchResponseBool: $searchResponseBool
+                                             ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot, magazineData: $magazineVM.magazines, showResearchButton: $showResearchButton, userLatitude: userLatitude ,
+                                             userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
                                 .zIndex(0)
                         }
                     case "현상소":
                         NavigationStack{
-                            StationMapView(mapData: $mapVM.mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse, userLatitude: userLatitude , userLongitude: userLongitude)
+                            StationMapView(mapData: $mapVM.mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
                                 .zIndex(0)
                         }
                     case "수리점":
                         NavigationStack{
-                            RepairShopMapView(mapData: $mapVM.mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse, userLatitude: userLatitude , userLongitude: userLongitude)
+                            RepairShopMapView(mapData: $mapVM.mapData, isShowingWebView: $isShowingWebView, searchResponseBool: $searchResponseBool,searchResponse: $searchResponse, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
                                 .zIndex(0)
                         }
                         
                     default:
                         NavigationStack{
-                            UIMapView(mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, userLatitude: userLatitude , userLongitude: userLongitude)
+                            UIMapView(mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .zIndex(0)
-                                
+                            
                         }
                         
                     }
                 }
-                else{
-                    SearchProgress()
-                }
                 
-                // FIXME: 
-                if !isShowingPhotoSpot && !searchFocus {
-
+                // FIXME:
+                if !searchFocus {
                     // 이지역 재 검색 버튼
-                    RoundedRectangle(cornerRadius: 17)
-                        .frame(width: Screen.maxWidth * 0.4, height: 40)
-                        .foregroundColor(.black)
-                        .overlay{
-                            HStack{
-                                Image(systemName: "arrow.clockwise")
-                                    .foregroundColor(.white)
-                                Text("이 지역 재검색")
-                                    .foregroundColor(.white)
-                                    .fontWeight(.bold)
-                            }.onTapGesture {
-//                                isSheetPresented.toggle()
-                                researchCGPoint = CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.44)
-                                researchButtonBool.toggle()
-                                mapVM.fetchNextPageMap(nextPageToken: "")
-                                magazineVM.fetchMagazine()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                                    isSheetPresented.toggle()
+                    if showResearchButton{
+                        RoundedRectangle(cornerRadius: 17)
+                            .frame(width: Screen.maxWidth * 0.4, height: 40)
+                            .foregroundColor(.black)
+                            .overlay{
+                                HStack{
+                                    Image(systemName: "arrow.clockwise")
+                                        .foregroundColor(.white)
+                                    Text("이 지역 재검색")
+                                        .foregroundColor(.white)
+                                        .fontWeight(.bold)
+                                }.onTapGesture {
+                                    researchCGPoint = CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.44)
+                                    researchButtonBool.toggle()
+                                    mapVM.fetchNextPageMap(nextPageToken: "")
+                                    magazineVM.fetchMagazine()
+                                    
                                 }
+                                
                             }
-                            
-                        }
-                        .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.82)
+                            .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.82)
+                    }
+                    
                 }
-                
+                // FIXME: 프로그레스뷰 고치
+                //                if researchButtonBool{
+                //                    ProgressView()
+                //                        .scaleEffect(1, anchor: .center)
+                //                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                //                }
                 
                 if isShowingPhotoSpot{
                     /// nearbyMagazineData -> NearbyPostsComponent뷰에서 ForEach을 위한 Magazine 데이터
@@ -221,12 +198,12 @@ struct MapView: View {
                     /// 매개변수로는 contentView에서 전달 받은 magazineData 값 전달 / nearbyPostsArr : 포토스팟 클릭 마커
                     /// 그럼 메서드에서 for in 두번 돌려 필요한 값만 전달
                     /// 이 과정에서 DB 연관 없다고 생각 듬! -> 확인  필요
-                    NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData)
+                    NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
                         .zIndex(1)
                         .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.75)
                         .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
                 }
-
+                
             }
             .ignoresSafeArea()
             .ignoresSafeArea(.keyboard)
@@ -275,10 +252,11 @@ struct UIMapView: UIViewRepresentable,View {
     
     @Binding var researchButtonBool : Bool
     @Binding var researchCGPoint : CGPoint
+    @Binding var showResearchButton : Bool
     
     var userLatitude : Double
     var userLongitude : Double
-
+    @State var fetchMarkers: [NMFMarker] = []
     
     // UIView 기반 컴포넌트의 인스턴스 생성하고 필요한 초기화 작업을 수행한 뒤 반환한다.
     func makeUIView(context: Context) -> NMFNaverMapView {
@@ -296,7 +274,7 @@ struct UIMapView: UIViewRepresentable,View {
         /// 임시 주석
         view.mapView.touchDelegate = context.coordinator
         
-    
+        
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
         //        view.showCompass = false
         // MARK: 위치 정보 받아오기
@@ -307,29 +285,11 @@ struct UIMapView: UIViewRepresentable,View {
         // MARK: 지도가 그려질때 현재 유저 GPS 위치로 카메라 움직임
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLatitude, lng: userLongitude))
         view.mapView.moveCamera(cameraUpdate)
-
-        // TODO: 마커를 MarkerCustomInfo형식 배열로 만들꺼면 효율 좋은 사용법 찾아내기
-        //        var markers: [MarkerCustomInfo] = []
-        //        for i in mapData{
-        //            let object : MarkerCustomInfo = MarkerCustomInfo(marker: NMGLatLng(lat: i.fields.latitude.doubleValue, lng: i.fields.longitude.doubleValue), category: 1, url: i.fields.url.stringValue)
-        //            markers.append(object)
-        //        }
-        // MARK: 사용 중단 코드 mapStore 방식
-        /// 굳이 따로 markers를 만들어서 넣어줄 필요가 없어 보임
-        //        DispatchQueue.main.asyncAfter(deadline: .now() + 1){
-        //            for i in mapStore.mapData{
-        //                let object : MarkerCustomInfo = MarkerCustomInfo(marker: NMGLatLng(lat: i.latitude, lng: i.longitude), category: i.category ?? 4, url: i.url)
-        //                markers.append(object)
-        //            }
-        //        }
         
-        
-        // MARK: Combine 이용 Content뷰에서 처음에 불러온 데이터 고정
-        // MARK: Map 컬렉션 DB에서 위치 정보를 받아와 마커로 표시
+        // 지도 데이터를 정보를 뽑고 fetchMarkers 배열에 넣어줌
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
             for item in mapData{
-                let marker = NMFMarker()
-                marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
+                var marker = NMFMarker(position: NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue))
                 switch item.fields.category.stringValue{
                 case "필름스팟":
                     marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
@@ -344,6 +304,7 @@ struct UIMapView: UIViewRepresentable,View {
                     marker.userInfo = ["magazine": item.fields.magazineID.arrayValue.values[0].stringValue]
                     // MARK: 마커에 태그 번호 생성 -> 마커 클릭시에 사용됨
                     marker.tag = 0
+                    fetchMarkers.append(marker)
                 case "현상소":
                     marker.iconImage = NMFOverlayImage(name: "stationMarker")
                     marker.width = 25
@@ -355,6 +316,7 @@ struct UIMapView: UIViewRepresentable,View {
                     marker.captionHaloColor = UIColor(.white)
                     marker.userInfo = ["url" :  item.fields.url.stringValue]
                     marker.tag = 1
+                    fetchMarkers.append(marker)
                 case "수리점":
                     marker.iconImage = NMFOverlayImage(name: "repairShopMarker")
                     marker.width = 25
@@ -366,25 +328,36 @@ struct UIMapView: UIViewRepresentable,View {
                     marker.captionHaloColor = UIColor(.white)
                     marker.userInfo = ["url" :  item.fields.url.stringValue]
                     marker.tag = 2
-                    // MARK: 캡션 글씨 색상 컬러
-                    // TODO: 디자인 고려해보기
-                    //                    marker.captionColor = UIColor.blue
-                    //                    marker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 200.0/255.0, alpha: 1)
+                    fetchMarkers.append(marker)
                 default:
                     marker.iconImage = NMF_MARKER_IMAGE_BLACK
                 }
                 
-                // MARK: 마커 클릭시
+                fetchMarkers.append(marker)
+                //                marker.mapView = view.mapView
+            }
+        }
+        
+        // fetchMarkers안에 있는 마커 정보들을 지도에 그려줌
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+            for marker in fetchMarkers{
+                marker.mapView = view.mapView
+                
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {
                         switch marker.tag{
                         case 0: //포토스팟
                             // MARK: 포토스팟 컴포넌트 띄워주기
                             isShowingPhotoSpot.toggle()
+                            showResearchButton.toggle()
                             nearbyPostsArr.removeAll()
-                            for pickable in view.mapView.pickAll(view.mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng)), withTolerance: 30){
+                            
+                            for pickable in view.mapView.pickAll(view.mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng)), withTolerance: 50){
                                 if let marker = pickable as? NMFMarker{
                                     if marker.tag == 0 {
+                                        if nearbyPostsArr.contains(marker.userInfo["magazine"] as! String){
+                                            continue
+                                        }
                                         nearbyPostsArr.append(marker.userInfo["magazine"] as! String)
                                     }
                                 }
@@ -403,18 +376,16 @@ struct UIMapView: UIViewRepresentable,View {
                     }
                     return true
                 }
-                marker.mapView = view.mapView
             }
         }
         
-
         return view
     }
     
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
-        // 연구 중
-        //        print(changeMap)
+        
+        
         if searchResponseBool{
             // MARK: 위치를 검색해주세요 버튼 누를시 장소로 이동
             /// x -> latitude / y -> longitude
@@ -439,27 +410,51 @@ struct UIMapView: UIViewRepresentable,View {
         }
         
         if researchButtonBool{
+           
+            
             var addUserMarker = NMFMarker()
             addUserMarker.position = uiView.mapView.projection.latlng(from: researchCGPoint)
             uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: addUserMarker.position.lat, lng: addUserMarker.position.lng)))
+        
             researchButtonBool.toggle()
+            
+            // 지도 데이터 마커를 전부 보여줌 처리
+            for marker in fetchMarkers{
+                marker.hidden = false
+            }
+            // 지도 데이터 마커를 전부 숨김 처리
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                for marker in fetchMarkers{
+                    marker.hidden = true
+                }
+                
+            }
+            // 350 반경 마커들만 보여줌 처리
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                for pickable in uiView.mapView.pickAll(researchCGPoint, withTolerance: 350){
+                    if let marker = pickable as? NMFMarker{
+                        marker.hidden = false
+                        
+                    }
+                }
+            }
         }
-//        if researchButtonBool{
-//            switch uiView.mapView.zoomLevel{
-//            case 12...16:
-//                print("줌레벨 측정 : \(uiView.mapView.zoomLevel)")
-//                return
-//            case 10..<12:
-//                print("줌레벨 측정 : \(uiView.mapView.zoomLevel)")
-//                return
-//            default:
-//                return
-//            }
-//        }
-//        /// 숫자가 작을수록 축소 , 숫자가 클수록 확대
-//        view.mapView.zoomLevel = 12
-//        view.mapView.minZoomLevel = 10
-//        view.mapView.maxZoomLevel = 16
+        //        if researchButtonBool{
+        //            switch uiView.mapView.zoomLevel{
+        //            case 12...16:
+        //                print("줌레벨 측정 : \(uiView.mapView.zoomLevel)")
+        //                return
+        //            case 10..<12:
+        //                print("줌레벨 측정 : \(uiView.mapView.zoomLevel)")
+        //                return
+        //            default:
+        //                return
+        //            }
+        //        }
+        //        /// 숫자가 작을수록 축소 , 숫자가 클수록 확대
+        //        view.mapView.zoomLevel = 12
+        //        view.mapView.minZoomLevel = 10
+        //        view.mapView.maxZoomLevel = 16
         
     }
     
@@ -468,7 +463,7 @@ struct UIMapView: UIViewRepresentable,View {
         return Coordinator(viewModel: self.viewModel, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap)
         //        return Coordinator(markerAddButtonBool: $markerAddButtonBool, markerPoint: $markerPoint)
     }
-
+    
     
     
 }
@@ -504,14 +499,12 @@ class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, 
         self.latitude = latlng.lat
         self.longitude = latlng.lng
         self.point = point
-//        print("\(latlng.lat), \(latlng.lng)")
-//        print(point)
-        
-        
+        //        print("\(latlng.lat), \(latlng.lng)")
+        //        print(point)
     }
     
 }
 //
 class MapSceneViewModel: ObservableObject {
-
+    
 }

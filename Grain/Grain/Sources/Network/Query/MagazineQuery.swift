@@ -97,7 +97,6 @@ enum MagazineQuery {
         }
         
         str.removeLast()
-
         return
         """
         {
@@ -109,6 +108,15 @@ enum MagazineQuery {
                     "arrayValue": {
                         "values": [
                                 \(str)
+                        ]
+                    }
+                },
+                "comment": {
+                    "arrayValue": {
+                        "values": [
+                            {
+                                "stringValue": "default"
+                            }
                         ]
                     }
                 },
@@ -134,10 +142,10 @@ enum MagazineQuery {
                   "stringValue": "\(data.fields.content.stringValue)"
                 },
                 "latitude": {
-                  "doubleValue": \(data.fields.latitude.doubleValue)
+                  "doubleValue": \(data.fields.latitude.doubleValue!)
                 },
                 "longitude": {
-                  "doubleValue": \(data.fields.longitude.doubleValue)
+                  "doubleValue": \(data.fields.longitude.doubleValue!)
                 },
                 "nickName": {
                   "stringValue": "\(data.fields.nickName.stringValue)"
@@ -155,13 +163,14 @@ enum MagazineQuery {
     }
     
     //MARK: - 매거진 DB에 매거진의 좋아요 수 update 쿼리 리턴 메소드
-    static func updateLikedNumQuery(num: String) -> Data?
+    static func updateLikedNumQuery(num: Int) -> Data?
     {
+//        var type = "likedNum"
         let query = """
                     {
                       "fields": {
                            "likedNum": {
-                                "stringValue": "\(num)"
+                                "integerValue": \(num)
                     }
                 }
             }

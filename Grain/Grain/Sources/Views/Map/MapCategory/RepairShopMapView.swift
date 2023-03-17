@@ -24,15 +24,18 @@ struct RepairShopMapView: View {
     var userLatitude: Double
     var userLongitude: Double
     
+    @Binding var researchButtonBool : Bool
+    @Binding var researchCGPoint : CGPoint
+    
     var body: some View {
         ZStack{
             // 뒷배경 어둡게
-            if isShowingWebView{
-                Rectangle()
-                    .zIndex(1)
-                    .opacity(0.3)
-            }
-            RepairShopUIMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, userLatitude: userLatitude , userLongitude: userLongitude)
+//            if isShowingWebView{
+//                Rectangle()
+//                    .zIndex(1)
+//                    .opacity(0.3)
+//            }
+            RepairShopUIMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
         }
         .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
             WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium])
@@ -52,9 +55,13 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
     @Binding var bindingWebURL : String
     @Binding var searchResponseBool: Bool
     @Binding var searchResponse: [Address]
-
+    @State var fetchMarkers: [NMFMarker] = []
+    
     var userLatitude: Double
     var userLongitude: Double
+    
+    @Binding var researchButtonBool : Bool
+    @Binding var researchCGPoint : CGPoint
     
     // UIView 기반 컴포넌트의 인스턴스 생성하고 필요한 초기화 작업을 수행한 뒤 반환한다.
     func makeUIView(context: Context) -> NMFNaverMapView {
@@ -81,22 +88,28 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLatitude, lng: userLongitude))
         view.mapView.moveCamera(cameraUpdate)
         
-        
-        for item in mapData{
-            if item.fields.category.stringValue == "수리점"{
-                let marker = NMFMarker()
-                marker.position = NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue)
-                marker.iconImage = NMFOverlayImage(name: "repairShopMarker")
-                marker.width = 25
-                marker.height = 25
-                // MARK: 아이콘 캡션 - 수리점 글씨
-                marker.captionText = item.fields.category.stringValue
-                marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
-                marker.captionTextSize = 9
-                marker.captionHaloColor = UIColor(.white)
-                marker.userInfo = ["url" :  item.fields.url.stringValue]
-                marker.tag = 2
-                // MARK: 마커 클릭시
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+            for item in mapData{
+                if item.fields.category.stringValue == "수리점"{
+                    var marker = NMFMarker(position: NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue))
+                    marker.iconImage = NMFOverlayImage(name: "repairShopMarker")
+                    marker.width = 25
+                    marker.height = 25
+                    // MARK: 아이콘 캡션 - 수리점 글씨
+                    marker.captionText = item.fields.category.stringValue
+                    marker.captionColor = UIColor(red: 0.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1)
+                    marker.captionTextSize = 9
+                    marker.captionHaloColor = UIColor(.white)
+                    marker.userInfo = ["url" :  item.fields.url.stringValue]
+                    marker.tag = 2
+                    fetchMarkers.append(marker)
+                }
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+            for marker in fetchMarkers{
+                marker.mapView = view.mapView
+                
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {
                         isShowingWebView.toggle()
@@ -104,10 +117,11 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
                     }
                     return true
                 }
-                marker.mapView = view.mapView
+                
             }
-    
         }
+        
+        
         return view
     }
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
@@ -134,6 +148,38 @@ struct RepairShopUIMapView: UIViewRepresentable,View {
             }
             searchResponseBool.toggle()
         }
+        
+        if researchButtonBool{
+           
+            
+            var addUserMarker = NMFMarker()
+            addUserMarker.position = uiView.mapView.projection.latlng(from: researchCGPoint)
+            uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: addUserMarker.position.lat, lng: addUserMarker.position.lng)))
+        
+            researchButtonBool.toggle()
+            
+            // 지도 데이터 마커를 전부 보여줌 처리
+            for marker in fetchMarkers{
+                marker.hidden = false
+            }
+            // 지도 데이터 마커를 전부 숨김 처리
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                for marker in fetchMarkers{
+                    marker.hidden = true
+                }
+                
+            }
+            // 350 반경 마커들만 보여줌 처리
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                for pickable in uiView.mapView.pickAll(researchCGPoint, withTolerance: 350){
+                    if let marker = pickable as? NMFMarker{
+                        marker.hidden = false
+                        
+                    }
+                }
+            }
+        }
+        
     }
     
 //    func makeCoordinator() -> Coordinator {

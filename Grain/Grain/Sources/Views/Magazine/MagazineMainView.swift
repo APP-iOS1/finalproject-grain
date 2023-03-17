@@ -50,7 +50,9 @@ struct MagazineMainView: View {
                 .padding(.leading)
                 switch selectedIndex {
                 case 0:
-                    MagazineBestView(userVM: userViewModel, currentUsers: userViewModel.currentUsers, magazineVM: magazineVM)
+                    VStack{
+                        MagazineBestView(userVM: userViewModel, currentUsers: userViewModel.currentUsers, magazineVM: magazineVM)
+                    }
                 default:
                     MagazineFeedView(currentUsers: userViewModel.currentUsers, userVM: userViewModel, magazineVM: magazineVM)
                 }

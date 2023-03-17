@@ -36,7 +36,6 @@ final class MagazineViewModel: ObservableObject {
                 self.magazines = data.documents
                 // MARK: 매거진 데이터 최신순 정렬 메서드 호출
 //                self.sortByRecentMagazine(magazines: data.documents)
-                
                 self.sortedRecentMagazineData = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
                 })
@@ -72,7 +71,6 @@ final class MagazineViewModel: ObservableObject {
         MagazineService.updateMagazine(data: data, docID: docID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-                
             } receiveValue: { (data: MagazineDocument) in
                 self.updateMagazineSuccess.send()
             }.store(in: &subscription)
@@ -81,7 +79,7 @@ final class MagazineViewModel: ObservableObject {
     // MARK: 매거진 좋아요 수 업데이트 메소드(사용자가 해당 매거진 게시글에 좋아요 눌렀을때 유저정보 수정과 동시에 이 메거진의 좋아요수도 같이 업데이트할때 사용)
     /// 사용방법:  원래 데이터 수정해서  MagazineDocument형식으로 data 에 넣고, docID에는 메거진 id 넣어서 updateMagazine 호출.
     /// ex)  원래 좋아요 수 + 1해서 num에 string 타입으로 넣어주고 , docID에는 AuthID 넣어줌.
-    func updateMagazine(num: String, docID: String){
+    func updateMagazine(num: Int, docID: String){
         MagazineService.updateMagazineLikedNum(num: num, docID: docID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
@@ -89,6 +87,8 @@ final class MagazineViewModel: ObservableObject {
             } receiveValue: { (data: MagazineDocument) in
                 self.updateMagazineSuccess.send()
             }.store(in: &subscription)
+//        print("updateMagazine 메서드 실행")
+//        fetchMagazine()
     }
     
     

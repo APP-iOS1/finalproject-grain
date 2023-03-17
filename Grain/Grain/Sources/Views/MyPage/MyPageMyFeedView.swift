@@ -10,7 +10,7 @@ import Kingfisher
 
 struct MyPageMyFeedView: View {
     @StateObject var userVM = UserViewModel()
-
+    @StateObject var magazineVM = MagazineViewModel()
     // 나의 피드를 그리드로 보여줄지 리스트로 보여줄지 선택하는 변수
     @State private var showGridOrList: Bool = true
     
@@ -22,9 +22,8 @@ struct MyPageMyFeedView: View {
         GridItem(.flexible(), spacing: 1),
         GridItem(.flexible(), spacing: 1)
     ]
-    
+    @State var updateNum : String = ""
     @State private var selectedIndex: Int?
-
     var body: some View {
         VStack{
             HStack{
@@ -61,7 +60,7 @@ struct MyPageMyFeedView: View {
                     LazyVGrid(columns: columns, spacing: 1) {
                         ForEach(magazineDocument, id: \.self) { data in
                             NavigationLink {
-                                MagazineDetailView(userVM: userVM, currentUsers: userVM.currentUsers, data: data)
+                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: userVM.currentUsers, data: data, updateNum: $updateNum)
                             } label: {
                                 KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                    .resizable()
@@ -71,7 +70,6 @@ struct MyPageMyFeedView: View {
                                    .frame(width: Screen.maxWidth / 3 - 1, height: Screen.maxWidth / 3 - 1)
                                    .clipped()
                             }
-
                         }
                     }
                 }
@@ -105,7 +103,7 @@ struct MyPageMyFeedView: View {
                         ForEach(magazineDocument, id: \.self) { data in
                             NavigationLink {
                                 // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
-                                MagazineDetailView(userVM: userVM, currentUsers: userVM.currentUsers, data: data)
+                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: userVM.currentUsers, data: data, updateNum: $updateNum)
                             } label: {
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
                                 MagazineViewCell(data: data)

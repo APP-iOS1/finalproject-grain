@@ -141,7 +141,7 @@ struct CommunityRowView: View {
         }
         .onAppear(perform: {
             if isLoading == true {
-                withAnimation(.linear(duration: 1.5).repeatForever(autoreverses: true)) {
+                withAnimation(.linear(duration: 0.5).repeatForever(autoreverses: true)) {
                     self.opacity = opacity == 0.4 ? 0.8 : 0.4
                 }
             }

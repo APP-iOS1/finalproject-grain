@@ -9,16 +9,15 @@ import SwiftUI
 
 struct MagazineSearchResultView: View {
     @State private var isShownProgress:Bool = true
-    
+    @StateObject var magazineVM = MagazineViewModel()
     @Binding var searchWord: String
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
-    
+    @State var updateNum : String = ""
     let magazine: MagazineViewModel
     let userViewModel: UserViewModel
-    
     var body: some View {
             ZStack{
                 VStack{
@@ -30,7 +29,7 @@ struct MagazineSearchResultView: View {
                                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                         },id: \.self) { item in
                             NavigationLink {
-                                MagazineDetailView(userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item)
+                                MagazineDetailView(magazineVM: magazineVM, userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item, updateNum: $updateNum)
                             } label: {
                                 HStack{
                                     Rectangle()

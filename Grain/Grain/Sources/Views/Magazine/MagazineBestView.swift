@@ -21,6 +21,7 @@ struct MagazineBestView: View {
     let userVM: UserViewModel
     let currentUsers : CurrentUserFields?
     let magazineVM: MagazineViewModel
+    @State var updateNum : String = ""
     var body: some View {
         VStack {
             ScrollView {
@@ -40,18 +41,18 @@ struct MagazineBestView: View {
                 .padding([.leading, .top])
                 ForEach(magazineVM.sortedTopLikedMagazineData, id: \.self ){ data in
                     NavigationLink {
-                        MagazineDetailView(userVM: userVM, currentUsers: currentUsers, data: data)
+                        MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: currentUsers, data: data, updateNum: $updateNum)
                     } label: {
                         Top10View(data: data)
                             .padding(.vertical, 7)
                             .padding(.horizontal)
-                           
-                        
                     }
+      
                 }
-            } // scroll view
+            }
         }//vstack
         .onAppear{
+            magazineVM.fetchMagazine()
         }
     }
 }

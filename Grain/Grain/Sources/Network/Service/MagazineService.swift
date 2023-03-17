@@ -54,8 +54,6 @@ enum MagazineService {
     
     // MARK: - 매거진 데이터 전체 업데이트
     static func updateMagazine(data: MagazineDocument, docID: String) -> AnyPublisher<MagazineDocument, Error> {
-        print("FirebaseService updateMagazine start")
-        
         do {
             let request = try MagazineRouter.patch(putData: data, docID: docID).asURLRequest()
             return URLSession
@@ -70,8 +68,9 @@ enum MagazineService {
     }
     
     // MARK: - 매거진 좋아요 수 업데이트
-    static func updateMagazineLikedNum(num: String, docID: String) -> AnyPublisher<MagazineDocument, Error> {
+    static func updateMagazineLikedNum(num: Int, docID: String) -> AnyPublisher<MagazineDocument, Error> {
         do {
+            
             let request = try MagazineRouter.patchLikedNum(likedNum: num, docID: docID).asURLRequest()
             return URLSession
                 .shared

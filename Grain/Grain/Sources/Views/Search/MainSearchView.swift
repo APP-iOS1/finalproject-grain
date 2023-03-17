@@ -36,8 +36,6 @@ struct MainSearchView: View {
     
     @FocusState private var focus: FocusableField?
     
-    
-    
     private let searchTitles: [String] = ["매거진", "커뮤니티", "계정"]
     
     private func ignoreSpaces(in string: String) -> String {
@@ -48,6 +46,7 @@ struct MainSearchView: View {
             isShownProgress = true
         }
     }
+    @State var updateNum : String = ""
     var body: some View {
         NavigationStack{
             VStack{
@@ -169,7 +168,7 @@ struct MainSearchView: View {
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                                     }.prefix(3),id: \.self) { item in
                                         NavigationLink {
-                                            MagazineDetailView(userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item)
+                                            MagazineDetailView(magazineVM: magazineViewModel, userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item, updateNum: $updateNum)
                                         } label: {
                                             VStack(alignment: .leading){
                                                 Text(item.fields.title.stringValue)
@@ -188,6 +187,7 @@ struct MainSearchView: View {
                                             }
                                             .padding(.horizontal)
                                         }
+                                        
                                     }
                                     
                                     Button {
@@ -402,6 +402,7 @@ struct MainSearchView: View {
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
             CommunitySearchResultView(searchWord: $searchWord, community: communtyViewModel)
         }
+        
         .navigationDestination(isPresented: $isUserSearchResultShown){
             UserSearchResultView(searchWord: $searchWord, user: userViewModel)
         }

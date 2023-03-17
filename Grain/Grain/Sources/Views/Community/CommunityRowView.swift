@@ -45,7 +45,7 @@ struct CommunityRowView: View {
         }
     }
     var community: CommunityDocument
-    @State var opacity : Double = 0.8
+    @State var opacity: Double = 0.8
     
     @Binding var isLoading: Bool
     var body: some View {
@@ -64,29 +64,26 @@ struct CommunityRowView: View {
                     VStack(alignment: .leading){
                         //MARK: 게시글 태그
                         HStack {
-                            RoundedRectangle(cornerRadius: 20)
-                                .frame(width: 45, height: 25)
-                                .foregroundColor(Color(hex: "F58800"))
-                                .overlay{
-                                    Text("\(community.fields.category.stringValue)")
-                                        .foregroundColor(.white)
-                                        .bold()
-                                        .font(.caption)
-                                }
+                            
+                            Text("\(community.fields.category.stringValue)")
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 8)
+                                .background(Color(hex: "F58800"))
+                                .cornerRadius(20)
+                                .foregroundColor(.white)
+                                .bold()
+                                .font(.caption)
                                 .setSkeletonView(opacity: opacity, shouldShow: isLoading)
-                                .padding(.leading, -3)
-                                
-                            RoundedRectangle(cornerRadius: 20)
-                                .frame(width: 45, height: 25)
-                                .foregroundColor(Color(hex: tagColor))
-                                .overlay{
-                                    Text(community.fields.state.stringValue)
-                                        .foregroundColor(Color(hex: tagNameColor))
-                                        .bold()
-                                        .font(.caption)
-                                }
+                            
+                            Text(community.fields.state.stringValue)
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 8)
+                                .background(Color(hex: tagColor))
+                                .cornerRadius(20)
+                                .foregroundColor(Color(hex: tagNameColor))
+                                .bold()
+                                .font(.caption)
                                 .setSkeletonView(opacity: opacity, shouldShow: isLoading)
-                                .padding(.leading, 3)
                         } // hstack
                         .padding(.top, 4)
                        // .padding(.vertical, 3)
@@ -97,7 +94,6 @@ struct CommunityRowView: View {
                         Text("\(community.fields.title.stringValue)")
                             .font(.callout)
                             .foregroundColor(.black)
-                        
                             .multilineTextAlignment(.leading)
                             .padding(.top, -2)
                             .setSkeletonView(opacity: opacity, shouldShow: isLoading)

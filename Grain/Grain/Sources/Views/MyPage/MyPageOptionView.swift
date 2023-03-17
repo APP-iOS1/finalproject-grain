@@ -299,6 +299,8 @@ struct InfoSection: View {
             NavigationLink {
                 ZStack{
                     MyWebView(urlToLoad: "https://statuesque-cast-fac.notion.site/GRAIN-6d71c1363594444b8c9d4ba9ad6b192d")
+                        .navigationTitle(Text("이용약관"))
+                        .navigationBarTitleDisplayMode(.inline)
                     if isShownProgress == true {
                         ProgressView()
                             .onAppear{
@@ -337,6 +339,8 @@ struct InfoSection: View {
                 //PrivacyPolicyView()
                 ZStack{
                     MyWebView(urlToLoad: "https://sites.google.com/view/grain-ios/%ED%99%88")
+                        .navigationTitle(Text("개인 정보 처리방침"))
+                        .navigationBarTitleDisplayMode(.inline)
                     if isShownProgress == true {
                         ProgressView()
                             .onAppear{
@@ -372,6 +376,8 @@ struct InfoSection: View {
             NavigationLink {
                 ZStack{
                 MyWebView(urlToLoad: "https://statuesque-cast-fac.notion.site/Third-Party-Notices-141126a372d64957b9d7a81b02f2f3c1")
+                        .navigationTitle(Text("오픈소스 라이선스"))
+                        .navigationBarTitleDisplayMode(.inline)
                     if isShownProgress == true {
                         ProgressView()
                             .onAppear{
@@ -611,78 +617,134 @@ struct SupportEmail {
 
 //고객센터 View
 struct UserServiceView: View{
+    // 다른 앱을 열기 위함
     @Environment(\.openURL) var openURL
+    
+    // text를 클립 보드에 복사하기 위한 변수
+    let pastedboard = UIPasteboard.general
+    @State private var copiedComplete: Bool = false
+    
+    // 메일 형식
     private var email = SupportEmail(toAddress: "pkkyung26@gmail.com", subject: "GRAIN 문의사항", messageHeader: "아래에 내용을 입력해주세요. (사용하시는 기기와 iOS버전, 앱의 버전을 입력해주시면 더욱 신속한 처리가 가능합니다. \n 단말기 명: \n iOS 버전: \n GRAIN 버전: ")
     
     var body: some View {
-        VStack(alignment: .leading){
-            Image(systemName: "message")
-                .font(.title)
-                .padding(.bottom, 1)
-
+            VStack(alignment: .leading){
+                Image(systemName: "message")
+                    .font(.title)
+                    .padding(.bottom, 1)
+                
                 Text("문의사항이 있으신가요?")
-                .font(.title2)
+                    .font(.title2)
+                    .bold()
+                    .padding(.bottom)
+                
+                VStack(alignment: .leading){
+                    HStack(spacing: 0){
+                        Text("문의사항은 ")
+                        Text(verbatim: "pkkyung26@gmail.com")
+                            .foregroundColor(.vivaMagenta)
+                            .onTapGesture {
+                                pastedboard.string = "pkkyung26@gmail.com"
+                                self.copiedComplete = true
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    self.copiedComplete = false
+                                }
+                            }
+                        Text(" 으로")
+                    }
+                    Text("메일을 보내주세요.")
+                }
+                .font(.headline)
                 .bold()
                 .padding(.bottom)
-            
-            VStack{
-                Text("문의사항은 ") +
-                Text(verbatim: "pkkyung26@gmail.com")
-                    .foregroundColor(.vivaMagenta)
-                +
-                Text("으로 메일을 보내주세요")
-            }
-            .font(.headline)
-            .bold()
-            .padding(.bottom)
-
-            
-            Text("""
+                
+                
+                Text("""
 (화면이나 기능에 이상이 있을 시, 사용 중이신 기기와 iOS 버전, 앱의 버전을 함께 알려주시면 보다 빠르게 처리가 가능합니다.)
 """)
-            .padding(.bottom, 30)
-            .foregroundColor(.textGray)
-            
-            HStack{
-                Spacer()
+                .padding(.bottom, 30)
+                .foregroundColor(.textGray)
                 
-                RoundedRectangle(cornerRadius: 10)
-                    .frame(width: 180, height: 40)
-                    .overlay{
-                        Button{
-                            email.send(openURL: openURL)
-                            
-                        } label: {
-                            Text("메일 앱에서 작성하기")
-                                .foregroundColor(.white)
-                        }
+                HStack{
+                    Spacer()
+                    
+                    VStack{
+                        RoundedRectangle(cornerRadius: 10)
+                            .frame(width: 180, height: 50)
+                            .overlay{
+                                Button{
+                                    email.send(openURL: openURL)
+                                    
+                                } label: {
+                                    Text("메일 앱에서 작성하기")
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .padding(.top)
+                        
+                        RoundedRectangle(cornerRadius: 10)
+                            .frame(width: 180, height: 50)
+                            .overlay{
+                                Button{
+                                    pastedboard.string = "pkkyung26@gmail.com"
+                                    self.copiedComplete = true
+                                    
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                        self.copiedComplete = false
+                                    }
+                                    
+                                } label: {
+                                    Text("메일 주소 복사하기")
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .padding(.top)
+                        
                     }
-                    .padding(.top)
+                    Spacer()
+                }
                 
                 Spacer()
+                
+                if copiedComplete {
+                    HStack{
+                        Spacer()
+                        Text("복사되었습니다")
+                            .font(.callout)
+                            .foregroundColor(.middlebrightGray)
+                            .padding(.bottom)
+                        Spacer()
+                    }
+                }
             }
-            
-            Spacer()
-        }
-        .padding()
-//        .padding(.top, 190)
-        .navigationTitle(Text("고객센터"))
-        .navigationBarTitleDisplayMode(.inline)
+            .padding()
+            .padding(.top, 50)
+            .navigationTitle(Text("고객센터"))
+            .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-struct UserServiceView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack{
-            UserServiceView()
-        }
-    }
-}
+//struct UserServiceView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack{
+//            UserServiceView()
+//        }
+//    }
+//}
 
 
 //피드백 View
 struct UserFeedbackView: View{
+    // 다른 앱을 열기 위함
+
     @Environment(\.openURL) var openURL
+    
+    // text를 클립 보드에 복사하기 위한 변수
+    let pastedboard = UIPasteboard.general
+    @State private var copiedComplete: Bool = false
+    
+    // 메일 형식
     private var email = SupportEmail(toAddress: "pkkyung26@gmail.com", subject: "GRAIN 피드백 메일", messageHeader: "GRAIN에서 좋았던 점이나 불편했던 점, 바라는 점을 보내주세요.")
     
     var body: some View {
@@ -695,56 +757,108 @@ struct UserFeedbackView: View{
                 .font(.title2)
                 .bold()
                 .padding(.bottom)
-            VStack{
-                Text("GRAIN에 전달해주실 피드백을") +
-                Text(verbatim:"pkkyung@gmail.com")
-                    .foregroundColor(.vivaMagenta) +
-                Text("으로 보내주세요")
+            
+            VStack(alignment: .leading){
+                Text("GRAIN에 전달해주실 피드백을")
+                
+                HStack(spacing: 0){
+                    Text(verbatim:"pkkyung@gmail.com")
+                        .foregroundColor(.vivaMagenta)
+                        .onTapGesture {
+                            pastedboard.string = "pkkyung26@gmail.com"
+                            self.copiedComplete = true
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.copiedComplete = false
+                            }
+                        }
+                    
+                    Text("으로 보내주세요")
+                }
             }
             .font(.headline)
             .bold()
             .padding(.bottom)
             
+            VStack{
+                Text("GRAIN")
+                    .bold() +
                 Text("""
-GRAIN에서 좋았던 점이나 불편했던 점, 바라는 점을 보내주세요.
+에서 좋았던 점이나 불편했던 점, 바라는 점을 보내주세요.
 여러분의 소중한 피드백을 기다립니다!
 """)
+            }
                 .foregroundColor(.boxGray)
                 .padding(.bottom)
             
             HStack{
                 Spacer()
                 
-                RoundedRectangle(cornerRadius: 10)
-                    .frame(width: 180, height: 40)
-                    .overlay{
-                        Button{
-                            email.send(openURL: openURL)
-                            
-                        } label: {
-                            Text("메일 앱에서 작성하기")
-                                .foregroundColor(.white)
-                                .bold()
+                VStack{
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(width: 180, height: 50)
+                        .overlay{
+                            Button{
+                                email.send(openURL: openURL)
+                                
+                            } label: {
+                                Text("메일 앱에서 작성하기")
+                                    .foregroundColor(.white)
+                            }
                         }
-                    }
-                    .padding(.top)
+                        .padding(.top)
+                    
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(width: 180, height: 50)
+                        .overlay{
+                            Button{
+                                pastedboard.string = "pkkyung26@gmail.com"
+                                self.copiedComplete = true
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                    self.copiedComplete = false
+                                }
+                                
+                            } label: {
+                                Text("메일 주소 복사하기")
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        .padding(.top)
+                    
+                }
+                .padding(.top)
                 
                 Spacer()
                 
             }
             Spacer()
+            
+            if copiedComplete {
+                HStack{
+                    Spacer()
+                    Text("복사되었습니다")
+                        .font(.callout)
+                        .foregroundColor(.middlebrightGray)
+                        .padding(.bottom)
+                    Spacer()
+                }
+            }
+
         }
         .padding()
+        .padding(.top, 50)
         .navigationTitle(Text("피드백"))
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-//struct UserFeedbackView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NavigationStack{
-//            UserFeedbackView()
-//        }
-//    }
-//}
+
+struct UserFeedbackView_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack{
+            UserFeedbackView()
+        }
+    }
+}
 
 

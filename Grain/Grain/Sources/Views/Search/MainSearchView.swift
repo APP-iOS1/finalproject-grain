@@ -19,7 +19,6 @@ enum SearchState: Hashable {
 }
 
 struct MainSearchView: View {
-    @StateObject var searchViewModel: SearchViewModel = SearchViewModel()
     @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
     @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()

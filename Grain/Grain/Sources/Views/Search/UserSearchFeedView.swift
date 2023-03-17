@@ -83,7 +83,7 @@ struct UserSearchFeedView: View {
                 }.onAppear{
                     // MARK: fetch 데이터 시작
                     magazineViewModel.fetchMagazine()
-//                    userViewModel.fetchUser()
+                    userViewModel.fetchUser()
                 }
             }
             
@@ -203,6 +203,10 @@ struct UserPageUserFeedView: View {
                 }
                 
             }
+            
+        }.onAppear{
+            userVM.fetchUser()
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
     }
 }

@@ -5,7 +5,7 @@ import Kingfisher
 struct MagazineDetailView: View {
     @ObservedObject var magazineVM : MagazineViewModel
     
-    @State private var isHeartToggle: Bool = false// 하트 눌림 상황
+    @State private var isHeartToggle: Bool = false // 하트 눌림 상황
     @State private var isBookMarked: Bool = true
     @State private var isHeartAnimation: Bool = false
     @State private var heartOpacity: Double = 0

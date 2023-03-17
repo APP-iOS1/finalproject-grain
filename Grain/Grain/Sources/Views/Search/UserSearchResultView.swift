@@ -16,7 +16,7 @@ struct UserSearchResultView: View {
         return string.replacingOccurrences(of: " ", with: "")
     }
     
-    let user: UserViewModel
+    @StateObject var user: UserViewModel
     
     var body: some View {
             ZStack {

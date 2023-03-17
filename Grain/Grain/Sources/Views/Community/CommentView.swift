@@ -10,8 +10,8 @@ import FirebaseAuth
 
 //MARK: 입력된 댓글 레이아웃
 struct CommentView: View {
-    @StateObject var userVM: UserViewModel
-
+    @ObservedObject var userVM: UserViewModel
+    
     @StateObject var commentVm = CommentViewModel()
 
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine

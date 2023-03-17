@@ -11,8 +11,8 @@ import Kingfisher
 
 struct UserDetailView: View {
 
-    var user: UserDocument
-    @StateObject var userVM: UserViewModel
+    let user: UserDocument
+    @ObservedObject var userVM: UserViewModel
     
     @StateObject var magazineVM = MagazineViewModel()
     

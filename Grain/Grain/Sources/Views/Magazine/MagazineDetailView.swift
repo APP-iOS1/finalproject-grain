@@ -76,7 +76,6 @@ struct MagazineDetailView: View {
                                 .foregroundColor(.textGray)
                             
                         }
-                        Text(data.fields.likedNum.integerValue)
                         Spacer()
                         VStack{
                             Spacer()
@@ -409,30 +408,7 @@ struct MagazineDetailView: View {
             }
         }
     }
-    //        .toolbar {
-    //            ToolbarItem(placement: .navigationBarTrailing) {
-    //                HStack{
-    //                    // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
-    //                    if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
-    //                        NavigationLink {
-    //                            MagazineEditView(data: data)
-    //                        } label: {
-    //                            Image(systemName: "square.and.pencil")
-    //                                .foregroundColor(.blue)
-    //                        }
-    //
-    //                        Button {
-    //                            //삭제
-    //                            magazineVM.deleteMagazine(docID: data.name)
-    //                            dismiss()
-    //                        } label: {
-    //                            Image(systemName: "trash")
-    //                                .foregroundColor(.blue)
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        }
+    
     var sharedView: some View {
         ForEach(Array(data.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
             if index == selectedIndex{

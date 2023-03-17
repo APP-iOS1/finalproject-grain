@@ -13,7 +13,6 @@ struct MagazineFeedView: View {
 
     let currentUsers : CurrentUserFields?
     let userVM: UserViewModel
-//    let magazineVM: MagazineViewModel
 
     @State var updateNum : String = ""
     var body: some View {

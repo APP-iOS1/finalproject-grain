@@ -66,8 +66,3 @@ struct MainRecentSearchView: View {
     }
 }
 
-//struct MainRecentSearchView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MainRecentSearchView(searchList: .constant([""]))
-//    }
-//}

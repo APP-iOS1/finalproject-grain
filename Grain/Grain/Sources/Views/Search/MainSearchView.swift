@@ -22,7 +22,7 @@ struct MainSearchView: View {
     @StateObject var searchViewModel: SearchViewModel = SearchViewModel()
     @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
     @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
-    @StateObject var userViewModel: UserViewModel = UserViewModel()
+    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
     
     @State private var searchWord: String = ""
     @State private var searchList: [String] =  ["카메라", "명소", "출사"]

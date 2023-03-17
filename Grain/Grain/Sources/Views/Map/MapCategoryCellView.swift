@@ -20,7 +20,7 @@ struct MapCategoryCellView: View {
     @State var StationButtonClickedBool : Bool = false
     @State var repairButtonClickedBool : Bool = false
     
-    @Binding var moreCategoryButton : Bool
+    
     
     @Binding var reportButton : Bool    // 제보하러가기 버튼
     
@@ -55,31 +55,6 @@ struct MapCategoryCellView: View {
     var body: some View {
         // MARK: 카테고리 버튼
         HStack{
-            if moreCategoryButton {
-                Button {
-                    moreCategoryButton.toggle()
-                    categoryString = "전체"
-                } label: {
-                    
-                    Rectangle()
-
-                        .foregroundColor(allButtonClickedBool ? .black : .white)
-                        .overlay{
-                            HStack{
-                                Text("카테고리 더보기")
-                                    .fontWeight(.bold)
-                                    .font(.caption) //살짝 키우기
-                                    .foregroundColor(allButtonClickedBool ? .white : .gray)
-                            }
-                           
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(allButtonClickedBool ? .black : .white , lineWidth: 5)
-                        }.cornerRadius(10)
-                        .frame(width: Screen.maxWidth * 0.25, height:  Screen.maxHeight * 0.0525)
-                        
-                }
-                
-            }else{
                 HStack{
                     Button {
                         allButtonClickedBool.toggle()
@@ -101,7 +76,7 @@ struct MapCategoryCellView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(allButtonClickedBool ? .black : .white , lineWidth: 5)
                             }.cornerRadius(10)
-                            .frame(width: Screen.maxWidth * 0.145, height:  Screen.maxHeight * 0.0525)
+                            .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
                             
                     }
                     
@@ -122,7 +97,7 @@ struct MapCategoryCellView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(photoButtonClickedBool ? .black : .white , lineWidth: 5)
                             }.cornerRadius(10)
-                            .frame(width: Screen.maxWidth * 0.145, height:  Screen.maxHeight * 0.0525)
+                            .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
                             
                     }
                     
@@ -144,7 +119,7 @@ struct MapCategoryCellView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(StationButtonClickedBool ? .black : .white , lineWidth: 5)
                             }.cornerRadius(10)
-                            .frame(width: Screen.maxWidth * 0.145, height:  Screen.maxHeight * 0.0525)
+                            .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
 
                     }
                     
@@ -166,28 +141,12 @@ struct MapCategoryCellView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(repairButtonClickedBool ? .black : .white , lineWidth: 5)
                             }.cornerRadius(10)
-                            .frame(width: Screen.maxWidth * 0.145, height:  Screen.maxHeight * 0.0525)
+                            .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
                             
                     }
                     
-                    Button {
-                        moreCategoryButton.toggle()
-                    } label: {
-                        Rectangle()
-                            .foregroundColor(.white)
-                            .overlay{
-                                HStack{
-                                    Image(systemName: "lessthan")
-                                        
-                                }
-                                
-                            }.cornerRadius(10)
-                            .frame(width: Screen.maxWidth * 0.1 , height:  Screen.maxHeight * 0.0525)
-                            
-                    }
-                   
                 }
-            }
+            
             Spacer()
         
             Button {

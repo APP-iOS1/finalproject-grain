@@ -3,7 +3,7 @@ import FirebaseAuth
 import Kingfisher
 
 struct MagazineDetailView: View {
-    @StateObject var magazineVM = MagazineViewModel()
+    @ObservedObject var magazineVM : MagazineViewModel
     
     @State private var isHeartToggle: Bool = false// 하트 눌림 상황
     @State private var isBookMarked: Bool = true
@@ -12,16 +12,19 @@ struct MagazineDetailView: View {
     @State private var saveOpacity: Double = 0
     @State private var showDevices: Bool = false
     @State private var currentAmount: CGFloat = 0
-    @State private var dragOffset: CGSize = CGSize.zero
+
+    @State private var dragOffset = CGSize.zero
+    @State private var firstImage: Image?
     @State private var renderedImage: Image = Image(systemName: "photo")
     @State private var isDeleteAlertShown:Bool = false
+
     
     @Environment(\.dismiss) private var dismiss
     
     let userVM: UserViewModel
     let currentUsers : CurrentUserFields?
     let data : MagazineDocument
-    
+    @Binding var updateNum : String
     @SceneStorage("isZooming") var isZooming: Bool = false
     @SceneStorage("index") var selectedIndex: Int = 0
     @Environment(\.displayScale) var displayScale
@@ -73,7 +76,7 @@ struct MagazineDetailView: View {
                                 .foregroundColor(.textGray)
                             
                         }
-                        
+                        Text(data.fields.likedNum.integerValue)
                         Spacer()
                         VStack{
                             Spacer()
@@ -174,7 +177,6 @@ struct MagazineDetailView: View {
                                     .foregroundColor(.black)
                                     .padding(.top, 2)
                             }
-                            
                             //                        Spacer()
                             
                             //MARK: 북마크 버튼
@@ -250,13 +252,11 @@ struct MagazineDetailView: View {
                   primaryButton:  .cancel(Text("취소")),
                   secondaryButton:.destructive(Text("삭제"),
                                                action: {
-                magazineVM.deleteMagazine(docID: data.name)
+                        magazineVM.deleteMagazine(docID: data.fields.id.stringValue)                       
                 dismiss()
             }))
         }
         .onAppear{
-            print("MagazineDetailView onAppear Start")
-            
             // 희경: 유저 팔로워, 팔로잉 업데이트 후 뒤로가기했다가 다시 들어갔을때 바로 반영안되는 issue
             // [해결] magazineDetailView의 onAppear 에서 fetchUser를 해주는 방식에서 userVM의 updateCurrentUserArray 메소드의 receivedValue 블록에 fetchUser 해주는 방식으로 변경
             // [이유] UserDetailView의 onDisappear메소드와 onAppear메소드간의 비동기처리가 문제였던것같다.
@@ -277,9 +277,9 @@ struct MagazineDetailView: View {
             }else{
                 isBookMarked = false
             }
+            
         }
         .onDisappear{
-            print("MagazineDetailView onDisappear Start")
             if isHeartToggle {
                 // 좋아요 누름
                 if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
@@ -288,8 +288,14 @@ struct MagazineDetailView: View {
                         let arr = userVM.likedMagazineID
                         let docID =  user.id.stringValue
                         userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
+                       
+                        updateNum = data.fields.likedNum.integerValue
+                        var plusNum = Int(updateNum)! + 1
+                        magazineVM.updateMagazine(num: plusNum, docID: data.fields.id.stringValue)
+                        updateNum = String(plusNum)
                     }
                 }
+//                print(magazineVM.sortedRecentMagazineData)
             } else {
                 // 좋아요 취소
                 if userVM.likedMagazineID.contains(data.fields.id.stringValue){
@@ -297,11 +303,14 @@ struct MagazineDetailView: View {
                         if userVM.likedMagazineID.contains(data.fields.id.stringValue) {
                             let index = userVM.likedMagazineID.firstIndex(of: data.fields.id.stringValue)
                             userVM.likedMagazineID.remove(at: index!)
-                            print("likedMagazineIDARR: \(userVM.likedMagazineID)")
                         }
                         //                            let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
                         let docID = user.id.stringValue
                         userVM.updateCurrentUserArray(type: "likedMagazineId", arr: userVM.likedMagazineID, docID: docID)
+                        updateNum = data.fields.likedNum.integerValue
+                        var minusNum = Int(updateNum)! - 1
+                        magazineVM.updateMagazine(num:  minusNum , docID: data.fields.id.stringValue)
+                        updateNum = String(minusNum)
                     }
                 }
             }
@@ -355,6 +364,7 @@ struct MagazineDetailView: View {
                             self.saveOpacity = 0
                         }
                     } label: {
+
                         HStack{
                             Text(isBookMarked ? "저장 취소" : "저장")
                             Spacer()

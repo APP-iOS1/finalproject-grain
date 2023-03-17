@@ -54,7 +54,7 @@ struct MagazineMainView: View {
                         MagazineBestView(userVM: userViewModel, currentUsers: userViewModel.currentUsers, magazineVM: magazineVM)
                     }
                 default:
-                    MagazineFeedView(currentUsers: userViewModel.currentUsers, userVM: userViewModel, magazineVM: magazineVM)
+                    MagazineFeedView(magazineVM: magazineVM, currentUsers: userViewModel.currentUsers, userVM: userViewModel)
                 }
             }
             .navigationDestination(isPresented: $isSearchViewShown) {

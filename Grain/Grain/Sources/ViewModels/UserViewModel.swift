@@ -58,7 +58,6 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
-                print("UserViewModel fetchUser start ++ 실행완")
                 self.users = data.documents
                 self.fetchUsersSuccess.send(data.documents)
             }.store(in: &subscription)
@@ -69,7 +68,6 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CurrentUserResponse) in
-                print("UserViewModel fetchCurrentUser start ++ 실행완")
                 self.currentUsers = data.fields
                 if let currentUsers = self.currentUsers {
                     self.parsingUserDataToStringArr(currentUserData: currentUsers)
@@ -171,7 +169,6 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
-                print("updateCurrentUserArray start ***")
                 self.fetchUser()
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)

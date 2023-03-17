@@ -11,13 +11,16 @@ import Kingfisher
 struct MagazineEditView: View {
     @State var data : MagazineDocument
     @StateObject var magazineVM = MagazineViewModel()
-
+    
     @State var editTitle : String = ""
     @State var editContent : String = ""
     @State var editCustomPlace : String = ""
     
     @State var clickedContent : Bool = false    // 텍스트 클릭 Bool
     @State var clickedCustomPlace : Bool = false    // 텍스트 클릭 Bool
+    @State private var showSuccessAlert: Bool = false
+    @Environment(\.presentationMode) var presentationMode
+    @State private var showAlert: Bool = false
     
     var body: some View {
         NavigationView{
@@ -45,7 +48,7 @@ struct MagazineEditView: View {
                                                 clickedCustomPlace.toggle()
                                             }
                                     }
-                                   
+                                    
                                 }
                                 .font(.caption)
                             }
@@ -58,7 +61,7 @@ struct MagazineEditView: View {
                             .background(Color.black)
                             .padding(.top, -5)
                             .padding(.bottom, -10)
-
+                        
                         //            Image("line")
                         //                .resizable()
                         //                .frame(width: Screen.maxWidth, height: 0.3)
@@ -78,7 +81,7 @@ struct MagazineEditView: View {
                         .tabViewStyle(.page)
                     }
                     .frame(minHeight: 350)
-
+                    
                     LazyVStack(pinnedViews: [.sectionHeaders]) {
                         Section(header: MagazineEditHeader(data: data, editTitle: $editTitle) ){
                             VStack {
@@ -91,7 +94,7 @@ struct MagazineEditView: View {
                                         .padding()
                                         .foregroundColor(Color.textGray)
                                         .onSubmit {
-//                                            data.fields.content.stringValue = editContent
+                                            //                                            data.fields.content.stringValue = editContent
                                             clickedContent.toggle()
                                         }
                                 }else{
@@ -116,21 +119,55 @@ struct MagazineEditView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack{
-                    Button {
-                        var docId = String(data.name.suffix(20))
-                        data.fields.title.stringValue = editTitle
-                        data.fields.content.stringValue = editContent
-                        magazineVM.updateMagazine(data: data, docID: docId)
-                    } label: {
-                        Text("수정완료")
+                    if editTitle.isEmpty && editContent.isEmpty {
+                        Button {
+                            showAlert.toggle()
+                        } label: {
+                            Text("수정완료")
+                        }//변경 안됐을때 Alert
+                        .alert(isPresented: $showAlert) {
+                            Alert(title: Text("변경된 내용이 없습니다."),
+                                  message: Text("수정하실 내용을 입력해주세요."),
+                                  dismissButton: .destructive(
+                                    Text("확인")
+                                  ){
+                                      
+                                  })
+                        }
+                    }else{
+                        Button {
+                            if editTitle.count > 0 {
+                                data.fields.title.stringValue = editTitle
+                            }else{
+                                data.fields.title.stringValue = data.fields.title.stringValue
+                            }
+                            //content가 바뀐게 있다면 바뀐거 넣어주고 없으면 그대로 전송하기
+                            if editContent.count > 0 {
+                                data.fields.content.stringValue = editContent
+                            }else{
+                                data.fields.content.stringValue = data.fields.content.stringValue
+                            }
+                            magazineVM.updateMagazine(data: data, docID: data.fields.id.stringValue)
+                            
+                            showSuccessAlert.toggle()
+                        }  label: {
+                            Text("수정완료")
+                        }.alert(isPresented: $showSuccessAlert) {
+                            Alert(title: Text("수정이 완료되었습니다."),
+                                  message: Text(""),
+                                  dismissButton: .destructive(
+                                    Text("확인")
+                                  ){
+                                      presentationMode.wrappedValue.dismiss()
+                                  })
+                        }
+                        
                     }
-
                 }
             }
         }
     }
 }
-
 struct MagazineEditHeader: View {
     @State var data : MagazineDocument
     @Binding var editTitle : String

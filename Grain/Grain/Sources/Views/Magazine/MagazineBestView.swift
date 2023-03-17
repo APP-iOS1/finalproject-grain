@@ -18,9 +18,12 @@ fileprivate  enum timePeriod {
 struct MagazineBestView: View {
     let userVM: UserViewModel
     let currentUsers : CurrentUserFields?
+
+    @State var updateNum : String = ""
+
     
     @ObservedObject var magazineVM: MagazineViewModel
-    
+
     var body: some View {
         VStack {
             ScrollView {
@@ -40,8 +43,9 @@ struct MagazineBestView: View {
                 .padding([.leading, .top])
                 ForEach(Array(magazineVM.sortedTopLikedMagazineData.enumerated()), id: \.1.self ){ (index, data) in
                     NavigationLink {
-                        MagazineDetailView(userVM: userVM, currentUsers: currentUsers, data: data)
+                        MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: currentUsers, data: data, updateNum: $updateNum)
                     } label: {
+
                         LazyVStack{
                             Top10View(data: data)
                                 .padding(.vertical, 7)
@@ -51,9 +55,11 @@ struct MagazineBestView: View {
                         
                     }
                    
+
                 }
-            } // scroll view
+            }
         }//vstack
+
     }
 }
 

@@ -196,6 +196,9 @@ struct CameraLenseFilmModalView: View {
                         data.image.arrayValue = MagazineArrayValue(values: [])
                         magazineVM.insertMagazine(data: data, images: selectedImages)
                         mapVM.insertMap(data: data)
+                        var postMagazineArr : [String]  = userVM.postedMagazineID
+                        postMagazineArr.append(docId)
+                        userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
                         magazineVM.fetchMagazine()
                         presented.toggle()
                     }

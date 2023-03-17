@@ -61,6 +61,12 @@ struct Top10View: View {
                                 .frame( alignment:.leading)
                                
                             Spacer()
+                            Image(systemName: "heart.fill")
+                                .font(.subheadline)
+                                .foregroundColor(.white)
+                            Text(data.fields.likedNum.integerValue)
+                                .font(.subheadline)
+                                .foregroundColor(.white)
                         }
                         .padding(.horizontal)
                         .padding(.vertical)

@@ -149,12 +149,12 @@ struct ContentView: View {
             //                    magazineVM.updateMagazine()
         }
         .ignoresSafeArea(.keyboard)
-        //        .splashView {
-        //            ZStack{
-        //                SplashScreen()
-        //            }
-        //
-        //        }
+//                .splashView {
+//                    ZStack{
+//                        SplashScreen()
+//                    }
+//        
+//                }
     }
     
 }

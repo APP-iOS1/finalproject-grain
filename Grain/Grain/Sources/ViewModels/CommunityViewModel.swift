@@ -34,7 +34,7 @@ final class CommunityViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommunityResponse) in
                 self.communities = data.documents
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) { // 스켈레톤 View를 위해
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
                     self.isLoading = false
                 }
                 // MARK: 커뮤니티 최신순으로 정렬

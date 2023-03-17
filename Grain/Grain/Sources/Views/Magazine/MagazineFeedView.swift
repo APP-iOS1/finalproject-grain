@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct MagazineFeedView: View {
+
     @ObservedObject var magazineVM: MagazineViewModel
-    
+
     let currentUsers : CurrentUserFields?
     let userVM: UserViewModel
 //    let magazineVM: MagazineViewModel
@@ -24,7 +25,9 @@ struct MagazineFeedView: View {
                         MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: currentUsers, data: data, updateNum: $updateNum)
                     } label: {
                         // MARK: fetch해온 데이터 cell뷰로 보여주기
-                        MagazineViewCell(data: data)
+                        LazyVStack{
+                            MagazineViewCell(data: data)
+                        }
                     }
                     .task(id: updateNum){
                         Task{
@@ -45,6 +48,7 @@ struct MagazineFeedView: View {
                     print("--------------------")
                 }
                
+
             }
             
         }

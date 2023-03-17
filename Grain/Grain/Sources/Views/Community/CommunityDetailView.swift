@@ -30,12 +30,16 @@ struct CommunityDetailView: View {
     
     @State private var postStatus : String = "" // 게시글 상태 값
     @State private var postStatusString : String = "" // 게시글 상태 변경 표시글
+    
     @FocusState private var textFieldFocused: Bool
     
+
     @State var commentCollectionDocId: String = ""
     @State var replyCommentText : String = "" // 답글 표시 이름 값
     @State var replyContent: String = ""
     @State var replyComment : Bool = false  // 답글 표시 Bool값
+    @SceneStorage("isZooming") var isZooming: Bool = false
+
     
     var body: some View {
         NavigationView {
@@ -79,31 +83,30 @@ struct CommunityDetailView: View {
                             .padding(.top, 5)
                             .padding(.bottom, 15)
                             .padding(.horizontal, Screen.maxWidth * 0.04)
-                                                
+                        
                         //MARK: 사진
-                        TabView{
-                            ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
-                                Rectangle()
-                                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                                    .overlay{
-                                        KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                    }
-                            }
-                        } //이미지 뷰
-                        .tabViewStyle(.page)
+                        ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
+                            Rectangle()
+                                .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                                .overlay{
+                                    KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                }
+                        }
+                        .addPinchZoom()
                         .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                         .padding(.bottom, 10)
-   
+                        .zIndex(.infinity)
+                        
                         // MARK: 게시글(디테일뷰) 내용
-                                HStack {
-                                    Text(community.fields.content.stringValue)
-                                        .lineSpacing(4.0)
-                                        .padding(.vertical, -20)
-                                        .padding()
-                                    Spacer()
-                                }
+                        HStack {
+                            Text(community.fields.content.stringValue)
+                                .lineSpacing(4.0)
+                                .padding(.vertical, -20)
+                                .padding()
+                            Spacer()
+                        }
                         .padding(.top, 10)
                         Divider()
                             .frame(maxWidth: Screen.maxWidth * 0.94)
@@ -123,7 +126,13 @@ struct CommunityDetailView: View {
                 }
                 .padding(.top, 1)
                 // MARK: 댓글 달기
-                CommunityCommentView(currentUser: userVM.currentUsers,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
+                if isZooming == false {
+                    CommunityCommentView(currentUser: userVM.currentUsers,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
+                        .transition(.move(edge: .bottom))
+                        .animation(.default , value: isZooming)
+
+                }
+
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -141,64 +150,64 @@ struct CommunityDetailView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
                     if community.fields.userID.stringValue == Auth.auth().currentUser?.uid{
-                    Menu {
-                        if !(postStatus == ""){
-                            Button{
-                                community.fields.state.stringValue = postStatus
-                                communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
+                        Menu {
+                            if !(postStatus == ""){
+                                Button{
+                                    community.fields.state.stringValue = postStatus
+                                    communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
+                                }label: {
+                                    Text(postStatusString)
+                                }
+                            }
+                            Button {
+                                //저장시 코드
+                            } label: {
+                                Text("저장")
+                            }
+                            NavigationLink {
+                                CommunityEditView(communityVM: communityVM, community: community, editFetch: $editFetch)
                             }label: {
-                                Text(postStatusString)
+                                Text("수정")
+                            }
+                            .onChange(of: editFetch) { _ in
+                                communityVM.fetchCommunity()
+                            }
+                            Button {
+                                communityVM.deleteCommunity(docID: community.fields.id.stringValue)
+                                presentationMode.wrappedValue.dismiss()
+                            } label: {
+                                Text("삭제")
+                            }
+                            
+                            
+                        } label: {
+                            Label("더보기", systemImage: "ellipsis")
+                            
+                        }
+                        .onAppear{
+                            switch community.fields.state.stringValue{
+                            case "모집중":
+                                postStatusString = "모집완료 (으)로 변경"
+                                postStatus = "모집완료"
+                            case "판매중":
+                                postStatusString = "판매완료 (으)로 변경"
+                                postStatus = "판매완료"
+                            case "모집완료":
+                                postStatusString = "모집중 (으)로 변경"
+                                postStatus = "모집중"
+                            case "판매완료":
+                                postStatusString = "판매중 (으)로 변경"
+                                postStatus = "판매중"
+                            default:
+                                postStatus = ""
                             }
                         }
-                        Button {
-                            //저장시 코드
-                        } label: {
-                            Text("저장")
-                        }
-                        NavigationLink {
-                            CommunityEditView(communityVM: communityVM, community: community, editFetch: $editFetch)
-                        }label: {
-                            Text("수정")
-                        }
-                        .onChange(of: editFetch) { _ in
-                            communityVM.fetchCommunity()
-                        }
-                        Button {
-                            communityVM.deleteCommunity(docID: community.fields.id.stringValue)
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Text("삭제")
-                        }
-                        
-                        
-                    } label: {
-                        Label("더보기", systemImage: "ellipsis")
-                        
-                    }
-                    .onAppear{
-                        switch community.fields.state.stringValue{
-                        case "모집중":
-                            postStatusString = "모집완료 으로 변경"
-                            postStatus = "모집완료"
-                        case "판매중":
-                            postStatusString = "판매완료 으로 변경"
-                            postStatus = "판매완료"
-                        case "모집완료":
-                            postStatusString = "모집중 으로 변경"
-                            postStatus = "모집중"
-                        case "판매완료":
-                            postStatusString = "판매중 으로 변경"
-                            postStatus = "판매중"
-                        default:
-                            postStatus = ""
-                        }
-                    }
-                    .accentColor(.black)
-                    .padding(.trailing, Screen.maxWidth * 0.04)
+                        .accentColor(.black)
+                        .padding(.trailing, Screen.maxWidth * 0.04)
                     } else {
                         Menu {
                             Button {
-                             //저장시 코드
+                                //저장시 코드
                             } label: {
                                 Text("저장")
                             }
@@ -234,7 +243,7 @@ struct CommunityDetailView: View {
                                    collectionDocId: community.fields.id.stringValue)
             print("실행?")
         })
-                  
+        
         .onDisappear{
             Task{
                 

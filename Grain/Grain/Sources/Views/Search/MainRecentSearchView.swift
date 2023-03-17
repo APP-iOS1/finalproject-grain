@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct MainRecentSearchView: View {
-    @StateObject var searchVM = SearchViewModel()
     @Binding var searchList: [String]
+    @ObservedObject var userVM: UserViewModel
     
     var body: some View {
         VStack{
@@ -21,6 +22,8 @@ struct MainRecentSearchView: View {
                 
                 Button(action: {
                     searchList.removeAll()
+                    let arr: [String] = [""]
+                    userVM.updateCurrentUserArray(type: "recentSearch", arr: arr, docID: Auth.auth().currentUser?.uid ?? "")
                 }) {
                     Text("전체삭제")
                         .font(.subheadline)
@@ -28,39 +31,43 @@ struct MainRecentSearchView: View {
                 }
             }
             .padding(.bottom, 0)
-            ForEach(0..<searchList.count, id: \.self) { index in
-                HStack {
-                    NavigationLink(destination: {
+            if userVM.recentSearch.count > 1 {
+                ForEach(1..<userVM.recentSearch.count, id: \.self) { index in
+                    HStack {
+                        NavigationLink(destination: {
+                            
+                        }) {
+                            Text(userVM.recentSearch[index])
+                                .fontWeight(.bold)
+                                .foregroundColor(.black)
+                            
+                        }
+                        Spacer()
                         
-                    }) {
-                        Text(searchList[index])
-                            .fontWeight(.bold)
-                            .foregroundColor(.black)
+                        Button(action: {
+                            searchList.remove(at: index)
+                            var arr = userVM.recentSearch
+                            arr.remove(at: index)
+                            userVM.updateCurrentUserArray(type: "recentSearch", arr: arr, docID: Auth.auth().currentUser?.uid ?? "")
+                        }) {
+                            Image(systemName: "multiply")
+                                .foregroundColor(.gray)
+                            
+                        }
+                        .frame(alignment: .trailing )
                         
                     }
-                    Spacer()
-                    
-                    Button(action: {
-                        searchList.remove(at: index)
-                    }) {
-                        Image(systemName: "multiply")
-                            .foregroundColor(.gray)
-                        
-                    }
-                    .frame(alignment: .trailing )
-                    
+                    .padding()
                 }
-                .padding()
             }
-            
         }
         .padding()
         
     }
 }
 
-struct MainRecentSearchView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainRecentSearchView(searchList: .constant([""]))
-    }
-}
+//struct MainRecentSearchView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MainRecentSearchView(searchList: .constant([""]))
+//    }
+//}

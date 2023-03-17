@@ -81,6 +81,20 @@ struct MainSearchView: View {
                                     }else {
                                         self.isUserSearchResultShown.toggle()
                                     }
+                                    
+                                    if let user = userViewModel.currentUsers {
+                                        if userViewModel.recentSearch.contains(where: { $0 == self.searchWord }) {
+                                            // 이미 검색한 검색어이면 배열에서 먼저 이미 있는 값 삭제
+                                            if let index = userViewModel.recentSearch.firstIndex(of: self.searchWord) {
+                                                userViewModel.recentSearch.remove(at: index)
+                                            }
+                                        }
+
+                                        // 배열의 첫번째 인덱스에 넣어준다.
+                                        // 1 index 에 넣는 이유는 0번째 인덱스가 "" 로 초기화 되어있기 때문.
+                                        userViewModel.recentSearch.insert(self.searchWord, at: 1)
+                                        userViewModel.updateCurrentUserArray(type: "recentSearch", arr: userViewModel.recentSearch, docID: user.id.stringValue)
+                                    }
                                 }
                             }
                             .onChange(of: searchWord) { value in
@@ -154,8 +168,7 @@ struct MainSearchView: View {
                 }
                 
                 if searchWord.isEmpty {
-                    
-                    MainRecentSearchView(searchList: $searchList)
+                    MainRecentSearchView(searchList: $searchList, userVM: userViewModel)
                     
                 } else if !searchWord.isEmpty {
                     ZStack {
@@ -198,29 +211,7 @@ struct MainSearchView: View {
                                             }
                                             .padding(.horizontal)
                                         }.onTapGesture {
-                                            // 서치 뷰모델에 업데이트 하는 메소드 호출
-                                            
-                                            if let recentSearch = searchViewModel.recentSearch.first(where: {
-                                                $0.fields.id.stringValue == item.fields.id.stringValue
-                                            }) {
-                                                recentSearch.
-                                            } else {
-                                                
-                                            }
-                                            
-                                            
-//                                            if let user = userViewModel.currentUsers {
-//                                                if userViewModel.recentSearch.contains(where: { $0 == self.searchWord }) {
-//                                                    // 이미 검색한 검색어이면 배열에서 먼저 이미 있는 값 삭제
-//                                                    if let index = userViewModel.recentSearch.firstIndex(of: self.searchWord) {
-//                                                        userViewModel.recentSearch.remove(at: index)
-//                                                    }
-//                                                }
-//                                                
-//                                                // 배열의 첫번째 인덱스에 넣어준다.
-//                                                userViewModel.recentSearch.insert(self.searchWord, at: 0)
-//                                                userViewModel.updateCurrentUserArray(type: "recentSearch", arr: userViewModel.recentSearch, docID: user.id.stringValue)
-//                                            }
+                                        
                                         }
                                     }
                                     

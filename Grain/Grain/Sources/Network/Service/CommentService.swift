@@ -59,8 +59,6 @@ enum CommentService {
             // FIXME: - 검증 필요
             let docID: String = docID
             let request = try CommentRouter.patch(collectionName: collectionName, collectionDocId: collectionDocId, docID: docID, updateComment: updateComment, data: data ).asURLRequest()
-            
-            print("update request: \(request)")
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

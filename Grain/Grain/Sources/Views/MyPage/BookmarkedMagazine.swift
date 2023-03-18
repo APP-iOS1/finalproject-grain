@@ -13,7 +13,7 @@ struct BookmarkedMagazine: View {
     
     var bookmarkedMagazineDocument: [MagazineDocument]
     @StateObject var userVM = UserViewModel()
-    @StateObject var magazineVM = MagazineViewModel()
+    @ObservedObject var magazineVM: MagazineViewModel
     // 테스트 이미지 배열
     var images: [Image] = [Image("1"), Image("2"), Image("3"), Image("test"), Image("sampleImage"), Image("testImage")]
     
@@ -22,7 +22,7 @@ struct BookmarkedMagazine: View {
         GridItem(.flexible(), spacing: 1),
         GridItem(.flexible(), spacing: 1)
     ]
-    @State var updateNum : String = ""
+    @State var ObservingChangeValueLikeNum : String = ""
     var body: some View {
         VStack{
             ScrollView{
@@ -43,7 +43,7 @@ struct BookmarkedMagazine: View {
                 LazyVGrid(columns: columns, spacing: 1) {
                     ForEach(bookmarkedMagazineDocument, id: \.self) { item in
                         NavigationLink {
-                            MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: userVM.currentUsers, data: item, updateNum: $updateNum)
+                            MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: userVM.currentUsers, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                         } label: {
                             KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                .resizable()
@@ -54,14 +54,14 @@ struct BookmarkedMagazine: View {
                     }
                 }
             }
+            .task(id: ObservingChangeValueLikeNum){
+                Task{
+                    await magazineVM.fetchMagazine()
+                }
+            }
         }
         .navigationTitle("저장된 매거진")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-struct BookmarkedMagazine_Previews: PreviewProvider {
-    static var previews: some View {
-        BookmarkedMagazine(bookmarkedMagazineDocument: [])
-    }
-}

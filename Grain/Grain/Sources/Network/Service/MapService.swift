@@ -53,9 +53,6 @@ enum MapService {
         
         do {
             let request = try requestRouter.asURLRequest()
-            print("request")
-            print(request)
-            
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

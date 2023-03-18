@@ -57,7 +57,7 @@ struct MainSearchView: View {
 //        }
     }
     
-    @State var updateNum : String = ""
+    @State var ObservingChangeValueLikeNum : String = ""
 
     var body: some View {
         NavigationStack{
@@ -193,7 +193,7 @@ struct MainSearchView: View {
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                                     }.prefix(3),id: \.self) { item in
                                         NavigationLink {
-                                            MagazineDetailView(magazineVM: magazineViewModel, userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item, updateNum: $updateNum)
+                                            MagazineDetailView(magazineVM: magazineViewModel, userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                                         } label: {
                                             VStack(alignment: .leading){
                                                 Text(item.fields.title.stringValue)
@@ -226,6 +226,11 @@ struct MainSearchView: View {
                                             .padding(.vertical, 9)
                                     }
                                     
+                                }
+                                .task(id: ObservingChangeValueLikeNum){
+                                   Task{
+                                       await magazineViewModel.fetchMagazine()
+                                   }
                                 }
                                 .emptyPlaceholder(magazineViewModel.magazines.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)
@@ -461,7 +466,7 @@ struct MainSearchView: View {
         }
         
         .navigationDestination(isPresented: $isUserSearchResultShown){
-            UserSearchResultView(searchWord: $searchWord, user: userViewModel)
+            UserSearchResultView(searchWord: $searchWord, user: userViewModel, magazineVM: magazineViewModel)
         }
         .onAppear{
             if searchWord.isEmpty{

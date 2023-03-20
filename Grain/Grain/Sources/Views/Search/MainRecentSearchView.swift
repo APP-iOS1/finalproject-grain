@@ -40,29 +40,32 @@ struct MainRecentSearchView: View {
                             Text(userVM.recentSearch[index])
                                 .fontWeight(.bold)
                                 .foregroundColor(.black)
-                            
+
                         }
                         Spacer()
-                        
+
                         Button(action: {
                             searchList.remove(at: index)
                             var arr = userVM.recentSearch
                             arr.remove(at: index)
                             userVM.updateCurrentUserArray(type: "recentSearch", arr: arr, docID: Auth.auth().currentUser?.uid ?? "")
+
                         }) {
                             Image(systemName: "multiply")
                                 .foregroundColor(.gray)
-                            
+
                         }
                         .frame(alignment: .trailing )
-                        
-                    }
+
+                    }//hstack
                     .padding()
-                }
+                }// ForEach
             }
         }
+        .onReceive(userVM.updateUsersArraySuccess, perform: { _ in
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+        })
         .padding()
-        
     }
 }
 

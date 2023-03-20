@@ -466,7 +466,7 @@ struct MainSearchView: View {
         .onAppear{
             if searchWord.isEmpty{
                         isShownProgress = true
-                    }
+            }
             self.focus = .search
             userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
             communtyViewModel.fetchCommunity()

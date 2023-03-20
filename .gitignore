@@ -99,3 +99,4 @@ Grain/Podfile.lock
 
 **/GoogleService-Info.plist
 *.xcconfig
+Grain/Grain/GoogleService-Info.plist

@@ -10,16 +10,14 @@ import Kingfisher
 import FirebaseAuth
 
 struct MagazineCommentView: View {
-    @StateObject var commentVm = CommentViewModel() //댓글 뷰 모델 사용
     
-    let userVM: UserViewModel
-    
-    var currentUser : CurrentUserFields?  //현재 유저 받아오기
+    @ObservedObject var userVM : UserViewModel
+    @StateObject var commentVm = CommentViewModel()
     
     @State var commentText: String = "" // 댓글 작성 텍스트 필드
     @State var editButtonShowing : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
     @State var summitComment : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
-    @State var deleebuttonBool : Bool = false
+    @State var deleteButtonBool : Bool = false   //onChange를 이용하여 fetch 해주기
     @State var replyComment : Bool = false  // 답글 표시 Bool값
     @State var replyCommentText : String = "" // 답글 표시 이름 값
     @State var commentCollectionDocId : String = "" // 답글 id
@@ -32,7 +30,6 @@ struct MagazineCommentView: View {
     
     func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬 예) 댓글 3개면 [ false, false, false ]
         eachBool = Array(repeating: false, count: count)
-       
     }
     
     var body: some View {
@@ -110,21 +107,20 @@ struct MagazineCommentView: View {
                                     
                                     if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                         Button {
-                                            //수정 하기 버튼
                                             commentVm.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue, updateComment: commentText,data: commentVm.sortedRecentComment[index].fields)
                                             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                                             commentText = ""
-                                            
+
                                         } label: {
                                             Text("수정")
                                         }
                                         //  MARK: 삭제
                                         Button {
                                             commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue)
-                                            deleebuttonBool.toggle()
+                                            deleteButtonBool.toggle()
                                         } label: {
                                             Text("삭제")
-                                        }.onChange(of: deleebuttonBool) { _ in
+                                        }.onChange(of: deleteButtonBool) { _ in
                                             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                                         }
                                     }
@@ -136,7 +132,7 @@ struct MagazineCommentView: View {
                                 
                                 VStack{
                                     if readMoreComments && eachBool[index]{
-                                        MagazineRecommentView(userVM: userVM, currentUser: currentUser, commentVm: commentVm, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, commentText: $commentText)
+                                        MagazineRecommentView(userVM: userVM, commentVm: commentVm, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
                                     }
                                 }
                             }
@@ -180,7 +176,7 @@ struct MagazineCommentView: View {
                 }
                 // MARK: 댓글 구역
                 HStack{
-                    KFImage(URL(string: currentUser?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "" ) ??  URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg") )
                         .resizable()
                         .frame(width: 35, height: 35)
                         .cornerRadius(30)
@@ -189,7 +185,7 @@ struct MagazineCommentView: View {
                                 .stroke(lineWidth: 0.5)
                         }
                         .padding(.leading)
-                    MagazineCommentTextField(commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, commentCollectionDocId: $commentCollectionDocId, reCommentCount: $reCommentCount, eachBool: $eachBool, currentUser: currentUser,collectionName: collectionName, collectionDocId: collectionDocId)
+                    MagazineCommentTextField(commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, commentCollectionDocId: $commentCollectionDocId, reCommentCount: $reCommentCount, eachBool: $eachBool, currentUser: userVM.currentUsers,collectionName: collectionName, collectionDocId: collectionDocId)
                         .onChange(of: summitComment) { _ in
                             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                         }
@@ -204,6 +200,7 @@ struct MagazineCommentView: View {
     }
 }
 struct MagazineCommentTextField: View {
+    
     @Binding var commentText: String
     @Binding var summitComment: Bool
     @Binding var replyComment : Bool

@@ -12,10 +12,11 @@ import Kingfisher
 
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
-    // 댓글 관련
+
+    
     @StateObject var commentVm = CommentViewModel()
-    @StateObject var communityVM = CommunityViewModel()
-    @StateObject var userVM = UserViewModel()
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
     
     @State var community: CommunityDocument
     @State private var isBookMarked: Bool = false
@@ -108,7 +109,7 @@ struct CommunityDetailView: View {
                             .padding(.bottom, 15)
                             .padding(.horizontal, Screen.maxWidth * 0.04)
                         // MARK: - 커뮤니티 댓글 뷰
-                        CommentView(userVM: userVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, currentUser: userVM.currentUsers, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
+                        CommentView(userVM: userVM, commentVm: commentVm, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
                     }
                 }
                 .refreshable {
@@ -117,7 +118,8 @@ struct CommunityDetailView: View {
                 .padding(.top, 1)
                 // MARK: 댓글 달기
                 if isZooming == false {
-                    CommunityCommentView(currentUser: userVM.currentUsers,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
+                    
+                    CommunityCommentView( commentVm : commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
                         .transition(.move(edge: .bottom))
                         .animation(.default , value: isZooming)
 
@@ -220,7 +222,6 @@ struct CommunityDetailView: View {
         .onChange(of: commentVm.comment, perform: { value in
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
-            print("실행?")
         })
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)

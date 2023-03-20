@@ -15,7 +15,7 @@ struct ContentView: View {
     @StateObject var communityVM = CommunityViewModel()
     @StateObject var mapVM = MapViewModel()
     @StateObject var magazineVM = MagazineViewModel()
-    
+
     @State private var tabSelection: Int = 0
     @State var selectedIndex = 0
     @State var magazineViewPresented : Bool = false
@@ -30,9 +30,9 @@ struct ContentView: View {
     @State var modalSize = Screen.maxHeight * 0.25
     @StateObject var userVM = UserViewModel()
     
-
+    
     @SceneStorage("isZooming") var isZooming: Bool = false
-
+    
     @StateObject var locationManager = LocationManager()
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.5701759
@@ -40,12 +40,12 @@ struct ContentView: View {
     var userLongitude: Double {
         return locationManager.lastLocation?.coordinate.longitude ?? 126.9835183
     }
-
+    
     // 네트워크 감지
     @ObservedObject var networkManager = NetworkManager()
-
+    
     var body: some View {
-        Group{
+//        Group{
             if networkManager.isConnected {
                 VStack{
                     switch authenticationStore.authenticationState {
@@ -63,7 +63,7 @@ struct ContentView: View {
                                         VStack {
                                             SelectPostView(presented: $presented,
                                                            communityVM: communityVM,
-                                                           updateNumber: updateNumber,magazineVM: magazineVM, userLatitude: userLatitude , userLongitude: userLongitude)
+                                                           updateNumber: updateNumber, magazineVM: magazineVM, userLatitude: userLatitude , userLongitude: userLongitude)
                                         }
                                     }
                                 
@@ -74,7 +74,7 @@ struct ContentView: View {
                                     }
                                 case 1:
                                     NavigationStack {
-                                        CommunityView(communityVM: communityVM)
+                                        CommunityView(communityVM: communityVM, userVM: userVM)
                                     }
                                 case 2:
                                     NavigationStack {
@@ -160,7 +160,7 @@ struct ContentView: View {
             } else {
                 NetworkConnectionView(networkManager: networkManager)
             }
-        }
+//        }
     }
 }
 struct ContentView_Previews: PreviewProvider {

@@ -10,17 +10,16 @@ import FirebaseAuth
 
 //MARK: 입력된 댓글 레이아웃
 struct CommentView: View {
-    @ObservedObject var userVM: UserViewModel
-    
-    @StateObject var commentVm = CommentViewModel()
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var commentVm : CommentViewModel
 
     @State var readMoreComments : Bool = false   //답글 더보기 Bool값
     @State var reCommentCount : Int = 0
     @State var eachBool : [Bool] = []
+    @State var deleteButtonBool : Bool = false   //onChange를 이용하여 fetch 해주기
     
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex)
-    var currentUser : CurrentUserFields?  //현재 유저 받아오기
     
     @Binding var commentCollectionDocId: String
     @Binding var replyCommentText: String
@@ -86,13 +85,18 @@ struct CommentView: View {
                                 if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                     Button{
                                         commentVm.updateComment(collectionName: "Community", collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue, updateComment: replyContent, data: commentVm.sortedRecentComment[index].fields)
+                                        commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
+                                        replyContent = ""
                                     } label: {
                                         Text("수정")
                                     }
                                     Button{
                                         commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue)
+                                        deleteButtonBool.toggle()
                                     } label: {
                                         Text("삭제")
+                                    }.onChange(of: deleteButtonBool) { _ in
+                                        commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
                                     }
                                 }
                             }
@@ -103,8 +107,7 @@ struct CommentView: View {
                             
                             if readMoreComments && eachBool[index]{
                                 VStack{
-                                    CommunityRecommentView(userVM: userVM, currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent)
-
+                                    CommunityRecommentView(commentVm: commentVm, userVM: userVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent)
                                 }
                             }
                         }

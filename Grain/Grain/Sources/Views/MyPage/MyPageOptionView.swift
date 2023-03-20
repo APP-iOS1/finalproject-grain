@@ -62,9 +62,9 @@ extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate 
 //MARK: - 계정 섹션
 struct AccountSection: View {
     @ObservedObject var magazineVM: MagazineViewModel
-    @StateObject var communityVM: CommunityViewModel
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
     
-    var userVM: UserViewModel
     var bookmarkedMagazineDocument: [MagazineDocument]
     var bookmarkedCommunityDoument: [CommunityDocument]
     
@@ -145,7 +145,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedCommunityView(bookmarkedCommunityDoument: bookmarkedCommunityDoument, isLoading: $communityVM.isLoading)
+                BookmarkedCommunityView(communityVM : communityVM, userVM : userVM, isLoading: $communityVM.isLoading, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")

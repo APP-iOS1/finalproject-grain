@@ -9,18 +9,22 @@ import SwiftUI
 
 
 struct BookmarkedCommunityView: View {
+    
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
+    @Binding var isLoading: Bool
+    
     @Environment(\.presentationMode) var presentationMode
+    
     
     var bookmarkedCommunityDoument: [CommunityDocument]
     
-    @Binding var isLoading: Bool
-
     var body: some View {
         VStack{
             ScrollView{
                 ForEach(bookmarkedCommunityDoument, id: \.self) { data in
                     NavigationLink {
-                        CommunityDetailView(community: data)
+                        CommunityDetailView(communityVM: communityVM, userVM: userVM, community: data)
                     } label: {
                         CommunityRowView(community: data, isLoading: $isLoading)
                     }

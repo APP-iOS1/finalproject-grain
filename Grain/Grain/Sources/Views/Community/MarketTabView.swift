@@ -8,17 +8,19 @@
 import SwiftUI
 
 struct MarketTabView: View {
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
+    @Binding var isLoading: Bool
     
     var community: [CommunityDocument]
-    @Binding var isLoading: Bool
-    @StateObject var communityVM: CommunityViewModel
+    
     var body: some View {
         
         VStack {
             ScrollView{
                 ForEach(community, id: \.self){ data in
                     NavigationLink {
-                        CommunityDetailView(community: data)
+                        CommunityDetailView(communityVM: communityVM, userVM: userVM, community: data)
                     } label: {
                         CommunityRowView(community: data, isLoading: $isLoading)
                     }

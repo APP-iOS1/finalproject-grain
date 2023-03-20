@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct CommunityView: View {
-    @StateObject var communityVM: CommunityViewModel
-    let colors: [String] = ["", "#807EFC", "#6CD9B7", "E3F084", "FA98E0"]
-    let titles: [String] = ["전체", "매칭", "마켓", "클래스", "정보"]
+    
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
+    
     @State private var selectedIndex: Int = 0
     @State private var isAddViewShown: Bool = false
     @State private var isSearchViewShown: Bool = false
     
-    
+    let colors: [String] = ["", "#807EFC", "#6CD9B7", "E3F084", "FA98E0"]
+    let titles: [String] = ["전체", "매칭", "마켓", "클래스", "정보"]
+        
     var body: some View {
         NavigationStack{
             VStack{
@@ -50,15 +53,16 @@ struct CommunityView: View {
                 
                 switch(selectedIndex) {
                 case 0:
-                    AllTabView(community: communityVM.sortedRecentCommunityData, communityVM: communityVM, isLoading: $communityVM.isLoading)
+                    AllTabView(communityVM : communityVM, userVM: userVM, isLoading: $communityVM.isLoading, community: communityVM.sortedRecentCommunityData)
+
                 case 1:
-                    MatchingTabView(community: communityVM.returnCategoryCommunity(category: "매칭"), isLoading: $communityVM.isLoading, communityVM: communityVM)
+                    MatchingTabView(communityVM: communityVM, userVM: userVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "매칭"))
                 case 2:
-                    ClassTabView(community: communityVM.returnCategoryCommunity(category: "마켓"), isLoading: $communityVM.isLoading, communityVM: communityVM)
+                    ClassTabView(communityVM: communityVM, userVM: userVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "마켓"))
                 case 3:
-                    MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"), isLoading: $communityVM.isLoading, communityVM: communityVM)
+                    MarketTabView(communityVM: communityVM, userVM: userVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "클래스"))
                 default:
-                    InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"), communityVM: communityVM, isLoading: $communityVM.isLoading)
+                    InfoTabView(communityVM: communityVM, userVM: userVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "정보"))   
                 }
             } // 최상단 vstack
         } // navi stack
@@ -78,7 +82,6 @@ struct CommunityView: View {
                 } label: {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.black)
-//
                 }
             }
         }
@@ -86,7 +89,6 @@ struct CommunityView: View {
             // 커뮤니티 데이터 fetch
             communityVM.fetchCommunity()
             self.isSearchViewShown = false
-
         }
         
     }

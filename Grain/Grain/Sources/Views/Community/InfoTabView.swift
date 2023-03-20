@@ -8,17 +8,18 @@
 import SwiftUI
 
 struct InfoTabView: View {
-    
-    var community: [CommunityDocument]
-    @StateObject var communityVM: CommunityViewModel
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
     @Binding var isLoading: Bool
-    
+        
+    var community: [CommunityDocument]
+
     var body: some View {
         VStack {
             ScrollView{
                 ForEach(community, id: \.self){ data in
                     NavigationLink {
-                        CommunityDetailView(community: data)
+                        CommunityDetailView(communityVM: communityVM, userVM: userVM, community: data)
                     } label: {
                         CommunityRowView(community: data, isLoading: $isLoading)
                     }

@@ -3,9 +3,9 @@ import FirebaseAuth
 import Kingfisher
 
 struct MagazineDetailView: View {
-    @ObservedObject var magazineVM :
-    MagazineViewModel
-     
+    @ObservedObject var magazineVM : MagazineViewModel
+    @ObservedObject var userVM : UserViewModel
+
     @State private var isHeartToggle: Bool = false // 하트 눌림 상황
     @State private var isBookMarked: Bool = true
     @State private var isHeartAnimation: Bool = false
@@ -22,7 +22,6 @@ struct MagazineDetailView: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    @ObservedObject var userVM: UserViewModel
     
     let data : MagazineDocument
     @Binding var ObservingChangeValueLikeNum : String   // 좋아요 수의 변화를 관찰합니다.
@@ -47,19 +46,6 @@ struct MagazineDetailView: View {
                 VStack {
                     // MARK: 닉네임 헤더
                     HStack {
-                        /// ForEach로 유저 필터링해서 넘기는 방식으로 유저 프로필뷰에 데이터 유저데이터 넘겨줬을때 유저 프로필에서 넘겨준 user 데이터가 업데이트가 안되는 이슈발생
-                        
-                        /// 희경: ForEach로 데이터를 넘겨주면 유저뷰모델의 users가 업데이트 될때 ForEach가 다시 실행되면서, 데이터만 업데이트되는것이 아니라 ForEach안에 NavigationLink가 다시 로드되면서 업데이트가 실행된 뷰가 아닌 다른 뷰가 만들어지는것같음.
-                        
-                        //                        ForEach(userVM.users.filter {
-                        //                            $0.fields.id.stringValue == data.fields.userID.stringValue
-                        //                        }, id: \.self){ item in
-                        //                            NavigationLink {
-                        //                                UserDetailView(user: item, userVM: userVM)
-                        //                            } label: {
-                        //                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue)
-                        //                            }
-                        //                        }
                         if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue})
                         {
                             NavigationLink {
@@ -170,7 +156,7 @@ struct MagazineDetailView: View {
                                 .padding(.leading)
                             
                             NavigationLink {
-                                MagazineCommentView(userVM: userVM, currentUser: userVM.currentUsers, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
+                                MagazineCommentView(userVM: userVM, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
                             } label: {
                                 Image(systemName: "bubble.right")
                                     .font(.system(size: 23))
@@ -277,7 +263,6 @@ struct MagazineDetailView: View {
             }else{
                 isBookMarked = false
             }
-            
             ObservingChangeValueLikeNum = data.fields.likedNum.integerValue
         }
         .onDisappear{
@@ -351,7 +336,6 @@ struct MagazineDetailView: View {
             
             ToolbarItem(placement: .navigationBarTrailing) {
                 // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
-                //                if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                 Menu {
                     Button {
                         //저장시 코드
@@ -365,7 +349,7 @@ struct MagazineDetailView: View {
                         HStack{
                             Text(isBookMarked ? "저장 취소" : "저장")
                             Spacer()
-                            Image(systemName: isBookMarked ? "bookmark.slash.fill" : "bookmark.fill")                        }
+                            Image(systemName: isBookMarked ? "bookmark.slash.fill" : "bookmark.fill") }
                     }
                     if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                         NavigationLink {
@@ -399,7 +383,6 @@ struct MagazineDetailView: View {
                 }
                 .onTapGesture {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        
                         render()
                     }
                 }
@@ -418,11 +401,11 @@ struct MagazineDetailView: View {
         }
     }
 }
+
 struct SharingPhoto: Transferable {
     static var transferRepresentation: some TransferRepresentation {
         ProxyRepresentation(exporting: \.image)
     }
-    
     public var image: Image
     public var caption: String
 }

@@ -13,11 +13,9 @@ import Kingfisher
 
 //MARK: 댓글 입력창
 struct CommunityCommentView: View {
-    @StateObject var communityVM = CommunityViewModel()
-    @StateObject var userVM = UserViewModel()
-    @StateObject var commentVm = CommentViewModel()
+    @ObservedObject var commentVm : CommentViewModel //댓글 뷰 모델 사용
+    @ObservedObject var userVM : UserViewModel
     
-    let currentUser : CurrentUserFields?  //현재 유저 받아오기
     let community: CommunityDocument
     
     @Binding var commentCollectionDocId: String
@@ -51,7 +49,7 @@ struct CommunityCommentView: View {
                     }
             }
             HStack{
-                KFImage(URL(string: currentUser?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                     .resizable()
                     .frame(width: 35, height: 35)
                     .cornerRadius(30)
@@ -81,8 +79,8 @@ struct CommunityCommentView: View {
                                                       , commentCollectionDocId: commentCollectionDocId
                                                       , data: CommentFields(
                                                         comment: CommentString(stringValue: replyContent),
-                                                        profileImage: CommentString(stringValue: currentUser?.profileImage.stringValue ?? ""),
-                                                        nickName: CommentString(stringValue: currentUser?.nickName.stringValue ?? ""),
+                                                        profileImage: CommentString(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""),
+                                                        nickName: CommentString(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""),
                                                         userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""),
                                                         id: CommentString(stringValue: UUID().uuidString)
                                                       )
@@ -103,8 +101,8 @@ struct CommunityCommentView: View {
                                 collectionName: "Community",
                                 collectionDocId: community.fields.id.stringValue,
                                 data: CommentFields(comment: CommentString(stringValue: replyContent),
-                                                    profileImage: CommentString(stringValue: currentUser?.profileImage.stringValue ?? ""),
-                                                    nickName: CommentString(stringValue: currentUser?.nickName.stringValue ?? ""),
+                                                    profileImage: CommentString(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""),
+                                                    nickName: CommentString(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""),
                                                     userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""),
                                                     id: CommentString(stringValue: UUID().uuidString)))
                             

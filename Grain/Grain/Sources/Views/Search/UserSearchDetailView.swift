@@ -61,7 +61,7 @@ struct UserSearchDetailView: View {
     // MARK: docID -> 파이어스토어 User -> 문서ID 값 유저마다 고유의 값으로 들어가야 될듯
     
     @StateObject var userVM = UserViewModel()
-    @StateObject var magazineVM = MagazineViewModel()
+    @ObservedObject var magazineVM: MagazineViewModel
 
     let user: UserDocument
 
@@ -208,7 +208,7 @@ struct UserSearchDetailView: View {
                     .padding(.horizontal, 10)
                     .padding(.top, 5)
                     .foregroundColor(.brightGray)
-                UserPageUserFeedView(magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))                //                    .padding(.top, -80)
+                UserPageUserFeedView(magazineVM: magazineVM, magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))                //                    .padding(.top, -80)
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장

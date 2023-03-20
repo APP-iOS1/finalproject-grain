@@ -13,8 +13,8 @@ struct MagazineRecommentView: View {
     
     let userVM: UserViewModel
     var currentUser : CurrentUserFields?  //현재 유저 받아오기
-    
-    @StateObject var commentVm = CommentViewModel() //댓글 뷰 모델 사용
+
+    @ObservedObject var commentVm: CommentViewModel
     
     var commentCollectionDocId : String
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
@@ -37,7 +37,7 @@ struct MagazineRecommentView: View {
                     HStack(alignment: .top){
                         // MARK: -  유저 프로필 이미지
                         VStack{
-                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue })
                             {
                                 NavigationLink {
                                     UserDetailView(user: user, userVM: userVM)

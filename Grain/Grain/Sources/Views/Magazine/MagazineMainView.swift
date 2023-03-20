@@ -11,7 +11,7 @@ import FirebaseAuth
 
 struct MagazineMainView: View {
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
-    @ObservedObject var magazineVM: MagazineViewModel = MagazineViewModel()
+    @ObservedObject var magazineVM: MagazineViewModel
     
     @State private var selectedIndex: Int = 0
     @State private var isSearchViewShown: Bool = false

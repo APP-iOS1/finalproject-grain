@@ -18,6 +18,7 @@ struct MagazineCommentView: View {
     @StateObject var commentVm = CommentViewModel() //댓글 뷰 모델 사용
     @State var editButtonShowing : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
     @State var summitComment : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
+    @State var deleebuttonBool : Bool = false
     @State var replyComment : Bool = false  // 답글 표시 Bool값
     @State var replyCommentText : String = "" // 답글 표시 이름 값
     @State var commentCollectionDocId : String = "" // 답글 id
@@ -121,9 +122,12 @@ struct MagazineCommentView: View {
                                         //  MARK: 삭제
                                         Button {
                                             commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue)
-                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                            deleebuttonBool.toggle()
+//                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                                         } label: {
                                             Text("삭제")
+                                        }.onChange(of: deleebuttonBool) { _ in
+                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                                         }
                                     }
                                 }
@@ -134,7 +138,7 @@ struct MagazineCommentView: View {
                                 
                                 VStack{
                                     if readMoreComments && eachBool[index]{
-                                        MagazineRecommentView(userVM: userVM, currentUser: currentUser, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, commentText: $commentText)
+                                        MagazineRecommentView(userVM: userVM, currentUser: currentUser, commentVm: commentVm, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, commentText: $commentText)
                                     }
                                 }
                             }

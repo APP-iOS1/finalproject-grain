@@ -14,7 +14,7 @@ struct MyPageView: View {
     // MARK: docID -> 파이어스토어 User -> 문서ID 값 유저마다 고유의 값으로 들어가야 될듯
     
     @StateObject var userVM = UserViewModel()
-    
+    @ObservedObject var magazineVM: MagazineViewModel
     var magazineDocument: [MagazineDocument]
     var boomarkedMagazineDocument: [MagazineDocument]
     var bookmarkedCommunityDoument: [CommunityDocument]
@@ -147,7 +147,7 @@ struct MyPageView: View {
                     .padding(.horizontal, 10)
                     .padding(.top, 5)
                     .foregroundColor(.brightGray)
-                MyPageMyFeedView(magazineDocument: magazineDocument)
+                MyPageMyFeedView(magazineVM: magazineVM, magazineDocument: magazineDocument)
                 //                    .padding(.top, -80)
             }
             .onAppear{
@@ -163,7 +163,7 @@ struct MyPageView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        MyPageOptionView(userVM: userVM, bookmarkedMagazineDocument: boomarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
+                        MyPageOptionView(userVM: userVM, bookmarkedMagazineDocument: boomarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument, magazineVM: magazineVM)
                     } label: {
                         Image(systemName: "ellipsis")
                             .foregroundColor(.black)

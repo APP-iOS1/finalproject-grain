@@ -24,7 +24,8 @@ struct MagazineDetailView: View {
     let userVM: UserViewModel
     let currentUsers : CurrentUserFields?
     let data : MagazineDocument
-    @Binding var updateNum : String
+    @Binding var ObservingChangeValueLikeNum : String   // 좋아요 수의 변화를 관찰합니다.
+    
     @SceneStorage("isZooming") var isZooming: Bool = false
     @SceneStorage("index") var selectedIndex: Int = 0
     @Environment(\.displayScale) var displayScale
@@ -58,7 +59,6 @@ struct MagazineDetailView: View {
                         //                                MagazineProfileImage(imageName: item.fields.profileImage.stringValue)
                         //                            }
                         //                        }
-                        
                         if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue})
                         {
                             NavigationLink {
@@ -277,6 +277,7 @@ struct MagazineDetailView: View {
                 isBookMarked = false
             }
             
+            ObservingChangeValueLikeNum = data.fields.likedNum.integerValue
         }
         .onDisappear{
             if isHeartToggle {
@@ -287,14 +288,11 @@ struct MagazineDetailView: View {
                         let arr = userVM.likedMagazineID
                         let docID =  user.id.stringValue
                         userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
-                       
-                        updateNum = data.fields.likedNum.integerValue
-                        var plusNum = Int(updateNum)! + 1
-                        magazineVM.updateMagazine(num: plusNum, docID: data.fields.id.stringValue)
-                        updateNum = String(plusNum)
+
+                        magazineVM.updateMagazine(num: Int(ObservingChangeValueLikeNum)! + 1, docID: data.fields.id.stringValue)  //좋아요 갯수 증가
+                        ObservingChangeValueLikeNum = String(Int(ObservingChangeValueLikeNum)! + 1) //.task(id: ObservingChangeValueLikeNum) -> await magazineVM.fetchMagazine() 실행
                     }
                 }
-//                print(magazineVM.sortedRecentMagazineData)
             } else {
                 // 좋아요 취소
                 if userVM.likedMagazineID.contains(data.fields.id.stringValue){
@@ -306,10 +304,9 @@ struct MagazineDetailView: View {
                         //                            let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
                         let docID = user.id.stringValue
                         userVM.updateCurrentUserArray(type: "likedMagazineId", arr: userVM.likedMagazineID, docID: docID)
-                        updateNum = data.fields.likedNum.integerValue
-                        var minusNum = Int(updateNum)! - 1
-                        magazineVM.updateMagazine(num:  minusNum , docID: data.fields.id.stringValue)
-                        updateNum = String(minusNum)
+                        
+                        magazineVM.updateMagazine(num:  Int(ObservingChangeValueLikeNum)! - 1 , docID: data.fields.id.stringValue)    //좋아요 갯수 감소
+                        ObservingChangeValueLikeNum = String(Int(ObservingChangeValueLikeNum)! - 1)  //.task(id: ObservingChangeValueLikeNum) -> await magazineVM.fetchMagazine() 실행
                     }
                 }
             }

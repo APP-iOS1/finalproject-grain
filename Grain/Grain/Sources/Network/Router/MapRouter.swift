@@ -82,8 +82,8 @@ enum MapRouter {
     private var data: Data? {
         switch self {
         case let .post(magazineData, docID):
-            guard let magazinequery = MapQuery.insertMapQuery(data: magazineData, docID: docID) else { return nil }
-            print( String(decoding: magazinequery, as: UTF8.self))
+//            guard let magazinequery = MapQuery.insertMapQuery(data: magazineData, docID: docID) else { return nil }
+//            print( String(decoding: magazinequery, as: UTF8.self))
             return MapQuery.insertMapQuery(data: magazineData, docID: docID)
         default:
             return nil

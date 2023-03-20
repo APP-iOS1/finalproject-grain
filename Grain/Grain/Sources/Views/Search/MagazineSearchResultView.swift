@@ -15,7 +15,7 @@ struct MagazineSearchResultView: View {
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
-    @State var updateNum : String = ""
+    @State var ObservingChangeValueLikeNum : String = ""
     let magazine: MagazineViewModel
     let userViewModel: UserViewModel
     var body: some View {
@@ -29,7 +29,7 @@ struct MagazineSearchResultView: View {
                                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                         },id: \.self) { item in
                             NavigationLink {
-                                MagazineDetailView(magazineVM: magazineVM, userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item, updateNum: $updateNum)
+                                MagazineDetailView(magazineVM: magazineVM, userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {
                                 HStack{
                                     Rectangle()
@@ -70,6 +70,11 @@ struct MagazineSearchResultView: View {
                     .listStyle(.plain)
                     Spacer()
                 }
+                .task(id: ObservingChangeValueLikeNum){
+                   Task{
+                       await magazineVM.fetchMagazine()
+                   }
+               }
                 if isShownProgress == true {
                     SearchProgress()
                         .onAppear{

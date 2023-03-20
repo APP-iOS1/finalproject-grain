@@ -228,7 +228,7 @@ struct UserDetailView: View {
                 .padding(.horizontal, 10)
                 .padding(.top, 5)
                 .foregroundColor(.brightGray)
-            UserPageUserFeedView(magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))
+            UserPageUserFeedView(magazineVM: magazineVM, magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))
         }
         .onAppear{
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")

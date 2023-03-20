@@ -17,7 +17,7 @@ struct UserSearchResultView: View {
     }
     
     @StateObject var user: UserViewModel = UserViewModel()
-    
+    @ObservedObject var magazineVM: MagazineViewModel
     var body: some View {
             ZStack {
                 VStack{
@@ -29,7 +29,7 @@ struct UserSearchResultView: View {
                                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                         },id: \.self) { item in
                             NavigationLink {
-                                UserSearchDetailView(user: item)
+                                UserSearchDetailView(magazineVM: magazineVM, user: item)
                             } label: {
                                 HStack{
 //                                    KFImage(URL(string: item.fields.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
@@ -97,8 +97,8 @@ struct UserSearchResultView: View {
 }
 
 
-struct UserSearchResultView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserSearchResultView(searchWord: .constant(""), user: UserViewModel())
-    }
-}
+//struct UserSearchResultView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UserSearchResultView(searchWord: .constant(""), user: UserViewModel())
+//    }
+//}

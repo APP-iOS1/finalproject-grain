@@ -9,11 +9,9 @@
 import Foundation
 import Combine
 import UIKit
-//import FirebaseFirestore  /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
 
 
 final class UserViewModel: ObservableObject {
-    
     var subscription = Set<AnyCancellable>()
     
     @Published var users = [UserDocument]()
@@ -198,62 +196,7 @@ final class UserViewModel: ObservableObject {
                 self.deleteUsersSuccess.send()
             }.store(in: &subscription)
     }
-    
-    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
-//    func updateUserUsingSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
-//        let db = Firestore.firestore()
-//        let documentRef = db.collection("User").document("\(updateDocument)")
-//        if isArray{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }else{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(updateKey)" : "\(updateValue)"
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }
-//    }
-    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
-//    func deleteUserUsingSDK(updateDocument: String, deleteKey: String, deleteIndex: String, isArray: Bool) async {
-//        let db = Firestore.firestore()
-//        let documentRef = db.collection("User").document("\(updateDocument)")
-//        if isArray{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(deleteKey)": FieldValue.arrayRemove([
-//                            "\(deleteIndex)"
-//                        ])
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }else{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(deleteKey)" : FieldValue.delete()
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }
-//    }
-    
+  
     func removeAll() {
         self.likedMagazineID.removeAll()
         self.myLens.removeAll()
@@ -317,4 +260,3 @@ final class UserViewModel: ObservableObject {
     }
     
 }
-

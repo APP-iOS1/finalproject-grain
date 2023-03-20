@@ -24,7 +24,6 @@ struct MagazineContentAddView: View {
     @Binding var presented : Bool
     // insert
     @ObservedObject var magazineVM : MagazineViewModel
-    @ObservedObject var storageVM = StorageViewModel()
     
     // 지도에서 좌표 값 가져오기
     @State var updateNumber : NMGLatLng
@@ -127,9 +126,7 @@ struct MagazineContentAddView: View {
                                                     Image(uiImage: selectedImages[index])
                                                         .resizable()
                                                         .cornerRadius(15)
-                                                        .onAppear{
-                                                            print("Upper right coordinates: (\(geometry.size.width), 0)")
-                                                        }
+                                                       
                                                     Image(systemName: "x.circle.fill")
                                                         .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                         .onTapGesture {

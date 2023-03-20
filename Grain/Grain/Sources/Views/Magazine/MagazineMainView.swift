@@ -10,7 +10,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct MagazineMainView: View {
-    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+    @ObservedObject var userViewModel: UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     
     @State private var selectedIndex: Int = 0
@@ -50,11 +50,10 @@ struct MagazineMainView: View {
                 .padding(.leading)
                 switch selectedIndex {
                 case 0:
-                    VStack{
-                        MagazineBestView(userVM: userViewModel, currentUsers: userViewModel.currentUsers, magazineVM: magazineVM)
-                    }
+                    MagazineBestView(userVM: userViewModel, magazineVM: magazineVM)
+                    
                 default:
-                    MagazineFeedView(magazineVM: magazineVM, currentUsers: userViewModel.currentUsers, userVM: userViewModel)
+                    MagazineFeedView(magazineVM: magazineVM, userVM: userViewModel)
                 }
             }
             .navigationDestination(isPresented: $isSearchViewShown) {
@@ -66,9 +65,7 @@ struct MagazineMainView: View {
         }
         .onAppear {
             self.isSearchViewShown = false
-            userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            userViewModel.fetchUser()
-            magazineVM.fetchMagazine()
+         
         }
         .onReceive(userViewModel.fetchUsersSuccess, perform: { newValue in
             userViewModel.filterCurrentUsersFollow()

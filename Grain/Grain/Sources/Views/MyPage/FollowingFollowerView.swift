@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct FollowingFollowerView: View {
-    let titles: [String] = ["구독자", "구독중"]
     @State private var selectedIndex: Int = 0
     @State private var isShownPickerProgress: Bool = false
+    
+    let titles: [String] = ["구독자", "구독중"]
 
     var body: some View {
         VStack{

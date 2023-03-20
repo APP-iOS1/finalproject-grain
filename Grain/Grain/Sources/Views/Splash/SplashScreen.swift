@@ -122,15 +122,6 @@ struct SplashScreen: View {
                 }
             }
         }
-//        .onChange(of: isActive) { newValue in
-//            if newValue {
-//                if let _ = UserDefaults.standard.string(forKey: "userIdToken") {
-//                    viewModel.state = .signIn // 로그인 성공 기록이 있을 경우
-//                } else {
-//                    viewModel.state = .signOut
-//                }
-//            }
-//        }
         .ignoresSafeArea()
     }
     func animateSplash(){

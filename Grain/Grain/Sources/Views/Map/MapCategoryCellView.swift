@@ -20,8 +20,6 @@ struct MapCategoryCellView: View {
     @State var StationButtonClickedBool : Bool = false
     @State var repairButtonClickedBool : Bool = false
     
-    
-    
     @Binding var reportButton : Bool    // 제보하러가기 버튼
     
     // MARK: 오버레이

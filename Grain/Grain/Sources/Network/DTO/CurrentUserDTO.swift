@@ -39,4 +39,3 @@ struct CurrentUserArrayValue: Codable {
 struct CurrentUserStringValue: Codable, Hashable {
     var stringValue: String
 }
-

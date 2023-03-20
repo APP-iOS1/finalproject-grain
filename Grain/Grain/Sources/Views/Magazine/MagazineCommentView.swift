@@ -10,12 +10,13 @@ import Kingfisher
 import FirebaseAuth
 
 struct MagazineCommentView: View {
+    @StateObject var commentVm = CommentViewModel() //댓글 뷰 모델 사용
     
     let userVM: UserViewModel
     
     var currentUser : CurrentUserFields?  //현재 유저 받아오기
+    
     @State var commentText: String = "" // 댓글 작성 텍스트 필드
-    @StateObject var commentVm = CommentViewModel() //댓글 뷰 모델 사용
     @State var editButtonShowing : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
     @State var summitComment : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
     @State var deleebuttonBool : Bool = false
@@ -23,11 +24,11 @@ struct MagazineCommentView: View {
     @State var replyCommentText : String = "" // 답글 표시 이름 값
     @State var commentCollectionDocId : String = "" // 답글 id
     @State var readMoreComments : Bool = false   //답글 더보기 Bool값
-    var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
-    var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
-    
     @State var reCommentCount : Int = 0
     @State var eachBool : [Bool] = []
+    
+    var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
+    var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
     func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬 예) 댓글 3개면 [ false, false, false ]
         eachBool = Array(repeating: false, count: count)
@@ -46,7 +47,7 @@ struct MagazineCommentView: View {
                                 if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
                                 {
                                     NavigationLink {
-                                        UserDetailView(user: user, userVM: userVM)
+                                        UserDetailView(userVM: userVM, user: user)
                                     } label: {
                                         KFImage(URL(string: commentVm.sortedRecentComment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                             .resizable()
@@ -93,7 +94,6 @@ struct MagazineCommentView: View {
                                 HStack{
                                     Button {
                                         replyComment.toggle()
-                                        //                                        commentText = "@" + item.fields.nickName.stringValue  // FIXME: 태그 기능 추가시 주석 풀기
                                         replyCommentText = "@" + commentVm.sortedRecentComment[index].fields.nickName.stringValue
                                         commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
                                     } label: {
@@ -118,12 +118,10 @@ struct MagazineCommentView: View {
                                         } label: {
                                             Text("수정")
                                         }
-                                        //                                    .padding(.trailing, 5)
                                         //  MARK: 삭제
                                         Button {
                                             commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue)
                                             deleebuttonBool.toggle()
-//                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                                         } label: {
                                             Text("삭제")
                                         }.onChange(of: deleebuttonBool) { _ in
@@ -144,7 +142,6 @@ struct MagazineCommentView: View {
                             }
                             .frame(width: Screen.maxWidth * 0.8)
                         }
-//                        .padding(.vertical, -7)
                         Divider()
                     }
                     .onAppear{

@@ -133,7 +133,6 @@ enum StorageRouter {
     }
 }
 
-// FIXME: 이것이 무엇인지 공부하기
 extension Data {
     
     mutating func append(_ string: String) {
@@ -142,5 +141,3 @@ extension Data {
         }
     }
 }
-
-//var imagePathURL = "https://firebasestorage.googleapis.com/v0/b/grain-final.appspo%2F" + jsonData?.name ?? "" + "?alt=media&token=" + jsonData?.downloadTokens ?? ""

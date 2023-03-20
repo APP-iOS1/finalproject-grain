@@ -30,16 +30,8 @@ struct PhotoSpotMapView: View {
     @Binding var researchCGPoint : CGPoint
     
     var body: some View {
-        // 뒷배경 어둡게
-    
         ZStack{
-//            if isShowingPhotoSpot{
-//                Rectangle()
-//                    .zIndex(1)
-//                    .opacity(0.3)
-//            }
             PhotoSpotUIMapView(mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot , nearbyPostsArr: $nearbyPostsArr, visitButton: $visitButton, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
-            
             
             if isShowingPhotoSpot{
                 
@@ -63,8 +55,6 @@ struct PhotoSpotMapView: View {
 // FIXME: 네이버 지도
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct PhotoSpotUIMapView: UIViewRepresentable,View {
-    
-
     @StateObject var locationManager = LocationManager()
     
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기

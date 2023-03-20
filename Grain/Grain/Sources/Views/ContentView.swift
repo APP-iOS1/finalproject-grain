@@ -59,10 +59,6 @@ struct ContentView: View {
                             Spacer()
                             ZStack {
                                 Spacer()
-                                //                            .sheet(isPresented: $presented, content: {
-                                //                                SelectPostView(presented: $presented, communityVM: communityVM, updateNumber: updateNumber, modalSize: $modalSize)
-                                //                                    .presentationDetents([.height(modalSize)])
-                                //                            })
                                     .fullScreenCover(isPresented: $presented) {
                                         VStack {
                                             SelectPostView(presented: $presented,
@@ -82,7 +78,7 @@ struct ContentView: View {
                                     }
                                 case 2:
                                     NavigationStack {
-                                        CommunityView(communityVM: communityVM)
+                                        // 게시물 추가 버튼 부분
                                     }
                                 case 3:
                                     NavigationStack {
@@ -103,6 +99,7 @@ struct ContentView: View {
                                 }
                                 Spacer()
                             }
+                            
                             if isZooming == false {
                                 
                                 HStack {
@@ -150,8 +147,8 @@ struct ContentView: View {
                     magazineVM.fetchMagazine()
                     communityVM.fetchCommunity()
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+                    userVM.fetchUser()
                     
-                    //                    magazineVM.updateMagazine()
                 }
                 .ignoresSafeArea(.keyboard)
                 //        .splashView {
@@ -164,25 +161,7 @@ struct ContentView: View {
                 NetworkConnectionView(networkManager: networkManager)
             }
         }
-        .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
-        .tint(.black)
-        .onAppear{
-            /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
-            magazineVM.fetchMagazine()
-            communityVM.fetchCommunity()
-            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-
-            //                    magazineVM.updateMagazine()
-        }
-        .ignoresSafeArea(.keyboard)
-//                .splashView {
-//                    ZStack{
-//                        SplashScreen()
-//                    }
-//        
-//                }
     }
-    
 }
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

@@ -155,7 +155,6 @@ struct AddMarkerMapView: View {
                             .fill(.black)
                             .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
                             .overlay {
-//
                                 Button {
                                     showingAlert.toggle()
                                 } label: {
@@ -263,20 +262,6 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         // MARK: 지도가 그려질때 현재 유저 GPS 위치로 카메라 움직임
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: userLatitude, lng: userLongitude))
         view.mapView.moveCamera(cameraUpdate)
-        
-        
-        //        let currentUserMarker = NMFMarker()
-        //        currentUserMarker.position = NMGLatLng(lat: userLatitude, lng: userLongitude)
-        //        currentUserMarker.iconImage = NMF_MARKER_IMAGE_BLACK
-        //        currentUserMarker.zIndex = 1    /// 마커 zindex
-        //        currentUserMarker.captionText = "현재위치"
-        //        currentUserMarker.captionColor = UIColor.black
-        //        currentUserMarker.captionHaloColor = UIColor(red: 200.0/255.0, green: 1, blue: 200.0/255.0, alpha: 1)
-        //        // 화면상의 currentUserMarker 마커 CGPoint값
-        //        let point = view.mapView.projection.point(from: currentUserMarker.position)
-        //        print("point: \(point)")
-        //        currentUserMarker.mapView = view.mapView
-        
         return view
     }
     // UIView 자체를 업데이트 해야 하는 변경이 swiftui 뷰에서 생길떄 마다 호출된다.
@@ -295,13 +280,6 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         var addUserMarker = NMFMarker()
         
         if markerAddButtonBool{
-            
-//            Image("uploadMarker")
-//                .resizable()
-//                .aspectRatio(contentMode: .fit)
-//                .frame(width: Screen.maxWidth * 0.1,height: Screen.maxHeight * 0.08)
-//                .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
-//
             addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.39))
             addUserMarker.iconImage = NMFOverlayImage(name: "uploadMarker")
             addUserMarker.width = Screen.maxWidth * 0.1

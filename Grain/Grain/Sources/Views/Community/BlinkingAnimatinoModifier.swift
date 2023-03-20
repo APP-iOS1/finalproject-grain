@@ -28,7 +28,6 @@ struct BlinkingAnimatinoModifier: AnimatableModifier {
                     .clipShape(RoundedRectangle(cornerRadius: 0))
                     .zIndex(0)                        // 뒤의 Conent가 보이지 않도록
                 RoundedRectangle(cornerRadius: 0) //회색
-//                    .fill(Color(hex: "616161").opacity(0.5))
                     .fill(Color.gray.opacity(0.5))
                     .opacity(self.opacity).zIndex(1)            // 우선순위 1
             }.opacity(shouldShow ? 1 : 0)

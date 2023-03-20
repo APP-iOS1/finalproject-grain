@@ -9,8 +9,9 @@ import SwiftUI
 import FirebaseAuth
 
 struct MainRecentSearchView: View {
-    @Binding var searchList: [String]
     @ObservedObject var userVM: UserViewModel
+    
+    @Binding var searchList: [String]
     
     var body: some View {
         VStack{

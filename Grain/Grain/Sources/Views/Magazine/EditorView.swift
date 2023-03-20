@@ -10,7 +10,6 @@
 import SwiftUI
 
 struct EditorView: View {
-    //var data : MagazineDocument
     var body: some View {
         ScrollView {
                 VStack{
@@ -34,13 +33,11 @@ struct EditorView: View {
                         Circle()
                             .frame(width: 40)
                         VStack(alignment: .leading) {
-                            //                    Text(data.fields.nickName.stringValue)
                             Text("wonder")
                                 .bold()
                             HStack {
                                 Text("1분전")
                                 Spacer()
-                                //   Text(data.fields.customPlaceName.stringValue)
                             }
                             .font(.caption)
                         }
@@ -91,8 +88,6 @@ struct EditorView: View {
                         .lineSpacing(4.0)
                         .padding()
                 }
-                
-            
         }
         .padding(.top, 1)
     }

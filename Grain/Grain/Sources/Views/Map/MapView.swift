@@ -439,23 +439,6 @@ struct UIMapView: UIViewRepresentable,View {
                 }
             }
         }
-        //        if researchButtonBool{
-        //            switch uiView.mapView.zoomLevel{
-        //            case 12...16:
-        //                print("줌레벨 측정 : \(uiView.mapView.zoomLevel)")
-        //                return
-        //            case 10..<12:
-        //                print("줌레벨 측정 : \(uiView.mapView.zoomLevel)")
-        //                return
-        //            default:
-        //                return
-        //            }
-        //        }
-        //        /// 숫자가 작을수록 축소 , 숫자가 클수록 확대
-        //        view.mapView.zoomLevel = 12
-        //        view.mapView.minZoomLevel = 10
-        //        view.mapView.maxZoomLevel = 16
-        
     }
     
     func makeCoordinator() -> Coordinator {
@@ -499,8 +482,6 @@ class Coordinator: NSObject, NMFMapViewTouchDelegate, NMFMapViewCameraDelegate, 
         self.latitude = latlng.lat
         self.longitude = latlng.lng
         self.point = point
-        //        print("\(latlng.lat), \(latlng.lng)")
-        //        print(point)
     }
     
 }

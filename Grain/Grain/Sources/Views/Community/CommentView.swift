@@ -14,18 +14,19 @@ struct CommentView: View {
     
     @StateObject var commentVm = CommentViewModel()
 
+    @State var readMoreComments : Bool = false   //답글 더보기 Bool값
+    @State var reCommentCount : Int = 0
+    @State var eachBool : [Bool] = []
+    
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex)
-    
     var currentUser : CurrentUserFields?  //현재 유저 받아오기
     
     @Binding var commentCollectionDocId: String
     @Binding var replyCommentText: String
     @Binding var replyContent: String
     @Binding var replyComment : Bool  // 답글 표시 Bool값
-    @State var readMoreComments : Bool = false   //답글 더보기 Bool값
-    @State var reCommentCount : Int = 0
-    @State var eachBool : [Bool] = []
+    
     func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬 예) 댓글 3개면 [ false, false, false ]
         eachBool = Array(repeating: false, count: count)
     }
@@ -39,7 +40,7 @@ struct CommentView: View {
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
                             {
                                 NavigationLink {
-                                    UserDetailView(user: user, userVM: userVM)
+                                    UserDetailView(userVM: userVM, user: user)
                                 } label: {
                                     ProfileImage(imageName: commentVm.sortedRecentComment[index].fields.profileImage.stringValue)
                                 }

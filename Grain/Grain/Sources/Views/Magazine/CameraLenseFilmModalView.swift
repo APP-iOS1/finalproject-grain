@@ -66,16 +66,7 @@ struct CameraLenseFilmModalView: View {
                     }
                 }
                 .pickerStyle(.wheel)
-//                List(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self, selection: $selectedCamera) { camera in
-//                    Text(camera.stringValue)
-//                }
-//                .listStyle(.plain)
                 Text("선택된 카메라: \(selectedCamera)")
-//                List(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self, selection: $selectedCamera) { camera in
-//                    Text(camera.stringValue)
-//                }
-//                .listStyle(.plain)
-//                Spacer()
             }
             
             Divider()
@@ -99,13 +90,7 @@ struct CameraLenseFilmModalView: View {
                         Text($0)
                     }
                 }.pickerStyle(.wheel)
-//                List(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self, selection: $selectedLense) { lense in
-//                    Text(lense.stringValue)
-//                }
-//                .listStyle(.plain)
-//                Spacer()
             }
-            
             
             Divider()
             
@@ -128,11 +113,6 @@ struct CameraLenseFilmModalView: View {
                         Text($0)
                     }
                 }.pickerStyle(.wheel)
-//                List(userVM.currentUsers?.myFilm.arrayValue.values ?? [], id: \.self, selection: $selectedFilm) { film in
-//                    Text(film.stringValue)
-//                }
-//                .listStyle(.plain)
-//                Spacer()
             }
             
         }
@@ -215,9 +195,6 @@ struct CameraLenseFilmModalView: View {
         }
         .onAppear {
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            //            selectedCamera = myCamera[0]
-            //            selectedLense = myLense[0]
-            //            selectedFilm = myFilm[0]
         }
 
 

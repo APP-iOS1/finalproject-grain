@@ -10,21 +10,19 @@ import Kingfisher
 import FirebaseAuth
 
 struct CommunityRecommentView: View {
+    @StateObject var commentVm = CommentViewModel() //댓글 뷰 모델 사용
     
     let userVM: UserViewModel
-    var currentUser : CurrentUserFields?  //현재 유저 받아오기
-    
-    @StateObject var commentVm = CommentViewModel() //댓글 뷰 모델 사용
+    let currentUser : CurrentUserFields?  //현재 유저 받아오기
     
     var commentCollectionDocId : String
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Community - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
     @Binding var replyContent : String
+    
     var body: some View {
-        
         VStack(alignment: .leading){
-            
             // 댓글이 없으면 빈칸
             if commentVm.sortedRecentRecomment.count < 1 {
             }
@@ -38,7 +36,7 @@ struct CommunityRecommentView: View {
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentRecomment[index].fields.userID.stringValue})
                             {
                                 NavigationLink {
-                                    UserDetailView(user: user, userVM: userVM)
+                                    UserDetailView(userVM: userVM, user: user)
                                 } label: {
                                     KFImage(URL(string: commentVm.sortedRecentRecomment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()
@@ -53,7 +51,7 @@ struct CommunityRecommentView: View {
                             }
                         }
                         .frame(width: Screen.maxWidth * 0.1)
-                    
+                        
                         VStack(alignment: .leading){
                             HStack{
                                 NavigationLink {
@@ -73,7 +71,7 @@ struct CommunityRecommentView: View {
                                         .font(.caption2)
                                 }
                                 Spacer()
-                            
+                                
                             }
                             .padding(.bottom, -5)
                             
@@ -87,7 +85,6 @@ struct CommunityRecommentView: View {
                                 if commentVm.sortedRecentRecomment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                     Button {
                                         commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue, updateComment: replyContent, data: commentVm.sortedRecentRecomment[index].fields)
-//                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
                                         replyContent = ""
                                     } label: {
                                         Text("수정")
@@ -103,7 +100,7 @@ struct CommunityRecommentView: View {
                             .foregroundColor(.textGray)
                             .padding(.top, 1)
                             .padding(.bottom, -3)
- 
+                            
                         }
                     }
                     

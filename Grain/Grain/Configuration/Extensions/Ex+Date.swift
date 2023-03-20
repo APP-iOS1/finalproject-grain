@@ -38,11 +38,3 @@ extension Date {
         return dateFormatter.date(from: string)
     }
 }
-
-//let dateString = "2023-02-08"
-//
-//if let date = Date.fromString(string: dateString) {
-//    print("Successfully converted to date: \(date)")
-//} else {
-//    print("Failed to convert to date")
-//}

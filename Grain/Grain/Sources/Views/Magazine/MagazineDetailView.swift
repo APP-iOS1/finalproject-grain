@@ -3,8 +3,9 @@ import FirebaseAuth
 import Kingfisher
 
 struct MagazineDetailView: View {
-    @ObservedObject var magazineVM : MagazineViewModel
-    
+    @ObservedObject var magazineVM :
+    MagazineViewModel
+     
     @State private var isHeartToggle: Bool = false // 하트 눌림 상황
     @State private var isBookMarked: Bool = true
     @State private var isHeartAnimation: Bool = false
@@ -21,8 +22,8 @@ struct MagazineDetailView: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    let userVM: UserViewModel
-    let currentUsers : CurrentUserFields?
+    @ObservedObject var userVM: UserViewModel
+    
     let data : MagazineDocument
     @Binding var ObservingChangeValueLikeNum : String   // 좋아요 수의 변화를 관찰합니다.
     
@@ -62,7 +63,7 @@ struct MagazineDetailView: View {
                         if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue})
                         {
                             NavigationLink {
-                                UserDetailView(user: user, userVM: userVM)
+                                UserDetailView(userVM: userVM, user: user)
                             } label: {
                                 MagazineProfileImage(imageName: user.fields.profileImage.stringValue)
                             }
@@ -251,7 +252,7 @@ struct MagazineDetailView: View {
                   primaryButton:  .cancel(Text("취소")),
                   secondaryButton:.destructive(Text("삭제"),
                                                action: {
-                        magazineVM.deleteMagazine(docID: data.fields.id.stringValue)                       
+                        magazineVM.deleteMagazine(docID: data.fields.id.stringValue)
                 dismiss()
             }))
         }
@@ -435,4 +436,3 @@ struct SharingPhoto: Transferable {
 //
 //    }
 //}
-

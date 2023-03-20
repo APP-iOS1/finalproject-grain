@@ -115,9 +115,6 @@ enum MagazineRouter {
         if let data = data {
             request.httpBody = data
         }
-        
-        // FIXME: Encoding 하는 방식으로 data 넘겨주기
-        //        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
         return request
     }
 

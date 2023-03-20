@@ -30,13 +30,6 @@ struct StationMapView: View {
     
     var body: some View {
         ZStack{
-            
-            // 뒷배경 어둡게
-//            if isShowingWebView{
-//                Rectangle()
-//                    .zIndex(1)
-//                    .opacity(0.3)
-//            }
             StationUIMapView(isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL,mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
         }
         .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
@@ -52,8 +45,6 @@ struct StationUIMapView: UIViewRepresentable,View {
     @Binding var isShowingWebView: Bool
     @Binding var bindingWebURL : String
     
-    
-//    @ObservedObject var viewModel = MapSceneViewModel()
     @StateObject var locationManager = LocationManager()
     
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
@@ -79,8 +70,6 @@ struct StationUIMapView: UIViewRepresentable,View {
         view.mapView.minZoomLevel = 10
         view.mapView.maxZoomLevel = 16
         view.mapView.isRotateGestureEnabled = false
-
-//        view.mapView.touchDelegate = context.coordinator
         
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
         // TODO: 네이버 지도 공식 문서 읽어보기

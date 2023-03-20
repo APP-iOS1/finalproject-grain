@@ -58,7 +58,7 @@ struct CommunityView: View {
                 case 3:
                     MarketTabView(community: communityVM.returnCategoryCommunity(category: "클래스"), isLoading: $communityVM.isLoading, communityVM: communityVM)
                 default:
-                    InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"), isLoading: $communityVM.isLoading, communityVM: communityVM)
+                    InfoTabView(community: communityVM.returnCategoryCommunity(category: "정보"), communityVM: communityVM, isLoading: $communityVM.isLoading)
                 }
             } // 최상단 vstack
         } // navi stack
@@ -85,11 +85,6 @@ struct CommunityView: View {
         .onAppear {
             // 커뮤니티 데이터 fetch
             communityVM.fetchCommunity()
-            // MARK: 커뮤니티 업데이트 메서드 부분 필요시 확인하고 사용하기!
-            /// isArray 업데이트 해야하는 값이 배열이면 true로 전달
-//            Task{
-//                await communityVM.updateCommunity(updateDocument: "PQGsHYXGjF8QkeQol8sz", updateKey: "name", updateValue: "123131", isArray: false)
-//            }
             self.isSearchViewShown = false
 
         }

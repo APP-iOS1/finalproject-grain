@@ -11,8 +11,7 @@ struct MagazineFeedView: View {
 
     @ObservedObject var magazineVM: MagazineViewModel
 
-    let currentUsers : CurrentUserFields?
-    let userVM: UserViewModel
+    @ObservedObject var userVM: UserViewModel
 
     @State var ObservingChangeValueLikeNum : String = ""
     var body: some View {
@@ -21,7 +20,7 @@ struct MagazineFeedView: View {
                 ForEach(magazineVM.sortedRecentMagazineData, id: \.self){ data in
                     NavigationLink {
                         // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
-                        MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: currentUsers, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                        MagazineDetailView(magazineVM: magazineVM, userVM: userVM,  data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                     } label: {
                         // MARK: fetch해온 데이터 cell뷰로 보여주기
                         LazyVStack{
@@ -37,10 +36,7 @@ struct MagazineFeedView: View {
                 }
             }
         }
-//        .onAppear{
-//            print("11")
-//            magazineVM.fetchMagazine()
-//        }
+
     }
 }
 //

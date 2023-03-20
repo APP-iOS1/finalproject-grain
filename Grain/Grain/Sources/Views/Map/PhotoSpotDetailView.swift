@@ -10,10 +10,11 @@ import Kingfisher
 
 
 struct PhotoSpotDetailView: View {
-    
     @State private var isBookMarked: Bool = false
     @State private var isliked: Bool = false
+    
     @Environment(\.dismiss) private var dismiss
+    
     var data : MagazineDocument
     
     var body: some View {
@@ -44,10 +45,7 @@ struct PhotoSpotDetailView: View {
                             .background(Color.black)
                             .padding(.top, -5)
                             .padding(.bottom, -10)
-                        
-                        //            Image("line")
-                        //                .resizable()
-                        //                .frame(width: Screen.maxWidth, height: 0.3)
+                            .frame(width: Screen.maxWidth, height: 0.3)
                         TabView{
                         
                             ForEach(data.fields.image.arrayValue.values, id: \.self) { i in
@@ -55,7 +53,6 @@ struct PhotoSpotDetailView: View {
                                     .resizable()
                                     .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
                                     .aspectRatio(contentMode: .fit)
-
                             }
                         }
                         .tabViewStyle(.page)
@@ -80,11 +77,6 @@ struct PhotoSpotDetailView: View {
             }
             .padding(.top, 1)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    // 다른 용도로 쓰일수 있어서 우선 남겨둠
-                }
-            }
-            .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     HStack{
                         Button {
@@ -102,6 +94,7 @@ struct PhotoSpotDetailView: View {
         
     }
 }
+
 struct Header: View {
     var data : MagazineDocument
     var body: some View {

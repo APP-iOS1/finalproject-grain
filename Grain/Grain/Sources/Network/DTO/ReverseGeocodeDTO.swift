@@ -23,5 +23,3 @@ struct Region:  Codable,Hashable {
 struct Area:  Codable,Hashable {
     let name: String
 }
-
-

@@ -31,12 +31,7 @@ struct Fields: Codable,Hashable {
     }
 }
 
-// FIXME: 분명 Firebase Store에서는 숫자 타입이고 postman에서 실험할떄는 String형으로 나오는지??
 // MARK: category: MapCategory -> category: MapID
-//struct MapCategory: Codable,Hashable {
-//    let integerValue: String
-//}
-
 struct MapID: Codable,Hashable {
     let stringValue: String
 }

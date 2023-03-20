@@ -13,14 +13,13 @@ import Kingfisher
 
 //MARK: 댓글 입력창
 struct CommunityCommentView: View {
-    
-    var currentUser : CurrentUserFields?  //현재 유저 받아오기
-    let community: CommunityDocument
     @StateObject var communityVM = CommunityViewModel()
     @StateObject var userVM = UserViewModel()
     @StateObject var commentVm = CommentViewModel()
     
-
+    let currentUser : CurrentUserFields?  //현재 유저 받아오기
+    let community: CommunityDocument
+    
     @Binding var commentCollectionDocId: String
     @Binding var replyCommentText: String
     @Binding var replyContent: String
@@ -72,7 +71,7 @@ struct CommunityCommentView: View {
                     }
                 Spacer()
                 
-
+                
                 if trimContent.count > 0 {
                     if replyComment{
                         Button {
@@ -86,8 +85,8 @@ struct CommunityCommentView: View {
                                                         nickName: CommentString(stringValue: currentUser?.nickName.stringValue ?? ""),
                                                         userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""),
                                                         id: CommentString(stringValue: UUID().uuidString)
-                                                        )
                                                       )
+                            )
                             replyContent = ""
                             replyComment = false
                         } label: {
@@ -108,7 +107,7 @@ struct CommunityCommentView: View {
                                                     nickName: CommentString(stringValue: currentUser?.nickName.stringValue ?? ""),
                                                     userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""),
                                                     id: CommentString(stringValue: UUID().uuidString)))
-
+                            
                             replyContent = ""        //댓글 텍스트 필드 초기화
                         } label: {
                             Text("등록")
@@ -125,7 +124,7 @@ struct CommunityCommentView: View {
                         .foregroundColor(.middlebrightGray)
                         .bold()
                         .padding(.trailing)
-
+                    
                 }
                 
             }

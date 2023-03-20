@@ -37,7 +37,7 @@ struct MagazineSearchDetailView: View {
                             .background(Color.black)
                             .padding(.top, -5)
                             .padding(.bottom, -10)
-                   
+                        
                         TabView{
                             ForEach(1..<4, id: \.self) { i in
                                 Image("\(i)")
@@ -75,14 +75,14 @@ struct MagazineSearchDetailView: View {
                         //수정
                     } label: {
                         Image(systemName: "square.and.pencil")
-                           
+                        
                             .foregroundColor(.blue)
                     }
                     Button {
                         //삭제
                     } label: {
                         Image(systemName: "trash")
-                          
+                        
                             .foregroundColor(.blue)
                     }
                 }

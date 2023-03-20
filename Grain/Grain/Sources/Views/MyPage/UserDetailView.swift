@@ -10,22 +10,20 @@ import FirebaseAuth
 import Kingfisher
 
 struct UserDetailView: View {
-
-    let user: UserDocument
-    @ObservedObject var userVM: UserViewModel
-    
     @StateObject var magazineVM = MagazineViewModel()
+    
+    @ObservedObject var userVM: UserViewModel
     
     @State private var showDevices: Bool = false
     @State private var angle: Double = 0
-    
     // 유저가 올린 메거진 데이터
     @State var magazines = [MagazineDocument]()
-
     // isFollow 초기값 넣어줘야함. 팔로우한 유저인지 먼저 체크 (체크하는 메소드 필요)
     @State private var isFollowingUser: Bool = false
     // 내 프로필인지 체크 (구독버튼을 보여줄지 판단하기 위해)
     @State private var isMyProfile: Bool = false
+    
+    let user: UserDocument
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -55,7 +53,6 @@ struct UserDetailView: View {
                             
                             if !isMyProfile {
                                 Button {
-                                    print("========버튼 눌림====================================")
                                     // userData update
                                     isFollowingUser.toggle()
                                     /// 희경:  userViewModel 에 메소드로 따로 빼주는게 보기 좋을듯.
@@ -144,14 +141,6 @@ struct UserDetailView: View {
                                     .padding(.leading, -5)
                                     .bold()
                                 
-//
-//                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == user.fields.id.stringValue})
-//                                {
-//                                    Text("\(user.fields.follower.arrayValue.values.count == 1 ? 0 : user.fields.follower.arrayValue.values.count-1)")
-//                                        .padding(.leading, -5)
-//                                        .bold()
-//                                }
-                                
                                 Text("|")
                                 
                                 NavigationLink {
@@ -239,7 +228,6 @@ struct UserDetailView: View {
             self.magazines = magazineVM.filterUserMagazine(userID: user.fields.id.stringValue)
         })
         .onReceive(userVM.updateUsersArraySuccess, perform: { _ in
-            print("onReceive updateUsersArray")
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         })
         .onReceive(userVM.fetchCurrentUsersSuccess, perform: { _ in
@@ -262,4 +250,3 @@ struct UserDetailView: View {
         })
     }
 }
-

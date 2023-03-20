@@ -12,6 +12,7 @@ struct BookmarkedCommunityView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var bookmarkedCommunityDoument: [CommunityDocument]
+    
     @Binding var isLoading: Bool
 
     var body: some View {
@@ -22,8 +23,6 @@ struct BookmarkedCommunityView: View {
                         CommunityDetailView(community: data)
                     } label: {
                         CommunityRowView(community: data, isLoading: $isLoading)
-                        //여기에 isLoading들어가야해서
-
                     }
                 }
             }

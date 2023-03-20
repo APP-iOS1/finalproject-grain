@@ -13,22 +13,22 @@ struct MatchingTabView: View {
     @Binding var isLoading: Bool
     @StateObject var communityVM: CommunityViewModel
     var body: some View {
-       
-            VStack {
-                ScrollView{
-                    ForEach(community, id: \.self){ data in
-                        NavigationLink {
-                            
-                            CommunityDetailView(community: data)
-                        } label: {
-                            CommunityRowView(community: data, isLoading: $isLoading)
-                        }
+        
+        VStack {
+            ScrollView{
+                ForEach(community, id: \.self){ data in
+                    NavigationLink {
+                        
+                        CommunityDetailView(community: data)
+                    } label: {
+                        CommunityRowView(community: data, isLoading: $isLoading)
                     }
                 }
-            }// vstack
-            .refreshable {
-                communityVM.fetchCommunity()
             }
+        }// vstack
+        .refreshable {
+            communityVM.fetchCommunity()
+        }
         
     }
 }

@@ -14,8 +14,6 @@ struct EditorViewCell: View {
     
     var body: some View {
             VStack{
-                //다중이라면 여기 포이치문 필요
-                
                 //에디터픽 이미지
                 ZStack{
                 Image("editor")

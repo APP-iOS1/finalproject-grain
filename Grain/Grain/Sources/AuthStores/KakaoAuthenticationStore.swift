@@ -20,50 +20,50 @@ final class KakaoAuthenticationStore: ObservableObject {
     
     /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
     //MARK: - KaKao logIn
-//    func kakaoSignIn(){
-//        // 카카오톡 실행 가능 여부 확인
-//        if (UserApi.isKakaoTalkLoginAvailable()) {
-//            UserApi.shared.loginWithKakaoTalk { [self](oauthToken, error) in
-//                if let error = error {
-//                    print(error)
-//                }
-//                else {
-//                    print("loginWithKakaoTalk() success.")
-//
-//                    //do something
-//                    if let token = oauthToken {
-//                        print("kakao token: \(token)")
-//                        //fireStore data 넣을부분
+    func kakaoSignIn(){
+        // 카카오톡 실행 가능 여부 확인
+        if (UserApi.isKakaoTalkLoginAvailable()) {
+            UserApi.shared.loginWithKakaoTalk { [self](oauthToken, error) in
+                if let error = error {
+                    print(error)
+                }
+                else {
+                    print("loginWithKakaoTalk() success.")
+
+                    //do something
+                    if let token = oauthToken {
+                        print("kakao token: \(token)")
+                        //fireStore data 넣을부분
 //                        fetchingFirebase()
-//                    }
-//
-//
-//
-//                }
-//            }
-//        } else {
-//            UserApi.shared.loginWithKakaoAccount { [self](oauthToken, error) in
-//                if let error = error {
-//                    print(error)
-//                }
-//                else {
-//                    print("loginWithKakaoAccount() success.")
-//                    if let token = oauthToken {
-//                        print("kakao token: \(token)")
-//                        //fireStore data 넣을부분
+                    }
+
+
+
+                }
+            }
+        } else {
+            UserApi.shared.loginWithKakaoAccount { [self](oauthToken, error) in
+                if let error = error {
+                    print(error)
+                }
+                else {
+                    print("loginWithKakaoAccount() success.")
+                    if let token = oauthToken {
+                        print("kakao token: \(token)")
+                        //fireStore data 넣을부분
 //                        fetchingFirebase()
-//                    }
-//                    //do something
-//                    //                    _ = oauthToken
-//                    self.authenticationStore.authenticationState = .authenticating
-//                    self.authenticationStore.logInCompanyState = .kakaoLogIn
-//
-//                }
-//            }
-//        }
-//    }
+                    }
+                    //do something
+                    //                    _ = oauthToken
+                    self.authenticationStore.authenticationState = .authenticating
+                    self.authenticationStore.logInCompanyState = .kakaoLogIn
+
+                }
+            }
+        }
+    }
     
-    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
+//    / PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
 //    func fetchingFirebase(){
 //        UserApi.shared.me() {(user, error) in
 //            if let error = error {

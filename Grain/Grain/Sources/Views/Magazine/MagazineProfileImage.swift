@@ -22,8 +22,6 @@ struct MagazineProfileImage: View {
             }
             .padding(.leading, 10)
     }
-    
-    
 }
 struct MagazineProfileImage_Previews: PreviewProvider {
     static var previews: some View {

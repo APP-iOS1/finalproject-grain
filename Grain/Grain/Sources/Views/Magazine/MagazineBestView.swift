@@ -16,13 +16,12 @@ fileprivate  enum timePeriod {
 }
 
 struct MagazineBestView: View {
-    let userVM: UserViewModel
-    let currentUsers : CurrentUserFields?
+    @ObservedObject var  userVM: UserViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
     
     @State var ObservingChangeValueLikeNum : String = ""
     
     
-    @ObservedObject var magazineVM: MagazineViewModel
     
     var body: some View {
         VStack {
@@ -43,7 +42,7 @@ struct MagazineBestView: View {
                 .padding([.leading, .top])
                 ForEach(magazineVM.sortedTopLikedMagazineData, id: \.self ){ data in
                     NavigationLink {
-                        MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: currentUsers, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                        MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                     } label: {
                         
                         LazyVStack{
@@ -54,8 +53,6 @@ struct MagazineBestView: View {
                         }
                         
                     }
-                    
-                    
                 }
             }
             .task(id: ObservingChangeValueLikeNum){

@@ -10,16 +10,21 @@ import FirebaseAuth
 import PhotosUI
 
 struct AddCommunityView: View {
-    @StateObject var communityVM : CommunityViewModel
+    @ObservedObject var communityVM : CommunityViewModel
     @StateObject var userVM = UserViewModel()
+    
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
-    //    @State private var inputCustomPlace: String = ""
-    
     @State private var selectedCamera = 0
-    //    @State private var userId = Auth.auth().currentUser?.uid
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
+    @State private var selectedTab: CommunityTabs = .매칭
+    // 이미지 앨범에서 가져오기
+    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedImageData: Data? = nil
+    @State private var selectedImages: [UIImage] = []
+    @State private var isShowingAlert = false
+    @State private var pickImageCount : Int = 0
     
     @Binding var presented: Bool
     
@@ -27,15 +32,8 @@ struct AddCommunityView: View {
         case 매칭, 마켓, 클래스, 정보
         var id: Self { self }
     }
-    @State private var selectedTab: CommunityTabs = .매칭
     
-    // 이미지 앨범에서 가져오기
-    @State private var selectedItem: PhotosPickerItem? = nil
-    @State private var selectedImageData: Data? = nil
-    @State private var selectedImages: [UIImage] = []
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
-    @State private var isShowingAlert = false
-    @State private var pickImageCount : Int = 0
     
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     
@@ -80,7 +78,7 @@ struct AddCommunityView: View {
                                 }
                             }
                         }
-                        
+                    
                     // MARK: 선택한 이미지를 보여주는 부분
                     ScrollView(.horizontal) {
                         HStack {
@@ -96,7 +94,7 @@ struct AddCommunityView: View {
                                                 Image(uiImage: selectedImages[index])
                                                     .resizable()
                                                     .cornerRadius(15)
-                                                    
+                                                
                                                 Rectangle()
                                                     .overlay {
                                                         Text("대표 사진")
@@ -118,9 +116,7 @@ struct AddCommunityView: View {
                                                 Image(uiImage: selectedImages[index])
                                                     .resizable()
                                                     .cornerRadius(15)
-                                                    .onAppear{
-                                                        print("Upper right coordinates: (\(geometry.size.width), 0)")
-                                                    }
+                                                 
                                                 Image(systemName: "x.circle.fill")
                                                     .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                     .onTapGesture {
@@ -128,10 +124,10 @@ struct AddCommunityView: View {
                                                         pickImageCount = selectedImages.count
                                                     }
                                             }
-
+                                            
                                         }
                                 }.frame(width: 100, height: 100)
-                               
+                                
                             }
                         }
                     }
@@ -198,7 +194,7 @@ struct AddCommunityView: View {
                         }
                     }
                     .frame(height: Screen.maxHeight * 0.4, alignment: .top)
-
+                
                 Spacer()
                 
                 //MARK: 다음 버튼

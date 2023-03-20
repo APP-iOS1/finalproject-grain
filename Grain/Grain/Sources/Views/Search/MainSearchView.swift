@@ -33,8 +33,10 @@ struct MainSearchView: View {
     @State private var searchStatus: SearchState = .magazine
     @State private var selectedIndex: Int = 0
     @State private var progress: Double = 0.5
+    @State var ObservingChangeValueLikeNum : String = ""
+    
     @FocusState private var focus: FocusableField?
-   
+    
     var searchedUser: [UserDocument] {
         let arr = userViewModel.users.filter {
             ignoreSpaces(in: $0.fields.nickName.stringValue)
@@ -51,14 +53,7 @@ struct MainSearchView: View {
         return string.replacingOccurrences(of: " ", with: "")
     }
     
-    init(){
-//        if searchWord.isEmpty{
-//            isShownProgress = true
-//        }
-    }
     
-    @State var ObservingChangeValueLikeNum : String = ""
-
     var body: some View {
         NavigationStack{
             VStack{
@@ -90,7 +85,7 @@ struct MainSearchView: View {
                                                 userViewModel.recentSearch.remove(at: index)
                                             }
                                         }
-
+                                        
                                         // 배열의 첫번째 인덱스에 넣어준다.
                                         // 1 index 에 넣는 이유는 0번째 인덱스가 "" 로 초기화 되어있기 때문.
                                         userViewModel.recentSearch.insert(self.searchWord, at: 1)
@@ -169,7 +164,7 @@ struct MainSearchView: View {
                 }
                 
                 if searchWord.isEmpty {
-                    MainRecentSearchView(searchList: $searchList, userVM: userViewModel)
+                    MainRecentSearchView(userVM: userViewModel, searchList: $searchList)
                     
                 } else if !searchWord.isEmpty {
                     ZStack {
@@ -193,7 +188,7 @@ struct MainSearchView: View {
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                                     }.prefix(3),id: \.self) { item in
                                         NavigationLink {
-                                            MagazineDetailView(magazineVM: magazineViewModel, userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                                            MagazineDetailView(magazineVM: magazineViewModel, userVM: userViewModel, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                                         } label: {
                                             VStack(alignment: .leading){
                                                 Text(item.fields.title.stringValue)
@@ -212,7 +207,7 @@ struct MainSearchView: View {
                                             }
                                             .padding(.horizontal)
                                         }.onTapGesture {
-                                        
+                                            
                                         }
                                         
                                     }
@@ -228,9 +223,9 @@ struct MainSearchView: View {
                                     
                                 }
                                 .task(id: ObservingChangeValueLikeNum){
-                                   Task{
-                                       await magazineViewModel.fetchMagazine()
-                                   }
+                                    Task{
+                                        await magazineViewModel.fetchMagazine()
+                                    }
                                 }
                                 .emptyPlaceholder(magazineViewModel.magazines.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)
@@ -319,13 +314,11 @@ struct MainSearchView: View {
                                     .padding(.top)
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 7)
-//                                    userViewModel.users.prefix()
                                     
                                     if searchedUser.count >= 4 {
                                         ForEach(0..<4) { i in
                                             NavigationLink {
-    //                                            UserSearchDetailView(user: item)
-                                                UserDetailView(user: searchedUser[i], userVM: userViewModel)
+                                                UserDetailView(userVM: userViewModel, user: searchedUser[i])
                                             } label: {
                                                 VStack{
                                                     HStack{
@@ -363,8 +356,8 @@ struct MainSearchView: View {
                                     else if searchedUser.count > 0 && searchedUser.count < 4  {
                                         ForEach(0..<searchedUser.count) { i in
                                             NavigationLink {
-    //                                            UserSearchDetailView(user: item)
-                                                UserDetailView(user: searchedUser[i], userVM: userViewModel)
+                                                //                                            UserSearchDetailView(user: item)
+                                                UserDetailView(userVM: userViewModel, user: searchedUser[i])
                                             } label: {
                                                 VStack{
                                                     HStack{
@@ -399,7 +392,7 @@ struct MainSearchView: View {
                                             }
                                         }
                                     }
-                                 
+                                    
                                     Button {
                                         self.isCommunitySearchResultShown.toggle()
                                     } label: {
@@ -420,13 +413,11 @@ struct MainSearchView: View {
                                         MainSearchPlaceHolder(searchWord: $searchWord)
                                         Spacer()
                                     }
-                                    
                                 }
                                 
                             default:
                                 Text("다시 시도해주세요")
                             }
-                            
                         }
                         
                         if isShownProgress == true {
@@ -466,11 +457,11 @@ struct MainSearchView: View {
         }
         
         .navigationDestination(isPresented: $isUserSearchResultShown){
-            UserSearchResultView(searchWord: $searchWord, user: userViewModel, magazineVM: magazineViewModel)
+            UserSearchResultView(searchWord: $searchWord, user: userViewModel , magazineVM: magazineViewModel)
         }
         .onAppear{
             if searchWord.isEmpty{
-                        isShownProgress = true
+                isShownProgress = true
             }
             self.focus = .search
             userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")

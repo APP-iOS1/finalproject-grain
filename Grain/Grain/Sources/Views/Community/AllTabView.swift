@@ -25,7 +25,7 @@ struct AllTabView: View {
                         }
                     }
                 }
-            }// vstack
+            }// VStack
         }
         .refreshable {
             communityVM.fetchCommunity()

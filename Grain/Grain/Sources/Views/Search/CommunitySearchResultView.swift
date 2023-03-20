@@ -9,76 +9,78 @@ import SwiftUI
 
 struct CommunitySearchResultView: View {
     @State private var isShownProgress: Bool = true
+    
     @Binding var searchWord: String
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
+    
     let community: CommunityViewModel
+    
     var body: some View {
-       
-            ZStack {
-                VStack{
-                    List{
-                        ForEach(community.communities.filter {
-                            ignoreSpaces(in: $0.fields.title.stringValue)
-                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-                            ignoreSpaces(in: $0.fields.content.stringValue)
-                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                        },id: \.self) { item in
-                            NavigationLink {
-                                CommunitySearchDetailView(community: item)
-                            } label: {
-                                HStack{
-                                    Rectangle()
-                                        .foregroundColor(.gray)
-                                        .frame(width: 90, height: 90)
-                                        .overlay{
-                                            Image(systemName: "camera.fill")
-                                                .resizable()
-                                                .foregroundColor(.white)
-                                                .aspectRatio(contentMode: .fit)
-                                                .padding()
-                                        }
-                                    VStack(alignment: .leading){
-                                        Text(item.fields.title.stringValue)
-                                            .bold()
-                                            .padding(.bottom, 5)
-                                        Text(item.fields.content.stringValue)
-                                            .lineLimit(2)
-                                            .foregroundColor(.textGray)
-                                            .font(.caption)
+        ZStack {
+            VStack{
+                List{
+                    ForEach(community.communities.filter {
+                        ignoreSpaces(in: $0.fields.title.stringValue)
+                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                        ignoreSpaces(in: $0.fields.content.stringValue)
+                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                    },id: \.self) { item in
+                        NavigationLink {
+                            CommunitySearchDetailView(community: item)
+                        } label: {
+                            HStack{
+                                Rectangle()
+                                    .foregroundColor(.gray)
+                                    .frame(width: 90, height: 90)
+                                    .overlay{
+                                        Image(systemName: "camera.fill")
+                                            .resizable()
+                                            .foregroundColor(.white)
+                                            .aspectRatio(contentMode: .fit)
+                                            .padding()
                                     }
+                                VStack(alignment: .leading){
+                                    Text(item.fields.title.stringValue)
+                                        .bold()
+                                        .padding(.bottom, 5)
+                                    Text(item.fields.content.stringValue)
+                                        .lineLimit(2)
+                                        .foregroundColor(.textGray)
+                                        .font(.caption)
                                 }
                             }
                         }
                     }
-                    .emptyPlaceholder(community.communities.filter {
-                        ignoreSpaces(in: $0.fields.title.stringValue)
-                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
-                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                    }) {
-                        VStack{
-                                Spacer()
-                                SearchPlaceHolderView(searchWord: $searchWord)
-                                Spacer()
-                        }
-                        
+                }
+                .emptyPlaceholder(community.communities.filter {
+                    ignoreSpaces(in: $0.fields.title.stringValue)
+                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
+                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                }) {
+                    VStack{
+                        Spacer()
+                        SearchPlaceHolderView(searchWord: $searchWord)
+                        Spacer()
                     }
-                    .listStyle(.plain)
-                    Spacer()
+                    
                 }
-                if isShownProgress == true {
-                    SearchProgress()
-                        .onAppear{
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                self.isShownProgress = false
-                            }
-                        }
-                }
+                .listStyle(.plain)
+                Spacer()
             }
-            .navigationTitle("\(searchWord)")
-            .navigationBarTitleDisplayMode(.inline)
+            if isShownProgress == true {
+                SearchProgress()
+                    .onAppear{
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.isShownProgress = false
+                        }
+                    }
+            }
+        }
+        .navigationTitle("\(searchWord)")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

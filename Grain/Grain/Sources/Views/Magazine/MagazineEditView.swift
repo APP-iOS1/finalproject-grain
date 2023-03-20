@@ -9,18 +9,18 @@ import FirebaseAuth
 import Kingfisher
 
 struct MagazineEditView: View {
-    @State var data : MagazineDocument
     @StateObject var magazineVM = MagazineViewModel()
     
+    @State var data : MagazineDocument
     @State var editTitle : String = ""
     @State var editContent : String = ""
     @State var editCustomPlace : String = ""
-    
     @State var clickedContent : Bool = false    // 텍스트 클릭 Bool
     @State var clickedCustomPlace : Bool = false    // 텍스트 클릭 Bool
     @State private var showSuccessAlert: Bool = false
-    @Environment(\.presentationMode) var presentationMode
     @State private var showAlert: Bool = false
+    
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         NavigationView{
@@ -62,9 +62,6 @@ struct MagazineEditView: View {
                             .padding(.top, -5)
                             .padding(.bottom, -10)
                         
-                        //            Image("line")
-                        //                .resizable()
-                        //                .frame(width: Screen.maxWidth, height: 0.3)
                         TabView{
                             ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
                                 Rectangle()
@@ -94,7 +91,6 @@ struct MagazineEditView: View {
                                         .padding()
                                         .foregroundColor(Color.textGray)
                                         .onSubmit {
-                                            //                                            data.fields.content.stringValue = editContent
                                             clickedContent.toggle()
                                         }
                                 }else{
@@ -170,8 +166,9 @@ struct MagazineEditView: View {
 }
 struct MagazineEditHeader: View {
     @State var data : MagazineDocument
-    @Binding var editTitle : String
     @State var clickedTitle : Bool = false  // 텍스트 클릭 Bool
+    
+    @Binding var editTitle : String
     
     var body: some View {
         VStack(alignment: .leading) {

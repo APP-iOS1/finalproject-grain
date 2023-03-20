@@ -40,7 +40,7 @@ struct MagazineRecommentView: View {
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue })
                             {
                                 NavigationLink {
-                                    UserDetailView(user: user, userVM: userVM)
+                                    UserDetailView(userVM: userVM, user: user)
                                 } label: {
                                     KFImage(URL(string: commentVm.sortedRecentRecomment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()

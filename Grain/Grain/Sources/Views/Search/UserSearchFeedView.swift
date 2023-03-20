@@ -12,7 +12,7 @@ import FirebaseAuth
 struct UserSearchFeedView: View {
     @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
-
+    
     var images: [Image] = [Image("1"), Image("2"), Image("3"), Image("test"), Image("sampleImage"), Image("testImage")]
     
     // 나의 피드를 그리드로 보여줄지 리스트로 보여줄지 선택하는 변수
@@ -70,14 +70,14 @@ struct UserSearchFeedView: View {
                         }, id: \.self){ data in
                             NavigationLink {
                                 // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
-//                                MagazineDetailView(data: data)
+                                //                                MagazineDetailView(data: data)
                             } label: {
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
                                 MagazineViewCell(data: data)
                             }
-
+                            
                         }
-                    
+                        
                     }
                 }.onAppear{
                     // MARK: fetch 데이터 시작
@@ -105,13 +105,10 @@ struct UserPageUserFeedView: View {
     var magazineDocument: [MagazineDocument]
     
     let columns = [
-        //        GridItem(.adaptive(minimum: 100), spacing: 1)
         GridItem(.flexible(), spacing: 1),
         GridItem(.flexible(), spacing: 1),
         GridItem(.flexible(), spacing: 1)
     ]
-    
-    //    @State private var selectedIndex: Int?
     
     var body: some View {
         VStack{
@@ -149,7 +146,7 @@ struct UserPageUserFeedView: View {
                     LazyVGrid(columns: columns, spacing: 1) {
                         ForEach(magazineDocument, id: \.self) { data in
                             NavigationLink {
-                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: userVM.currentUsers, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {
                                 KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                     .resizable()
@@ -163,42 +160,17 @@ struct UserPageUserFeedView: View {
                     }
                 }
                 .task(id: ObservingChangeValueLikeNum){
-                   Task{
-                       await magazineVM.fetchMagazine()
-                   }
-               }
-
-                //                ScrollView{
-                //                    LazyVGrid(columns: columns, spacing: 1) {
-                //                        ForEach(magazineDocument, id: \.self) { data in
-                //                            NavigationLink {
-                //                                MagazineDetailView(userVM: userVM, currentUsers: userVM.currentUsers, data: data)
-                ////                                TestScrollView(magazineDocument: magazineDocument, userVM: userVM, selectedIndex: selectedIndex)
-                //                            } label: {
-                //                                Button{
-                //                                    selectedIndex = magazineDocument.firstIndex(of: data)
-                //                                } label: {
-                //                                    KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                //                                       .resizable()
-                //    //                                   .aspectRatio(contentMode: .fit)
-                //    //                                   .frame(width: 100)
-                //                                       .scaledToFill()
-                //                                       .frame(width: Screen.maxWidth / 3 - 1, height: Screen.maxWidth / 3 - 1)
-                //                                       .clipped()
-                //                                }
-                //
-                //                            }
-                //
-                //                        }
-                //                    }
-                //                }
+                    Task{
+                        await magazineVM.fetchMagazine()
+                    }
+                }
             } else {
                 ScrollView{
                     LazyVStack{
                         ForEach(magazineDocument, id: \.self) { data in
                             NavigationLink {
                                 // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
-                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: userVM.currentUsers, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
                                 MagazineViewCell(data: data)
@@ -207,14 +179,13 @@ struct UserPageUserFeedView: View {
                     }
                 }
                 .task(id: ObservingChangeValueLikeNum){
-                   Task{
-                       await magazineVM.fetchMagazine()
-                   }
-               }
-
+                    Task{
+                        await magazineVM.fetchMagazine()
+                    }
+                }
+                
                 
             }
-            
         }.onAppear{
             userVM.fetchUser()
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")

@@ -6,23 +6,14 @@
 //
 
 import SwiftUI
-//import FirebaseFirestore  /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
+
 import Kingfisher
-/*
- id:String
- category: Int
- userId: String
- image: [String]
- title: string
- 
- location: String
- content: string
- createdAt: TimeStamp
- */
 
 struct CommunityRowView: View {
-    
     @StateObject var commentVm: CommentViewModel = CommentViewModel()
+    
+    @State var opacity: Double = 0.8
+    
     var tagColor: String {
         switch community.fields.state.stringValue {
         case "모집중", "판매중", "Tip":
@@ -44,10 +35,11 @@ struct CommunityRowView: View {
             return "616161"
         }
     }
+    
     var community: CommunityDocument
-    @State var opacity: Double = 0.8
     
     @Binding var isLoading: Bool
+    
     var body: some View {
         VStack(alignment: .leading){
             HStack{
@@ -58,7 +50,6 @@ struct CommunityRowView: View {
                     .clipped()
                     .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                     .padding(.horizontal, 13)
-                    //.padding(.top, 5)
                 
                 VStack {
                     VStack(alignment: .leading){
@@ -86,10 +77,7 @@ struct CommunityRowView: View {
                                 .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                         } // hstack
                         .padding(.top, 4)
-                       // .padding(.vertical, 3)
-                        
-                       // Spacer()
-                        
+                
                         //MARK: 게시글 제목
                         Text("\(community.fields.title.stringValue)")
                             .font(.callout)
@@ -99,14 +87,8 @@ struct CommunityRowView: View {
                             .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                             .lineLimit(2)
                             .frame(height: 45)
-                            
-                            
-    //                        .padding(.bottom, 3)
-                        
-                        // Spacer()
-                        
+               
                         HStack {
-                            // String.toDate(community.createTime)
                             Text(community.createdDate?.renderTime() ?? "")
                                 .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                             Spacer()
@@ -119,12 +101,11 @@ struct CommunityRowView: View {
                         .padding(.bottom, 4)
                         .foregroundColor(.secondary)
                         .font(.caption)
-                        //.padding(.trailing, 10)
                     }
                     .frame(height: 100)
                     .padding(.trailing, 13)
                     .padding(.leading, -3)
-                }//vstack
+                }//VStack
             }
             Divider()
                 .padding(.top, 5)
@@ -145,14 +126,6 @@ struct CommunityRowView: View {
         .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.17)
     }
 }
-
-//extension CommunityRowView {
-//    fileprivate var loadingView : some View {
-//        Color.black.opacity(0.8).edgesIgnoringSafeArea(.all)
-//            .overlay(ProgressView().tint(.white))
-//    }
-//}
-
 
 //struct CommunityRowView_Previews: PreviewProvider {
 //    static var previews: some View {

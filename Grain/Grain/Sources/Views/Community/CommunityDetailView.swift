@@ -12,35 +12,30 @@ import Kingfisher
 
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
-    @State var community: CommunityDocument
-    
+    // 댓글 관련
+    @StateObject var commentVm = CommentViewModel()
     @StateObject var communityVM = CommunityViewModel()
     @StateObject var userVM = UserViewModel()
     
-    @Environment(\.presentationMode) var presentationMode
-    
-    // 댓글 관련
-    @StateObject var commentVm = CommentViewModel()
-    
+    @State var community: CommunityDocument
     @State private var isBookMarked: Bool = false
     @State private var isliked: Bool = false
     @State private var commentText: String = ""
     @State private var isHiddenComment: Bool = true
     @State private var editFetch: Bool = false
-    
     @State private var postStatus : String = "" // 게시글 상태 값
     @State private var postStatusString : String = "" // 게시글 상태 변경 표시글
-    
-    @FocusState private var textFieldFocused: Bool
-    
-
     @State var commentCollectionDocId: String = ""
     @State var replyCommentText : String = "" // 답글 표시 이름 값
     @State var replyContent: String = ""
     @State var replyComment : Bool = false  // 답글 표시 Bool값
+    
+    @FocusState private var textFieldFocused: Bool
+    
+    @Environment(\.presentationMode) var presentationMode
+
     @SceneStorage("isZooming") var isZooming: Bool = false
 
-    
     var body: some View {
         NavigationView {
             VStack {
@@ -57,11 +52,10 @@ struct CommunityDetailView: View {
                         .padding(.top, 5)
                         // MARK: 닉네임 헤더
                         HStack {
-                            // item = userData
                             NavigationLink {
                                 if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue
                                 }) {
-                                    UserDetailView(user: user, userVM: userVM)
+                                    UserDetailView(userVM: userVM, user: user)
                                 }
                             } label: {
                                 ProfileImage(imageName: community.fields.profileImage.stringValue)
@@ -76,7 +70,6 @@ struct CommunityDetailView: View {
                             }
                             Spacer()
                         }//HS
-                        //.padding(.vertical, 5)
                         Divider()
                             .frame(maxWidth: Screen.maxWidth * 0.94)
                             .background(Color.black)
@@ -115,14 +108,11 @@ struct CommunityDetailView: View {
                             .padding(.bottom, 15)
                             .padding(.horizontal, Screen.maxWidth * 0.04)
                         // MARK: - 커뮤니티 댓글 뷰
-//                        VStack(alignment: .leading ){
                         CommentView(userVM: userVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, currentUser: userVM.currentUsers, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
-//                        }
                     }
                 }
                 .refreshable {
                     communityVM.fetchCommunity()
-//                    commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
                 }
                 .padding(.top, 1)
                 // MARK: 댓글 달기
@@ -165,7 +155,7 @@ struct CommunityDetailView: View {
                                 Text("저장")
                             }
                             NavigationLink {
-                                CommunityEditView(communityVM: communityVM, community: community, editFetch: $editFetch)
+                                CommunityEditView(community: community, communityVM: communityVM, editFetch: $editFetch)
                             }label: {
                                 Text("수정")
                             }
@@ -226,43 +216,12 @@ struct CommunityDetailView: View {
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
             communityVM.fetchCommunity()
-            
-            // 유저가 저장을 눌렀는지
-            //                if userVM.userBookmarkedCommunity.contains(where: { item in
-            //                    item == community.fields.id.stringValue})
-            //                {
-            //                    print(isBookMarked)
-            //                    isBookMarked = true
-            //                }else{
-            //                    isBookMarked = false
-            //                }
-            //            }
         }
         .onChange(of: commentVm.comment, perform: { value in
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
             print("실행?")
         })
-        
-        .onDisappear{
-            Task{
-                
-                //                if isliked {
-                //                    /// 추가 부분
-                //                    await userVM.updateUserUsingSDK(updateDocument: docID ?? "", updateKey: "bookmarkedCommunityID", updateValue: community.fields.id?.stringValue ?? "", isArray: true)
-                //                }else{
-                //                    /// 삭제부분
-                //                    await userVM.deleteUserSDK(updateDocument: docID ?? "", deleteKey: "bookmarkedCommunityID", deleteIndex: community.fields.id?.stringValue ?? "", isArray: true)
-                //                }
-                
-                //                 유저 DB에 북마크 상태 저장/삭제
-                //                if isBookMarked {
-                //                    await userVM.updateUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", updateKey: "bookmarkedMagazineID", updateValue: community.fields.id.stringValue, isArray: true)
-                //                }else{
-                //                    await userVM.deleteUserUsingSDK(updateDocument: Auth.auth().currentUser?.uid ?? "", deleteKey: "bookmarkedMagazineID", deleteIndex: community.fields.id.stringValue, isArray: true)
-                //                }
-            }
-        }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .onTapGesture {

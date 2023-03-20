@@ -23,7 +23,7 @@ struct MagazineContentAddView: View {
     // 모달 내리기
     @Binding var presented : Bool
     // insert
-    @ObservedObject var magazineVM = MagazineViewModel()
+    @ObservedObject var magazineVM : MagazineViewModel
     @ObservedObject var storageVM = StorageViewModel()
     
     // 지도에서 좌표 값 가져오기
@@ -213,7 +213,7 @@ struct MagazineContentAddView: View {
                         }
                     } else {
                         NavigationLink {
-                            AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, userLatitude: userLatitude , userLongitude: userLongitude)
+                            AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, magazineVM: magazineVM, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .navigationBarBackButtonHidden(true)
                         } label: {
                             RoundedRectangle(cornerRadius: 12)

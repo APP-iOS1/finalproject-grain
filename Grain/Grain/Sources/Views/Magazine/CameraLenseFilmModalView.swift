@@ -15,7 +15,7 @@ struct CameraLenseFilmModalView: View {
     var myLense = ["lenseA", "lenseB", "lenseC","lense1", "lense2", "lense3"]
     var myFilm = ["film1", "film2", "film3", "film4"]
     
-    @ObservedObject var magazineVM = MagazineViewModel()
+    @ObservedObject var magazineVM : MagazineViewModel
     
     @StateObject var userVM = UserViewModel()
     @StateObject var mapVM = MapViewModel()
@@ -199,6 +199,7 @@ struct CameraLenseFilmModalView: View {
                         var postMagazineArr : [String]  = userVM.postedMagazineID
                         postMagazineArr.append(docId)
                         userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
+                        
                         magazineVM.fetchMagazine()
                         presented.toggle()
                     }

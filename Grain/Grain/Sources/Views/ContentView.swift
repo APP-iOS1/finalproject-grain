@@ -67,7 +67,7 @@ struct ContentView: View {
                                         VStack {
                                             SelectPostView(presented: $presented,
                                                            communityVM: communityVM,
-                                                           updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
+                                                           updateNumber: updateNumber,magazineVM: magazineVM, userLatitude: userLatitude , userLongitude: userLongitude)
                                         }
                                     }
                                 
@@ -97,7 +97,7 @@ struct ContentView: View {
                                         VStack {
                                             SelectPostView(presented: $presented,
                                                            communityVM: communityVM,
-                                                           updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
+                                                           updateNumber: updateNumber,magazineVM: magazineVM, userLatitude: userLatitude , userLongitude: userLongitude)
                                         }
                                     }
                                 }

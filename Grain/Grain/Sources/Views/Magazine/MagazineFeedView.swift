@@ -36,8 +36,6 @@ struct MagazineFeedView: View {
                     await magazineVM.fetchMagazine()   
                 }
             }
-            
-            
         }
 //        .onAppear{
 //            print("11")

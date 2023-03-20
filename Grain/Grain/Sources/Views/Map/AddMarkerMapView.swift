@@ -31,7 +31,7 @@ struct AddMarkerMapView: View {
     // 텍스트 필드 String
     @State var searchMap : String = ""
     // geocode 하기 위해
-    
+    @ObservedObject var magazineVM : MagazineViewModel
     @StateObject var naverVM = NaverAPIViewModel()
     
     // 위치 검색 결과 값
@@ -138,7 +138,7 @@ struct AddMarkerMapView: View {
                 
                 if (isFinishedSpot && writeDownCustomPlaceCheck){   // 핀과 커스텀 플레이스가 작성이 되었을때
                     NavigationLink {
-                        CameraLenseFilmModalView(inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, writeDownCustomPlaceText: $writeDownCustomPlaceText)
+                        CameraLenseFilmModalView(magazineVM: magazineVM, inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, writeDownCustomPlaceText: $writeDownCustomPlaceText)
                             .navigationBarBackButtonHidden(true)
                     } label:{
                         RoundedRectangle(cornerRadius: 12)

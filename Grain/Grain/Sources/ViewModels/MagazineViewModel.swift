@@ -48,7 +48,7 @@ final class MagazineViewModel: ObservableObject {
                 
                 
                 self.sortedTopLikedMagazineData = data.documents.sorted(by: {
-                    // MARK: String -> Int로 바꾸기 
+                    // MARK: String -> Int로 바꾸기
                     return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
                 })
                 

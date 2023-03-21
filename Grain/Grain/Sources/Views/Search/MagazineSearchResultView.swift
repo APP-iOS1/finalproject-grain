@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct MagazineSearchResultView: View {
-    @StateObject var magazineVM = MagazineViewModel()
+    
+    @ObservedObject var magazineVM : MagazineViewModel
     
     @State private var isShownProgress:Bool = true
     @State var ObservingChangeValueLikeNum : String = ""
@@ -93,8 +94,8 @@ struct MagazineSearchResultView: View {
     }
 }
 
-struct MagazineSearchResultView_Previews: PreviewProvider {
-    static var previews: some View {
-        MagazineSearchResultView(searchWord: .constant(""), magazine: MagazineViewModel(), userViewModel: UserViewModel())
-    }
-}
+//struct MagazineSearchResultView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MagazineSearchResultView(searchWord: .constant(""), magazine: MagazineViewModel(), userViewModel: UserViewModel())
+//    }
+//}

@@ -12,6 +12,7 @@ import FirebaseAuth
 struct CommunityRecommentView: View {
     @ObservedObject var commentVm : CommentViewModel 
     @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
     
     var commentCollectionDocId : String
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
@@ -35,7 +36,7 @@ struct CommunityRecommentView: View {
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentRecomment[index].fields.userID.stringValue})
                             {
                                 NavigationLink {
-                                    UserDetailView(userVM: userVM, user: user)
+                                    UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                                 } label: {
                                     KFImage(URL(string: commentVm.sortedRecentRecomment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()

@@ -9,7 +9,9 @@ import SwiftUI
 import MessageUI
 
 struct MyPageOptionView: View {
-    @StateObject var communityVM: CommunityViewModel = CommunityViewModel()
+    
+    @ObservedObject var commentVm: CommentViewModel
+    @ObservedObject var communityVM: CommunityViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     
     var userVM: UserViewModel
@@ -20,7 +22,7 @@ struct MyPageOptionView: View {
         VStack(alignment: .leading){
             ScrollView{
                 //MARK: 계정 섹션
-                AccountSection(magazineVM: magazineVM, communityVM: communityVM, userVM: userVM, bookmarkedMagazineDocument: bookmarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
+                AccountSection(commentVm: commentVm, magazineVM: magazineVM, communityVM: communityVM, userVM: userVM, bookmarkedMagazineDocument: bookmarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
                 
                 //MARK: 지원 섹션
                 SupportSection()
@@ -61,6 +63,7 @@ extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate 
 
 //MARK: - 계정 섹션
 struct AccountSection: View {
+    @ObservedObject var commentVm: CommentViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
@@ -100,7 +103,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                EditCameraView()
+                EditCameraView(userVM: userVM)
             } label: {
                 HStack {
                     Image(systemName: "camera")
@@ -122,7 +125,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedMagazine(magazineVM: magazineVM, bookmarkedMagazineDocument: bookmarkedMagazineDocument)
+                BookmarkedMagazine(userVM: userVM, magazineVM: magazineVM, bookmarkedMagazineDocument: bookmarkedMagazineDocument)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")
@@ -145,7 +148,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedCommunityView(communityVM : communityVM, userVM : userVM, isLoading: $communityVM.isLoading, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
+                BookmarkedCommunityView(commentVm : commentVm, communityVM : communityVM, userVM : userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")

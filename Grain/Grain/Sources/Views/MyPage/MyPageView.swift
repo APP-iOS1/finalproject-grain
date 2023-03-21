@@ -10,8 +10,11 @@ import Kingfisher
 import FirebaseAuth
 
 struct MyPageView: View {
-    // MARK: docID -> 파이어스토어 User -> 문서ID 값 유저마다 고유의 값으로 들어가야 될듯
-    @StateObject var userVM = UserViewModel()
+    
+    
+    @ObservedObject var commentVm: CommentViewModel
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     
     var magazineDocument: [MagazineDocument]
@@ -142,7 +145,7 @@ struct MyPageView: View {
                     .padding(.horizontal, 10)
                     .padding(.top, 5)
                     .foregroundColor(.brightGray)
-                MyPageMyFeedView(magazineVM: magazineVM, magazineDocument: magazineDocument)
+                MyPageMyFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineDocument)
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장
@@ -157,7 +160,7 @@ struct MyPageView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        MyPageOptionView(magazineVM: magazineVM, userVM: userVM, bookmarkedMagazineDocument: boomarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
+                        MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM, bookmarkedMagazineDocument: boomarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
                     } label: {
                         Image(systemName: "ellipsis")
                             .foregroundColor(.black)

@@ -12,24 +12,26 @@ import NMapsMap
 
 
 struct ReportMapView: View {
+    @StateObject var reportMapVM = ReportMapViewModel()
+    @ObservedObject var locationManager : LocationManager
+    
     @Environment(\.dismiss) private var dismiss
-    @State var clickedReportButtonBool : Bool = false   // updateUIView에서 경도 위도를 알 수 있게끔 해주는 Bool 값
     
     @Binding var updateNumber : NMGLatLng   // mapView에서 바인딩 받아야됨 아직 이유를 모르겠음
     
+    @State var clickedReportButtonBool : Bool = false   // updateUIView에서 경도 위도를 알 수 있게끔 해주는 Bool 값
     @State var showingAlert : Bool = false
     @State var finalReportBool : Bool = false   // 최종 제보하기 버튼
-    
     @State var writeDownCategory : String = ""  // 카테고리 적는 텍스트필드
     @State var writeDownStoreName : String = "" // 가게이름 적는 텍스트필드
     
-    @StateObject var reportMapVM = ReportMapViewModel()
+    
     var userLatitude: Double
     var userLongitude: Double
     
     var body: some View {
         ZStack{
-            ReportUIMapView(clickedReportButtonBool: $clickedReportButtonBool, updateNumber: $updateNumber,  userLatitude: userLatitude , userLongitude: userLongitude) //지도 호출
+            ReportUIMapView(locationManager: locationManager, clickedReportButtonBool: $clickedReportButtonBool, updateNumber: $updateNumber,  userLatitude: userLatitude , userLongitude: userLongitude) //지도 호출
             
             // MARK: Mapview로 돌아가는 버튼
             Button {
@@ -120,7 +122,7 @@ struct ReportMapView: View {
 struct ReportUIMapView: UIViewRepresentable,View {
 
     
-    @StateObject var locationManager = LocationManager()
+    @ObservedObject var locationManager : LocationManager
     @Binding var clickedReportButtonBool : Bool
     
     

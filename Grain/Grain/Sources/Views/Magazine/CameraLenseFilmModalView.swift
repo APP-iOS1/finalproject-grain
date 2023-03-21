@@ -17,8 +17,8 @@ struct CameraLenseFilmModalView: View {
     
     @ObservedObject var magazineVM : MagazineViewModel
     
-    @StateObject var userVM = UserViewModel()
-    @StateObject var mapVM = MapViewModel()
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var mapVM : MapViewModel
     
     
     @State private var selectedCamera: String = ""

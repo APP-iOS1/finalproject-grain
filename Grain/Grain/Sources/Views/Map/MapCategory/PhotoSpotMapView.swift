@@ -13,14 +13,19 @@ import UIKit
 
 
 struct PhotoSpotMapView: View {
+    @ObservedObject var userVM: UserViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
+    @ObservedObject var locationManager : LocationManager
+    
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     @Binding var searchResponseBool: Bool
     @Binding var searchResponse: [Address]
     @Binding var isShowingPhotoSpot:  Bool
     @State var nearbyPostsArr : [String] = []
     @State var visitButton : Bool = false
-    @StateObject var magazineVM = MagazineViewModel()
+
     @Binding var magazineData: [MagazineDocument]
+    
     @State var clikedMagazineData : MagazineDocument?
     
     @Binding var showResearchButton : Bool
@@ -31,11 +36,11 @@ struct PhotoSpotMapView: View {
     
     var body: some View {
         ZStack{
-            PhotoSpotUIMapView(mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot , nearbyPostsArr: $nearbyPostsArr, visitButton: $visitButton, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
+            PhotoSpotUIMapView(locationManager: locationManager, mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot , nearbyPostsArr: $nearbyPostsArr, visitButton: $visitButton, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
             
             if isShowingPhotoSpot{
                 
-                NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
+                NearbyPostsComponent(userVM: userVM, visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
                     .zIndex(1)
                     .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.75)
                     .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
@@ -55,7 +60,7 @@ struct PhotoSpotMapView: View {
 // FIXME: 네이버 지도
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct PhotoSpotUIMapView: UIViewRepresentable,View {
-    @StateObject var locationManager = LocationManager()
+    @ObservedObject var locationManager : LocationManager
     
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     @Binding var searchResponseBool: Bool

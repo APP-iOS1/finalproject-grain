@@ -144,6 +144,10 @@
 		A7D9F31229897C9000B39218 /* GeocodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F31129897C9000B39218 /* GeocodeService.swift */; };
 		A7D9F3162989840200B39218 /* NaverAPIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D9F3152989840200B39218 /* NaverAPIViewModel.swift */; };
 		A7E3DDE3298D3D5F004DA1F6 /* NearbyPostsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3DDE2298D3D5F004DA1F6 /* NearbyPostsComponent.swift */; };
+		A7FCA45B29C9675200F94249 /* EditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FCA45A29C9675200F94249 /* EditorViewModel.swift */; };
+		A7FCA45D29C9680200F94249 /* EditorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FCA45C29C9680200F94249 /* EditorService.swift */; };
+		A7FCA45F29C9684F00F94249 /* EditorRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FCA45E29C9684F00F94249 /* EditorRouter.swift */; };
+		A7FCA46129C96AA900F94249 /* EditorDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FCA46029C96AA900F94249 /* EditorDTO.swift */; };
 		BE5AF60818554C3E24688654 /* Pods_Grain.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8051593871DC4EE5ACC7FFF /* Pods_Grain.framework */; };
 /* End PBXBuildFile section */
 
@@ -290,6 +294,10 @@
 		A7D9F31129897C9000B39218 /* GeocodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeService.swift; sourceTree = "<group>"; };
 		A7D9F3152989840200B39218 /* NaverAPIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverAPIViewModel.swift; sourceTree = "<group>"; };
 		A7E3DDE2298D3D5F004DA1F6 /* NearbyPostsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyPostsComponent.swift; sourceTree = "<group>"; };
+		A7FCA45A29C9675200F94249 /* EditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewModel.swift; sourceTree = "<group>"; };
+		A7FCA45C29C9680200F94249 /* EditorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorService.swift; sourceTree = "<group>"; };
+		A7FCA45E29C9684F00F94249 /* EditorRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorRouter.swift; sourceTree = "<group>"; };
+		A7FCA46029C96AA900F94249 /* EditorDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDTO.swift; sourceTree = "<group>"; };
 		F8051593871DC4EE5ACC7FFF /* Pods_Grain.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Grain.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -311,6 +319,7 @@
 			children = (
 				A7AF1A0A2995E78A007E6D43 /* CommentViewModel.swift */,
 				06F0D829297EB3DC00E7B885 /* CommunityViewModel.swift */,
+				A7FCA45A29C9675200F94249 /* EditorViewModel.swift */,
 				06F0D82B297EB3E700E7B885 /* MagazineViewModel.swift */,
 				06F0D82D297EB3F200E7B885 /* MapViewModel.swift */,
 				A7D9F3152989840200B39218 /* NaverAPIViewModel.swift */,
@@ -620,6 +629,7 @@
 				A7AF1A02299566EF007E6D43 /* CommentDTO.swift */,
 				A7D957CE297AA574001D2401 /* CommunityDTO.swift */,
 				A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */,
+				A7FCA46029C96AA900F94249 /* EditorDTO.swift */,
 				A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */,
 				A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */,
 				A7D9F2FF298962B900B39218 /* MapDTO.swift */,
@@ -650,6 +660,7 @@
 			children = (
 				A7AF1A0629956CDC007E6D43 /* CommentRouter.swift */,
 				A7D957D3297AAF74001D2401 /* CommunityRouter.swift */,
+				A7FCA45E29C9684F00F94249 /* EditorRouter.swift */,
 				0693B4C62992849600F9CDE2 /* Error.swift */,
 				8B88CA7B29C462720064425C /* GeocodeRouter.swift */,
 				A7D957D5297AAF8C001D2401 /* MagazineRouter.swift */,
@@ -667,6 +678,7 @@
 			children = (
 				A7AF1A082995DBCD007E6D43 /* CommentService.swift */,
 				A7D957DC297AAFC8001D2401 /* CommunityService.swift */,
+				A7FCA45C29C9680200F94249 /* EditorService.swift */,
 				A7D9F31129897C9000B39218 /* GeocodeService.swift */,
 				A7D957DA297AAFBD001D2401 /* MagazineService.swift */,
 				A7D9F3032989645D00B39218 /* MapService.swift */,
@@ -823,6 +835,7 @@
 				06FD6ABB2977B45600B4A859 /* Ex+View.swift in Sources */,
 				998847DC299239D600004066 /* UserSearchFeedView.swift in Sources */,
 				06FD6ABD2977B4F600B4A859 /* SegmentedPicker.swift in Sources */,
+				A7FCA46129C96AA900F94249 /* EditorDTO.swift in Sources */,
 				9958AFB2297781F400A51DA9 /* Constants.swift in Sources */,
 				9958AFAE2977811300A51DA9 /* Ex+Date.swift in Sources */,
 				A7D9F3042989645D00B39218 /* MapService.swift in Sources */,
@@ -831,6 +844,7 @@
 				9970FC3629AF8FCF0002A370 /* EX+pinchAndPanGesture.swift in Sources */,
 				9962CDC92979246500E834C3 /* AllTabView.swift in Sources */,
 				8B0BA0A2298A4197000A7090 /* CameraModalView.swift in Sources */,
+				A7FCA45F29C9684F00F94249 /* EditorRouter.swift in Sources */,
 				0C5204A52989F5D4002623FB /* SplashView.swift in Sources */,
 				06F0D830297EB3FE00E7B885 /* UserViewModel.swift in Sources */,
 				A7D9F31229897C9000B39218 /* GeocodeService.swift in Sources */,
@@ -875,6 +889,7 @@
 				0628A1A729B5AC09002A2709 /* UserDetailView.swift in Sources */,
 				8B10F4302990DD5300582D27 /* BookmarkedCommunityView.swift in Sources */,
 				A7D957D6297AAF8C001D2401 /* MagazineRouter.swift in Sources */,
+				A7FCA45D29C9680200F94249 /* EditorService.swift in Sources */,
 				9962CDD1297924D800E834C3 /* InfoTabView.swift in Sources */,
 				8B88CA6E29C2F2350064425C /* NetworkManager.swift in Sources */,
 				A7D9F306298964AE00B39218 /* MapRouter.swift in Sources */,
@@ -928,6 +943,7 @@
 				0693B4C72992849600F9CDE2 /* Error.swift in Sources */,
 				A75BB99529815361004FE6FA /* PhotoSpotMapView.swift in Sources */,
 				9947E4F729895211002AC952 /* KakaoAuthenticationStore.swift in Sources */,
+				A7FCA45B29C9675200F94249 /* EditorViewModel.swift in Sources */,
 				9936E2B729915CB8006F3333 /* SearchPlaceHolderView.swift in Sources */,
 				A71CAE6429C1904100752A67 /* CommunityRecommentView.swift in Sources */,
 				9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */,

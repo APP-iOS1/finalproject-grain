@@ -11,8 +11,9 @@ import FirebaseAuth
 
 struct MagazineCommentView: View {
     
-    @ObservedObject var userVM : UserViewModel
     @StateObject var commentVm = CommentViewModel()
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
     
     @State var commentText: String = "" // 댓글 작성 텍스트 필드
     @State var editButtonShowing : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
@@ -44,7 +45,7 @@ struct MagazineCommentView: View {
                                 if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
                                 {
                                     NavigationLink {
-                                        UserDetailView(userVM: userVM, user: user)
+                                        UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                                     } label: {
                                         KFImage(URL(string: commentVm.sortedRecentComment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                             .resizable()
@@ -132,7 +133,7 @@ struct MagazineCommentView: View {
                                 
                                 VStack{
                                     if readMoreComments && eachBool[index]{
-                                        MagazineRecommentView(userVM: userVM, commentVm: commentVm, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                        MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
                                     }
                                 }
                             }
@@ -185,7 +186,7 @@ struct MagazineCommentView: View {
                                 .stroke(lineWidth: 0.5)
                         }
                         .padding(.leading)
-                    MagazineCommentTextField(commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, commentCollectionDocId: $commentCollectionDocId, reCommentCount: $reCommentCount, eachBool: $eachBool, currentUser: userVM.currentUsers,collectionName: collectionName, collectionDocId: collectionDocId)
+                    MagazineCommentTextField(commentVm: commentVm, commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, commentCollectionDocId: $commentCollectionDocId, reCommentCount: $reCommentCount, eachBool: $eachBool, currentUser: userVM.currentUsers,collectionName: collectionName, collectionDocId: collectionDocId)
                         .onChange(of: summitComment) { _ in
                             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                         }
@@ -201,6 +202,8 @@ struct MagazineCommentView: View {
 }
 struct MagazineCommentTextField: View {
     
+    @ObservedObject var commentVm : CommentViewModel
+    
     @Binding var commentText: String
     @Binding var summitComment: Bool
     @Binding var replyComment : Bool
@@ -215,9 +218,7 @@ struct MagazineCommentTextField: View {
     var trimComment: String {
         commentText.trimmingCharacters(in: .whitespaces)
     }
-    
-    @StateObject var commentVm = CommentViewModel()
-    
+
     var body: some View {
         VStack {
             HStack{

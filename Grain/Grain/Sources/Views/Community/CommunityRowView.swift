@@ -10,7 +10,8 @@ import SwiftUI
 import Kingfisher
 
 struct CommunityRowView: View {
-    @StateObject var commentVm: CommentViewModel = CommentViewModel()
+
+    @ObservedObject var commentVm: CommentViewModel
     
     @State var opacity: Double = 0.8
     

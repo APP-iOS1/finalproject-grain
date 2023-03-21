@@ -5,96 +5,168 @@
 //  Created by 윤소희 on 2023/02/03.
 //
 
-//네이버 블로그 클론코딩 ~
-
 import SwiftUI
+import Kingfisher
 
 struct EditorView: View {
+    
+    @ObservedObject var editorVM : EditorViewModel
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
+    
     var body: some View {
         ScrollView {
-                VStack{
-                    //MARK: 장소
-                    HStack{
-                        Text("제주도")
-                            .font(.subheadline)
-                        Spacer()
-                    }
-                    .padding()
-                    //MARK: 제목
-                    HStack{
-                        Text("필름에 담은 제주")
-                            .font(.largeTitle)
-                        Spacer()
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, -5)
-                    //MARK: 작성자 + 작성시간
-                    HStack {
-                        Circle()
-                            .frame(width: 40)
-                        VStack(alignment: .leading) {
-                            Text("wonder")
-                                .bold()
-                            HStack {
-                                Text("1분전")
-                                Spacer()
-                            }
-                            .font(.caption)
-                        }
-                        Spacer()
-                    }
-                    .padding()
-                    
-                    Divider()
-                        .padding(.horizontal)
-                    
-                    //MARK: 필름 사진
-                    Image("jeju2")
-                        .resizable()
-                        .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
-                        .aspectRatio(contentMode: .fit)
-                    
-                    //MARK: 본문
-                    Text("제주를 여행한다면 수많은 관광 명소 중 어디를 가야할 지 행복한 고민을 하게 되죠. 산과 오름, 해변, 폭포, 용암동굴, 주변 섬 등 어디를 가나 천혜의 아름다운 자연 경관을 만날 수 있어요. 걷기를 좋아한다면 올레, 숲길, 휴양림 등의 다양한 형태의 명소들을 찾을 수 있어요. 아이들과 함께 라면 박물관, 미술관, 과학관, 테마파크, 민속공원 등 수많은 선택지에 놀랄 거예요. 선택의 폭이 너무 넓기 때문에 일정과 숙소에 맞춰 사전 계획을 세우는 것은 필수예요.")
-                        .lineSpacing(4.0)
-                        .padding()
-                    
-                
-                    //MARK: 필름 사진
-                    Image("jeju1")
-                        .resizable()
-                        .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
-                        .aspectRatio(contentMode: .fit)
-                    
-                    
-                    //MARK: 본문
-                    VStack{
-                        Text("제주를 여행한다면 수많은 관광 명소 중 어디를 가야할 지 행복한 고민을 하게 되죠. 산과 오름, 해변, 폭포, 용암동굴, 주변 섬 등 어디를 가나 천혜의 아름다운 자연 경관을 만날 수 있어요.")
-                            .lineSpacing(4.0)
-                            .padding()
-                        Text("걷기를 좋아한다면 올레, 숲길, 휴양림 등의 다양한 형태의 명소들을 찾을 수 있어요. 아이들과 함께 라면 박물관, 미술관, 과학관, 테마파크, 민속공원 등 수많은 선택지에 놀랄 거예요. 선택의 폭이 너무 넓기 때문에 일정과 숙소에 맞춰 사전 계획을 세우는 것은 필수예요.")
-                            .lineSpacing(4.0)
-                            .padding()
-                    }
-                    
-                    //MARK: 필름 사진
-                    Image("jeju3")
-                        .resizable()
-                        .frame(width: Screen.maxWidth, height: Screen.maxWidth * 0.6)
-                        .aspectRatio(contentMode: .fit)
-                    
-                    //MARK: 본문
-                    Text("제주를 여행한다면 수많은 관광 명소 중 어디를 가야할 지 행복한 고민을 하게 되죠. 산과 오름, 해변, 폭포, 용암동굴, 주변 섬 등 어디를 가나 천혜의 아름다운 자연 경관을 만날 수 있어요. 걷기를 좋아한다면 올레, 숲길, 휴양림 등의 다양한 형태의 명소들을 찾을 수 있어요. 아이들과 함께 라면 박물관, 미술관, 과학관, 테마파크, 민속공원 등 수많은 선택지에 놀랄 거예요. 선택의 폭이 너무 넓기 때문에 일정과 숙소에 맞춰 사전 계획을 세우는 것은 필수예요.")
-                        .lineSpacing(4.0)
-                        .padding()
+            VStack{
+                //MARK: 장소
+                HStack{
+                    Text(editorVM.editorData[0].fields.region.stringValue)
+                        .font(.subheadline)
+                    Spacer()
                 }
+                .padding(.leading , 15)
+                .padding(.bottom, -10)
+                //MARK: 제목
+                HStack{
+                    Text(editorVM.editorData[0].fields.title.stringValue)
+                        .font(.title2)
+                        .bold()
+                        .padding(.horizontal)
+                        .frame(width: Screen.maxWidth , alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                        .padding(.top)
+                        .padding(.bottom, 6)
+                    Spacer()
+                }
+                
+                HStack {
+                    if let user = userVM.users.first(where: { $0.fields.id.stringValue == editorVM.editorData[0].fields.userID.stringValue})
+                    {
+                        NavigationLink {
+                            UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
+                        } label: {
+                            MagazineProfileImage(imageName: user.fields.profileImage.stringValue)   // 에디터 프로필 이미지 뷰를 만들 수 있었지만 재사용해도 문제없을 거 같아 사용
+                        }
+                    }
+                    
+                    VStack(alignment: .leading){
+                        Text(editorVM.editorData[0].fields.nickName.stringValue)
+                            .bold()
+                        Text(editorVM.editorData[0].createTime.toDate()?.renderTime() ?? "")
+                            .font(.caption)
+                            .foregroundColor(.textGray)
+                        
+                    }
+                    Spacer()
+                }
+                .padding(5)
+
+            }
+            Divider()
+                .frame(maxWidth: Screen.maxWidth * 0.94)
+                .background(Color.black)
+                .padding(.top, 5)
+                .padding(.bottom, 15)
+                .padding(.horizontal, Screen.maxWidth * 0.04)
+            
+            VStack{
+                
+                // MARK: - 포스트 첫 번째
+                VStack{
+                  
+                    KFImage(URL(string: editorVM.editorData[0].fields.postImage1.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                    
+                    
+                    Text(editorVM.editorData[0].fields.postContent1.stringValue)
+                        .lineSpacing(4.0)
+                        .padding()
+                        .foregroundColor(Color.textGray)
+                        .frame(width: Screen.maxWidth , alignment: .leading)
+                }
+                
+                // MARK: - 포스트 두 번째
+                VStack{
+                    
+                    KFImage(URL(string: editorVM.editorData[0].fields.postImage2.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                    
+                    Text(editorVM.editorData[0].fields.postContent2.stringValue)
+                        .lineSpacing(4.0)
+                        .padding()
+                        .foregroundColor(Color.textGray)
+                        .frame(width: Screen.maxWidth , alignment: .leading)
+                       
+                }
+                
+                // MARK: - 포스트 세 번째
+                VStack{
+                    KFImage(URL(string: editorVM.editorData[0].fields.postImage3.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                    Text(editorVM.editorData[0].fields.postContent3.stringValue)
+                        .lineSpacing(4.0)
+                        .padding()
+                        .foregroundColor(Color.textGray)
+                        .frame(width: Screen.maxWidth , alignment: .leading)
+                }
+
+                // MARK: - 포스트 네 번째
+                VStack{
+
+                    KFImage(URL(string: editorVM.editorData[0].fields.postImage4.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                    Text(editorVM.editorData[0].fields.postContent4.stringValue)
+                        .lineSpacing(4.0)
+                        .padding()
+                        .foregroundColor(Color.textGray)
+                        .frame(width: Screen.maxWidth , alignment: .leading)
+                }
+                
+                // MARK: - 포스트 다섯 번째
+                VStack{
+                    KFImage(URL(string: editorVM.editorData[0].fields.postImage5.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                    Text(editorVM.editorData[0].fields.postContent5.stringValue)
+                        .lineSpacing(4.0)
+                        .padding()
+                        .foregroundColor(Color.textGray)
+                        .frame(width: Screen.maxWidth , alignment: .leading)
+                }
+
+            }
+            
+            Divider()
+                .frame(maxWidth: Screen.maxWidth * 0.94)
+                .background(Color.black)
+                .padding(.top, 5)
+                .padding(.bottom, 15)
+                .padding(.horizontal, Screen.maxWidth * 0.04)
+            
+            // MARK: - 공고 모집
+            VStack(alignment: .leading){
+                HStack(spacing: 0){
+                    Text("그레인 에디터를 희망하시는 분은 ")
+                    Text(verbatim: "pkkyung26@gmail.com")
+                        .foregroundColor(.vivaMagenta)
+                    Text(" 으로 메일을 보내주세요.")
+                }
+                
+            }
+            .font(.caption2)
+            .foregroundColor(.gray)
+            .bold()
+            .padding(.bottom)
+           
         }
-        .padding(.top, 1)
     }
 }
 
-struct EditorView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditorView()
-    }
-}
+//struct EditorView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EditorView()
+//    }
+//}

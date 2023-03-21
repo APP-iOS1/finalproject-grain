@@ -10,9 +10,9 @@ import FirebaseAuth
 import Kingfisher
 
 struct UserDetailView: View {
-    @StateObject var magazineVM = MagazineViewModel()
     
     @ObservedObject var userVM: UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
     
     @State private var showDevices: Bool = false
     @State private var angle: Double = 0
@@ -217,7 +217,7 @@ struct UserDetailView: View {
                 .padding(.horizontal, 10)
                 .padding(.top, 5)
                 .foregroundColor(.brightGray)
-            UserPageUserFeedView(magazineVM: magazineVM, magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))
+            UserPageUserFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))
         }
         .onAppear{
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")

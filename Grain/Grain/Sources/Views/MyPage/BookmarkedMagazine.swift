@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct BookmarkedMagazine: View {
-    @StateObject var userVM = UserViewModel()
+    @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     
     @State var ObservingChangeValueLikeNum : String = ""

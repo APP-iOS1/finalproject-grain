@@ -20,13 +20,14 @@ struct MapView: View {
     
     @StateObject var naverVM = NaverAPIViewModel()  // 네이버 API 관련
     
+    @State var ObservingChangeValueLikeNum : String = ""
     @State var categoryString : String = "전체"   // 카테고리 버튼 default : 전체
     @State var searchResponse : [Address] = [Address(roadAddress: "", jibunAddress: "", englishAddress: "", x: "", y: "", distance: 0)]
     @State private var searchText = ""          // 위치를 검색해주세요 텍스트 필드
     @State var clikedMagazineData : MagazineDocument?   //까먹음
     @State var visitButton : Bool = false   // 포토스팟 방문 했는지 판단으로 생각 됨 ???!!
     @State var nearbyPostsArr : [String] = [] //주변 게시물 저장
-    @State var isShowingPhotoSpot: Bool = false // 주변 게시물 보여주는 Bool
+    @State var isShowingPhotoSpotMapVIew: Bool = false // 주변 게시물 보여주는 Bool
     @State var isShowingWebView: Bool = false   // 현상소, 수리점 모달 띄워주는 Bool
     @State var bindingWebURL : String = ""      // UIMapView 에서 마커에서 나오는 정보 가져오기 위해
     @State var searchResponseBool : Bool = false    // 검색하기 버튼 Bool
@@ -98,7 +99,7 @@ struct MapView: View {
                 if !searchFocus{
                     HStack{
                         /// 카테고리 버튼 셀 뷰 -> 카테고리 클릭 정보 받아옴
-                        MapCategoryCellView(categoryString: $categoryString, reportButton: $reportButton)
+                        MapCategoryCellView(isShowingPhotoSpotMapVIew: $isShowingPhotoSpotMapVIew, categoryString: $categoryString, reportButton: $reportButton)
                             .padding(.leading, 7)
                         Spacer()
                     }
@@ -115,14 +116,14 @@ struct MapView: View {
                         
                     case "전체":
                         NavigationStack{
-                            UIMapView(locationManager: locationManager, mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
+                            UIMapView(locationManager: locationManager, mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpotMapVIew: $isShowingPhotoSpotMapVIew, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .zIndex(0)
                         }
                     case "필름스팟":
                         NavigationStack{
                             PhotoSpotMapView(userVM: userVM, magazineVM : magazineVM, locationManager: locationManager, mapData: $mapVM.mapData
                                              ,searchResponseBool: $searchResponseBool
-                                             ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot, magazineData: $magazineVM.magazines, showResearchButton: $showResearchButton, userLatitude: userLatitude ,
+                                             ,searchResponse: $searchResponse, magazineData: $magazineVM.magazines, showResearchButton: $showResearchButton, userLatitude: userLatitude ,
                                              userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
                                 .zIndex(0)
                         }
@@ -139,7 +140,7 @@ struct MapView: View {
                         
                     default:
                         NavigationStack{
-                            UIMapView(locationManager: locationManager, mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpot: $isShowingPhotoSpot, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
+                            UIMapView(locationManager: locationManager, mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpotMapVIew: $isShowingPhotoSpotMapVIew, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .zIndex(0)
                             
                         }
@@ -165,8 +166,6 @@ struct MapView: View {
                                     researchCGPoint = CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.44)
                                     researchButtonBool.toggle()
                                     mapVM.fetchNextPageMap(nextPageToken: "")
-                                    magazineVM.fetchMagazine()
-                                    
                                 }
                                 
                             }
@@ -181,13 +180,14 @@ struct MapView: View {
                 //                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
                 //                }
                 
-                if isShowingPhotoSpot{
+                if isShowingPhotoSpotMapVIew{
                     /// nearbyMagazineData -> NearbyPostsComponent뷰에서 ForEach을 위한 Magazine 데이터
                     /// magazineVM.nearbyPostsFilter메서드 호출 반환 값으로 [MagazineDocument]
                     /// 매개변수로는 contentView에서 전달 받은 magazineData 값 전달 / nearbyPostsArr : 포토스팟 클릭 마커
                     /// 그럼 메서드에서 for in 두번 돌려 필요한 값만 전달
                     /// 이 과정에서 DB 연관 없다고 생각 듬! -> 확인  필요
-                    NearbyPostsComponent(userVM: userVM, visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
+                    
+                    NearbyPostsComponent(userVM: userVM, magazineVM: magazineVM, visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpotMapVIew, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
                         .zIndex(1)
                         .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.75)
                         .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
@@ -197,7 +197,7 @@ struct MapView: View {
             .ignoresSafeArea()
             .ignoresSafeArea(.keyboard)
             .fullScreenCover(isPresented: $visitButton, content: {
-                PhotoSpotDetailView(data: clikedMagazineData!)
+                PhotoSpotDetailView(magazineVM: magazineVM, userVM : userVM, data: clikedMagazineData!)
             })
             .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
                 WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium, .large])
@@ -224,15 +224,11 @@ struct UIMapView: UIViewRepresentable,View {
     
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     
-    //FIXME: Set으로 만들어보기
-    //    var nearbyPostsArr = Set<String>()
+
     @Binding var nearbyPostsArr : [String]  //주변 게시물 저장
-    //모달뷰
-    @Binding var isShowingPhotoSpot: Bool
-    
+    @Binding var isShowingPhotoSpotMapVIew: Bool    //모달뷰
     @Binding var isShowingWebView: Bool
     @Binding var bindingWebURL : String
-    
     @Binding var markerAddButtonBool: Bool
     @Binding var changeMap: CGPoint
     
@@ -337,10 +333,9 @@ struct UIMapView: UIViewRepresentable,View {
                         switch marker.tag{
                         case 0: //포토스팟
                             // MARK: 포토스팟 컴포넌트 띄워주기
-                            isShowingPhotoSpot.toggle()
-                            showResearchButton.toggle()
+                            isShowingPhotoSpotMapVIew = true
+                            showResearchButton = false
                             nearbyPostsArr.removeAll()
-                            
                             for pickable in view.mapView.pickAll(view.mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng)), withTolerance: 50){
                                 if let marker = pickable as? NMFMarker{
                                     if marker.tag == 0 {
@@ -353,11 +348,11 @@ struct UIMapView: UIViewRepresentable,View {
                             }
                         case 1: //현상소
                             isShowingWebView.toggle()
-                            isShowingPhotoSpot = false
+                            isShowingPhotoSpotMapVIew = false
                             bindingWebURL = marker.userInfo["url"] as! String
                         case 2: //수리점
                             isShowingWebView.toggle()
-                            isShowingPhotoSpot = false
+                            isShowingPhotoSpotMapVIew = false
                             bindingWebURL = marker.userInfo["url"] as! String
                         default:    //없음
                             print("없음")

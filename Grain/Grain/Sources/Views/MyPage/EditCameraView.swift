@@ -9,7 +9,8 @@ import SwiftUI
 import FirebaseAuth
 
 struct EditCameraView: View {
-    @StateObject var userVM: UserViewModel = UserViewModel()
+
+    @ObservedObject var userVM : UserViewModel
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.presentationMode) var presentationMode
@@ -155,13 +156,13 @@ struct EditCameraView: View {
 
 }
 
-struct EditCameraView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack{
-            EditCameraView()
-        }
-    }
-}
+//struct EditCameraView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack{
+//            EditCameraView()
+//        }
+//    }
+//}
 
 
 // MARK: - 카메라 바디 섹션 선언부

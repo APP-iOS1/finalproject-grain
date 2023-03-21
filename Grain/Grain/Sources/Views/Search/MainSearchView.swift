@@ -318,7 +318,7 @@ struct MainSearchView: View {
                                     if searchedUser.count >= 4 {
                                         ForEach(0..<4) { i in
                                             NavigationLink {
-                                                UserDetailView(userVM: userViewModel, user: searchedUser[i])
+                                                UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: searchedUser[i])
                                             } label: {
                                                 VStack{
                                                     HStack{
@@ -357,7 +357,7 @@ struct MainSearchView: View {
                                         ForEach(0..<searchedUser.count) { i in
                                             NavigationLink {
                                                 //                                            UserSearchDetailView(user: item)
-                                                UserDetailView(userVM: userViewModel, user: searchedUser[i])
+                                                UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: searchedUser[i])
                                             } label: {
                                                 VStack{
                                                     HStack{
@@ -450,14 +450,14 @@ struct MainSearchView: View {
             }
         }
         .navigationDestination(isPresented: $isMagazineSearchResultShown){
-            MagazineSearchResultView(searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
+            MagazineSearchResultView(magazineVM: magazineViewModel, searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
         }
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
             CommunitySearchResultView(searchWord: $searchWord, community: communtyViewModel)
         }
         
         .navigationDestination(isPresented: $isUserSearchResultShown){
-            UserSearchResultView(searchWord: $searchWord, user: userViewModel , magazineVM: magazineViewModel)
+            UserSearchResultView( userVM: userViewModel , magazineVM: magazineViewModel, searchWord: $searchWord)
         }
         .onAppear{
             if searchWord.isEmpty{

@@ -10,8 +10,11 @@ import SwiftUI
 
 struct BookmarkedCommunityView: View {
     
+    @ObservedObject var commentVm: CommentViewModel
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
+    
     @Binding var isLoading: Bool
     
     @Environment(\.presentationMode) var presentationMode
@@ -24,9 +27,9 @@ struct BookmarkedCommunityView: View {
             ScrollView{
                 ForEach(bookmarkedCommunityDoument, id: \.self) { data in
                     NavigationLink {
-                        CommunityDetailView(communityVM: communityVM, userVM: userVM, community: data)
+                        CommunityDetailView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {
-                        CommunityRowView(community: data, isLoading: $isLoading)
+                        CommunityRowView(commentVm: commentVm, community: data, isLoading: $isLoading)
                     }
                 }
             }

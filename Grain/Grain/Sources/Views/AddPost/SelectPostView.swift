@@ -11,14 +11,19 @@ import PhotosUI
 
 struct SelectPostView: View {
     
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
+    @ObservedObject var mapVM : MapViewModel
+    @ObservedObject var locationManager : LocationManager
+    
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     @Environment(\.dismiss) private var dismiss
     
     @Binding var presented : Bool
-    @StateObject var communityVM: CommunityViewModel
-    @State var updateNumber : NMGLatLng
     
-    @ObservedObject var magazineVM : MagazineViewModel
+    @State var updateNumber : NMGLatLng
+
     var userLatitude : Double
     var userLongitude : Double
     
@@ -33,7 +38,7 @@ struct SelectPostView: View {
                                              
                 //MARK: 매거진 작성 네비게이션 링크
                 NavigationLink {
-                    MagazineContentAddView(presented: $presented, magazineVM: magazineVM, updateNumber: updateNumber, userLatitude: userLatitude , userLongitude: userLongitude)
+                    MagazineContentAddView(magazineVM: magazineVM, userVM: userVM,mapVM: mapVM, locationManager: locationManager, presented: $presented, updateNumber: updateNumber, userLatitude: userLatitude , userLongitude: userLongitude)
                         .navigationBarBackButtonHidden(true)
                 } label: {
                     VStack {
@@ -59,7 +64,7 @@ struct SelectPostView: View {
                 
                 //MARK: 커뮤니티 작성 네비게이션 링크
                 NavigationLink {
-                    AddCommunityView(communityVM: communityVM, presented: $presented)
+                    AddCommunityView(communityVM: communityVM, userVM: userVM, presented: $presented)
                         .navigationBarBackButtonHidden(true)
                 } label: {
                     VStack {

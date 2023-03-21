@@ -9,19 +9,22 @@ import SwiftUI
 import Kingfisher
 
 struct NearbyPostsComponent: View {
+    @ObservedObject var  userVM: UserViewModel
+    
     @State var isliked : Bool = false
+    
     @Binding var visitButton : Bool
     @Binding var isShowingPhotoSpot : Bool
     var  nearbyMagazineData : [MagazineDocument]    // 값을 받아옴
     @Binding var clikedMagazineData : MagazineDocument?
     @Binding var showResearchButton : Bool
     
-    @StateObject var userVM = UserViewModel()
+    
     
     var body: some View {
         
         ScrollView(.horizontal) {
-            HStack{
+//            HStack{
 //                ForEach(nearbyMagazineData,id: \.self) { item in
 //                        RoundedRectangle(cornerRadius: 15)
 //                            .foregroundColor(.white)
@@ -32,7 +35,7 @@ struct NearbyPostsComponent: View {
 //                                        Spacer()
 //                                        Image(systemName: "x.circle")
 //                                            .foregroundColor(.black)
-//    //                                        .position(CGPoint(x: Screen.maxWidth * 0.7 , y: Screen.maxHeight * 0.07))
+//                                            .position(CGPoint(x: Screen.maxWidth * 0.7 , y: Screen.maxHeight * 0.07))
 //                                            .padding(.trailing,5)
 //                                            .padding(.top, 5)
 //                                            .onTapGesture {
@@ -102,8 +105,8 @@ struct NearbyPostsComponent: View {
 //                            .padding()
 //
 //                }
-                
-            }
+//                
+//            }
         }
         
     }

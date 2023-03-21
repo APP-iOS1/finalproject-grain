@@ -14,9 +14,10 @@ import Kingfisher
 struct CommunityDetailView: View {
 
     
-    @StateObject var commentVm = CommentViewModel()
+    @ObservedObject var commentVm: CommentViewModel
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
     
     @State var community: CommunityDocument
     @State private var isBookMarked: Bool = false
@@ -56,7 +57,7 @@ struct CommunityDetailView: View {
                             NavigationLink {
                                 if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue
                                 }) {
-                                    UserDetailView(userVM: userVM, user: user)
+                                    UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                                 }
                             } label: {
                                 ProfileImage(imageName: community.fields.profileImage.stringValue)
@@ -109,7 +110,7 @@ struct CommunityDetailView: View {
                             .padding(.bottom, 15)
                             .padding(.horizontal, Screen.maxWidth * 0.04)
                         // MARK: - 커뮤니티 댓글 뷰
-                        CommentView(userVM: userVM, commentVm: commentVm, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
+                        CommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
                     }
                 }
                 .refreshable {

@@ -12,7 +12,8 @@ import FirebaseAuth
 struct CommentView: View {
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var commentVm : CommentViewModel
-
+    @ObservedObject var magazineVM : MagazineViewModel
+    
     @State var readMoreComments : Bool = false   //답글 더보기 Bool값
     @State var reCommentCount : Int = 0
     @State var eachBool : [Bool] = []
@@ -39,7 +40,7 @@ struct CommentView: View {
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
                             {
                                 NavigationLink {
-                                    UserDetailView(userVM: userVM, user: user)
+                                    UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                                 } label: {
                                     ProfileImage(imageName: commentVm.sortedRecentComment[index].fields.profileImage.stringValue)
                                 }
@@ -107,7 +108,7 @@ struct CommentView: View {
                             
                             if readMoreComments && eachBool[index]{
                                 VStack{
-                                    CommunityRecommentView(commentVm: commentVm, userVM: userVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent)
+                                    CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent)
                                 }
                             }
                         }

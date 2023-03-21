@@ -9,7 +9,7 @@ import FirebaseAuth
 import Kingfisher
 
 struct MagazineEditView: View {
-    @StateObject var magazineVM = MagazineViewModel()
+    @ObservedObject var magazineVM : MagazineViewModel
     
     @State var data : MagazineDocument
     @State var editTitle : String = ""

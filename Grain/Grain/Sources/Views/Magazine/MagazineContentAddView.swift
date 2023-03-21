@@ -11,6 +11,12 @@ import PhotosUI
 import FirebaseAuth
 
 struct MagazineContentAddView: View {
+    
+    @ObservedObject var magazineVM : MagazineViewModel
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var mapVM : MapViewModel
+    @ObservedObject var locationManager : LocationManager
+    
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
     @State private var inputCustomPlace: String = ""
@@ -23,7 +29,6 @@ struct MagazineContentAddView: View {
     // 모달 내리기
     @Binding var presented : Bool
     // insert
-    @ObservedObject var magazineVM : MagazineViewModel
     
     // 지도에서 좌표 값 가져오기
     @State var updateNumber : NMGLatLng
@@ -35,7 +40,6 @@ struct MagazineContentAddView: View {
     @State private var selectedItems: [PhotosPickerItem] = []
     // 유저 데이터
     
-    @StateObject var userVM = UserViewModel()
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     var myCamera = ["camera1", "camera2", "camera3", "camera4"]
     @FocusState private var focusField: Fields?
@@ -210,7 +214,7 @@ struct MagazineContentAddView: View {
                         }
                     } else {
                         NavigationLink {
-                            AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, magazineVM: magazineVM, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, userLatitude: userLatitude , userLongitude: userLongitude)
+                            AddMarkerMapView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1,inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .navigationBarBackButtonHidden(true)
                         } label: {
                             RoundedRectangle(cornerRadius: 12)

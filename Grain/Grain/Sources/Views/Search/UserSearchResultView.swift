@@ -9,27 +9,29 @@ import SwiftUI
 import Kingfisher
 
 struct UserSearchResultView: View {
+    
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
+    
     @State private var isShownProgress: Bool = true
     @Binding var searchWord: String
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
-    
-    @StateObject var user: UserViewModel = UserViewModel()
-    @ObservedObject var magazineVM: MagazineViewModel
+
     var body: some View {
             ZStack {
                 VStack{
                     List{
-                        ForEach(user.users.filter {
+                        ForEach(userVM.users.filter {
                             ignoreSpaces(in: $0.fields.nickName.stringValue)
                                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                             ignoreSpaces(in: $0.fields.name.stringValue)
                                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                         },id: \.self) { item in
                             NavigationLink {
-                                UserSearchDetailView(magazineVM: magazineVM, user: item)
+                                UserSearchDetailView(userVM: userVM, magazineVM: magazineVM, user: item)
                             } label: {
                                 HStack{
                                     Circle()
@@ -57,7 +59,7 @@ struct UserSearchResultView: View {
                             }
                         }
                     }
-                    .emptyPlaceholder(user.users.filter {
+                    .emptyPlaceholder(userVM.users.filter {
                         ignoreSpaces(in: $0.fields.nickName.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                         ignoreSpaces(in: $0.fields.name.stringValue)

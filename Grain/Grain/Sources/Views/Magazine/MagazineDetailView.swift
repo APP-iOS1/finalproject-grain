@@ -49,7 +49,7 @@ struct MagazineDetailView: View {
                         if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue})
                         {
                             NavigationLink {
-                                UserDetailView(userVM: userVM, user: user)
+                                UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                             } label: {
                                 MagazineProfileImage(imageName: user.fields.profileImage.stringValue)
                             }
@@ -156,7 +156,7 @@ struct MagazineDetailView: View {
                                 .padding(.leading)
                             
                             NavigationLink {
-                                MagazineCommentView(userVM: userVM, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
+                                MagazineCommentView(userVM: userVM, magazineVM: magazineVM, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
                             } label: {
                                 Image(systemName: "bubble.right")
                                     .font(.system(size: 23))
@@ -353,7 +353,7 @@ struct MagazineDetailView: View {
                     }
                     if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                         NavigationLink {
-                            MagazineEditView(data: data)
+                            MagazineEditView(magazineVM: magazineVM, data: data)
                         }label: {
                             Text("수정")
                             Spacer()

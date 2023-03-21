@@ -11,7 +11,7 @@ import PhotosUI
 
 struct AddCommunityView: View {
     @ObservedObject var communityVM : CommunityViewModel
-    @StateObject var userVM = UserViewModel()
+    @ObservedObject var userVM : UserViewModel
     
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""

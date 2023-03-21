@@ -14,6 +14,8 @@ import UIKit
 
 
 struct RepairShopMapView: View {
+    @ObservedObject var locationManager : LocationManager
+    
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     @State var bindingWebURL : String = ""      // UIMapView 에서 마커에서 나오는 정보 가져오기 위해
     @Binding var isShowingWebView: Bool
@@ -28,7 +30,7 @@ struct RepairShopMapView: View {
     
     var body: some View {
         ZStack{
-            RepairShopUIMapView(mapData: $mapData, isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
+            RepairShopUIMapView(locationManager : locationManager, mapData: $mapData, isShowingWebView: $isShowingWebView, bindingWebURL: $bindingWebURL, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
         }
         .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
             WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium])
@@ -42,7 +44,8 @@ struct RepairShopMapView: View {
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct RepairShopUIMapView: UIViewRepresentable,View {
     
-    @StateObject var locationManager = LocationManager()
+    @ObservedObject var locationManager : LocationManager
+    
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     @Binding var isShowingWebView: Bool
     @Binding var bindingWebURL : String

@@ -9,8 +9,10 @@ import SwiftUI
 
 struct CommunityView: View {
     
+    @StateObject var commentVm = CommentViewModel()
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
     
     @State private var selectedIndex: Int = 0
     @State private var isAddViewShown: Bool = false
@@ -53,16 +55,15 @@ struct CommunityView: View {
                 
                 switch(selectedIndex) {
                 case 0:
-                    AllTabView(communityVM : communityVM, userVM: userVM, isLoading: $communityVM.isLoading, community: communityVM.sortedRecentCommunityData)
-
+                    AllTabView(commentVm: commentVm, communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, community: communityVM.sortedRecentCommunityData)
                 case 1:
-                    MatchingTabView(communityVM: communityVM, userVM: userVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "매칭"))
+                    MatchingTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "매칭"))
                 case 2:
-                    ClassTabView(communityVM: communityVM, userVM: userVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "마켓"))
+                    ClassTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "마켓"))
                 case 3:
-                    MarketTabView(communityVM: communityVM, userVM: userVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "클래스"))
+                    MarketTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "클래스"))
                 default:
-                    InfoTabView(communityVM: communityVM, userVM: userVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "정보"))   
+                    InfoTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "정보"))
                 }
             } // 최상단 vstack
         } // navi stack

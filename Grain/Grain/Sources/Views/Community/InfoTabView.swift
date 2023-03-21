@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct InfoTabView: View {
+    
+    @ObservedObject var commentVm: CommentViewModel
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
+    
     @Binding var isLoading: Bool
         
     var community: [CommunityDocument]
@@ -19,9 +23,9 @@ struct InfoTabView: View {
             ScrollView{
                 ForEach(community, id: \.self){ data in
                     NavigationLink {
-                        CommunityDetailView(communityVM: communityVM, userVM: userVM, community: data)
+                        CommunityDetailView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {
-                        CommunityRowView(community: data, isLoading: $isLoading)
+                        CommunityRowView(commentVm: commentVm, community: data, isLoading: $isLoading)
                     }
                 }
             }

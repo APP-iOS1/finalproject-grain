@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct MyPageMyFeedView: View {
-    @StateObject var userVM = UserViewModel()
+    @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     // 나의 피드를 그리드로 보여줄지 리스트로 보여줄지 선택하는 변수
     @State private var showGridOrList: Bool = true

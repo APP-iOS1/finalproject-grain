@@ -12,7 +12,8 @@ struct EditorView: View {
     
     @ObservedObject var editorVM : EditorViewModel
     @ObservedObject var userVM : UserViewModel
-
+    @ObservedObject var magazineVM : MagazineViewModel
+    
     var body: some View {
         ScrollView {
             VStack{
@@ -41,7 +42,7 @@ struct EditorView: View {
                     if let user = userVM.users.first(where: { $0.fields.id.stringValue == editorVM.editorData[0].fields.userID.stringValue})
                     {
                         NavigationLink {
-                            UserDetailView(userVM: userVM, user: user)
+                            UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                         } label: {
                             MagazineProfileImage(imageName: user.fields.profileImage.stringValue)   // 에디터 프로필 이미지 뷰를 만들 수 있었지만 재사용해도 문제없을 거 같아 사용
                         }
@@ -145,7 +146,7 @@ struct EditorView: View {
                 .padding(.bottom, 15)
                 .padding(.horizontal, Screen.maxWidth * 0.04)
             
-            // MARK: - 공고 모집 
+            // MARK: - 공고 모집
             VStack(alignment: .leading){
                 HStack(spacing: 0){
                     Text("그레인 에디터를 희망하시는 분은 ")

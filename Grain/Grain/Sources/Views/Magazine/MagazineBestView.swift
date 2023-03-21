@@ -28,7 +28,7 @@ struct MagazineBestView: View {
         VStack {
             ScrollView {
                 NavigationLink {
-                    EditorView(editorVM : editorVM, userVM: userVM)
+                    EditorView(editorVM : editorVM, userVM: userVM, magazineVM: magazineVM)
                 } label: {
                     EditorViewCell(editorVM: editorVM)
                 }

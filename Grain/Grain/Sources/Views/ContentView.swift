@@ -16,7 +16,10 @@ struct ContentView: View {
     @StateObject var mapVM = MapViewModel()
     @StateObject var magazineVM = MagazineViewModel()
     @StateObject var editorVM = EditorViewModel()
-
+    @StateObject var userVM = UserViewModel()
+    @StateObject var locationManager = LocationManager()
+    @StateObject var commentVm = CommentViewModel()
+    
     @State private var tabSelection: Int = 0
     @State var selectedIndex = 0
     @State var magazineViewPresented : Bool = false
@@ -29,12 +32,10 @@ struct ContentView: View {
     let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
     
     @State var modalSize = Screen.maxHeight * 0.25
-    @StateObject var userVM = UserViewModel()
-    
     
     @SceneStorage("isZooming") var isZooming: Bool = false
     
-    @StateObject var locationManager = LocationManager()
+    
     var userLatitude: Double {
         return locationManager.lastLocation?.coordinate.latitude ?? 37.5701759
     }
@@ -62,9 +63,13 @@ struct ContentView: View {
                                 Spacer()
                                     .fullScreenCover(isPresented: $presented) {
                                         VStack {
-                                            SelectPostView(presented: $presented,
+                                            SelectPostView(userVM: userVM,
                                                            communityVM: communityVM,
-                                                           updateNumber: updateNumber, magazineVM: magazineVM, userLatitude: userLatitude , userLongitude: userLongitude)
+                                                           magazineVM: magazineVM,
+                                                           mapVM : mapVM,
+                                                           locationManager : locationManager,
+                                                           presented: $presented,
+                                                           updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
                                         }
                                     }
                                 
@@ -75,7 +80,7 @@ struct ContentView: View {
                                     }
                                 case 1:
                                     NavigationStack {
-                                        CommunityView(communityVM: communityVM, userVM: userVM)
+                                        CommunityView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM)
                                     }
                                 case 2:
                                     NavigationStack {
@@ -83,18 +88,22 @@ struct ContentView: View {
                                     }
                                 case 3:
                                     NavigationStack {
-                                        MapView(clikedMagazineData: clikedMagazineData, userLatitude: userLatitude, userLongitude: userLongitude)
+                                        MapView(mapVM: mapVM, userVM : userVM, magazineVM : magazineVM, locationManager : locationManager, clikedMagazineData: clikedMagazineData, userLatitude: userLatitude, userLongitude: userLongitude)
                                     }
                                 case 4:
                                     NavigationStack {
-                                        MyPageView(magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), boomarkedMagazineDocument: magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID), bookmarkedCommunityDoument: communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID))
+                                        MyPageView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), boomarkedMagazineDocument: magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID), bookmarkedCommunityDoument: communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID))
                                     }
                                 default:
                                     NavigationStack {
                                         VStack {
-                                            SelectPostView(presented: $presented,
+                                            SelectPostView(userVM: userVM,
                                                            communityVM: communityVM,
-                                                           updateNumber: updateNumber,magazineVM: magazineVM, userLatitude: userLatitude , userLongitude: userLongitude)
+                                                           magazineVM: magazineVM,
+                                                           mapVM : mapVM,
+                                                           locationManager : locationManager,
+                                                           presented: $presented,
+                                                           updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
                                         }
                                     }
                                 }

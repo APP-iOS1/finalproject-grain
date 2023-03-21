@@ -13,6 +13,13 @@ import UIKit
 
 struct AddMarkerMapView: View {
     
+    @StateObject var naverVM = NaverAPIViewModel()  // 네이버 API 관련
+    
+    @ObservedObject var magazineVM : MagazineViewModel
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var mapVM : MapViewModel
+    @ObservedObject var locationManager : LocationManager
+    
     @State var reMarkerAddButtonBool : Bool = false
     @State var markerAddButtonBool : Bool = false
     @State var locationcheckBool : Bool = false
@@ -31,13 +38,11 @@ struct AddMarkerMapView: View {
     // 텍스트 필드 String
     @State var searchMap : String = ""
     // geocode 하기 위해
-    @ObservedObject var magazineVM : MagazineViewModel
-    @StateObject var naverVM = NaverAPIViewModel()
+    
+   
     
     // 위치 검색 결과 값
     @State var searchResponse : [Address] = [Address(roadAddress: "", jibunAddress: "", englishAddress: "", x: "", y: "", distance: 0)]
-    
-    @StateObject var locationManager = LocationManager()
     
     @State var updateReverseGeocodeResult :  [ReverseGeocodeResult] = [ReverseGeocodeResult(region: Region(area1: Area(name: ""), area2: Area(name: ""), area3: Area(name: ""), area4: Area(name: "")))]
     
@@ -61,7 +66,7 @@ struct AddMarkerMapView: View {
                 ZStack(alignment: .top) {
                     
                     //MARK: 네이버맵뷰
-                    AddMarkerUIMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, reMarkerAddButtonBool: $reMarkerAddButtonBool, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult, userLatitude: userLatitude , userLongitude: userLongitude)
+                    AddMarkerUIMapView(naverVM: naverVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, reMarkerAddButtonBool: $reMarkerAddButtonBool, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult, userLatitude: userLatitude , userLongitude: userLongitude)
                         .zIndex(0)
                         .ignoresSafeArea()
                         .onTapGesture {
@@ -138,7 +143,7 @@ struct AddMarkerMapView: View {
                 
                 if (isFinishedSpot && writeDownCustomPlaceCheck){   // 핀과 커스텀 플레이스가 작성이 되었을때
                     NavigationLink {
-                        CameraLenseFilmModalView(magazineVM: magazineVM, inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, writeDownCustomPlaceText: $writeDownCustomPlaceText)
+                        CameraLenseFilmModalView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, writeDownCustomPlaceText: $writeDownCustomPlaceText)
                             .navigationBarBackButtonHidden(true)
                     } label:{
                         RoundedRectangle(cornerRadius: 12)
@@ -219,9 +224,8 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
     
     
     //임시
-    @StateObject var naverVM = NaverAPIViewModel()
-    
-    @StateObject var locationManager = LocationManager()
+    @ObservedObject var naverVM : NaverAPIViewModel
+    @ObservedObject var locationManager : LocationManager
     // 가상 마커 CGPoint 좌표 값을 통해 지도 좌표 넘겨주기
     @Binding var updateNumber : NMGLatLng
     @Binding var updateReverseGeocodeResult1 : String

@@ -12,6 +12,8 @@ import FirebaseAuth
 struct MagazineMainView: View {
     @ObservedObject var userViewModel: UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
+    @ObservedObject var editorVM : EditorViewModel
+    
     
     @State private var selectedIndex: Int = 0
     @State private var isSearchViewShown: Bool = false
@@ -50,7 +52,7 @@ struct MagazineMainView: View {
                 .padding(.leading)
                 switch selectedIndex {
                 case 0:
-                    MagazineBestView(userVM: userViewModel, magazineVM: magazineVM)
+                    MagazineBestView(userVM: userViewModel, magazineVM: magazineVM, editorVM: editorVM)
                     
                 default:
                     MagazineFeedView(magazineVM: magazineVM, userVM: userViewModel)

@@ -18,6 +18,7 @@ fileprivate  enum timePeriod {
 struct MagazineBestView: View {
     @ObservedObject var  userVM: UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
+    @ObservedObject var editorVM : EditorViewModel
     
     @State var ObservingChangeValueLikeNum : String = ""
     
@@ -27,9 +28,9 @@ struct MagazineBestView: View {
         VStack {
             ScrollView {
                 NavigationLink {
-                    EditorView()
+                    EditorView(editorVM : editorVM, userVM: userVM)
                 } label: {
-                    EditorViewCell()
+                    EditorViewCell(editorVM: editorVM)
                 }
                 HStack{
                     Text("인기 게시글")
@@ -61,8 +62,10 @@ struct MagazineBestView: View {
                }
            }
             
-        }//vstack
-        
+        }
+        .onAppear{
+            editorVM.fetchEditor()
+        }
     }
 }
 

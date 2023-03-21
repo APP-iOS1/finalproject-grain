@@ -15,6 +15,7 @@ struct ContentView: View {
     @StateObject var communityVM = CommunityViewModel()
     @StateObject var mapVM = MapViewModel()
     @StateObject var magazineVM = MagazineViewModel()
+    @StateObject var editorVM = EditorViewModel()
 
     @State private var tabSelection: Int = 0
     @State var selectedIndex = 0
@@ -70,7 +71,7 @@ struct ContentView: View {
                                 switch selectedIndex {
                                 case 0:
                                     NavigationStack {
-                                        MagazineMainView(userViewModel: userVM, magazineVM: magazineVM)
+                                        MagazineMainView(userViewModel: userVM, magazineVM: magazineVM, editorVM: editorVM)
                                     }
                                 case 1:
                                     NavigationStack {
@@ -144,6 +145,7 @@ struct ContentView: View {
                 .tint(.black)
                 .onAppear{
                     /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
+                    editorVM.fetchEditor()
                     magazineVM.fetchMagazine()
                     communityVM.fetchCommunity()
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")

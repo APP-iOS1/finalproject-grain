@@ -5,6 +5,7 @@ import Kingfisher
 struct MagazineDetailView: View {
     @ObservedObject var magazineVM : MagazineViewModel
     @ObservedObject var userVM : UserViewModel
+    @ObservedObject var mapVM = MapViewModel()
 
     @State private var isHeartToggle: Bool = false // 하트 눌림 상황
     @State private var isBookMarked: Bool = true
@@ -239,6 +240,7 @@ struct MagazineDetailView: View {
                   secondaryButton:.destructive(Text("삭제"),
                                                action: {
                         magazineVM.deleteMagazine(docID: data.fields.id.stringValue)
+                        mapVM.deleteMap(docID: data.fields.id.stringValue)
                 dismiss()
             }))
         }

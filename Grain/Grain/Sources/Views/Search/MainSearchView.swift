@@ -19,9 +19,10 @@ enum SearchState: Hashable {
 }
 
 struct MainSearchView: View {
-    @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
+    @ObservedObject var communityViewModel: CommunityViewModel = CommunityViewModel()
     @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+    @ObservedObject var commentViewModel: CommentViewModel = CommentViewModel()
     
     @State private var searchWord: String = ""
 //    @State private var searchList: [String] =  ["카메라", "명소", "출사"]
@@ -175,7 +176,6 @@ struct MainSearchView: View {
                                     HStack{
                                         Text(Image(systemName: "magnifyingglass"))
                                             .padding(.leading)
-                                        
                                         Text("\(searchWord)")
                                     }
                                     .padding(.top)
@@ -251,15 +251,14 @@ struct MainSearchView: View {
                                     .padding(.top)
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 3)
-                                    ForEach(communtyViewModel.communities.filter {
+                                    ForEach(communityViewModel.communities.filter {
                                         ignoreSpaces(in: $0.fields.title.stringValue)
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                         ignoreSpaces(in: $0.fields.content.stringValue)
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                                     }.prefix(3),id: \.self) { item in
                                         NavigationLink {
-                                            CommunitySearchDetailView(community: item)
-                                            
+                                            CommunityDetailView(commentVm: commentViewModel, communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, community: item)
                                         } label: {
                                             VStack(alignment: .leading){
                                                 Text(item.fields.title.stringValue)
@@ -289,7 +288,7 @@ struct MainSearchView: View {
                                             .padding(.vertical, 9)
                                     }
                                 }
-                                .emptyPlaceholder(communtyViewModel.communities.filter {
+                                .emptyPlaceholder(communityViewModel.communities.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                     ignoreSpaces(in: $0.fields.content.stringValue)
@@ -453,7 +452,7 @@ struct MainSearchView: View {
             MagazineSearchResultView(magazineVM: magazineViewModel, searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
         }
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
-            CommunitySearchResultView(searchWord: $searchWord, community: communtyViewModel)
+            CommunitySearchResultView(commentVM: commentViewModel, communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord, community: communityViewModel)
         }
         
         .navigationDestination(isPresented: $isUserSearchResultShown){
@@ -465,7 +464,7 @@ struct MainSearchView: View {
             }
             self.focus = .search
             userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            communtyViewModel.fetchCommunity()
+            communityViewModel.fetchCommunity()
             magazineViewModel.fetchMagazine()
             userViewModel.fetchUser()
         }

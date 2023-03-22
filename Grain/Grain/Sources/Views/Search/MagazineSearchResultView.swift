@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MagazineSearchResultView: View {
     
@@ -37,16 +38,15 @@ struct MagazineSearchResultView: View {
                             MagazineDetailView(magazineVM: magazineVM, userVM: userViewModel, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                         } label: {
                             HStack{
-                                Rectangle()
-                                    .foregroundColor(.gray)
+                                KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"camera.fill"))
+                                    .resizable()
                                     .frame(width: 90, height: 90)
-                                    .overlay{
-                                        Image(systemName: "camera.fill")
-                                            .resizable()
-                                            .foregroundColor(.white)
-                                            .aspectRatio(contentMode: .fit)
-                                            .padding()
-                                    }
+                                    .foregroundColor(.white)
+//                                    .aspectRatio(contentMode: .fit)
+                                    .scaledToFit()
+                                    .padding(.leading, -5)
+                                    .padding(.trailing, 5)
+                                
                                 VStack(alignment: .leading){
                                     Text(item.fields.title.stringValue)
                                         .bold()

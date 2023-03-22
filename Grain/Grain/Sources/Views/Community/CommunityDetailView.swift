@@ -13,7 +13,6 @@ import Kingfisher
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
 
-    
     @ObservedObject var commentVm: CommentViewModel
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel

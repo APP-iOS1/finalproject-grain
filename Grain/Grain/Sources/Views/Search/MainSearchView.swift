@@ -78,20 +78,8 @@ struct MainSearchView: View {
                                     }else {
                                         self.isUserSearchResultShown.toggle()
                                     }
-                                    
-                                    if let user = userViewModel.currentUsers {
-                                        if userViewModel.recentSearch.contains(where: { $0 == self.searchWord }) {
-                                            // 이미 검색한 검색어이면 배열에서 먼저 이미 있는 값 삭제
-                                            if let index = userViewModel.recentSearch.firstIndex(of: self.searchWord) {
-                                                userViewModel.recentSearch.remove(at: index)
-                                            }
-                                        }
-                                        
-                                        // 배열의 첫번째 인덱스에 넣어준다.
-                                        // 1 index 에 넣는 이유는 0번째 인덱스가 "" 로 초기화 되어있기 때문.
-                                        userViewModel.recentSearch.insert(self.searchWord, at: 1)
-                                        userViewModel.updateCurrentUserArray(type: "recentSearch", arr: userViewModel.recentSearch, docID: user.id.stringValue)
-                                    }
+
+                                    updateRecentSearch()
                                 }
                             }
                             .onChange(of: searchWord) { value in
@@ -214,6 +202,7 @@ struct MainSearchView: View {
                                     
                                     Button {
                                         self.isMagazineSearchResultShown.toggle()
+                                        updateRecentSearch()
                                     } label: {
                                         Text("결과 모두 보기")
                                             .foregroundColor(.blue)
@@ -281,6 +270,7 @@ struct MainSearchView: View {
                                     
                                     Button {
                                         self.isCommunitySearchResultShown.toggle()
+                                        updateRecentSearch()
                                     } label: {
                                         Text("결과 모두 보기")
                                             .foregroundColor(.blue)
@@ -393,6 +383,7 @@ struct MainSearchView: View {
                                     }
                                     
                                     Button {
+                                        updateRecentSearch()
                                         self.isUserSearchResultShown.toggle()
                                     } label: {
                                         Text("결과 모두 보기")
@@ -467,6 +458,22 @@ struct MainSearchView: View {
             communityViewModel.fetchCommunity()
             magazineViewModel.fetchMagazine()
             userViewModel.fetchUser()
+        }
+    }
+    
+    
+    func updateRecentSearch() {
+        if let user = userViewModel.currentUsers {
+            if userViewModel.recentSearch.contains(where: { $0 == self.searchWord }) {
+                // 이미 검색한 검색어이면 배열에서 먼저 이미 있는 값 삭제
+                if let index = userViewModel.recentSearch.firstIndex(of: self.searchWord) {
+                    userViewModel.recentSearch.remove(at: index)
+                }
+            }
+            // 배열의 첫번째 인덱스에 넣어준다.
+            // 1 index 에 넣는 이유는 0번째 인덱스가 "" 로 초기화 되어있기 때문.
+            userViewModel.recentSearch.insert(self.searchWord, at: 1)
+            userViewModel.updateCurrentUserArray(type: "recentSearch", arr: userViewModel.recentSearch, docID: user.id.stringValue)
         }
     }
 }

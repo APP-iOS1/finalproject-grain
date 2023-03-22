@@ -46,6 +46,19 @@ struct MainRecentSearchView: View {
                             }else {
                                 self.isUserSearchResultShown.toggle()
                             }
+                            
+                            if let user = userVM.currentUsers {
+                                if userVM.recentSearch.contains(where: { $0 == self.searchWord }) {
+                                    // 이미 검색한 검색어이면 배열에서 먼저 이미 있는 값 삭제
+                                    if let index = userVM.recentSearch.firstIndex(of: self.searchWord) {
+                                        userVM.recentSearch.remove(at: index)
+                                    }
+                                }
+                                // 배열의 첫번째 인덱스에 넣어준다.
+                                // 1 index 에 넣는 이유는 0번째 인덱스가 "" 로 초기화 되어있기 때문.
+                                userVM.recentSearch.insert(self.searchWord, at: 1)
+                                userVM.updateCurrentUserArray(type: "recentSearch", arr: userVM.recentSearch, docID: user.id.stringValue)
+                            }
                         } label: {
                             Text(userVM.recentSearch[index])
                                 .fontWeight(.bold)

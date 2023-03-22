@@ -151,11 +151,32 @@ struct CommunityDetailView: View {
                                     Text(postStatusString)
                                 }
                             }
-                            Button {
-                                //저장시 코드
-                            } label: {
-                                Text("저장")
+                            
+                            if !userVM.bookmarkedCommunityID.contains(community.fields.id.stringValue) {
+                                Button {
+                                        userVM.bookmarkedCommunityID.append(community.fields.id.stringValue)
+                                        if let user = userVM.currentUsers {
+                                            let arr = userVM.bookmarkedCommunityID
+                                            let docID = user.id.stringValue
+                                            userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
+                                        }
+                                } label: {
+                                    Text("저장")
+                                }
+                            } else {
+                                Button {
+                                        if let user = userVM.currentUsers {
+                                            let index = userVM.bookmarkedCommunityID.firstIndex(of: community.fields.id.stringValue)
+                                            userVM.bookmarkedCommunityID.remove(at: index!)
+                                            let arr = userVM.bookmarkedCommunityID
+                                            let docID = user.id.stringValue
+                                            userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
+                                        }
+                                } label: {
+                                    Text("저장취소")
+                                }
                             }
+                            
                             NavigationLink {
                                 CommunityEditView(community: community, communityVM: communityVM, editFetch: $editFetch)
                             }label: {
@@ -198,10 +219,29 @@ struct CommunityDetailView: View {
                         .padding(.trailing, Screen.maxWidth * 0.04)
                     } else {
                         Menu {
-                            Button {
-                                //저장시 코드
-                            } label: {
-                                Text("저장")
+                            if !userVM.bookmarkedCommunityID.contains(community.fields.id.stringValue) {
+                                Button {
+                                        userVM.bookmarkedCommunityID.append(community.fields.id.stringValue)
+                                        if let user = userVM.currentUsers {
+                                            let arr = userVM.bookmarkedCommunityID
+                                            let docID = user.id.stringValue
+                                            userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
+                                        }
+                                } label: {
+                                    Text("저장")
+                                }
+                            } else {
+                                Button {
+                                        if let user = userVM.currentUsers {
+                                            let index = userVM.bookmarkedCommunityID.firstIndex(of: community.fields.id.stringValue)
+                                            userVM.bookmarkedCommunityID.remove(at: index!)
+                                            let arr = userVM.bookmarkedCommunityID
+                                            let docID = user.id.stringValue
+                                            userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
+                                        }
+                                } label: {
+                                    Text("저장취소")
+                                }
                             }
                         } label: {
                             Label("더보기", systemImage: "ellipsis")

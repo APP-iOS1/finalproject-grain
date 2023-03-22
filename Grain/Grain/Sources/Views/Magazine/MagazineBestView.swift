@@ -41,7 +41,7 @@ struct MagazineBestView: View {
                         .frame(width: 240, height: 3.5)
                 }
                 .padding([.leading, .top])
-                ForEach(magazineVM.sortedTopLikedMagazineData, id: \.self ){ data in
+                ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10)), id: \.self ){ data in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
                     NavigationLink {
                         MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                     } label: {

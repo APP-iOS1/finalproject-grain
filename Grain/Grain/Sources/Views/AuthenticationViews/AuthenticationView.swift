@@ -13,7 +13,6 @@ import _AuthenticationServices_SwiftUI
 
 struct AuthenticationView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
-    @EnvironmentObject var kakaoAuthenticationStore: KakaoAuthenticationStore
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -77,23 +76,7 @@ struct AuthenticationView: View {
             }
             .frame(width: Screen.maxWidth * 0.8, height: Screen.maxHeight * 0.06)
             .padding(.bottom, 7)
-            
-            // MARK: - 카카오 로그인
-            Button{
-//                kakaoAuthenticationStore.kakaoSignIn()    
-                authenticationStore.changeLogInCompanyToKakao()
-            } label: {
-                Image("kakaoLoginLarge")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                  
-                    .cornerRadius(8)
-            }
-            .frame(width: Screen.maxWidth * 0.8, height: Screen.maxHeight * 0.06)
-            .padding(.bottom, 5)
             Spacer()
-                .frame(maxHeight: Screen.maxHeight * 0.12 )
-            
         }
     }
 }

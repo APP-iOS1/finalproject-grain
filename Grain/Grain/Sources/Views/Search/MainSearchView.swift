@@ -19,12 +19,13 @@ enum SearchState: Hashable {
 }
 
 struct MainSearchView: View {
-    @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
+    @ObservedObject var communityViewModel: CommunityViewModel = CommunityViewModel()
     @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+    @ObservedObject var commentViewModel: CommentViewModel = CommentViewModel()
     
     @State private var searchWord: String = ""
-    @State private var searchList: [String] =  ["카메라", "명소", "출사"]
+//    @State private var searchList: [String] =  ["카메라", "명소", "출사"]
     @State private var isMagazineSearchResultShown: Bool = false
     @State private var isCommunitySearchResultShown: Bool = false
     @State private var isUserSearchResultShown: Bool = false
@@ -77,20 +78,8 @@ struct MainSearchView: View {
                                     }else {
                                         self.isUserSearchResultShown.toggle()
                                     }
-                                    
-                                    if let user = userViewModel.currentUsers {
-                                        if userViewModel.recentSearch.contains(where: { $0 == self.searchWord }) {
-                                            // 이미 검색한 검색어이면 배열에서 먼저 이미 있는 값 삭제
-                                            if let index = userViewModel.recentSearch.firstIndex(of: self.searchWord) {
-                                                userViewModel.recentSearch.remove(at: index)
-                                            }
-                                        }
-                                        
-                                        // 배열의 첫번째 인덱스에 넣어준다.
-                                        // 1 index 에 넣는 이유는 0번째 인덱스가 "" 로 초기화 되어있기 때문.
-                                        userViewModel.recentSearch.insert(self.searchWord, at: 1)
-                                        userViewModel.updateCurrentUserArray(type: "recentSearch", arr: userViewModel.recentSearch, docID: user.id.stringValue)
-                                    }
+
+                                    updateRecentSearch()
                                 }
                             }
                             .onChange(of: searchWord) { value in
@@ -164,7 +153,7 @@ struct MainSearchView: View {
                 }
                 
                 if searchWord.isEmpty {
-                    MainRecentSearchView(userVM: userViewModel, searchList: $searchList)
+                    MainRecentSearchView(userVM: userViewModel, selectedIndex: $selectedIndex, searchWord: $searchWord, isMagazineSearchResultShown: $isMagazineSearchResultShown, isCommunitySearchResultShown: $isCommunitySearchResultShown, isUserSearchResultShown: $isUserSearchResultShown)
                     
                 } else if !searchWord.isEmpty {
                     ZStack {
@@ -175,7 +164,6 @@ struct MainSearchView: View {
                                     HStack{
                                         Text(Image(systemName: "magnifyingglass"))
                                             .padding(.leading)
-                                        
                                         Text("\(searchWord)")
                                     }
                                     .padding(.top)
@@ -214,6 +202,7 @@ struct MainSearchView: View {
                                     
                                     Button {
                                         self.isMagazineSearchResultShown.toggle()
+                                        updateRecentSearch()
                                     } label: {
                                         Text("결과 모두 보기")
                                             .foregroundColor(.blue)
@@ -251,15 +240,14 @@ struct MainSearchView: View {
                                     .padding(.top)
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 3)
-                                    ForEach(communtyViewModel.communities.filter {
+                                    ForEach(communityViewModel.communities.filter {
                                         ignoreSpaces(in: $0.fields.title.stringValue)
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                         ignoreSpaces(in: $0.fields.content.stringValue)
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                                     }.prefix(3),id: \.self) { item in
                                         NavigationLink {
-                                            CommunitySearchDetailView(community: item)
-                                            
+                                            CommunityDetailView(commentVm: commentViewModel, communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, community: item)
                                         } label: {
                                             VStack(alignment: .leading){
                                                 Text(item.fields.title.stringValue)
@@ -282,6 +270,7 @@ struct MainSearchView: View {
                                     
                                     Button {
                                         self.isCommunitySearchResultShown.toggle()
+                                        updateRecentSearch()
                                     } label: {
                                         Text("결과 모두 보기")
                                             .foregroundColor(.blue)
@@ -289,7 +278,7 @@ struct MainSearchView: View {
                                             .padding(.vertical, 9)
                                     }
                                 }
-                                .emptyPlaceholder(communtyViewModel.communities.filter {
+                                .emptyPlaceholder(communityViewModel.communities.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                     ignoreSpaces(in: $0.fields.content.stringValue)
@@ -394,7 +383,8 @@ struct MainSearchView: View {
                                     }
                                     
                                     Button {
-                                        self.isCommunitySearchResultShown.toggle()
+                                        updateRecentSearch()
+                                        self.isUserSearchResultShown.toggle()
                                     } label: {
                                         Text("결과 모두 보기")
                                             .foregroundColor(.blue)
@@ -453,7 +443,7 @@ struct MainSearchView: View {
             MagazineSearchResultView(magazineVM: magazineViewModel, searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
         }
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
-            CommunitySearchResultView(searchWord: $searchWord, community: communtyViewModel)
+            CommunitySearchResultView(commentVM: commentViewModel, communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord, community: communityViewModel)
         }
         
         .navigationDestination(isPresented: $isUserSearchResultShown){
@@ -465,9 +455,25 @@ struct MainSearchView: View {
             }
             self.focus = .search
             userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            communtyViewModel.fetchCommunity()
+            communityViewModel.fetchCommunity()
             magazineViewModel.fetchMagazine()
             userViewModel.fetchUser()
+        }
+    }
+    
+    
+    func updateRecentSearch() {
+        if let user = userViewModel.currentUsers {
+            if userViewModel.recentSearch.contains(where: { $0 == self.searchWord }) {
+                // 이미 검색한 검색어이면 배열에서 먼저 이미 있는 값 삭제
+                if let index = userViewModel.recentSearch.firstIndex(of: self.searchWord) {
+                    userViewModel.recentSearch.remove(at: index)
+                }
+            }
+            // 배열의 첫번째 인덱스에 넣어준다.
+            // 1 index 에 넣는 이유는 0번째 인덱스가 "" 로 초기화 되어있기 때문.
+            userViewModel.recentSearch.insert(self.searchWord, at: 1)
+            userViewModel.updateCurrentUserArray(type: "recentSearch", arr: userViewModel.recentSearch, docID: user.id.stringValue)
         }
     }
 }

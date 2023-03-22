@@ -58,7 +58,7 @@ struct MyPageMyFeedView: View {
             if showGridOrList {
                 ScrollView{
                     LazyVGrid(columns: columns, spacing: 1) {
-                        ForEach(magazineDocument, id: \.self) { data in
+                        ForEach(magazineDocument.reversed(), id: \.self) { data in
                             NavigationLink {
                                 MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {

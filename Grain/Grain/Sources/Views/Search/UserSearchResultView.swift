@@ -16,6 +16,16 @@ struct UserSearchResultView: View {
     @State private var isShownProgress: Bool = true
     @Binding var searchWord: String
     
+    var searchedUser: [UserDocument] {
+        let arr = userVM.users.filter {
+            ignoreSpaces(in: $0.fields.nickName.stringValue)
+                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+            ignoreSpaces(in: $0.fields.name.stringValue)
+                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+        }
+        return Array(arr)
+    }
+    
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
@@ -24,37 +34,34 @@ struct UserSearchResultView: View {
             ZStack {
                 VStack{
                     List{
-                        ForEach(userVM.users.filter {
-                            ignoreSpaces(in: $0.fields.nickName.stringValue)
-                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-                            ignoreSpaces(in: $0.fields.name.stringValue)
-                                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-                        },id: \.self) { item in
-                            NavigationLink {
-                                UserSearchDetailView(userVM: userVM, magazineVM: magazineVM, user: item)
-                            } label: {
-                                HStack{
-                                    Circle()
-                                        .stroke(lineWidth: 1)
-                                        .frame(width: 47, height: 47)
-                                        .foregroundColor(.black)
-                                        .overlay(
-                                            KFImage(URL(string: item.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                                .resizable()
-                                                .foregroundColor(.brightGray)
-                                                .scaledToFill()
-                                        )
-                                    VStack(alignment: .leading){
-                                        Text(item.fields.nickName.stringValue)
-                                            .bold()
-                                            .padding(.bottom, 5)
-                                        Text(item.fields.name.stringValue)
-                                            .font(.caption)
-                                            .foregroundColor(.textGray)
-                                            .frame(alignment: .leading)
+                        if searchedUser.count > 0 {
+                            ForEach(0..<searchedUser.count ,id: \.self) { i in
+                                NavigationLink {
+                                    UserDetailView(userVM: userVM, magazineVM: magazineVM, user: searchedUser[i])
+                                } label: {
+                                    HStack{
+                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 47, height: 47)
+                                            .cornerRadius(64)
+                                            .overlay {
+                                                Circle()
+                                                    .stroke(lineWidth: 0.5)
+                                            }
+                                        
+                                        VStack(alignment: .leading){
+                                            Text(searchedUser[i].fields.nickName.stringValue)
+                                                .bold()
+                                                .padding(.bottom, 5)
+                                            Text(searchedUser[i].fields.name.stringValue)
+                                                .font(.caption)
+                                                .foregroundColor(.textGray)
+                                                .frame(alignment: .leading)
+                                        }
+                                        .padding(.leading)
+                                        Spacer()
                                     }
-                                    .padding(.leading)
-                                    Spacer()
                                 }
                             }
                         }

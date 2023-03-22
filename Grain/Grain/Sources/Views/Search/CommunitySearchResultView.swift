@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct CommunitySearchResultView: View {
     @State private var isShownProgress: Bool = true
+    @ObservedObject var commentVM: CommentViewModel
+    @ObservedObject var communityVM: CommunityViewModel
+    @ObservedObject var userVM: UserViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
     
     @Binding var searchWord: String
     
@@ -29,19 +34,17 @@ struct CommunitySearchResultView: View {
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                     },id: \.self) { item in
                         NavigationLink {
-                            CommunitySearchDetailView(community: item)
+                            CommunityDetailView(commentVm: commentVM, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: item)
                         } label: {
                             HStack{
-                                Rectangle()
-                                    .foregroundColor(.gray)
+                                KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"camera.fill"))
+                                    .resizable()
                                     .frame(width: 90, height: 90)
-                                    .overlay{
-                                        Image(systemName: "camera.fill")
-                                            .resizable()
-                                            .foregroundColor(.white)
-                                            .aspectRatio(contentMode: .fit)
-                                            .padding()
-                                    }
+                                    .foregroundColor(.white)
+                                    .aspectRatio(contentMode: .fit)
+                                    .padding(.leading, -5)
+                                    .padding(.trailing, 5)
+                                 
                                 VStack(alignment: .leading){
                                     Text(item.fields.title.stringValue)
                                         .bold()
@@ -84,9 +87,9 @@ struct CommunitySearchResultView: View {
     }
 }
 
-struct CommunitySearchResultView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        CommunitySearchResultView(searchWord: .constant(""), community: CommunityViewModel())
-    }
-}
+//struct CommunitySearchResultView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//        CommunitySearchResultView(searchWord: .constant(""), community: CommunityViewModel())
+//    }
+//}

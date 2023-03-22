@@ -58,7 +58,6 @@
 		9936E2B129909846006F3333 /* MainSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FD6AB82977AF7100B4A859 /* MainSearchView.swift */; };
 		9936E2B529915B04006F3333 /* Ex+EmptyPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9936E2B429915B04006F3333 /* Ex+EmptyPlaceholder.swift */; };
 		9936E2B729915CB8006F3333 /* SearchPlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9936E2B629915CB8006F3333 /* SearchPlaceHolderView.swift */; };
-		9947E4F729895211002AC952 /* KakaoAuthenticationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9947E4F629895211002AC952 /* KakaoAuthenticationStore.swift */; };
 		9955E115297A538900265D14 /* MagazineDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E114297A538900265D14 /* MagazineDetailView.swift */; };
 		9955E117297A6D5900265D14 /* MagazineContentAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9955E116297A6D5900265D14 /* MagazineContentAddView.swift */; };
 		9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AF72297778D800A51DA9 /* GrainApp.swift */; };
@@ -204,7 +203,6 @@
 		9936E2AD298CD003006F3333 /* CommunitySearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitySearchResultView.swift; sourceTree = "<group>"; };
 		9936E2B429915B04006F3333 /* Ex+EmptyPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ex+EmptyPlaceholder.swift"; sourceTree = "<group>"; };
 		9936E2B629915CB8006F3333 /* SearchPlaceHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPlaceHolderView.swift; sourceTree = "<group>"; };
-		9947E4F629895211002AC952 /* KakaoAuthenticationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoAuthenticationStore.swift; sourceTree = "<group>"; };
 		9955E114297A538900265D14 /* MagazineDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDetailView.swift; sourceTree = "<group>"; };
 		9955E116297A6D5900265D14 /* MagazineContentAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineContentAddView.swift; sourceTree = "<group>"; };
 		9958AF6F297778D800A51DA9 /* Grain.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grain.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -480,8 +478,6 @@
 				995EBDCE29966F18002C1686 /* Grain.entitlements */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
 				9958AFB82977D56000A51DA9 /* Info.plist */,
-				8BEBC92129C9958B005C903A /* Config.xcconfig */,
-				8BEBC91F29C99584005C903A /* GoogleService-Info.plist */,
 				99DEE60629C2E70A00BE5BC6 /* Localizable.strings */,
 				9958AF812977793700A51DA9 /* Configuration */,
 				9958AF80297778FD00A51DA9 /* Sources */,
@@ -565,7 +561,6 @@
 			isa = PBXGroup;
 			children = (
 				9958AF9829777E4D00A51DA9 /* AuthenticationStore.swift */,
-				9947E4F629895211002AC952 /* KakaoAuthenticationStore.swift */,
 			);
 			path = AuthStores;
 			sourceTree = "<group>";
@@ -767,7 +762,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BEBC92029C99584005C903A /* GoogleService-Info.plist in Resources */,
 				99DEE60429C2E70A00BE5BC6 /* Localizable.strings in Resources */,
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
 				8BEBC92229C9958B005C903A /* Config.xcconfig in Resources */,
@@ -942,7 +936,6 @@
 				998847D6299226CB00004066 /* MagazineSearchDetailView.swift in Sources */,
 				0693B4C72992849600F9CDE2 /* Error.swift in Sources */,
 				A75BB99529815361004FE6FA /* PhotoSpotMapView.swift in Sources */,
-				9947E4F729895211002AC952 /* KakaoAuthenticationStore.swift in Sources */,
 				A7FCA45B29C9675200F94249 /* EditorViewModel.swift in Sources */,
 				9936E2B729915CB8006F3333 /* SearchPlaceHolderView.swift in Sources */,
 				A71CAE6429C1904100752A67 /* CommunityRecommentView.swift in Sources */,

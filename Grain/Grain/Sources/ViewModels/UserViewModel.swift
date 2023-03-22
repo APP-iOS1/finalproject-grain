@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 import UIKit
-
+import FirebaseAuth
 
 final class UserViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
@@ -168,7 +168,7 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
-                self.fetchUser()
+                self.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)
     }

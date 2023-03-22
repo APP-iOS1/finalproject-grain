@@ -13,13 +13,15 @@ struct MapCategoryCellView: View {
     // MARK: 카테고리 종류 리스트
     // category -> 0: 포토스팟 / 1: 현상소 / 2: 수리점
     let categoryList : [String] = ["전체","필름스팟", "현상소", "수리점"]
-    @Binding var categoryString : String
+    
     
     @State var allButtonClickedBool : Bool = true
     @State var photoButtonClickedBool : Bool = false
     @State var StationButtonClickedBool : Bool = false
     @State var repairButtonClickedBool : Bool = false
     
+    @Binding var isShowingPhotoSpotMapVIew : Bool
+    @Binding var categoryString : String
     @Binding var reportButton : Bool    // 제보하러가기 버튼
     
     // MARK: 오버레이
@@ -36,6 +38,7 @@ struct MapCategoryCellView: View {
             allButtonClickedBool = false
             StationButtonClickedBool = false
             repairButtonClickedBool = false
+            isShowingPhotoSpotMapVIew = false
         case "현상소":
             allButtonClickedBool = false
             photoButtonClickedBool = false

@@ -12,7 +12,7 @@ enum MapRouter {
     case get
     case getNext(nextPageToken: String)
     case post(magazineData: MagazineFields, docID: String)
-    case delete
+    case delete(docID: String)
     case put
     
     private var baseURL: URL {
@@ -44,6 +44,8 @@ enum MapRouter {
     
     private var endPoint: String {
         switch self {
+        case let .delete(docID):
+            return "/MapData/\(docID)"
         default:
             return "/MapData"
         }

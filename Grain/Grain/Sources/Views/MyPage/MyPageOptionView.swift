@@ -246,9 +246,7 @@ struct SupportSection: View {
 
 //MARK: - 정보 섹션
 struct InfoSection: View {
-    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
-    @ObservedObject var kakoAuthVM: KakaoAuthenticationStore = KakaoAuthenticationStore()
-    
+    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()    
     // Progress 변수
     @State private var isShownProgress: Bool = true
     
@@ -377,19 +375,7 @@ struct InfoSection: View {
             .padding(.horizontal)
             
             Button {
-                //                if authVM.logInCompanyState == .appleLogIn {
-                //                    authVM.appleLogout()
-                //                } else if authVM.logInCompanyState == .googleLogIn {
-                //                    authVM.googleLogout()
-                //                } else if authVM.logInCompanyState == .kakaoLogIn {
-                //                    kakoAuthVM.kakaoLogOut()
-                //                } else {
-                //                    authVM.appleLogout()
-                //                    authVM.googleLogout()
-                //                    kakoAuthVM.kakaoLogOut()
-                //                }
                 showAlert.toggle()
-                
             } label: {
                 HStack {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
@@ -418,12 +404,9 @@ struct InfoSection: View {
                               authVM.appleLogout()
                           } else if authVM.logInCompanyState == .googleLogIn {
                               authVM.googleLogout()
-                          } else if authVM.logInCompanyState == .kakaoLogIn {
-                              kakoAuthVM.kakaoLogOut()
-                          } else {
+                          }else {
                               authVM.appleLogout()
                               authVM.googleLogout()
-                              kakoAuthVM.kakaoLogOut()
                           }
                       },
                       secondaryButton: .default(

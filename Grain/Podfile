@@ -11,8 +11,5 @@ target 'Grain' do
   pod 'GoogleSignIn', '~> 6.2.4'
   pod 'GoogleSignInSwiftSupport'
   pod 'NMapsMap'
-  pod 'KakaoSDKCommon'
-  pod 'KakaoSDKAuth'
-  pod 'KakaoSDKUser'
   pod 'Kingfisher'
 end

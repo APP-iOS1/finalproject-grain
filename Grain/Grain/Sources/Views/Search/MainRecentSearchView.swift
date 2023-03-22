@@ -10,8 +10,11 @@ import FirebaseAuth
 
 struct MainRecentSearchView: View {
     @ObservedObject var userVM: UserViewModel
-    
-    @Binding var searchList: [String]
+    @Binding var selectedIndex: Int
+    @Binding var searchWord: String
+    @Binding var isMagazineSearchResultShown: Bool
+    @Binding var isCommunitySearchResultShown: Bool
+    @Binding var isUserSearchResultShown: Bool
     
     var body: some View {
         VStack{
@@ -22,7 +25,6 @@ struct MainRecentSearchView: View {
                 Spacer()
                 
                 Button(action: {
-                    searchList.removeAll()
                     let arr: [String] = [""]
                     userVM.updateCurrentUserArray(type: "recentSearch", arr: arr, docID: Auth.auth().currentUser?.uid ?? "")
                 }) {
@@ -35,29 +37,34 @@ struct MainRecentSearchView: View {
             if userVM.recentSearch.count > 1 {
                 ForEach(1..<userVM.recentSearch.count, id: \.self) { index in
                     HStack {
-                        NavigationLink(destination: {
-                            
-                        }) {
+                        Button {
+                            searchWord = "\(userVM.recentSearch[index])"
+                            if selectedIndex == 0 {
+                                self.isMagazineSearchResultShown.toggle()
+                            }else if selectedIndex == 1 {
+                                self.isCommunitySearchResultShown.toggle()
+                            }else {
+                                self.isUserSearchResultShown.toggle()
+                            }
+                        } label: {
                             Text(userVM.recentSearch[index])
                                 .fontWeight(.bold)
                                 .foregroundColor(.black)
-
                         }
                         Spacer()
-
+                        
                         Button(action: {
-                            searchList.remove(at: index)
                             var arr = userVM.recentSearch
                             arr.remove(at: index)
                             userVM.updateCurrentUserArray(type: "recentSearch", arr: arr, docID: Auth.auth().currentUser?.uid ?? "")
-
+                            
                         }) {
                             Image(systemName: "multiply")
                                 .foregroundColor(.gray)
-
+                            
                         }
                         .frame(alignment: .trailing )
-
+                        
                     }//hstack
                     .padding()
                 }// ForEach

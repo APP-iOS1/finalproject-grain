@@ -24,7 +24,7 @@ struct MainSearchView: View {
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
     
     @State private var searchWord: String = ""
-    @State private var searchList: [String] =  ["카메라", "명소", "출사"]
+//    @State private var searchList: [String] =  ["카메라", "명소", "출사"]
     @State private var isMagazineSearchResultShown: Bool = false
     @State private var isCommunitySearchResultShown: Bool = false
     @State private var isUserSearchResultShown: Bool = false
@@ -164,7 +164,7 @@ struct MainSearchView: View {
                 }
                 
                 if searchWord.isEmpty {
-                    MainRecentSearchView(userVM: userViewModel, searchList: $searchList)
+                    MainRecentSearchView(userVM: userViewModel, selectedIndex: $selectedIndex, searchWord: $searchWord, isMagazineSearchResultShown: $isMagazineSearchResultShown, isCommunitySearchResultShown: $isCommunitySearchResultShown, isUserSearchResultShown: $isUserSearchResultShown)
                     
                 } else if !searchWord.isEmpty {
                     ZStack {
@@ -394,7 +394,7 @@ struct MainSearchView: View {
                                     }
                                     
                                     Button {
-                                        self.isCommunitySearchResultShown.toggle()
+                                        self.isUserSearchResultShown.toggle()
                                     } label: {
                                         Text("결과 모두 보기")
                                             .foregroundColor(.blue)

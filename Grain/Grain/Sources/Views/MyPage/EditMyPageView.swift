@@ -22,6 +22,8 @@ struct EditMyPageView: View {
     @State private var editedIntroduce = ""
     
     var userVM: UserViewModel
+    //본인 이외의 사용자들의 정보 필터링한 값을 담는 변수
+    @State private var exceptCurrentUser: [UserDocument] = []
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentationMode) var presentationMode
@@ -173,7 +175,7 @@ struct EditMyPageView: View {
                     .underlineTextField()
                     .padding(.bottom, 30)
                 
-                    if !editedNickname.isEmpty && checkNicknameRule(string: editedNickname) {
+                    if editedNickname == nickName || !editedNickname.isEmpty && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname}{
                         Text("올바른 형식입니다")
                             .font(.subheadline)
                             .padding(.horizontal, 20)
@@ -181,6 +183,13 @@ struct EditMyPageView: View {
                             .padding(.bottom)
                             .foregroundColor(.black)
                         
+                    } else if !editedNickname.isEmpty && exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname} {
+                        Text("중복된 닉네임입니다")
+                            .font(.subheadline)
+                            .padding(.horizontal, 20)
+                            .padding(.top, -20)
+                            .padding(.bottom)
+                            .foregroundColor(.red)
                     } else {
                         Text("영문, 숫자를 포함하여 4~15 글자로 작성해주세요")
                             .font(.subheadline)
@@ -231,7 +240,7 @@ struct EditMyPageView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                if (editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) {
+                if (editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname} {
                     Button {
                         if var currentUser = userVM.currentUsers {
                             let docID = currentUser.id.stringValue
@@ -259,6 +268,8 @@ struct EditMyPageView: View {
             focus = .nickName
             editedNickname = userVM.currentUsers?.nickName.stringValue ?? ""
             editedIntroduce = userVM.currentUsers?.introduce.stringValue ?? ""
+            exceptCurrentUser = userVM.users.filter{$0.fields.id.stringValue != userVM.currentUsers?.id.stringValue}
+            print("except: \(exceptCurrentUser)")
         }
     }
     
@@ -292,3 +303,5 @@ extension View {
             .padding(.horizontal,10)
     }
 }
+
+

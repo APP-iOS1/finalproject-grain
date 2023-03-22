@@ -15,7 +15,9 @@ final class MapViewModel: ObservableObject {
     @Published var mapData = [MapDocument]()
     
     var fetchMapSuccess = PassthroughSubject<(), Never>()
+    var deleteMapSuccess = PassthroughSubject<(), Never>()
     var fetchNextPageMapSuccess = PassthroughSubject<(), Never>()       // MARK: 다음 페이지 계속 돌아갈 상태값?
+    
     var insertMapSuccess = PassthroughSubject<(), Never>()
 
     func fetchNextPageMap(nextPageToken: String){
@@ -46,4 +48,14 @@ final class MapViewModel: ObservableObject {
                 
             }.store(in: &subscription)
     }
+    
+    func deleteMap(docID: String) {
+        MapService.deleteMap(docID: docID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: MapDocument) in
+                self.deleteMapSuccess.send()
+            }.store(in: &subscription)
+    }
+    
 }

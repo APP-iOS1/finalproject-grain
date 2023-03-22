@@ -234,21 +234,11 @@ struct SupportSection: View {
         }
     }
     
-    func createEmailUrl(to: String, subject: String, body: String) -> String {
-        let subjectEncoded = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let bodyEncoded = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        
-        let defaultUrl = "mailto:\(to)?subject=\(subjectEncoded)&body=\(bodyEncoded)"
-        
-        return defaultUrl
-    }
 }
 
 //MARK: - 정보 섹션
 struct InfoSection: View {
-    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
-    @ObservedObject var kakoAuthVM: KakaoAuthenticationStore = KakaoAuthenticationStore()
-    
+    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()    
     // Progress 변수
     @State private var isShownProgress: Bool = true
     
@@ -377,19 +367,7 @@ struct InfoSection: View {
             .padding(.horizontal)
             
             Button {
-                //                if authVM.logInCompanyState == .appleLogIn {
-                //                    authVM.appleLogout()
-                //                } else if authVM.logInCompanyState == .googleLogIn {
-                //                    authVM.googleLogout()
-                //                } else if authVM.logInCompanyState == .kakaoLogIn {
-                //                    kakoAuthVM.kakaoLogOut()
-                //                } else {
-                //                    authVM.appleLogout()
-                //                    authVM.googleLogout()
-                //                    kakoAuthVM.kakaoLogOut()
-                //                }
                 showAlert.toggle()
-                
             } label: {
                 HStack {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
@@ -418,12 +396,9 @@ struct InfoSection: View {
                               authVM.appleLogout()
                           } else if authVM.logInCompanyState == .googleLogIn {
                               authVM.googleLogout()
-                          } else if authVM.logInCompanyState == .kakaoLogIn {
-                              kakoAuthVM.kakaoLogOut()
-                          } else {
+                          }else {
                               authVM.appleLogout()
                               authVM.googleLogout()
-                              kakoAuthVM.kakaoLogOut()
                           }
                       },
                       secondaryButton: .default(
@@ -472,88 +447,6 @@ struct MyWebView: UIViewRepresentable {
  일단 무시하고 작업해도 될 듯
  */
 
-
-// Mail Send
-class EmailController: NSObject, MFMailComposeViewControllerDelegate {
-    public static let shared = EmailController()
-    private override init() { }
-    
-    func sendEmail(subject:String, body:String, to:String){
-        // Check if the device is able to send emails
-        if !MFMailComposeViewController.canSendMail() {
-            print("This device cannot send emails.")
-            return
-        }
-        // Create the email composer
-        let mailComposer = MFMailComposeViewController()
-        mailComposer.mailComposeDelegate = self
-        mailComposer.setToRecipients([to])
-        mailComposer.setSubject(subject)
-        mailComposer.setMessageBody(body, isHTML: false)
-        EmailController.getRootViewController()?.present(mailComposer, animated: true, completion: nil)
-    }
-    
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        EmailController.getRootViewController()?.dismiss(animated: true, completion: nil)
-    }
-    
-    static func getRootViewController() -> UIViewController? {
-        // In SwiftUI 2.0
-        UIApplication.shared.windows.first?.rootViewController
-    }
-}
-
-
-// mail test (from GPT)
-struct MailView: UIViewControllerRepresentable {
-    @Binding var isShowing: Bool
-    
-    func makeUIViewController(context: Context) -> MFMailComposeViewController {
-        let mailComposeViewController = MFMailComposeViewController()
-        mailComposeViewController.setToRecipients(["example@example.com"])
-        mailComposeViewController.setSubject("Subject")
-        mailComposeViewController.setMessageBody("Message body", isHTML: false)
-        mailComposeViewController.mailComposeDelegate = context.coordinator
-        return mailComposeViewController
-    }
-    
-    func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {
-        // No update necessary
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(isShowing: $isShowing)
-    }
-    
-    class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
-        @Binding var isShowing: Bool
-        
-        init(isShowing: Binding<Bool>) {
-            _isShowing = isShowing
-        }
-        
-        func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-            defer {
-                isShowing = false
-            }
-            
-            switch result {
-            case .cancelled:
-                print("Mail cancelled")
-            case .saved:
-                print("Mail saved")
-            case .sent:
-                print("Mail sent")
-            case .failed:
-                print("Mail failed: \(String(describing: error))")
-            @unknown default:
-                fatalError()
-            }
-            
-            controller.dismiss(animated: true, completion: nil)
-        }
-    }
-}
 
 // OpenURL
 struct SupportEmail {

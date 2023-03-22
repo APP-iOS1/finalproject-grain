@@ -46,9 +46,7 @@ enum MapService {
     static func insertMap(data: MagazineFields) -> AnyPublisher<MagazineDocument, Error> {
         
         // 문서 생성 Uid
-        let docID: String = UUID().uuidString
-     
-        let requestRouter = MapRouter.post(magazineData: data, docID: docID)
+        let requestRouter = MapRouter.post(magazineData: data, docID: data.id.stringValue)
         
         
         do {
@@ -64,4 +62,19 @@ enum MapService {
         }
     }
     
+    
+    static func deleteMap(docID: String) -> AnyPublisher<MapDocument, Error> {
+        
+        do {
+            let request = try MapRouter.delete(docID: docID).asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: MapDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
+    }
 }

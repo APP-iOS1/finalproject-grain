@@ -12,6 +12,10 @@ class NetworkManager: ObservableObject {
     let monitor = NWPathMonitor()
     let queue = DispatchQueue(label: "NetworkManager")
     @Published var isConnected: Bool = true
+    @Published var currentInterface: NWInterface.InterfaceType = .wifi
+    
+    var isWiFi: Bool = false
+    var isCellular: Bool = false
     
     var imageName: String {
         return isConnected ? "wifi" : "wifi.exclamationmark"
@@ -25,6 +29,22 @@ class NetworkManager: ObservableObject {
         }
     }
     
+    var wifiConnection: String {
+        if isWiFi {
+            return "와이파이에 연결되었습니다"
+        } else {
+            return ""
+        }
+    }
+    
+    var cellularConnection: String {
+        if isCellular {
+            return "셀룰러에 연결되었습니다"
+        } else {
+            return ""
+        }
+    }
+    
     init() {
         monitor.pathUpdateHandler = { path in
             DispatchQueue.main.async {
@@ -33,5 +53,22 @@ class NetworkManager: ObservableObject {
         }
         
         monitor.start(queue: queue)
+    }
+    
+    //네트워크 모니터링 시작 함수
+    func startMonitoring() {
+        monitor.start(queue: queue)
+        monitor.pathUpdateHandler = { path in
+            self.isConnected = path.status == .satisfied
+            
+            if path.usesInterfaceType(.wifi) {
+                print("Using wifi")
+                self.isWiFi = true
+                
+            } else if path.usesInterfaceType(.cellular) {
+                print("Using cellular")
+                self.isCellular = true
+            }
+        }
     }
 }

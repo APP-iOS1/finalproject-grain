@@ -112,6 +112,8 @@ final class MagazineViewModel: ObservableObject {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
         var nearbyPostFilterArr: [MagazineDocument] = []
         nearbyPostFilterArr.removeAll()
+        print("메서드")
+        print(nearbyPostsArr)
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
         for arrData in nearbyPostsArr{
             for magazineIdValue in magazineData{

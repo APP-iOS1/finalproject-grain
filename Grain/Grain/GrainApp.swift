@@ -6,10 +6,8 @@
 //
 
 import SwiftUI
-
 import FirebaseCore
-import KakaoSDKCommon
-import KakaoSDKAuth
+
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
@@ -23,14 +21,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct GrainApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    init() {
-           // Kakao SDK 초기화
-            let kakaoAppKey = Bundle.main.infoDictionary?["KakaoNativeAppKey"] ?? ""
-            KakaoSDK.initSDK(appKey: kakaoAppKey as! String)
-       }
     var body: some Scene {
         WindowGroup {
-            ContentView().environmentObject(AuthenticationStore()).environmentObject(KakaoAuthenticationStore())
+            ContentView().environmentObject(AuthenticationStore())
 
         }
     }

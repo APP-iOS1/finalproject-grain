@@ -16,6 +16,8 @@ struct MyPageView: View {
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
+    @ObservedObject var authenticationStore : AuthenticationStore = AuthenticationStore()
+    
     
     var magazineDocument: [MagazineDocument]
     var boomarkedMagazineDocument: [MagazineDocument]
@@ -148,6 +150,8 @@ struct MyPageView: View {
                 MyPageMyFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineDocument)
             }
             .onAppear{
+                print("my page view")
+                print("authenticationStore.logInCompanyState : \(authenticationStore.logInCompanyState) ")
                 // MARK: userID에 UserDefaults이용해서 저장
                 userVM.fetchUser()
                 userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")

@@ -18,10 +18,6 @@ struct EditCameraView: View {
     // editMode
     @Environment(\.editMode) private var editMode
     
-    // 사용자 장비가 담긴 배열
-    @State private var  myBodies: [String] = ["코닥", "캐논", "니콘"]
-    @State private var myLenses: [String] = ["렌즈1", "렌즈2", "렌즈3"]
-    @State private var myFilms: [String] = ["코닥", "캐논", "니콘"]
     // 장비 추가 버튼 출현 변수
     @State private var showAddBody = false
     @State private var showAddLens = false
@@ -95,13 +91,13 @@ struct EditCameraView: View {
                     
                     List{
                         // MARK: 카메라 바디 섹션
-                        BodyList(userVM: userVM, myBodies: $myBodies, showAddBody: $showAddBody, newItem: $newBodyItem)
+                        BodyList(userVM: userVM, showAddBody: $showAddBody, newItem: $newBodyItem)
                         
                         // MARK: 카메라 렌즈 섹션
-                        LensList(userVM: userVM, myLenses: $myLenses, showAddLens: $showAddLens, newItem: $newLensItem)
+                        LensList(userVM: userVM, showAddLens: $showAddLens, newItem: $newLensItem)
 
                         // MARK: 카메라 필름 섹션
-                        FilmList(userVM: userVM, myFilms: $myFilms, showAddFilm: $showAddFilm, newItem: $newFilmItem)
+                        FilmList(userVM: userVM, showAddFilm: $showAddFilm, newItem: $newFilmItem)
                     }
                     .listStyle(.sidebar)
                     .scrollContentBackground(.hidden)
@@ -172,7 +168,6 @@ struct BodyList: View {
 
     @Environment(\.editMode) private var editMode
 
-    @Binding var  myBodies: [String]
     @Binding var showAddBody: Bool
     @Binding var newItem: String
         
@@ -285,7 +280,6 @@ struct LensList: View {
     
     @Environment(\.editMode) private var editMode
 
-    @Binding var  myLenses: [String]
     @Binding var showAddLens: Bool
     @Binding var newItem: String
     
@@ -395,7 +389,7 @@ struct FilmList: View {
     var userVM: UserViewModel
 
     @Environment(\.editMode) private var editMode
-    @Binding var  myFilms: [String]
+    
     @Binding var showAddFilm: Bool
     @Binding var newItem: String
     

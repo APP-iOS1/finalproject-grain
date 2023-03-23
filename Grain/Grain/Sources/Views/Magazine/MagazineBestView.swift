@@ -22,8 +22,6 @@ struct MagazineBestView: View {
     
     @State var ObservingChangeValueLikeNum : String = ""
     
-    
-    
     var body: some View {
         VStack {
             ScrollView {
@@ -45,7 +43,6 @@ struct MagazineBestView: View {
                     NavigationLink {
                         MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                     } label: {
-                        
                         LazyVStack{
                             Top10View(data: data)
                                 .padding(.vertical, 7)

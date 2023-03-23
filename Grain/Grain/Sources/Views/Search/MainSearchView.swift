@@ -304,14 +304,18 @@ struct MainSearchView: View {
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 7)
                                     
-                                    if searchedUser.count >= 4 {
-                                        ForEach(0..<4) { i in
+                                    List(userViewModel.users.filter {
+                                        ignoreSpaces(in: $0.fields.nickName.stringValue)
+                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                                        ignoreSpaces(in: $0.fields.name.stringValue)
+                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+                                    }.prefix(3) ,id: \.self) { user in
                                             NavigationLink {
-                                                UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: searchedUser[i])
+                                                UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: user)
                                             } label: {
                                                 VStack{
                                                     HStack{
-                                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                                        KFImage(URL(string: user.fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                                             .resizable()
                                                             .frame(width: 47, height: 47)
                                                             .cornerRadius(30)
@@ -321,65 +325,25 @@ struct MainSearchView: View {
                                                             }
                                                             .padding(.trailing, -10)
                                                         VStack(alignment: .leading){
-                                                            Text(searchedUser[i].fields.nickName.stringValue)
+                                                            Text(user.fields.nickName.stringValue)
                                                                 .font(.body)
                                                                 .bold()
                                                                 .padding(.bottom, 1)
                                                                 .lineLimit(1)
-                                                            Text(searchedUser[i].fields.name.stringValue)
+                                                            Text(user.fields.name.stringValue)
                                                                 .font(.caption)
                                                                 .foregroundColor(.textGray)
                                                                 .frame(alignment: .leading)
                                                         }
                                                         .padding(.leading)
                                                         Spacer()
-                                                    }
+                                                    }//HStack
                                                     Divider()
                                                         .padding(.bottom, 5)
-                                                }
+                                                } //VStack
                                                 .padding(.horizontal)
                                                 .padding(.top, 5)
                                             }
-                                        }
-                                    }
-                                    else if searchedUser.count > 0 && searchedUser.count < 4  {
-                                        ForEach(0..<searchedUser.count) { i in
-                                            NavigationLink {
-                                                //                                            UserSearchDetailView(user: item)
-                                                UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: searchedUser[i])
-                                            } label: {
-                                                VStack{
-                                                    HStack{
-                                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                                            .resizable()
-                                                            .frame(width: 47, height: 47)
-                                                            .cornerRadius(30)
-                                                            .overlay {
-                                                                Circle()
-                                                                    .stroke(lineWidth: 0.5)
-                                                            }
-                                                            .padding(.trailing, -10)
-                                                        VStack(alignment: .leading){
-                                                            Text(searchedUser[i].fields.nickName.stringValue)
-                                                                .font(.body)
-                                                                .bold()
-                                                                .padding(.bottom, 1)
-                                                                .lineLimit(1)
-                                                            Text(searchedUser[i].fields.name.stringValue)
-                                                                .font(.caption)
-                                                                .foregroundColor(.textGray)
-                                                                .frame(alignment: .leading)
-                                                        }
-                                                        .padding(.leading)
-                                                        Spacer()
-                                                    }
-                                                    Divider()
-                                                        .padding(.bottom, 5)
-                                                }
-                                                .padding(.horizontal)
-                                                .padding(.top, 5)
-                                            }
-                                        }
                                     }
                                     
                                     Button {

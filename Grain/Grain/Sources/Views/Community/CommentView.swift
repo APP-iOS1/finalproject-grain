@@ -26,6 +26,12 @@ struct CommentView: View {
     @Binding var replyCommentText: String
     @Binding var replyContent: String
     @Binding var replyComment : Bool  // 답글 표시 Bool값
+    @Binding var editComment : Bool
+    @Binding var editDocID : String
+    @Binding var editData : CommentFields
+    @Binding var editRecomment : Bool
+    @Binding var editReDocID : String
+    @Binding var editReData : CommentFields
     
     func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬 예) 댓글 3개면 [ false, false, false ]
         eachBool = Array(repeating: false, count: count)
@@ -85,9 +91,9 @@ struct CommentView: View {
                                 
                                 if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                     Button{
-                                        commentVm.updateComment(collectionName: "Community", collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue, updateComment: replyContent, data: commentVm.sortedRecentComment[index].fields)
-                                        commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
-                                        replyContent = ""
+                                        editComment.toggle()
+                                        editDocID = commentVm.sortedRecentComment[index].fields.id.stringValue
+                                        editData = commentVm.sortedRecentComment[index].fields
                                     } label: {
                                         Text("수정")
                                     }
@@ -108,7 +114,7 @@ struct CommentView: View {
                             
                             if readMoreComments && eachBool[index]{
                                 VStack{
-                                    CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent)
+                                    CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData)
                                 }
                             }
                         }

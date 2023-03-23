@@ -19,7 +19,11 @@ struct CommunityRecommentView: View {
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Community - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
     @State var deleteRecommentButtonBool : Bool = false   //onChange를 이용하여 fetch 해주기
+    
     @Binding var replyContent : String
+    @Binding var editRecomment : Bool
+    @Binding var editReDocID : String
+    @Binding var editReData : CommentFields
     
     var body: some View {
         VStack(alignment: .leading){
@@ -84,10 +88,9 @@ struct CommunityRecommentView: View {
                             HStack{
                                 if commentVm.sortedRecentRecomment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                     Button {
-                                        commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue, updateComment: replyContent, data: commentVm.sortedRecentRecomment[index].fields)
-                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
-                                        replyContent = ""
-                                        
+                                        editRecomment.toggle()
+                                        editReDocID = commentVm.sortedRecentRecomment[index].fields.id.stringValue
+                                        editReData = commentVm.sortedRecentRecomment[index].fields
                                     } label: {
                                         Text("수정")
                                     }

@@ -13,7 +13,9 @@ import Kingfisher
 
 //MARK: 댓글 입력창
 struct CommunityCommentView: View {
-    @ObservedObject var commentVm : CommentViewModel //댓글 뷰 모델 사용
+    @StateObject var commentVm = CommentViewModel()
+    
+//    @ObservedObject var commentVm : CommentViewModel //댓글 뷰 모델 사용
     @ObservedObject var userVM : UserViewModel
     
     let community: CommunityDocument
@@ -23,21 +25,34 @@ struct CommunityCommentView: View {
     @Binding var replyContent: String
     @Binding var replyComment : Bool  // 답글 표시 Bool값
     
+    @Binding var editComment : Bool
+    @Binding var editDocID : String
+    @Binding var editData : CommentFields
+    @Binding var editRecomment : Bool
+    @Binding var editReDocID : String
+    @Binding var editReData : CommentFields
     var trimContent: String {
         replyContent.trimmingCharacters(in: .whitespaces)
     }
     
     var body: some View {
         VStack{
+            
+            // MARK: -
             if replyComment {
                 Rectangle()
                     .fill(Color(hex: "e9ecef"))
                     .frame(width: Screen.maxWidth * 1,height: Screen.maxHeight * 0.055)
                     .overlay {
                         HStack{
-                            Text(replyCommentText + "님에게 답글 남기는 중")
+                            Text(replyCommentText)
+                                .foregroundColor(.black)
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                            Text("님에게 답글 남기는 중")
                                 .foregroundColor(.textGray)
                                 .font(.subheadline)
+                                .offset(x: -5)
                             Spacer()
                             Button {
                                 replyComment.toggle()
@@ -48,6 +63,49 @@ struct CommunityCommentView: View {
                         }.padding(10)
                     }
             }
+            if editComment {
+                Rectangle()
+                    .fill(Color(hex: "e9ecef"))
+                    .frame(width: Screen.maxWidth * 1,height: Screen.maxHeight * 0.055)
+                    .overlay {
+                        HStack{
+                            Text("댓글을 수정하는 중입니다")
+                                .foregroundColor(.textGray)
+                                .font(.subheadline)
+                            Spacer()
+                            Button {
+                                editComment.toggle()
+                                replyContent = ""
+                            } label: {
+                                Image(systemName: "xmark")
+                            }
+                        }.padding(10)
+                    }.onAppear{
+                        replyComment = false
+                    }
+            }
+            if editRecomment{
+                Rectangle()
+                    .fill(Color(hex: "e9ecef"))
+                    .frame(width: Screen.maxWidth * 1,height: Screen.maxHeight * 0.055)
+                    .overlay {
+                        HStack{
+                            Text("댓글을 수정하는 중입니다")
+                                .foregroundColor(.textGray)
+                                .font(.subheadline)
+                            Spacer()
+                            Button {
+                                editRecomment.toggle()
+                                replyContent = ""
+                            } label: {
+                                Image(systemName: "xmark")
+                            }
+                        }.padding(10)
+                    }.onAppear{
+                        replyComment = false
+                    }
+            }
+            
             HStack{
                 KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                     .resizable()
@@ -87,6 +145,7 @@ struct CommunityCommentView: View {
                             )
                             replyContent = ""
                             replyComment = false
+                            commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -94,7 +153,36 @@ struct CommunityCommentView: View {
                                 .bold()
                                 .padding(.trailing)
                         }
-                    }else{
+                    }
+                    else if editComment{
+                        Button {
+                            commentVm.updateComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, docID: editDocID, updateComment: replyContent, data: editData)
+                            replyContent = ""
+                            editComment = false
+                            commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                        } label: {
+                            Text("등록")
+                                .font(.subheadline)
+                                .foregroundColor(.textGray)
+                                .bold()
+                                .padding(.trailing)
+                        }
+                    }
+                    else if editRecomment{
+                        Button {
+                            commentVm.updateRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: editReDocID, updateComment: replyContent, data: editReData)
+                            replyContent = ""
+                            editRecomment = false
+                            commentVm.fetchRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                        } label: {
+                            Text("등록")
+                                .font(.subheadline)
+                                .foregroundColor(.textGray)
+                                .bold()
+                                .padding(.trailing)
+                        }
+                    }
+                    else{
                         Button {
                             // MARK: 댓글 업로드 구현
                             commentVm.insertComment(
@@ -106,7 +194,7 @@ struct CommunityCommentView: View {
                                                     userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""),
                                                     id: CommentString(stringValue: UUID().uuidString)))
                             
-                            replyContent = ""        //댓글 텍스트 필드 초기화
+                            replyContent = ""
                         } label: {
                             Text("등록")
                                 .font(.subheadline)

@@ -223,8 +223,9 @@ struct AddCommunityView: View {
                         var postCommunityArr : [String]  = userVM.postedCommunityID
                         postCommunityArr.append(docId)
                         userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunityArr, docID: Auth.auth().currentUser?.uid ?? "")
+                        communityVM.fetchCommunity()     //  presented.toggle() 순서 바뀌면 게시글이 바로 적용이 안됨!
                         presented.toggle()
-                        communityVM.fetchCommunity()        // 필요한지?
+                        
                     } label: {
                         RoundedRectangle(cornerRadius: 12)
                             .fill(.black)

@@ -16,13 +16,11 @@ struct AllTabView: View {
     
     @Binding var isLoading: Bool
     
-    var community: [CommunityDocument]
-
     var body: some View {
         NavigationView{
             VStack {
                 ScrollView{
-                    ForEach(community, id: \.self) { data in
+                    ForEach(communityVM.sortedRecentCommunityData, id: \.self) { data in
                         NavigationLink {
                             CommunityDetailView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                         } label: {

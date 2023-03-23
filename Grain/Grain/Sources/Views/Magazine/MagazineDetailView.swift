@@ -168,7 +168,6 @@ struct MagazineDetailView: View {
                             //                        Spacer()
                             
                             //MARK: 북마크 버튼
-                            
                             Button {
                                 self.isBookMarked.toggle()
                                 self.saveOpacity = 1
@@ -338,7 +337,6 @@ struct MagazineDetailView: View {
             }
             
             ToolbarItem(placement: .navigationBarTrailing) {
-                // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
                 Menu {
                     Button {
                         //저장시 코드
@@ -348,12 +346,19 @@ struct MagazineDetailView: View {
                             self.saveOpacity = 0
                         }
                     } label: {
-
                         HStack{
                             Text(isBookMarked ? "저장 취소" : "저장")
                             Spacer()
                             Image(systemName: isBookMarked ? "bookmark.slash.fill" : "bookmark.fill") }
                     }
+                    NavigationLink {
+                        MagazineEditView(magazineVM: magazineVM, data: data)
+                    }label: {
+                        Text("수정")
+                        Spacer()
+                        Image(systemName: "square.and.pencil")
+                    }
+                    // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
                     if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                         NavigationLink {
                             MagazineEditView(magazineVM: magazineVM, data: data)

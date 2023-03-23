@@ -18,7 +18,7 @@ struct UserDetailView: View {
     @State private var angle: Double = 0
     // 유저가 올린 메거진 데이터
     @State var magazines = [MagazineDocument]()
-    // isFollow 초기값 넣어줘야함. 팔로우한 유저인지 먼저 체크 (체크하는 메소드 필요)
+    // isFollow 초기값 넣어줘야함. 팔로우한 유저인지 먼저 체크
     @State private var isFollowingUser: Bool = false
     // 내 프로필인지 체크 (구독버튼을 보여줄지 판단하기 위해)
     @State private var isMyProfile: Bool = false
@@ -77,7 +77,6 @@ struct UserDetailView: View {
                                         }
                                     } else {
                                         // "구독" 상태이고, 내 팔로잉 리스트에 있는경우 => 구독취소
-                                        
                                         if userVM.following.contains(user.fields.id.stringValue) {
                                             if let currentUser = userVM.currentUsers {
                                                 var currentUserFollowing: [String] = userVM.following
@@ -229,7 +228,8 @@ struct UserDetailView: View {
             self.magazines = magazineVM.filterUserMagazine(userID: user.fields.id.stringValue)
         })
         .onReceive(userVM.updateUsersArraySuccess, perform: { _ in
-            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+//            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            userVM.fetchUser()
         })
         .onReceive(userVM.fetchCurrentUsersSuccess, perform: { _ in
             // 나의 following 리스트에 있는 사람인지 확인

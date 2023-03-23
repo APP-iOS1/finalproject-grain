@@ -18,7 +18,8 @@ struct CommunityDetailView: View {
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
-    @State var community: CommunityDocument
+    var community: CommunityDocument
+    
     @State private var isBookMarked: Bool = false
     @State private var isliked: Bool = false
     @State private var commentText: String = ""
@@ -31,11 +32,19 @@ struct CommunityDetailView: View {
     @State var replyContent: String = ""
     @State var replyComment : Bool = false  // 답글 표시 Bool값
     
+    @State var editComment : Bool = false
+    @State var editDocID : String = ""
+    @State var editData : CommentFields = CommentFields(comment: CommentString(stringValue: ""), profileImage: CommentString(stringValue: ""), nickName: CommentString(stringValue: ""), userID: CommentString(stringValue: ""), id: CommentString(stringValue: ""))
+    @State var editRecomment : Bool = false
+    @State var editReDocID : String = ""
+    @State var editReData : CommentFields = CommentFields(comment: CommentString(stringValue: ""), profileImage: CommentString(stringValue: ""), nickName: CommentString(stringValue: ""), userID: CommentString(stringValue: ""), id: CommentString(stringValue: ""))
+    
     @FocusState private var textFieldFocused: Bool
     
     @Environment(\.presentationMode) var presentationMode
 
     @SceneStorage("isZooming") var isZooming: Bool = false
+    @SceneStorage("index") var selectedIndex: Int = 0
 
     var body: some View {
         NavigationView {
@@ -53,21 +62,23 @@ struct CommunityDetailView: View {
                         .padding(.top, 5)
                         // MARK: 닉네임 헤더
                         HStack {
-                            NavigationLink {
-                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue
-                                }) {
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue}){
+                                NavigationLink {
                                     UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
+                                } label: {
+                                    ProfileImage(imageName: user.fields.profileImage.stringValue)
+                                        .padding(.leading, 9)
                                 }
-                            } label: {
-                                ProfileImage(imageName: community.fields.profileImage.stringValue)
-                            }
-                            
-                            VStack(alignment: .leading) {
-                                Text(community.fields.nickName.stringValue)
-                                    .font(.subheadline)
-                                //MARK: 옵셔널 처리 고민
-                                Text(community.createTime.toDate()?.renderTime() ?? "")
-                                    .font(.caption)
+                                
+                                VStack(alignment: .leading) {
+                                    Text(user.fields.nickName.stringValue)
+//                                        .font(.subheadline)
+                                        .font(.callout)
+                                        .bold()
+                                    //MARK: 옵셔널 처리 고민
+                                    Text(community.createTime.toDate()?.renderTime() ?? "")
+                                        .font(.caption)
+                                }
                             }
                             Spacer()
                         }//HS
@@ -79,13 +90,17 @@ struct CommunityDetailView: View {
                             .padding(.horizontal, Screen.maxWidth * 0.04)
                         
                         //MARK: 사진
-                        ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
+                        ForEach(Array(community.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
                             Rectangle()
                                 .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                                 .overlay{
                                     KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
+                                }
+                                .tag(index)
+                                .onAppear{
+                                    selectedIndex = index
                                 }
                         }
                         .addPinchZoom()
@@ -105,11 +120,12 @@ struct CommunityDetailView: View {
                         Divider()
                             .frame(maxWidth: Screen.maxWidth * 0.94)
                             .background(Color.black)
-                            .padding(.top, 5)
-                            .padding(.bottom, 15)
+                            .padding(.top, 20)
+//                            .padding(.bottom)
                             .padding(.horizontal, Screen.maxWidth * 0.04)
                         // MARK: - 커뮤니티 댓글 뷰
-                        CommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
+                        CommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData )
+                          .padding(.leading, 3)
                     }
                 }
                 .refreshable {
@@ -119,7 +135,7 @@ struct CommunityDetailView: View {
                 // MARK: 댓글 달기
                 if isZooming == false {
                     
-                    CommunityCommentView( commentVm : commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
+                    CommunityCommentView( commentVm : commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData )
                         .transition(.move(edge: .bottom))
                         .animation(.default , value: isZooming)
 
@@ -145,7 +161,8 @@ struct CommunityDetailView: View {
                         Menu {
                             if !(postStatus == ""){
                                 Button{
-                                    community.fields.state.stringValue = postStatus
+                                    
+//                                    community.fields.state.stringValue = postStatus
                                     communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
                                 }label: {
                                     Text(postStatusString)
@@ -254,7 +271,7 @@ struct CommunityDetailView: View {
         }
         .onAppear{
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            userVM.fetchUser()
+//            userVM.fetchUser() -> 필요없어 보임
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
             communityVM.fetchCommunity()

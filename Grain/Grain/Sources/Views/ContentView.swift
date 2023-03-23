@@ -153,7 +153,6 @@ struct ContentView: View {
                 .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
                 .tint(.black)
                 .onAppear{
-                    print("authenticationStore.logInCompanyState : \(authenticationStore.logInCompanyState) ")
                     /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
                     editorVM.fetchEditor()
                     magazineVM.fetchMagazine()

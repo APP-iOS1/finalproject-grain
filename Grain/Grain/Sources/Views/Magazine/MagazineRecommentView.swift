@@ -15,8 +15,16 @@ struct MagazineRecommentView: View {
     @ObservedObject var commentVm : CommentViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
+    
+    @Binding var editRecomment : Bool
+    @Binding var editReDocID : String
+    @Binding var editReData : CommentFields
     @Binding var commentText: String // 답글 입력 텍스트 필드 값
     @State var deleteRecommentButtonBool : Bool = false   //onChange를 이용하여 fetch 해주기
+    
+    struct editRecommentStruct {
+        
+    }
     
     var commentCollectionDocId : String
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
@@ -88,10 +96,12 @@ struct MagazineRecommentView: View {
                             HStack{
                                 if commentVm.sortedRecentRecomment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                     Button {
-                                        commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue, updateComment: commentText, data: commentVm.sortedRecentRecomment[index].fields)
                                         
-                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
-                                        commentText = ""
+                                        editRecomment.toggle()
+                                        
+                                        editReDocID = commentVm.sortedRecentRecomment[index].fields.id.stringValue
+                                        editReData = commentVm.sortedRecentRecomment[index].fields
+                                                                            
                                     } label: {
                                         Text("수정")
                                     }

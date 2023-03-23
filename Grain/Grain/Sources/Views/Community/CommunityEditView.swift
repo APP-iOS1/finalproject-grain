@@ -8,7 +8,12 @@
 import SwiftUI
 import FirebaseAuth
 import Kingfisher
-//import Introspect
+
+// 텍스트 필드 포커스를 위한 열거형
+private enum FocusableField: Hashable {
+    case title
+    case content
+}
 
 struct CommunityEditView: View {
     @State var community : CommunityDocument
@@ -18,6 +23,7 @@ struct CommunityEditView: View {
     @State var clickedContent : Bool = false
     @State private var showAlert: Bool = false
     @State private var showSuccessAlert: Bool = false
+    @FocusState private var focus: FocusableField?
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -29,36 +35,19 @@ struct CommunityEditView: View {
         ScrollView {
             VStack{
                 VStack {
-                    HStack {
-                        // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
-                        if clickedTitle{
-                            VStack{
-                                TextField(community.fields.title.stringValue, text: $editTitle)
-                                    .font(.title2)
-                                    .padding(.horizontal)
-                                    .padding(.vertical, 3)
-                                    .padding(.bottom, 3)
-                                    .bold()
-                                    .onSubmit {
-                                        community.fields.title.stringValue = editTitle
-                                        clickedTitle.toggle()
-                                    }
-                            }
-                            .padding(.top, 1)
-                            
-                        }else{
-                            Text(community.fields.title.stringValue)
-                                .font(.title2)
-                                .padding(.horizontal)
-                                .padding(.top, 5)
-                                .bold()
-                                .onTapGesture {
-                                    clickedTitle.toggle()
-                                }
-                        }
-                        Spacer()
-                    }
-                    .padding(.top, 5)
+                    // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
+                    VStack{
+                        TextField(community.fields.title.stringValue, text: $editTitle)
+                            .font(.title2)
+                            .padding(.horizontal)
+                            .padding(.vertical, 3)
+                            .padding(.bottom, 3)
+                            .bold()
+                            .focused($focus, equals: .title)
+                            .disableAutocorrection(true)
+                            .autocapitalization(.none)
+                    }.padding(.top, 5)
+                    
                     HStack {
                         ProfileImage(imageName: community.fields.profileImage.stringValue)
                         VStack(alignment: .leading) {
@@ -122,6 +111,12 @@ struct CommunityEditView: View {
                 }
                 .padding(.top, 6)
             }
+        }
+        .onAppear {
+            focus = .title
+            editTitle = community.fields.title.stringValue
+            editContent = community.fields.content.stringValue
+
         }
         .onDisappear{
             communityVM.fetchCommunity()

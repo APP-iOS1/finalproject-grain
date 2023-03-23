@@ -8,6 +8,13 @@ import SwiftUI
 import FirebaseAuth
 import Kingfisher
 
+// 텍스트 필드 포커스를 위한 열거형
+private enum FocusableField: Hashable {
+    case title
+    case content
+    case place
+}
+
 struct MagazineEditView: View {
     @ObservedObject var magazineVM : MagazineViewModel
     
@@ -19,8 +26,10 @@ struct MagazineEditView: View {
     @State var clickedCustomPlace : Bool = false    // 텍스트 클릭 Bool
     @State private var showSuccessAlert: Bool = false
     @State private var showAlert: Bool = false
+    @FocusState private var focus: FocusableField?
     
     @Environment(\.presentationMode) var presentationMode
+
     
     var body: some View {
         NavigationView{
@@ -36,13 +45,16 @@ struct MagazineEditView: View {
                                 HStack {
                                     Text(data.createTime.toDate()?.renderTime() ?? "")
                                     Spacer()
-                                    if clickedCustomPlace{
+                                    if clickedCustomPlace {
                                         TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
+                                            .font(.caption)
                                             .onSubmit {
                                                 data.fields.customPlaceName.stringValue = editCustomPlace
                                                 clickedCustomPlace.toggle()
                                             }
-                                    }else{
+//                                            .background(.yellow)
+                                            
+                                    } else {
                                         Text(data.fields.customPlaceName.stringValue)
                                             .onTapGesture {
                                                 clickedCustomPlace.toggle()
@@ -80,30 +92,16 @@ struct MagazineEditView: View {
                     .frame(minHeight: 350)
                     
                     LazyVStack(pinnedViews: [.sectionHeaders]) {
-                        Section(header: MagazineEditHeader(data: data, editTitle: $editTitle) ){
+                        Section(header: MagazineEditHeader(data: data, editTitle: $editTitle)){
                             VStack {
-                                
-                                // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
-                                if clickedContent{
-                                    TextField(data.fields.content.stringValue, text: $editContent)
-                                        .lineSpacing(4.0)
-                                        .padding(.vertical, -9)
-                                        .padding()
-                                        .foregroundColor(Color.textGray)
-                                        .onSubmit {
-                                            clickedContent.toggle()
-                                        }
-                                }else{
-                                    Text(data.fields.content.stringValue)
-                                        .lineSpacing(4.0)
-                                        .padding(.vertical, -9)
-                                        .padding()
-                                        .foregroundColor(Color.textGray)
-                                        .onTapGesture {
-                                            clickedContent.toggle()
-                                        }
-                                }
-                                
+                                TextField(data.fields.content.stringValue, text: $editContent)
+                                    .lineSpacing(4.0)
+                                    .padding(.vertical, -9)
+                                    .padding()
+                                    .foregroundColor(Color.textGray)
+                                    .focused($focus, equals: .content)
+                                    .disableAutocorrection(true)
+                                    .autocapitalization(.none)
                             }
                         }
                     }
@@ -111,6 +109,11 @@ struct MagazineEditView: View {
                 }
             }
             .padding(.top, 1)
+        }
+        .onAppear {
+            editTitle = data.fields.title.stringValue
+            editContent = data.fields.content.stringValue
+            editCustomPlace = data.fields.customPlaceName.stringValue
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -166,16 +169,15 @@ struct MagazineEditView: View {
 }
 struct MagazineEditHeader: View {
     @State var data : MagazineDocument
-    @State var clickedTitle : Bool = false  // 텍스트 클릭 Bool
+    @State var clickedTitle : Bool = true  // 텍스트 클릭 Bool
     
     @Binding var editTitle : String
     
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
-            
             // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
-            if clickedTitle{
+            if clickedTitle {
                 TextField(data.fields.title.stringValue, text: $editTitle)
                     .font(.title2)
                     .bold()
@@ -184,7 +186,8 @@ struct MagazineEditHeader: View {
                         data.fields.title.stringValue = editTitle
                         clickedTitle.toggle()
                     }
-            }else{
+            }
+            else {
                 Text(data.fields.title.stringValue)
                     .font(.title2)
                     .bold()
@@ -193,7 +196,6 @@ struct MagazineEditHeader: View {
                         clickedTitle.toggle()
                     }
             }
-            
             Spacer()
             Divider()
         }
@@ -202,3 +204,4 @@ struct MagazineEditHeader: View {
         .background(Rectangle().foregroundColor(.white))
     }
 }
+

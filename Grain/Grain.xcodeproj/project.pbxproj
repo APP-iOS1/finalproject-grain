@@ -478,8 +478,6 @@
 				995EBDCE29966F18002C1686 /* Grain.entitlements */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
 				9958AFB82977D56000A51DA9 /* Info.plist */,
-				9967FC9929CC429600F15844 /* Config.xcconfig */,
-				9967FC9829CC429600F15844 /* GoogleService-Info.plist */,
 				99DEE60629C2E70A00BE5BC6 /* Localizable.strings */,
 				9958AF812977793700A51DA9 /* Configuration */,
 				9958AF80297778FD00A51DA9 /* Sources */,

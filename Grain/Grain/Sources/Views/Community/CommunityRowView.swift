@@ -10,7 +10,7 @@ import SwiftUI
 import Kingfisher
 
 struct CommunityRowView: View {
-    @ObservedObject var commentVm: CommentViewModel
+    @StateObject var commentVm = CommentViewModel() //StateObject 이걸로 처리해도 되나??
     
     @State var opacity: Double = 0.8
     
@@ -119,6 +119,9 @@ struct CommunityRowView: View {
                 }
             }
         })
+        .onAppear{
+            commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+        }
         .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.17)
     }
 }

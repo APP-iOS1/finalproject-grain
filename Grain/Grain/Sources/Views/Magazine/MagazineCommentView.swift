@@ -18,7 +18,6 @@ struct MagazineCommentView: View {
     @State var commentText: String = "" // 댓글 작성 텍스트 필드
     @State var editButtonShowing : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
     @State var summitComment : Bool = false // 내가 쓴 댓글 수정/삭제 한번에 보여줄려고 만든 Bool
-    @State var deleteButtonBool : Bool = false   //onChange를 이용하여 fetch 해주기
     @State var replyComment : Bool = false  // 답글 표시 Bool값
     @State var replyCommentText : String = "" // 답글 표시 이름 값
     @State var editComment : Bool = false
@@ -122,11 +121,11 @@ struct MagazineCommentView: View {
                                         //  MARK: 삭제
                                         Button {
                                             commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue)
-                                            deleteButtonBool.toggle()
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                            }
                                         } label: {
                                             Text("삭제")
-                                        }.onChange(of: deleteButtonBool) { _ in
-                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                                         }
                                     }
                                 }
@@ -183,6 +182,7 @@ struct MagazineCommentView: View {
                             }.padding(10)
                         }.onAppear{
                             editComment = false
+                            editRecomment = false
                         }
                 }
                 if editComment {
@@ -204,6 +204,7 @@ struct MagazineCommentView: View {
                             }.padding(10)
                         }.onAppear{
                             replyComment = false
+                            editRecomment = false
                         }
                 }
                 if editRecomment{
@@ -225,6 +226,7 @@ struct MagazineCommentView: View {
                             }.padding(10)
                         }.onAppear{
                             replyComment = false
+                            editComment = false
                         }
                 }
                 // MARK: 댓글 구역
@@ -310,7 +312,9 @@ struct MagazineCommentTextField: View {
                             commentText = ""
                             self.summitComment.toggle()
                             replyComment = false
-                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                            }
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -325,7 +329,10 @@ struct MagazineCommentTextField: View {
                             commentText = ""
                             self.summitComment.toggle()
                             editComment = false
-                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                            }
+                            
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -340,7 +347,9 @@ struct MagazineCommentTextField: View {
                             commentText = ""
                             self.summitComment.toggle()
                             editRecomment = false
-                            commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                            }
                         } label: {
                             Text("등록")
                                 .font(.subheadline)

@@ -76,11 +76,11 @@ struct ContentView: View {
                                 switch selectedIndex {
                                 case 0:
                                     NavigationStack {
-                                        MagazineMainView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
+                                        MagazineMainView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
                                     }
                                 case 1:
                                     NavigationStack {
-                                        CommunityView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM)
+                                        CommunityView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM)
                                     }
                                 case 2:
                                     NavigationStack {

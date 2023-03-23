@@ -10,7 +10,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct MagazineMainView: View {
-    @ObservedObject var commentVm: CommentViewModel
+
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
@@ -60,7 +60,7 @@ struct MagazineMainView: View {
                 }
             }
             .navigationDestination(isPresented: $isSearchViewShown) {
-                MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM, commentViewModel: commentVm)
+                MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM)
             }
             .refreshable {
                 magazineVM.fetchMagazine()

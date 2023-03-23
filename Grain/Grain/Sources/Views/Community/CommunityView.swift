@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CommunityView: View {
-    @ObservedObject var commentVm: CommentViewModel
+
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
@@ -54,20 +54,20 @@ struct CommunityView: View {
                 
                 switch(selectedIndex) {
                 case 0:
-                    AllTabView(commentVm: commentVm, communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
+                    AllTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
                 case 1:
-                    MatchingTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
+                    MatchingTabView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
                 case 2:
-                    ClassTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading )
+                    ClassTabView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading )
                 case 3:
-                    MarketTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading )
+                    MarketTabView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading )
                 default:
-                    InfoTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading )
+                    InfoTabView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading )
                 }
             } // 최상단 vstack
         } // navi stack
         .navigationDestination(isPresented: $isSearchViewShown) {
-            MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM, commentViewModel: commentVm)
+            MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

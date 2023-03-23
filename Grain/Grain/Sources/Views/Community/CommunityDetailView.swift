@@ -12,8 +12,9 @@ import Kingfisher
 
 // image -> systemName image로 임시 처리
 struct CommunityDetailView: View {
+    
+    @StateObject var commentVm = CommentViewModel()
 
-    @ObservedObject var commentVm: CommentViewModel
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
@@ -121,10 +122,9 @@ struct CommunityDetailView: View {
                             .frame(maxWidth: Screen.maxWidth * 0.94)
                             .background(Color.black)
                             .padding(.top, 20)
-//                            .padding(.bottom)
                             .padding(.horizontal, Screen.maxWidth * 0.04)
                         // MARK: - 커뮤니티 댓글 뷰
-                        CommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData )
+                        CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData )
                           .padding(.leading, 3)
                     }
                 }
@@ -135,7 +135,7 @@ struct CommunityDetailView: View {
                 // MARK: 댓글 달기
                 if isZooming == false {
                     
-                    CommunityCommentView( commentVm : commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData )
+                    CommunityCommentView(commentVm: commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData )
                         .transition(.move(edge: .bottom))
                         .animation(.default , value: isZooming)
 
@@ -269,10 +269,6 @@ struct CommunityDetailView: View {
                 }
             }
         }
-        .onChange(of: commentVm.comment, perform: { value in
-            commentVm.fetchComment(collectionName: "Community",
-                                   collectionDocId: community.fields.id.stringValue)
-        })
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .onTapGesture {

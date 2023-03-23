@@ -22,7 +22,7 @@ struct MainSearchView: View {
     @ObservedObject var communityViewModel: CommunityViewModel
     @ObservedObject var magazineViewModel: MagazineViewModel
     @ObservedObject var userViewModel: UserViewModel
-    @ObservedObject var commentViewModel: CommentViewModel
+
     
     @State private var searchWord: String = ""
     @State private var isMagazineSearchResultShown: Bool = false
@@ -246,7 +246,7 @@ struct MainSearchView: View {
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                                     }.prefix(3),id: \.self) { item in
                                         NavigationLink {
-                                            CommunityDetailView(commentVm: commentViewModel, communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, community: item)
+                                            CommunityDetailView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, community: item)
                                         } label: {
                                             VStack(alignment: .leading){
                                                 Text(item.fields.title.stringValue)
@@ -442,7 +442,7 @@ struct MainSearchView: View {
             MagazineSearchResultView(magazineVM: magazineViewModel, searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
         }
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
-            CommunitySearchResultView(commentVM: commentViewModel, communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord, community: communityViewModel)
+            CommunitySearchResultView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord, community: communityViewModel)
         }
         
         .navigationDestination(isPresented: $isUserSearchResultShown){

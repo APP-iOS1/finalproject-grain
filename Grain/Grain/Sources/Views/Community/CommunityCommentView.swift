@@ -13,9 +13,8 @@ import Kingfisher
 
 //MARK: 댓글 입력창
 struct CommunityCommentView: View {
-    @StateObject var commentVm = CommentViewModel()
-    
-//    @ObservedObject var commentVm : CommentViewModel //댓글 뷰 모델 사용
+
+    @ObservedObject var commentVm : CommentViewModel
     @ObservedObject var userVM : UserViewModel
     
     let community: CommunityDocument
@@ -61,6 +60,9 @@ struct CommunityCommentView: View {
                                 Image(systemName: "xmark")
                             }
                         }.padding(10)
+                    }.onAppear{
+                        editComment = false
+                        editRecomment = false
                     }
             }
             if editComment {
@@ -82,6 +84,7 @@ struct CommunityCommentView: View {
                         }.padding(10)
                     }.onAppear{
                         replyComment = false
+                        editRecomment = false
                     }
             }
             if editRecomment{
@@ -103,6 +106,7 @@ struct CommunityCommentView: View {
                         }.padding(10)
                     }.onAppear{
                         replyComment = false
+                        editComment = false
                     }
             }
             
@@ -159,7 +163,9 @@ struct CommunityCommentView: View {
                             commentVm.updateComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, docID: editDocID, updateComment: replyContent, data: editData)
                             replyContent = ""
                             editComment = false
-                            commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                            }
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -173,7 +179,9 @@ struct CommunityCommentView: View {
                             commentVm.updateRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: editReDocID, updateComment: replyContent, data: editReData)
                             replyContent = ""
                             editRecomment = false
-                            commentVm.fetchRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                commentVm.fetchRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                            }
                         } label: {
                             Text("등록")
                                 .font(.subheadline)

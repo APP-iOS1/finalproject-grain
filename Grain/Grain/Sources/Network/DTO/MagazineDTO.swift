@@ -9,6 +9,7 @@ import Foundation
 
 struct MagazineResponse: Codable {
     var documents: [MagazineDocument]
+    let nextPageToken: String?
 }
 
 struct MagazineDocument: Codable,Hashable {

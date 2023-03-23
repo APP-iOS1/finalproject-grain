@@ -10,6 +10,7 @@ import Foundation
 // MARK: - CommentResponse: Comment 컬렉션 아래 [ 문서 ID ]
 struct CommentResponse: Codable,Hashable {
     var documents: [CommentDocument]
+    let nextPageToken: String?
 }
 // MARK: - CommentDocument: 문서
 /// name:  해당 응답 path( 경로 값 ) ex)  "projects/grain-final/databases/(default)/documents/Magazine/1BA19CE5-119C-4898-9EC2-0BB920EAC64D/Comment/93Ku6eSMImVC8gJJbN6a",

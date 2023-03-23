@@ -11,6 +11,7 @@ struct CurrentUserResponse: Codable {
     var name : String
     var fields: CurrentUserFields
     var createTime, updateTime: String
+    let nextPageToken: String?
 }
 struct CurrentUserFields: Codable {
     var bookmarkedCommunityID, lastSearched, follower, following: CurrentUserUpperArrayValue

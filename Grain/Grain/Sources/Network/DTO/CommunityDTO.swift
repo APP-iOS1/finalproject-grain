@@ -10,6 +10,7 @@ import Foundation
 
 struct CommunityResponse: Codable {
     var documents: [CommunityDocument]
+    let nextPageToken: String?
 }
 
 struct CommunityDocument: Codable,Hashable{

@@ -199,9 +199,6 @@ struct CommunityDetailView: View {
                             }label: {
                                 Text("수정")
                             }
-                            .onChange(of: editFetch) { _ in
-                                communityVM.fetchCommunity()
-                            }
                             Button {
                                 communityVM.deleteCommunity(docID: community.fields.id.stringValue)
                                 presentationMode.wrappedValue.dismiss()

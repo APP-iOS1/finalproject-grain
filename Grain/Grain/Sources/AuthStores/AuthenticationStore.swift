@@ -95,7 +95,8 @@ final class AuthenticationStore: ObservableObject {
                 dump("\(#function) - DEBUG \(error.localizedDescription)")
             } else {
                 guard let profile = user?.profile else { return }
-
+                
+                // MARK: - 구글 최초 로그인?
                 insertUser(myFilm: "선택", bookmarkedMagazineID: "", email: profile.email, myCamera: "필수", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: uid ?? "", following: "", myLens: "선택", profileImage: "", name: profile.name, follower: "", nickName: "", introduce: "")
                 
                 self.authStateAuthenticated(user: CurrentUser(id: uid ?? "", name: profile.name, email: profile.email))
@@ -160,7 +161,7 @@ final class AuthenticationStore: ObservableObject {
                 try await changeRequest.commitChanges()
                 self.displayName = Auth.auth().currentUser?.displayName ?? ""
                 
-                //FIXME: 이거 이상함
+                // MARK: - 애플 최초 로그인?
                 insertUser(myFilm: "선택", bookmarkedMagazineID: "", email: user.email ?? "" , myCamera: "필수", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: user.uid, following: "", myLens: "선택", profileImage: "", name: user.displayName ?? "" , follower: "", nickName: "", introduce: "")
             }
             catch {

@@ -54,15 +54,16 @@ struct MagazineDetailView: View {
                             } label: {
                                 MagazineProfileImage(imageName: user.fields.profileImage.stringValue)
                             }
-                        }
-                        
-                        VStack(alignment: .leading){
-                            Text(data.fields.nickName.stringValue)
-                                .bold()
-                            Text(data.createTime.toDate()?.renderTime() ?? "")
-                                .font(.caption)
-                                .foregroundColor(.textGray)
                             
+                            
+                            VStack(alignment: .leading){
+                                Text(user.fields.nickName.stringValue)
+                                    .bold()
+                                Text(data.createTime.toDate()?.renderTime() ?? "")
+                                    .font(.caption)
+                                    .foregroundColor(.textGray)
+                                
+                            }
                         }
                         Spacer()
                         VStack{

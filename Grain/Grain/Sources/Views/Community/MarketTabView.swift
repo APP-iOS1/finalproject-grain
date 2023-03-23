@@ -16,13 +16,11 @@ struct MarketTabView: View {
     
     @Binding var isLoading: Bool
     
-    var community: [CommunityDocument]
-    
     var body: some View {
         
         VStack {
             ScrollView{
-                ForEach(community, id: \.self){ data in
+                ForEach(communityVM.returnCategoryCommunity(category: "클래스"), id: \.self){ data in
                     NavigationLink {
                         CommunityDetailView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {

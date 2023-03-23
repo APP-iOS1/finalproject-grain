@@ -21,6 +21,12 @@ struct MagazineCommentView: View {
     @State var deleteButtonBool : Bool = false   //onChange를 이용하여 fetch 해주기
     @State var replyComment : Bool = false  // 답글 표시 Bool값
     @State var replyCommentText : String = "" // 답글 표시 이름 값
+    @State var editComment : Bool = false
+    @State var editDocID : String = ""
+    @State var editData : CommentFields = CommentFields(comment: CommentString(stringValue: ""), profileImage: CommentString(stringValue: ""), nickName: CommentString(stringValue: ""), userID: CommentString(stringValue: ""), id: CommentString(stringValue: ""))
+    @State var editReDocID : String = ""
+    @State var editReData : CommentFields = CommentFields(comment: CommentString(stringValue: ""), profileImage: CommentString(stringValue: ""), nickName: CommentString(stringValue: ""), userID: CommentString(stringValue: ""), id: CommentString(stringValue: ""))
+    @State var editRecomment : Bool = false
     @State var commentCollectionDocId : String = "" // 답글 id
     @State var readMoreComments : Bool = false   //답글 더보기 Bool값
     @State var reCommentCount : Int = 0
@@ -105,13 +111,11 @@ struct MagazineCommentView: View {
                                     } label: {
                                         Text("답글 더보기")
                                     }
-                                    
                                     if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                         Button {
-                                            commentVm.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue, updateComment: commentText,data: commentVm.sortedRecentComment[index].fields)
-                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                                            commentText = ""
-
+                                            editComment.toggle()
+                                            editDocID = commentVm.sortedRecentComment[index].fields.id.stringValue
+                                            editData = commentVm.sortedRecentComment[index].fields
                                         } label: {
                                             Text("수정")
                                         }
@@ -133,7 +137,7 @@ struct MagazineCommentView: View {
                                 
                                 VStack{
                                     if readMoreComments && eachBool[index]{
-                                        MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                        MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
                                     }
                                 }
                             }
@@ -153,7 +157,6 @@ struct MagazineCommentView: View {
                 reCommentCount = commentVm.sortedRecentComment.count
                 makeEachBool(count: reCommentCount)
             }
-
             VStack(alignment: .leading){
                 // MARK: 답글달기 클릭시 활성화 되는 구역
                 if replyComment {
@@ -162,9 +165,14 @@ struct MagazineCommentView: View {
                         .frame(width: Screen.maxWidth * 1,height: Screen.maxHeight * 0.055)
                         .overlay {
                             HStack{
-                                Text(replyCommentText + "님에게 답글 남기는 중")
+                                Text(replyCommentText)
+                                    .foregroundColor(.black)
+                                    .font(.subheadline)
+                                    .fontWeight(.bold)
+                                Text("님에게 답글 남기는 중")
                                     .foregroundColor(.textGray)
                                     .font(.subheadline)
+                                    .offset(x: -5)
                                 Spacer()
                                 Button {
                                     replyComment.toggle()
@@ -173,6 +181,50 @@ struct MagazineCommentView: View {
                                     Image(systemName: "xmark")
                                 }
                             }.padding(10)
+                        }.onAppear{
+                            editComment = false
+                        }
+                }
+                if editComment {
+                    Rectangle()
+                        .fill(Color(hex: "e9ecef"))
+                        .frame(width: Screen.maxWidth * 1,height: Screen.maxHeight * 0.055)
+                        .overlay {
+                            HStack{
+                                Text("댓글을 수정하는 중입니다")
+                                    .foregroundColor(.textGray)
+                                    .font(.subheadline)
+                                Spacer()
+                                Button {
+                                    editComment.toggle()
+                                    commentText = ""
+                                } label: {
+                                    Image(systemName: "xmark")
+                                }
+                            }.padding(10)
+                        }.onAppear{
+                            replyComment = false
+                        }
+                }
+                if editRecomment{
+                    Rectangle()
+                        .fill(Color(hex: "e9ecef"))
+                        .frame(width: Screen.maxWidth * 1,height: Screen.maxHeight * 0.055)
+                        .overlay {
+                            HStack{
+                                Text("댓글을 수정하는 중입니다")
+                                    .foregroundColor(.textGray)
+                                    .font(.subheadline)
+                                Spacer()
+                                Button {
+                                    editRecomment.toggle()
+                                    commentText = ""
+                                } label: {
+                                    Image(systemName: "xmark")
+                                }
+                            }.padding(10)
+                        }.onAppear{
+                            replyComment = false
                         }
                 }
                 // MARK: 댓글 구역
@@ -186,7 +238,7 @@ struct MagazineCommentView: View {
                                 .stroke(lineWidth: 0.5)
                         }
                         .padding(.leading)
-                    MagazineCommentTextField(commentVm: commentVm, commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, commentCollectionDocId: $commentCollectionDocId, reCommentCount: $reCommentCount, eachBool: $eachBool, currentUser: userVM.currentUsers,collectionName: collectionName, collectionDocId: collectionDocId)
+                    MagazineCommentTextField(commentVm: commentVm, commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData,editReDocID: $editReDocID, editReData: $editReData, editRecomment: $editRecomment, commentCollectionDocId: $commentCollectionDocId, reCommentCount: $reCommentCount, eachBool: $eachBool, currentUser: userVM.currentUsers,collectionName: collectionName, collectionDocId: collectionDocId)
                         .onChange(of: summitComment) { _ in
                             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                         }
@@ -207,10 +259,15 @@ struct MagazineCommentTextField: View {
     @Binding var commentText: String
     @Binding var summitComment: Bool
     @Binding var replyComment : Bool
+    @Binding var editComment : Bool
+    @Binding var editDocID : String
+    @Binding var editData : CommentFields
+    @Binding var editReDocID : String
+    @Binding var editReData : CommentFields
+    @Binding var editRecomment : Bool
     @Binding var commentCollectionDocId : String
     @Binding var reCommentCount : Int
     @Binding var eachBool : [Bool]
-    
     var currentUser : CurrentUserFields?
     var collectionName : String
     var collectionDocId : String
@@ -218,7 +275,7 @@ struct MagazineCommentTextField: View {
     var trimComment: String {
         commentText.trimmingCharacters(in: .whitespaces)
     }
-
+    
     var body: some View {
         VStack {
             HStack{
@@ -232,7 +289,7 @@ struct MagazineCommentTextField: View {
                             .frame(height: 35)
                     }
                 Spacer()
- 
+                
                 if trimComment.count > 0 {
                     
                     // MARK: 답글달기 활성화 True이면 대댓글 쓰기
@@ -248,11 +305,42 @@ struct MagazineCommentTextField: View {
                                                         nickName: CommentString(stringValue: currentUser?.nickName.stringValue ?? ""),
                                                         userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""),
                                                         id: CommentString(stringValue: UUID().uuidString)
-                                                        )
                                                       )
+                            )
                             commentText = ""
                             self.summitComment.toggle()
                             replyComment = false
+                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                        } label: {
+                            Text("등록")
+                                .font(.subheadline)
+                                .foregroundColor(.textGray)
+                                .bold()
+                                .padding(.trailing)
+                        }
+                    }
+                    else if editComment{
+                        Button {
+                            commentVm.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: editDocID, updateComment: commentText ,data: editData)
+                            commentText = ""
+                            self.summitComment.toggle()
+                            editComment = false
+                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                        } label: {
+                            Text("등록")
+                                .font(.subheadline)
+                                .foregroundColor(.textGray)
+                                .bold()
+                                .padding(.trailing)
+                        }
+                    }
+                    else if editRecomment{
+                        Button {
+                            commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: editReDocID, updateComment: commentText, data: editReData)
+                            commentText = ""
+                            self.summitComment.toggle()
+                            editRecomment = false
+                            commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -277,12 +365,11 @@ struct MagazineCommentTextField: View {
                                 )
                             )
                             commentText = ""
-                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                             self.summitComment.toggle()
                             replyComment = false
                             reCommentCount += 1
                             eachBool.insert(false, at: 0)
-    
+                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)    // 해당하는 매거진 댓글 정보 가져오기
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -302,7 +389,7 @@ struct MagazineCommentTextField: View {
                 }
                 
             }
-
+            
         }
         .frame(minWidth: 0, maxWidth: .infinity)
         .frame(height: 56)

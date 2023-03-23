@@ -55,15 +55,15 @@ struct CommunityView: View {
                 
                 switch(selectedIndex) {
                 case 0:
-                    AllTabView(commentVm: commentVm, communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, community: communityVM.sortedRecentCommunityData)
+                    AllTabView(commentVm: commentVm, communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
                 case 1:
-                    MatchingTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "매칭"))
+                    MatchingTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
                 case 2:
-                    ClassTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "마켓"))
+                    ClassTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading )
                 case 3:
-                    MarketTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "클래스"))
+                    MarketTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading )
                 default:
-                    InfoTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, community: communityVM.returnCategoryCommunity(category: "정보"))
+                    InfoTabView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading )
                 }
             } // 최상단 vstack
         } // navi stack

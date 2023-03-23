@@ -18,7 +18,8 @@ struct CommunityDetailView: View {
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
-    @State var community: CommunityDocument
+    var community: CommunityDocument
+    
     @State private var isBookMarked: Bool = false
     @State private var isliked: Bool = false
     @State private var commentText: String = ""
@@ -30,6 +31,13 @@ struct CommunityDetailView: View {
     @State var replyCommentText : String = "" // 답글 표시 이름 값
     @State var replyContent: String = ""
     @State var replyComment : Bool = false  // 답글 표시 Bool값
+    
+    @State var editComment : Bool = false
+    @State var editDocID : String = ""
+    @State var editData : CommentFields = CommentFields(comment: CommentString(stringValue: ""), profileImage: CommentString(stringValue: ""), nickName: CommentString(stringValue: ""), userID: CommentString(stringValue: ""), id: CommentString(stringValue: ""))
+    @State var editRecomment : Bool = false
+    @State var editReDocID : String = ""
+    @State var editReData : CommentFields = CommentFields(comment: CommentString(stringValue: ""), profileImage: CommentString(stringValue: ""), nickName: CommentString(stringValue: ""), userID: CommentString(stringValue: ""), id: CommentString(stringValue: ""))
     
     @FocusState private var textFieldFocused: Bool
     
@@ -109,7 +117,7 @@ struct CommunityDetailView: View {
                             .padding(.bottom, 15)
                             .padding(.horizontal, Screen.maxWidth * 0.04)
                         // MARK: - 커뮤니티 댓글 뷰
-                        CommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
+                        CommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData )
                     }
                 }
                 .refreshable {
@@ -119,7 +127,7 @@ struct CommunityDetailView: View {
                 // MARK: 댓글 달기
                 if isZooming == false {
                     
-                    CommunityCommentView( commentVm : commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment)
+                    CommunityCommentView( commentVm : commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData )
                         .transition(.move(edge: .bottom))
                         .animation(.default , value: isZooming)
 
@@ -145,7 +153,8 @@ struct CommunityDetailView: View {
                         Menu {
                             if !(postStatus == ""){
                                 Button{
-                                    community.fields.state.stringValue = postStatus
+                                    
+//                                    community.fields.state.stringValue = postStatus
                                     communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
                                 }label: {
                                     Text(postStatusString)
@@ -254,7 +263,7 @@ struct CommunityDetailView: View {
         }
         .onAppear{
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            userVM.fetchUser()
+//            userVM.fetchUser() -> 필요없어 보임
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)
             communityVM.fetchCommunity()

@@ -9,7 +9,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.661459576127-lrgpqlk7h2arnd6fbk37hejl3q6nfa0o</string>
+				<string>com.googleusercontent.apps.661459576127-dkpp87eg0krvc8s76c3le8sagaeborip</string>
 			</array>
 		</dict>
 		<dict>
@@ -21,31 +21,31 @@
 			</array>
 		</dict>
 	</array>
-	<key>NaverClientID</key>
-	<string>$(NAVER_CLIENT_ID_CONFIG)</string>
-	<key>NaverClientSecret</key>
-	<string>$(NAVER_CLIENT_SECRET_CONFIG)</string>
-	<key>NMFClientId</key>
-	<string>$(NAVER_MAP_CLIENT_ID_CONFIG)</string>
-	<key>KakaoNativeAppKey</key>
-	<string>$(KAKAKO_NATIVE_APP_KEY_CONFIG)</string>
-	<key>FireStore</key>
-	<string>$(FireStoreBaseURL)</string>
 	<key>FireStorage</key>
 	<string>$(FireStorageBaseURL)</string>
-	<key>PROTOCOL</key>
-	<string>${PROTOCOL}</string>
+	<key>FireStore</key>
+	<string>$(FireStoreBaseURL)</string>
+	<key>KakaoNativeAppKey</key>
+	<string>$(KAKAKO_NATIVE_APP_KEY_CONFIG)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
 		<string>instagram-stories</string>
 	</array>
+	<key>NMFClientId</key>
+	<string>$(NAVER_MAP_CLIENT_ID_CONFIG)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NaverClientID</key>
+	<string>$(NAVER_CLIENT_ID_CONFIG)</string>
+	<key>NaverClientSecret</key>
+	<string>$(NAVER_CLIENT_SECRET_CONFIG)</string>
+	<key>PROTOCOL</key>
+	<string>${PROTOCOL}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Sacramento-Regular.otf</string>

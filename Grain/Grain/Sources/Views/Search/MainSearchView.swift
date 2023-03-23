@@ -19,13 +19,12 @@ enum SearchState: Hashable {
 }
 
 struct MainSearchView: View {
-    @ObservedObject var communityViewModel: CommunityViewModel = CommunityViewModel()
-    @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
-    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
-    @ObservedObject var commentViewModel: CommentViewModel = CommentViewModel()
+    @ObservedObject var communityViewModel: CommunityViewModel
+    @ObservedObject var magazineViewModel: MagazineViewModel
+    @ObservedObject var userViewModel: UserViewModel
+    @ObservedObject var commentViewModel: CommentViewModel
     
     @State private var searchWord: String = ""
-//    @State private var searchList: [String] =  ["카메라", "명소", "출사"]
     @State private var isMagazineSearchResultShown: Bool = false
     @State private var isCommunitySearchResultShown: Bool = false
     @State private var isUserSearchResultShown: Bool = false
@@ -343,14 +342,14 @@ struct MainSearchView: View {
                                         }
                                     }
                                     else if searchedUser.count > 0 && searchedUser.count < 4  {
-                                        ForEach(0..<searchedUser.count) { i in
+                                        ForEach(Array(searchedUser.enumerated()), id:\.1.self) { (index, item) in
                                             NavigationLink {
                                                 //                                            UserSearchDetailView(user: item)
-                                                UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: searchedUser[i])
+                                                UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: searchedUser[index])
                                             } label: {
                                                 VStack{
                                                     HStack{
-                                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                                        KFImage(URL(string: item.fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                                             .resizable()
                                                             .frame(width: 47, height: 47)
                                                             .cornerRadius(30)
@@ -360,12 +359,12 @@ struct MainSearchView: View {
                                                             }
                                                             .padding(.trailing, -10)
                                                         VStack(alignment: .leading){
-                                                            Text(searchedUser[i].fields.nickName.stringValue)
+                                                            Text(item.fields.nickName.stringValue)
                                                                 .font(.body)
                                                                 .bold()
                                                                 .padding(.bottom, 1)
                                                                 .lineLimit(1)
-                                                            Text(searchedUser[i].fields.name.stringValue)
+                                                            Text(item.fields.name.stringValue)
                                                                 .font(.caption)
                                                                 .foregroundColor(.textGray)
                                                                 .frame(alignment: .leading)
@@ -454,10 +453,6 @@ struct MainSearchView: View {
                 isShownProgress = true
             }
             self.focus = .search
-            userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            communityViewModel.fetchCommunity()
-            magazineViewModel.fetchMagazine()
-            userViewModel.fetchUser()
         }
     }
     

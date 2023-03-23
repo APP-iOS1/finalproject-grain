@@ -63,10 +63,6 @@ struct ReportMapView: View {
             
             if (finalReportBool){   // 최종 제보하기 버튼 조건문
                 Button {
-                    print(updateNumber.lat)
-                    print(updateNumber.lng)
-                    
-                   
                     reportMapVM.insertReportMap(data: ReportMapFields(longitude: ReportMapDoubleValue(doubleValue: updateNumber.lng), latitude: ReportMapDoubleValue(doubleValue: updateNumber.lat), storeName: ReportMapStringValue(stringValue: writeDownStoreName), category: ReportMapStringValue(stringValue: writeDownCategory)))
                     // post 
                     writeDownCategory = ""

@@ -118,9 +118,6 @@ struct CommunityEditView: View {
             editContent = community.fields.content.stringValue
 
         }
-        .onDisappear{
-            communityVM.fetchCommunity()
-        }
         .padding(.top, 1)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

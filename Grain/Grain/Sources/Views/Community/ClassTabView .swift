@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ClassTabView: View {
-    
-    @ObservedObject var commentVm: CommentViewModel
+
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
@@ -20,9 +19,9 @@ struct ClassTabView: View {
             ScrollView{
                 ForEach(communityVM.returnCategoryCommunity(category: "마켓"), id: \.self){ data in
                     NavigationLink {
-                        CommunityDetailView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
+                        CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {
-                        CommunityRowView(commentVm: commentVm, community: data, isLoading: $isLoading)
+                        CommunityRowView(community: data, isLoading: $isLoading)
                     }
                 }
             }

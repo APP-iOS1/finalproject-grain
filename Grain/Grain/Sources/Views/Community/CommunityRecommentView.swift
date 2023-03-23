@@ -17,9 +17,7 @@ struct CommunityRecommentView: View {
     var commentCollectionDocId : String
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Community - 4ADB415C-871A-4FAF-86EA-D279D145CD37
-    
-    @State var deleteRecommentButtonBool : Bool = false   //onChange를 이용하여 fetch 해주기
-    
+        
     @Binding var replyContent : String
     @Binding var editRecomment : Bool
     @Binding var editReDocID : String
@@ -96,11 +94,11 @@ struct CommunityRecommentView: View {
                                     }
                                     Button {
                                         commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue)
-                                        deleteRecommentButtonBool.toggle()
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                            commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                                        }
                                     } label: {
                                         Text("삭제")
-                                    }.onChange(of: deleteRecommentButtonBool) { _ in
-                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
                                     }
                                 }
                             }

@@ -9,6 +9,7 @@ import Foundation
 
 struct UserResponse: Codable {
     var documents: [UserDocument]
+    let nextPageToken: String?
 }
 
 struct UserDocument: Codable,Hashable {

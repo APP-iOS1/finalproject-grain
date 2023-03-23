@@ -20,7 +20,6 @@ struct MagazineRecommentView: View {
     @Binding var editReDocID : String
     @Binding var editReData : CommentFields
     @Binding var commentText: String // 답글 입력 텍스트 필드 값
-    @State var deleteRecommentButtonBool : Bool = false   //onChange를 이용하여 fetch 해주기
     
     struct editRecommentStruct {
         
@@ -98,7 +97,6 @@ struct MagazineRecommentView: View {
                                     Button {
                                         
                                         editRecomment.toggle()
-                                        
                                         editReDocID = commentVm.sortedRecentRecomment[index].fields.id.stringValue
                                         editReData = commentVm.sortedRecentRecomment[index].fields
                                                                             
@@ -107,11 +105,12 @@ struct MagazineRecommentView: View {
                                     }
                                     Button {
                                         commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue)
-                                        deleteRecommentButtonBool.toggle()
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                            commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                                        }
+                                        
                                     } label: {
                                         Text("삭제")
-                                    }.onChange(of: deleteRecommentButtonBool) { _ in
-                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
                                     }
                                 }
                             }

@@ -40,7 +40,6 @@ final class CommentViewModel: ObservableObject {
                 self.sortedRecentComment = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
                 })
-                
                 self.fetchCommentSuccess.send()
             }.store(in: &subscription)
     }
@@ -50,10 +49,9 @@ final class CommentViewModel: ObservableObject {
         CommentService.insertComment(collectionName: collectionName, collectionDocId: collectionDocId, data: data)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-                
             } receiveValue: { (data: CommentDocument) in
-                self.insertCommentSuccess.send()
                 self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                self.insertCommentSuccess.send()
             }.store(in: &subscription)
     }
     
@@ -64,7 +62,6 @@ final class CommentViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
                 self.updateCommentSuccess.send()
-                
             }.store(in: &subscription)
     }
     
@@ -75,7 +72,6 @@ final class CommentViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
                 self.deleteCommentSuccess.send()
-                
             }.store(in: &subscription)
     }
     

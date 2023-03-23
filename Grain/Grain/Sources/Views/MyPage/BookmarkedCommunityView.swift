@@ -10,7 +10,7 @@ import SwiftUI
 
 struct BookmarkedCommunityView: View {
     
-    @ObservedObject var commentVm: CommentViewModel
+    @ObservedObject var commentVm =  CommentViewModel() // 임시
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
@@ -27,9 +27,9 @@ struct BookmarkedCommunityView: View {
             ScrollView{
                 ForEach(bookmarkedCommunityDoument, id: \.self) { data in
                     NavigationLink {
-                        CommunityDetailView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
+                        CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {
-                        CommunityRowView(commentVm: commentVm, community: data, isLoading: $isLoading)
+                        CommunityRowView( community: data, isLoading: $isLoading)
                     }
                 }
             }

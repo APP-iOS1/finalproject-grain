@@ -10,7 +10,6 @@ import Kingfisher
 
 struct CommunitySearchResultView: View {
     @State private var isShownProgress: Bool = true
-    @ObservedObject var commentVM: CommentViewModel
     @ObservedObject var communityVM: CommunityViewModel
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
@@ -34,7 +33,7 @@ struct CommunitySearchResultView: View {
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                     },id: \.self) { item in
                         NavigationLink {
-                            CommunityDetailView(commentVm: commentVM, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: item)
+                            CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: item)
                         } label: {
                             HStack{
                                 KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"camera.fill"))

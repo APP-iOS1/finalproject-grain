@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct InfoTabView: View {
-    @StateObject var commentVm = CommentViewModel()
-//    @ObservedObject var commentVm: CommentViewModel
+
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
@@ -22,9 +21,9 @@ struct InfoTabView: View {
             ScrollView{
                 ForEach(communityVM.returnCategoryCommunity(category: "정보"), id: \.self){ data in
                     NavigationLink {
-                        CommunityDetailView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
+                        CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {
-                        CommunityRowView(commentVm: commentVm, community: data, isLoading: $isLoading)
+                        CommunityRowView(community: data, isLoading: $isLoading)
                     }
                 }
             }

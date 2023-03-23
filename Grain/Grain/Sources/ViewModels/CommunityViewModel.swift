@@ -40,8 +40,24 @@ final class CommunityViewModel: ObservableObject {
                 self.sortedRecentCommunityData = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
                 })
-                
                 self.fetchCommunitySuccess.send(data.documents)
+                // MARK: - 데이터 개수가 20개 넘을 때 풀기 잘못하면 터짐
+//                self.communities.append(contentsOf: data.documents)
+//                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
+//                    self.isLoading = false
+//                }
+//                // MARK: 커뮤니티 최신순으로 정렬
+//                self.sortedRecentCommunityData.append(contentsOf: data.documents.sorted(by: {
+//                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+//                }))
+//
+//                if !(data.nextPageToken == nil) {
+//                    var nextPageToken : String = ""
+//                    nextPageToken = data.nextPageToken!
+//                    self.fetchCommunity(nextPageToken: nextPageToken)
+//                }else{
+//                    self.fetchCommunitySuccess.send(data.documents)
+//                }
             }.store(in: &subscription)
     }
     

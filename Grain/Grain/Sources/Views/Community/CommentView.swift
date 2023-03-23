@@ -10,15 +10,13 @@ import FirebaseAuth
 
 //MARK: 입력된 댓글 레이아웃
 struct CommentView: View {
+    @ObservedObject var commentVm: CommentViewModel
     @ObservedObject var userVM : UserViewModel
-    @ObservedObject var commentVm : CommentViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
     @State var readMoreComments : Bool = false   //답글 더보기 Bool값
     @State var reCommentCount : Int = 0
     @State var eachBool : [Bool] = []
-    @State var deleteButtonBool : Bool = false   //onChange를 이용하여 fetch 해주기
-    
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex)
     
@@ -99,11 +97,12 @@ struct CommentView: View {
                                     }
                                     Button{
                                         commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue)
-                                        deleteButtonBool.toggle()
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                            commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
+                                        }
+                                        
                                     } label: {
                                         Text("삭제")
-                                    }.onChange(of: deleteButtonBool) { _ in
-                                        commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
                                     }
                                 }
                             }
@@ -130,7 +129,6 @@ struct CommentView: View {
 
         }.onAppear{
             commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
                 reCommentCount = commentVm.sortedRecentComment.count
                 makeEachBool(count: reCommentCount)

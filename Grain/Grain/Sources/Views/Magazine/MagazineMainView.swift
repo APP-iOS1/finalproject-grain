@@ -10,11 +10,12 @@ import SwiftUI
 import FirebaseAuth
 
 struct MagazineMainView: View {
-    @ObservedObject var userViewModel: UserViewModel
-    @ObservedObject var magazineVM: MagazineViewModel
+    @ObservedObject var commentVm: CommentViewModel
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
     @ObservedObject var editorVM : EditorViewModel
-    
-    
+
     @State private var selectedIndex: Int = 0
     @State private var isSearchViewShown: Bool = false
    
@@ -52,14 +53,14 @@ struct MagazineMainView: View {
                 .padding(.leading)
                 switch selectedIndex {
                 case 0:
-                    MagazineBestView(userVM: userViewModel, magazineVM: magazineVM, editorVM: editorVM)
+                    MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
                     
                 default:
-                    MagazineFeedView(magazineVM: magazineVM, userVM: userViewModel)
+                    MagazineFeedView(magazineVM: magazineVM, userVM: userVM)
                 }
             }
             .navigationDestination(isPresented: $isSearchViewShown) {
-                MainSearchView()
+                MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM, commentViewModel: commentVm)
             }
             .refreshable {
                 magazineVM.fetchMagazine()
@@ -69,8 +70,8 @@ struct MagazineMainView: View {
             self.isSearchViewShown = false
          
         }
-        .onReceive(userViewModel.fetchUsersSuccess, perform: { newValue in
-            userViewModel.filterCurrentUsersFollow()
+        .onReceive(userVM.fetchUsersSuccess, perform: { newValue in
+            userVM.filterCurrentUsersFollow()
         })
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

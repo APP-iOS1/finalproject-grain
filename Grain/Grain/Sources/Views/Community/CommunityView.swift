@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct CommunityView: View {
-    
-    @StateObject var commentVm = CommentViewModel()
+    @ObservedObject var commentVm: CommentViewModel
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
@@ -68,7 +67,7 @@ struct CommunityView: View {
             } // 최상단 vstack
         } // navi stack
         .navigationDestination(isPresented: $isSearchViewShown) {
-            MainSearchView()
+            MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM, commentViewModel: commentVm)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

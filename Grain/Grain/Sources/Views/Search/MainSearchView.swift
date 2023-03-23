@@ -302,7 +302,7 @@ struct MainSearchView: View {
                                     .padding(.top)
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 7)
-
+                                    
                                     if searchedUser.count >= 4 {
                                         ForEach(0..<4) { i in
                                             NavigationLink {
@@ -359,13 +359,11 @@ struct MainSearchView: View {
                                                             }
                                                             .padding(.trailing, -10)
                                                         VStack(alignment: .leading){
-
                                                             Text(item.fields.nickName.stringValue)
                                                                 .font(.body)
                                                                 .bold()
                                                                 .padding(.bottom, 1)
                                                                 .lineLimit(1)
-
                                                             Text(item.fields.name.stringValue)
                                                                 .font(.caption)
                                                                 .foregroundColor(.textGray)
@@ -373,13 +371,14 @@ struct MainSearchView: View {
                                                         }
                                                         .padding(.leading)
                                                         Spacer()
-                                                    }//HStack
+                                                    }
                                                     Divider()
                                                         .padding(.bottom, 5)
-                                                } //VStack
+                                                }
                                                 .padding(.horizontal)
                                                 .padding(.top, 5)
                                             }
+                                        }
                                     }
                                     
                                     Button {

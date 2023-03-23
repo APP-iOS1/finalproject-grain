@@ -56,7 +56,6 @@ struct UserDetailView: View {
                                     // userData update
                                     isFollowingUser.toggle()
                                     /// 희경:  userViewModel 에 메소드로 따로 빼주는게 보기 좋을듯.
-                                    print("구독버튼 눌림")
                                     if isFollowingUser {
                                         // "구독중" 상태이고, 내 팔로잉 리스트에 없는 경우 => 구독
                                         if !userVM.following.contains(user.fields.id.stringValue) {

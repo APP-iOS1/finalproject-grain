@@ -86,8 +86,6 @@ struct CommunityView: View {
             }
         }
         .onAppear {
-            // 커뮤니티 데이터 fetch
-            communityVM.fetchCommunity()
             self.isSearchViewShown = false
         }
         

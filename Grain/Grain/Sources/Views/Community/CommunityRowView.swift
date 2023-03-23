@@ -10,7 +10,6 @@ import SwiftUI
 import Kingfisher
 
 struct CommunityRowView: View {
-
     @ObservedObject var commentVm: CommentViewModel
     
     @State var opacity: Double = 0.8
@@ -113,10 +112,6 @@ struct CommunityRowView: View {
             
         }
         .padding(.top, 5)
-        .onAppear{
-            commentVm.fetchComment(collectionName: "Community",
-                                   collectionDocId: community.fields.id.stringValue)
-        }
         .onAppear(perform: {
             if isLoading == true {
                 withAnimation(.linear(duration: 0.5).repeatForever(autoreverses: true)) {

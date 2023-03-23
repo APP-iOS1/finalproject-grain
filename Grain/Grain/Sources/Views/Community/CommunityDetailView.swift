@@ -269,13 +269,6 @@ struct CommunityDetailView: View {
                 }
             }
         }
-        .onAppear{
-            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-//            userVM.fetchUser() -> 필요없어 보임
-            commentVm.fetchComment(collectionName: "Community",
-                                   collectionDocId: community.fields.id.stringValue)
-            communityVM.fetchCommunity()
-        }
         .onChange(of: commentVm.comment, perform: { value in
             commentVm.fetchComment(collectionName: "Community",
                                    collectionDocId: community.fields.id.stringValue)

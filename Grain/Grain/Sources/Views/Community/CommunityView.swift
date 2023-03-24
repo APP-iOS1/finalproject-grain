@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CommunityView: View {
-
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel

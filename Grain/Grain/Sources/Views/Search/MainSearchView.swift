@@ -37,22 +37,11 @@ struct MainSearchView: View {
     
     @FocusState private var focus: FocusableField?
     
-    var searchedUser: [UserDocument] {
-        let arr = userViewModel.users.filter {
-            ignoreSpaces(in: $0.fields.nickName.stringValue)
-                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-            ignoreSpaces(in: $0.fields.name.stringValue)
-                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-        }
-        return Array(arr)
-    }
-    
     private let searchTitles: [String] = ["매거진", "커뮤니티", "계정"]
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
-    
     
     var body: some View {
         NavigationStack{

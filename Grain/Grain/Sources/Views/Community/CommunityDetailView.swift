@@ -89,21 +89,22 @@ struct CommunityDetailView: View {
                             .padding(.top, 5)
                             .padding(.bottom, 15)
                             .padding(.horizontal, Screen.maxWidth * 0.04)
-                        
                         //MARK: 사진
-                        ForEach(Array(community.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
+                        ForEach(Array(                        community.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
                             Rectangle()
-                                .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                                .overlay{
-                                    KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                .frame(width: Screen.maxWidth, height: Screen.maxWidth)
+                                .overlay {
+                                    KFImage(URL(string: item.stringValue) ?? URL(string: "https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()
-                                        .aspectRatio(contentMode: .fill)
+                                        .aspectRatio(contentMode: .fit)
                                 }
                                 .tag(index)
                                 .onAppear{
                                     selectedIndex = index
                                 }
+                            
                         }
+
                         .addPinchZoom()
                         .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                         .padding(.bottom, 10)
@@ -228,6 +229,7 @@ struct CommunityDetailView: View {
                             default:
                                 postStatus = ""
                             }
+                            selectedIndex = 0
                         }
                         .accentColor(.black)
                         .padding(.trailing, Screen.maxWidth * 0.04)

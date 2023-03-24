@@ -14,15 +14,12 @@ struct MagazineDetailView: View {
     @State private var saveOpacity: Double = 0
     @State private var showDevices: Bool = false
     @State private var currentAmount: CGFloat = 0
-
     @State private var dragOffset = CGSize.zero
     @State private var firstImage: Image?
     @State private var renderedImage: Image = Image(systemName: "photo")
     @State private var isDeleteAlertShown:Bool = false
 
-    
     @Environment(\.dismiss) private var dismiss
-    
     
     let data : MagazineDocument
     @Binding var ObservingChangeValueLikeNum : String   // 좋아요 수의 변화를 관찰합니다.
@@ -87,7 +84,7 @@ struct MagazineDetailView: View {
                                     .aspectRatio(contentMode: .fit)
                             }
                             .tag(index)
-                            .onAppear{
+                            .onChange(of: index){ item in
                                 selectedIndex = index
                             }
                         
@@ -266,6 +263,7 @@ struct MagazineDetailView: View {
                 isBookMarked = false
             }
             ObservingChangeValueLikeNum = data.fields.likedNum.integerValue
+            selectedIndex = 0 
         }
         .onDisappear{
             if isHeartToggle {
@@ -351,15 +349,9 @@ struct MagazineDetailView: View {
                             Spacer()
                             Image(systemName: isBookMarked ? "bookmark.slash.fill" : "bookmark.fill") }
                     }
-                    NavigationLink {
-                        MagazineEditView(magazineVM: magazineVM, data: data)
-                    }label: {
-                        Text("수정")
-                        Spacer()
-                        Image(systemName: "square.and.pencil")
-                    }
+                  
                     // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
-                    if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
+//                    if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                         NavigationLink {
                             MagazineEditView(magazineVM: magazineVM, data: data)
                         }label: {
@@ -383,16 +375,15 @@ struct MagazineDetailView: View {
                                       preview: SharePreview(data.fields.title.stringValue, image: renderedImage))
                             
                         }
-                    }
+//                    }
                     
                 } label: {
                     Label("더보기", systemImage: "ellipsis")
                     
                 }
                 .onTapGesture {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        render()
-                    }
+                    render()
+                    
                 }
             }
         }

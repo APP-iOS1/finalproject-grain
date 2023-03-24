@@ -14,9 +14,9 @@ struct BookmarkedMagazine: View {
     
     @State var ObservingChangeValueLikeNum : String = ""
     
-    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.presentationMode) var presentationMode
     
-    var bookmarkedMagazineDocument: [MagazineDocument]
+    @State private var bookmarkedMagazineDocument: [MagazineDocument] = []
  
     let columns = [
         GridItem(.flexible(), spacing: 1),
@@ -28,7 +28,7 @@ struct BookmarkedMagazine: View {
         VStack{
             ScrollView{
                 LazyVGrid(columns: columns, spacing: 1) {
-                    ForEach(bookmarkedMagazineDocument, id: \.self) { item in
+                    ForEach(bookmarkedMagazineDocument.reversed(), id: \.self) { item in
                         NavigationLink {
                             MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                         } label: {
@@ -49,6 +49,12 @@ struct BookmarkedMagazine: View {
         }
         .navigationTitle("저장된 매거진")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear{
+            bookmarkedMagazineDocument = magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID)
+        }
+        .refreshable {
+            magazineVM.fetchMagazine()
+        }
     }
 }
 

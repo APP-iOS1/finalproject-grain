@@ -94,6 +94,7 @@ final class MagazineViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: MagazineDocument) in
+                self.fetchMagazine()
                 self.updateMagazineSuccess.send()
             }.store(in: &subscription)
     }
@@ -105,8 +106,8 @@ final class MagazineViewModel: ObservableObject {
         MagazineService.updateMagazineLikedNum(num: num, docID: docID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-                
             } receiveValue: { (data: MagazineDocument) in
+                
                 self.updateMagazineSuccess.send()
             }.store(in: &subscription)
     }

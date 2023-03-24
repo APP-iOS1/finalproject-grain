@@ -37,22 +37,11 @@ struct MainSearchView: View {
     
     @FocusState private var focus: FocusableField?
     
-    var searchedUser: [UserDocument] {
-        let arr = userViewModel.users.filter {
-            ignoreSpaces(in: $0.fields.nickName.stringValue)
-                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-            ignoreSpaces(in: $0.fields.name.stringValue)
-                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-        }
-        return Array(arr)
-    }
-    
     private let searchTitles: [String] = ["매거진", "커뮤니티", "계정"]
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
-    
     
     var body: some View {
         NavigationStack{
@@ -303,84 +292,46 @@ struct MainSearchView: View {
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 7)
                                     
-                                    if searchedUser.count >= 4 {
-                                        ForEach(0..<4) { i in
-                                            NavigationLink {
-                                                UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: searchedUser[i])
-                                            } label: {
-                                                VStack{
-                                                    HStack{
-                                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                                            .resizable()
-                                                            .frame(width: 47, height: 47)
-                                                            .cornerRadius(30)
-                                                            .overlay {
-                                                                Circle()
-                                                                    .stroke(lineWidth: 0.5)
-                                                            }
-                                                            .padding(.trailing, -10)
-                                                        VStack(alignment: .leading){
-                                                            Text(searchedUser[i].fields.nickName.stringValue)
-                                                                .font(.body)
-                                                                .bold()
-                                                                .padding(.bottom, 1)
-                                                                .lineLimit(1)
-                                                            Text(searchedUser[i].fields.name.stringValue)
-                                                                .font(.caption)
-                                                                .foregroundColor(.textGray)
-                                                                .frame(alignment: .leading)
+                                    ForEach(userViewModel.users.filter {
+                                        ignoreSpaces(in: $0.fields.nickName.stringValue)
+                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                                        ignoreSpaces(in: $0.fields.name.stringValue)
+                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))}.prefix(3), id: \.self) { user in
+                                        NavigationLink {
+                                            UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: user)
+                                        } label: {
+                                            VStack{
+                                                HStack{
+                                                    KFImage(URL(string: user.fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                                        .resizable()
+                                                        .frame(width: 47, height: 47)
+                                                        .cornerRadius(30)
+                                                        .overlay {
+                                                            Circle()
+                                                                .stroke(lineWidth: 0.5)
                                                         }
-                                                        .padding(.leading)
-                                                        Spacer()
+                                                        .padding(.trailing, -10)
+                                                    VStack(alignment: .leading){
+                                                        Text(user.fields.nickName.stringValue)
+                                                            .font(.body)
+                                                            .bold()
+                                                            .padding(.bottom, 1)
+                                                            .lineLimit(1)
+                                                        Text(user.fields.name.stringValue)
+                                                            .font(.caption)
+                                                            .foregroundColor(.textGray)
+                                                            .frame(alignment: .leading)
                                                     }
-                                                    Divider()
-                                                        .padding(.bottom, 5)
+                                                    .padding(.leading)
+                                                    Spacer()
                                                 }
-                                                .padding(.horizontal)
-                                                .padding(.top, 5)
+                                                Divider()
+                                                    .padding(.bottom, 5)
                                             }
+                                            .padding(.horizontal)
+                                            .padding(.top, 5)
                                         }
                                     }
-                                    else if searchedUser.count > 0 && searchedUser.count < 4  {
-                                        ForEach(Array(searchedUser.enumerated()), id:\.1.self) { (index, item) in
-                                            NavigationLink {
-                                                //                                            UserSearchDetailView(user: item)
-                                                UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: searchedUser[index])
-                                            } label: {
-                                                VStack{
-                                                    HStack{
-                                                        KFImage(URL(string: item.fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                                            .resizable()
-                                                            .frame(width: 47, height: 47)
-                                                            .cornerRadius(30)
-                                                            .overlay {
-                                                                Circle()
-                                                                    .stroke(lineWidth: 0.5)
-                                                            }
-                                                            .padding(.trailing, -10)
-                                                        VStack(alignment: .leading){
-                                                            Text(item.fields.nickName.stringValue)
-                                                                .font(.body)
-                                                                .bold()
-                                                                .padding(.bottom, 1)
-                                                                .lineLimit(1)
-                                                            Text(item.fields.name.stringValue)
-                                                                .font(.caption)
-                                                                .foregroundColor(.textGray)
-                                                                .frame(alignment: .leading)
-                                                        }
-                                                        .padding(.leading)
-                                                        Spacer()
-                                                    }
-                                                    Divider()
-                                                        .padding(.bottom, 5)
-                                                }
-                                                .padding(.horizontal)
-                                                .padding(.top, 5)
-                                            }
-                                        }
-                                    }
-                                    
                                     Button {
                                         updateRecentSearch()
                                         self.isUserSearchResultShown.toggle()

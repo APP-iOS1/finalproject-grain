@@ -269,7 +269,6 @@ struct EditMyPageView: View {
             editedNickname = userVM.currentUsers?.nickName.stringValue ?? ""
             editedIntroduce = userVM.currentUsers?.introduce.stringValue ?? ""
             exceptCurrentUser = userVM.users.filter{$0.fields.id.stringValue != userVM.currentUsers?.id.stringValue}
-            print("except: \(exceptCurrentUser)")
         }
     }
     

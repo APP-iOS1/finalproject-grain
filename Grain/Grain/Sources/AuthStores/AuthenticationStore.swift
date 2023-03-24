@@ -27,16 +27,25 @@ enum LogInCompanyState{
     case noCompany
 }
 
+enum MemberState{
+    case member   // 이미 가입된 상태
+    case freshman   //아직 가입되지 않은 상태
+//    case defaultState // 디폴트 상태값 주기
+
+}
+
 final class AuthenticationStore: ObservableObject {
     
     @Published var authenticationState: AuthenticationState = .unauthenticated
     @Published var logInCompanyState: LogInCompanyState = .noCompany
+    @Published var memberState: MemberState = .freshman
     @Published var user: User?
     @Published var displayName = ""
     @Published var errorMessage = ""
+    @Published var checkUsers = [UserDocument]()
+    
     fileprivate var currentNonce: String?
     
-    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
     let authPath = Auth.auth()
     
     init() {
@@ -96,7 +105,8 @@ final class AuthenticationStore: ObservableObject {
             } else {
                 guard let profile = user?.profile else { return }
                 
-                // MARK: - 구글 최초 로그인?
+                
+                // MARK: - 구글 로그인 최초로 이루어질 때 진행하는 post -> 로그아웃하고 로그인해도 데이터가 덮어쓰우지지 않음
                 insertUser(myFilm: "선택", bookmarkedMagazineID: "", email: profile.email, myCamera: "필수", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: uid ?? "", following: "", myLens: "선택", profileImage: "", name: profile.name, follower: "", nickName: "", introduce: "")
                 
                 self.authStateAuthenticated(user: CurrentUser(id: uid ?? "", name: profile.name, email: profile.email))
@@ -161,7 +171,8 @@ final class AuthenticationStore: ObservableObject {
                 try await changeRequest.commitChanges()
                 self.displayName = Auth.auth().currentUser?.displayName ?? ""
                 
-                // MARK: - 애플 최초 로그인?
+                // MARK: - 애플 최초 로그인? -> 이것 마저 구글 로그인하고 비슷한 상황
+                /// 지금 user.email 값이 안나옴;; Auth.auth().currentUser 이쪽에서 nil로 들어오는 상황
                 insertUser(myFilm: "선택", bookmarkedMagazineID: "", email: user.email ?? "" , myCamera: "필수", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: user.uid, following: "", myLens: "선택", profileImage: "", name: user.displayName ?? "" , follower: "", nickName: "", introduce: "")
             }
             catch {
@@ -237,9 +248,9 @@ final class AuthenticationStore: ObservableObject {
         }
     }
     // MARK: - 유저 데이터 만들기
-    
     var subscription = Set<AnyCancellable>()
     var fetchUsersSuccess = PassthroughSubject<(), Never>()
+    var findUserDocIDSuccess = PassthroughSubject<(), Never>()
     
     func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String, introduce: String) {
         UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName, introduce: introduce)
@@ -250,6 +261,27 @@ final class AuthenticationStore: ObservableObject {
                 self.fetchUsersSuccess.send()
             }.store(in: &subscription)
     }
+    
+    // 전체 유저데이터 조회 후 비교
+    func findUserDocID(docID: String){
+        UserService.getUser()
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: UserResponse) in
+                self.checkUsers = data.documents
+                for i in data.documents{
+                    if i.fields.id.stringValue == docID{
+                        self.memberState = .member
+                        break
+                    }
+                    self.memberState = .freshman
+                }
+                self.findUserDocIDSuccess.send()
+            }.store(in: &subscription)
+    }
+    
+    
+    
     // MARK: - 애플 로그인 helper
     private func randomNonceString(length: Int = 32) -> String {
         precondition(length > 0)

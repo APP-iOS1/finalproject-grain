@@ -227,8 +227,6 @@ struct UserDetailView: View {
         }
         .onAppear{
             self.userData = user
-            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            magazineVM.fetchMagazine()
             
         }
         .task(id: userVM.users) {

@@ -17,26 +17,31 @@ struct BookmarkedCommunityView: View {
     
     @Binding var isLoading: Bool
     
-    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.presentationMode) var presentationMode
     
     
-    var bookmarkedCommunityDoument: [CommunityDocument]
+    @State private var bookmarkedCommunityDoument: [CommunityDocument] = []
     
     var body: some View {
         VStack{
             ScrollView{
-                ForEach(bookmarkedCommunityDoument, id: \.self) { data in
+                ForEach(bookmarkedCommunityDoument.reversed(), id: \.self) { data in
                     NavigationLink {
                         CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {
-                        CommunityRowView( community: data, isLoading: $isLoading)
+                        CommunityRowView(community: data, isLoading: $isLoading)
                     }
                 }
             }
         }
         .navigationTitle("저장된 커뮤니티 글")
         .navigationBarTitleDisplayMode(.inline)
-        
+        .onAppear{
+            bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
+        }
+        .refreshable {
+            communityVM.fetchCommunity()
+        }
     }
 }
 

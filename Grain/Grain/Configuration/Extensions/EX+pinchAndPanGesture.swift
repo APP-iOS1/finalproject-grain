@@ -38,7 +38,7 @@ struct PinchZoomContext<Content: View>: View {
                     .frame(width: Screen.maxWidth, height: Screen.maxHeight * 3)
             }
             
-            TabView(selection: $selectedIndex){
+            TabView{
                 content()
                 // offset을 지정
                     .offset(x: offset.x, y: offset.y)

@@ -148,6 +148,9 @@ struct EditCameraView: View {
         .onAppear{
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
+        .refreshable {
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+        }
     }
 
 }

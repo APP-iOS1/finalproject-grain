@@ -14,7 +14,6 @@ struct MagazineDetailView: View {
     @State private var saveOpacity: Double = 0
     @State private var showDevices: Bool = false
     @State private var currentAmount: CGFloat = 0
-
     @State private var dragOffset = CGSize.zero
     @State private var firstImage: Image?
     @State private var renderedImage: Image = Image(systemName: "photo")
@@ -22,9 +21,7 @@ struct MagazineDetailView: View {
 
     @Environment(\.dismiss) private var dismiss
     
-    var data : MagazineDocument
-//    @StateObject var magzineData: MagazineDocument = MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: "0.0"), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineString(stringValue: ""), likedNum: LikedNum(integerValue: "0"), latitude: MagazineLocation(doubleValue: "0.0"), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: "")), name: MagazineString(stringValue: ""), createTime: MagazineString(stringValue: ""), updateTime: MagazineString(stringValue: ""))
-    
+    let data : MagazineDocument
     @State var magazineData: MagazineDocument?
     
     @Binding var ObservingChangeValueLikeNum : String   // 좋아요 수의 변화를 관찰합니다.
@@ -80,19 +77,19 @@ struct MagazineDetailView: View {
                             }
                         }
                         .padding(5)
-                        
-                        // MARK: 이미지
-                        ForEach(Array(magazineData.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
-                            Rectangle()
-                                .frame(width: Screen.maxWidth, height: Screen.maxWidth)
-                                .overlay {
-                                    KFImage(URL(string: item.stringValue) ?? URL(string: "https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                }
-                                .tag(index)
-                                .onAppear{
-                                    selectedIndex = index
+                    
+                    // MARK: 이미지
+                    ForEach(Array(data.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
+                        Rectangle()
+                            .frame(width: Screen.maxWidth, height: Screen.maxWidth)
+                            .overlay {
+                                KFImage(URL(string: item.stringValue) ?? URL(string: "https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                            }
+                            .tag(index)
+                            .onChange(of: index){ item in
+                                selectedIndex = index
                                 }
                             
                         }
@@ -124,6 +121,7 @@ struct MagazineDetailView: View {
                                                 .bold()
                                         }
                                     }
+
                             }
                             .opacity(saveOpacity)
                         }
@@ -275,6 +273,7 @@ struct MagazineDetailView: View {
                     isBookMarked = false
                 }
                 ObservingChangeValueLikeNum = magazineData.fields.likedNum.integerValue
+                selectedIndex = 0 
             }
         }
         .task(id: magazineVM.magazines) {
@@ -368,15 +367,9 @@ struct MagazineDetailView: View {
                             Spacer()
                             Image(systemName: isBookMarked ? "bookmark.slash.fill" : "bookmark.fill") }
                     }
-                    NavigationLink {
-                        MagazineEditView(magazineVM: magazineVM, data: data)
-                    }label: {
-                        Text("수정")
-                        Spacer()
-                        Image(systemName: "square.and.pencil")
-                    }
+                  
                     // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
-                    if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
+//                    if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                         NavigationLink {
                             MagazineEditView(magazineVM: magazineVM, data: data)
                         }label: {
@@ -400,16 +393,15 @@ struct MagazineDetailView: View {
                                       preview: SharePreview(data.fields.title.stringValue, image: renderedImage))
                             
                         }
-                    }
+//                    }
                     
                 } label: {
                     Label("더보기", systemImage: "ellipsis")
                     
                 }
                 .onTapGesture {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        render()
-                    }
+                    render()
+                    
                 }
             }
         }

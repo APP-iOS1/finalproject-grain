@@ -23,7 +23,7 @@ struct UserDetailView: View {
     // 내 프로필인지 체크 (구독버튼을 보여줄지 판단하기 위해)
     @State private var isMyProfile: Bool = false
     
-    let user: UserDocument
+    @State var user: UserDocument
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -223,12 +223,15 @@ struct UserDetailView: View {
             magazineVM.fetchMagazine()
             
         }
+        .task(id: userVM.users) {
+            if let user = userVM.users.first(where: {
+                $0.fields.id.stringValue == user.fields.id.stringValue
+            }) {
+                self.user = user
+            }
+        }
         .onReceive(magazineVM.fetchMagazineSuccess, perform: { newValue in
             self.magazines = magazineVM.filterUserMagazine(userID: user.fields.id.stringValue)
-        })
-        .onReceive(userVM.updateUsersArraySuccess, perform: { _ in
-//            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            userVM.fetchUser()
         })
         .onReceive(userVM.fetchCurrentUsersSuccess, perform: { _ in
             // 나의 following 리스트에 있는 사람인지 확인

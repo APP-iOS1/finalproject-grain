@@ -342,43 +342,44 @@ struct MainSearchView: View {
                                         }
                                     }
                                     else if searchedUser.count > 0 && searchedUser.count < 4  {
-                                        ForEach(Array(searchedUser.enumerated()), id:\.1.self) { (index, item) in
-                                            NavigationLink {
-                                                //                                            UserSearchDetailView(user: item)
-                                                UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: searchedUser[index])
-                                            } label: {
-                                                VStack{
-                                                    HStack{
-                                                        KFImage(URL(string: item.fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                                            .resizable()
-                                                            .frame(width: 47, height: 47)
-                                                            .cornerRadius(30)
-                                                            .overlay {
-                                                                Circle()
-                                                                    .stroke(lineWidth: 0.5)
+                                            ForEach(Array(searchedUser.enumerated()), id:\.1.self) { (index, item) in
+                                                NavigationLink {
+                                                    //                                            UserSearchDetailView(user: item)
+                                                    UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: searchedUser[index])
+                                                } label: {
+                                                    VStack{
+                                                        HStack{
+                                                            KFImage(URL(string: item.fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                                                .resizable()
+                                                                .frame(width: 47, height: 47)
+                                                                .cornerRadius(30)
+                                                                .overlay {
+                                                                    Circle()
+                                                                        .stroke(lineWidth: 0.5)
+                                                                }
+                                                                .padding(.trailing, -10)
+                                                            VStack(alignment: .leading){
+                                                                Text(item.fields.nickName.stringValue)
+                                                                    .font(.body)
+                                                                    .bold()
+                                                                    .padding(.bottom, 1)
+                                                                    .lineLimit(1)
+                                                                Text(item.fields.name.stringValue)
+                                                                    .font(.caption)
+                                                                    .foregroundColor(.textGray)
+                                                                    .frame(alignment: .leading)
                                                             }
-                                                            .padding(.trailing, -10)
-                                                        VStack(alignment: .leading){
-                                                            Text(item.fields.nickName.stringValue)
-                                                                .font(.body)
-                                                                .bold()
-                                                                .padding(.bottom, 1)
-                                                                .lineLimit(1)
-                                                            Text(item.fields.name.stringValue)
-                                                                .font(.caption)
-                                                                .foregroundColor(.textGray)
-                                                                .frame(alignment: .leading)
+                                                            .padding(.leading)
+                                                            Spacer()
                                                         }
-                                                        .padding(.leading)
-                                                        Spacer()
+                                                        Divider()
+                                                            .padding(.bottom, 5)
                                                     }
-                                                    Divider()
-                                                        .padding(.bottom, 5)
+                                                    .padding(.horizontal)
+                                                    .padding(.top, 5)
                                                 }
-                                                .padding(.horizontal)
-                                                .padding(.top, 5)
-                                            }
-                                        }
+                                            }// ForEach
+                                        
                                     }
                                     
                                     Button {

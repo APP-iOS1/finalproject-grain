@@ -169,6 +169,7 @@ final class UserViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
                 self.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+                self.fetchUser()
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)
     }

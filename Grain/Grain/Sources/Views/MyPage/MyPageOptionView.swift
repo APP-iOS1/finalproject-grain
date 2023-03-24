@@ -15,14 +15,14 @@ struct MyPageOptionView: View {
     @ObservedObject var magazineVM: MagazineViewModel
     
     var userVM: UserViewModel
-    var bookmarkedMagazineDocument: [MagazineDocument]
-    var bookmarkedCommunityDoument: [CommunityDocument]
+//    var bookmarkedMagazineDocument: [MagazineDocument]
+//    var bookmarkedCommunityDoument: [CommunityDocument]
     
     var body: some View {
         VStack(alignment: .leading){
             ScrollView{
                 //MARK: 계정 섹션
-                AccountSection(commentVm: commentVm, magazineVM: magazineVM, communityVM: communityVM, userVM: userVM, bookmarkedMagazineDocument: bookmarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
+                AccountSection(commentVm: commentVm, magazineVM: magazineVM, communityVM: communityVM, userVM: userVM)
                 
                 //MARK: 지원 섹션
                 SupportSection()
@@ -68,8 +68,8 @@ struct AccountSection: View {
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     
-    var bookmarkedMagazineDocument: [MagazineDocument]
-    var bookmarkedCommunityDoument: [CommunityDocument]
+//    var bookmarkedMagazineDocument: [MagazineDocument]
+//    var bookmarkedCommunityDoument: [CommunityDocument]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
@@ -125,7 +125,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedMagazine(userVM: userVM, magazineVM: magazineVM, bookmarkedMagazineDocument: bookmarkedMagazineDocument)
+                BookmarkedMagazine(userVM: userVM, magazineVM: magazineVM)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")
@@ -148,7 +148,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedCommunityView(commentVm : commentVm, communityVM : communityVM, userVM : userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
+                BookmarkedCommunityView(commentVm : commentVm, communityVM : communityVM, userVM : userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")

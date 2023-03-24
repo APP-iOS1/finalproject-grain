@@ -20,11 +20,13 @@ struct MagazineDetailView: View {
     @State private var renderedImage: Image = Image(systemName: "photo")
     @State private var isDeleteAlertShown:Bool = false
 
-    
     @Environment(\.dismiss) private var dismiss
     
+    var data : MagazineDocument
+//    @StateObject var magzineData: MagazineDocument = MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: "0.0"), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineString(stringValue: ""), likedNum: LikedNum(integerValue: "0"), latitude: MagazineLocation(doubleValue: "0.0"), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: "")), name: MagazineString(stringValue: ""), createTime: MagazineString(stringValue: ""), updateTime: MagazineString(stringValue: ""))
     
-    let data : MagazineDocument
+    @State var magazineData: MagazineDocument?
+    
     @Binding var ObservingChangeValueLikeNum : String   // 좋아요 수의 변화를 관찰합니다.
     
     @SceneStorage("isZooming") var isZooming: Bool = false
@@ -41,197 +43,200 @@ struct MagazineDetailView: View {
             renderedImage = Image(uiImage: uiImage)
         }
     }
+    
     var body: some View {
         ScrollView {
             VStack{
+                if let magazineData = self.magazineData {
                 VStack {
                     // MARK: 닉네임 헤더
-                    HStack {
-                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue})
-                        {
-                            NavigationLink {
-                                UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
-                            } label: {
-                                MagazineProfileImage(imageName: user.fields.profileImage.stringValue)
-                            }
-                            
-                            
-                            VStack(alignment: .leading){
-                                Text(user.fields.nickName.stringValue)
-                                    .bold()
-                                Text(data.createTime.toDate()?.renderTime() ?? "")
-                                    .font(.caption)
-                                    .foregroundColor(.textGray)
-                                
-                            }
-                        }
-                        Spacer()
-                        VStack{
-                            Spacer()
-                            Text(data.fields.customPlaceName.stringValue)
-                                .foregroundColor(.textGray)
-                                .font(.caption)
-                                .padding(.trailing , Screen.maxWidth * 0.03)
-                            
-                        }
-                    }
-                    .padding(5)
-                    
-                    // MARK: 이미지
-                    ForEach(Array(data.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
-                        Rectangle()
-                            .frame(width: Screen.maxWidth, height: Screen.maxWidth)
-                            .overlay {
-                                KFImage(URL(string: item.stringValue) ?? URL(string: "https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                            }
-                            .tag(index)
-                            .onAppear{
-                                selectedIndex = index
-                            }
-                        
-                    }
-                    .addPinchZoom()
-                    .ignoresSafeArea()
-                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                    .overlay{
-                        Image(systemName: "heart.fill")
-                            .foregroundColor(.white)
-                            .font(.system(size: isHeartAnimation ? 95 : 60 ))
-                            .opacity(heartOpacity)
-                    }
-                    .overlay{
-                        Group{
-                            Rectangle()
-                                .frame(width:
-                                        Screen.maxWidth * 0.3, height: Screen.maxWidth * 0.3, alignment: .center)
-                                .foregroundColor(.black)
-                                .cornerRadius(7)
-                                .opacity(0.8)
-                                .overlay{
-                                    VStack{
-                                        Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark.slash.fill")
-                                            .foregroundColor(.white)
-                                            .font(.title)
-                                            .padding(.bottom,5)
-                                        Text(isBookMarked ? "저장됨" : "저장 취소됨")
-                                            .foregroundColor(.white)
-                                            .bold()
-                                    }
-                                }
-                        }
-                        .opacity(saveOpacity)
-                    }
-                    .zIndex(.infinity)
-                    
-                    VStack(alignment: .leading){
-                        HStack{
-                            VStack{
-                                Button{
-                                    showDevices.toggle()
-                                    //                                transitionView.toggle()
+                        HStack {
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
+                            {
+                                NavigationLink {
+                                    UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                                 } label: {
-                                    VStack(alignment: .leading){
-                                        HStack{
-                                            Text("장비 정보")
-                                                .font(.subheadline)
-                                            Image(systemName: "chevron.right")
-                                                .font(.caption)
-                                                .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
-                                                .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
-                                        }
-                                        .bold()
-                                    }
-                                    .padding(.top, 5)
+                                    MagazineProfileImage(imageName: user.fields.profileImage.stringValue)
                                 }
                                 
+                                
+                                VStack(alignment: .leading){
+                                    Text(user.fields.nickName.stringValue)
+                                        .bold()
+                                    Text(magazineData.createTime.toDate()?.renderTime() ?? "")
+                                        .font(.caption)
+                                        .foregroundColor(.textGray)
+                                    
+                                }
                             }
-                            .padding(.leading, 20)
-                            .padding(.top, -5)
-                            .foregroundColor(.textGray)
-                            
                             Spacer()
-                            // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
-                            // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
-                            HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
-                                .padding(.leading)
-                            
-                            NavigationLink {
-                                MagazineCommentView(userVM: userVM, magazineVM: magazineVM, collectionName: "Magazine", collectionDocId: data.fields.id.stringValue)
-                            } label: {
-                                Image(systemName: "bubble.right")
-                                    .font(.system(size: 23))
-                                    .foregroundColor(.black)
-                                    .padding(.top, 2)
+                            VStack{
+                                Spacer()
+                                Text(magazineData.fields.customPlaceName.stringValue)
+                                    .foregroundColor(.textGray)
+                                    .font(.caption)
+                                    .padding(.trailing , Screen.maxWidth * 0.03)
+                                
                             }
-                            //                        Spacer()
-                            
-                            //MARK: 북마크 버튼
-                            Button {
-                                self.isBookMarked.toggle()
-                                self.saveOpacity = 1
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    self.saveOpacity = 0
-                                }
-                            } label: {
-                                Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
-                                    .font(.system(size: 22))
-                                    .foregroundColor(.black)
-                            }
-                            .padding(.trailing)
-                            
                         }
-                        .padding(.top, 5)
+                        .padding(5)
                         
-                        if showDevices {
-                            VStack(alignment: .leading){
-                                ForEach(userVM.users.filter{
-                                    $0.fields.id.stringValue == data.fields.userID.stringValue
-                                }, id: \.self) { item in
-                                    
-                                    item.fields.myCamera.arrayValue.values.count > 1 ? Text("바디 | \(item.fields.myCamera.arrayValue.values[1].stringValue)") : nil
-                                    
-                                    item.fields.myLens.arrayValue.values.count > 1 ? Text("렌즈 | \(item.fields.myLens.arrayValue.values[1].stringValue)") : nil
-                                    
-                                    item.fields.myFilm.arrayValue.values.count > 1 ? Text("필름 | \(item.fields.myFilm.arrayValue.values[1].stringValue)") : nil
+                        // MARK: 이미지
+                        ForEach(Array(magazineData.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
+                            Rectangle()
+                                .frame(width: Screen.maxWidth, height: Screen.maxWidth)
+                                .overlay {
+                                    KFImage(URL(string: item.stringValue) ?? URL(string: "https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
                                 }
-                            }
-                            .font(.subheadline)
-                            .foregroundColor(.textGray)
-                            .padding(.top, -9)
-                            .padding(.leading, 20)
+                                .tag(index)
+                                .onAppear{
+                                    selectedIndex = index
+                                }
+                            
                         }
+                        .addPinchZoom()
+                        .ignoresSafeArea()
+                        .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                        .overlay{
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(.white)
+                                .font(.system(size: isHeartAnimation ? 95 : 60 ))
+                                .opacity(heartOpacity)
+                        }
+                        .overlay{
+                            Group{
+                                Rectangle()
+                                    .frame(width:
+                                            Screen.maxWidth * 0.3, height: Screen.maxWidth * 0.3, alignment: .center)
+                                    .foregroundColor(.black)
+                                    .cornerRadius(7)
+                                    .opacity(0.8)
+                                    .overlay{
+                                        VStack{
+                                            Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark.slash.fill")
+                                                .foregroundColor(.white)
+                                                .font(.title)
+                                                .padding(.bottom,5)
+                                            Text(isBookMarked ? "저장됨" : "저장 취소됨")
+                                                .foregroundColor(.white)
+                                                .bold()
+                                        }
+                                    }
+                            }
+                            .opacity(saveOpacity)
+                        }
+                        .zIndex(.infinity)
+                        
+                        VStack(alignment: .leading){
+                            HStack{
+                                VStack{
+                                    Button{
+                                        showDevices.toggle()
+                                        //                                transitionView.toggle()
+                                    } label: {
+                                        VStack(alignment: .leading){
+                                            HStack{
+                                                Text("장비 정보")
+                                                    .font(.subheadline)
+                                                Image(systemName: "chevron.right")
+                                                    .font(.caption)
+                                                    .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
+                                                    .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
+                                            }
+                                            .bold()
+                                        }
+                                        .padding(.top, 5)
+                                    }
+                                    
+                                }
+                                .padding(.leading, 20)
+                                .padding(.top, -5)
+                                .foregroundColor(.textGray)
+                                
+                                Spacer()
+                                // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
+                                // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
+                                HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
+                                    .padding(.leading)
+                                
+                                NavigationLink {
+                                    MagazineCommentView(userVM: userVM, magazineVM: magazineVM, collectionName: "Magazine", collectionDocId: magazineData.fields.id.stringValue)
+                                } label: {
+                                    Image(systemName: "bubble.right")
+                                        .font(.system(size: 23))
+                                        .foregroundColor(.black)
+                                        .padding(.top, 2)
+                                }
+                                //                        Spacer()
+                                
+                                //MARK: 북마크 버튼
+                                Button {
+                                    self.isBookMarked.toggle()
+                                    self.saveOpacity = 1
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        self.saveOpacity = 0
+                                    }
+                                } label: {
+                                    Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
+                                        .font(.system(size: 22))
+                                        .foregroundColor(.black)
+                                }
+                                .padding(.trailing)
+                                
+                            }
+                            .padding(.top, 5)
+                            
+                            if showDevices {
+                                VStack(alignment: .leading){
+                                    ForEach(userVM.users.filter{
+                                        $0.fields.id.stringValue == magazineData.fields.userID.stringValue
+                                    }, id: \.self) { item in
+                                        
+                                        item.fields.myCamera.arrayValue.values.count > 1 ? Text("바디 | \(item.fields.myCamera.arrayValue.values[1].stringValue)") : nil
+                                        
+                                        item.fields.myLens.arrayValue.values.count > 1 ? Text("렌즈 | \(item.fields.myLens.arrayValue.values[1].stringValue)") : nil
+                                        
+                                        item.fields.myFilm.arrayValue.values.count > 1 ? Text("필름 | \(item.fields.myFilm.arrayValue.values[1].stringValue)") : nil
+                                    }
+                                }
+                                .font(.subheadline)
+                                .foregroundColor(.textGray)
+                                .padding(.top, -9)
+                                .padding(.leading, 20)
+                            }
+                        }
+                        
+                    }//VStack
+                        .frame(minHeight: 350)
+                        .zIndex(1)
+                    
+                    VStack{
+                        
+                        // MARK: 제목
+                        Text(magazineData.fields.title.stringValue)
+                            .font(.title2)
+                            .bold()
+                            .padding(.horizontal)
+                            .frame(width: Screen.maxWidth , alignment: .leading)
+                            .multilineTextAlignment(.leading)
+                            .padding(.top)
+                            .padding(.bottom, 6)
+                        
+                        
+                        // MARK: 내용
+                        Text(magazineData.fields.content.stringValue)
+                            .lineSpacing(7.0)
+                            .padding(.horizontal)
+                            .foregroundColor(Color.textGray)
+                            .frame(width: Screen.maxWidth , alignment: .leading)
+                        
+                        Spacer()
                     }
-                    
+                    .zIndex(0)
                 }//VStack
-                .frame(minHeight: 350)
-                .zIndex(1)
-                
-                VStack{
-                    
-                    // MARK: 제목
-                    Text(data.fields.title.stringValue)
-                        .font(.title2)
-                        .bold()
-                        .padding(.horizontal)
-                        .frame(width: Screen.maxWidth , alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                        .padding(.top)
-                        .padding(.bottom, 6)
-                    
-                    
-                    // MARK: 내용
-                    Text(data.fields.content.stringValue)
-                        .lineSpacing(7.0)
-                        .padding(.horizontal)
-                        .foregroundColor(Color.textGray)
-                        .frame(width: Screen.maxWidth , alignment: .leading)
-                    
-                    Spacer()
-                }
-                .zIndex(0)
-            }//VStack
+            }
         }//스크롤뷰
         .alert(isPresented: $isDeleteAlertShown) {
             Alert(title: Text("게시물을 삭제하시겠어요?"),
@@ -239,33 +244,45 @@ struct MagazineDetailView: View {
                   primaryButton:  .cancel(Text("취소")),
                   secondaryButton:.destructive(Text("삭제"),
                                                action: {
-                        magazineVM.deleteMagazine(docID: data.fields.id.stringValue)
-                        mapVM.deleteMap(docID: data.fields.id.stringValue)
-                dismiss()
+                if let magazineData = self.magazineData {
+                    magazineVM.deleteMagazine(docID: magazineData.fields.id.stringValue)
+                    mapVM.deleteMap(docID: magazineData.fields.id.stringValue)
+                    dismiss()
+                }
             }))
         }
         .onAppear{
+            magazineData = data
             // 희경: 유저 팔로워, 팔로잉 업데이트 후 뒤로가기했다가 다시 들어갔을때 바로 반영안되는 issue
             // [해결] magazineDetailView의 onAppear 에서 fetchUser를 해주는 방식에서 userVM의 updateCurrentUserArray 메소드의 receivedValue 블록에 fetchUser 해주는 방식으로 변경
             // [이유] UserDetailView의 onDisappear메소드와 onAppear메소드간의 비동기처리가 문제였던것같다.
             // onDisappear에서 updateUser를 실행하는데 완료되기전에 onAppear를 해준듯.
             // 유저가 좋아요를 눌렀는지 / 유저가 저장을 눌렀는지 를 통해  심볼을 fill 해줄건지 판단
             // 좋아요 버튼
-            if userVM.likedMagazineID.contains(where: { item in
-                item == data.fields.id.stringValue})
-            {
-                isHeartToggle = true
-            }else{
-                isHeartToggle = false
+            if let magazineData = self.magazineData {
+                if userVM.likedMagazineID.contains(where: { item in
+                    item == magazineData.fields.id.stringValue})
+                {
+                    isHeartToggle = true
+                }else{
+                    isHeartToggle = false
+                }
+                if userVM.bookmarkedMagazineID.contains(where: { item in
+                    item == magazineData.fields.id.stringValue})
+                {
+                    isBookMarked = true
+                }else{
+                    isBookMarked = false
+                }
+                ObservingChangeValueLikeNum = magazineData.fields.likedNum.integerValue
             }
-            if userVM.bookmarkedMagazineID.contains(where: { item in
-                item == data.fields.id.stringValue})
-            {
-                isBookMarked = true
-            }else{
-                isBookMarked = false
+        }
+        .task(id: magazineVM.magazines) {
+            if let data = magazineVM.sortedTopLikedMagazineData.first(where: {
+                $0.fields.id.stringValue == data.fields.id.stringValue
+            }) {
+                self.magazineData = data
             }
-            ObservingChangeValueLikeNum = data.fields.likedNum.integerValue
         }
         .onDisappear{
             if isHeartToggle {

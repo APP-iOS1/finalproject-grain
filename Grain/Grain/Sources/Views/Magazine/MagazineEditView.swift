@@ -12,7 +12,6 @@ import Kingfisher
 private enum FocusableField: Hashable {
     case title
     case content
-    case place
 }
 
 struct MagazineEditView: View {
@@ -25,11 +24,11 @@ struct MagazineEditView: View {
     @State var clickedContent : Bool = false    // 텍스트 클릭 Bool
     @State var clickedCustomPlace : Bool = false    // 텍스트 클릭 Bool
     @State private var showSuccessAlert: Bool = false
-    @State private var showAlert: Bool = false
+    @State private var showEmptyContentAlert: Bool = false
+    @State private var showEmptyTitleAlert: Bool = false
     @FocusState private var focus: FocusableField?
     
     @Environment(\.presentationMode) var presentationMode
-
     
     var body: some View {
         NavigationView{
@@ -45,22 +44,23 @@ struct MagazineEditView: View {
                                 HStack {
                                     Text(data.createTime.toDate()?.renderTime() ?? "")
                                     Spacer()
-                                    if clickedCustomPlace {
-                                        TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
-                                            .font(.caption)
-                                            .onSubmit {
-                                                data.fields.customPlaceName.stringValue = editCustomPlace
-                                                clickedCustomPlace.toggle()
-                                            }
-//                                            .background(.yellow)
-                                            
-                                    } else {
-                                        Text(data.fields.customPlaceName.stringValue)
-                                            .onTapGesture {
-                                                clickedCustomPlace.toggle()
-                                            }
-                                    }
+//                                    if clickedCustomPlace {
+//                                        TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
+//                                            .font(.caption)
+//                                            .onSubmit {
+//                                                data.fields.customPlaceName.stringValue = editCustomPlace
+//                                                clickedCustomPlace.toggle()
+//                                            }
+//
+//                                    } else {
+//                                        Text(data.fields.customPlaceName.stringValue)
+//                                            .onTapGesture {
+//                                                clickedCustomPlace.toggle()
+//                                            }
+//                                    }
                                     
+                                    // 커스텀 플레이스 이름 변경 불가능하게 수정
+                                    Text(data.fields.customPlaceName.stringValue)
                                 }
                                 .font(.caption)
                             }
@@ -118,39 +118,42 @@ struct MagazineEditView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack{
-                    if editTitle.isEmpty && editContent.isEmpty {
+                    if editTitle.isEmpty {
                         Button {
-                            showAlert.toggle()
+                            print("게시물의 타이틀이 비었습니다. ")
+                            showEmptyTitleAlert.toggle()
                         } label: {
-                            Text("수정완료")
-                        }//변경 안됐을때 Alert
-                        .alert(isPresented: $showAlert) {
-                            Alert(title: Text("변경된 내용이 없습니다."),
-                                  message: Text("수정하실 내용을 입력해주세요."),
+                            Text("확인")
+                        }.alert(isPresented: $showEmptyTitleAlert) {
+                            Alert(title: Text("게시물의 제목을 입력해주세요."),
+                                  message: Text("게시물의 제목이 비어있습니다."),
                                   dismissButton: .destructive(
                                     Text("확인")
-                                  ){
-                                      
-                                  })
+                                  ){})
                         }
-                    }else{
+                        
+                    } else if editContent.isEmpty {
                         Button {
-                            if editTitle.count > 0 {
-                                data.fields.title.stringValue = editTitle
-                            }else{
-                                data.fields.title.stringValue = data.fields.title.stringValue
-                            }
-                            //content가 바뀐게 있다면 바뀐거 넣어주고 없으면 그대로 전송하기
-                            if editContent.count > 0 {
-                                data.fields.content.stringValue = editContent
-                            }else{
-                                data.fields.content.stringValue = data.fields.content.stringValue
-                            }
+                            print("editContent 이 비었습니다 ")
+                            showEmptyContentAlert.toggle()
+                        } label: {
+                            Text("확인")
+                        }.alert(isPresented: $showEmptyContentAlert) {
+                            Alert(title: Text("게시물의 내용을 입력해주세요."),
+                                  message: Text("게시물의 내용이 비어있습니다."),
+                                  dismissButton: .destructive(
+                                    Text("확인")
+                                  ){})
+                        }
+                    } else if editTitle != data.fields.title.stringValue || editContent != data.fields.content.stringValue {
+                        Button {
+                            print("수정됨")
+                            data.fields.title.stringValue = editTitle
+                            data.fields.content.stringValue = editContent
                             magazineVM.updateMagazine(data: data, docID: data.fields.id.stringValue)
-                            
                             showSuccessAlert.toggle()
-                        }  label: {
-                            Text("수정완료")
+                        } label: {
+                            Text("확인")
                         }.alert(isPresented: $showSuccessAlert) {
                             Alert(title: Text("수정이 완료되었습니다."),
                                   message: Text(""),
@@ -160,7 +163,21 @@ struct MagazineEditView: View {
                                       presentationMode.wrappedValue.dismiss()
                                   })
                         }
-                        
+                    } else {
+                        Button {
+                            print("수정된 사항 없음")
+                            showSuccessAlert.toggle()
+                        } label: {
+                            Text("확인")
+                        }.alert(isPresented: $showSuccessAlert) {
+                            Alert(title: Text("수정이 완료되었습니다."),
+                                  message: Text(""),
+                                  dismissButton: .destructive(
+                                    Text("확인")
+                                  ){
+                                      presentationMode.wrappedValue.dismiss()
+                                  })
+                        }
                     }
                 }
             }

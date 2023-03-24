@@ -20,8 +20,8 @@ struct MyPageView: View {
     
     
     var magazineDocument: [MagazineDocument]
-    var boomarkedMagazineDocument: [MagazineDocument]
-    var bookmarkedCommunityDoument: [CommunityDocument]
+//    var boomarkedMagazineDocument: [MagazineDocument]
+//    var bookmarkedCommunityDoument: [CommunityDocument]
     
     @State private var showDevices: Bool = false
     @State private var angle: Double = 0
@@ -162,13 +162,17 @@ struct MyPageView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM, bookmarkedMagazineDocument: boomarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
+                        MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM)
                     } label: {
                         Image(systemName: "ellipsis")
                             .foregroundColor(.black)
                     }
                 }
             }
+        }
+        .refreshable {
+            userVM.fetchUser()
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
     }
 }

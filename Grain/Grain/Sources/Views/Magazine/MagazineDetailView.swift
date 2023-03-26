@@ -16,7 +16,7 @@ struct MagazineDetailView: View {
     @State private var currentAmount: CGFloat = 0
     @State private var dragOffset = CGSize.zero
     @State private var firstImage: Image?
-    @State private var renderedImage: Image = Image(systemName: "photo")
+    @State private var renderedImage: Image? = nil
     @State private var isDeleteAlertShown:Bool = false
 
     @Environment(\.dismiss) private var dismiss
@@ -40,7 +40,7 @@ struct MagazineDetailView: View {
             renderedImage = Image(uiImage: uiImage)
         }
     }
-    
+    @MainActor
     var body: some View {
         ScrollView {
             VStack{
@@ -88,9 +88,7 @@ struct MagazineDetailView: View {
                                     .aspectRatio(contentMode: .fit)
                             }
                             .tag(index)
-                            .onChange(of: index){ item in
-                                selectedIndex = index
-                                }
+                            
                             
                         }
                         .addPinchZoom()
@@ -369,7 +367,7 @@ struct MagazineDetailView: View {
                     }
                   
                     // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
-//                    if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                    if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                         NavigationLink {
                             MagazineEditView(magazineVM: magazineVM, data: data)
                         }label: {
@@ -393,25 +391,29 @@ struct MagazineDetailView: View {
                                       preview: SharePreview(data.fields.title.stringValue, image: renderedImage))
                             
                         }
-//                    }
+                    }
                     
                 } label: {
                     Label("더보기", systemImage: "ellipsis")
                     
                 }
                 .onTapGesture {
-                    render()
+                    DispatchQueue.main.async {
+
+                        render()
+                    }
                     
                 }
             }
         }
     }
-    
+ 
     var sharedView: some View {
         ForEach(Array(data.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
             if index == selectedIndex{
                 KFImage(URL(string: item.stringValue) ?? URL(string: "https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                     .resizable()
+                    .frame(width: Screen.maxWidth, height: Screen.maxWidth)
                     .aspectRatio(contentMode: .fit)
                     .padding(0)
             }

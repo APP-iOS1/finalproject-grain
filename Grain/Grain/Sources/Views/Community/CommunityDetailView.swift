@@ -169,7 +169,6 @@ struct CommunityDetailView: View {
                         Menu {
                             if !(postStatus == ""){
                                 Button{
-                                    
 //                                    community.fields.state.stringValue = postStatus
                                     communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
                                 }label: {
@@ -201,12 +200,11 @@ struct CommunityDetailView: View {
                                     Text("저장취소")
                                 }
                             }
-                            
-                            NavigationLink {
-                                CommunityEditView(userVM: userVM, community: community, communityVM: communityVM, editFetch: $editFetch)
-                            }label: {
-                                Text("수정")
-                            }
+//                            NavigationLink {
+//                                CommunityEditView(userVM: userVM, community: community?, communityVM: communityVM, editFetch: $editFetch)
+//                            }label: {
+//                                Text("수정")
+//                            }
                             Button {
                                 communityVM.deleteCommunity(docID: community.fields.id.stringValue)
                                 presentationMode.wrappedValue.dismiss()

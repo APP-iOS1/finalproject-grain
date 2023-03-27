@@ -37,7 +37,7 @@ struct MagazineEditView: View {
                 VStack{
                     VStack {
                         HStack {
-                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == data
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == data?
                                 .fields.userID.stringValue })
                             {
                                 ProfileImage(imageName: user.fields.profileImage.stringValue)

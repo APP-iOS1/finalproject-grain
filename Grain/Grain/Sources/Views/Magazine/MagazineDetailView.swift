@@ -376,7 +376,7 @@ struct MagazineDetailView: View {
                     // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
                     if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                         NavigationLink {
-                            MagazineEditView(magazineVM: magazineVM, data: $magazineData)
+                            MagazineEditView(magazineVM: magazineVM, userVM: userVM, data: $magazineData)
                         }label: {
                             Text("수정")
                             Spacer()

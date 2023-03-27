@@ -10,7 +10,8 @@ import Kingfisher
 
 struct Top10View: View {
     let data : MagazineDocument
-
+    var userVM: UserViewModel
+    
     var body: some View {
         VStack{
             Rectangle()
@@ -53,13 +54,14 @@ struct Top10View: View {
                             Divider()
                                 .overlay(Color.white)
                                 .frame(width: 1.5, height: 16)
-                            
-                            Text(data.fields.nickName.stringValue)
-                                .font(.subheadline)
-                                .bold()
-                                .foregroundColor(.white)
-                                .frame( alignment:.leading)
-                               
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue })
+                            {
+                                Text(user.fields.nickName.stringValue)
+                                    .font(.subheadline)
+                                    .bold()
+                                    .foregroundColor(.white)
+                                    .frame( alignment:.leading)
+                            }
                             Spacer()
                             Image(systemName: "heart.fill")
                                 .font(.subheadline)

@@ -203,7 +203,7 @@ struct CommunityDetailView: View {
                             }
                             
                             NavigationLink {
-                                CommunityEditView(community: $communityData, communityVM: communityVM, editFetch: $editFetch)
+                                CommunityEditView(userVM: userVM, community: community, communityVM: communityVM, editFetch: $editFetch)
                             }label: {
                                 Text("수정")
                             }

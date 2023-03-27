@@ -16,7 +16,9 @@ private enum FocusableField: Hashable {
 }
 
 struct CommunityEditView: View {
+    @ObservedObject var userVM : UserViewModel
     @Binding var community: CommunityDocument?
+    
     @State var editTitle : String = ""
     @State private var editContent : String = ""
     @State var clickedTitle : Bool = false
@@ -51,21 +53,31 @@ struct CommunityEditView: View {
                         }.padding(.top, 5)
                         
                         HStack {
-                            ProfileImage(imageName: community.fields.profileImage.stringValue)
-                            VStack(alignment: .leading) {
-                                Text(community.fields.nickName.stringValue)
-                                //MARK: 옵셔널 처리 고민
-                                Text(community.createTime.toDate()?.renderTime() ?? "")
-                                    .font(.caption)
-                            }
-                            Spacer()
-                        }//HS
+                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue })
+                        {
+                            ProfileImage(imageName: user.fields.profileImage.stringValue)
+                        }
                         
-                        Divider()
-                            .frame(maxWidth: Screen.maxWidth * 0.94)
-                            .background(Color.black)
-                            .padding(.top, 5)
-                            .padding(.bottom, 15)
+                        VStack(alignment: .leading) {
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue })
+                            {
+                                Text(user.fields.nickName.stringValue)
+//                                    .font(.subheadline)
+//                                    .bold()
+                            }
+//                            Text(community.fields.nickName.stringValue)
+                            //MARK: 옵셔널 처리 고민
+                            Text(community.createTime.toDate()?.renderTime() ?? "")
+                                .font(.caption)
+                        }
+                        Spacer()
+                        }//HS
+                        .padding(.leading, 7)
+                        
+                    Divider()
+                        .frame(maxWidth: Screen.maxWidth * 0.94)
+                        .background(Color.black)
+                        .padding(.top, 5)
                         
                         //MARK: 사진
                         TabView{

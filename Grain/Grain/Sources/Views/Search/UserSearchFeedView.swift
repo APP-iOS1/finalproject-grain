@@ -73,7 +73,7 @@ struct UserSearchFeedView: View {
                                 //                                MagazineDetailView(data: data)
                             } label: {
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
-                                MagazineViewCell(data: data)
+                                MagazineViewCell(data: data, userVM: userViewModel)
                             }
                             
                         }
@@ -145,7 +145,7 @@ struct UserPageUserFeedView: View {
             if showGridOrList {
                 ScrollView{
                     LazyVGrid(columns: columns, spacing: 1) {
-                        ForEach(magazineDocument, id: \.self) { data in
+                        ForEach(magazineDocument.reversed(), id: \.self) { data in
                             NavigationLink {
                                 MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {
@@ -172,7 +172,7 @@ struct UserPageUserFeedView: View {
                                 MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
-                                MagazineViewCell(data: data)
+                                MagazineViewCell(data: data, userVM: userVM)
                             }
                         }
                     }

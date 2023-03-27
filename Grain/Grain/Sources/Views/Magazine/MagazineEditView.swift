@@ -16,7 +16,9 @@ private enum FocusableField: Hashable {
 
 struct MagazineEditView: View {
     @ObservedObject var magazineVM : MagazineViewModel
+    @ObservedObject var userVM: UserViewModel
     @Binding var data : MagazineDocument?
+    
     @State var editTitle : String = ""
     @State var editContent : String = ""
     @State var editCustomPlace : String = ""
@@ -35,17 +37,41 @@ struct MagazineEditView: View {
                 VStack{
                     VStack {
                         HStack {
-                            Circle()
-                                .frame(width: 40)
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == data
+                                .fields.userID.stringValue })
+                            {
+                                ProfileImage(imageName: user.fields.profileImage.stringValue)
+                            }
+                            
                             if let data = self.data {
-                                VStack(alignment: .leading) {
-                                    Text(data.fields.nickName.stringValue)
+                            VStack(alignment: .leading) {
+                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue })
+                                {
+                                    Text(user.fields.nickName.stringValue)
                                         .bold()
-                                    HStack {
-                                        Text(data.createTime.toDate()?.renderTime() ?? "")
-                                        Spacer()
-                                        // 커스텀 플레이스 이름 변경 불가능하게 수정
-                                        Text(data.fields.customPlaceName.stringValue)
+                                }
+//                                Text(data.fields.nickName.stringValue)
+//                                    .bold()
+                                HStack {
+                                    Text(data.createTime.toDate()?.renderTime() ?? "")
+                                    Spacer()
+//                                    if clickedCustomPlace {
+//                                        TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
+//                                            .font(.caption)
+//                                            .onSubmit {
+//                                                data.fields.customPlaceName.stringValue = editCustomPlace
+//                                                clickedCustomPlace.toggle()
+//                                            }
+//
+//                                    } else {
+//                                        Text(data.fields.customPlaceName.stringValue)
+//                                            .onTapGesture {
+//                                                clickedCustomPlace.toggle()
+//                                            }
+//                                    }
+                                    
+                                    // 커스텀 플레이스 이름 변경 불가능하게 수정
+                                    Text(data.fields.customPlaceName.stringValue)
                                     }
                                     .font(.caption)
                                 }
@@ -54,10 +80,11 @@ struct MagazineEditView: View {
                         }
                         .padding()
                         .padding(.top, -15)
+                        
                         Divider()
                             .frame(maxWidth: Screen.maxWidth * 0.9)
                             .background(Color.black)
-                            .padding(.top, -5)
+                            .padding(.top, -10)
                             .padding(.bottom, -10)
                         
                         TabView{

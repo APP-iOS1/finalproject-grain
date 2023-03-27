@@ -24,7 +24,7 @@ struct MagazineFeedView: View {
                     } label: {
                         // MARK: fetch해온 데이터 cell뷰로 보여주기
                         LazyVStack{
-                            MagazineViewCell(data: data)
+                            MagazineViewCell(data: data, userVM: userVM)
                         }
                     }
                 }

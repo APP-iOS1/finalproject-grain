@@ -83,7 +83,7 @@ struct MyPageMyFeedView: View {
                                 MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
-                                MagazineViewCell(data: data)
+                                MagazineViewCell(data: data, userVM: userVM)
                             }
                         }
                     }

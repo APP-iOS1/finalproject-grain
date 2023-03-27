@@ -102,7 +102,7 @@ struct ReportMapView: View {
                             })
                             Button("취소", role: .cancel, action: {})
                         } message: {
-                            //                            Text("제보 감사드립니다!")
+//                            Text("제보 감사드립니다!")
                         }
                     }
                     .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.85)

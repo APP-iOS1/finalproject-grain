@@ -74,7 +74,7 @@ struct AuthenticationView: View {
                         matching: .images,
                         photoLibrary: .shared()) {
                             if selectedImages.count == 0{
-                                KFImage(URL(string: "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d" ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                KFImage(URL(string: "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d" ?? "") ?? URL(string: "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: 100, height: 100)
@@ -235,34 +235,37 @@ struct AuthenticationView: View {
                     
                     // MARK: - 결정 버튼
                     Spacer()
-                    Button {
-                        // 유저 DB에 데이터 넣기
-                        userVM.insertUser(myFilm: "default", bookmarkedMagazineID: "", email: authenticationStore.email, myCamera: "default", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: authenticationStore.userUID, following: "", myLens: "default", profileImage: selectedImages, name: authenticationStore.userName , follower: "", nickName: editedNickname, introduce: editedIntroduce)
-                        // 로그인 상태값 바꾸기
-                        authenticationStore.authenticationState = .authenticated
-                    } label: {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(.black)
-                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
-                            .overlay {
-                                Text("회원가입하기")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                            }
+                    if (editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname}{
+                        Button {
+                            // 유저 DB에 데이터 넣기
+                            userVM.insertUser(myFilm: "필름 중 하나를 선택해 주세요", bookmarkedMagazineID: "", email: authenticationStore.email, myCamera: "카메라 중 하나를 선택해 주세요", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: authenticationStore.userUID, following: "", myLens: "렌즈 중 하나를 선택해 주세요", profileImage: selectedImages, name: authenticationStore.userName , follower: "", nickName: editedNickname, introduce: editedIntroduce)
+                            // 로그인 상태값 바꾸기
+                            authenticationStore.authenticationState = .authenticated
+                        } label: {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.black)
+                                .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                                .overlay {
+                                    Text("회원가입하기")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                }
+                        }
                     }
-                   
                     
                 }
+                .onAppear{
+                    exceptCurrentUser = userVM.users.filter{$0.fields.id.stringValue != userVM.currentUsers?.id.stringValue}
+                }
                 .padding()
-                .navigationTitle("프로필 편집")
+                .navigationTitle("회원가입")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar{
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button {
                             authenticationStore.authenticationState = .unauthenticated
-                            print("툴바 x 클릭")
                         } label: {
-                            Text("X")
+                            Image(systemName: "xmark")
                         }
 
                     }
@@ -327,9 +330,6 @@ struct AuthenticationView: View {
                     .frame(width: Screen.maxWidth * 0.8, height: Screen.maxHeight * 0.06)
                     .padding(.bottom, 7)
                     Spacer()
-                }
-                .onAppear{
-                    print("unauthenticated!!!!!")
                 }
             case .authenticated:
                 VStack{

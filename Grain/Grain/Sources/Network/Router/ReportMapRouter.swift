@@ -42,7 +42,6 @@ enum ReportMapRouter {
     
     private var method: HTTPMethod {
         switch self {
-      
         case .post :
             return .post
         default:

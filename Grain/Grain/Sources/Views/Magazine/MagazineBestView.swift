@@ -31,12 +31,12 @@ struct MagazineBestView: View {
                     EditorViewCell(editorVM: editorVM)
                 }
                 HStack{
-                    Text("인기 게시글")
+                    Text("인기 필름")
                         .font(.title)
                         .fontWeight(.bold)
                     Image("line")
                         .resizable()
-                        .frame(width: 240, height: 3.5)
+                        .frame(width: Screen.maxWidth * 0.66, height: Screen.maxHeight * 0.003)
                 }
                 .padding([.leading, .top])
                 ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10)), id: \.self ){ data in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
@@ -64,8 +64,14 @@ struct MagazineBestView: View {
     }
 }
 
-//struct MagazineBestView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MagazineBestView()
-//    }
-//}
+struct MagazineBestView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group{
+            MagazineBestView(userVM: UserViewModel(), magazineVM: MagazineViewModel(), editorVM: EditorViewModel())
+                .previewDevice("iPhone 14 Pro")
+            
+            MagazineBestView(userVM: UserViewModel(), magazineVM: MagazineViewModel(), editorVM: EditorViewModel())
+                .previewDevice("iPhone SE (3rd generation)")
+        }
+    }
+}

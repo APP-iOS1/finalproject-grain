@@ -270,6 +270,9 @@ struct EditMyPageView: View {
             editedIntroduce = userVM.currentUsers?.introduce.stringValue ?? ""
             exceptCurrentUser = userVM.users.filter{$0.fields.id.stringValue != userVM.currentUsers?.id.stringValue}
         }
+        .onDisappear{
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+        }
     }
     
     func limitNickname(_ upper: Int) {

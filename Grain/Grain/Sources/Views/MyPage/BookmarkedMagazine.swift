@@ -51,7 +51,7 @@ struct BookmarkedMagazine: View {
             bookmarkedMagazineDocument = magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID)
         }
         .refreshable {
-            magazineVM.fetchMagazine()
+            bookmarkedMagazineDocument = magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID)
         }
     }
 }

@@ -44,12 +44,20 @@ struct MyPageView: View {
                             .padding(.trailing, 10)
                         
                         VStack(alignment: .leading){
-                            Text(userVM.currentUsers?.nickName.stringValue ?? "123456789101789")
-                                .font(.title3)
-                                .bold()
-                                .padding(.leading, 8)
-                                .padding(.bottom, 1)
-                            
+                            HStack {
+                                Text(userVM.currentUsers?.nickName.stringValue ?? "123456789101789")
+                                    .font(.title3)
+                                    .bold()
+                                    .padding(.leading, 8)
+                                    .padding(.bottom, 1)
+                                
+                                Button {
+                                    userVM.deleteUserCommunity(communities: ["0B69E63D-9B00-4477-82E6-32D325538A1A", "C6785C00-C093-4CE8-9493-7AF825ED8D9C"])
+                                } label: {
+                                    Text("유저탈퇴 테스트")
+                                }
+
+                            }
                             VStack(alignment: .leading){
                                 HStack{
                                     Text("매거진")

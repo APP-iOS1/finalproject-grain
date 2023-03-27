@@ -161,9 +161,7 @@ struct UserPageUserFeedView: View {
                     }
                 }
                 .task(id: ObservingChangeValueLikeNum){
-                    Task{
-                        await magazineVM.fetchMagazine()
-                    }
+                     magazineVM.fetchMagazine()
                 }
             } else {
                 ScrollView{
@@ -180,9 +178,7 @@ struct UserPageUserFeedView: View {
                     }
                 }
                 .task(id: ObservingChangeValueLikeNum){
-                    Task{
-                        await magazineVM.fetchMagazine()
-                    }
+                    magazineVM.fetchMagazine()
                 }
                 
                 

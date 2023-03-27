@@ -20,6 +20,7 @@ struct CommunityDetailView: View {
     @ObservedObject var magazineVM : MagazineViewModel
     
     var community: CommunityDocument
+    @State var communityData: CommunityDocument?
     
     @State private var isBookMarked: Bool = false
     @State private var isliked: Bool = false
@@ -53,11 +54,13 @@ struct CommunityDetailView: View {
                 ScrollView {
                     VStack(alignment: .leading){
                         HStack{
-                            Text(community.fields.title.stringValue)
-                                .font(.title2)
-                                .bold()
-                                .padding(.horizontal)
+                            if let community = self.communityData {
+                                Text(community.fields.title.stringValue)
+                                    .font(.title2)
+                                    .bold()
+                                    .padding(.horizontal)
                                 .padding(.top, 5)
+                            }
                             Spacer()
                         }
                         .padding(.top, 5)
@@ -108,10 +111,12 @@ struct CommunityDetailView: View {
                         
                         // MARK: 게시글(디테일뷰) 내용
                         HStack {
-                            Text(community.fields.content.stringValue)
-                                .lineSpacing(4.0)
-                                .padding(.vertical, -20)
-                                .padding()
+                            if let community = self.communityData {
+                                Text(community.fields.content.stringValue)
+                                    .lineSpacing(4.0)
+                                    .padding(.vertical, -20)
+                                    .padding()
+                            }
                             Spacer()
                         }
                         .padding(.top, 10)
@@ -131,14 +136,20 @@ struct CommunityDetailView: View {
                 .padding(.top, 1)
                 // MARK: 댓글 달기
                 if isZooming == false {
-                    
                     CommunityCommentView(commentVm: commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData )
                         .transition(.move(edge: .bottom))
                         .animation(.default , value: isZooming)
-
                 }
-
             }
+            .onAppear {
+                self.communityData = self.community
+            }
+            .task(id: communityVM.communities, {
+                if let communityData = communityVM.communities.first(where: { $0.fields.id.stringValue == self.community.fields.id.stringValue
+                }) {
+                    self.communityData = communityData
+                }
+            })
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {

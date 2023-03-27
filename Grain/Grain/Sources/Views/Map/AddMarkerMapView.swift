@@ -78,7 +78,7 @@ struct AddMarkerMapView: View {
                         //MARK: 맵뷰 상단 검색바
                         HStack{
                             // FIXME: onSubmit 하고 버튼 눌러야함
-                            TextField("🔍 ex) 서울시 종로구 사직동", text: $searchMap)
+                            TextField("ex) 서울시 종로구 사직동", text: $searchMap)
                                 .padding()
                                 .background(.white)
                                 .cornerRadius(15)
@@ -89,11 +89,15 @@ struct AddMarkerMapView: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .foregroundColor(.white)
                                 .frame(width: 50, height: 51)
+                                .onTapGesture {
+                                    searchResponse = naverVM.addresses
+                                    searchResponseBool = true
+                                }
                                 .overlay{
                                     Image(systemName: "location.magnifyingglass")
                                         .onTapGesture {
                                             searchResponse = naverVM.addresses
-                                            searchResponseBool.toggle()
+                                            searchResponseBool = true
                                         }
                                 }
                         }
@@ -295,8 +299,13 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
             naverVM.fetchReverseGeocode(latitude: addUserMarker.position.lat, longitude: addUserMarker.position.lng)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
-                updateReverseGeocodeResult1 = naverVM.reverseGeocodeResult[0].region.area1.name + " " + naverVM.reverseGeocodeResult[0].region.area2.name + " " +
-                naverVM.reverseGeocodeResult[0].region.area3.name
+                if naverVM.reverseGeocodeResult.count == 0{
+                    updateReverseGeocodeResult1 = "주소지 없음"
+                }else{
+                    updateReverseGeocodeResult1 = naverVM.reverseGeocodeResult[0].region.area1.name + " " + naverVM.reverseGeocodeResult[0].region.area2.name + " " +
+                    naverVM.reverseGeocodeResult[0].region.area3.name
+                }
+
             }
             markerAddButtonBool.toggle()
         }

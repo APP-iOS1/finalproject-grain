@@ -76,9 +76,7 @@ struct MagazineSearchResultView: View {
                 Spacer()
             }
             .task(id: ObservingChangeValueLikeNum){
-                Task{
-                    await magazineVM.fetchMagazine()
-                }
+                magazineVM.fetchMagazine()
             }
             if isShownProgress == true {
                 SearchProgress()

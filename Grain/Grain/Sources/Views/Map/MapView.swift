@@ -123,7 +123,7 @@ struct MapView: View {
                         NavigationStack{
                             PhotoSpotMapView(userVM: userVM, magazineVM : magazineVM, locationManager: locationManager, mapData: $mapVM.mapData
                                              ,searchResponseBool: $searchResponseBool
-                                             ,searchResponse: $searchResponse, magazineData: $magazineVM.magazines, showResearchButton: $showResearchButton, userLatitude: userLatitude ,
+                                             ,searchResponse: $searchResponse, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum, magazineData: $magazineVM.magazines, showResearchButton: $showResearchButton, userLatitude: userLatitude ,
                                              userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
                                 .zIndex(0)
                         }
@@ -197,7 +197,8 @@ struct MapView: View {
             .ignoresSafeArea()
             .ignoresSafeArea(.keyboard)
             .fullScreenCover(isPresented: $visitButton, content: {
-                PhotoSpotDetailView(magazineVM: magazineVM, userVM : userVM, data: clikedMagazineData!)
+//                PhotoSpotDetailView(magazineVM: magazineVM, userVM : userVM, data: clikedMagazineData!)
+                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: clikedMagazineData!, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
             })
             .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
                 WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium, .large])

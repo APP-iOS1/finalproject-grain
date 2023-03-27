@@ -56,7 +56,6 @@ struct MagazineDetailView: View {
                                     MagazineProfileImage(imageName: user.fields.profileImage.stringValue)
                                 }
                                 
-                                
                                 VStack(alignment: .leading){
                                     Text(user.fields.nickName.stringValue)
                                         .bold()
@@ -65,6 +64,8 @@ struct MagazineDetailView: View {
                                         .foregroundColor(.textGray)
                                     
                                 }
+                            } else {
+                                Text("유저 없음")
                             }
                             Spacer()
                             VStack{

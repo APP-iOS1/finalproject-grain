@@ -21,7 +21,7 @@ struct MagazineEditView: View {
     @State var editContent : String = ""
     @State var editCustomPlace : String = ""
     @State var clickedContent : Bool = false   // 텍스트 클릭 Bool
-    @State var clickedCustomPlace : Bool = false    // 텍스트 클릭 Bool
+    @State var clickedCustomPlace : Bool = false    // 텍스트 클릭 Bool 
     @State private var showSuccessAlert: Bool = false
     @State private var showEmptyContentAlert: Bool = false
     @State private var showEmptyTitleAlert: Bool = false

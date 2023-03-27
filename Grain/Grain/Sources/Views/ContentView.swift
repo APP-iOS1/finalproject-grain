@@ -51,11 +51,10 @@ struct ContentView: View {
             if networkManager.isConnected {
                 VStack{
                     switch authenticationStore.authenticationState {
-                    case .unauthenticated, .authenticating:
+                    case .unauthenticated, .authenticating , .freshman:
                         NavigationStack{
-                            AuthenticationView()
+                            AuthenticationView(userVM: userVM)
                         }
-                        
                     case.authenticated:
                         VStack{
                             Spacer()
@@ -159,7 +158,7 @@ struct ContentView: View {
                     communityVM.fetchCommunity()
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                     userVM.fetchUser()
-                    
+                    print(authenticationStore.authenticationState)
                 }
                 .ignoresSafeArea(.keyboard)
                 //        .splashView {

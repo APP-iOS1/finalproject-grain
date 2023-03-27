@@ -42,9 +42,7 @@ struct BookmarkedMagazine: View {
                 }
             }
             .task(id: ObservingChangeValueLikeNum){
-                Task{
-                    await magazineVM.fetchMagazine()
-                }
+                 magazineVM.fetchMagazine()
             }
         }
         .navigationTitle("저장된 매거진")

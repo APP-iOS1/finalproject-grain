@@ -99,15 +99,11 @@ struct CommunityDetailView: View {
                                 .overlay {
                                     KFImage(URL(string: item.stringValue) ?? URL(string: "https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()
-                                        .aspectRatio(contentMode: .fit)
+                                        .aspectRatio(contentMode: .fill)
                                 }
                                 .tag(index)
-                                .onAppear{
-                                    selectedIndex = index
-                                }
-                            
+                        
                         }
-
                         .addPinchZoom()
                         .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                         .padding(.bottom, 10)

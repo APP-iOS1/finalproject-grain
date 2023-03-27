@@ -19,6 +19,7 @@ enum AuthenticationState {
     case unauthenticated
     case authenticating
     case authenticated
+    case freshman
 }
 /// 로그인 회사 상태관리
 enum LogInCompanyState{
@@ -31,7 +32,6 @@ enum MemberState{
     case member   // 이미 가입된 상태
     case freshman   //아직 가입되지 않은 상태
 //    case defaultState // 디폴트 상태값 주기
-
 }
 
 final class AuthenticationStore: ObservableObject {
@@ -44,6 +44,10 @@ final class AuthenticationStore: ObservableObject {
     @Published var errorMessage = ""
     @Published var checkUsers = [UserDocument]()
     
+    @Published var userUID = ""
+    @Published var userName = ""
+    @Published var email = ""
+
     fileprivate var currentNonce: String?
     
     let authPath = Auth.auth()
@@ -104,12 +108,11 @@ final class AuthenticationStore: ObservableObject {
                 dump("\(#function) - DEBUG \(error.localizedDescription)")
             } else {
                 guard let profile = user?.profile else { return }
-                
-                
-                // MARK: - 구글 로그인 최초로 이루어질 때 진행하는 post -> 로그아웃하고 로그인해도 데이터가 덮어쓰우지지 않음
-                insertUser(myFilm: "선택", bookmarkedMagazineID: "", email: profile.email, myCamera: "필수", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: uid ?? "", following: "", myLens: "선택", profileImage: "", name: profile.name, follower: "", nickName: "", introduce: "")
-                
-                self.authStateAuthenticated(user: CurrentUser(id: uid ?? "", name: profile.name, email: profile.email))
+            
+                userUID = uid ?? ""
+                userName = profile.name
+                email = profile.email
+                findUserDocID(docID: uid ?? "")
                 self.logInCompanyState = .googleLogIn
             }
         }
@@ -171,9 +174,10 @@ final class AuthenticationStore: ObservableObject {
                 try await changeRequest.commitChanges()
                 self.displayName = Auth.auth().currentUser?.displayName ?? ""
                 
-                // MARK: - 애플 최초 로그인? -> 이것 마저 구글 로그인하고 비슷한 상황
-                /// 지금 user.email 값이 안나옴;; Auth.auth().currentUser 이쪽에서 nil로 들어오는 상황
-                insertUser(myFilm: "선택", bookmarkedMagazineID: "", email: user.email ?? "" , myCamera: "필수", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: user.uid, following: "", myLens: "선택", profileImage: "", name: user.displayName ?? "" , follower: "", nickName: "", introduce: "")
+                userUID = user.uid
+                userName = user.displayName ?? ""
+                email = user.email ?? ""
+                findUserDocID(docID: user.uid)
             }
             catch {
                 print("Unable to update the user's displayname: \(error.localizedDescription)")
@@ -249,18 +253,7 @@ final class AuthenticationStore: ObservableObject {
     }
     // MARK: - 유저 데이터 만들기
     var subscription = Set<AnyCancellable>()
-    var fetchUsersSuccess = PassthroughSubject<(), Never>()
     var findUserDocIDSuccess = PassthroughSubject<(), Never>()
-    
-    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String, introduce: String) {
-        UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName, introduce: introduce)
-        
-            .receive(on: DispatchQueue.main)
-            .sink { (completion: Subscribers.Completion<Error>) in
-            } receiveValue: { (data: UserDocument) in
-                self.fetchUsersSuccess.send()
-            }.store(in: &subscription)
-    }
     
     // 전체 유저데이터 조회 후 비교
     func findUserDocID(docID: String){
@@ -271,10 +264,10 @@ final class AuthenticationStore: ObservableObject {
                 self.checkUsers = data.documents
                 for i in data.documents{
                     if i.fields.id.stringValue == docID{
-                        self.memberState = .member
+                        self.authenticationState = .authenticated
                         break
                     }
-                    self.memberState = .freshman
+                    self.authenticationState = .freshman
                 }
                 self.findUserDocIDSuccess.send()
             }.store(in: &subscription)

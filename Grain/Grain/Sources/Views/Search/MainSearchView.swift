@@ -200,9 +200,7 @@ struct MainSearchView: View {
                                     
                                 }
                                 .task(id: ObservingChangeValueLikeNum){
-                                    Task{
-                                        await magazineViewModel.fetchMagazine()
-                                    }
+                                    magazineViewModel.fetchMagazine()
                                 }
                                 .emptyPlaceholder(magazineViewModel.magazines.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)

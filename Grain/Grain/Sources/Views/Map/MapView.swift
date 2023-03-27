@@ -53,7 +53,7 @@ struct MapView: View {
                 
                 HStack{
                     
-                    TextField("🔍 ex) 서울시 종로구 사직동", text: $searchText)
+                    TextField("ex) 서울시 종로구 사직동", text: $searchText)
                         .padding()
                         .background(.white)
                         .frame(width: Screen.maxWidth * 0.75, height:  Screen.maxHeight * 0.0525)

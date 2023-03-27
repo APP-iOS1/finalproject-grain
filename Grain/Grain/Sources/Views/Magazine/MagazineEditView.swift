@@ -16,7 +16,7 @@ private enum FocusableField: Hashable {
 
 struct MagazineEditView: View {
     @ObservedObject var magazineVM : MagazineViewModel
-    
+    @ObservedObject var userVM: UserViewModel
     @State var data : MagazineDocument
     @State var editTitle : String = ""
     @State var editContent : String = ""
@@ -36,11 +36,20 @@ struct MagazineEditView: View {
                 VStack{
                     VStack {
                         HStack {
-                            Circle()
-                                .frame(width: 40)
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == data
+                                .fields.userID.stringValue })
+                            {
+                                ProfileImage(imageName: user.fields.profileImage.stringValue)
+                            }
+                            
                             VStack(alignment: .leading) {
-                                Text(data.fields.nickName.stringValue)
-                                    .bold()
+                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue })
+                                {
+                                    Text(user.fields.nickName.stringValue)
+                                        .bold()
+                                }
+//                                Text(data.fields.nickName.stringValue)
+//                                    .bold()
                                 HStack {
                                     Text(data.createTime.toDate()?.renderTime() ?? "")
                                     Spacer()
@@ -68,10 +77,11 @@ struct MagazineEditView: View {
                         }
                         .padding()
                         .padding(.top, -15)
+                        
                         Divider()
                             .frame(maxWidth: Screen.maxWidth * 0.9)
                             .background(Color.black)
-                            .padding(.top, -5)
+                            .padding(.top, -10)
                             .padding(.bottom, -10)
                         
                         TabView{

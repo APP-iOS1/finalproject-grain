@@ -18,6 +18,8 @@ struct MyPageView: View {
     @ObservedObject var magazineVM: MagazineViewModel
     @ObservedObject var authenticationStore : AuthenticationStore = AuthenticationStore()
     
+    @State private var selectedIndex: Int = 0
+
     
     var magazineDocument: [MagazineDocument]
 //    var boomarkedMagazineDocument: [MagazineDocument]
@@ -64,10 +66,15 @@ struct MyPageView: View {
                                 
                                 HStack{
                                     NavigationLink {
-                                        CurrentUserFollowerListView(userVM: userVM)
+//                                        CurrentUserFollowerListView(userVM: userVM)
+                                        CurrentUserFollowingFollowerView(userVM: userVM, magazineVM: magazineVM, selectedIndex: $selectedIndex)
+                                            .onAppear{
+                                                selectedIndex = 0
+                                            }
                                     } label: {
                                         Text("구독자")
                                     }
+
                                     
                                     Text("\(userVM.follower.count == 1 ? 0 : userVM.follower.count-1)")
                                         .padding(.leading, -5)
@@ -76,10 +83,16 @@ struct MyPageView: View {
                                     Text("|")
 
                                     NavigationLink {
-                                        CurrentUserFollowingListView(userVM: userVM)
+//                                        CurrentUserFollowingListView(userVM: userVM)
+                                        CurrentUserFollowingFollowerView(userVM: userVM, magazineVM: magazineVM, selectedIndex: $selectedIndex)
+                                            .onAppear{
+                                                selectedIndex = 1
+                                            }
+
                                     } label: {
                                         Text("구독중")
                                     }
+                                    
                                     
                                     Text("\(userVM.following.count == 1 ? 0 : userVM.following.count-1)")
                                         .padding(.leading, -5)

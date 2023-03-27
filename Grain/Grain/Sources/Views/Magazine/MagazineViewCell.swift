@@ -11,7 +11,8 @@ import Kingfisher
 
 struct MagazineViewCell: View {
     var data : MagazineDocument
-    
+    var userVM: UserViewModel
+
     var body: some View {
         VStack {
             Rectangle()
@@ -47,9 +48,14 @@ struct MagazineViewCell: View {
                    
                 
                 Divider()
-                Text(data.fields.nickName.stringValue)
-                    .font(.subheadline)
-                    .bold()
+                
+                if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue })
+                {
+                    Text(user.fields.nickName.stringValue)
+                        .font(.subheadline)
+                        .bold()
+                }
+
                 Spacer()
                 Text(data.createTime.toDate()?.renderTime() ?? "")
                     .font(.caption)
@@ -69,6 +75,6 @@ struct MagazineViewCell: View {
 
 struct MagazineViewCell_Previews: PreviewProvider {
     static var previews: some View {
-        MagazineViewCell(data: MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: 0), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), likedNum: LikedNum(integerValue: ""), latitude: MagazineLocation(doubleValue: 0), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: "")), name: "", createTime: "", updateTime: ""))
+        MagazineViewCell(data: MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: 0), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), likedNum: LikedNum(integerValue: ""), latitude: MagazineLocation(doubleValue: 0), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: "")), name: "", createTime: "", updateTime: ""), userVM: UserViewModel())
     }
 }

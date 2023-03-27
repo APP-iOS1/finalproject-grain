@@ -16,6 +16,8 @@ private enum FocusableField: Hashable {
 }
 
 struct CommunityEditView: View {
+    @ObservedObject var userVM : UserViewModel
+
     @State var community : CommunityDocument
     @State var editTitle : String = ""
     @State private var editContent : String = ""
@@ -49,15 +51,26 @@ struct CommunityEditView: View {
                     }.padding(.top, 5)
                     
                     HStack {
-                        ProfileImage(imageName: community.fields.profileImage.stringValue)
+                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue })
+                        {
+                            ProfileImage(imageName: user.fields.profileImage.stringValue)
+                        }
+                        
                         VStack(alignment: .leading) {
-                            Text(community.fields.nickName.stringValue)
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue })
+                            {
+                                Text(user.fields.nickName.stringValue)
+//                                    .font(.subheadline)
+//                                    .bold()
+                            }
+//                            Text(community.fields.nickName.stringValue)
                             //MARK: 옵셔널 처리 고민
                             Text(community.createTime.toDate()?.renderTime() ?? "")
                                 .font(.caption)
                         }
                         Spacer()
                     }//HS
+                    .padding(.leading, 7)
                     
                     Divider()
                         .frame(maxWidth: Screen.maxWidth * 0.94)

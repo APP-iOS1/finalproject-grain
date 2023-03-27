@@ -357,7 +357,7 @@ struct PhotoSpotDetailView: View {
                         }
                         if data.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                             NavigationLink {
-                                MagazineEditView(magazineVM: magazineVM, data: data)
+                                MagazineEditView(magazineVM: magazineVM, userVM: userVM, data: data)
                             }label: {
                                 Text("수정")
                                 Spacer()

@@ -44,7 +44,7 @@ struct MagazineBestView: View {
                         MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                     } label: {
                         LazyVStack{
-                            Top10View(data: data)
+                            Top10View(data: data, userVM: userVM)
                                 .padding(.vertical, 7)
                                 .padding(.horizontal)
                             

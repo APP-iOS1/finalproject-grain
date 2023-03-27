@@ -26,6 +26,9 @@ struct UserDetailView: View {
     let user: UserDocument
     @State var userData: UserDocument?
     
+    // 구독중,구독자 페이지 인덱싱
+    @State private var selectedIndex: Int = 0
+    
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading){
@@ -135,7 +138,11 @@ struct UserDetailView: View {
                             if let userData = self.userData {
                                 HStack{
                                     NavigationLink {
-                                        FollowerListView(userVM: userVM, user: userData)
+//                                        FollowerListView(userVM: userVM, user: userData)
+                                        FollowingFollowerView(userVM: userVM, userData: userData, magazineVM: magazineVM, selectedIndex: $selectedIndex)
+                                            .onAppear{
+                                                selectedIndex = 0
+                                            }
                                     } label: {
                                         Text("구독자")
                                     }
@@ -147,7 +154,11 @@ struct UserDetailView: View {
                                     Text("|")
                                     
                                     NavigationLink {
-                                        FollowingListView(userVM: userVM, user: userData)
+//                                        FollowingListView(userVM: userVM, user: userData)
+                                        FollowingFollowerView(userVM: userVM, userData: userData, magazineVM: magazineVM, selectedIndex: $selectedIndex)
+                                            .onAppear{
+                                                selectedIndex = 1
+                                            }
                                     } label: {
                                         Text("구독중")
                                     }

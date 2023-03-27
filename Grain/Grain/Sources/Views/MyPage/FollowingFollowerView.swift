@@ -12,7 +12,7 @@ struct FollowingFollowerView: View {
     var userData: UserDocument
     @ObservedObject var magazineVM: MagazineViewModel
 
-    @Binding var selectedIndex: Int
+    @State var selectedIndex: Int
     @State private var isShownPickerProgress: Bool = false
     
     let titles: [String] = ["구독자", "구독중"]
@@ -66,7 +66,7 @@ struct CurrentUserFollowingFollowerView: View {
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     
-    @Binding var selectedIndex: Int
+    @State var selectedIndex: Int
     @State private var isShownPickerProgress: Bool = false
     
     let titles: [String] = ["구독자", "구독중"]

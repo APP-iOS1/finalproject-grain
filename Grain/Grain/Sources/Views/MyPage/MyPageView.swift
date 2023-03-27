@@ -18,8 +18,6 @@ struct MyPageView: View {
     @ObservedObject var magazineVM: MagazineViewModel
     @ObservedObject var authenticationStore : AuthenticationStore = AuthenticationStore()
     
-    @State private var selectedIndex: Int = 0
-
     
     var magazineDocument: [MagazineDocument]
 //    var boomarkedMagazineDocument: [MagazineDocument]
@@ -75,10 +73,10 @@ struct MyPageView: View {
                                 HStack{
                                     NavigationLink {
 //                                        CurrentUserFollowerListView(userVM: userVM)
-                                        CurrentUserFollowingFollowerView(userVM: userVM, magazineVM: magazineVM, selectedIndex: $selectedIndex)
-                                            .onAppear{
-                                                selectedIndex = 0
-                                            }
+                                        CurrentUserFollowingFollowerView(userVM: userVM, magazineVM: magazineVM, selectedIndex: 0)
+//                                            .onAppear{
+//                                                selectedIndex = 0
+//                                            }
                                     } label: {
                                         Text("구독자")
                                     }
@@ -92,10 +90,10 @@ struct MyPageView: View {
 
                                     NavigationLink {
 //                                        CurrentUserFollowingListView(userVM: userVM)
-                                        CurrentUserFollowingFollowerView(userVM: userVM, magazineVM: magazineVM, selectedIndex: $selectedIndex)
-                                            .onAppear{
-                                                selectedIndex = 1
-                                            }
+                                        CurrentUserFollowingFollowerView(userVM: userVM, magazineVM: magazineVM, selectedIndex: 1)
+//                                            .onAppear{
+//                                                selectedIndex = 1
+//                                            }
 
                                     } label: {
                                         Text("구독중")

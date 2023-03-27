@@ -16,7 +16,7 @@ struct NearbyPostsComponent: View {
     @State var isliked : Bool = false
     @Binding var visitButton : Bool
     @Binding var isShowingPhotoSpot : Bool
-    var  nearbyMagazineData : [MagazineDocument]    // 값을 받아옴
+    var  nearbyMagazineData : [MagazineDocument] // 값을 받아옴
     @Binding var clikedMagazineData : MagazineDocument?
     @Binding var showResearchButton : Bool
     

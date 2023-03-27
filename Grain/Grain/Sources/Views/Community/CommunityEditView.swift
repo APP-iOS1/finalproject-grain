@@ -16,13 +16,15 @@ private enum FocusableField: Hashable {
 }
 
 struct CommunityEditView: View {
-    @State var community : CommunityDocument
+    @Binding var community: CommunityDocument?
     @State var editTitle : String = ""
     @State private var editContent : String = ""
     @State var clickedTitle : Bool = false
     @State var clickedContent : Bool = false
-    @State private var showAlert: Bool = false
     @State private var showSuccessAlert: Bool = false
+    @State private var showEmptyTitleAlert: Bool = false
+    @State private var showEmptyContentAlert: Bool = false
+    
     @FocusState private var focus: FocusableField?
     
     @Environment(\.presentationMode) var presentationMode
@@ -35,134 +37,141 @@ struct CommunityEditView: View {
         ScrollView {
             VStack{
                 VStack {
-                    // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
-                    VStack{
-                        TextField(community.fields.title.stringValue, text: $editTitle)
-                            .font(.title2)
-                            .padding(.horizontal)
-                            .padding(.vertical, 3)
-                            .padding(.bottom, 3)
-                            .bold()
-                            .focused($focus, equals: .title)
+                    if let community = self.community {
+                        VStack{
+                            TextField(community.fields.title.stringValue, text: $editTitle)
+                                .font(.title2)
+                                .padding(.horizontal)
+                                .padding(.vertical, 3)
+                                .padding(.bottom, 3)
+                                .bold()
+                                .focused($focus, equals: .title)
+                                .disableAutocorrection(true)
+                                .autocapitalization(.none)
+                        }.padding(.top, 5)
+                        
+                        HStack {
+                            ProfileImage(imageName: community.fields.profileImage.stringValue)
+                            VStack(alignment: .leading) {
+                                Text(community.fields.nickName.stringValue)
+                                //MARK: 옵셔널 처리 고민
+                                Text(community.createTime.toDate()?.renderTime() ?? "")
+                                    .font(.caption)
+                            }
+                            Spacer()
+                        }//HS
+                        
+                        Divider()
+                            .frame(maxWidth: Screen.maxWidth * 0.94)
+                            .background(Color.black)
+                            .padding(.top, 5)
+                            .padding(.bottom, 15)
+                        
+                        //MARK: 사진
+                        TabView{
+                            ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
+                                Rectangle()
+                                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                                    .overlay{
+                                        KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    }
+                            }
+                        } //이미지 뷰
+                        .tabViewStyle(.page)
+                        .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                        .padding(.bottom, 15)
+                    }
+                } //VStack
+                
+                HStack{
+                    if let community = self.community {
+                        TextField(community.fields.content.stringValue, text: $editContent)
+                            .lineSpacing(4.0)
+                            .padding(.vertical, -15)
+                            .padding()
+                            .foregroundColor(Color.textGray)
+                            .focused($focus, equals: .content)
                             .disableAutocorrection(true)
                             .autocapitalization(.none)
-                    }.padding(.top, 5)
-                    
-                    HStack {
-                        ProfileImage(imageName: community.fields.profileImage.stringValue)
-                        VStack(alignment: .leading) {
-                            Text(community.fields.nickName.stringValue)
-                            //MARK: 옵셔널 처리 고민
-                            Text(community.createTime.toDate()?.renderTime() ?? "")
-                                .font(.caption)
-                        }
                         Spacer()
-                    }//HS
-                    
-                    Divider()
-                        .frame(maxWidth: Screen.maxWidth * 0.94)
-                        .background(Color.black)
-                        .padding(.top, 5)
-                        .padding(.bottom, 15)
-                    
-                    //MARK: 사진
-                    TabView{
-                        ForEach(community.fields.image.arrayValue.values, id: \.self) { item in
-                            Rectangle()
-                                .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                                .overlay{
-                                    KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                }
-                        }
-                    } //이미지 뷰
-                    .tabViewStyle(.page)
-                    .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                    .padding(.bottom, 15)
-                }
-                
-                // MARK: 텍스트 클릭시 텍스트 필드로 변환 onSubmit하면 수정한 텍스트 데이터에 저장
-                HStack{
-                    if clickedContent{
-                        VStack{
-                            TextField(community.fields.content.stringValue, text: $editContent, axis: .vertical)
-                                .lineSpacing(4.0)
-                                .padding(.vertical, -15)
-                                .padding()
-                                .foregroundColor(Color.textGray)
-                                .onSubmit {
-                                    community.fields.content.stringValue = editContent
-                                    clickedContent.toggle()
-                                }
-                        }
-                        .padding(.top, -5)
-                        
-                    }else{
-                        Text(community.fields.content.stringValue)
-                            .lineSpacing(4.0)
-                            .padding(.vertical, -20)
-                            .padding()
-                            .onTapGesture {
-                                clickedContent.toggle()
-                            }
                     }
-                    Spacer()
-                }
+                } //HStack
                 .padding(.top, 6)
             }
         }
         .onAppear {
-            focus = .title
-            editTitle = community.fields.title.stringValue
-            editContent = community.fields.content.stringValue
-
+            if let community = self.community {
+                focus = .title
+                editTitle = community.fields.title.stringValue
+                editContent = community.fields.content.stringValue
+            }
         }
         .padding(.top, 1)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                HStack{
-                    if editTitle.isEmpty && editContent.isEmpty {
-                        Button {
-                            showAlert.toggle()
-                            editFetch.toggle()
-                        } label: {
-                            Text("수정완료")
-                        }//변경 안됐을때 Alert
-                        .alert(isPresented: $showAlert) {
-                            Alert(title: Text("변경된 내용이 없습니다."),
-                                  message: Text("수정하실 내용을 입력해주세요."),
-                                  dismissButton: .destructive(
-                                    Text("확인")
-                                  ){
-                                      
-                                  })
-                        }
-                    }else{
-                        Button {
-                            if editTitle.count > 0 {
-                                community.fields.title.stringValue = editTitle
-                            }else{
-                                community.fields.title.stringValue = community.fields.title.stringValue
+                if var data = self.community {
+                    HStack{
+                        if editTitle.isEmpty {
+                            Button {
+                                print("게시물의 타이틀이 비었습니다. ")
+                                showEmptyTitleAlert.toggle()
+                            } label: {
+                                Text("확인")
+                            }.alert(isPresented: $showEmptyTitleAlert) {
+                                Alert(title: Text("게시물의 제목을 입력해주세요."),
+                                      message: Text("게시물의 제목이 비어있습니다."),
+                                      dismissButton: .destructive(
+                                        Text("확인")
+                                      ){})
                             }
-                            //content가 바뀐게 있다면 바뀐거 넣어주고 없으면 그대로 전송하기
-                            if editContent.count > 0 {
-                                community.fields.content.stringValue = editContent
-                            }else{
-                                community.fields.content.stringValue = community.fields.content.stringValue
+                        } else if editContent.isEmpty {
+                            Button {
+                                print("editContent 이 비었습니다 ")
+                                showEmptyContentAlert.toggle()
+                            } label: {
+                                Text("확인")
+                            }.alert(isPresented: $showEmptyContentAlert) {
+                                Alert(title: Text("게시물의 내용을 입력해주세요."),
+                                      message: Text("게시물의 내용이 비어있습니다."),
+                                      dismissButton: .destructive(
+                                        Text("확인")
+                                      ){})
                             }
-                            communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
-                            showSuccessAlert.toggle()
-                        } label: {
-                            Text("수정완료")
-                        }.alert(isPresented: $showSuccessAlert) {
-                            Alert(title: Text("수정이 완료되었습니다."),
-                                  message: Text(""),
-                                  dismissButton: .destructive(
-                                    Text("확인")
-                                  ){
-                                      presentationMode.wrappedValue.dismiss()
-                                  })
+                        } else if editTitle != data.fields.title.stringValue || editContent != data.fields.content.stringValue {
+                            Button {
+                                print("수정됨")
+                                data.fields.title.stringValue = editTitle
+                                data.fields.content.stringValue = editContent
+                                communityVM.updateCommunity(data: data, docID: data.fields.id.stringValue)
+                                showSuccessAlert.toggle()
+                            } label: {
+                                Text("확인")
+                            }.alert(isPresented: $showSuccessAlert) {
+                                Alert(title: Text("수정이 완료되었습니다."),
+                                      message: Text(""),
+                                      dismissButton: .destructive(
+                                        Text("확인")
+                                      ){
+                                          presentationMode.wrappedValue.dismiss()
+                                      })
+                            }
+                        } else {
+                            Button {
+                                print("수정된 사항 없음")
+                                showSuccessAlert.toggle()
+                            } label: {
+                                Text("확인")
+                            }.alert(isPresented: $showSuccessAlert) {
+                                Alert(title: Text("수정이 완료되었습니다."),
+                                      message: Text(""),
+                                      dismissButton: .destructive(
+                                        Text("확인")
+                                      ){
+                                          presentationMode.wrappedValue.dismiss()
+                                      })
+                            }
                         }
                     }
                 }

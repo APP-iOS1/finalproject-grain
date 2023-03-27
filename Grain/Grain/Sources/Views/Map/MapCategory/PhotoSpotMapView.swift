@@ -20,6 +20,7 @@ struct PhotoSpotMapView: View {
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     @Binding var searchResponseBool: Bool
     @Binding var searchResponse: [Address]
+    @Binding var ObservingChangeValueLikeNum: String
     @State var isShowingPhotoSpot :  Bool = false
     @State var nearbyPostsArr : [String] = []
     @State var visitButton : Bool = false
@@ -50,7 +51,7 @@ struct PhotoSpotMapView: View {
             isShowingPhotoSpot = false
         }
         .fullScreenCover(isPresented: $visitButton, content: {
-            PhotoSpotDetailView(magazineVM: magazineVM, userVM : userVM, data: clikedMagazineData!)
+            MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: clikedMagazineData!, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
         })
     }
 }

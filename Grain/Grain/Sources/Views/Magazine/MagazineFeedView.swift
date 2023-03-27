@@ -31,9 +31,7 @@ struct MagazineFeedView: View {
 
             }
             .task(id: ObservingChangeValueLikeNum){
-                Task{
-                    await magazineVM.fetchMagazine()   
-                }
+                 magazineVM.fetchMagazine()
             }
         }
 

@@ -78,7 +78,7 @@ struct AddMarkerMapView: View {
                         //MARK: 맵뷰 상단 검색바
                         HStack{
                             // FIXME: onSubmit 하고 버튼 눌러야함
-                            TextField("🔍 ex) 서울시 종로구 사직동", text: $searchMap)
+                            TextField("ex) 서울시 종로구 사직동", text: $searchMap)
                                 .padding()
                                 .background(.white)
                                 .cornerRadius(15)

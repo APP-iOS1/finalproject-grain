@@ -78,7 +78,7 @@ struct EditMyPageView: View {
                 matching: .images,
                 photoLibrary: .shared()) {
                     if selectedImages.count == 0{
-                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string: "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 100, height: 100)

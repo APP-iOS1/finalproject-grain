@@ -21,6 +21,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct GrainApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @EnvironmentObject var authenticationStore: AuthenticationStore
     var body: some Scene {
         WindowGroup {
             ContentView().environmentObject(AuthenticationStore())

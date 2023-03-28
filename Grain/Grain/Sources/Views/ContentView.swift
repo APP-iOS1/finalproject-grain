@@ -111,7 +111,7 @@ struct ContentView: View {
                             
                             if isZooming == false {
                                 
-                                HStack {
+                                HStack(spacing: 10) {
                                     ForEach(0..<5, id: \.self) { number in
                                         Button {
                                             if number == 2 {
@@ -124,7 +124,7 @@ struct ContentView: View {
                                                 Image(systemName: icons[number])
                                                     .font(.title2)
                                                     .foregroundColor(.white)
-                                                    .frame(width: 60, height: 60)
+                                                    .frame(width: 50, height: 50)
                                                     .background(.black)
                                                     .cornerRadius(30)
                                             }

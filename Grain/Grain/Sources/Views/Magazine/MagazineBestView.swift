@@ -72,6 +72,9 @@ struct MagazineBestView_Previews: PreviewProvider {
             
             MagazineBestView(userVM: UserViewModel(), magazineVM: MagazineViewModel(), editorVM: EditorViewModel())
                 .previewDevice("iPhone SE (3rd generation)")
+            
+            MagazineBestView(userVM: UserViewModel(), magazineVM: MagazineViewModel(), editorVM: EditorViewModel())
+                .previewDevice("iPhone 12 mini")
         }
     }
 }

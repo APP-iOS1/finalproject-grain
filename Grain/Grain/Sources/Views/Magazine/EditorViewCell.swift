@@ -23,7 +23,7 @@ struct EditorViewCell: View {
                         KFImage(URL(string: data.fields.postImage4.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                             .resizable()
                             .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.5)
-                            .aspectRatio(contentMode: .fit)
+                            .aspectRatio(contentMode: .fill)
                             .overlay(
                                 LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(0), Color.black.opacity(0.3), Color.black.opacity(0.6)]), startPoint: .top, endPoint: .bottom)
                             )
@@ -41,7 +41,9 @@ struct EditorViewCell: View {
                                 .font(.title)
                                 .fontWeight(.medium)
                         }
-                        .offset(x: 80 ,y: 60)
+                        .padding(.leading, 110)
+                        .padding(.top, 100)
+//                        .offset(x: 80 ,y: 60)
                     }
                 
             }

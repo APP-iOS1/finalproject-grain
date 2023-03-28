@@ -114,16 +114,15 @@ struct MagazineRecommentView: View {
                             HStack{
                                 if commentVm.sortedRecentRecomment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                     Button {
-                                        
                                         editRecomment.toggle()
                                         editReDocID = commentVm.sortedRecentRecomment[index].fields.id.stringValue
                                         editReData = commentVm.sortedRecentRecomment[index].fields
-                                                                            
                                     } label: {
                                         Text("수정")
                                     }
                                     Button {
                                         commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue)
+                                        
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                                             commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
                                         }

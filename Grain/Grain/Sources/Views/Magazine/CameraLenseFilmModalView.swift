@@ -116,7 +116,7 @@ struct CameraLenseFilmModalView: View {
             }
             
         }
-        .navigationTitle("내장비")
+        .navigationTitle("나의 장비 고르기")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {

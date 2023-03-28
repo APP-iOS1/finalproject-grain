@@ -38,7 +38,7 @@ final class CommentViewModel: ObservableObject {
             } receiveValue: { (data: CommentResponse) in
                 self.comment = data.documents
                 self.sortedRecentComment = data.documents.sorted(by: {
-                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                    return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
                 })
                 self.fetchCommentSuccess.send()
             }.store(in: &subscription)
@@ -92,7 +92,7 @@ final class CommentViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentResponse) in
                 self.sortedRecentRecomment = data.documents.sorted(by: {
-                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                    return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
                 })
                 self.fetchRecommentSuccess.send()
             }.store(in: &subscription)

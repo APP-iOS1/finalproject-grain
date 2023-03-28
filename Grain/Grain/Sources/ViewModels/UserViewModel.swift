@@ -114,7 +114,7 @@ final class UserViewModel: ObservableObject {
         return following
     }
     
-   
+    
     //MARK: - 구독한 사람들의 메거진만 필터링해서 리턴해주는 메서드(홈뷰 구독탭에서 가져다 쓰시면 됩니다. ^^ 갖다쓰기만해 ~ )
     /// 홈뷰에서 fetch 한 모든 게시물 데이터 MagazineVM.magazines 넘겨서 호출해주면 됩니다.
     /// 그러면 알아서 구독한 사람들의 게시물만 던져줍니다.
@@ -200,7 +200,7 @@ final class UserViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-//     MARK: - 유저정보 삭제 메소드 (유저 탈퇴시 유저가 작성한 메거진 게시글 모두 삭제)
+    //     MARK: - 유저정보 삭제 메소드 (유저 탈퇴시 유저가 작성한 메거진 게시글 모두 삭제)
     func deleteUserMagazine(magazines: [String]) {
         for i in magazines {
             print("magazines.count == \(magazines.count)")
@@ -224,7 +224,7 @@ final class UserViewModel: ObservableObject {
                 }.store(in: &subscription)
         }
     }
-  
+    
     func removeAll() {
         self.likedMagazineID.removeAll()
         self.myLens.removeAll()
@@ -295,6 +295,19 @@ final class UserViewModel: ObservableObject {
             } receiveValue: { (data: UserDocument) in
                 self.insertUsersSuccess.send()
             }.store(in: &subscription)
+    }
+    
+    // 매거진 피드뷰 구독자 필터링
+    func subscriptionFeed(magazineData : [MagazineDocument]) -> [MagazineDocument]{
+        var subscriptionFeedData : [MagazineDocument] = []
+        for i in self.followerList{
+            for j in magazineData{
+                if i.fields.id.stringValue == j.fields.userID.stringValue{  // i.fields.id.stringValue  팔로워 id 뽑기,j.fields.userID.stringValue 매거진 안에 userID 뽑아서 둘이 같으면 데이터 넣기
+                    subscriptionFeedData.append(j)
+                }
+            }
+        }
+        return subscriptionFeedData
     }
     
 }

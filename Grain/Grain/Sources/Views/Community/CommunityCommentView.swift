@@ -30,6 +30,9 @@ struct CommunityCommentView: View {
     @Binding var editRecomment : Bool
     @Binding var editReDocID : String
     @Binding var editReData : CommentFields
+    @Binding var eachBool : [Bool]
+    @Binding var reCommentCount : Int
+    
     var trimContent: String {
         replyContent.trimmingCharacters(in: .whitespaces)
     }
@@ -203,6 +206,10 @@ struct CommunityCommentView: View {
                                                     id: CommentString(stringValue: UUID().uuidString)))
                             
                             replyContent = ""
+                            replyComment = false
+                            reCommentCount += 1
+                            eachBool.insert(false, at: 0)
+                            commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
                         } label: {
                             Text("등록")
                                 .font(.subheadline)

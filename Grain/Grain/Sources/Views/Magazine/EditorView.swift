@@ -14,6 +14,9 @@ struct EditorView: View {
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
+    let pastedboard = UIPasteboard.general
+    @State private var copiedComplete: Bool = false
+    
     var body: some View {
         ScrollView {
             VStack{
@@ -148,18 +151,27 @@ struct EditorView: View {
             
             // MARK: - 공고 모집
             VStack(alignment: .leading){
+                Text("그레인 에디터를 희망하시는 분은")
+                
                 HStack(spacing: 0){
-                    Text("그레인 에디터를 희망하시는 분은 ")
                     Text(verbatim: "pkkyung26@gmail.com")
                         .foregroundColor(.vivaMagenta)
+                        .onTapGesture {
+                            pastedboard.string = "pkkyung26@gmail.com"
+                            self.copiedComplete = true
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.copiedComplete = false
+                            }
+                        }
                     Text(" 으로 메일을 보내주세요.")
                 }
                 
             }
-            .font(.caption2)
+            .font(.caption)
             .foregroundColor(.gray)
             .bold()
-            .padding(.bottom)
+            .padding(.trailing)
            
         }
     }

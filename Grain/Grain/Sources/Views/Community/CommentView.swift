@@ -15,8 +15,6 @@ struct CommentView: View {
     @ObservedObject var magazineVM : MagazineViewModel
     
     @State var readMoreComments : Bool = false   //답글 더보기 Bool값
-    @State var reCommentCount : Int = 0
-    @State var eachBool : [Bool] = []
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex)
     
@@ -30,6 +28,8 @@ struct CommentView: View {
     @Binding var editRecomment : Bool
     @Binding var editReDocID : String
     @Binding var editReData : CommentFields
+    @Binding var eachBool : [Bool]
+    @Binding var reCommentCount : Int
     
     func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬 예) 댓글 3개면 [ false, false, false ]
         eachBool = Array(repeating: false, count: count)
@@ -92,6 +92,7 @@ struct CommentView: View {
                                     makeEachBool(count: reCommentCount)
                                     readMoreComments.toggle()
                                     eachBool[index] = true
+                                    commentVm.sortedRecentRecomment.removeAll()
                                 } label: {
                                     Text("답글 더보기")
                                 }
@@ -137,13 +138,11 @@ struct CommentView: View {
             }
 
         }.onAppear{
-            commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
+            commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)           
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                 reCommentCount = commentVm.sortedRecentComment.count
                 makeEachBool(count: reCommentCount)
             }
-            
-            
         }
     }
 }

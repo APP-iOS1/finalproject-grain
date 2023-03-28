@@ -16,8 +16,10 @@ final class CommunityViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
     
     @Published var communities = [CommunityDocument]()
-    @Published var sortedRecentCommunityData = [CommunityDocument]()    // 매거진 게시물 최신순으로
+    @Published var sortedRecentCommunityData = [CommunityDocument]()    // 커뮤니티 게시물 최신순으로
     @Published var isLoading = false
+    
+    @Published var closeState = [CommunityDocument]()   // 혹시 모를 모집완료 | 판매완료 모아둘 배열
     
     var fetchCommunitySuccess = PassthroughSubject<[CommunityDocument], Never>()
     var insertCommunitySuccess = PassthroughSubject<(), Never>()
@@ -31,7 +33,7 @@ final class CommunityViewModel: ObservableObject {
         CommunityService.getCommunity()
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-            } receiveValue: { (data: CommunityResponse) in
+            } receiveValue: { [self] (data: CommunityResponse) in
                 self.communities = data.documents
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
                     self.isLoading = false
@@ -41,6 +43,16 @@ final class CommunityViewModel: ObservableObject {
                     return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
                 })
                 self.fetchCommunitySuccess.send(data.documents)
+                
+                // MARK: 커뮤니티 모집완료 | 판매완료 게시글 sortedRecentCommunityData에서 배열 뒤로 배치
+                for i in self.sortedRecentCommunityData.indices{
+                    if self.sortedRecentCommunityData[i].fields.state.stringValue == "모집완료" || self.sortedRecentCommunityData[i].fields.state.stringValue == "판매완료"{
+                        self.sortedRecentCommunityData.append(self.sortedRecentCommunityData[i])
+                        self.closeState.append(self.sortedRecentCommunityData[i])  // 혹시 모를 배열 값 선언부에 설명 씀
+                        self.sortedRecentCommunityData.remove(at: i)
+                    }
+                }
+                
                 // MARK: - 데이터 개수가 20개 넘을 때 풀기 잘못하면 터짐
 //                self.communities.append(contentsOf: data.documents)
 //                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해

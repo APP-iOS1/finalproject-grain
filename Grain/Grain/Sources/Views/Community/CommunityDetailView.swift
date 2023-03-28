@@ -172,8 +172,8 @@ struct CommunityDetailView: View {
                         Menu {
                             if !(postStatus == ""){
                                 Button{
-//                                    community.fields.state.stringValue = postStatus
-                                    communityVM.updateCommunity(data: community, docID: community.fields.id.stringValue)
+                                    communityData?.fields.state.stringValue = postStatus
+                                    communityVM.updateCommunity(data: communityData!, docID: community.fields.id.stringValue)
                                 }label: {
                                     Text(postStatusString)
                                 }

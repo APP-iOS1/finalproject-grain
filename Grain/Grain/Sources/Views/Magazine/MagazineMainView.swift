@@ -26,44 +26,9 @@ struct MagazineMainView: View {
     var body: some View {
         NavigationStack {
             VStack{
-                HStack {
-                    SegmentedPicker(
-                        titles,
-                        selectedIndex: Binding(
-                            get: { selectedIndex },
-                            set: { selectedIndex = $0 ?? 0 }),
-                        content: { item, isSelected in
-                            Text(item)
-                                .foregroundColor(isSelected ? Color.black : Color.gray )
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
-                                .font(.title3)
-                                .bold()
-                        },
-                        selection: {
-                            VStack(spacing: 0) {
-                                Spacer()
-                                Rectangle()
-                                    .fill(Color.black)
-                                    .frame(height: 2)
-                                    .transition(.slide)
-                                    .animation(.easeInOut, value: selectedIndex)
-                            }
-                        })
-                    Spacer()
-                    
-                    if selectedIndex == 1 {
-                        HStack{
-                            Picker(selection: $selectedFilter, label: Text("전체보기")) {
-                                        ForEach(0 ..< feedFilter.count) {
-                                            Text(self.feedFilter[$0])
-                                        }
-                            }
-                        }
-                    }
-                    
-                }//HS
-                .padding(.leading)
+                SegmentControlView(items: titles, selection: $selectedIndex, defaultXSpace: 10)
+                .padding(.leading, 9)
+                
                 switch selectedIndex {
                 case 0:
                     MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)

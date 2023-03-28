@@ -42,7 +42,7 @@ struct CommunityView: View {
                                 Spacer()
                                 Rectangle()
                                     .fill(Color.black)
-                                    .frame(height: 1)
+                                    .frame(height: 2)
                                     .transition(.slide)
                                     .animation(.easeInOut, value: selectedIndex)
                             }

@@ -40,7 +40,9 @@ struct MapView: View {
     @State var researchButtonBool : Bool = false
     @State var researchCGPoint : CGPoint = CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.5)
     @State private var searchFocus : Bool = false   // 검색 창 클릭시 bool
-    @State var showResearchButton : Bool = true // 이 지역 재 검색 나타내는 bool
+    @State var showResearchButton : Bool = true // 이 지역 재검색 나타내는 bool
+    @State var isShowingProgress : Bool = false // 이 지역 재검색 프로그레스
+    @State var isShowingSearchProgress : Bool = false // 검색 프로그레스
     
     var userLatitude : Double
     var userLongitude : Double
@@ -80,6 +82,7 @@ struct MapView: View {
                             searchResponse = naverVM.addresses
                             searchResponseBool = true
                             searchFocus = false
+                            isShowingSearchProgress = true
                         }
                         .overlay{
                             Image(systemName: "location.magnifyingglass")
@@ -87,6 +90,7 @@ struct MapView: View {
                                 .onTapGesture {
                                     searchResponse = naverVM.addresses
                                     searchResponseBool = true
+                                    isShowingSearchProgress = true
                                 }
                         }
                         .onTapGesture {
@@ -164,10 +168,12 @@ struct MapView: View {
                                     Text("이 지역 재검색")
                                         .foregroundColor(.white)
                                         .fontWeight(.bold)
-                                }.onTapGesture {
+                                }
+                                .onTapGesture {
                                     researchCGPoint = CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.44)
                                     researchButtonBool.toggle()
                                     mapVM.fetchNextPageMap(nextPageToken: "")
+                                    isShowingProgress = true
                                 }
                                 
                             }
@@ -175,12 +181,28 @@ struct MapView: View {
                     }
                     
                 }
-                // FIXME: 프로그레스뷰 고치
-                //                if researchButtonBool{
-                //                    ProgressView()
-                //                        .scaleEffect(1, anchor: .center)
-                //                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
-                //                }
+                
+                // MARK: - 이 지역 재검색 프로그레스
+                if isShowingProgress{
+                    ProgressView()
+                        .onAppear{
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.17) {
+                                isShowingProgress = false
+                            }
+                        }
+                        .zIndex(1)
+                }
+                
+                // MARK: - 검색 프로그레스
+                if isShowingSearchProgress{
+                    ProgressView()
+                        .onAppear{
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                isShowingSearchProgress = false
+                            }
+                        }
+                        .zIndex(1)
+                }
                 
                 if isShowingPhotoSpotMapVIew{
                     /// nearbyMagazineData -> NearbyPostsComponent뷰에서 ForEach을 위한 Magazine 데이터
@@ -395,36 +417,35 @@ struct UIMapView: UIViewRepresentable,View {
             searchResponseBool.toggle()
         }
         
-//        if researchButtonBool{
-//
-//
-//            var addUserMarker = NMFMarker()
-//            addUserMarker.position = uiView.mapView.projection.latlng(from: researchCGPoint)
-//            uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: addUserMarker.position.lat, lng: addUserMarker.position.lng)))
-//
-//            researchButtonBool.toggle()
-//
-//            // 지도 데이터 마커를 전부 보여줌 처리
-//            for marker in fetchMarkers{
-//                marker.hidden = false
-//            }
-//            // 지도 데이터 마커를 전부 숨김 처리
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-//                for marker in fetchMarkers{
-//                    marker.hidden = true
-//                }
-//
-//            }
-//            // 350 반경 마커들만 보여줌 처리
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-//                for pickable in uiView.mapView.pickAll(researchCGPoint, withTolerance: 350){
-//                    if let marker = pickable as? NMFMarker{
-//                        marker.hidden = false
-//
-//                    }
-//                }
-//            }
-//        }
+        if researchButtonBool{
+
+            var addUserMarker = NMFMarker()
+            addUserMarker.position = uiView.mapView.projection.latlng(from: researchCGPoint)
+            uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo: NMGLatLng(lat: addUserMarker.position.lat, lng: addUserMarker.position.lng)))
+
+            researchButtonBool = false
+
+            // 지도 데이터 마커를 전부 보여줌 처리
+            for marker in fetchMarkers{
+                marker.hidden = false
+            }
+            // 지도 데이터 마커를 전부 숨김 처리
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                for marker in fetchMarkers{
+                    marker.hidden = true
+                }
+
+            }
+            // 350 반경 마커들만 보여줌 처리
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                for pickable in uiView.mapView.pickAll(researchCGPoint, withTolerance: 350){
+                    if let marker = pickable as? NMFMarker{
+                        marker.hidden = false
+
+                    }
+                }
+            }
+        }
     }
     
     func makeCoordinator() -> Coordinator {

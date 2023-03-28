@@ -18,8 +18,10 @@ struct MagazineMainView: View {
 
     @State private var selectedIndex: Int = 0
     @State private var isSearchViewShown: Bool = false
-   
+    @State private var selectedFilter = 0
+    
     let titles: [String] = ["인기", "실시간"]
+    let feedFilter = ["전체보기", "구독자"]
     
     var body: some View {
         NavigationStack {
@@ -32,7 +34,7 @@ struct MagazineMainView: View {
                     MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
                     
                 default:
-                    MagazineFeedView(magazineVM: magazineVM, userVM: userVM)
+                    MagazineFeedView(magazineVM: magazineVM, userVM: userVM, selectedFilter: $selectedFilter)
                 }
             }
             .navigationDestination(isPresented: $isSearchViewShown) {

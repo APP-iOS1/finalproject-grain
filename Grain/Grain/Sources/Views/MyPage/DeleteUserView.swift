@@ -12,6 +12,7 @@ import FirebaseAuth
 struct DeleteUserView: View {
     @ObservedObject var userVM: UserViewModel
     @State private var content: String = ""
+    @State private var pushDeleteButton: Bool = false
     
     var body: some View {
         VStack {
@@ -49,9 +50,12 @@ struct DeleteUserView: View {
                     }
                     
                     Section("계정을 삭제하는 이유를 알려주시면, 사용자님의 피드백을 바탕으로 더 나은 서비스를 제공하도록 노력하겠습니다.") {
-                        TextField("내용을 입력해주세요", text: $content)
+//                        TextField("내용을 입력해주세요", text: $content)
+//                            .font(.footnote)
+//                            .frame(height: 50)
+                        TextEditor(text: $content)
                             .font(.footnote)
-                            .frame(height: 50)
+
                     }
                     
                
@@ -59,20 +63,26 @@ struct DeleteUserView: View {
                         HStack {
                             Spacer()
                             Button {
-                                let user: String = Auth.auth().currentUser?.uid ?? ""
-                                let magazines: [String] = userVM.postedMagazineID
-                                let communities: [String] = userVM.postedCommunityID
-                                
-                                // 삭제 되는데, 댓글까지 삭제해야댐
-                                // 댓글 대댓글 삭제하려면 모든 게시글 댓글 get해서 그걸로 delete돌려야댐.
-                                userVM.deleteUser(docID: user)
-                                userVM.deleteUserCommunity(communities: communities)
-                                userVM.deleteUserMagazine(magazines: magazines)
+                                pushDeleteButton.toggle()
                             } label: {
                                 Text("계정 삭제")
                                     .foregroundColor(.red)
                                 
                             }
+                            .alert(isPresented: $pushDeleteButton) {
+                                Alert(title: Text("정말로 계정을 삭제하시겠습니까?"), message: Text("회원님의 모든 데이터들이 영구적으로 삭제됩니다. "), primaryButton: .destructive(Text("삭제"), action: {
+                                            // 'Delete' 버튼을 눌렀을 때 실행할 코드 작성
+                                            let user: String = Auth.auth().currentUser?.uid ?? ""
+                                            let magazines: [String] = userVM.postedMagazineID
+                                            let communities: [String] = userVM.postedCommunityID
+                                            
+                                            // 삭제 되는데, 댓글까지 삭제해야댐
+                                            // 댓글 대댓글 삭제하려면 모든 게시글 댓글 get해서 그걸로 delete돌려야댐.
+                                            userVM.deleteUser(docID: user)
+                                            userVM.deleteUserCommunity(communities: communities)
+                                            userVM.deleteUserMagazine(magazines: magazines)
+                                        }), secondaryButton: .cancel())
+                                    }
                             Spacer()
                         }
                     }

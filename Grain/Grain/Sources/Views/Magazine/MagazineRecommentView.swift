@@ -15,6 +15,8 @@ struct MagazineRecommentView: View {
     @ObservedObject var commentVm : CommentViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
+    @State var deleteCommentAlertBool : Bool = false
+    @State var deleteDocId : String = ""
     
     @Binding var editRecomment : Bool
     @Binding var editReDocID : String
@@ -120,16 +122,24 @@ struct MagazineRecommentView: View {
                                     } label: {
                                         Text("수정")
                                     }
-                                    Button {
-                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue)
-                                        
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                            commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
-                                        }
-                                        
+                                    
+                                    Button{
+                                        deleteDocId = commentVm.sortedRecentRecomment[index].fields.id.stringValue
+                                        deleteCommentAlertBool.toggle()
                                     } label: {
                                         Text("삭제")
+                                            .alert(isPresented: $deleteCommentAlertBool) {
+                                                Alert(title: Text("댓글을 삭제하시겠어요?"),
+                                                      primaryButton:  .cancel(Text("취소")),
+                                                      secondaryButton:.destructive(Text("삭제"),action: {
+                                                    commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                                }))
+                                            }
                                     }
+                                    .task(id: deleteCommentAlertBool) {
+                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                                    }
+                                    
                                 }
                             }
                             .font(.caption2)

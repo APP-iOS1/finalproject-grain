@@ -194,8 +194,8 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
-                self.deleteUserMagazine(magazines: self.postedMagazineID)
-                self.deleteUserCommunity(communities: self.postedCommunityID)
+//                self.deleteUserMagazine(magazines: self.postedMagazineID)
+//                self.deleteUserCommunity(communities: self.postedCommunityID)
                 self.deleteUsersSuccess.send()
             }.store(in: &subscription)
     }
@@ -212,7 +212,6 @@ final class UserViewModel: ObservableObject {
                 }.store(in: &subscription)
         }
     }
-    
     
     //     MARK: - 유저정보 삭제 메소드 (유저 탈퇴시 유저가 작성한 커뮤니티 게시글 모두 삭제)
     func deleteUserCommunity(communities: [String]) {

@@ -14,7 +14,7 @@ struct MyPageOptionView: View {
     @ObservedObject var communityVM: CommunityViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     
-    var userVM: UserViewModel
+    @ObservedObject var userVM: UserViewModel
 //    var bookmarkedMagazineDocument: [MagazineDocument]
 //    var bookmarkedCommunityDoument: [CommunityDocument]
     
@@ -28,7 +28,7 @@ struct MyPageOptionView: View {
                 SupportSection()
                 
                 //MARK: 정보 섹션
-                InfoSection()
+                InfoSection(userVM: userVM)
                     .padding(.bottom)
             }
             Spacer()
@@ -84,7 +84,7 @@ struct AccountSection: View {
                 EditMyPageView(userVM: userVM)
             } label: {
                 HStack() {
-                    Image(systemName: "person")
+                    Image(systemName: "pencil")
                         .font(.system(size: 25))
                         .padding(.trailing, 10)
                     
@@ -238,7 +238,8 @@ struct SupportSection: View {
 
 //MARK: - 정보 섹션
 struct InfoSection: View {
-    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()    
+    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
+    @ObservedObject var userVM: UserViewModel
     // Progress 변수
     @State private var isShownProgress: Bool = true
     
@@ -405,6 +406,29 @@ struct InfoSection: View {
                         Text("아니오")
                       ))
             }
+            
+            NavigationLink {
+                DeleteUserView(userVM: userVM)
+            } label: {
+                HStack() {
+                    Image(systemName: "person")
+                        .font(.system(size: 25))
+                        .padding(.trailing, 10)
+
+                    Text("계정 삭제")
+                        .font(.title3)
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .font(.title3)
+                }
+                .foregroundColor(.black)
+                .padding(.horizontal)
+                .padding(.vertical)
+            }
+            .padding(.horizontal)
+            
         }
     }
 }

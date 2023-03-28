@@ -59,20 +59,39 @@ struct MagazineRecommentView: View {
                                         }
                                         .padding(.horizontal, 7)
                                 }
+                            } else {
+                                // 유저데이터가 없는경우: 탈퇴한 유저
+                                // 디폴트 이미지 정하기
+                                KFImage(URL(string:"https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/G5KvQmuPEehYVxvO7bHWkpBoY0f2%2FCD8C78A7-C100-42BC-8481-17E7BBC2E962%2F2C7635E2-6C57-493F-83CB-3E4B3D862132?alt=media&token=58695683-ecf8-4109-afe9-c5084580907a"))
+                                    .resizable()
+                                    .frame(width: 35, height: 35)
+                                    .cornerRadius(30)
+                                    .overlay {
+                                        Circle()
+                                            .stroke(lineWidth: 0.5)
+                                    }
+                                    .padding(.horizontal, 7)
                             }
                         }
                         .frame(width: Screen.maxWidth * 0.1)
                     
                         VStack(alignment: .leading){
                             HStack{
-                                NavigationLink {
-                                    //유저 프로필 뷰 입장
-                                } label: {
-                                    // MARK: 유저 닉네임
-                                    Text(commentVm.sortedRecentRecomment[index].fields.nickName.stringValue)
+                                if userVM.users.contains(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue }) {
+                                    NavigationLink {
+                                        //유저 프로필 뷰 입장
+                                    } label: {
+                                        // MARK: 유저 닉네임
+                                        Text(commentVm.sortedRecentRecomment[index].fields.nickName.stringValue)
+                                            .font(.caption)
+                                            .fontWeight(.bold)
+                                    }
+                                } else {
+                                    Text("Unknown_User")
                                         .font(.caption)
                                         .fontWeight(.bold)
                                 }
+                                
                                 HStack{
                                     Text("・")
                                         .font(.caption2)

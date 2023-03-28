@@ -77,7 +77,7 @@ struct MyPageMyFeedView: View {
             } else {
                 ScrollView{
                     LazyVStack{
-                        ForEach(magazineDocument, id: \.self) { data in
+                        ForEach(magazineDocument.reversed(), id: \.self) { data in
                             NavigationLink {
                                 // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
                                 MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)

@@ -107,6 +107,7 @@ struct MagazineCommentView: View {
                                         makeEachBool(count: reCommentCount)
                                         readMoreComments.toggle()
                                         eachBool[index] = true
+                                        commentVm.sortedRecentRecomment.removeAll()
                                     } label: {
                                         Text("답글 더보기")
                                     }
@@ -241,9 +242,7 @@ struct MagazineCommentView: View {
                         }
                         .padding(.leading)
                     MagazineCommentTextField(commentVm: commentVm, commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData,editReDocID: $editReDocID, editReData: $editReData, editRecomment: $editRecomment, commentCollectionDocId: $commentCollectionDocId, reCommentCount: $reCommentCount, eachBool: $eachBool, currentUser: userVM.currentUsers,collectionName: collectionName, collectionDocId: collectionDocId)
-                        .onChange(of: summitComment) { _ in
-                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                        }
+
                 }
             }
         }

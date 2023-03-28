@@ -42,43 +42,44 @@ struct AddCommunityView: View {
             VStack {
                 HStack {
                     Spacer()
-                    PhotosPicker(
-                        selection: $selectedItem,
-                        matching: .images,
-                        photoLibrary: .shared()) {
-                            Rectangle()
-                                .fill(.white)
-                                .border(.gray)
-                                .frame(width: 100, height: 100)
-                                .overlay {
-                                    VStack {
-                                        Spacer()
-                                        Image(systemName: "camera.fill")
-                                            .font(.title3)
-                                            .foregroundColor(.black)
-                                        Spacer()
-                                        Text("\(pickImageCount)/5")
-                                            .font(.headline)
-                                            .foregroundColor(.black)
-                                        Spacer()
+                    if pickImageCount < 5 {
+                        PhotosPicker(
+                            selection: $selectedItem,
+                            matching: .images,
+                            photoLibrary: .shared()) {
+                                Rectangle()
+                                    .fill(.white)
+                                    .border(.gray)
+                                    .frame(width: 100, height: 100)
+                                    .overlay {
+                                        VStack {
+                                            Spacer()
+                                            Image(systemName: "camera.fill")
+                                                .font(.title3)
+                                                .foregroundColor(.black)
+                                            Spacer()
+                                            Text("\(pickImageCount)/5")
+                                                .font(.headline)
+                                                .foregroundColor(.black)
+                                            Spacer()
+                                        }
+                                    }
+                                    .padding(.leading)
+                            }
+                            .onChange(of: selectedItem) { newItem in
+                                Task {
+                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                                        selectedImageData = data
+                                    }
+                                    // MARK: 선택한 이미지 selectedImages배열에 넣어주기
+                                    /// 이미지 선택 버튼 우측으로 이미지 정렬
+                                    if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+                                        selectedImages.append(uiImage)
+                                        pickImageCount = selectedImages.count
                                     }
                                 }
-                                .padding(.leading)
-                        }
-                        .onChange(of: selectedItem) { newItem in
-                            Task {
-                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                    selectedImageData = data
-                                }
-                                // MARK: 선택한 이미지 selectedImages배열에 넣어주기
-                                /// 이미지 선택 버튼 우측으로 이미지 정렬
-                                if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
-                                    selectedImages.append(uiImage)
-                                    pickImageCount = selectedImages.count
-                                }
                             }
-                        }
-                    
+                    }
                     // MARK: 선택한 이미지를 보여주는 부분
                     ScrollView(.horizontal) {
                         HStack {
@@ -238,7 +239,7 @@ struct AddCommunityView: View {
                     }
                 }
             }
-            .navigationTitle("커뮤니티")
+            .navigationTitle("커뮤니티 작성하기")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

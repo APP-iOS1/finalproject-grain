@@ -75,9 +75,11 @@ struct CommunityRecommentView: View {
                                         //유저 프로필 뷰 입장
                                     } label: {
                                         // MARK: 유저 닉네임
-                                        Text(commentVm.sortedRecentRecomment[index].fields.nickName.stringValue)
-                                            .font(.caption)
-                                            .fontWeight(.bold)
+                                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue }){
+                                            Text(user.fields.nickName.stringValue)
+                                                .font(.caption)
+                                                .fontWeight(.bold)
+                                        }
                                     }
                                 }
                                 else {

@@ -29,6 +29,7 @@ struct NearbyPostsComponent: View {
                 ForEach(nearbyMagazineData,id: \.self) { item in
                         RoundedRectangle(cornerRadius: 15)
                             .foregroundColor(.white)
+                            .shadow(color: .gray, radius: 5)
                             .frame(width:Screen.maxWidth * 0.75, height: Screen.maxHeight * 0.14)
                             .overlay{
                                 VStack{
@@ -53,7 +54,7 @@ struct NearbyPostsComponent: View {
 
                                             HStack{
                                                 RoundedRectangle(cornerRadius: 10)
-                                                    .stroke(Color(.black),lineWidth: 2)
+                                                    .stroke(Color(.black),lineWidth: 1.5)
                                                     .foregroundColor(.black)
                                                     .frame(width: 80,height: 25)
                                                     .overlay{
@@ -82,21 +83,21 @@ struct NearbyPostsComponent: View {
                                     
                                 }
                                 Image(systemName: "x.circle")
-                                    .foregroundColor(.black)
-                                    .position(CGPoint(x: Screen.maxWidth * 0.7 , y: Screen.maxHeight * 0.01))
+//                                    .foregroundColor(.black)
+                                    .position(CGPoint(x: Screen.maxWidth * 0.7 , y: Screen.maxHeight * 0.015))
                                     .padding(.trailing,5)
                                     .padding(.top, 5)
                                     .onTapGesture {
                                         isShowingPhotoSpot = false
                                         showResearchButton.toggle()
                                     }
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.black, lineWidth: 2)
-                                    .frame(width: Screen.maxWidth * 0.75, height: Screen.maxWidth * 0.3)
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .stroke(.black, lineWidth: 2)
+//                                    .frame(width: Screen.maxWidth * 0.75, height: Screen.maxWidth * 0.3)
 
                             }
                             .padding()
-
+                            
                 }
                 
             }

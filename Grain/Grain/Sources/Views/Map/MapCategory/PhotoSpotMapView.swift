@@ -105,7 +105,7 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
             for item in mapData{
                 if item.fields.category.stringValue == "필름스팟"{
-                    var marker = NMFMarker(position: NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue))
+                    let marker = NMFMarker(position: NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue))
                     marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
                     marker.width = 25
                     marker.height = 25

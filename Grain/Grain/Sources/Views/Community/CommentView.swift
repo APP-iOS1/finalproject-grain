@@ -17,6 +17,8 @@ struct CommentView: View {
     @State var readMoreComments : Bool = false   //답글 더보기 Bool값
     @State var deleteCommentAlertBool : Bool = false
     @State var deleteDocId : String = ""
+    @State var nickName : String = "" // 닉네임 변경을 위해
+    
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex)
     
@@ -58,9 +60,15 @@ struct CommentView: View {
                         VStack(alignment: .leading) {
                             HStack{
                                 if userVM.users.contains(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue }) {
-                                    Text(commentVm.sortedRecentComment[index].fields.nickName.stringValue)
-                                        .font(.caption)
-                                        .fontWeight(.bold)
+                                    
+                                    if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue  }){
+                                        Text(user.fields.nickName.stringValue)
+                                            .font(.caption)
+                                            .fontWeight(.bold)
+                                            .onAppear{
+                                                nickName = user.fields.nickName.stringValue
+                                            }
+                                    }
                                 } else {
                                     Text("Unkown_User")
                                         .font(.caption)
@@ -84,7 +92,7 @@ struct CommentView: View {
                                 
                                 Button {
                                     replyComment.toggle()
-                                    replyCommentText = "@" + commentVm.sortedRecentComment[index].fields.nickName.stringValue
+                                    replyCommentText = "@" + nickName
                                     commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
                                 } label: {
                                     Text("답글달기")

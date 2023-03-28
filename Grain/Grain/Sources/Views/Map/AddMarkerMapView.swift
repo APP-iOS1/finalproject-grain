@@ -65,6 +65,50 @@ struct AddMarkerMapView: View {
         NavigationView {
             VStack {
                 ZStack(alignment: .top) {
+                    //MARK: 맵뷰 상단 검색바
+                    HStack{
+                        Button {
+                            self.mode.wrappedValue.dismiss()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 44,height: 44)
+                                .foregroundColor(.black)
+                                .bold()
+                        }
+                        TextField("ex) 서울시 종로구 사직동", text: $searchMap)
+                            .padding()
+                            .background(.white)
+                            .frame(width: Screen.maxWidth * 0.7, height:  Screen.maxHeight * 0.0525)
+                            .cornerRadius(15)
+                            .shadow(color: .gray, radius: 5)
+                            .onSubmit {
+                                // MARK: Geocode API 실행
+                                naverVM.fetchGeocode(requestAddress: searchMap)
+                            }
+                            .padding(.leading, -5)
+                        
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundColor(.black)
+                            .frame(width: Screen.maxWidth * 0.125, height:  Screen.maxHeight * 0.0525)
+                            .shadow(color: .gray, radius: 5)
+                            .onTapGesture {
+                                searchResponse = naverVM.addresses
+                                searchResponseBool = true
+                                isShowingSearchProgress = true
+                            }
+                            .overlay{
+                                Image(systemName: "location.magnifyingglass")
+                                    .foregroundColor(.white)
+                                    .onTapGesture {
+                                        searchResponse = naverVM.addresses
+                                        searchResponseBool = true
+                                        isShowingSearchProgress = true
+                                    }
+                            }
+                    }
+                    .zIndex(1)
+                    .padding(.trailing , 5)
                     
                     //MARK: 네이버맵뷰
                     AddMarkerUIMapView(naverVM: naverVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, reMarkerAddButtonBool: $reMarkerAddButtonBool, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult, userLatitude: userLatitude , userLongitude: userLongitude)
@@ -74,47 +118,11 @@ struct AddMarkerMapView: View {
                             hideKeyboard()
                             //markerAddButtonBool.toggle()
                         }
-                    VStack {
-                        
-                        //MARK: 맵뷰 상단 검색바
-                        HStack{
-                            // FIXME: onSubmit 하고 버튼 눌러야함
-                            TextField("ex) 서울시 종로구 사직동", text: $searchMap)
-                                .padding()
-                                .background(.white)
-                                .cornerRadius(15)
-                                .onSubmit {
-                                    // MARK: Geocode API 실행
-                                    naverVM.fetchGeocode(requestAddress: searchMap)
-                                }
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundColor(.white)
-                                .frame(width: 50, height: 51)
-                                .onTapGesture {
-                                    searchResponse = naverVM.addresses
-                                    searchResponseBool = true
-                                    isShowingSearchProgress = true
-                                }
-                                .overlay{
-                                    Image(systemName: "location.magnifyingglass")
-                                        .onTapGesture {
-                                            searchResponse = naverVM.addresses
-                                            searchResponseBool = true
-                                            isShowingSearchProgress = true
-                                        }
-                                }
-                        }
-                        .padding()
-                        .shadow(radius: 1)
-                        Spacer()
-                        
-                    }
-                    
                     Image("uploadMarker")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: Screen.maxWidth * 0.1,height: Screen.maxHeight * 0.08)
-                        .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
+                        .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.29)
                     
                     
                     // MARK: - 검색 프로그레스
@@ -214,19 +222,6 @@ struct AddMarkerMapView: View {
             }.onAppear{
                 writeDownCustomPlaceCheck = false
             }
-            .toolbar {
-                ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
-                    Button {
-                        self.mode.wrappedValue.dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.black)
-                            .bold()
-                            .opacity(1)
-                            .shadow(radius: 1)
-                    }
-                }
-            }
             .ignoresSafeArea(.keyboard)
             
         }
@@ -297,14 +292,15 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         
         
         
-        var addUserMarker = NMFMarker()
+        let addUserMarker = NMFMarker()
         
         if markerAddButtonBool{
-            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.39))
+            addUserMarker.position = uiView.mapView.projection.latlng(from: CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.38))
             addUserMarker.iconImage = NMFOverlayImage(name: "uploadMarker")
             addUserMarker.width = Screen.maxWidth * 0.1
             addUserMarker.height = Screen.maxHeight * 0.045
             addUserMarker.mapView = uiView.mapView
+            
             
             // 업로드에 위치 정보 넘겨줌
             updateNumber = addUserMarker.position

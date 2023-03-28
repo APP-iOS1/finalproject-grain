@@ -32,6 +32,7 @@ struct MagazineCommentView: View {
     @State var eachBool : [Bool] = []
     @State var deleteCommentAlertBool : Bool = false
     @State var deleteDocId : String = ""
+    @State var nickName : String = "" // 닉네임 변경을 위해
     
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
@@ -88,9 +89,15 @@ struct MagazineCommentView: View {
                                             //유저 프로필 뷰 입장
                                         } label: {
                                             // MARK: 유저 닉네임
-                                            Text(commentVm.sortedRecentComment[index].fields.nickName.stringValue)
-                                                .font(.caption)
-                                                .fontWeight(.bold)
+                                            /// 전체 유저 데이터에서 id 값과 댓글 필드값 userID와 비교해서 해당하는 유저 DB를 찾음 -> user의 nickname 값을 표현
+                                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue }){
+                                                Text(nickName)
+                                                    .font(.caption)
+                                                    .fontWeight(.bold)
+                                                    .onAppear{
+                                                        nickName = user.fields.nickName.stringValue
+                                                    }
+                                            }
                                         }
                                     } else {
                                         Text("Unknown_User")
@@ -119,7 +126,7 @@ struct MagazineCommentView: View {
                                 HStack{
                                     Button {
                                         replyComment.toggle()
-                                        replyCommentText = "@" + commentVm.sortedRecentComment[index].fields.nickName.stringValue
+                                        replyCommentText = "@" + nickName
                                         commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
                                     } label: {
                                         Text("답글달기")

@@ -48,14 +48,23 @@ struct CommentView: View {
                                 } label: {
                                     ProfileImage(imageName: commentVm.sortedRecentComment[index].fields.profileImage.stringValue)
                                 }
+                            } else {
+                                ProfileImage(imageName: "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/G5KvQmuPEehYVxvO7bHWkpBoY0f2%2FCD8C78A7-C100-42BC-8481-17E7BBC2E962%2F2C7635E2-6C57-493F-83CB-3E4B3D862132?alt=media&token=58695683-ecf8-4109-afe9-c5084580907a")
                             }
                         }
                         
                         VStack(alignment: .leading) {
                             HStack{
-                                Text(commentVm.sortedRecentComment[index].fields.nickName.stringValue)
-                                    .font(.caption)
-                                    .fontWeight(.bold)
+                                if userVM.users.contains(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue }) {
+                                    Text(commentVm.sortedRecentComment[index].fields.nickName.stringValue)
+                                        .font(.caption)
+                                        .fontWeight(.bold)
+                                } else {
+                                    Text("Unkown_User")
+                                        .font(.caption)
+                                        .fontWeight(.bold)
+                                }
+                                
                                 HStack{
                                     Text("・")
                                         .font(.caption2)

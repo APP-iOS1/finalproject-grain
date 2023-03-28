@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0628A1A729B5AC09002A2709 /* UserDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0628A1A629B5AC09002A2709 /* UserDetailView.swift */; };
+		065A24F029D2976900A78ACF /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 065A24EF29D2976900A78ACF /* Config.xcconfig */; };
+		065A24F229D2976F00A78ACF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 065A24F129D2976F00A78ACF /* GoogleService-Info.plist */; };
+		065A24F429D2BD9300A78ACF /* DeleteUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065A24F329D2BD9300A78ACF /* DeleteUserView.swift */; };
 		0693B4C72992849600F9CDE2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0693B4C62992849600F9CDE2 /* Error.swift */; };
 		06A7341A29AF2FA600ABB37B /* FollowerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7341929AF2FA600ABB37B /* FollowerListView.swift */; };
 		06A7341C29AF2FB800ABB37B /* FollowingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7341B29AF2FB800ABB37B /* FollowingListView.swift */; };
@@ -153,6 +156,9 @@
 
 /* Begin PBXFileReference section */
 		0628A1A629B5AC09002A2709 /* UserDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailView.swift; sourceTree = "<group>"; };
+		065A24EF29D2976900A78ACF /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = SOURCE_ROOT; };
+		065A24F129D2976F00A78ACF /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		065A24F329D2BD9300A78ACF /* DeleteUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteUserView.swift; sourceTree = "<group>"; };
 		0693B4C62992849600F9CDE2 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		06A7341929AF2FA600ABB37B /* FollowerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerListView.swift; sourceTree = "<group>"; };
 		06A7341B29AF2FB800ABB37B /* FollowingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingListView.swift; sourceTree = "<group>"; };
@@ -375,6 +381,7 @@
 				334699D42988CB86004153A6 /* MyPageOptionView.swift */,
 				334699D22988AE26004153A6 /* MyPageView.swift */,
 				0628A1A629B5AC09002A2709 /* UserDetailView.swift */,
+				065A24F329D2BD9300A78ACF /* DeleteUserView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -929,6 +936,7 @@
 				0C535C2B2977AB7300E20BD9 /* Top10View.swift in Sources */,
 				0C535C2D2977B68600E20BD9 /* EditorViewCell.swift in Sources */,
 				9962CDCF297924CC00E834C3 /* MarketTabView.swift in Sources */,
+				065A24F429D2BD9300A78ACF /* DeleteUserView.swift in Sources */,
 				A7D957D4297AAF74001D2401 /* CommunityRouter.swift in Sources */,
 				A7D9F30E29896D8500B39218 /* UserService.swift in Sources */,
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,

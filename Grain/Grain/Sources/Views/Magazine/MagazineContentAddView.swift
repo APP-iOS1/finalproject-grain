@@ -50,7 +50,6 @@ struct MagazineContentAddView: View {
     var body: some View {
         /// 지도뷰로 이동하기 위해 전체적으로 걸어줌
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
-        NavigationView{
             GeometryReader { geo in
                 VStack {
                     HStack {
@@ -247,7 +246,7 @@ struct MagazineContentAddView: View {
                 }
                 //.ignoresSafeArea(.keyboard)
             }
-        }
+        
     }
 }
 //struct MagazineContentAddView_Previews: PreviewProvider {

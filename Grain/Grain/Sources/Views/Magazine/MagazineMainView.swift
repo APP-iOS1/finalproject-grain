@@ -26,9 +26,21 @@ struct MagazineMainView: View {
     var body: some View {
         NavigationStack {
             VStack{
-                SegmentControlView(items: titles, selection: $selectedIndex, defaultXSpace: 10)
-                .padding(.leading, 9)
-                
+                HStack{
+                    
+                    SegmentControlView(items: titles, selection: $selectedIndex, defaultXSpace: 10)
+                        .padding(.leading, 9)
+                    
+                    if selectedIndex == 1 {
+                        
+                        Picker(selection: $selectedFilter, label: Text("전체보기").fontWeight(.bold)) {
+                            ForEach(0 ..< feedFilter.count , id: \.self) {
+                                Text(self.feedFilter[$0])
+                            }
+                        }
+                        
+                    }
+                }
                 switch selectedIndex {
                 case 0:
                     MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)

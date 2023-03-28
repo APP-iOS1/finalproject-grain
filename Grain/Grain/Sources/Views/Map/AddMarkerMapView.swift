@@ -56,6 +56,7 @@ struct AddMarkerMapView: View {
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     @State private var showingAlert = false
     @State private var isFinishedSpot = false
+    @State private var isShowingSearchProgress = false
     
     var userLatitude: Double
     var userLongitude: Double
@@ -92,12 +93,14 @@ struct AddMarkerMapView: View {
                                 .onTapGesture {
                                     searchResponse = naverVM.addresses
                                     searchResponseBool = true
+                                    isShowingSearchProgress = true
                                 }
                                 .overlay{
                                     Image(systemName: "location.magnifyingglass")
                                         .onTapGesture {
                                             searchResponse = naverVM.addresses
                                             searchResponseBool = true
+                                            isShowingSearchProgress = true
                                         }
                                 }
                         }
@@ -113,12 +116,21 @@ struct AddMarkerMapView: View {
                         .frame(width: Screen.maxWidth * 0.1,height: Screen.maxHeight * 0.08)
                         .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
                     
-//                    Image("uploadMarker")
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .frame(width: 56,height: 56)
-//                        .position(CGPoint(x: 196, y: 285))
-                }
+                    
+                    // MARK: - 검색 프로그레스
+                    if isShowingSearchProgress{
+                        ProgressView()
+                            .onAppear{
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    isShowingSearchProgress = false
+                                }
+                            }
+                            .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
+                            .zIndex(1)
+                    }
+                    
+                }//ZStack
+                
                 HStack {
                     Text("포토 스팟으로 핀을 이동하세요")
                         .font(.headline)

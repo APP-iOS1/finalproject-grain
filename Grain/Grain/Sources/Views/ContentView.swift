@@ -158,7 +158,6 @@ struct ContentView: View {
                     communityVM.fetchCommunity()
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                     userVM.fetchUser()
-                    print(authenticationStore.authenticationState)
                 }
                 .ignoresSafeArea(.keyboard)
                 //        .splashView {

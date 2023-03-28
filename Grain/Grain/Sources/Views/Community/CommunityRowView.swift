@@ -122,7 +122,7 @@ struct CommunityRowView: View {
         .onAppear{
             commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
         }
-        .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.17)
+//        .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.17) -> 커뮤니티 셀뷰 간격 사이 고치기 필요시 주석 제거하기
     }
 }
 

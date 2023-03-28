@@ -156,7 +156,6 @@ struct CameraLenseFilmModalView: View {
                                                                   roadAddress: MagazineString(stringValue: ""),
                                                                   cameraInfo: MagazineString(stringValue: ""))
                
-                        
                         data.id.stringValue = docId
                         data.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
                         data.customPlaceName.stringValue = writeDownCustomPlaceText
@@ -179,8 +178,8 @@ struct CameraLenseFilmModalView: View {
                         var postMagazineArr : [String]  = userVM.postedMagazineID
                         postMagazineArr.append(docId)
                         userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
-                        
-                        magazineVM.fetchMagazine()
+
+//                        magazineVM.fetchMagazine()
                         presented.toggle()
                     }
                 } label: {

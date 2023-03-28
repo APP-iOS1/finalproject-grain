@@ -74,8 +74,8 @@ struct MapCategoryCellView: View {
                                         .foregroundColor(allButtonClickedBool ? .white : .gray)
                                 }
                                
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(allButtonClickedBool ? .black : .white , lineWidth: 5)
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .stroke(allButtonClickedBool ? .black : .white , lineWidth: 5)
                             }.cornerRadius(10)
                             .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
                             
@@ -95,8 +95,8 @@ struct MapCategoryCellView: View {
                                         .font(.caption)
                                         .foregroundColor(photoButtonClickedBool ? .white : .gray)
                                 }
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(photoButtonClickedBool ? .black : .white , lineWidth: 5)
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .stroke(photoButtonClickedBool ? .black : .white , lineWidth: 5)
                             }.cornerRadius(10)
                             .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
                             
@@ -117,8 +117,8 @@ struct MapCategoryCellView: View {
                                         .font(.caption)
                                         .foregroundColor(StationButtonClickedBool ? .white : .gray)
                                 }
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(StationButtonClickedBool ? .black : .white , lineWidth: 5)
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .stroke(StationButtonClickedBool ? .black : .white , lineWidth: 5)
                             }.cornerRadius(10)
                             .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
 
@@ -133,14 +133,13 @@ struct MapCategoryCellView: View {
                             .foregroundColor(repairButtonClickedBool ? .black : .white)
                             .overlay{
                                 HStack{
-                                    
                                     Text("수리점")
                                         .fontWeight(.bold)
                                         .font(.caption)
                                         .foregroundColor(repairButtonClickedBool ? .white : .gray)
                                 }
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(repairButtonClickedBool ? .black : .white , lineWidth: 5)
+//                                RoundedRectangle(cornerRadius: 10)
+//                                    .stroke(repairButtonClickedBool ? .black : .white , lineWidth: 5)
                             }.cornerRadius(10)
                             .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
                             

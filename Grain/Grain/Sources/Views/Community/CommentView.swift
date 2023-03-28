@@ -15,6 +15,10 @@ struct CommentView: View {
     @ObservedObject var magazineVM : MagazineViewModel
     
     @State var readMoreComments : Bool = false   //답글 더보기 Bool값
+    @State var deleteCommentAlertBool : Bool = false
+    @State var deleteDocId : String = ""
+    @State var nickName : String = "" // 닉네임 변경을 위해
+    
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex)
     
@@ -56,9 +60,15 @@ struct CommentView: View {
                         VStack(alignment: .leading) {
                             HStack{
                                 if userVM.users.contains(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue }) {
-                                    Text(commentVm.sortedRecentComment[index].fields.nickName.stringValue)
-                                        .font(.caption)
-                                        .fontWeight(.bold)
+                                    
+                                    if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue  }){
+                                        Text(user.fields.nickName.stringValue)
+                                            .font(.caption)
+                                            .fontWeight(.bold)
+                                            .onAppear{
+                                                nickName = user.fields.nickName.stringValue
+                                            }
+                                    }
                                 } else {
                                     Text("Unkown_User")
                                         .font(.caption)
@@ -82,7 +92,7 @@ struct CommentView: View {
                                 
                                 Button {
                                     replyComment.toggle()
-                                    replyCommentText = "@" + commentVm.sortedRecentComment[index].fields.nickName.stringValue
+                                    replyCommentText = "@" + nickName
                                     commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
                                 } label: {
                                     Text("답글달기")
@@ -106,14 +116,22 @@ struct CommentView: View {
                                         Text("수정")
                                     }
                                     Button{
-                                        commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: commentVm.sortedRecentComment[index].fields.id.stringValue)
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                            commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
-                                        }
-                                        
+                                        deleteDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
+                                        deleteCommentAlertBool.toggle()
                                     } label: {
                                         Text("삭제")
+                                            .alert(isPresented: $deleteCommentAlertBool) {
+                                                Alert(title: Text("댓글을 삭제하시겠어요?"),
+                                                      primaryButton:  .cancel(Text("취소")),
+                                                      secondaryButton:.destructive(Text("삭제"),action: {
+                                                    commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
+                                                }))
+                                            }
                                     }
+                                    .task(id: deleteCommentAlertBool) {
+                                        commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
+                                    }
+                                    
                                 }
                             }
                             .font(.caption2)

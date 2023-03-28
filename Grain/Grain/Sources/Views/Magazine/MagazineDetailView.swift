@@ -194,16 +194,9 @@ struct MagazineDetailView: View {
                                 
                                 if showDevices {
                                     VStack(alignment: .leading){
-                                        ForEach(userVM.users.filter{
-                                            $0.fields.id.stringValue == magazineData.fields.userID.stringValue
-                                        }, id: \.self) { item in
-                                            
-                                            item.fields.myCamera.arrayValue.values.count > 1 ? Text("바디 | \(item.fields.myCamera.arrayValue.values[1].stringValue)") : nil
-                                            
-                                            item.fields.myLens.arrayValue.values.count > 1 ? Text("렌즈 | \(item.fields.myLens.arrayValue.values[1].stringValue)") : nil
-                                            
-                                            item.fields.myFilm.arrayValue.values.count > 1 ? Text("필름 | \(item.fields.myFilm.arrayValue.values[1].stringValue)") : nil
-                                        }
+                                        Text("바디 | \(magazineData.fields.cameraInfo.stringValue)")
+                                        Text("렌즈 | \(magazineData.fields.lenseInfo.stringValue)")
+                                        Text("필름 | \(magazineData.fields.filmInfo.stringValue)")
                                     }
                                     .font(.subheadline)
                                     .foregroundColor(.textGray)

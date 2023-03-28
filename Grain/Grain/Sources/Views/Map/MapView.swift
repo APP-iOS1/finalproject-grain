@@ -68,11 +68,8 @@ struct MapView: View {
                             searchFocus.toggle()
                             allButtonClickedBool.toggle()
                         }
-                        .overlay{
-                            // FIXME: onSubmit 하고 버튼 눌러야함
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.black, lineWidth: 3)
-                        }.padding()
+                        .shadow(color: .gray, radius: 5)
+                        .padding()
                     
                     // 검색 확인 버튼
                     RoundedRectangle(cornerRadius: 10)
@@ -160,13 +157,14 @@ struct MapView: View {
                     if showResearchButton{
                         RoundedRectangle(cornerRadius: 17)
                             .frame(width: Screen.maxWidth * 0.4, height: 40)
-                            .foregroundColor(.black)
+                            .foregroundColor(.white)
+                            .shadow(color: .gray, radius: 5)
                             .overlay{
                                 HStack{
                                     Image(systemName: "arrow.clockwise")
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.black)
                                     Text("이 지역 재검색")
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.black)
                                         .fontWeight(.bold)
                                 }
                                 .onTapGesture {
@@ -177,7 +175,7 @@ struct MapView: View {
                                 }
                                 
                             }
-                            .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.82)
+                            .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.803)
                     }
                     
                 }
@@ -214,7 +212,7 @@ struct MapView: View {
                     NearbyPostsComponent(userVM: userVM, magazineVM: magazineVM, visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpotMapVIew, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
                         .zIndex(1)
                         .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.75)
-                        .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
+                        .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 25)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
                 }
                 
             }
@@ -235,6 +233,7 @@ struct MapView: View {
             mapVM.fetchNextPageMap(nextPageToken: "")
             magazineVM.fetchMagazine()
         }
+        .ignoresSafeArea(.keyboard)
     }
 }
 
@@ -280,15 +279,14 @@ struct UIMapView: UIViewRepresentable,View {
         view.mapView.maxZoomLevel = 16
         view.mapView.isRotateGestureEnabled = false // 지도 회전 잠금
         
+        // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
+        view.showCompass = false
+        // MARK: 위치 정보 받아오기
+        view.showLocationButton = true
+        
         /// 임시 주석
         view.mapView.touchDelegate = context.coordinator
-        
-        
-        // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
-        //        view.showCompass = false
-        // MARK: 위치 정보 받아오기
-        //        view.showLocationButton = true
-        
+
         view.mapView.positionMode = .direction
         
         // MARK: 지도가 그려질때 현재 유저 GPS 위치로 카메라 움직임
@@ -413,7 +411,7 @@ struct UIMapView: UIViewRepresentable,View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     marker.mapView = nil
                 }
-            }
+            } 
             searchResponseBool.toggle()
         }
         

@@ -14,6 +14,8 @@ struct CommunityRecommentView: View {
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
+    @State var deleteCommentAlertBool : Bool = false
+    @State var deleteDocId : String = ""
     var commentCollectionDocId : String
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Community - 4ADB415C-871A-4FAF-86EA-D279D145CD37
@@ -73,9 +75,11 @@ struct CommunityRecommentView: View {
                                         //유저 프로필 뷰 입장
                                     } label: {
                                         // MARK: 유저 닉네임
-                                        Text(commentVm.sortedRecentRecomment[index].fields.nickName.stringValue)
-                                            .font(.caption)
-                                            .fontWeight(.bold)
+                                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue }){
+                                            Text(user.fields.nickName.stringValue)
+                                                .font(.caption)
+                                                .fontWeight(.bold)
+                                        }
                                     }
                                 }
                                 else {
@@ -111,14 +115,23 @@ struct CommunityRecommentView: View {
                                     } label: {
                                         Text("수정")
                                     }
-                                    Button {
-                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: commentVm.sortedRecentRecomment[index].fields.id.stringValue)
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                            commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
-                                        }
+                                    Button{
+                                        deleteDocId = commentVm.sortedRecentRecomment[index].fields.id.stringValue
+                                        deleteCommentAlertBool.toggle()
                                     } label: {
                                         Text("삭제")
+                                            .alert(isPresented: $deleteCommentAlertBool) {
+                                                Alert(title: Text("댓글을 삭제하시겠어요?"),
+                                                      primaryButton:  .cancel(Text("취소")),
+                                                      secondaryButton:.destructive(Text("삭제"),action: {
+                                                    commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                                }))
+                                            }
                                     }
+                                    .task(id: deleteCommentAlertBool) {
+                                        commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+                                    }
+                                    
                                 }
                             }
                             .font(.caption2)

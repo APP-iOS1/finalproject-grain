@@ -105,7 +105,6 @@ struct CommunityDetailView: View {
                                         .aspectRatio(contentMode: .fill)
                                 }
                                 .tag(index)
-                        
                         }
                         .addPinchZoom()
                         .frame(width: Screen.maxWidth , height: Screen.maxWidth)
@@ -135,6 +134,9 @@ struct CommunityDetailView: View {
                 }
                 .refreshable {
                     communityVM.fetchCommunity()
+                }
+                .onDisappear{
+                    selectedIndex = 0
                 }
                 .padding(.top, 1)
                 // MARK: 댓글 달기

@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		0628A1A729B5AC09002A2709 /* UserDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0628A1A629B5AC09002A2709 /* UserDetailView.swift */; };
-		065A24F029D2976900A78ACF /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 065A24EF29D2976900A78ACF /* Config.xcconfig */; };
-		065A24F229D2976F00A78ACF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 065A24F129D2976F00A78ACF /* GoogleService-Info.plist */; };
 		065A24F429D2BD9300A78ACF /* DeleteUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065A24F329D2BD9300A78ACF /* DeleteUserView.swift */; };
 		0693B4C72992849600F9CDE2 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0693B4C62992849600F9CDE2 /* Error.swift */; };
 		06A7341A29AF2FA600ABB37B /* FollowerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A7341929AF2FA600ABB37B /* FollowerListView.swift */; };
@@ -52,6 +50,7 @@
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
 		8BCF31E2297A500900EB6188 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31E1297A500900EB6188 /* CommentView.swift */; };
+		991536DE29D4A00E007B5B07 /* EX + Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DD29D4A00E007B5B07 /* EX + Haptic.swift */; };
 		99233D462977F2C700A875B1 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D452977F2C700A875B1 /* MapView.swift */; };
 		99233D482977F2F900A875B1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D472977F2F900A875B1 /* LocationManager.swift */; };
 		99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D492977F31B00A875B1 /* MapCategoryCellView.swift */; };
@@ -156,8 +155,6 @@
 
 /* Begin PBXFileReference section */
 		0628A1A629B5AC09002A2709 /* UserDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailView.swift; sourceTree = "<group>"; };
-		065A24EF29D2976900A78ACF /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = SOURCE_ROOT; };
-		065A24F129D2976F00A78ACF /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		065A24F329D2BD9300A78ACF /* DeleteUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteUserView.swift; sourceTree = "<group>"; };
 		0693B4C62992849600F9CDE2 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		06A7341929AF2FA600ABB37B /* FollowerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerListView.swift; sourceTree = "<group>"; };
@@ -202,6 +199,7 @@
 		8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityAddView.swift; sourceTree = "<group>"; };
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		8BCF31E1297A500900EB6188 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
+		991536DD29D4A00E007B5B07 /* EX + Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX + Haptic.swift"; sourceTree = "<group>"; };
 		99233D452977F2C700A875B1 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		99233D472977F2F900A875B1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		99233D492977F31B00A875B1 /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
@@ -546,6 +544,7 @@
 				9958AFAB297780F100A51DA9 /* Ex+String.swift */,
 				06FD6ABA2977B45600B4A859 /* Ex+View.swift */,
 				9967FCC629D2D21E00F15844 /* EX+SegmentControls .swift */,
+				991536DD29D4A00E007B5B07 /* EX + Haptic.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -856,6 +855,7 @@
 				06F0D830297EB3FE00E7B885 /* UserViewModel.swift in Sources */,
 				A7D9F31229897C9000B39218 /* GeocodeService.swift in Sources */,
 				998847FC2992D65400004066 /* SearchProgress.swift in Sources */,
+				991536DE29D4A00E007B5B07 /* EX + Haptic.swift in Sources */,
 				A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */,
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,
 				A7E3DDE3298D3D5F004DA1F6 /* NearbyPostsComponent.swift in Sources */,

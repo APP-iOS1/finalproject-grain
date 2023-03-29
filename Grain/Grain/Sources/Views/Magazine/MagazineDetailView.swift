@@ -6,11 +6,13 @@ struct MagazineDetailView: View {
     @ObservedObject var magazineVM : MagazineViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var mapVM = MapViewModel()
-
+    
     @State private var isHeartToggle: Bool = false // 하트 눌림 상황
     @State private var isBookMarked: Bool = true
     @State private var isHeartAnimation: Bool = false
+    @State private var isHeartAnimationTwo: Bool = false
     @State private var heartOpacity: Double = 0
+    @State private var heartOpacityTwo: Double = 0
     @State private var saveOpacity: Double = 0
     @State private var showDevices: Bool = false
     @State private var currentAmount: CGFloat = 0
@@ -18,7 +20,9 @@ struct MagazineDetailView: View {
     @State private var firstImage: Image?
     @State private var renderedImage: Image? = nil
     @State private var isDeleteAlertShown:Bool = false
-
+    @State private var lifetime: Float = 0
+    @State private var imageScale: CGFloat = 1
+    
     @Environment(\.dismiss) private var dismiss
     
     let data : MagazineDocument
@@ -90,19 +94,63 @@ struct MagazineDetailView: View {
                                             .aspectRatio(contentMode: .fit)
                                     }
                                     .tag(index)
-                                    .onChange(of: index){ item in
-                                        selectedIndex = index
-                                    }
                                 
                             }
                             .addPinchZoom()
-                            .ignoresSafeArea()
+                            .onTapGesture(count: 2) {
+                                isHeartAnimationTwo = false
+                                HapticManager.instance.impact(style: .medium)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                    withAnimation(.interpolatingSpring(mass: 0.35, stiffness: 100, damping: 4.5, initialVelocity: 25)) {
+                                        
+                                        self.isHeartAnimationTwo = true
+                                        
+                                    }
+                                    self.heartOpacityTwo = 1
+                                    
+                                }
+                                
+                                self.isHeartToggle = true
+                                
+                                withAnimation(Animation.linear(duration: 0.1)) {
+                                    self.imageScale = 0.8
+                                    
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    withAnimation(Animation.linear(duration: 0.17)) {
+                                        self.imageScale = 1
+                                        self.lifetime = 1
+                                    }
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                    withAnimation {
+                                        self.lifetime = 0
+                                        
+                                    }
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                    self.heartOpacityTwo = 0
+                                    
+                                }
+                                
+                                
+                                
+                            }
                             .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                             .overlay{
                                 Image(systemName: "heart.fill")
                                     .foregroundColor(.white)
                                     .font(.system(size: isHeartAnimation ? 95 : 60 ))
                                     .opacity(heartOpacity)
+                            }
+                            .overlay{
+                                Image(systemName: "heart.fill")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: isHeartAnimationTwo ? 95 : 30 ))
+                                    .opacity(heartOpacityTwo)
                             }
                             .overlay{
                                 Group{
@@ -162,7 +210,7 @@ struct MagazineDetailView: View {
                                     Spacer()
                                     // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
                                     // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
-                                    HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
+                                    HeartButton(lifetime: $lifetime, imageScale: $imageScale, isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
                                         .padding(.leading)
                                     
                                     NavigationLink {
@@ -272,7 +320,6 @@ struct MagazineDetailView: View {
                         isBookMarked = false
                     }
                     ObservingChangeValueLikeNum = magazineData.fields.likedNum.integerValue
-                    selectedIndex = 0 
                 }
             }
             .task(id: magazineVM.magazines) {
@@ -283,6 +330,7 @@ struct MagazineDetailView: View {
                 }
             }
             .onDisappear{
+                selectedIndex = 0
                 if isHeartToggle {
                     // 좋아요 누름
                     if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
@@ -363,7 +411,7 @@ struct MagazineDetailView: View {
                             HStack{
                                 Text(isBookMarked ? "저장 취소" : "저장")
                                 Spacer()
-                                Image(systemName: isBookMarked ? "bookmark.slash.fill" : "bookmark.fill") 
+                                Image(systemName: isBookMarked ? "bookmark.slash.fill" : "bookmark.fill")
                             }
                         }
                         // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기

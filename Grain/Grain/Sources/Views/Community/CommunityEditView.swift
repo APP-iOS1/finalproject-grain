@@ -111,7 +111,7 @@ struct CommunityEditView: View {
                         TextEditor(text: $editContent)
                             .frame(height: 400)
                             .lineSpacing(4.0)
-                            .padding(8)
+                            .padding([.leading, .trailing])
                     }
                 } //HStack
                 .padding(.top, 6)

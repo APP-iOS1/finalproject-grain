@@ -234,7 +234,7 @@ struct MagazineDetailView: View {
                                 .lineSpacing(7.0)
                                 .padding(.horizontal)
                                 .foregroundColor(Color.textGray)
-                                .frame(width: Screen.maxWidth , alignment: .leading)
+//                                .frame(width: Screen.maxWidth , alignment: .leading)
                             
                             Spacer()
                         }

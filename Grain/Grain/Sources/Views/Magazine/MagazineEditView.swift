@@ -82,7 +82,6 @@ struct MagazineEditView: View {
                             Spacer()
                         }
                         
-                        
                         TabView{
                             if let data = self.data {
                                 ForEach(data.fields.image.arrayValue.values, id: \.self) { item in
@@ -104,18 +103,11 @@ struct MagazineEditView: View {
                         if let data = self.data {
                             Section(header: MagazineEditHeader(data: data, editTitle: $editTitle)){
                                 VStack {
-//                                    TextField(data.fields.content.stringValue, text: $editContent)
-//                                        .lineSpacing(4.0)
-//                                        .padding(.vertical, -9)
-//                                        .padding()
-//                                        .foregroundColor(Color.textGray)
-//                                        .focused($focus, equals: .content)
-//                                        .disableAutocorrection(true)
-//                                        .autocapitalization(.none)
                                     TextEditor(text: $editContent)
                                         .frame(height: 400)
-                                        .lineSpacing(4.0)
-                                        .padding(8)
+                                        .foregroundColor(Color.textGray)
+                                        .lineSpacing(7.0)
+                                        .padding(.horizontal)
                                 }
                             }
                         }
@@ -164,7 +156,6 @@ struct MagazineEditView: View {
                             }
                         } else if editTitle != data.fields.title.stringValue || editContent != data.fields.content.stringValue {
                             Button {
-                                print("수정됨")
                                 data.fields.title.stringValue = editTitle
                                 data.fields.content.stringValue = editContent
                                 magazineVM.updateMagazine(data: data, docID: data.fields.id.stringValue)
@@ -182,7 +173,6 @@ struct MagazineEditView: View {
                             }
                         } else {
                             Button {
-                                print("수정된 사항 없음")
                                 showSuccessAlert.toggle()
                             } label: {
                                 Text("확인")

@@ -20,7 +20,7 @@ struct AddCommunityView: View {
     @State private var textFieldFocused: Bool = true
     @State private var selectedTab: CommunityTabs = .매칭
     // 이미지 앨범에서 가져오기
-    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedImageData: Data? = nil
     @State private var selectedImages: [UIImage] = []
     @State private var isShowingAlert = false
@@ -44,9 +44,8 @@ struct AddCommunityView: View {
                     Spacer()
                     if pickImageCount < 5 {
                         PhotosPicker(
-                            selection: $selectedItem,
-                            matching: .images,
-                            photoLibrary: .shared()) {
+                            selection: $selectedItems, maxSelectionCount: 5,
+                            matching: .images) {
                                 Rectangle()
                                     .fill(.white)
                                     .border(.gray)
@@ -66,15 +65,13 @@ struct AddCommunityView: View {
                                     }
                                     .padding(.leading)
                             }
-                            .onChange(of: selectedItem) { newItem in
+                            .onChange(of: selectedItems) { newItem in
                                 Task {
-                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                        selectedImageData = data
-                                    }
-                                    // MARK: 선택한 이미지 selectedImages배열에 넣어주기
-                                    /// 이미지 선택 버튼 우측으로 이미지 정렬
-                                    if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
-                                        selectedImages.append(uiImage)
+                                    selectedImages = []
+                                    for value in newItem {
+                                        if let imageData = try? await value.loadTransferable(type: Data.self), let image = UIImage(data: imageData) {
+                                            selectedImages.append(image)
+                                        }
                                         pickImageCount = selectedImages.count
                                     }
                                 }
@@ -109,6 +106,8 @@ struct AddCommunityView: View {
                                                 Image(systemName: "x.circle.fill")
                                                     .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                     .onTapGesture {
+                                                        selectedItems.remove(at: index)
+
                                                         selectedImages.remove(at: index)
                                                         pickImageCount = selectedImages.count
                                                     }
@@ -121,6 +120,7 @@ struct AddCommunityView: View {
                                                 Image(systemName: "x.circle.fill")
                                                     .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                     .onTapGesture {
+                                                        selectedItems.remove(at: index)
                                                         selectedImages.remove(at: index)
                                                         pickImageCount = selectedImages.count
                                                     }

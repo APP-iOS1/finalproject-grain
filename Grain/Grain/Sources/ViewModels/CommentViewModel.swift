@@ -98,6 +98,8 @@ final class CommentViewModel: ObservableObject {
             }.store(in: &subscription)
 
     }
+    /// 매거진 하나당 코맨트 여러개 -> 코멘트 여러개에서 여러개
+    ///
     // MARK: 대댓글 Update
     func updateRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String, docID: String, updateComment: String, data: CommentFields ){
         CommentService.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, docID: docID, updateComment: updateComment, data: data)

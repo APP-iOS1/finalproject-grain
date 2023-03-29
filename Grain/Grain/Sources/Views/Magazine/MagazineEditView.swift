@@ -33,7 +33,7 @@ struct MagazineEditView: View {
     
     var body: some View {
         NavigationView{
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack{
                     VStack {
                         HStack {
@@ -41,6 +41,7 @@ struct MagazineEditView: View {
                                 .fields.userID.stringValue })
                             {
                                 ProfileImage(imageName: user.fields.profileImage.stringValue)
+                                    .padding(.trailing, -4)
                             }
                             
                             if let data = self.data {
@@ -49,11 +50,13 @@ struct MagazineEditView: View {
                                 {
                                     Text(user.fields.nickName.stringValue)
                                         .bold()
+                                        .padding(.bottom, -4)
                                 }
-//                                Text(data.fields.nickName.stringValue)
-//                                    .bold()
+
                                 HStack {
                                     Text(data.createTime.toDate()?.renderTime() ?? "")
+                                        .font(.caption)
+                                        .foregroundColor(.textGray)
                                     Spacer()
 //                                    if clickedCustomPlace {
 //                                        TextField(data.fields.customPlaceName.stringValue, text: $editCustomPlace)
@@ -78,14 +81,7 @@ struct MagazineEditView: View {
                             }
                             Spacer()
                         }
-                        .padding()
-                        .padding(.top, -15)
                         
-                        Divider()
-                            .frame(maxWidth: Screen.maxWidth * 0.9)
-                            .background(Color.black)
-                            .padding(.top, -10)
-                            .padding(.bottom, -10)
                         
                         TabView{
                             if let data = self.data {
@@ -103,25 +99,27 @@ struct MagazineEditView: View {
                         .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                         .tabViewStyle(.page)
                     }
-                    .frame(minHeight: 350)
                     
                     LazyVStack(pinnedViews: [.sectionHeaders]) {
                         if let data = self.data {
                             Section(header: MagazineEditHeader(data: data, editTitle: $editTitle)){
                                 VStack {
-                                    TextField(data.fields.content.stringValue, text: $editContent)
+//                                    TextField(data.fields.content.stringValue, text: $editContent)
+//                                        .lineSpacing(4.0)
+//                                        .padding(.vertical, -9)
+//                                        .padding()
+//                                        .foregroundColor(Color.textGray)
+//                                        .focused($focus, equals: .content)
+//                                        .disableAutocorrection(true)
+//                                        .autocapitalization(.none)
+                                    TextEditor(text: $editContent)
+                                        .frame(height: 400)
                                         .lineSpacing(4.0)
-                                        .padding(.vertical, -9)
-                                        .padding()
-                                        .foregroundColor(Color.textGray)
-                                        .focused($focus, equals: .content)
-                                        .disableAutocorrection(true)
-                                        .autocapitalization(.none)
+                                        .padding(8)
                                 }
                             }
                         }
                     }
-                    Spacer()
                 }
             }
             .padding(.top, 1)

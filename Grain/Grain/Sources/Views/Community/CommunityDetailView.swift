@@ -59,7 +59,7 @@ struct CommunityDetailView: View {
                         HStack{
                             if let community = self.communityData {
                                 Text(community.fields.title.stringValue)
-                                    .font(.title2)
+                                    .font(.title)
                                     .bold()
                                     .padding(.horizontal)
                                 .padding(.top, 5)
@@ -67,8 +67,10 @@ struct CommunityDetailView: View {
                             Spacer()
                         }
                         .padding(.top, 5)
+                        
+                        Divider()
                         // MARK: 닉네임 헤더
-                        HStack {
+                        HStack() {
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue}){
                                 NavigationLink {
                                     UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
@@ -79,22 +81,25 @@ struct CommunityDetailView: View {
                                 
                                 VStack(alignment: .leading) {
                                     Text(user.fields.nickName.stringValue)
-//                                        .font(.subheadline)
                                         .font(.callout)
                                         .bold()
+                                        .padding(.bottom, -3)
                                     //MARK: 옵셔널 처리 고민
                                     Text(community.createTime.toDate()?.renderTime() ?? "")
-                                        .font(.caption)
-                                }
+                                        .font(.caption2)
+                                        .foregroundColor(.textGray)
+                                }.padding(.leading, -2)
                             }
                             Spacer()
                         }//HS
-                        Divider()
-                            .frame(maxWidth: Screen.maxWidth * 0.94)
-                            .background(Color.black)
-                            .padding(.top, 5)
-                            .padding(.bottom, 15)
-                            .padding(.horizontal, Screen.maxWidth * 0.04)
+                        .padding([.top, .bottom], 2)
+                        
+//                        Divider()
+//                            .frame(maxWidth: Screen.maxWidth * 0.94)
+//                            .background(Color.black)
+//                            .padding(.top, 5)
+//                            .padding(.bottom, 15)
+//                            .padding(.horizontal, Screen.maxWidth * 0.04)
                         //MARK: 사진
                         ForEach(Array(                        community.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
                             Rectangle()
@@ -123,11 +128,25 @@ struct CommunityDetailView: View {
                             Spacer()
                         }
                         .padding(.top, 10)
+//                        Divider()
+//                            .frame(maxWidth: Screen.maxWidth * 0.94)
+//                            .background(Color.black)
+//                            .padding(.top, 20)
+//                            .padding(.horizontal, Screen.maxWidth * 0.04)
+                        
+                        HStack {
+                            Image(systemName: "bubble.right")
+                                .padding(.top, 2)
+                            Text("\(commentVm.comment.count)")
+                                    .padding(.leading, -3)
+                        }
+                        .padding(.top, 20)
+                        .padding(.leading)
+                        .font(.callout)
+                        .foregroundColor(.gray)
+                        
                         Divider()
-                            .frame(maxWidth: Screen.maxWidth * 0.94)
-                            .background(Color.black)
-                            .padding(.top, 20)
-                            .padding(.horizontal, Screen.maxWidth * 0.04)
+                        
                         // MARK: - 커뮤니티 댓글 뷰
                         CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData, eachBool: $eachBool , reCommentCount: $reCommentCount)
                           .padding(.leading, 3)

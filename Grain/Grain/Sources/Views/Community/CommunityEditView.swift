@@ -36,7 +36,7 @@ struct CommunityEditView: View {
     @Binding var editFetch: Bool
     
     var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false){
             VStack{
                 VStack {
                     if let community = self.community {
@@ -52,6 +52,8 @@ struct CommunityEditView: View {
                                 .autocapitalization(.none)
                         }.padding(.top, 5)
                         
+                        Divider()
+                        
                         HStack {
                         if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue })
                         {
@@ -62,22 +64,29 @@ struct CommunityEditView: View {
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue })
                             {
                                 Text(user.fields.nickName.stringValue)
-//                                    .font(.subheadline)
-//                                    .bold()
+                                    .font(.callout)
+                                    .bold()
+                                    .padding(.bottom, -5)
+
                             }
-//                            Text(community.fields.nickName.stringValue)
+
                             //MARK: 옵셔널 처리 고민
                             Text(community.createTime.toDate()?.renderTime() ?? "")
-                                .font(.caption)
+                                .font(.caption2)
+                                .foregroundColor(.textGray)
                         }
+                        .padding(.leading, -2)
+                            
                         Spacer()
+                            
                         }//HS
                         .padding(.leading, 7)
+                        .padding([.top, .bottom], 2)
                         
-                    Divider()
-                        .frame(maxWidth: Screen.maxWidth * 0.94)
-                        .background(Color.black)
-                        .padding(.top, 5)
+                        //                    Divider()
+                        //                        .frame(maxWidth: Screen.maxWidth * 0.94)
+//                        .background(Color.black)
+//                        .padding(.top, 5)
                         
                         //MARK: 사진
                         TabView{
@@ -99,15 +108,10 @@ struct CommunityEditView: View {
                 
                 HStack{
                     if let community = self.community {
-                        TextField(community.fields.content.stringValue, text: $editContent)
+                        TextEditor(text: $editContent)
+                            .frame(height: 400)
                             .lineSpacing(4.0)
-                            .padding(.vertical, -15)
-                            .padding()
-                            .foregroundColor(Color.textGray)
-                            .focused($focus, equals: .content)
-                            .disableAutocorrection(true)
-                            .autocapitalization(.none)
-                        Spacer()
+                            .padding(8)
                     }
                 } //HStack
                 .padding(.top, 6)

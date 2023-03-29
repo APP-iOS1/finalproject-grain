@@ -54,16 +54,16 @@ struct MagazineDetailView: View {
                                     NavigationLink {
                                         UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                                     } label: {
-                                        MagazineProfileImage(imageName: user.fields.profileImage.stringValue)
-                                    }
+                                        ProfileImage(imageName: user.fields.profileImage.stringValue)
+                                    }.padding(.trailing, -4)
                                     
                                     VStack(alignment: .leading){
                                         Text(user.fields.nickName.stringValue)
                                             .bold()
+                                            .padding(.bottom, -4)
                                         Text(magazineData.createTime.toDate()?.renderTime() ?? "")
                                             .font(.caption)
                                             .foregroundColor(.textGray)
-                                        
                                     }
                                 } else {
                                     Text("유저 없음")

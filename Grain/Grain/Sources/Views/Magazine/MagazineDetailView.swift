@@ -44,7 +44,7 @@ struct MagazineDetailView: View {
     var body: some View {
         NavigationStack{
             ScrollView {
-                VStack{
+                VStack(alignment: .leading){
                     if let magazineData = self.magazineData {
                         VStack {
                             // MARK: 닉네임 헤더
@@ -228,15 +228,16 @@ struct MagazineDetailView: View {
                                 .padding(.top)
                                 .padding(.bottom, 6)
                             
-                            
-                            // MARK: 내용
-                            Text(magazineData.fields.content.stringValue)
-                                .lineSpacing(7.0)
-                                .padding(.horizontal)
-                                .foregroundColor(Color.textGray)
-//                                .frame(width: Screen.maxWidth , alignment: .leading)
-                            
-                            Spacer()
+                            HStack {
+                                // MARK: 내용
+                                Text(magazineData.fields.content.stringValue)
+                                    .lineSpacing(7.0)
+                                    .padding(.horizontal)
+                                    .foregroundColor(Color.textGray)
+                                    .frame(alignment: .leading)
+                                
+                                Spacer()
+                            }
                         }
                         .zIndex(0)
                     }//VStack
@@ -256,7 +257,7 @@ struct MagazineDetailView: View {
                 }))
             }
             .onAppear{
-                magazineData = data
+                self.magazineData = self.data
                 // 희경: 유저 팔로워, 팔로잉 업데이트 후 뒤로가기했다가 다시 들어갔을때 바로 반영안되는 issue
                 // [해결] magazineDetailView의 onAppear 에서 fetchUser를 해주는 방식에서 userVM의 updateCurrentUserArray 메소드의 receivedValue 블록에 fetchUser 해주는 방식으로 변경
                 // [이유] UserDetailView의 onDisappear메소드와 onAppear메소드간의 비동기처리가 문제였던것같다.

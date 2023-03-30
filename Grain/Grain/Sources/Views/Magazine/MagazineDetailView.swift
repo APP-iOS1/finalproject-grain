@@ -22,7 +22,8 @@ struct MagazineDetailView: View {
     @State private var isDeleteAlertShown:Bool = false
     @State private var lifetime: Float = 0
     @State private var imageScale: CGFloat = 1
-    
+    @State private var viewID = 0
+
     @Environment(\.dismiss) private var dismiss
     
     let data : MagazineDocument
@@ -44,7 +45,7 @@ struct MagazineDetailView: View {
             renderedImage = Image(uiImage: uiImage)
         }
     }
-    @MainActor
+    
     var body: some View {
         NavigationStack{
             ScrollView {
@@ -135,9 +136,6 @@ struct MagazineDetailView: View {
                                     self.heartOpacityTwo = 0
                                     
                                 }
-                                
-                                
-                                
                             }
                             .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                             .overlay{
@@ -151,6 +149,7 @@ struct MagazineDetailView: View {
                                     .foregroundColor(.white)
                                     .font(.system(size: isHeartAnimationTwo ? 95 : 30 ))
                                     .opacity(heartOpacityTwo)
+                                    .id(viewID)
                             }
                             .overlay{
                                 Group{
@@ -177,37 +176,31 @@ struct MagazineDetailView: View {
                             }
                             .zIndex(.infinity)
                             
-                            //.tag(index) // 문제시 고치기
-                            
-                            
-                            
                             VStack(alignment: .leading){
                                 HStack{
-                                    VStack{
-                                        Button{
-                                            showDevices.toggle()
-                                            //                                transitionView.toggle()
-                                        } label: {
-                                            VStack(alignment: .leading){
-                                                HStack{
-                                                    Text("장비 정보")
-                                                        .font(.subheadline)
-                                                    Image(systemName: "chevron.right")
-                                                        .font(.caption)
-                                                        .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
-                                                        .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
-                                                }
-                                                .bold()
-                                            }
-                                            .padding(.top, 5)
-                                        }
-                                        
+                                    
+                                    HStack{
+                                        Text("장비 정보")
+                                            .font(.subheadline)
+                                        Image(systemName: "chevron.right")
+                                            .font(.caption)
+                                            .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
+                                            .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
                                     }
+                                    .bold()
+                                    .padding(.top, 5)
+                                    .onTapGesture {
+                                        withAnimation {
+                                            showDevices.toggle()
+                                        }
+                                    }
+                                    
                                     .padding(.leading, 20)
                                     .padding(.top, -5)
                                     .foregroundColor(.textGray)
                                     
                                     Spacer()
+                                    
                                     // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
                                     // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
                                     HeartButton(lifetime: $lifetime, imageScale: $imageScale, isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
@@ -221,21 +214,20 @@ struct MagazineDetailView: View {
                                             .foregroundColor(.black)
                                             .padding(.top, 2)
                                     }
-                                    //                        Spacer()
                                     
                                     //MARK: 북마크 버튼
-                                    Button {
-                                        self.isBookMarked.toggle()
-                                        self.saveOpacity = 1
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                            self.saveOpacity = 0
+                                    
+                                    Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
+                                        .font(.system(size: 22))
+                                        .foregroundColor(.black)
+                                        .padding(.trailing)
+                                        .onTapGesture {
+                                            self.isBookMarked.toggle()
+                                            self.saveOpacity = 1
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                                self.saveOpacity = 0
+                                            }
                                         }
-                                    } label: {
-                                        Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
-                                            .font(.system(size: 22))
-                                            .foregroundColor(.black)
-                                    }
-                                    .padding(.trailing)
                                     
                                 }
                                 .padding(.top, 5)
@@ -250,7 +242,9 @@ struct MagazineDetailView: View {
                                     .foregroundColor(.textGray)
                                     .padding(.top, -9)
                                     .padding(.leading, 20)
+                                    .transition(.moveAndFade)
                                 }
+                                
                             }
                             
                         }//VStack

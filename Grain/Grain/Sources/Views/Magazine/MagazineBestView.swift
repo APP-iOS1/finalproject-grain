@@ -9,27 +9,24 @@ import SwiftUI
 
 import FirebaseAuth
 
-fileprivate  enum timePeriod {
-    case daily
-    case weekly
-    case monthly
-}
-
 struct MagazineBestView: View {
     @ObservedObject var  userVM: UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     @ObservedObject var editorVM : EditorViewModel
     
-    @State var ObservingChangeValueLikeNum : String = ""
+    @State private var ObservingChangeValueLikeNum: String = ""
+    @State private var isMagazineDegtailViewShown: Bool = false
+    @State private var isMagazineEditorViewShown: Bool = false
+    @State private var selectIndexNum: Int = 0
     
     var body: some View {
         VStack {
             ScrollView {
-                NavigationLink {
-                    EditorView(editorVM : editorVM, userVM: userVM, magazineVM: magazineVM)
-                } label: {
-                    EditorViewCell(editorVM: editorVM)
-                }
+                
+                EditorViewCell(editorVM: editorVM)
+                    .onTapGesture {
+                        isMagazineEditorViewShown.toggle()
+                    }
                 HStack{
                     Text("인기 필름")
                         .font(.title)
@@ -39,24 +36,38 @@ struct MagazineBestView: View {
                         .frame(width: Screen.maxWidth * 0.66, height: Screen.maxHeight * 0.003)
                 }
                 .padding([.leading, .top])
-                ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10)), id: \.self ){ data in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
-                    NavigationLink {
-                        MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
-                    } label: {
-                        LazyVStack{
-                            Top10View(data: data, userVM: userVM)
-                                .padding(.vertical, 7)
-                                .padding(.horizontal)
-                            
-                        }
+                
+                ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
+                    
+                    LazyVStack{
+                        Top10View(data: data, userVM: userVM)
+                            .padding(.vertical, 7)
+                            .padding(.horizontal)
                         
                     }
+                    .onTapGesture {
+                        selectIndexNum = index
+                        isMagazineDegtailViewShown.toggle()
+                    }
+                    
+                    
                 }
             }
             .task(id: ObservingChangeValueLikeNum){
-                magazineVM.fetchMagazine() 
-           }
+                magazineVM.fetchMagazine()
+            }
             
+        }
+        .navigationDestination(isPresented: $isMagazineDegtailViewShown){
+            ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data ) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
+                if selectIndexNum == index{
+                    
+                    MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                }
+            }
+        }
+        .navigationDestination(isPresented: $isMagazineEditorViewShown){
+            EditorView(editorVM : editorVM, userVM: userVM, magazineVM: magazineVM)
         }
         .onAppear{
             editorVM.fetchEditor()

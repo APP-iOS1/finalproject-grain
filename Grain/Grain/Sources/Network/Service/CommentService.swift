@@ -115,6 +115,7 @@ enum CommentService {
         
         do {
             let request = try CommentRouter.reCommentGet(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId).asURLRequest()
+            print(request)
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

@@ -33,6 +33,7 @@ struct MagazineCommentView: View {
     @State var deleteCommentAlertBool : Bool = false
     @State var deleteDocId : String = ""
     @State var nickName : String = "" // 닉네임 변경을 위해
+    @State var showRecommentView = false //정훈 테스트
     
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
@@ -162,9 +163,10 @@ struct MagazineCommentView: View {
                                                     }))
                                                 }
                                         }
-                                        .task(id: deleteCommentAlertBool) {
-                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                                        }
+                                        // 정훈 작업 중
+//                                        .task(id: deleteCommentAlertBool) {
+//                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+//                                        }
                                         
                                     }
                                 }
@@ -173,11 +175,23 @@ struct MagazineCommentView: View {
                                 .padding(.top, 1)
                                 .padding(.bottom, -3)
                                 
+                                // 정훈 작업 중
                                 VStack{
-                                    if readMoreComments && eachBool[index]{
+                                    if showRecommentView{
+                                        // 정훈 작업 중
+//                                        MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData, commentText: $commentText, index: index, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
                                         MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+
+                                    }else{
+                                        ProgressView()
                                     }
                                 }
+                                .onAppear {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                        self.showRecommentView = true
+                                    }
+                                }
+                                //// 정훈 작업 중
                             }
                             .frame(width: Screen.maxWidth * 0.8)
                         }
@@ -190,10 +204,6 @@ struct MagazineCommentView: View {
                     .padding(7)
                 }
                 
-            }.refreshable {
-                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                reCommentCount = commentVm.sortedRecentComment.count
-                makeEachBool(count: reCommentCount)
             }
             VStack(alignment: .leading){
                 // MARK: 답글달기 클릭시 활성화 되는 구역

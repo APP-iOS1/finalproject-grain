@@ -17,6 +17,9 @@ final class CommentViewModel: ObservableObject {
     @Published var comment = [CommentDocument]()
     @Published var sortedRecentComment = [CommentDocument]()
     @Published var sortedRecentRecomment = [CommentDocument]()  // 대댓글 최신순으로 정렬
+    @Published var sortedRecentRecommentArray : [[CommentDocument]] = [] // 정훈
+    
+    
     var fetchCommentSuccess = PassthroughSubject<(), Never>()
     var insertCommentSuccess = PassthroughSubject<(), Never>()
     var updateCommentSuccess = PassthroughSubject<(), Never>()
@@ -34,16 +37,37 @@ final class CommentViewModel: ObservableObject {
         CommentService.getComment(collectionName: collectionName, collectionDocId: collectionDocId)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-                
             } receiveValue: { (data: CommentResponse) in
                 self.comment = data.documents
                 self.sortedRecentComment = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
                 })
+                // 정훈 작업 중
+//                for i in self.sortedRecentComment{
+//                    print(i.fields.id.stringValue)
+//                    CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: i.fields.id.stringValue)
+//                        .receive(on: DispatchQueue.main)
+//                        .sink { (completion: Subscribers.Completion<Error>) in
+//                        } receiveValue: { (data: CommentResponse) in
+//                            self.sortedRecentRecomment = data.documents.sorted(by: {
+//                                return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+//                            })
+//                            if data.documents == []{
+//                                print("empty")
+//                                self.sortedRecentRecommentArray.append([])
+//                            }else{
+//                                self.sortedRecentRecommentArray.append(self.sortedRecentRecomment)
+//                            }
+//                            self.fetchRecommentSuccess.send()
+//                        }.store(in: &self.subscription)
+//                }
                 self.fetchCommentSuccess.send()
             }.store(in: &subscription)
+        // 정훈 작업 중
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//            print(self.sortedRecentRecommentArray)
+//        }
     }
-    
     // MARK: Create
     func insertComment(collectionName: String, collectionDocId: String, data: CommentFields) {
         CommentService.insertComment(collectionName: collectionName, collectionDocId: collectionDocId, data: data)
@@ -85,8 +109,8 @@ final class CommentViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-    // MARK: 대댓글 Read
-    func fetchRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String) { 
+//    // MARK: 대댓글 Read -> 임시 중단
+    func fetchRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String) {
         CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in

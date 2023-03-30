@@ -20,8 +20,8 @@ struct MyPageView: View {
     
     
     var magazineDocument: [MagazineDocument]
-//    var boomarkedMagazineDocument: [MagazineDocument]
-//    var bookmarkedCommunityDoument: [CommunityDocument]
+    //    var boomarkedMagazineDocument: [MagazineDocument]
+    //    var bookmarkedCommunityDoument: [CommunityDocument]
     
     @State private var showDevices: Bool = false
     @State private var angle: Double = 0
@@ -51,7 +51,7 @@ struct MyPageView: View {
                                     .padding(.leading, 8)
                                     .padding(.bottom, 1)
                                 
-
+                                
                             }
                             VStack(alignment: .leading){
                                 HStack{
@@ -67,29 +67,29 @@ struct MyPageView: View {
                                 
                                 HStack{
                                     NavigationLink {
-//                                        CurrentUserFollowerListView(userVM: userVM)
+                                        //                                        CurrentUserFollowerListView(userVM: userVM)
                                         CurrentUserFollowingFollowerView(userVM: userVM, magazineVM: magazineVM, selectedIndex: 0)
-//                                            .onAppear{
-//                                                selectedIndex = 0
-//                                            }
+                                        //                                            .onAppear{
+                                        //                                                selectedIndex = 0
+                                        //                                            }
                                     } label: {
                                         Text("구독자")
                                     }
-
+                                    
                                     
                                     Text("\(userVM.follower.count == 1 ? 0 : userVM.follower.count-1)")
                                         .padding(.leading, -5)
                                         .bold()
-
+                                    
                                     Text("|")
-
+                                    
                                     NavigationLink {
-//                                        CurrentUserFollowingListView(userVM: userVM)
+                                        //                                        CurrentUserFollowingListView(userVM: userVM)
                                         CurrentUserFollowingFollowerView(userVM: userVM, magazineVM: magazineVM, selectedIndex: 1)
-//                                            .onAppear{
-//                                                selectedIndex = 1
-//                                            }
-
+                                        //                                            .onAppear{
+                                        //                                                selectedIndex = 1
+                                        //                                            }
+                                        
                                     } label: {
                                         Text("구독중")
                                     }
@@ -115,36 +115,35 @@ struct MyPageView: View {
                     }
                     .padding(.horizontal, 5)
                     
-                    VStack{
-                        Button{
-                            showDevices.toggle()
-                        } label: {
-                            VStack(alignment: .leading){
-                                HStack{
-                                    Text("장비 정보")
-                                        .font(.subheadline)
-                                    Image(systemName: "chevron.right")
-                                        .font(.caption)
-                                        .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
-                                        .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
-                                }
-                                .bold()
-                                
-                                
-                                if showDevices {
-                                    VStack(alignment: .leading){
-                                        userVM.myCamera.count > 1 ? Text("바디 | \(userVM.myCamera[1])") : nil
-                                        
-                                        userVM.myLens.count > 1 ? Text("렌즈 | \(userVM.myLens[1])") : nil
-                                        
-                                        userVM.myFilm.count > 1 ? Text("필름 | \(userVM.myFilm[1])") : nil
-                                        
-                                    }
-                                    .font(.subheadline)
-                                    .padding(.top, -9)
-                                }
+                    VStack(alignment: .leading){
+                        HStack{
+                            Text("장비 정보")
+                                .font(.subheadline)
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
+                                .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
+                        }
+                        .bold()
+                        .padding(.top, 5)
+                        .onTapGesture {
+                            withAnimation {
+                                showDevices.toggle()
                             }
-                            .padding(.top, 5)
+                        }
+                        
+                        if showDevices {
+                            VStack(alignment: .leading){
+                                userVM.myCamera.count > 1 ? Text("바디 | \(userVM.myCamera[1])") : nil
+                                
+                                userVM.myLens.count > 1 ? Text("렌즈 | \(userVM.myLens[1])") : nil
+                                
+                                userVM.myFilm.count > 1 ? Text("필름 | \(userVM.myFilm[1])") : nil
+                                
+                            }
+                            .font(.subheadline)
+                            .padding(.top, -9)
+                            .transition(.moveAndFade)
                         }
                         
                     }

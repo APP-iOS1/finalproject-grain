@@ -393,7 +393,6 @@ struct MainSearchView: View {
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
             CommunitySearchResultView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord, community: communityViewModel)
         }
-        
         .navigationDestination(isPresented: $isUserSearchResultShown){
             UserSearchResultView( userVM: userViewModel , magazineVM: magazineViewModel, searchWord: $searchWord)
         }

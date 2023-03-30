@@ -8,29 +8,32 @@
 import SwiftUI
 
 struct HeartButton: View {
-    @State private var lifetime: Float = 0
-    @State private var imageScale: CGFloat = 1
+    @Binding var lifetime: Float
+    @Binding var imageScale: CGFloat
     @Binding var isHeartToggle: Bool
     @Binding var isHeartAnimation: Bool
     @Binding var heartOpacity: Double
-   
+    
     var body: some View {
         ZStack {
             Image(systemName: isHeartToggle ? "heart.fill" : "heart")
                 .font(.system(size: 24))
                 .foregroundColor(isHeartToggle ? .red : .black)
                 .scaleEffect(self.imageScale)
-                
+            
         }
         .onTapGesture {
-           
-            withAnimation(.interpolatingSpring(mass: 0.8, stiffness: 100, damping: 10, initialVelocity: 0)) {
+            if isHeartToggle == false {
+                HapticManager.instance.impact(style: .medium)
+
+            }
+            withAnimation(.interpolatingSpring(mass: 0.35, stiffness: 100, damping: 4.5, initialVelocity: 25)) {
                 if isHeartToggle == true {
                     self.isHeartAnimation = false
                 } else if isHeartToggle == false {
                     self.isHeartAnimation = true
                 }
-                      }
+            }
             self.isHeartToggle.toggle()
             withAnimation(Animation.linear(duration: 0.1)) {
                 if isHeartToggle == true {
@@ -55,19 +58,16 @@ struct HeartButton: View {
             }
             if isHeartAnimation == true {
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    
-                    self.heartOpacity = 1
-                    
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) {
+                
+                self.heartOpacity = 1
+                
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                     
                     self.heartOpacity = 0
                     
                 }
             }
-            
-            
         }
     }
 }

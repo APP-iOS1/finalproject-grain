@@ -51,25 +51,31 @@ struct MagazineContentAddView: View {
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
             GeometryReader { geo in
                 VStack {
+                    
+                    Divider()
+                    
                     HStack {
                         if pickImageCount < 5 {
                             PhotosPicker(
                                 selection: $selectedItems, maxSelectionCount: 5,
                                 matching: .images) {
                                     Rectangle()
-                                        .fill(.white)
-                                        .border(.gray)
-                                        .frame(width: 100, height: 100)
+                                        .fill(Color.white)
+                                        .frame(width: 95, height: 95)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.middlebrightGray, lineWidth: 1)
+                                        )
                                         .overlay {
                                             VStack {
                                                 Spacer()
                                                 Image(systemName: "camera.fill")
                                                     .font(.title3)
                                                     .foregroundColor(.black)
-                                                Spacer()
                                                 Text("\(pickImageCount)/5")
-                                                    .font(.headline)
-                                                    .foregroundColor(.black)
+                                                    .font(.footnote)
+                                                    .foregroundColor(.gray)
+                                                    .padding(.top, 5)
                                                 Spacer()
                                             }
                                         }
@@ -93,7 +99,6 @@ struct MagazineContentAddView: View {
                                 // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
                                 ForEach(selectedImages.indices, id: \.self) { index in
                                     GeometryReader { geometry in
-                                        
                                         Rectangle()
                                             .fill(.white)
                                             .frame(width: 100, height: 100)
@@ -143,17 +148,14 @@ struct MagazineContentAddView: View {
                         }
                         .padding(.horizontal)
                     }
-                    .padding(.top)
+                    .padding(.vertical)
                     
-                    //MARK: 제목과 게시물 내용 구분선
-                    Image("line")
-                        .resizable()
-                        .frame(width: Screen.maxWidth * 0.95,height: 1)
-                        .padding(.top)
+                    Divider()
                     
                     // MARK: 게시물 제목 작성 란
-                    TextField("제목을 입력해주세요", text: $inputTitle)
-                        .font(.title3)
+                    TextField("필름의 제목을 입력해주세요.", text: $inputTitle)
+                        .font(.body)
+                        .bold()
                         .keyboardType(.default)
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
@@ -162,15 +164,19 @@ struct MagazineContentAddView: View {
                             hideKeyboard()
                         }
                         .submitLabel(.done)
+                        .padding(.vertical, 6)
                     
-                    //MARK: 제목과 게시물 내용 구분선
-                    Image("line")
-                        .resizable()
-                        .frame(width: Screen.maxWidth * 0.95,height: 1)
+//                    //MARK: 제목과 게시물 내용 구분선
+//                    Image("line")
+//                        .resizable()
+//                        .frame(width: Screen.maxWidth * 0.95,height: 1)
+                    
+                    Divider()
                     
                     // MARK: 게시물 내용 작성 란
-                    TextField("소중한 추억을 기록해주세요", text: $inputContent, axis: .vertical)
-                        .font(.title3)
+                    TextField("필름에 담긴 이야기와, 설명을 기록해보세요.", text: $inputContent, axis: .vertical)
+                        .font(.body)
+                        .bold()
                         .textInputAutocapitalization(.never)
                         .keyboardType(.default)
                         .disableAutocorrection(true)
@@ -188,6 +194,7 @@ struct MagazineContentAddView: View {
                             }
                         }
                         .frame(height: Screen.maxHeight * 0.4, alignment: .top)
+                        .padding(.vertical, 6)
                     
                     
                     Spacer()

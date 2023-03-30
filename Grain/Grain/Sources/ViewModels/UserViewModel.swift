@@ -50,6 +50,8 @@ final class UserViewModel: ObservableObject {
     var updateUsersStringSuccess = PassthroughSubject<(), Never>()
     var updateUsersProfileSuccess = PassthroughSubject<(), Never>()
     var deleteUsersSuccess = PassthroughSubject<(), Never>()
+    var getMagazineCommentsSuccess = PassthroughSubject<[[String]], Never>()
+    var getMagazineReCommentsSuccess = PassthroughSubject<[[String]], Never>()
     
     
     func fetchUser() {
@@ -150,7 +152,7 @@ final class UserViewModel: ObservableObject {
     }
     
     // MARK: - 유저 프로필 업데이트 메소드 (nickName, introduce, profileImage 업데이트할때 ProfileEditView에서 사용)
-    /// ex) profileImage :프로필 UIImage를 UIImage 타입 그대로 배열에 넣어서 넘겨줍니다, 또 nickName, introduce, docID는 그대로 String 타입으로 넘겨주면 자동으로 update 될겁니다.
+    /// ex) profileImage :프로필 UIImage를 UIImage 타입 그대로 배열에 넣어서 넘겨줍니다, 또 nickName, introduce, docID는 그대로 String 타입으로 넘겨주면 자동으로 update 될겁니다.
     func updateCurrentUserProfile(profileImage: [UIImage], nickName: String, introduce: String, docID: String) {
         UserService.updateCurrentUserProfile(profileImage: profileImage, nickName: nickName, introduce: introduce, docID: docID)
             .receive(on: DispatchQueue.main)
@@ -203,7 +205,6 @@ final class UserViewModel: ObservableObject {
     //     MARK: - 유저정보 삭제 메소드 (유저 탈퇴시 유저가 작성한 메거진 게시글 모두 삭제)
     func deleteUserMagazine(magazines: [String]) {
         for i in magazines {
-            print("magazines.count == \(magazines.count)")
             MagazineService.deleteMagazine(docID: i)
                 .receive(on: DispatchQueue.main)
                 .sink { (completion: Subscribers.Completion<Error>) in
@@ -224,6 +225,52 @@ final class UserViewModel: ObservableObject {
                 }.store(in: &subscription)
         }
     }
+    
+    // 메거진컬렉션에 있는 모든 댓글 id 저장
+    //Magazine/1234/Comment/1234 - > delete
+    func getMagazineComments(magazines: [String]) {
+        var magazineComments = [[String]]()
+        for id in magazines {
+            CommentService.getComment(collectionName: "Magazine", collectionDocId: id)
+                .receive(on: DispatchQueue.main)
+                .sink { (completion: Subscribers.Completion<Error>) in
+                } receiveValue: { (data: CommentResponse) in
+                    // 메거진 하나당 달린 댓글들 id를 배열에 저장
+                    var arr: [String]
+                    for i in data.documents {
+                        // [magzineID, commentID]
+//                        arr.append([id, i.fields.id.stringValue])
+                    }
+                }.store(in: &subscription)
+        }
+        
+        self.getMagazineCommentsSuccess.send(magazineComments)
+    }
+    
+    // Magazine/123/Comment/1234/Recomment/12344 -> delete
+    
+    // 메거진컬렉션에 있는 모든 대댓글 id 저장
+    func getMagazineRecomment(comments: [[String]]) {
+        // [magzineID, commentID]
+        var magzineRecomment = [[String]]()
+        
+        for id in comments {
+            CommentService.getRecomment(collectionName: "Magazine", collectionDocId: id[0], commentCollectionName: "Comment", commentCollectionDocId: id[1])
+                .receive(on: DispatchQueue.main)
+                .sink { (completion: Subscribers.Completion<Error>) in
+                } receiveValue: { (data: CommentResponse) in
+                    // 메거진 하나당 달린 댓글들 id를 배열에 저장
+                    for i in data.documents {
+                        // [magzineID, commentID, recommentID]
+                        magzineRecomment.append([id[0], id[1], i.fields.id.stringValue])
+                    }
+                }.store(in: &subscription)
+        }
+        
+        self.getMagazineReCommentsSuccess.send(magzineRecomment)
+    }
+    
+    
     
     func removeAll() {
         self.likedMagazineID.removeAll()

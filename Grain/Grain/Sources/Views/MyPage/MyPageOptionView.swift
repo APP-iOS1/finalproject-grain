@@ -408,14 +408,17 @@ struct InfoSection: View {
             }
             
             NavigationLink {
-                DeleteUserView(userVM: userVM)
+               AccountDetailView(userVM: userVM)
             } label: {
                 HStack() {
                     Image(systemName: "person")
                         .font(.system(size: 25))
-                        .padding(.trailing, 10)
+//                        .padding(.trailing, 10)
+//                        .font(.system(size:20))
+                        .padding(.leading, 4.5)
+                        .padding(.trailing, 12)
 
-                    Text("계정 삭제")
+                    Text("계정 관리")
                         .font(.title3)
 
                     Spacer()

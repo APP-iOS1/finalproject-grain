@@ -16,23 +16,27 @@ struct CommunityRowView: View {
     
     var tagColor: String {
         switch community.fields.state.stringValue {
-        case "모집중", "판매중", "Tip":
-            return "#F8BC24"
+        case "모집중", "판매중":
+            return "#4C9E77"
         case "모집완료", "판매완료":
             return "#A0A0A0"
+        case "Tip":
+            return "#F5dF4D"
         default:
-            return "F8BC24"
+            return "4C9E77"
         }
     }
     
     var tagNameColor: String {
         switch community.fields.state.stringValue {
-        case "모집중", "판매중", "Tip":
-            return "#616161"
+        case "모집중", "판매중":
+            return "#FFFFFF"
         case "모집완료", "판매완료":
             return "#FFFFFF"
+        case "Tip":
+            return "000000"
         default:
-            return "616161"
+            return "#FFFFFF"
         }
     }
     
@@ -45,8 +49,9 @@ struct CommunityRowView: View {
             HStack{
                 KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                     .resizable()
-                    .scaledToFill()
                     .frame(width: Screen.maxWidth*0.27, height: Screen.maxWidth*0.27)
+                    .cornerRadius(7)
+                    .aspectRatio(contentMode: .fill)
                     .clipped()
                     .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                     .padding(.horizontal, 13)
@@ -59,7 +64,7 @@ struct CommunityRowView: View {
                             Text("\(community.fields.category.stringValue)")
                                 .padding(.vertical, 5)
                                 .padding(.horizontal, 8)
-                                .background(Color(hex: "F58800"))
+                                .background(Color.black)
                                 .cornerRadius(20)
                                 .foregroundColor(.white)
                                 .bold()
@@ -76,12 +81,12 @@ struct CommunityRowView: View {
                                 .font(.caption)
                                 .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                         } // hstack
-                        .padding(.top, 4)
+                        .padding(.top, 0)
                 
                         //MARK: 게시글 제목
                         Text("\(community.fields.title.stringValue)")
-                            .font(.callout)
-                            .foregroundColor(.black)
+                            .font(.subheadline)
+                            .foregroundColor(.boxGray)
                             .multilineTextAlignment(.leading)
                             .padding(.top, -2)
                             .setSkeletonView(opacity: opacity, shouldShow: isLoading)
@@ -122,7 +127,6 @@ struct CommunityRowView: View {
         .onAppear{
             commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
         }
-//        .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.17) -> 커뮤니티 셀뷰 간격 사이 고치기 필요시 주석 제거하기
     }
 }
 

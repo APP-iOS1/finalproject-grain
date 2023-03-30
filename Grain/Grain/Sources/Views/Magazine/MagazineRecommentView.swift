@@ -37,17 +37,18 @@ struct MagazineRecommentView: View {
             if commentVm.sortedRecentRecomment.count < 1 {
                 
             }else{
-                ForEach(commentVm.sortedRecentRecomment.indices, id:\.self){ index in
+                
+                ForEach(commentVm.sortedRecentRecommentArray[index].indices, id:\.self){ item in
                     Divider()
                     HStack(alignment: .top){
                         // MARK: -  유저 프로필 이미지
                         VStack{
-                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentRecomment[index].fields.userID.stringValue })
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentRecommentArray[index][item].fields.userID.stringValue })
                             {
                                 NavigationLink {
                                     UserDetailView(userVM: userVM , magazineVM: magazineVM, user: user)
                                 } label: {
-                                    KFImage(URL(string: commentVm.sortedRecentRecomment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                    KFImage(URL(string: commentVm.sortedRecentRecommentArray[index][item].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()
                                         .frame(width: 25, height: 25)
                                         .cornerRadius(15)
@@ -72,16 +73,16 @@ struct MagazineRecommentView: View {
                             }
                         }
                         .frame(width: Screen.maxWidth * 0.1)
-                        
+
                         VStack(alignment: .leading){
-                            
+
                             HStack{
-                                if userVM.users.contains(where: { $0.fields.id.stringValue == commentVm.sortedRecentRecomment[index].fields.userID.stringValue }) {
+                                if userVM.users.contains(where: { $0.fields.id.stringValue == commentVm.sortedRecentRecommentArray[index][item].fields.userID.stringValue }) {
                                     NavigationLink {
                                         //유저 프로필 뷰 입장
                                     } label: {
                                         // MARK: 유저 닉네임
-                                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentRecomment[index].fields.userID.stringValue }){
+                                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentRecommentArray[index][item].fields.userID.stringValue }){
                                             Text(user.fields.nickName.stringValue)
                                                 .font(.caption)
                                                 .fontWeight(.bold)
@@ -97,32 +98,32 @@ struct MagazineRecommentView: View {
                                         .font(.caption2)
                                         .padding(.trailing, -5)
                                     // MARK: 댓글 생성 날짜
-                                    Text(commentVm.sortedRecentRecomment[index].createTime.toDate()?.renderTime() ?? "")
+                                    Text(commentVm.sortedRecentRecommentArray[index][item].createTime.toDate()?.renderTime() ?? "")
                                         .font(.caption2)
                                 }
                                 Spacer()
-                                
+
                             }
                             .padding(.bottom, -5)
-                            
+
                             //MARK: - 댓글 내용
-                            Text(commentVm.sortedRecentRecomment[index].fields.comment.stringValue)
+                            Text(commentVm.sortedRecentRecommentArray[index][item].fields.comment.stringValue)
                                 .font(.caption)
                                 .padding(.bottom, -1)
-                            
+
                             // MARK: - 자기가 쓴 댓글일시 보여주는 수정/삭제
                             HStack{
-                                if commentVm.sortedRecentRecomment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                                if commentVm.sortedRecentRecommentArray[index][item].fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                     Button {
                                         editRecomment.toggle()
-                                        editReDocID = commentVm.sortedRecentRecomment[index].fields.id.stringValue
-                                        editReData = commentVm.sortedRecentRecomment[index].fields
+                                        editReDocID = commentVm.sortedRecentRecommentArray[index][item].fields.id.stringValue
+                                        editReData = commentVm.sortedRecentRecommentArray[index][item].fields
                                     } label: {
                                         Text("수정")
                                     }
-                                    
+
                                     Button{
-                                        deleteDocId = commentVm.sortedRecentRecomment[index].fields.id.stringValue
+                                        deleteDocId = commentVm.sortedRecentRecommentArray[index][item].fields.id.stringValue
                                         deleteCommentAlertBool.toggle()
                                     } label: {
                                         Text("삭제")
@@ -137,18 +138,19 @@ struct MagazineRecommentView: View {
                                     .task(id: deleteCommentAlertBool) {
                                         commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
                                     }
-                                    
+
                                 }
                             }
                             .font(.caption2)
                             .foregroundColor(.textGray)
                             .padding(.top, 1)
                             .padding(.bottom, -3)
-                            
+
                         }
                     }
-                    
+
                 }
+                
             }
             // 댓글이 한개 이상 존재하면 Foreach 구문 실행
 //            if commentVm.sortedRecentRecommentArray[index].isEmpty {
@@ -271,8 +273,8 @@ struct MagazineRecommentView: View {
             
         }
         .padding(.leading , -8)
-        .onAppear{
-            commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
-        }
+//        .onAppear{
+//            commentVm.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
+//        }
     }
 }

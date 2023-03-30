@@ -71,7 +71,6 @@ enum CommentService {
     }
     // MARK: - 댓글 데이터 삭제
     static func deleteComment(collectionName: String, collectionDocId: String, docID: String) -> AnyPublisher<CommentDocument, Error> {
-        print(docID)
         do {
             let request = try CommentRouter.delete(collectionName: collectionName, collectionDocId: collectionDocId, docID: docID).asURLRequest()
             return URLSession
@@ -115,7 +114,6 @@ enum CommentService {
         
         do {
             let request = try CommentRouter.reCommentGet(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId).asURLRequest()
-            print(request)
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

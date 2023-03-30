@@ -52,6 +52,7 @@
 		8BCF31E2297A500900EB6188 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31E1297A500900EB6188 /* CommentView.swift */; };
 		991536DE29D4A00E007B5B07 /* EX+Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DD29D4A00E007B5B07 /* EX+Haptic.swift */; };
 		991536E029D4BF0D007B5B07 /* EX+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DF29D4BF0D007B5B07 /* EX+Transition.swift */; };
+		991536E429D55E53007B5B07 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536E329D55E53007B5B07 /* AccountDetailView.swift */; };
 		99233D462977F2C700A875B1 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D452977F2C700A875B1 /* MapView.swift */; };
 		99233D482977F2F900A875B1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D472977F2F900A875B1 /* LocationManager.swift */; };
 		99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D492977F31B00A875B1 /* MapCategoryCellView.swift */; };
@@ -202,6 +203,7 @@
 		8BCF31E1297A500900EB6188 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		991536DD29D4A00E007B5B07 /* EX+Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Haptic.swift"; sourceTree = "<group>"; };
 		991536DF29D4BF0D007B5B07 /* EX+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Transition.swift"; sourceTree = "<group>"; };
+		991536E329D55E53007B5B07 /* AccountDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountDetailView.swift; sourceTree = "<group>"; };
 		99233D452977F2C700A875B1 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		99233D472977F2F900A875B1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		99233D492977F31B00A875B1 /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
@@ -369,6 +371,7 @@
 		334699D12988AE0B004153A6 /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				991536E329D55E53007B5B07 /* AccountDetailView.swift */,
 				8B10F42F2990DD5300582D27 /* BookmarkedCommunityView.swift */,
 				8B10F42D2990C3F100582D27 /* BookmarkedMagazine.swift */,
 				8B0BA0A1298A4197000A7090 /* CameraModalView.swift */,
@@ -944,6 +947,7 @@
 				A7D9F30E29896D8500B39218 /* UserService.swift in Sources */,
 				991536E029D4BF0D007B5B07 /* EX+Transition.swift in Sources */,
 				9958AF73297778D800A51DA9 /* GrainApp.swift in Sources */,
+				991536E429D55E53007B5B07 /* AccountDetailView.swift in Sources */,
 				334699D32988AE26004153A6 /* MyPageView.swift in Sources */,
 				06A7341A29AF2FA600ABB37B /* FollowerListView.swift in Sources */,
 				9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */,

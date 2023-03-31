@@ -19,14 +19,14 @@ struct CurrentUserFields: Codable {
     var name: CurrentUserStringValue
     var myLens: CurrentUserUpperArrayValue
     var nickName, introduce: CurrentUserStringValue
-    var bookmarkedMagazineID, myCamera: CurrentUserUpperArrayValue
+    var bookmarkedMagazineID, myCamera, fcmToken: CurrentUserUpperArrayValue
     var profileImage: CurrentUserStringValue
     var postedCommunityID: CurrentUserUpperArrayValue
     var email, id: CurrentUserStringValue
     var recentSearch, likedMagazineID, postedMagazineID: CurrentUserUpperArrayValue
 
     enum CodingKeys: String, CodingKey {
-        case bookmarkedCommunityID, lastSearched, follower, following, myFilm, name, myLens, nickName, bookmarkedMagazineID, myCamera, introduce, profileImage, postedCommunityID, email, id, recentSearch
+        case bookmarkedCommunityID, lastSearched, follower, following, myFilm, name, myLens, nickName, bookmarkedMagazineID, myCamera, introduce, profileImage, postedCommunityID, email, id, recentSearch, fcmToken
         case likedMagazineID = "likedMagazineId"
         case postedMagazineID
     }

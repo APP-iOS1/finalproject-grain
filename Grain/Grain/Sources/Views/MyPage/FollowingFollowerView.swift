@@ -39,7 +39,7 @@ struct FollowingFollowerView: View {
                             .fill(Color.black)
                             .frame(width: Screen.maxWidth * 0.4, height: 1)
                             .transition(.slide)
-                            .animation(.easeInOut, value: selectedIndex)
+                            .animation(.easeInOut.speed(1.5), value: selectedIndex)
                     }
                     
                 })

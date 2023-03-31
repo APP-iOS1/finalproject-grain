@@ -10,8 +10,9 @@ import SwiftUI
 import Kingfisher
 
 struct MagazineViewCell: View {
-    var data : MagazineDocument
-    var userVM: UserViewModel
+    let data : MagazineDocument
+    
+    @ObservedObject var userVM: UserViewModel
 
     var body: some View {
         VStack {
@@ -33,8 +34,8 @@ struct MagazineViewCell: View {
                 .font(.title2)
                 .frame(alignment: .leading)
                 .multilineTextAlignment(.leading)
-                .padding(.top,5)
-                .padding(.bottom, 3)
+                .padding(.top, 0)
+                .padding(.bottom, -2)
                 .frame(width: Screen.maxWidth * 0.9, alignment: .leading)
             
             Divider()

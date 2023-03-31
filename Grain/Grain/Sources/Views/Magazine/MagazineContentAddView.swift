@@ -35,13 +35,12 @@ struct MagazineContentAddView: View {
     @State var updateReverseGeocodeResult1 : String = ""
     
     // 이미지 앨범에서 가져오기
-    @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImageData: Data? = nil
     @State private var selectedItems: [PhotosPickerItem] = []
     // 유저 데이터
     
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
-    var myCamera = ["camera1", "camera2", "camera3", "camera4"]
+    
     @FocusState private var focusField: Fields?
     
     var userLatitude: Double
@@ -52,40 +51,43 @@ struct MagazineContentAddView: View {
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
             GeometryReader { geo in
                 VStack {
+                    
+                    Divider()
+                    
                     HStack {
                         if pickImageCount < 5 {
                             PhotosPicker(
-                                selection: $selectedItem,
-                                matching: .images,
-                                photoLibrary: .shared()) {
+                                selection: $selectedItems, maxSelectionCount: 5,
+                                matching: .images) {
                                     Rectangle()
-                                        .fill(.white)
-                                        .border(.gray)
-                                        .frame(width: 100, height: 100)
+                                        .fill(Color.white)
+                                        .frame(width: 95, height: 95)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.middlebrightGray, lineWidth: 1)
+                                        )
                                         .overlay {
                                             VStack {
                                                 Spacer()
                                                 Image(systemName: "camera.fill")
                                                     .font(.title3)
                                                     .foregroundColor(.black)
-                                                Spacer()
                                                 Text("\(pickImageCount)/5")
-                                                    .font(.headline)
-                                                    .foregroundColor(.black)
+                                                    .font(.footnote)
+                                                    .foregroundColor(.gray)
+                                                    .padding(.top, 5)
                                                 Spacer()
                                             }
                                         }
                                         .padding(.leading)
                                 }
-                                .onChange(of: selectedItem) { newItem in
+                                .onChange(of: selectedItems) { newItem in
                                     Task {
-                                        if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                            selectedImageData = data
-                                        }
-                                        // MARK: 선택한 이미지 selectedImages배열에 넣어주기
-                                        /// 이미지 선택 버튼 우측으로 이미지 정렬
-                                        if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
-                                            selectedImages.append(uiImage)
+                                        selectedImages = []
+                                        for value in newItem {
+                                            if let imageData = try? await value.loadTransferable(type: Data.self), let image = UIImage(data: imageData) {
+                                                selectedImages.append(image)
+                                            }
                                             pickImageCount = selectedImages.count
                                         }
                                     }
@@ -97,7 +99,6 @@ struct MagazineContentAddView: View {
                                 // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
                                 ForEach(selectedImages.indices, id: \.self) { index in
                                     GeometryReader { geometry in
-                                        
                                         Rectangle()
                                             .fill(.white)
                                             .frame(width: 100, height: 100)
@@ -120,6 +121,7 @@ struct MagazineContentAddView: View {
                                                     Image(systemName: "x.circle.fill")
                                                         .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                         .onTapGesture {
+                                                            selectedItems.remove(at: index)
                                                             selectedImages.remove(at: index)
                                                             pickImageCount = selectedImages.count
                                                         }
@@ -132,6 +134,7 @@ struct MagazineContentAddView: View {
                                                     Image(systemName: "x.circle.fill")
                                                         .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                         .onTapGesture {
+                                                            selectedItems.remove(at: index)
                                                             selectedImages.remove(at: index)
                                                             pickImageCount = selectedImages.count
                                                         }
@@ -145,17 +148,14 @@ struct MagazineContentAddView: View {
                         }
                         .padding(.horizontal)
                     }
-                    .padding(.top)
+                    .padding(.vertical)
                     
-                    //MARK: 제목과 게시물 내용 구분선
-                    Image("line")
-                        .resizable()
-                        .frame(width: Screen.maxWidth * 0.95,height: 1)
-                        .padding(.top)
+                    Divider()
                     
                     // MARK: 게시물 제목 작성 란
-                    TextField("제목을 입력해주세요", text: $inputTitle)
-                        .font(.title3)
+                    TextField("필름의 제목을 입력해주세요.", text: $inputTitle)
+                        .font(.body)
+                        .bold()
                         .keyboardType(.default)
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
@@ -164,15 +164,19 @@ struct MagazineContentAddView: View {
                             hideKeyboard()
                         }
                         .submitLabel(.done)
+                        .padding(.vertical, 6)
                     
-                    //MARK: 제목과 게시물 내용 구분선
-                    Image("line")
-                        .resizable()
-                        .frame(width: Screen.maxWidth * 0.95,height: 1)
+//                    //MARK: 제목과 게시물 내용 구분선
+//                    Image("line")
+//                        .resizable()
+//                        .frame(width: Screen.maxWidth * 0.95,height: 1)
+                    
+                    Divider()
                     
                     // MARK: 게시물 내용 작성 란
-                    TextField("소중한 추억을 기록해주세요", text: $inputContent, axis: .vertical)
-                        .font(.title3)
+                    TextField("필름에 담긴 이야기와, 설명을 기록해보세요.", text: $inputContent, axis: .vertical)
+                        .font(.body)
+                        .bold()
                         .textInputAutocapitalization(.never)
                         .keyboardType(.default)
                         .disableAutocorrection(true)
@@ -190,6 +194,7 @@ struct MagazineContentAddView: View {
                             }
                         }
                         .frame(height: Screen.maxHeight * 0.4, alignment: .top)
+                        .padding(.vertical, 6)
                     
                     
                     Spacer()

@@ -124,7 +124,7 @@ struct MainSearchView: View {
                                         .fill(Color.black)
                                         .frame(width: Screen.maxWidth * 0.2, height: 1)
                                         .transition(.slide)
-                                        .animation(.easeInOut, value: selectedIndex)
+                                        .animation(.easeInOut.speed(1.5), value: selectedIndex)
                                 }
                                 
                             })
@@ -393,7 +393,6 @@ struct MainSearchView: View {
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
             CommunitySearchResultView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord, community: communityViewModel)
         }
-        
         .navigationDestination(isPresented: $isUserSearchResultShown){
             UserSearchResultView( userVM: userViewModel , magazineVM: magazineViewModel, searchWord: $searchWord)
         }

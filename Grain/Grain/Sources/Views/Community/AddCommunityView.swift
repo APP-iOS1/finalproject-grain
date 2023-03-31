@@ -20,7 +20,7 @@ struct AddCommunityView: View {
     @State private var textFieldFocused: Bool = true
     @State private var selectedTab: CommunityTabs = .매칭
     // 이미지 앨범에서 가져오기
-    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedImageData: Data? = nil
     @State private var selectedImages: [UIImage] = []
     @State private var isShowingAlert = false
@@ -40,41 +40,42 @@ struct AddCommunityView: View {
     var body: some View {
         GeometryReader{ geo in
             VStack {
+                Divider()
                 HStack {
                     Spacer()
                     if pickImageCount < 5 {
                         PhotosPicker(
-                            selection: $selectedItem,
-                            matching: .images,
-                            photoLibrary: .shared()) {
+                            selection: $selectedItems, maxSelectionCount: 5,
+                            matching: .images) {
                                 Rectangle()
-                                    .fill(.white)
-                                    .border(.gray)
-                                    .frame(width: 100, height: 100)
+                                    .fill(Color.white)
+                                    .frame(width: 95, height: 95)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .stroke(Color.middlebrightGray, lineWidth: 1)
+                                    )
                                     .overlay {
                                         VStack {
                                             Spacer()
                                             Image(systemName: "camera.fill")
                                                 .font(.title3)
                                                 .foregroundColor(.black)
-                                            Spacer()
                                             Text("\(pickImageCount)/5")
-                                                .font(.headline)
-                                                .foregroundColor(.black)
+                                                .font(.footnote)
+                                                .foregroundColor(.gray)
+                                                .padding(.top, 5)
                                             Spacer()
                                         }
                                     }
                                     .padding(.leading)
                             }
-                            .onChange(of: selectedItem) { newItem in
+                            .onChange(of: selectedItems) { newItem in
                                 Task {
-                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                        selectedImageData = data
-                                    }
-                                    // MARK: 선택한 이미지 selectedImages배열에 넣어주기
-                                    /// 이미지 선택 버튼 우측으로 이미지 정렬
-                                    if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
-                                        selectedImages.append(uiImage)
+                                    selectedImages = []
+                                    for value in newItem {
+                                        if let imageData = try? await value.loadTransferable(type: Data.self), let image = UIImage(data: imageData) {
+                                            selectedImages.append(image)
+                                        }
                                         pickImageCount = selectedImages.count
                                     }
                                 }
@@ -109,6 +110,8 @@ struct AddCommunityView: View {
                                                 Image(systemName: "x.circle.fill")
                                                     .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                     .onTapGesture {
+                                                        selectedItems.remove(at: index)
+
                                                         selectedImages.remove(at: index)
                                                         pickImageCount = selectedImages.count
                                                     }
@@ -121,6 +124,7 @@ struct AddCommunityView: View {
                                                 Image(systemName: "x.circle.fill")
                                                     .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                     .onTapGesture {
+                                                        selectedItems.remove(at: index)
                                                         selectedImages.remove(at: index)
                                                         pickImageCount = selectedImages.count
                                                     }
@@ -133,51 +137,91 @@ struct AddCommunityView: View {
                         }
                     }
                     .padding(.horizontal)
-                }
-                //MARK: 제목과 게시물 내용 구분선
-                Image("line")
-                    .resizable()
-                    .frame(width: Screen.maxWidth * 0.95,height: 1)
+                } .padding(.vertical)
                 
-                //MARK: 카테고리 피커
+                Divider()
                 
-                HStack {
-                    Picker("Tab", selection: $selectedTab){
-                        ForEach(CommunityTabs.allCases){ tab in
-                            Text(tab.rawValue)
+//                //MARK: 카테고리 피커 -> 버튼으로 변경
+//                HStack {
+//                    Picker("Tab", selection: $selectedTab){
+//                        ForEach(CommunityTabs.allCases){ tab in
+//                            Text(tab.rawValue)
+//                        }
+//                    }
+//                    .font(.title)
+//                    .colorMultiply(.black)
+//                    Spacer()
+//                }.padding(.vertical, 6)
+                
+                VStack(alignment: .leading) {
+                    HStack{
+                        Text("카테고리")
+                            .foregroundColor(.black)
+                            .font(.subheadline)
+                            .bold()
+                        Spacer()
+                    }.padding(.leading)
+                    HStack {
+                        ForEach(CommunityTabs.allCases) { tab in
+                            Button {
+                                selectedTab = tab
+                            } label: {
+                                Text(tab.rawValue)
+                                    .font(.footnote)
+                                        .bold()
+                                        .padding(.horizontal)
+                                        .padding(.vertical, 7)
+                                        .foregroundColor(selectedTab == tab ? Color.white : Color.black)
+                                        .background(selectedTab == tab ? Color.black : Color.white)
+                                        .cornerRadius(14)
+                                        .overlay(RoundedRectangle(cornerRadius: 14)
+                                            .stroke(Color.brightGray, lineWidth: 0.5))
+                            }
+                            .padding(.horizontal, 6)
                         }
-                    }
-                    .font(.title)
-                    .colorMultiply(.black)
-                    Spacer()
-                }
+                        
+                        Spacer()
+                    }.padding(.leading)
+                }.padding(.vertical, 8)
                 
-                //MARK: 제목과 게시물 내용 구분선
-                Image("line")
-                    .resizable()
-                    .frame(width: Screen.maxWidth * 0.95,height: 1)
+                Divider()
+                
+                VStack {
+                    //MARK: 게시물 제목 작성 란
+                    TextField("제목을 입력해주세요.", text: $inputTitle)
+                        .font(.body)
+                        .bold()
+                        .keyboardType(.default)
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                        .padding(.horizontal, 15)
+                        .onSubmit {
+                            hideKeyboard()
+                        }
+                        .submitLabel(.done)
+                }
+                .padding(.vertical, 8)
                 
                 //MARK: 게시물 제목 작성 란
-                TextField("제목을 입력해주세요", text: $inputTitle)
-                    .font(.title3)
-                    .keyboardType(.default)
-                    .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
-                    .padding(.horizontal, 15)
-                    .onSubmit {
-                        hideKeyboard()
-                    }
-                    .submitLabel(.done)
-                
-                //MARK: 제목과 게시물 내용 구분선
-                Rectangle()
-                    .fill(Color(UIColor.systemGray5))
-                    .frame(width: Screen.maxWidth * 0.95, height: 1)
-                    .border(.black)
+//                TextField("제목을 입력해주세요.", text: $inputTitle)
+//                    .font(.body)
+//                    .bold()
+//                    .keyboardType(.default)
+//                    .textInputAutocapitalization(.never)
+//                    .disableAutocorrection(true)
+//                    .padding(.horizontal, 15)
+//                    .onSubmit {
+//                        hideKeyboard()
+//                    }
+//                    .submitLabel(.done)
+//                    .padding(.vertical, 8)
+               
+                Divider()
                 
                 // MARK: 게시물 내용 작성 란
-                TextField("내용을 입력해주세요", text: $inputContent, axis: .vertical)
-                    .font(.title3)
+                TextField("내용을 자세하게 입력해주세요 :)", text: $inputContent, axis: .vertical)
+                    .font(.body)
+                    .bold()
                     .textInputAutocapitalization(.never)
                     .keyboardType(.default)
                     .disableAutocorrection(true)
@@ -195,6 +239,7 @@ struct AddCommunityView: View {
                         }
                     }
                     .frame(height: Screen.maxHeight * 0.4, alignment: .top)
+                    .padding(.vertical, 8)
                 
                 Spacer()
                 

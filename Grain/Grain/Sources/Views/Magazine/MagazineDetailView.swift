@@ -7,11 +7,13 @@ struct MagazineDetailView: View {
     @ObservedObject var magazineVM : MagazineViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var mapVM = MapViewModel()
-
+    
     @State private var isHeartToggle: Bool = false // 하트 눌림 상황
     @State private var isBookMarked: Bool = true
     @State private var isHeartAnimation: Bool = false
+    @State private var isHeartAnimationTwo: Bool = false
     @State private var heartOpacity: Double = 0
+    @State private var heartOpacityTwo: Double = 0
     @State private var saveOpacity: Double = 0
     @State private var showDevices: Bool = false
     @State private var currentAmount: CGFloat = 0
@@ -19,6 +21,9 @@ struct MagazineDetailView: View {
     @State private var firstImage: Image?
     @State private var renderedImage: Image? = nil
     @State private var isDeleteAlertShown:Bool = false
+    @State private var lifetime: Float = 0
+    @State private var imageScale: CGFloat = 1
+    @State private var viewID = 0
 
     @Environment(\.dismiss) private var dismiss
     
@@ -41,11 +46,11 @@ struct MagazineDetailView: View {
             renderedImage = Image(uiImage: uiImage)
         }
     }
-    @MainActor
+    
     var body: some View {
         NavigationStack{
             ScrollView {
-                VStack{
+                VStack(alignment: .leading){
                     if let magazineData = self.magazineData {
                         VStack {
                             // MARK: 닉네임 헤더
@@ -55,16 +60,16 @@ struct MagazineDetailView: View {
                                     NavigationLink {
                                         UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                                     } label: {
-                                        MagazineProfileImage(imageName: user.fields.profileImage.stringValue)
-                                    }
+                                        ProfileImage(imageName: user.fields.profileImage.stringValue)
+                                    }.padding(.trailing, -4)
                                     
                                     VStack(alignment: .leading){
                                         Text(user.fields.nickName.stringValue)
                                             .bold()
+                                            .padding(.bottom, -4)
                                         Text(magazineData.createTime.toDate()?.renderTime() ?? "")
                                             .font(.caption)
                                             .foregroundColor(.textGray)
-                                        
                                     }
                                 } else {
                                     Text("유저 없음")
@@ -91,19 +96,61 @@ struct MagazineDetailView: View {
                                             .aspectRatio(contentMode: .fit)
                                     }
                                     .tag(index)
-                                    .onChange(of: index){ item in
-                                        selectedIndex = index
-                                    }
                                 
                             }
                             .addPinchZoom()
-                            .ignoresSafeArea()
+                            .onTapGesture(count: 2) {
+                                isHeartAnimationTwo = false
+                                HapticManager.instance.impact(style: .medium)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                                    withAnimation(.interpolatingSpring(mass: 0.35, stiffness: 100, damping: 4.5, initialVelocity: 25)) {
+                                        
+                                        self.isHeartAnimationTwo = true
+                                        
+                                    }
+                                    self.heartOpacityTwo = 1
+                                    
+                                }
+                                
+                                self.isHeartToggle = true
+                                
+                                withAnimation(Animation.linear(duration: 0.1)) {
+                                    self.imageScale = 0.8
+                                    
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    withAnimation(Animation.linear(duration: 0.17)) {
+                                        self.imageScale = 1
+                                        self.lifetime = 1
+                                    }
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                    withAnimation {
+                                        self.lifetime = 0
+                                        
+                                    }
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                    self.heartOpacityTwo = 0
+                                    
+                                }
+                            }
                             .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                             .overlay{
                                 Image(systemName: "heart.fill")
                                     .foregroundColor(.white)
                                     .font(.system(size: isHeartAnimation ? 95 : 60 ))
                                     .opacity(heartOpacity)
+                            }
+                            .overlay{
+                                Image(systemName: "heart.fill")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: isHeartAnimationTwo ? 95 : 30 ))
+                                    .opacity(heartOpacityTwo)
+                                    .id(viewID)
                             }
                             .overlay{
                                 Group{
@@ -130,40 +177,34 @@ struct MagazineDetailView: View {
                             }
                             .zIndex(.infinity)
                             
-                            //.tag(index) // 문제시 고치기
-                            
-                            
-                            
                             VStack(alignment: .leading){
                                 HStack{
-                                    VStack{
-                                        Button{
-                                            showDevices.toggle()
-                                            //                                transitionView.toggle()
-                                        } label: {
-                                            VStack(alignment: .leading){
-                                                HStack{
-                                                    Text("장비 정보")
-                                                        .font(.subheadline)
-                                                    Image(systemName: "chevron.right")
-                                                        .font(.caption)
-                                                        .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
-                                                        .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
-                                                }
-                                                .bold()
-                                            }
-                                            .padding(.top, 5)
-                                        }
-                                        
+                                    
+                                    HStack{
+                                        Text("장비 정보")
+                                            .font(.subheadline)
+                                        Image(systemName: "chevron.right")
+                                            .font(.caption)
+                                            .rotationEffect(Angle(degrees: self.showDevices ? 90 : 0))
+                                            .animation(.linear(duration: self.showDevices ? 0.1 : 0.1), value: showDevices)
                                     }
+                                    .bold()
+                                    .padding(.top, 5)
+                                    .onTapGesture {
+                                        withAnimation {
+                                            showDevices.toggle()
+                                        }
+                                    }
+                                    
                                     .padding(.leading, 20)
                                     .padding(.top, -5)
                                     .foregroundColor(.textGray)
                                     
                                     Spacer()
+                                    
                                     // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
                                     // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
-                                    HeartButton(isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
+                                    HeartButton(lifetime: $lifetime, imageScale: $imageScale, isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
                                         .padding(.leading)
                                     
                                     NavigationLink {
@@ -174,21 +215,20 @@ struct MagazineDetailView: View {
                                             .foregroundColor(.black)
                                             .padding(.top, 2)
                                     }
-                                    //                        Spacer()
                                     
                                     //MARK: 북마크 버튼
-                                    Button {
-                                        self.isBookMarked.toggle()
-                                        self.saveOpacity = 1
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                            self.saveOpacity = 0
+                                    
+                                    Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
+                                        .font(.system(size: 22))
+                                        .foregroundColor(.black)
+                                        .padding(.trailing)
+                                        .onTapGesture {
+                                            self.isBookMarked.toggle()
+                                            self.saveOpacity = 1
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                                self.saveOpacity = 0
+                                            }
                                         }
-                                    } label: {
-                                        Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
-                                            .font(.system(size: 22))
-                                            .foregroundColor(.black)
-                                    }
-                                    .padding(.trailing)
                                     
                                 }
                                 .padding(.top, 5)
@@ -203,7 +243,9 @@ struct MagazineDetailView: View {
                                     .foregroundColor(.textGray)
                                     .padding(.top, -9)
                                     .padding(.leading, 20)
+                                    .transition(.moveAndFade)
                                 }
+                                
                             }
                             
                         }//VStack
@@ -222,15 +264,16 @@ struct MagazineDetailView: View {
                                 .padding(.top)
                                 .padding(.bottom, 6)
                             
-                            
-                            // MARK: 내용
-                            Text(magazineData.fields.content.stringValue)
-                                .lineSpacing(7.0)
-                                .padding(.horizontal)
-                                .foregroundColor(Color.textGray)
-                                .frame(width: Screen.maxWidth , alignment: .leading)
-                            
-                            Spacer()
+                            HStack {
+                                // MARK: 내용
+                                Text(magazineData.fields.content.stringValue)
+                                    .lineSpacing(7.0)
+                                    .padding(.horizontal)
+                                    .foregroundColor(Color.textGray)
+                                    .frame(alignment: .leading)
+                                
+                                Spacer()
+                            }
                         }
                         .zIndex(0)
                     }//VStack
@@ -250,7 +293,7 @@ struct MagazineDetailView: View {
                 }))
             }
             .onAppear{
-                magazineData = data
+                self.magazineData = self.data
                 // 희경: 유저 팔로워, 팔로잉 업데이트 후 뒤로가기했다가 다시 들어갔을때 바로 반영안되는 issue
                 // [해결] magazineDetailView의 onAppear 에서 fetchUser를 해주는 방식에서 userVM의 updateCurrentUserArray 메소드의 receivedValue 블록에 fetchUser 해주는 방식으로 변경
                 // [이유] UserDetailView의 onDisappear메소드와 onAppear메소드간의 비동기처리가 문제였던것같다.
@@ -273,7 +316,6 @@ struct MagazineDetailView: View {
                         isBookMarked = false
                     }
                     ObservingChangeValueLikeNum = magazineData.fields.likedNum.integerValue
-                    selectedIndex = 0 
                 }
             }
             .task(id: magazineVM.magazines) {
@@ -284,6 +326,7 @@ struct MagazineDetailView: View {
                 }
             }
             .onDisappear{
+                selectedIndex = 0
                 if isHeartToggle {
                     // 좋아요 누름
                     if !userVM.likedMagazineID.contains(data.fields.id.stringValue){
@@ -366,7 +409,7 @@ struct MagazineDetailView: View {
                             HStack{
                                 Text(isBookMarked ? "저장 취소" : "저장")
                                 Spacer()
-                                Image(systemName: isBookMarked ? "bookmark.slash.fill" : "bookmark.fill") 
+                                Image(systemName: isBookMarked ? "bookmark.slash.fill" : "bookmark.fill")
                             }
                         }
                         // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기

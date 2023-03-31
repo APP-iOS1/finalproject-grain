@@ -93,6 +93,7 @@ final class CommunityViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommunityResponse) in
+                self.fetchCommunity()
                 self.updateCommunitySuccess.send()
             }.store(in: &subscription)
     }

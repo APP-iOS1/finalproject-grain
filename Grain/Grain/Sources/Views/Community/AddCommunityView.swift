@@ -21,10 +21,8 @@ struct AddCommunityView: View {
     @State private var selectedTab: CommunityTabs = .매칭
     // 이미지 앨범에서 가져오기
     @State private var selectedItems: [PhotosPickerItem] = []
-    @State private var selectedImageData: Data? = nil
     @State private var selectedImages: [UIImage] = []
     @State private var isShowingAlert = false
-    @State private var pickImageCount : Int = 0
     
     @Binding var presented: Bool
     
@@ -34,22 +32,19 @@ struct AddCommunityView: View {
     }
     
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
-    
-    var myCamera = ["camera1", "camera2", "camera3", "camera4"]
-    
+        
     var body: some View {
         GeometryReader{ geo in
             VStack {
                 Divider()
                 HStack {
-                    Spacer()
-                    if pickImageCount < 5 {
+                    if selectedImages.count < 5 {
                         PhotosPicker(
-                            selection: $selectedItems, maxSelectionCount: 5,
+                            selection: $selectedItems, maxSelectionCount: 5,selectionBehavior: .ordered ,
                             matching: .images) {
                                 Rectangle()
                                     .fill(Color.white)
-                                    .frame(width: 95, height: 95)
+                                    .frame(width: 100, height: 100)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 10)
                                             .stroke(Color.middlebrightGray, lineWidth: 1)
@@ -60,10 +55,11 @@ struct AddCommunityView: View {
                                             Image(systemName: "camera.fill")
                                                 .font(.title3)
                                                 .foregroundColor(.black)
-                                            Text("\(pickImageCount)/5")
+                                            Text("\(selectedItems.count)/5")
                                                 .font(.footnote)
                                                 .foregroundColor(.gray)
                                                 .padding(.top, 5)
+                                                .monospacedDigit()
                                             Spacer()
                                         }
                                     }
@@ -72,11 +68,12 @@ struct AddCommunityView: View {
                             .onChange(of: selectedItems) { newItem in
                                 Task {
                                     selectedImages = []
+                                 
                                     for value in newItem {
-                                        if let imageData = try? await value.loadTransferable(type: Data.self), let image = UIImage(data: imageData) {
+                                        if let imageData = try? await value.loadTransferable(type: Data.self),
+                                            let image = UIImage(data: imageData) {
                                             selectedImages.append(image)
                                         }
-                                        pickImageCount = selectedImages.count
                                     }
                                 }
                             }
@@ -85,18 +82,17 @@ struct AddCommunityView: View {
                     ScrollView(.horizontal) {
                         HStack {
                             // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
-                            ForEach(selectedImages.indices, id: \.self) { index in
+                            ForEach(Array(selectedImages.enumerated()), id: \.1.self) { (index, item) in
                                 GeometryReader { geometry in
-                                    
                                     Rectangle()
                                         .fill(.white)
                                         .frame(width: 100, height: 100)
                                         .overlay {
                                             if index == 0 {
-                                                Image(uiImage: selectedImages[index])
+                                                Image(uiImage: item)
                                                     .resizable()
                                                     .cornerRadius(15)
-                                                
+                                                    
                                                 Rectangle()
                                                     .overlay {
                                                         Text("대표 사진")
@@ -110,35 +106,40 @@ struct AddCommunityView: View {
                                                 Image(systemName: "x.circle.fill")
                                                     .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                     .onTapGesture {
-                                                        selectedItems.remove(at: index)
-
-                                                        selectedImages.remove(at: index)
-                                                        pickImageCount = selectedImages.count
+                                                        if selectedItems.count == selectedImages.count{
+                                                            selectedItems.remove(at: index)
+                                                            selectedImages.remove(at: index)
+                                                        }else{
+                                                            print("삭제 실패")
+                                                        }
                                                     }
                                             }
                                             else{
-                                                Image(uiImage: selectedImages[index])
+                                                Image(uiImage: item)
                                                     .resizable()
                                                     .cornerRadius(15)
-                                                 
+                                                   
                                                 Image(systemName: "x.circle.fill")
                                                     .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                     .onTapGesture {
-                                                        selectedItems.remove(at: index)
-                                                        selectedImages.remove(at: index)
-                                                        pickImageCount = selectedImages.count
+                                                        if selectedItems.count == selectedImages.count{
+                                                            selectedItems.remove(at: index)
+                                                            selectedImages.remove(at: index)
+                                                        }else{
+                                                            print("삭제 실패")
+                                                        }
                                                     }
                                             }
-                                            
+
                                         }
                                 }.frame(width: 100, height: 100)
-                                
+                               
                             }
                         }
                     }
                     .padding(.horizontal)
-                } .padding(.vertical)
-                
+                }
+                .padding(.vertical)
                 Divider()
                 
 //                //MARK: 카테고리 피커 -> 버튼으로 변경

@@ -27,6 +27,7 @@ struct ContentView: View {
     @State var ispushedAddButton = false
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     @State var clikedMagazineData : MagazineDocument?
+    @State private var isSearchViewShown: Bool = false
     
     let icons = ["film", "text.bubble", "plus","map", "person"]
     let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
@@ -45,7 +46,10 @@ struct ContentView: View {
     
     // 네트워크 감지
     @ObservedObject var networkManager = NetworkManager()
-    
+    init(){
+        UITabBar.appearance().isHidden = true
+        
+    }
     var body: some View {
         Group{
             if networkManager.isConnected {
@@ -56,103 +60,146 @@ struct ContentView: View {
                             AuthenticationView(userVM: userVM)
                         }
                     case.authenticated:
-                        VStack{
-                            Spacer()
-                            ZStack {
-                                Spacer()
-                                    .fullScreenCover(isPresented: $presented) {
-                                        VStack {
-                                            SelectPostView(userVM: userVM,
-                                                           communityVM: communityVM,
-                                                           magazineVM: magazineVM,
-                                                           mapVM : mapVM,
-                                                           locationManager : locationManager,
-                                                           presented: $presented,
-                                                           updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
-                                        }
-                                    }
-                                
-                                switch selectedIndex {
-                                case 0:
-                                    NavigationStack {
-                                        MagazineMainView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
-                                    }
-                                case 1:
-                                    NavigationStack {
-                                        CommunityView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM)
-                                    }
-                                case 2:
-                                    NavigationStack {
-                                        // 게시물 추가 버튼 부분
-                                    }
-                                case 3:
-                                    NavigationStack {
-                                        MapView(mapVM: mapVM, userVM : userVM, magazineVM : magazineVM, locationManager : locationManager, clikedMagazineData: clikedMagazineData, userLatitude: userLatitude, userLongitude: userLongitude)
-                                    }
-                                case 4:
-                                    NavigationStack {
-                                        MyPageView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID))
-                                    }
-                                default:
-                                    NavigationStack {
-                                        VStack {
-                                            SelectPostView(userVM: userVM,
-                                                           communityVM: communityVM,
-                                                           magazineVM: magazineVM,
-                                                           mapVM : mapVM,
-                                                           locationManager : locationManager,
-                                                           presented: $presented,
-                                                           updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
-                                        }
-                                    }
-                                }
-                                Spacer()
-                            }
+                        NavigationStack{
                             
-                            if isZooming == false {
+                            VStack{
+                                Spacer()
                                 
-                                HStack(spacing: 10) {
-                                    ForEach(0..<5, id: \.self) { number in
-                                        Button {
-                                            if number == 2 {
-                                                presented.toggle()
-                                            } else {
-                                                self.selectedIndex = number
+                                TabView(selection: $selectedIndex) {
+                                    MagazineMainView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
+                                        .tag(0)
+                                    CommunityView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM)
+                                        .tag(1)
+                                    
+                                    MapView(mapVM: mapVM, userVM : userVM, magazineVM : magazineVM, locationManager : locationManager, clikedMagazineData: clikedMagazineData, userLatitude: userLatitude, userLongitude: userLongitude)
+                                        .edgesIgnoringSafeArea(.top)
+                                        .tag(3)
+                                    MyPageView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID))
+                                        .tag(4)
+                                    
+                                }
+                                .toolbar(.hidden, for: .tabBar)
+                                .toolbar {
+                                    if (selectedIndex == 0) || (selectedIndex == 1) {
+                                        ToolbarItem(placement: .navigationBarLeading) {
+                                            Text("GRAIN")
+                                                .font(.title)
+                                                .bold()
+                                                .kerning(7)
+                                            
+                                        }
+                                        
+                                        ToolbarItem(placement: .navigationBarTrailing) {
+                                            Button {
+                                                self.isSearchViewShown = true
+                                            } label: {
+                                                Image(systemName: "magnifyingglass")
+                                                    .foregroundColor(.black)
                                             }
-                                        } label: {
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                    if selectedIndex == 4{
+                                        ToolbarItem(placement: .navigationBarLeading) {
+                                            Text("GRAIN")
+                                                .font(.title)
+                                                .bold()
+                                                .kerning(7)
+                                        }
+                                        
+                                        ToolbarItem(placement: .navigationBarTrailing) {
+                                            NavigationLink {
+                                                MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM)
+                                            } label: {
+                                                Image(systemName: "ellipsis")
+                                                    .foregroundColor(.black)
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                                
+                                if isZooming == false {
+                                    
+                                    HStack(alignment: .top, spacing: 10) {
+                                        ForEach(0..<5, id: \.self) { number in
+                                            
+                                            
                                             if number == 2 {
-                                                Image(systemName: icons[number])
-                                                    .font(.title2)
-                                                    .foregroundColor(.white)
-                                                    .frame(width: 50, height: 50)
-                                                    .background(.black)
-                                                    .cornerRadius(30)
+                                                
+                                                Circle()
+                                                    .frame(width: 40, height: 40)
+                                                    .foregroundColor(.black)
+                                                    .overlay {
+                                                        Image(systemName: icons[number])
+                                                            .font(.title3)
+                                                            .foregroundColor(.white)
+                                                            .monospacedDigit()
+                                                    }
+                                                    .padding(.horizontal, 8)
+                                                    .onTapGesture {
+                                                        presented.toggle()
+                                                        
+                                                    }
+                                                
+                                                
                                             }
                                             else {
                                                 VStack{
                                                     Image(systemName: icons[number])
-                                                        .font(.title2)
+                                                        .font(.title3)
                                                         .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                                        .monospacedDigit()
                                                     Text(labels[number])
-                                                        .font(.caption)
+                                                        .font(.caption2)
                                                         .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                                        .monospacedDigit()
+                                                    
                                                 }
-                                                .frame(width: 67, height: 60)
+                                                .frame(width: 65, height: 45)
+                                                .onTapGesture {
+                                                    self.selectedIndex = number
+                                                }
                                             }
+                                            
                                         }
                                     }
+                                    .transition(.move(edge: .bottom))
                                 }
-                                
-                                .transition(.move(edge: .bottom))
                             }
+                            .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
+                            
+                            
+                            .navigationDestination(isPresented: $isSearchViewShown) {
+                                MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM)
+                            }
+                            .fullScreenCover(isPresented: $presented) {
+                                VStack {
+                                    SelectPostView(userVM: userVM,
+                                                   communityVM: communityVM,
+                                                   magazineVM: magazineVM,
+                                                   mapVM : mapVM,
+                                                   locationManager : locationManager,
+                                                   presented: $presented,
+                                                   updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
+                                }
+                            }
+                            .animation(.default , value: isZooming)
                         }
-                        .animation(.default , value: isZooming)
+                        .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
+                        
+                        
+                        
                     }
                 }
                 .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
                 .tint(.black)
                 .onAppear{
                     /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
+                    self.isSearchViewShown = false
+                    
                     editorVM.fetchEditor()
                     magazineVM.fetchMagazine()
                     communityVM.fetchCommunity()

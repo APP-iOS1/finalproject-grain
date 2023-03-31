@@ -10,8 +10,6 @@ import Kingfisher
 import FirebaseAuth
 
 struct MyPageView: View {
-    
-    
     @ObservedObject var commentVm: CommentViewModel
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
@@ -172,16 +170,7 @@ struct MyPageView: View {
                 /// 희경: onReceive 메소드 사용 이유: fetchUser 메소드와 fetchCurrentUser메소드를 동시에 실행시키면 fetchUser가 완료되기 전에 fetchCurrentUser가 실행되어 filterCurrentUsersFollow가 제대로 수행되지 않음.
                 userVM.filterCurrentUsersFollow()
             })
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink {
-                        MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM)
-                    } label: {
-                        Image(systemName: "ellipsis")
-                            .foregroundColor(.black)
-                    }
-                }
-            }
+          
         }
         .refreshable {
             userVM.fetchUser()

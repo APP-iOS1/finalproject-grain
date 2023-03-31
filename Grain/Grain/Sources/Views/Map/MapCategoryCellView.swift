@@ -49,106 +49,97 @@ struct MapCategoryCellView: View {
             StationButtonClickedBool = false
         default:
             StationButtonClickedBool = false
-           
+            
         }
     }
     
     var body: some View {
         // MARK: 카테고리 버튼
         HStack{
-                HStack{
-                    Button {
-                        allButtonClickedBool.toggle()
+            HStack{
+                Rectangle()
+                
+                    .foregroundColor(allButtonClickedBool ? .black : .white)
+                    .overlay{
+                        HStack{
+                            Text("전체")
+                                .fontWeight(.bold)
+                                .font(.caption) //살짝 키우기
+                                .foregroundColor(allButtonClickedBool ? .white : .gray)
+                        }
+                        
+                        //                                RoundedRectangle(cornerRadius: 10)
+                        //                                    .stroke(allButtonClickedBool ? .black : .white , lineWidth: 5)
+                    }.cornerRadius(10)
+                    .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
+                    .onTapGesture {
+                        allButtonClickedBool = true
                         categoryString = "전체"
                         buttonSwitch(index: categoryString)
-                    } label: {
-                        
-                        Rectangle()
-
-                            .foregroundColor(allButtonClickedBool ? .black : .white)
-                            .overlay{
-                                HStack{
-                                    Text("전체")
-                                        .fontWeight(.bold)
-                                        .font(.caption) //살짝 키우기
-                                        .foregroundColor(allButtonClickedBool ? .white : .gray)
-                                }
-                               
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .stroke(allButtonClickedBool ? .black : .white , lineWidth: 5)
-                            }.cornerRadius(10)
-                            .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
-                            
                     }
-                    
-                    Button {
-                        photoButtonClickedBool.toggle()
+                
+                Rectangle()
+                    .foregroundColor(photoButtonClickedBool ? .black : .white)
+                    .overlay{
+                        HStack{
+                            Text("필름스팟")
+                                .fontWeight(.bold)
+                                .font(.caption)
+                                .foregroundColor(photoButtonClickedBool ? .white : .gray)
+                        }
+                        //                                RoundedRectangle(cornerRadius: 10)
+                        //                                    .stroke(photoButtonClickedBool ? .black : .white , lineWidth: 5)
+                    }.cornerRadius(10)
+                    .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
+                    .onTapGesture {
+                        photoButtonClickedBool = true
                         categoryString = "필름스팟"
                         buttonSwitch(index: categoryString)
-                    } label: {
-                        Rectangle()
-                            .foregroundColor(photoButtonClickedBool ? .black : .white)
-                            .overlay{
-                                HStack{
-                                    Text("필름스팟")
-                                        .fontWeight(.bold)
-                                        .font(.caption)
-                                        .foregroundColor(photoButtonClickedBool ? .white : .gray)
-                                }
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .stroke(photoButtonClickedBool ? .black : .white , lineWidth: 5)
-                            }.cornerRadius(10)
-                            .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
+                        
+                    }
+                
+                Rectangle()
+                    .foregroundColor(StationButtonClickedBool ? .black : .white)
+                    .overlay{
+                        HStack{
                             
-                    }
-                    
-                    Button {
-                        StationButtonClickedBool.toggle()
+                            Text("현상소")
+                                .fontWeight(.bold)
+                                .font(.caption)
+                                .foregroundColor(StationButtonClickedBool ? .white : .gray)
+                        }
+                        //                                RoundedRectangle(cornerRadius: 10)
+                        //                                    .stroke(StationButtonClickedBool ? .black : .white , lineWidth: 5)
+                    }.cornerRadius(10)
+                    .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
+                    .onTapGesture {
+                        StationButtonClickedBool = true
                         categoryString = "현상소"
-                        buttonSwitch(index: categoryString)
-                    } label: {
-                        Rectangle()
-                            .foregroundColor(StationButtonClickedBool ? .black : .white)
-                            .overlay{
-                                HStack{
-                                   
-                                    Text("현상소")
-                                        .fontWeight(.bold)
-                                        .font(.caption)
-                                        .foregroundColor(StationButtonClickedBool ? .white : .gray)
-                                }
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .stroke(StationButtonClickedBool ? .black : .white , lineWidth: 5)
-                            }.cornerRadius(10)
-                            .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
-
-                    }
-                    
-                    Button {
-                        repairButtonClickedBool.toggle()
+                        buttonSwitch(index: categoryString)                            }
+                
+                Rectangle()
+                    .foregroundColor(repairButtonClickedBool ? .black : .white)
+                    .overlay{
+                        HStack{
+                            Text("수리점")
+                                .fontWeight(.bold)
+                                .font(.caption)
+                                .foregroundColor(repairButtonClickedBool ? .white : .gray)
+                        }
+                        //                                RoundedRectangle(cornerRadius: 10)
+                        //                                    .stroke(repairButtonClickedBool ? .black : .white , lineWidth: 5)
+                    }.cornerRadius(10)
+                    .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
+                    .onTapGesture {
+                        repairButtonClickedBool = true
                         categoryString = "수리점"
                         buttonSwitch(index: categoryString)
-                    } label: {
-                        Rectangle()
-                            .foregroundColor(repairButtonClickedBool ? .black : .white)
-                            .overlay{
-                                HStack{
-                                    Text("수리점")
-                                        .fontWeight(.bold)
-                                        .font(.caption)
-                                        .foregroundColor(repairButtonClickedBool ? .white : .gray)
-                                }
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .stroke(repairButtonClickedBool ? .black : .white , lineWidth: 5)
-                            }.cornerRadius(10)
-                            .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
-                            
+                        
                     }
-                    
-                }
+            }
             
             Spacer()
-        
+            
             Button {
                 reportButton.toggle()
             } label: {
@@ -159,11 +150,10 @@ struct MapCategoryCellView: View {
                         Image(systemName: "exclamationmark.bubble")
                             .foregroundColor(.white)
                     }
-
-            }.padding(.trailing, 1)
-            
-            
+                
+            }
+            .padding(.trailing, 1)
         }
-
+        
     }
 }

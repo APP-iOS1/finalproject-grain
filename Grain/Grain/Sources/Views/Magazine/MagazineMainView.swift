@@ -17,7 +17,6 @@ struct MagazineMainView: View {
     @ObservedObject var editorVM : EditorViewModel
 
     @State private var selectedIndex: Int = 0
-    @State private var isSearchViewShown: Bool = false
     @State private var selectedFilter = 0
     
     let titles: [String] = ["인기", "실시간"]
@@ -49,40 +48,15 @@ struct MagazineMainView: View {
                     MagazineFeedView(magazineVM: magazineVM, userVM: userVM, selectedFilter: $selectedFilter)
                 }
             }
-            .navigationDestination(isPresented: $isSearchViewShown) {
-                MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM)
-            }
+           
             .refreshable {
                 magazineVM.fetchMagazine()
             }
         }
-        .onAppear {
-            self.isSearchViewShown = false
-         
-        }
         .onReceive(userVM.fetchUsersSuccess, perform: { newValue in
             userVM.filterCurrentUsersFollow()
         })
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Text("GRAIN")
-                    .font(.title)
-                    .bold()
-                    .kerning(7)
-                
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    self.isSearchViewShown = true
-                } label: {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.black)
-                }
-
-            }
-        }
+     
     }
 }
 

@@ -13,24 +13,34 @@ struct MagazineBestView: View {
     @ObservedObject var  userVM: UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     @ObservedObject var editorVM : EditorViewModel
-    
+    @ObservedObject var storyTimer: StoryTimer = StoryTimer(items: 7, interval: 3.0)
+
     @State private var ObservingChangeValueLikeNum: String = ""
     @State private var isMagazineDegtailViewShown: Bool = false
     @State private var isMagazineEditorViewShown: Bool = false
     @State private var selectIndexNum: Int = 0
+    @State private var editorIndex: Int = 0
     
     var body: some View {
         VStack {
             ScrollView {
-                
-                EditorViewCell(editorVM: editorVM)
-                    .onTapGesture {
-                        isMagazineEditorViewShown.toggle()
-                    }
+                TabView(selection: $editorIndex){
+                    EditorViewCell(editorVM: editorVM)
+                        .onTapGesture {
+                            isMagazineEditorViewShown.toggle()
+                        }
+                    
+                    Text("hello")
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+           
+                  
                 HStack{
                     Text("인기 필름")
                         .font(.title)
                         .fontWeight(.bold)
+                        .fixedSize()
+
                     Image("line")
                         .resizable()
                         .frame(width: Screen.maxWidth * 0.66, height: Screen.maxHeight * 0.003)

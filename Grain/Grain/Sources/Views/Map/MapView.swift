@@ -49,10 +49,9 @@ struct MapView: View {
     
     var body: some View {
         VStack{
-            
             // MARK: 지도 탭의 상단
             ZStack(alignment: .center){
-                
+            
                 HStack{
                     
                     TextField("ex) 서울시 종로구 사직동", text: $searchText)
@@ -214,10 +213,8 @@ struct MapView: View {
                         .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.75)
                         .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 25)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
                 }
-                
             }
-            .ignoresSafeArea()
-            .ignoresSafeArea(.keyboard)
+           
             .fullScreenCover(isPresented: $visitButton, content: {
                 MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: clikedMagazineData!, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
             })
@@ -233,7 +230,7 @@ struct MapView: View {
             mapVM.fetchNextPageMap(nextPageToken: "")
             magazineVM.fetchMagazine()
         }
-        .ignoresSafeArea(.keyboard)
+       
     }
 }
 

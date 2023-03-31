@@ -53,6 +53,7 @@
 		991536DE29D4A00E007B5B07 /* EX+Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DD29D4A00E007B5B07 /* EX+Haptic.swift */; };
 		991536E029D4BF0D007B5B07 /* EX+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DF29D4BF0D007B5B07 /* EX+Transition.swift */; };
 		991536E429D55E53007B5B07 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536E329D55E53007B5B07 /* AccountDetailView.swift */; };
+		9915371829D734BE007B5B07 /* EX+Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9915371729D734BE007B5B07 /* EX+Timer.swift */; };
 		99233D462977F2C700A875B1 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D452977F2C700A875B1 /* MapView.swift */; };
 		99233D482977F2F900A875B1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D472977F2F900A875B1 /* LocationManager.swift */; };
 		99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D492977F31B00A875B1 /* MapCategoryCellView.swift */; };
@@ -204,6 +205,7 @@
 		991536DD29D4A00E007B5B07 /* EX+Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Haptic.swift"; sourceTree = "<group>"; };
 		991536DF29D4BF0D007B5B07 /* EX+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Transition.swift"; sourceTree = "<group>"; };
 		991536E329D55E53007B5B07 /* AccountDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountDetailView.swift; sourceTree = "<group>"; };
+		9915371729D734BE007B5B07 /* EX+Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Timer.swift"; sourceTree = "<group>"; };
 		99233D452977F2C700A875B1 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		99233D472977F2F900A875B1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		99233D492977F31B00A875B1 /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 				9967FCC629D2D21E00F15844 /* EX+SegmentControls .swift */,
 				991536DD29D4A00E007B5B07 /* EX+Haptic.swift */,
 				991536DF29D4BF0D007B5B07 /* EX+Transition.swift */,
+				9915371729D734BE007B5B07 /* EX+Timer.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -736,6 +739,8 @@
 			dependencies = (
 			);
 			name = Grain;
+			packageProductDependencies = (
+			);
 			productName = Grain;
 			productReference = 9958AF6F297778D800A51DA9 /* Grain.app */;
 			productType = "com.apple.product-type.application";
@@ -765,6 +770,8 @@
 				ko,
 			);
 			mainGroup = 9958AF66297778D800A51DA9;
+			packageReferences = (
+			);
 			productRefGroup = 9958AF70297778D800A51DA9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -878,6 +885,7 @@
 				06FD6AB32977AECE00B4A859 /* CommunityView.swift in Sources */,
 				9955E115297A538900265D14 /* MagazineDetailView.swift in Sources */,
 				A7193F9E29B715F90049B1AA /* ReportMapService.swift in Sources */,
+				9915371829D734BE007B5B07 /* EX+Timer.swift in Sources */,
 				A7D9F2F62988FD4700B39218 /* StorageDTO.swift in Sources */,
 				A7D9F308298969FC00B39218 /* UserDTO.swift in Sources */,
 				9962CDD7297A224700E834C3 /* MagazineViewCell.swift in Sources */,

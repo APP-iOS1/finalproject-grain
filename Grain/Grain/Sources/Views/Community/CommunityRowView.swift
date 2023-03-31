@@ -71,7 +71,7 @@ struct CommunityRowView: View {
                                 .font(.caption)
                                 .setSkeletonView(opacity: opacity, shouldShow: isLoading)
                             
-                            Text(community.fields.state.stringValue)
+                            Text("\(community.fields.state.stringValue)")
                                 .padding(.vertical, 5)
                                 .padding(.horizontal, 8)
                                 .background(Color(hex: tagColor))

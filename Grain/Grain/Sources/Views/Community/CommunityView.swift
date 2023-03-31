@@ -14,7 +14,6 @@ struct CommunityView: View {
     
     @State private var selectedIndex: Int = 0
     @State private var isAddViewShown: Bool = false
-    @State private var isSearchViewShown: Bool = false
     
     let colors: [String] = ["", "#807EFC", "#6CD9B7", "E3F084", "FA98E0"]
     let titles: [String] = ["전체", "매칭", "마켓", "클래스", "정보"]
@@ -44,7 +43,7 @@ struct CommunityView: View {
                                     .fill(Color.black)
                                     .frame(height: 2)
                                     .transition(.slide)
-                                    .animation(.easeInOut, value: selectedIndex)
+                                    .animation(.easeInOut.speed(1.5), value: selectedIndex)
                             }
                         })
                     
@@ -65,29 +64,6 @@ struct CommunityView: View {
                 }
             } // 최상단 vstack
         } // navi stack
-        .navigationDestination(isPresented: $isSearchViewShown) {
-            MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM)
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Text("GRAIN")
-                    .font(.title)
-                    .bold()
-                    .kerning(7)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    self.isSearchViewShown.toggle()
-                } label: {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.black)
-                }
-            }
-        }
-        .onAppear {
-            self.isSearchViewShown = false
-        }
-        
     }
 }
 

@@ -91,9 +91,9 @@ struct CurrentUserFollowingFollowerView: View {
                         Spacer()
                         Rectangle()
                             .fill(Color.black)
-                            .frame(width: Screen.maxWidth * 0.4, height: 1)
+                            .frame(width: Screen.maxWidth * 0.4, height: 2)
                             .transition(.slide)
-                            .animation(.easeInOut, value: selectedIndex)
+                            .animation(.easeInOut.speed(1.5), value: selectedIndex)
                     }
                     
                 })

@@ -238,7 +238,7 @@ struct AuthenticationView: View {
                     if (editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname}{
                         Button {
                             // 유저 DB에 데이터 넣기
-                            userVM.insertUser(myFilm: "필름 중 하나를 선택해 주세요", bookmarkedMagazineID: "", email: authenticationStore.email, myCamera: "카메라 중 하나를 선택해 주세요", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: authenticationStore.userUID, following: "", myLens: "렌즈 중 하나를 선택해 주세요", profileImage: selectedImages, name: authenticationStore.userName , follower: "", nickName: editedNickname, introduce: editedIntroduce)
+                            userVM.insertUser(myFilm: "필름 중 하나를 선택해 주세요", bookmarkedMagazineID: "", email: authenticationStore.email, myCamera: "카메라 중 하나를 선택해 주세요", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: authenticationStore.userUID, following: "", myLens: "렌즈 중 하나를 선택해 주세요", profileImage: selectedImages, name: authenticationStore.userName , follower: "", nickName: editedNickname, introduce: editedIntroduce, fcmToken: "")
                             // 로그인 상태값 바꾸기
                             authenticationStore.authenticationState = .authenticated
                         } label: {

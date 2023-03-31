@@ -10,7 +10,7 @@ import Foundation
 enum UserQuery {
     
     // MARK: 최초로 로그인시 사용
-    static func insertUserQuery(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String, introduce: String ) -> Data? {
+    static func insertUserQuery(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String, introduce: String, fcmToken: String ) -> Data? {
         
         return
         """
@@ -31,6 +31,15 @@ enum UserQuery {
                                         "values": [
                                             {
                                                 "stringValue": "\(myCamera)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "fcmToken": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(fcmToken)"
                                             }
                                         ]
                                     }
@@ -248,10 +257,10 @@ enum UserQuery {
         """.data(using: .utf8)
         }
         
+        print("arr:\(arr)")
         return query
         
     }
     
     
 }
-

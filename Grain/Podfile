@@ -7,7 +7,7 @@ target 'Grain' do
 
   # Pods for Grain
   pod 'Firebase/Auth'
-  
+  pod 'Firebase/Messaging'
   pod 'GoogleSignIn', '~> 6.2.4'
   pod 'GoogleSignInSwiftSupport'
   pod 'NMapsMap'

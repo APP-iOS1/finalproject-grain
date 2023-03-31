@@ -41,7 +41,7 @@ final class CommentViewModel: ObservableObject {
     // MARK: Read
     func fetchComment(collectionName: String, collectionDocId: String) {
         self.sortedRecentComment.removeAll()
-        self.sortedRecentCommentID.removeAll()
+        self.hksortedRecentCommentID.removeAll()
         
         CommentService.getComment(collectionName: collectionName, collectionDocId: collectionDocId)
             .receive(on: DispatchQueue.main)
@@ -54,11 +54,11 @@ final class CommentViewModel: ObservableObject {
                 
                 // 댓글 id들 저장
                 for i in self.sortedRecentComment {
-                    self.sortedRecentCommentID.append(i.fields.id.stringValue)
+                    self.hksortedRecentCommentID.append(i.fields.id.stringValue)
                 }
                 
                 // 여기서 fetchRecomment 호출
-                self.fetchRecommentTest(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionDocId: self.sortedRecentCommentID)
+                self.fetchRecommentTest(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionDocId: self.hksortedRecentCommentID)
                 
                 self.fetchCommentSuccess.send()
             }.store(in: &subscription)
@@ -82,7 +82,7 @@ final class CommentViewModel: ObservableObject {
                     // comment id 값과 대댓글데이터를 딕셔너리로 묶어서 sortedRecentRecomment에 append
                     // 이경우에 sortedRecentRecomment도 정렬됨.
                     for i in recomments {
-                        self.sortedRecentRecomment.append([id : i])
+                        self.hksortedRecentRecomment.append([id : i])
                     }
                     
                 }.store(in: &subscription)
@@ -93,7 +93,7 @@ final class CommentViewModel: ObservableObject {
     
     func filterRecomment(commentID: String) -> [CommentDocument] {
         var recomments: [CommentDocument] = []
-        for recomment in self.sortedRecentRecomment {
+        for recomment in self.hksortedRecentRecomment {
             for i in recomment {
                 if commentID == i.key {
                     recomments.append(i.value)
@@ -119,24 +119,24 @@ final class CommentViewModel: ObservableObject {
     
 
              
-                for i in self.sortedRecentComment{
-                    CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: i.fields.id.stringValue)
-                        .receive(on: DispatchQueue.main)
-                        .sink { (completion: Subscribers.Completion<Error>) in
-                        } receiveValue: { (data: CommentResponse) in
-                            self.sortedRecentRecomment = data.documents.sorted(by: {
-                                return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
-                            })
-                            
-                            self.sortedRecentRecommentArray.updateValue(self.sortedRecentRecomment, forKey: "\(i.fields.id.stringValue)")
-                            self.sortedRecentRecommentCount.updateValue(self.sortedRecentRecomment.count, forKey: "\(i.fields.id.stringValue)")
-                            self.fetchRecommentSuccess.send()
-
-                        }.store(in: &self.subscription)
-                }
-                self.fetchCommentSuccess.send()
-            }.store(in: &subscription)
-    }    
+//                for i in self.hksortedRecentRecomment{
+//                    CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: i.fields.id.stringValue)
+//                        .receive(on: DispatchQueue.main)
+//                        .sink { (completion: Subscribers.Completion<Error>) in
+//                        } receiveValue: { (data: CommentResponse) in
+//                            self.sortedRecentRecomment = data.documents.sorted(by: {
+//                                return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+//                            })
+//
+//                            self.sortedRecentRecommentArray.updateValue(self.sortedRecentRecomment, forKey: "\(i.fields.id.stringValue)")
+//                            self.sortedRecentRecommentCount.updateValue(self.sortedRecentRecomment.count, forKey: "\(i.fields.id.stringValue)")
+//                            self.fetchRecommentSuccess.send()
+//
+//                        }.store(in: &self.subscription)
+//                }
+//                self.fetchCommentSuccess.send()
+//            }.store(in: &subscription)
+//    }
 
     // MARK: Create
     func insertComment(collectionName: String, collectionDocId: String, data: CommentFields) {

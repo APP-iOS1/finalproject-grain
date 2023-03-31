@@ -226,6 +226,7 @@ struct MagazineCommentView: View {
                                     
                                     VStack{
                                         MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText,commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+
                                     }
                                     
                                 }
@@ -430,7 +431,9 @@ struct MagazineCommentTextField: View {
                             self.summitComment.toggle()
                             editComment = false
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+
                                 commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+
                             }
                             
                         } label: {

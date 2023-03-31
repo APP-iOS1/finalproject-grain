@@ -161,14 +161,11 @@ struct CommunityCommentView: View {
                                 .padding(.trailing)
                         }
                     }
-                    else if editComment{
+                    else if editComment {
                         Button {
                             commentVm.updateComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, docID: editDocID, updateComment: replyContent, data: editData)
                             replyContent = ""
                             editComment = false
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
-                            }
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -182,9 +179,6 @@ struct CommunityCommentView: View {
                             commentVm.updateRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: editReDocID, updateComment: replyContent, data: editReData)
                             replyContent = ""
                             editRecomment = false
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId)
-                            }
                         } label: {
                             Text("등록")
                                 .font(.subheadline)

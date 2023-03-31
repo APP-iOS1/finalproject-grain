@@ -9,6 +9,7 @@ import SwiftUI
 import Kingfisher
 import FirebaseAuth
 
+
 struct MagazineRecommentView: View {
     
     @ObservedObject var userVM : UserViewModel
@@ -181,3 +182,4 @@ struct MagazineRecommentView: View {
         .padding(.leading , -8)
     }
 }
+

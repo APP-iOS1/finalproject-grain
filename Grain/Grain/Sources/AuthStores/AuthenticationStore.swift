@@ -13,6 +13,8 @@ import GoogleSignInSwift
 import Combine
 import AuthenticationServices
 import CryptoKit
+import FirebaseAuth
+import FirebaseMessaging
 
 /// 로그인 상태관리
 enum AuthenticationState {
@@ -47,6 +49,9 @@ final class AuthenticationStore: ObservableObject {
     @Published var userUID = ""
     @Published var userName = ""
     @Published var email = ""
+    
+    var updateUsersArraySuccess = PassthroughSubject<(), Never>()
+    var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()
 
     fileprivate var currentNonce: String?
     
@@ -114,6 +119,47 @@ final class AuthenticationStore: ObservableObject {
                 email = profile.email
                 findUserDocID(docID: uid ?? "")
                 self.logInCompanyState = .googleLogIn
+                
+                addToken()
+                print("로그인됨")
+
+            }
+        }
+    }
+    
+    func addToken() {
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                print("Error fetching FCM token: \(error.localizedDescription)")
+                return
+            }
+            if let token = token {
+                var arr : [String] = []
+
+                UserService.getCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+                    .receive(on: DispatchQueue.main)
+                    .sink { (completion: Subscribers.Completion<Error>) in
+                    } receiveValue: { (data: CurrentUserResponse) in
+                        for i in data.fields.fcmToken.arrayValue.values {
+                            if i.stringValue == token {
+                                continue
+                            }
+                            arr.append(i.stringValue)
+                        }
+                    }.store(in: &self.subscription)
+
+                arr.append(token)
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    // type : fcmToken arr : 토큰값 넣기 docID: 현재 유저 아이디
+                    UserService.updateCurrentUserArray(type: "fcmToken", arr: arr, docID: Auth.auth().currentUser?.uid ?? "")
+                        .receive(on: DispatchQueue.main)
+                        .sink { (completion: Subscribers.Completion<Error>) in
+                        } receiveValue: { (data: UserDocument) in
+                            print("updateUserToke:\(arr)")
+                            self.updateUsersArraySuccess.send()
+                        }.store(in: &self.subscription)
+                }
             }
         }
     }
@@ -261,10 +307,12 @@ final class AuthenticationStore: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
+                print("finduserdocid 실행됨")
                 self.checkUsers = data.documents
                 for i in data.documents{
                     if i.fields.id.stringValue == docID{
                         self.authenticationState = .authenticated
+//                        self.addToken()
                         break
                     }
                     self.authenticationState = .freshman

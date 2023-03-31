@@ -147,8 +147,9 @@ struct CommunityDetailView: View {
                         Divider()
                         
                         // MARK: - 커뮤니티 댓글 뷰
-                        CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData, eachBool: $eachBool , reCommentCount: $reCommentCount)
-                          .padding(.leading, 3)
+//                        CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData, eachBool: $eachBool , reCommentCount: $reCommentCount)
+//                          .padding(.leading, 3)
+                        TestCommentView(commentVM: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData, editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData)
                     }
                 }
                 .refreshable {

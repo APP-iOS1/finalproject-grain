@@ -24,29 +24,28 @@ struct MyPageMyFeedView: View {
         GridItem(.flexible(), spacing: 1)
     ]
     
+    @Binding var presented: Bool
+
     var body: some View {
         VStack{
             HStack{
-                Button{
-                    showGridOrList.toggle()
-                } label: {
-                    if showGridOrList {
-                        Image(systemName: "square.grid.2x2")
-                    } else {
-                        Image(systemName: "square.grid.2x2")
-                            .foregroundColor(.brightGray)
+                
+                
+                Image(systemName: "square.grid.2x2")
+                    .foregroundColor(showGridOrList ? .black : .brightGray)
+                    .onTapGesture {
+                        showGridOrList = true
+                        
                     }
-                }
-                Button{
-                    showGridOrList.toggle()
-                } label:{
-                    if showGridOrList {
-                        Image(systemName: "list.bullet")
-                            .foregroundColor(.brightGray)
-                    } else {
-                        Image(systemName: "list.bullet")
+                
+                Image(systemName: "list.bullet")
+                    .foregroundColor(showGridOrList ? .brightGray : .black)
+                    .onTapGesture{
+                        showGridOrList = false
+                        
                     }
-                }
+                
+                
                 Spacer()
                 
             }
@@ -70,6 +69,10 @@ struct MyPageMyFeedView: View {
                             }
                         }
                     }
+                    .emptyPlaceholder(magazineDocument.reversed()) {
+                            MyPagePlaceholderView(presented: $presented)
+                   
+                    }
                 }
                 .task(id: ObservingChangeValueLikeNum){
                     magazineVM.fetchMagazine()
@@ -87,9 +90,13 @@ struct MyPageMyFeedView: View {
                             }
                         }
                     }
+                    .emptyPlaceholder(magazineDocument.reversed()) {
+                            MyPagePlaceholderView(presented: $presented)
+                   
+                    }
                 }
                 .task(id: ObservingChangeValueLikeNum){
-                     magazineVM.fetchMagazine()
+                    magazineVM.fetchMagazine()
                 }
             }
             

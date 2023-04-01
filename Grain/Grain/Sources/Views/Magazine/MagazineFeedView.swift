@@ -18,10 +18,22 @@ struct MagazineFeedView: View {
     @State private var selectIndexNum: Int = 0
     
     @Binding var selectedFilter : Int
-    
+ 
     var body: some View {
         VStack {
             ScrollView{
+                // magazine fetch 된 시간 알려주는 부분
+                HStack{
+                    Text("\(Image(systemName: "info.circle")) 기준 시간: \(magazineVM.currentTime.getFormattedTime(from: magazineVM.currentTime))")
+                        .font(.footnote)
+                        .foregroundColor(.middlebrightGray)
+                    Spacer()
+                   
+                }
+                .padding(.horizontal)
+                .padding(.top, 13)
+                .padding(.bottom, -8)
+                
                 // MARK: 전체보기
                 if selectedFilter == 0{
                     ForEach(Array(magazineVM.sortedRecentMagazineData.enumerated()), id: \.1.self){ (index, data) in

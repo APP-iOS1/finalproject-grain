@@ -512,7 +512,7 @@ struct UserServiceView: View{
     @State private var copiedComplete: Bool = false
     
     // 메일 형식
-    private var email = SupportEmail(toAddress: "pkkyung26@gmail.com", subject: "GRAIN 문의사항", messageHeader: "아래에 내용을 입력해주세요. (사용하시는 기기와 iOS버전, 앱의 버전을 입력해주시면 더욱 신속한 처리가 가능합니다. \n 단말기 명: \n iOS 버전: \n GRAIN 버전: ")
+    private var email = SupportEmail(toAddress: "filmgrain.official@gmail.com", subject: "GRAIN 문의사항", messageHeader: "아래에 내용을 입력해주세요. (사용하시는 기기와 iOS버전, 앱의 버전을 입력해주시면 더욱 신속한 처리가 가능합니다. \n 단말기 명: \n iOS 버전: \n GRAIN 버전: ")
     
     var body: some View {
         VStack(alignment: .leading){
@@ -528,10 +528,10 @@ struct UserServiceView: View{
             VStack(alignment: .leading){
                 HStack(spacing: 0){
                     Text("문의사항은 ")
-                    Text(verbatim: "pkkyung26@gmail.com")
+                    Text(verbatim: "filmgrain.official@gmail.com")
                         .foregroundColor(.vivaMagenta)
                         .onTapGesture {
-                            pastedboard.string = "pkkyung26@gmail.com"
+                            pastedboard.string = "filmgrain.official@gmail.com"
                             self.copiedComplete = true
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -574,7 +574,7 @@ struct UserServiceView: View{
                         .frame(width: 180, height: 50)
                         .overlay{
                             Button{
-                                pastedboard.string = "pkkyung26@gmail.com"
+                                pastedboard.string = "filmgrain.official@gmail.com"
                                 self.copiedComplete = true
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
@@ -632,7 +632,7 @@ struct UserFeedbackView: View{
     @State private var copiedComplete: Bool = false
     
     // 메일 형식
-    private var email = SupportEmail(toAddress: "pkkyung26@gmail.com", subject: "GRAIN 피드백 메일", messageHeader: "GRAIN에서 좋았던 점이나 불편했던 점, 바라는 점을 보내주세요.")
+    private var email = SupportEmail(toAddress: "filmgrain.official@gmail.com", subject: "GRAIN 피드백 메일", messageHeader: "GRAIN에서 좋았던 점이나 불편했던 점, 바라는 점을 보내주세요.")
     
     var body: some View {
         VStack(alignment: .leading){
@@ -649,10 +649,10 @@ struct UserFeedbackView: View{
                 Text("GRAIN에 전달해주실 피드백을")
                 
                 HStack(spacing: 0){
-                    Text(verbatim:"pkkyung@gmail.com")
+                    Text(verbatim:"filmgrain.official@gmail.com")
                         .foregroundColor(.vivaMagenta)
                         .onTapGesture {
-                            pastedboard.string = "pkkyung26@gmail.com"
+                            pastedboard.string = "filmgrain.official@gmail.com"
                             self.copiedComplete = true
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -699,7 +699,7 @@ struct UserFeedbackView: View{
                         .frame(width: 180, height: 50)
                         .overlay{
                             Button{
-                                pastedboard.string = "pkkyung26@gmail.com"
+                                pastedboard.string = "filmgrain.official@gmail.com"
                                 self.copiedComplete = true
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {

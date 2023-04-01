@@ -33,7 +33,7 @@ struct PinchZoomContext<Content: View>: View {
     var body: some View{
         ZStack{
             if scale > 0 {
-                backgroundColor.ignoresSafeArea()
+                backgroundColor
                     .opacity(Double(max(min(scale, 0.7), 0.3)))
                     .frame(width: Screen.maxWidth, height: Screen.maxHeight * 3)
             }

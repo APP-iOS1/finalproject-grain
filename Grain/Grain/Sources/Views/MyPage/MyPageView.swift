@@ -24,6 +24,8 @@ struct MyPageView: View {
     @State private var showDevices: Bool = false
     @State private var angle: Double = 0
     
+    @Binding var presented: Bool
+
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
@@ -144,11 +146,11 @@ struct MyPageView: View {
                         
                         if showDevices {
                             VStack(alignment: .leading){
-                                userVM.myCamera.count > 1 ? Text("바디 | \(userVM.myCamera[1])") : nil
+                                userVM.myCamera.count > 1 ? Text("바디 \(Image(systemName: "poweron")) \(userVM.myCamera[1])") : nil
                                 
-                                userVM.myLens.count > 1 ? Text("렌즈 | \(userVM.myLens[1])") : nil
+                                userVM.myLens.count > 1 ? Text("렌즈 \(Image(systemName: "poweron")) \(userVM.myLens[1])") : nil
                                 
-                                userVM.myFilm.count > 1 ? Text("필름 | \(userVM.myFilm[1])") : nil
+                                userVM.myFilm.count > 1 ? Text("필름 \(Image(systemName: "poweron")) \(userVM.myFilm[1])") : nil
                                 
                             }
                             .font(.subheadline)
@@ -170,7 +172,7 @@ struct MyPageView: View {
                     .padding(.horizontal, 10)
                     .padding(.top, 5)
                     .foregroundColor(.brightGray)
-                MyPageMyFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineDocument)
+                MyPageMyFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineDocument, presented: $presented)
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장

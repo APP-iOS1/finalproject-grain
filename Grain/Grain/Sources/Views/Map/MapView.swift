@@ -121,7 +121,7 @@ struct MapView: View {
                             UIMapView(locationManager: locationManager, mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpotMapVIew: $isShowingPhotoSpotMapVIew, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .zIndex(0)
                         }
-                    case "필름스팟":
+                    case "포토스팟":
                         NavigationStack{
                             PhotoSpotMapView(userVM: userVM, magazineVM : magazineVM, locationManager: locationManager, mapData: $mapVM.mapData
                                              ,searchResponseBool: $searchResponseBool
@@ -295,7 +295,7 @@ struct UIMapView: UIViewRepresentable,View {
             for item in mapData{
                 var marker = NMFMarker(position: NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue))
                 switch item.fields.category.stringValue{
-                case "필름스팟":
+                case "포토스팟":
                     marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
                     marker.width = 25
                     marker.height = 25

@@ -154,10 +154,10 @@ struct EditorView: View {
                 Text("그레인 에디터를 희망하시는 분은")
                 
                 HStack(spacing: 0){
-                    Text(verbatim: "pkkyung26@gmail.com")
+                    Text(verbatim: "filmgrain.official@gmail.com")
                         .foregroundColor(.vivaMagenta)
                         .onTapGesture {
-                            pastedboard.string = "pkkyung26@gmail.com"
+                            pastedboard.string = "filmgrain.official@gmail.com"
                             self.copiedComplete = true
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {

@@ -63,13 +63,13 @@ struct MagazineViewCell: View {
                     .foregroundColor(.middleDarkGray)
             }
             .padding(.horizontal,5)
-           
+            .padding(.top, -2)
             
             
             Spacer()
         }
         .padding()
-        .padding(.bottom, 20)
+        .padding(.bottom, 13)
         
     }
 }

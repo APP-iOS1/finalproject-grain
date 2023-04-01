@@ -48,13 +48,6 @@ final class CommentViewModel: ObservableObject {
                 self.sortedRecentComment = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
                 })
-                // 댓글 id들 저장     // 희경작업
-//                for i in self.sortedRecentComment {
-//                    self.hksortedRecentCommentID.append(i.fields.id.stringValue)
-//                }
-                // 여기서 fetchRecomment 호출     // 희경작업
-//                self.fetchRecommentTest(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionDocId: self.hksortedRecentCommentID)
-                
                 for i in self.sortedRecentComment{
                     CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: i.fields.id.stringValue)
                         .receive(on: DispatchQueue.main)

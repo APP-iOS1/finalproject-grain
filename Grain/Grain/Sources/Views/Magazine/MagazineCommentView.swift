@@ -409,7 +409,6 @@ struct MagazineCommentTextField: View {
                     else if editRecomment{
                         Button {
                             commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: commentText, data: editReData)
-//                            print(commentCollectionDocId)
                             commentText = ""
                             self.summitComment.toggle()
                             editRecomment = false

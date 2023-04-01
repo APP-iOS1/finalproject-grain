@@ -40,8 +40,8 @@ struct CommunityDetailView: View {
     @State var editRecomment : Bool = false
     @State var editReDocID : String = ""
     @State var editReData : CommentFields = CommentFields(comment: CommentString(stringValue: ""), profileImage: CommentString(stringValue: ""), nickName: CommentString(stringValue: ""), userID: CommentString(stringValue: ""), id: CommentString(stringValue: ""))
-    
-    
+    @State var commentCount : Int = 0
+    @State var editReColletionDocID: String = ""
     
     @FocusState private var textFieldFocused: Bool
     
@@ -135,7 +135,7 @@ struct CommunityDetailView: View {
                         HStack {
                             Image(systemName: "bubble.right")
                                 .padding(.top, 2)
-                            Text("\(commentVm.comment.count)")
+                            Text("\(commentCount)")
                                     .padding(.leading, -3)
                         }
                         .padding(.top, 20)
@@ -146,7 +146,7 @@ struct CommunityDetailView: View {
                         Divider()
                         
                         // MARK: - 커뮤니티 댓글 뷰
-                        CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData)
+                        CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData ,commentCount : $commentCount, editReColletionDocID: $editReColletionDocID)
 //                          .padding(.leading, 3)
 //                        TestCommentView(commentVM: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData, editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData)
                     }
@@ -160,7 +160,7 @@ struct CommunityDetailView: View {
                 .padding(.top, 1)
                 // MARK: 댓글 달기
                 if isZooming == false {
-                    CommunityCommentView(commentVm: commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData)
+                    CommunityCommentView(commentVm: commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData, editReColletionDocID: $editReColletionDocID)
                         .transition(.move(edge: .bottom))
                         .animation(.default , value: isZooming)
                 }

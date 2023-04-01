@@ -17,8 +17,7 @@ struct CommunityRecommentView: View {
     @State var deleteCommentAlertBool : Bool = false
     @State var deleteDocId : String = ""
     @State var nickName : String = "" // 닉네임 변경을 위해
-    @State var userTest: UserDocument = UserDocument(name: "", fields: UserFields(likedMagazineID: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), id: UserStringValue(stringValue: ""), myLens: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), myFilm: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), postedCommunityID: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), nickName: UserStringValue(stringValue: ""), introduce: UserStringValue(stringValue: ""), following: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), profileImage: UserStringValue(stringValue: ""), recentSearch: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), bookmarkedCommunityID: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), follower: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), lastSearched: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), email: UserStringValue(stringValue: ""), postedMagazineID: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), myCamera: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), bookmarkedMagazineID: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), fcmToken: UserArrayKey(arrayValue: UserArrayValue(values: [UserStringValue(stringValue: "")])), name: UserStringValue(stringValue: "")), createTime: "", updateTime: "")
-    
+
     
     var commentCollectionDocId : String
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
@@ -28,18 +27,18 @@ struct CommunityRecommentView: View {
     @Binding var editRecomment : Bool
     @Binding var editReDocID : String
     @Binding var editReData : CommentFields
-
+    @Binding var editReColletionDocID: String
+    
     var body: some View {
         VStack(alignment: .leading){
             ForEach(Array(commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values), id:\.self){ element in
                 ForEach(element , id:\.self){ index in
                     if let user = userVM.users.first(where: { $0.fields.id.stringValue == index.fields.userID.stringValue }){
-                        Divider()
                         HStack(alignment: .top){
                             // MARK: -  유저 프로필 이미지
                             VStack{
                                 NavigationLink {
-                                    UserDetailView(userVM: userVM , magazineVM: magazineVM, user: userTest)
+                                    UserDetailView(userVM: userVM , magazineVM: magazineVM, user: user)
                                 } label: {
                                     KFImage(URL(string: index.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                                         .resizable()
@@ -61,12 +60,12 @@ struct CommunityRecommentView: View {
                                         //유저 프로필 뷰 입장
                                     } label: {
                                         // MARK: 유저 닉네임
-//                                        Text(nickName)
-//                                            .font(.caption)
-//                                            .fontWeight(.bold)
-//                                            .onAppear{
-//                                                nickName = user.fields.nickName.stringValue
-//                                            }
+                                        Text(nickName)
+                                            .font(.caption)
+                                            .fontWeight(.bold)
+                                            .onAppear{
+                                                nickName = user.fields.nickName.stringValue
+                                            }
                                     }
                                     HStack{
                                         Text("・")
@@ -93,6 +92,7 @@ struct CommunityRecommentView: View {
                                             editRecomment.toggle()
                                             editReDocID = index.fields.id.stringValue
                                             editReData = index.fields
+                                            editReColletionDocID =  commentCollectionDocId
                                         } label: {
                                             Text("수정")
                                         }
@@ -107,6 +107,10 @@ struct CommunityRecommentView: View {
                                                           primaryButton:  .cancel(Text("취소")),
                                                           secondaryButton:.destructive(Text("삭제"),action: {
                                                         commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                                        
+                                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                                        }
                                                     }))
                                                 }
                                         }
@@ -119,51 +123,53 @@ struct CommunityRecommentView: View {
 
                             }
                         }
+                        Divider()
                     }
-//                    else{
-//                        Divider()
-//                        HStack(alignment: .top){
-//                            // MARK: -  유저 프로필 이미지
-//                            VStack{
-//                                KFImage(URL(string:"https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
-//                                    .resizable()
-//                                    .frame(width: 25, height: 25)
-//                                    .cornerRadius(15)
-//                                    .overlay {
-//                                        Circle()
-//                                            .stroke(lineWidth: 0.5)
-//                                    }
-//                                    .padding(.horizontal, 7)
-//                            }
-//                            .frame(width: Screen.maxWidth * 0.1)
-//                            VStack(alignment: .leading){
-//                                HStack{
-//                                    Text("탈퇴한 유저입니다")
-//                                        .foregroundColor(.gray)
-//                                        .font(.caption)
-//                                        .fontWeight(.bold)
-//
-//                                    HStack{
-//                                        Text("・")
-//                                            .font(.caption2)
-//                                            .padding(.trailing, -5)
-//                                        // MARK: 댓글 생성 날짜
-//                                        Text(index.createTime.toDate()?.renderTime() ?? "")
-//                                            .font(.caption2)
-//                                    }
-//                                    Spacer()
-//                                }
-//                                .padding(.bottom, -5)
-//                                //MARK: - 댓글 내용
-//                                Text("삭제된 댓글입니다.")
-//                                    .font(.footnote)
-//                                    .padding(.bottom, -1)
-//
-//                            }
-//                            .frame(width: Screen.maxWidth * 0.8)
-//
-//                        }
-//                    }
+                    else{
+                        
+                        HStack(alignment: .top){
+                            // MARK: -  유저 프로필 이미지
+                            VStack{
+                                KFImage(URL(string:"https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
+                                    .cornerRadius(15)
+                                    .overlay {
+                                        Circle()
+                                            .stroke(lineWidth: 0.5)
+                                    }
+                                    .padding(.horizontal, 7)
+                            }
+                            .frame(width: Screen.maxWidth * 0.1)
+                            VStack(alignment: .leading){
+                                HStack{
+                                    Text("탈퇴한 유저입니다")
+                                        .foregroundColor(.gray)
+                                        .font(.caption)
+                                        .fontWeight(.bold)
+
+                                    HStack{
+                                        Text("・")
+                                            .font(.caption2)
+                                            .padding(.trailing, -5)
+                                        // MARK: 댓글 생성 날짜
+                                        Text(index.createTime.toDate()?.renderTime() ?? "")
+                                            .font(.caption2)
+                                    }
+                                    Spacer()
+                                }
+                                .padding(.bottom, -5)
+                                //MARK: - 댓글 내용
+                                Text("삭제된 댓글입니다.")
+                                    .font(.footnote)
+                                    .padding(.bottom, -1)
+
+                            }
+                            .frame(width: Screen.maxWidth * 0.8)
+
+                        }
+                        Divider()
+                    }
                 }
             }
         }

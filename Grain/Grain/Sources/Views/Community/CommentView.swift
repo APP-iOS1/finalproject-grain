@@ -36,6 +36,8 @@ struct CommentView: View {
     @Binding var editRecomment : Bool // 대댓글 수정 Bool값
     @Binding var editReDocID : String
     @Binding var editReData : CommentFields
+    @Binding var commentCount : Int
+    @Binding var editReColletionDocID: String
     
     var body: some View {
         VStack(alignment: .leading){
@@ -98,16 +100,17 @@ struct CommentView: View {
                                         Text("답글달기")
                                     }
                                     // MARK: 답글 더보기
-                                    Button {
-
-                                    } label: {
-                                        if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
-                                            Text("답글 더보기 (\(recommentCount))")
-                                        }else{
-                                            Text("답글 더보기 (0)" )
+                                    if let recommentCount = commentVm.sortedRecentRecommentCount[index.fields.id.stringValue]{
+                                        if recommentCount >= 5 {
+                                            Button {
+                                                readMoreComments.toggle()
+                                            } label: {
+                                                Text("답글 더보기 (\(recommentCount))")
+                                            }
+                                            
                                         }
                                     }
-
+                                    
                                     if index.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                         Button{
                                             editComment.toggle()
@@ -126,6 +129,10 @@ struct CommentView: View {
                                                           primaryButton:  .cancel(Text("취소")),
                                                           secondaryButton:.destructive(Text("삭제"),action: {
                                                         commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
+                                                        
+                                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                                        }
                                                     }))
                                                 }
                                         }
@@ -140,9 +147,9 @@ struct CommentView: View {
 
                                 VStack{
                                     // 리코멘트
-                                    if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                    if let recommentCount = commentVm.sortedRecentRecommentCount[index.fields.id.stringValue]{
                                         if recommentCount <= 5 || readMoreComments{
-//                                            CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: index.fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData)
+                                            CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: index.fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData , editReColletionDocID: $editReColletionDocID)
                                         }
                                     }
 
@@ -188,16 +195,15 @@ struct CommentView: View {
                                     .padding(.bottom, -1)
 
                                 HStack{
-
                                     // MARK: 답글 더보기
-                                    Button {
-
-
-                                    } label: {
-                                        if let recommentCount = commentVm.sortedRecentRecommentCount[index.fields.id.stringValue]{
-                                            Text("답글 더보기 (\(recommentCount))")
-                                        }else{
-                                            Text("답글 더보기 (0)" )
+                                    if let recommentCount = commentVm.sortedRecentRecommentCount[index.fields.id.stringValue]{
+                                        if recommentCount >= 5 {
+                                            Button {
+                                                readMoreComments.toggle()
+                                            } label: {
+                                                Text("답글 더보기 (\(recommentCount))")
+                                            }
+                                            
                                         }
                                     }
                                 }
@@ -218,10 +224,18 @@ struct CommentView: View {
                     }
                 }.padding(7)
             }
+            
         }
         .onAppear {
             commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                commentCount = commentVm.sortedRecentComment.count
+            }
+            
+            
         }
+       
     }
     
 }

@@ -37,4 +37,9 @@ extension Date {
         dateFormatter.dateFormat = format
         return dateFormatter.date(from: string)
     }
+    func getFormattedTime(from date: Date) -> String {
+         let formatter = DateFormatter()
+         formatter.dateFormat = "yyyy.MM.dd hh:mm:ss"
+         return formatter.string(from: date)
+     }
 }

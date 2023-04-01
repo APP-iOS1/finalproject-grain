@@ -13,13 +13,11 @@ struct MagazineBestView: View {
     @ObservedObject var  userVM: UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     @ObservedObject var editorVM : EditorViewModel
-    @ObservedObject var storyTimer: StoryTimer = StoryTimer(items: 7, interval: 3.0)
     
     @State private var ObservingChangeValueLikeNum: String = ""
     @State private var isMagazineDegtailViewShown: Bool = false
     @State private var isMagazineEditorViewShown: Bool = false
     @State private var selectIndexNum: Int = 0
-    @State private var editorIndex: Int = 0
     
     var body: some View {
         VStack {
@@ -31,16 +29,27 @@ struct MagazineBestView: View {
                     }
                 
                 HStack{
-                    Text("인기 필름")
+                    Text("인기 피드")
                         .font(.title)
                         .fontWeight(.bold)
                         .fixedSize()
-                    
+                    Spacer()
                     Image("line")
                         .resizable()
-                        .frame(width: Screen.maxWidth * 0.66, height: Screen.maxHeight * 0.003)
+                        .frame(width: Screen.maxWidth * 0.66, height: 2)
                 }
                 .padding([.leading, .top])
+                
+                HStack{
+                    Text("\(Image(systemName: "info.circle")) 실시간 좋아요 수 기준으로 인기 피드를 보여드립니다.")
+                        .font(.footnote)
+                        .foregroundColor(.middlebrightGray)
+                    Spacer()
+                   
+                }
+                .padding(.horizontal,21)
+                .padding(.top, 7)
+                .padding(.bottom, 2)
                 
                 ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
                     

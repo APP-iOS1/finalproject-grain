@@ -120,9 +120,7 @@ struct ContentView: View {
                                     }
                                     
                                 }
-                                
-                                if isZooming == false {
-                                    
+                                                                    
                                     HStack(alignment: .top, spacing: 10) {
                                         ForEach(0..<5, id: \.self) { number in
                                             
@@ -166,8 +164,7 @@ struct ContentView: View {
                                             
                                         }
                                     }
-                                    .transition(.move(edge: .bottom))
-                                }
+                                
                             }
                             .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
                             
@@ -186,7 +183,7 @@ struct ContentView: View {
                                                    updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
                                 }
                             }
-                            .animation(.default , value: isZooming)
+                            
                         }
                         .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
                         
@@ -194,7 +191,6 @@ struct ContentView: View {
                         
                     }
                 }
-                .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
                 .tint(.black)
                 .onAppear{
                     /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?

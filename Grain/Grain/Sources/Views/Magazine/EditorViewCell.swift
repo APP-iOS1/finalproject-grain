@@ -18,8 +18,10 @@ struct EditorViewCell: View {
                 //에디터픽 이미지
                 ZStack{
                 
+                    Rectangle()
+                        .fill(.gray)
+                        .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.5)
                     ForEach(editorVM.editorData, id:\.self){ data in
-                        
                         KFImage(URL(string: data.fields.postImage4.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                             .resizable()
                             .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.5)

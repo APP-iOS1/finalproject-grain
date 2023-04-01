@@ -21,6 +21,8 @@ final class MagazineViewModel: ObservableObject {
     
     @Published var isMagazineLoading = false
 
+    @Published var currentTime: Date = Date()
+
     var fetchMagazineSuccess = PassthroughSubject<[MagazineDocument], Never>()
     var insertMagazineSuccess = PassthroughSubject<(), Never>()
     var updateMagazineSuccess = PassthroughSubject<(), Never>()
@@ -28,6 +30,7 @@ final class MagazineViewModel: ObservableObject {
     
     // MARK: 메거진 데이터 가져오기 메소드
     func fetchMagazine() {
+        self.currentTime = Date()
         self.isMagazineLoading = true
         MagazineService.getMagazine()
             .receive(on: DispatchQueue.main)

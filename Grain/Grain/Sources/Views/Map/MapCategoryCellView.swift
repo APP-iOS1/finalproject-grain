@@ -12,7 +12,7 @@ struct MapCategoryCellView: View {
     
     // MARK: 카테고리 종류 리스트
     // category -> 0: 포토스팟 / 1: 현상소 / 2: 수리점
-    let categoryList : [String] = ["전체","필름스팟", "현상소", "수리점"]
+    let categoryList : [String] = ["전체","포토스팟", "현상소", "수리점"]
     
     
     @State var allButtonClickedBool : Bool = true
@@ -34,7 +34,7 @@ struct MapCategoryCellView: View {
             photoButtonClickedBool = false
             StationButtonClickedBool = false
             repairButtonClickedBool = false
-        case "필름스팟":
+        case "포토스팟":
             allButtonClickedBool = false
             StationButtonClickedBool = false
             repairButtonClickedBool = false
@@ -82,7 +82,7 @@ struct MapCategoryCellView: View {
                     .foregroundColor(photoButtonClickedBool ? .black : .white)
                     .overlay{
                         HStack{
-                            Text("필름스팟")
+                            Text("포토스팟")
                                 .fontWeight(.bold)
                                 .font(.caption)
                                 .foregroundColor(photoButtonClickedBool ? .white : .gray)
@@ -93,7 +93,7 @@ struct MapCategoryCellView: View {
                     .frame(width: Screen.maxWidth * 0.174, height:  Screen.maxHeight * 0.0525)
                     .onTapGesture {
                         photoButtonClickedBool = true
-                        categoryString = "필름스팟"
+                        categoryString = "포토스팟"
                         buttonSwitch(index: categoryString)
                         
                     }

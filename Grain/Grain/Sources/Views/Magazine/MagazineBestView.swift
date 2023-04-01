@@ -41,7 +41,7 @@ struct MagazineBestView: View {
                 .padding([.leading, .top])
                 
                 HStack{
-                    Text("\(Image(systemName: "info.circle")) 실시간 좋아요 수 기준으로 인기 피드를 보여드립니다.")
+                    Text("\(Image(systemName: "info.circle")) 좋아요 수 기준으로 인기 피드를 보여드립니다.")
                         .font(.footnote)
                         .foregroundColor(.middlebrightGray)
                     Spacer()

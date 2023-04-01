@@ -281,9 +281,6 @@ struct MagazineDetailView: View {
                 }
               
             }//스크롤뷰
-            .refreshable {
-                magazineVM.fetchMagazine()
-            }
             .alert(isPresented: $isDeleteAlertShown) {
                 Alert(title: Text("게시물을 삭제하시겠어요?"),
                       message: Text("게시물을 삭제하면 영구히 삭제되고 복원할 수 없습니다."),
@@ -457,6 +454,9 @@ struct MagazineDetailView: View {
                     }
                 }
             }
+        }
+        .refreshable {
+            magazineVM.fetchMagazine()
         }
     }
     var sharedView: some View {

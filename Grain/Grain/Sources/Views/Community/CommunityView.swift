@@ -12,7 +12,7 @@ struct CommunityView: View {
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
-    @State private var selectedIndex: Int = 0
+    @State private var communitySelectedIndex: Int = 0
     @State private var isAddViewShown: Bool = false
     
     let colors: [String] = ["", "#807EFC", "#6CD9B7", "E3F084", "FA98E0"]
@@ -26,8 +26,8 @@ struct CommunityView: View {
                     SegmentedPicker(
                         titles,
                         selectedIndex: Binding(
-                            get: { selectedIndex },
-                            set: { selectedIndex = $0 ?? 0 }),
+                            get: { communitySelectedIndex },
+                            set: { communitySelectedIndex = $0 ?? 0 }),
                         content: { item, isSelected in
                             Text(item)
                                 .foregroundColor(isSelected ? Color.black : Color.gray )
@@ -43,14 +43,14 @@ struct CommunityView: View {
                                     .fill(Color.black)
                                     .frame(height: 2)
                                     .transition(.slide)
-                                    .animation(.easeInOut.speed(1.5), value: selectedIndex)
+                                    .animation(.easeInOut.speed(1.5), value: communitySelectedIndex)
                             }
                         })
                     
                     Spacer()
                 } // hstack
                 
-                switch(selectedIndex) {
+                switch(communitySelectedIndex) {
                 case 0:
                     AllTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
                 case 1:

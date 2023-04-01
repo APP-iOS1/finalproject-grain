@@ -49,9 +49,9 @@ struct MagazineMainView: View {
                 }
             }
            
-            .refreshable {
-                magazineVM.fetchMagazine()
-            }
+        }
+        .refreshable {
+            magazineVM.fetchMagazine()
         }
         .onReceive(userVM.fetchUsersSuccess, perform: { newValue in
             userVM.filterCurrentUsersFollow()

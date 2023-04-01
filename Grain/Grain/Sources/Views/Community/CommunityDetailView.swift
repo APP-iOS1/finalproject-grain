@@ -151,9 +151,6 @@ struct CommunityDetailView: View {
 //                        TestCommentView(commentVM: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData, editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData)
                     }
                 }
-                .refreshable {
-                    communityVM.fetchCommunity()
-                }
                 .onDisappear{
                     selectedIndex = 0
                 }
@@ -296,6 +293,9 @@ struct CommunityDetailView: View {
                     }
                 }
             }
+        }
+        .refreshable {
+            communityVM.fetchCommunity()
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)

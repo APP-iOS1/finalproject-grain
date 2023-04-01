@@ -17,7 +17,6 @@ struct MatchingTabView: View {
 
 
     var body: some View {
-        
         VStack {
             ScrollView{
                 ForEach(communityVM.returnCategoryCommunity(category: "매칭"), id: \.self){ data in

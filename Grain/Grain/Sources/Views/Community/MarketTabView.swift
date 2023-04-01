@@ -16,7 +16,6 @@ struct MarketTabView: View {
     @Binding var isLoading: Bool
     
     var body: some View {
-        
         VStack {
             ScrollView{
                 ForEach(communityVM.returnCategoryCommunity(category: "클래스"), id: \.self){ data in

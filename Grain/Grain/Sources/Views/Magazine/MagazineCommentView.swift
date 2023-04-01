@@ -210,7 +210,7 @@ struct MagazineCommentView: View {
                                         // MARK: 답글 더보기
                                         Button {
 
-//                                            commentVm.sortedRecentRecomment.removeAll()
+
                                         } label: {
                                             if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
                                                 Text("답글 더보기 (\(recommentCount))")
@@ -409,7 +409,6 @@ struct MagazineCommentTextField: View {
                     else if editRecomment{
                         Button {
                             commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: commentText, data: editReData)
-//                            print(commentCollectionDocId)
                             commentText = ""
                             self.summitComment.toggle()
                             editRecomment = false

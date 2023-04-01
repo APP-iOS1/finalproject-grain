@@ -30,8 +30,7 @@ struct CommunityCommentView: View {
     @Binding var editRecomment : Bool
     @Binding var editReDocID : String
     @Binding var editReData : CommentFields
-    @Binding var eachBool : [Bool]
-    @Binding var reCommentCount : Int
+    @Binding var editReColletionDocID: String
     
     var trimContent: String {
         replyContent.trimmingCharacters(in: .whitespaces)
@@ -176,9 +175,12 @@ struct CommunityCommentView: View {
                     }
                     else if editRecomment{
                         Button {
-                            commentVm.updateRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: editReDocID, updateComment: replyContent, data: editReData)
+                            commentVm.updateRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: replyContent, data: editReData)
                             replyContent = ""
                             editRecomment = false
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                            }
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -201,8 +203,6 @@ struct CommunityCommentView: View {
                             
                             replyContent = ""
                             replyComment = false
-                            reCommentCount += 1
-                            eachBool.insert(false, at: 0)
                             commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
                         } label: {
                             Text("등록")

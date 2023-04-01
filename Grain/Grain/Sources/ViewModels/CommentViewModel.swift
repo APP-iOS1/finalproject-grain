@@ -16,14 +16,13 @@ final class CommentViewModel: ObservableObject {
     
     @Published var comment = [CommentDocument]()
     @Published var sortedRecentComment = [CommentDocument]()
-
-    @Published var hksortedRecentRecomment = [[String : CommentDocument]]()  // 대댓글 최신순으로 정렬
-    @Published var hksortedRecentCommentID: [String] = []
-
     @Published var sortedRecentRecomment = [CommentDocument]()  // 대댓글 최신순으로 정렬
     
     @Published var sortedRecentRecommentArray = [String : [CommentDocument]]()
     @Published var sortedRecentRecommentCount = [String : Int]()
+
+//    @Published var hksortedRecentRecomment = [[String : CommentDocument]]()  // 희경작업
+//    @Published var hksortedRecentCommentID: [String] = []  // 희경작업
 
     
     var fetchCommentSuccess = PassthroughSubject<(), Never>()
@@ -40,9 +39,8 @@ final class CommentViewModel: ObservableObject {
     ///  REST API 방식 CRUD
     // MARK: Read
     func fetchComment(collectionName: String, collectionDocId: String) {
-        self.sortedRecentComment.removeAll()
-        self.hksortedRecentCommentID.removeAll()
-        
+//        self.sortedRecentComment.removeAll()   // 희경작업
+//        self.hksortedRecentCommentID.removeAll()   // 희경작업
         CommentService.getComment(collectionName: collectionName, collectionDocId: collectionDocId)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
@@ -50,94 +48,71 @@ final class CommentViewModel: ObservableObject {
                 self.sortedRecentComment = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
                 })
+                // 댓글 id들 저장     // 희경작업
+//                for i in self.sortedRecentComment {
+//                    self.hksortedRecentCommentID.append(i.fields.id.stringValue)
+//                }
+                // 여기서 fetchRecomment 호출     // 희경작업
+//                self.fetchRecommentTest(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionDocId: self.hksortedRecentCommentID)
+                
+                for i in self.sortedRecentComment{
+                    CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: i.fields.id.stringValue)
+                        .receive(on: DispatchQueue.main)
+                        .sink { (completion: Subscribers.Completion<Error>) in
+                        } receiveValue: { (data: CommentResponse) in
+                            self.sortedRecentRecomment = data.documents.sorted(by: {
+                                return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+                            })
 
-                
-                // 댓글 id들 저장
-                for i in self.sortedRecentComment {
-                    self.hksortedRecentCommentID.append(i.fields.id.stringValue)
+                            self.sortedRecentRecommentArray.updateValue(self.sortedRecentRecomment, forKey: "\(i.fields.id.stringValue)")
+                            self.sortedRecentRecommentCount.updateValue(self.sortedRecentRecomment.count, forKey: "\(i.fields.id.stringValue)")
+                            self.fetchRecommentSuccess.send()
+
+                        }.store(in: &self.subscription)
                 }
-                
-                // 여기서 fetchRecomment 호출
-                self.fetchRecommentTest(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionDocId: self.hksortedRecentCommentID)
-                
                 self.fetchCommentSuccess.send()
             }.store(in: &subscription)
     }
     
-    // MARK: 대댓글 Read
-    func fetchRecommentTest(collectionName: String, collectionDocId: String, commentCollectionDocId: [String]) {
-        
-        self.sortedRecentRecomment.removeAll()
-        
-        for id in commentCollectionDocId {
-            CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: id)
-                .receive(on: DispatchQueue.main)
-                .sink { (completion: Subscribers.Completion<Error>) in
-                } receiveValue: { (data: CommentResponse) in
-                    // 대댓글 데이터 정렬
-                    var recomments = data.documents.sorted(by: {
-                        return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
-                    })
-                    
-                    // comment id 값과 대댓글데이터를 딕셔너리로 묶어서 sortedRecentRecomment에 append
-                    // 이경우에 sortedRecentRecomment도 정렬됨.
-                    for i in recomments {
-                        self.hksortedRecentRecomment.append([id : i])
-                    }
-                    
-                }.store(in: &subscription)
-        }
-        
-        self.fetchRecommentSuccess.send()
-    }
-    
-    func filterRecomment(commentID: String) -> [CommentDocument] {
-        var recomments: [CommentDocument] = []
-        for recomment in self.hksortedRecentRecomment {
-            for i in recomment {
-                if commentID == i.key {
-                    recomments.append(i.value)
-                }
-            }
-        }
-        return recomments
-    }
-    
-    // MARK: 대댓글 Read
-//    func fetchRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String) {
-//        CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId)
-//            .receive(on: DispatchQueue.main)
-//            .sink { (completion: Subscribers.Completion<Error>) in
-//            } receiveValue: { (data: CommentResponse) in
-//                self.sortedRecentRecomment = data.documents.sorted(by: {
-//                    return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
-//                })
-//                self.fetchRecommentSuccess.send()
-//            }.store(in: &subscription)
+    // MARK: 대댓글 Read    // 희경작업
+//    func fetchRecommentTest(collectionName: String, collectionDocId: String, commentCollectionDocId: [String]) {
 //
+//        self.sortedRecentRecomment.removeAll()
+//
+//        for id in commentCollectionDocId {
+//            CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: id)
+//                .receive(on: DispatchQueue.main)
+//                .sink { (completion: Subscribers.Completion<Error>) in
+//                } receiveValue: { (data: CommentResponse) in
+//                    // 대댓글 데이터 정렬
+//                    var recomments = data.documents.sorted(by: {
+//                        return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+//                    })
+//
+//                    // comment id 값과 대댓글데이터를 딕셔너리로 묶어서 sortedRecentRecomment에 append
+//                    // 이경우에 sortedRecentRecomment도 정렬됨.
+//                    for i in recomments {
+//                        self.hksortedRecentRecomment.append([id : i])
+//                    }
+//
+//                }.store(in: &subscription)
+//        }
+//
+//        self.fetchRecommentSuccess.send()
 //    }
-    
-
-             
-//                for i in self.hksortedRecentRecomment{
-//                    CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: i.fields.id.stringValue)
-//                        .receive(on: DispatchQueue.main)
-//                        .sink { (completion: Subscribers.Completion<Error>) in
-//                        } receiveValue: { (data: CommentResponse) in
-//                            self.sortedRecentRecomment = data.documents.sorted(by: {
-//                                return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
-//                            })
-//
-//                            self.sortedRecentRecommentArray.updateValue(self.sortedRecentRecomment, forKey: "\(i.fields.id.stringValue)")
-//                            self.sortedRecentRecommentCount.updateValue(self.sortedRecentRecomment.count, forKey: "\(i.fields.id.stringValue)")
-//                            self.fetchRecommentSuccess.send()
-//
-//                        }.store(in: &self.subscription)
+        
+//    func filterRecomment(commentID: String) -> [CommentDocument] {     // 희경작업
+//        var recomments: [CommentDocument] = []
+//        for recomment in self.hksortedRecentRecomment {
+//            for i in recomment {
+//                if commentID == i.key {
+//                    recomments.append(i.value)
 //                }
-//                self.fetchCommentSuccess.send()
-//            }.store(in: &subscription)
+//            }
+//        }
+//        return recomments
 //    }
-
+    
     // MARK: Create
     func insertComment(collectionName: String, collectionDocId: String, data: CommentFields) {
         CommentService.insertComment(collectionName: collectionName, collectionDocId: collectionDocId, data: data)
@@ -181,9 +156,8 @@ final class CommentViewModel: ObservableObject {
                 self.insertRecommentSuccess.send()
             }.store(in: &subscription)
     }
-    
 
-//    // MARK: 대댓글 Read -> 임시 중단
+//    // MARK: 대댓글 Read
     func fetchRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String) {
         CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId)
             .receive(on: DispatchQueue.main)
@@ -196,6 +170,7 @@ final class CommentViewModel: ObservableObject {
             }.store(in: &subscription)
 
     }
+    
     
     /// 매거진 하나당 코맨트 여러개 -> 코멘트 여러개에서 여러개
     ///

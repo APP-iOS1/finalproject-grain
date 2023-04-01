@@ -40,8 +40,7 @@ struct CommunityDetailView: View {
     @State var editRecomment : Bool = false
     @State var editReDocID : String = ""
     @State var editReData : CommentFields = CommentFields(comment: CommentString(stringValue: ""), profileImage: CommentString(stringValue: ""), nickName: CommentString(stringValue: ""), userID: CommentString(stringValue: ""), id: CommentString(stringValue: ""))
-    @State var eachBool : [Bool] = []
-    @State var reCommentCount : Int = 0
+    
     
     
     @FocusState private var textFieldFocused: Bool
@@ -101,7 +100,7 @@ struct CommunityDetailView: View {
 //                            .padding(.bottom, 15)
 //                            .padding(.horizontal, Screen.maxWidth * 0.04)
                         //MARK: 사진
-                        ForEach(Array(                        community.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
+                        ForEach(Array(community.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
                             Rectangle()
                                 .frame(width: Screen.maxWidth, height: Screen.maxWidth)
                                 .overlay {
@@ -147,9 +146,9 @@ struct CommunityDetailView: View {
                         Divider()
                         
                         // MARK: - 커뮤니티 댓글 뷰
-//                        CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData, eachBool: $eachBool , reCommentCount: $reCommentCount)
+                        CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData)
 //                          .padding(.leading, 3)
-                        TestCommentView(commentVM: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData, editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData)
+//                        TestCommentView(commentVM: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData, editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData)
                     }
                 }
                 .refreshable {
@@ -161,7 +160,7 @@ struct CommunityDetailView: View {
                 .padding(.top, 1)
                 // MARK: 댓글 달기
                 if isZooming == false {
-                    CommunityCommentView(commentVm: commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData, eachBool: $eachBool, reCommentCount: $reCommentCount )
+                    CommunityCommentView(commentVm: commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData)
                         .transition(.move(edge: .bottom))
                         .animation(.default , value: isZooming)
                 }

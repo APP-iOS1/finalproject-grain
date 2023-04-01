@@ -119,7 +119,6 @@ struct MagazineRecommentView: View {
                                                     }))
                                                 }
                                         }
-                                        
                                     }
                                 }
                                 .font(.caption2)
@@ -129,7 +128,7 @@ struct MagazineRecommentView: View {
                                 
                             }
                         }
-                    }//if
+                    }
                     else{
                         Divider()
                         HStack(alignment: .top){

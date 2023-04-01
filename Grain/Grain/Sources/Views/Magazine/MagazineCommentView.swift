@@ -210,7 +210,7 @@ struct MagazineCommentView: View {
                                         // MARK: 답글 더보기
                                         Button {
 
-//                                            commentVm.sortedRecentRecomment.removeAll()
+
                                         } label: {
                                             if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
                                                 Text("답글 더보기 (\(recommentCount))")

@@ -23,8 +23,7 @@ struct ContentView: View {
     @State private var tabSelection: Int = 0
     @State var selectedIndex = 0
     @State var magazineViewPresented : Bool = false
-    @State var presented = false
-    @State var ispushedAddButton = false
+    @State private var presented = false
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     @State var clikedMagazineData : MagazineDocument?
     @State private var isSearchViewShown: Bool = false
@@ -62,9 +61,7 @@ struct ContentView: View {
                     case.authenticated:
                         NavigationStack{
                             
-                            VStack{
-                                Spacer()
-                                
+                            
                                 TabView(selection: $selectedIndex) {
                                     MagazineMainView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
                                         .tag(0)
@@ -74,11 +71,10 @@ struct ContentView: View {
                                     MapView(mapVM: mapVM, userVM : userVM, magazineVM : magazineVM, locationManager : locationManager, clikedMagazineData: clikedMagazineData, userLatitude: userLatitude, userLongitude: userLongitude)
                                         .edgesIgnoringSafeArea(.top)
                                         .tag(3)
-                                    MyPageView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID))
+                                    MyPageView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), presented: $presented)
                                         .tag(4)
                                     
                                 }
-                                .toolbar(.hidden, for: .tabBar)
                                 .toolbar {
                                     if (selectedIndex == 0) || (selectedIndex == 1) {
                                         ToolbarItem(placement: .navigationBarLeading) {
@@ -120,7 +116,7 @@ struct ContentView: View {
                                     }
                                     
                                 }
-                                                                    
+                                                        
                                     HStack(alignment: .top, spacing: 10) {
                                         ForEach(0..<5, id: \.self) { number in
                                             
@@ -164,11 +160,7 @@ struct ContentView: View {
                                             
                                         }
                                     }
-                                
-                            }
                             .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
-                            
-                            
                             .navigationDestination(isPresented: $isSearchViewShown) {
                                 MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM)
                             }
@@ -186,9 +178,6 @@ struct ContentView: View {
                             
                         }
                         .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
-                        
-                        
-                        
                     }
                 }
                 .tint(.black)
@@ -202,7 +191,6 @@ struct ContentView: View {
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                     userVM.fetchUser()
                 }
-                .ignoresSafeArea(.keyboard)
                 //        .splashView {
                 //            ZStack{
                 //                SplashScreen()

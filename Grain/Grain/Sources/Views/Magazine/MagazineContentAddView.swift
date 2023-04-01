@@ -255,7 +255,6 @@ struct MagazineContentAddView: View {
                 .onAppear {
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 }
-                //.ignoresSafeArea(.keyboard)
             }
         
     }

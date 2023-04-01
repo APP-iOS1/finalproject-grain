@@ -32,7 +32,6 @@ struct MagazineDetailView: View {
     
     @Binding var ObservingChangeValueLikeNum : String   // 좋아요 수의 변화를 관찰합니다.
     
-    @SceneStorage("isZooming") var isZooming: Bool = false
     @SceneStorage("index") var selectedIndex: Int = 0
     @Environment(\.displayScale) var displayScale
     
@@ -235,9 +234,9 @@ struct MagazineDetailView: View {
                                 
                                 if showDevices {
                                     VStack(alignment: .leading){
-                                        Text("바디 | \(magazineData.fields.cameraInfo.stringValue)")
-                                        Text("렌즈 | \(magazineData.fields.lenseInfo.stringValue)")
-                                        Text("필름 | \(magazineData.fields.filmInfo.stringValue)")
+                                        Text("바디 \(Image(systemName: "poweron")) \(magazineData.fields.cameraInfo.stringValue)")
+                                        Text("렌즈 \(Image(systemName: "poweron")) \(magazineData.fields.lenseInfo.stringValue)")
+                                        Text("필름 \(Image(systemName: "poweron")) \(magazineData.fields.filmInfo.stringValue)")
                                     }
                                     .font(.subheadline)
                                     .foregroundColor(.textGray)
@@ -262,7 +261,7 @@ struct MagazineDetailView: View {
                                 .frame(width: Screen.maxWidth , alignment: .leading)
                                 .multilineTextAlignment(.leading)
                                 .padding(.top)
-                                .padding(.bottom, 6)
+                                .padding(.bottom, 10)
                             
                             HStack {
                                 // MARK: 내용
@@ -276,9 +275,15 @@ struct MagazineDetailView: View {
                             }
                         }
                         .zIndex(0)
+                        Spacer()
+                            .frame(height:40)
                     }//VStack
                 }
+              
             }//스크롤뷰
+            .refreshable {
+                magazineVM.fetchMagazine()
+            }
             .alert(isPresented: $isDeleteAlertShown) {
                 Alert(title: Text("게시물을 삭제하시겠어요?"),
                       message: Text("게시물을 삭제하면 영구히 삭제되고 복원할 수 없습니다."),

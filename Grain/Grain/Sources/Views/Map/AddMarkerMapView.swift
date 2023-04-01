@@ -113,7 +113,6 @@ struct AddMarkerMapView: View {
                     //MARK: 네이버맵뷰
                     AddMarkerUIMapView(naverVM: naverVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, reMarkerAddButtonBool: $reMarkerAddButtonBool, markerAddButtonBool: $markerAddButtonBool, locationcheckBool: $locationcheckBool, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, updateReverseGeocodeResult: $updateReverseGeocodeResult, userLatitude: userLatitude , userLongitude: userLongitude)
                         .zIndex(0)
-                        .ignoresSafeArea()
                         .onTapGesture {
                             hideKeyboard()
                             //markerAddButtonBool.toggle()
@@ -221,9 +220,7 @@ struct AddMarkerMapView: View {
                 
             }.onAppear{
                 writeDownCustomPlaceCheck = false
-            }
-            .ignoresSafeArea(.keyboard)
-            
+            }            
         }
     }
 }

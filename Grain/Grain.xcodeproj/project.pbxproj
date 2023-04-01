@@ -97,8 +97,10 @@
 		9996A461299B580E00065435 /* MagazineProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9996A460299B580E00065435 /* MagazineProfileImage.swift */; };
 		99B21EC329938CD7006933BB /* MagazineCommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B21EC229938CD7006933BB /* MagazineCommentView.swift */; };
 		99B21EC529940AF5006933BB /* MainRecentSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B21EC429940AF5006933BB /* MainRecentSearchView.swift */; };
-		99D0485B29D85CCC00539564 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 99D0485A29D85CCC00539564 /* Config.xcconfig */; };
 		99DEE60429C2E70A00BE5BC6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99DEE60629C2E70A00BE5BC6 /* Localizable.strings */; };
+		99F342DB29D8ADCA006DCA0A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 99F342D929D8ADCA006DCA0A /* Config.xcconfig */; };
+		99F342DC29D8ADCA006DCA0A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 99F342DA29D8ADCA006DCA0A /* GoogleService-Info.plist */; };
+		99F342DE29D8C05B006DCA0A /* MyPagePlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99F342DD29D8C05B006DCA0A /* MyPagePlaceholderView.swift */; };
 		A71516BA29926233009A0780 /* MagazineEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71516B929926233009A0780 /* MagazineEditView.swift */; };
 		A7193F9829B712F70049B1AA /* ReportMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7193F9729B712F70049B1AA /* ReportMapViewModel.swift */; };
 		A7193F9A29B714010049B1AA /* ReportMapDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7193F9929B714010049B1AA /* ReportMapDTO.swift */; };
@@ -115,7 +117,6 @@
 		A75BB9972981537D004FE6FA /* StationMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB9962981537D004FE6FA /* StationMapView.swift */; };
 		A75BB99929815391004FE6FA /* RepairShopMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB99829815391004FE6FA /* RepairShopMapView.swift */; };
 		A75BB99B29817612004FE6FA /* MarkerCustomInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB99A29817612004FE6FA /* MarkerCustomInfo.swift */; };
-		A76EB2F529D74AAC004FE801 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A76EB2F329D74AAC004FE801 /* GoogleService-Info.plist */; };
 		A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */; };
 		A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */; };
 		A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */; };
@@ -250,9 +251,11 @@
 		9996A460299B580E00065435 /* MagazineProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineProfileImage.swift; sourceTree = "<group>"; };
 		99B21EC229938CD7006933BB /* MagazineCommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineCommentView.swift; sourceTree = "<group>"; };
 		99B21EC429940AF5006933BB /* MainRecentSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRecentSearchView.swift; sourceTree = "<group>"; };
-		99D0485A29D85CCC00539564 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Config.xcconfig; path = ../../../../Downloads/Config.xcconfig; sourceTree = "<group>"; };
 		99DEE60529C2E70A00BE5BC6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99DEE60729C2E71400BE5BC6 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		99F342D929D8ADCA006DCA0A /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		99F342DA29D8ADCA006DCA0A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		99F342DD29D8C05B006DCA0A /* MyPagePlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPagePlaceholderView.swift; sourceTree = "<group>"; };
 		A71516B929926233009A0780 /* MagazineEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineEditView.swift; sourceTree = "<group>"; };
 		A7193F9729B712F70049B1AA /* ReportMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapViewModel.swift; sourceTree = "<group>"; };
 		A7193F9929B714010049B1AA /* ReportMapDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapDTO.swift; sourceTree = "<group>"; };
@@ -269,7 +272,6 @@
 		A75BB9962981537D004FE6FA /* StationMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationMapView.swift; sourceTree = "<group>"; };
 		A75BB99829815391004FE6FA /* RepairShopMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairShopMapView.swift; sourceTree = "<group>"; };
 		A75BB99A29817612004FE6FA /* MarkerCustomInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerCustomInfo.swift; sourceTree = "<group>"; };
-		A76EB2F329D74AAC004FE801 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeService.swift; sourceTree = "<group>"; };
 		A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeDTO.swift; sourceTree = "<group>"; };
 		A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeRouter.swift; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 				334699D22988AE26004153A6 /* MyPageView.swift */,
 				0628A1A629B5AC09002A2709 /* UserDetailView.swift */,
 				065A24F329D2BD9300A78ACF /* DeleteUserView.swift */,
+				99F342DD29D8C05B006DCA0A /* MyPagePlaceholderView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -490,8 +493,8 @@
 				995EBDCE29966F18002C1686 /* Grain.entitlements */,
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
 				9958AFB82977D56000A51DA9 /* Info.plist */,
-				A76EB2F329D74AAC004FE801 /* GoogleService-Info.plist */,
-				99D0485A29D85CCC00539564 /* Config.xcconfig */,
+				99F342D929D8ADCA006DCA0A /* Config.xcconfig */,
+				99F342DA29D8ADCA006DCA0A /* GoogleService-Info.plist */,
 				99DEE60629C2E70A00BE5BC6 /* Localizable.strings */,
 				9958AF812977793700A51DA9 /* Configuration */,
 				9958AF80297778FD00A51DA9 /* Sources */,
@@ -783,9 +786,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99F342DB29D8ADCA006DCA0A /* Config.xcconfig in Resources */,
 				99DEE60429C2E70A00BE5BC6 /* Localizable.strings in Resources */,
-				99D0485B29D85CCC00539564 /* Config.xcconfig in Resources */,
-				A76EB2F529D74AAC004FE801 /* GoogleService-Info.plist in Resources */,
+				99F342DC29D8ADCA006DCA0A /* GoogleService-Info.plist in Resources */,
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
 			);
@@ -907,6 +910,7 @@
 				8B10F4302990DD5300582D27 /* BookmarkedCommunityView.swift in Sources */,
 				A7D957D6297AAF8C001D2401 /* MagazineRouter.swift in Sources */,
 				A7FCA45D29C9680200F94249 /* EditorService.swift in Sources */,
+				99F342DE29D8C05B006DCA0A /* MyPagePlaceholderView.swift in Sources */,
 				9962CDD1297924D800E834C3 /* InfoTabView.swift in Sources */,
 				8B88CA6E29C2F2350064425C /* NetworkManager.swift in Sources */,
 				A7D9F306298964AE00B39218 /* MapRouter.swift in Sources */,
@@ -1113,7 +1117,7 @@
 		};
 		9958AF7E297778D900A51DA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 99D0485A29D85CCC00539564 /* Config.xcconfig */;
+			baseConfigurationReference = 99F342D929D8ADCA006DCA0A /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1154,7 +1158,7 @@
 		};
 		9958AF7F297778D900A51DA9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 99D0485A29D85CCC00539564 /* Config.xcconfig */;
+			baseConfigurationReference = 99F342D929D8ADCA006DCA0A /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

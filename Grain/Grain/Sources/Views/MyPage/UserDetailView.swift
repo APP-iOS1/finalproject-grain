@@ -10,7 +10,8 @@ import FirebaseAuth
 import Kingfisher
 
 struct UserDetailView: View {
-    
+    let sender = PushNotificationSender(serverKeyString: "")
+
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
@@ -76,6 +77,12 @@ struct UserDetailView: View {
                                                     userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: userData.fields.id.stringValue)
                                                 }
                                             }
+                                            
+                                            for i in user.fields.fcmToken.arrayValue.values {
+                                                sender.sendPushNotification(to: i.stringValue, title: "구독", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 \(userData.fields.nickName.stringValue) 을 구독합니다 ", image: "")
+                                            }
+                                            
+                                            
                                         } else {
                                             // "구독" 상태이고, 내 팔로잉 리스트에 있는경우 => 구독취소
                                             if userVM.following.contains(userData.fields.id.stringValue) {

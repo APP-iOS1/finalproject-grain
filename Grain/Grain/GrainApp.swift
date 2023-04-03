@@ -234,7 +234,7 @@ class PushNotificationSender {
         self.serverKeyString = serverKeyString
     }
 
-    func sendPushNotification(to deviceToken: String, title: String, message: String) {
+    func sendPushNotification(to deviceToken: String, title: String, message: String, image: String) {
 
         if let infolist = Bundle.main.infoDictionary {
             if let serverkeystr = infolist["serverkey"] as? String {
@@ -267,6 +267,7 @@ class PushNotificationSender {
             "notification": [
                 "title": title,
                 "body": message,
+                "image": image,
                 "sound": "default",
                 "badge": 1
             ],

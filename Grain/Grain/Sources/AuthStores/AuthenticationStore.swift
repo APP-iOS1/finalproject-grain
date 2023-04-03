@@ -156,10 +156,47 @@ final class AuthenticationStore: ObservableObject {
                         .receive(on: DispatchQueue.main)
                         .sink { (completion: Subscribers.Completion<Error>) in
                         } receiveValue: { (data: UserDocument) in
-                            print("updateUserToke:\(arr)")
+//                            print("updateUserToke:\(arr)")
                             self.updateUsersArraySuccess.send()
                         }.store(in: &self.subscription)
                 }
+            }
+        }
+    }
+    
+    func removeToken(tokenArray: [CurrentUserStringValue]) {
+//        print("tokenArray: \(tokenArray)")
+        
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                print("Error fetching FCM token: \(error.localizedDescription)")
+                return
+            }
+            if let token = token {
+                var arr : [CurrentUserStringValue] = tokenArray
+                var arrToString: [String] = []
+
+                for i in 0..<arr.count{
+                    if arr[i].stringValue == token{
+                        arr.remove(at: i)
+                        break
+                    }
+                }
+//                print("arr:\(arr)")
+
+                for i in arr {
+                    arrToString.append(i.stringValue)
+                }
+                print("arrToString: \(arrToString)")
+                
+                UserService.updateCurrentUserArray(type: "fcmToken", arr: arrToString, docID: Auth.auth().currentUser?.uid ?? "")
+                    .receive(on: DispatchQueue.main)
+                    .sink { (completion: Subscribers.Completion<Error>) in
+                    } receiveValue: { (data: UserDocument) in
+                        print("updateUserToke:\(arrToString)")
+                        self.updateUsersArraySuccess.send()
+                    }.store(in: &self.subscription)
+                
             }
         }
     }
@@ -198,6 +235,7 @@ final class AuthenticationStore: ObservableObject {
                         let result = try await Auth.auth().signIn(with: credential)
                         // diplayName update 시점
                         await updateDisplayName(for: result.user, with: appleIDCredential)
+                        addToken()
                         self.logInCompanyState = .appleLogIn
                     }
                     catch{

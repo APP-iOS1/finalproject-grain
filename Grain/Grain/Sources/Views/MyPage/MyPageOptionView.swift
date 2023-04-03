@@ -393,13 +393,17 @@ struct InfoSection: View {
                       primaryButton: .destructive(
                         Text("네")
                       ){
-                          if authVM.logInCompanyState == .appleLogIn {
-                              authVM.appleLogout()
-                          } else if authVM.logInCompanyState == .googleLogIn {
-                              authVM.googleLogout()
-                          }else {
-                              authVM.appleLogout()
-                              authVM.googleLogout()
+                          authVM.removeToken(tokenArray: userVM.currentUsers?.fcmToken.arrayValue.values ?? [])
+                          
+                          DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                              if authVM.logInCompanyState == .appleLogIn {
+                                  authVM.appleLogout()
+                              } else if authVM.logInCompanyState == .googleLogIn {
+                                  authVM.googleLogout()
+                              }else {
+                                  authVM.appleLogout()
+                                  authVM.googleLogout()
+                              }
                           }
                       },
                       secondaryButton: .default(

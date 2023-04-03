@@ -80,6 +80,7 @@ enum UserService {
     static func updateCurrentUserArray(type: String, arr: [String], docID: String) -> AnyPublisher<UserDocument, Error>  {
         do {
             let request = try UserRouter.patchArr(type: type, arr: arr, docID: docID).asURLRequest()
+            print(request)
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

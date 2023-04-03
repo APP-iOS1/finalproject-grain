@@ -257,7 +257,6 @@ enum UserQuery {
         """.data(using: .utf8)
         }
         
-        print("arr:\(arr)")
         return query
         
     }

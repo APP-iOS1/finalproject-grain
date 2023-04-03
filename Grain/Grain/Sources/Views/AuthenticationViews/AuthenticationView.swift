@@ -308,20 +308,15 @@ struct AuthenticationView: View {
                             .foregroundColor(.gray)
                             .overlay{
                                 ZStack {
-                                    HStack{
+                                    HStack(alignment: .center){
                                         Image("googleLogo")
                                             .resizable()
-                                            .cornerRadius(4)
                                             .aspectRatio(contentMode: .fit)
-                                            .padding([.top,.leading, .bottom], 10)
-                                            .padding(.trailing, 3)
+                                            .frame(width: 20, height: 20)
                                         Text("Sign in with Google")
-                                            .font(.subheadline)
+                                            .font(.headline)
                                             .foregroundColor(.middleDarkGray)
                                             .bold()
-
-                                        Spacer()
-
                                     }
                                 }
                             }

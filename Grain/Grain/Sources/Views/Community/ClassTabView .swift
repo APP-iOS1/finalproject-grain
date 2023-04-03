@@ -21,7 +21,7 @@ struct ClassTabView: View {
                     NavigationLink {
                         CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {
-                        CommunityRowView(community: data, isLoading: $isLoading)
+                        CommunityRowView(communityVM: communityVM, community: data, isLoading: $isLoading)
                     }
                 }
             }

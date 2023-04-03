@@ -39,8 +39,6 @@ final class CommentViewModel: ObservableObject {
     ///  REST API 방식 CRUD
     // MARK: Read
     func fetchComment(collectionName: String, collectionDocId: String) {
-//        self.sortedRecentComment.removeAll()   // 희경작업
-//        self.hksortedRecentCommentID.removeAll()   // 희경작업
         CommentService.getComment(collectionName: collectionName, collectionDocId: collectionDocId)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
@@ -65,7 +63,7 @@ final class CommentViewModel: ObservableObject {
                 }
                 self.fetchCommentSuccess.send()
             }.store(in: &subscription)
-    }
+    }    
     
     // MARK: 대댓글 Read    // 희경작업
 //    func fetchRecommentTest(collectionName: String, collectionDocId: String, commentCollectionDocId: [String]) {

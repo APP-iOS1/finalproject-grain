@@ -32,26 +32,152 @@ struct MagazineCommentView: View {
     @State var deleteDocId : String = ""
     @State var nickName : String = "" // 닉네임 변경을 위해
     @State var editReColletionDocID: String = "" // 리코멘트에서 값을 중간에서 받기 위해
+    @State var eachBool : [Bool] = []
+    @State var commentLoading : Bool = false
     
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
+    
+        
+    func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬 예) 댓글 3개면 [ false, false, false ]
+        eachBool = Array(repeating: false, count: count)
+       
+    }
     
     var body: some View {
         VStack() {
             Divider()
             ScrollView() {
                 VStack(alignment: .leading){
-                    ForEach(commentVm.sortedRecentComment.indices, id:\.self){ index in
-                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
-                        {
-                            HStack(alignment: .top){
-                                // MARK: -  유저 프로필 이미지
-                                VStack{
-                                    NavigationLink {
-                                        UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
-                                    } label: {
-                                        KFImage(URL(string: commentVm.sortedRecentComment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    if !(commentVm.sortedRecentComment.count == 0){
+                        ForEach(commentVm.sortedRecentComment.indices, id:\.self){ index in
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
+                            {
+                                HStack(alignment: .top){
+                                    // MARK: -  유저 프로필 이미지
+                                    VStack(alignment: .leading){
+                                        NavigationLink {
+                                            UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
+                                        } label: {
+                                            KFImage(URL(string: commentVm.sortedRecentComment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                                .resizable()
+                                                .frame(width: 35, height: 35)
+                                                .cornerRadius(30)
+                                                .overlay {
+                                                    Circle()
+                                                        .stroke(lineWidth: 0.5)
+                                                }
+                                                .padding(.horizontal, 7)
+                                        }
+                                        //
+                                    }
+                                    .frame(width: Screen.maxWidth * 0.1)
+                                    
+                                    VStack(alignment: .leading){
+                                        HStack{
+                                            
+                                            NavigationLink {
+                                                //유저 프로필 뷰 입장
+                                            } label: {
+                                                // MARK: 유저 닉네임
+                                                Text(nickName)
+                                                    .font(.caption)
+                                                    .fontWeight(.bold)
+                                                    .onAppear{
+                                                        nickName = user.fields.nickName.stringValue
+                                                    }
+                                            }
+                                            HStack{
+                                                Text("・")
+                                                    .font(.caption2)
+                                                    .padding(.trailing, -5)
+                                                // MARK: 댓글 생성 날짜
+                                                Text(commentVm.sortedRecentComment[index].createTime.toDate()?.renderTime() ?? "")
+                                                    .font(.caption2)
+                                            }
+                                            Spacer()
+                                        }
+                                        .padding(.bottom, -5)
+                                        
+                                        //MARK: - 댓글 내용
+                                        Text(commentVm.sortedRecentComment[index].fields.comment.stringValue)
+                                            .font(.footnote)
+                                            .padding(.bottom, -1)
+                                        // MARK: - 답글달기, 답글 더보기, 수정 , 삭제
+                                        HStack{
+                                            Button {
+                                                replyComment.toggle()
+                                                replyCommentText = "@" + nickName
+                                                commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
+                                            } label: {
+                                                Text("답글달기")
+                                            }
+                                            // MARK: 답글 더보기
+                                            
+                                            if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                                if recommentCount > 5 {
+                                                    Text("답글 더보기 (\(recommentCount))").onTapGesture {
+                                                        makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
+                                                        readMoreComments = true
+                                                        eachBool[index] = true
+                                                    }
+                                                }
+                                            }
+                                            if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                                                Button {
+                                                    editComment.toggle()
+                                                    editDocID = commentVm.sortedRecentComment[index].fields.id.stringValue
+                                                    editData = commentVm.sortedRecentComment[index].fields
+                                                } label: {
+                                                    Text("수정")
+                                                }
+                                                //  MARK: 삭제
+                                                Button{
+                                                    deleteDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
+                                                    deleteCommentAlertBool.toggle()
+                                                } label: {
+                                                    Text("삭제")
+                                                        .alert(isPresented: $deleteCommentAlertBool) {
+                                                            Alert(title: Text("댓글을 삭제하시겠어요?"),
+                                                                  primaryButton:  .cancel(Text("취소")),
+                                                                  secondaryButton:.destructive(Text("삭제"),action: {
+                                                                commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
+                                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                                                }
+                                                            }))
+                                                        }
+                                                }
+                                            }
+                                            
+                                        }
+                                        .font(.caption2)
+                                        .foregroundColor(.textGray)
+                                        .padding(.top, 1)
+                                        .padding(.bottom, -3)
+                                        // 정훈 작업 중
+                                        VStack{
+                                            if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                                if  readMoreComments && eachBool[index]{
+                                                    MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                                }else if recommentCount <= 5 {
+                                                    MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                                }
+                                            }
+                                        }
+                                        
+                                    }
+                                    .frame(width: Screen.maxWidth * 0.8)
+                                }
+                                Divider()
+                            }
+                            else
+                            { //MARK: 탈퇴 유저
+                                HStack(alignment: .top){
+                                    // MARK: -  유저 프로필 이미지
+                                    VStack{
+                                        KFImage(URL(string:"https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
                                             .resizable()
                                             .frame(width: 35, height: 35)
                                             .cornerRadius(30)
@@ -60,186 +186,103 @@ struct MagazineCommentView: View {
                                                     .stroke(lineWidth: 0.5)
                                             }
                                             .padding(.horizontal, 7)
-                                    }
-                                    //
-                                }
-                                .frame(width: Screen.maxWidth * 0.1)
-                                
-                                VStack(alignment: .leading){
-                                    HStack{
                                         
-                                        NavigationLink {
-                                            //유저 프로필 뷰 입장
-                                        } label: {
-                                            // MARK: 유저 닉네임
-                                            Text(nickName)
+                                    }
+                                    .frame(width: Screen.maxWidth * 0.1)
+                                    
+                                    VStack(alignment: .leading){
+                                        HStack{
+                                            Text("탈퇴한 유저입니다")
+                                                .foregroundColor(.gray)
                                                 .font(.caption)
                                                 .fontWeight(.bold)
-                                                .onAppear{
-                                                    nickName = user.fields.nickName.stringValue
-                                                }
+                                            HStack{
+                                                Text("・")
+                                                    .font(.caption2)
+                                                    .padding(.trailing, -5)
+                                                // MARK: 댓글 생성 날짜
+                                                Text(commentVm.sortedRecentComment[index].createTime.toDate()?.renderTime() ?? "")
+                                                    .font(.caption2)
+                                            }
+                                            
+                                            Spacer()
                                         }
+                                        .padding(.bottom, -5)
+                                        
+                                        //MARK: - 댓글 내용
+                                        Text("삭제된 댓글입니다.")
+                                            .font(.footnote)
+                                            .padding(.bottom, -1)
+                                        
                                         HStack{
-                                            Text("・")
-                                                .font(.caption2)
-                                                .padding(.trailing, -5)
-                                            // MARK: 댓글 생성 날짜
-                                            Text(commentVm.sortedRecentComment[index].createTime.toDate()?.renderTime() ?? "")
-                                                .font(.caption2)
-                                        }
-                                        
-                                        Spacer()
-                                    }
-                                    .padding(.bottom, -5)
-                                    
-                                    //MARK: - 댓글 내용
-                                    Text(commentVm.sortedRecentComment[index].fields.comment.stringValue)
-                                        .font(.footnote)
-                                        .padding(.bottom, -1)
-                                    // MARK: - 답글달기, 답글 더보기, 수정 , 삭제
-                                    HStack{
-                                        Button {
-                                            replyComment.toggle()
-                                            replyCommentText = "@" + nickName
-                                            commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
-                                        } label: {
-                                            Text("답글달기")
-                                        }
-                                        // MARK: 답글 더보기
-                                        
-                                        if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
-                                            if recommentCount >= 5 {
-                                                Button {
-                                                    readMoreComments.toggle()
-                                                } label: {
-                                                    Text("답글 더보기 (\(recommentCount))")
-                                                }
-                                                
-                                            }
-                                        }
-                                        if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
-                                            Button {
-                                                editComment.toggle()
-                                                editDocID = commentVm.sortedRecentComment[index].fields.id.stringValue
-                                                editData = commentVm.sortedRecentComment[index].fields
-                                            } label: {
-                                                Text("수정")
-                                            }
-                                            //  MARK: 삭제
-                                            Button{
-                                                deleteDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
-                                                deleteCommentAlertBool.toggle()
-                                            } label: {
-                                                Text("삭제")
-                                                    .alert(isPresented: $deleteCommentAlertBool) {
-                                                        Alert(title: Text("댓글을 삭제하시겠어요?"),
-                                                              primaryButton:  .cancel(Text("취소")),
-                                                              secondaryButton:.destructive(Text("삭제"),action: {
-                                                            commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
-                                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                                                            }
-                                                        }))
-                                                    }
-                                            }
-                                        }
-                                    }
-                                    .font(.caption2)
-                                    .foregroundColor(.textGray)
-                                    .padding(.top, 1)
-                                    .padding(.bottom, -3)
-                                    
-                                    // 정훈 작업 중
-                                    VStack{
-                                        if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
-                                            if recommentCount <= 5 || readMoreComments{
-                                                MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
-                                            }
-                                        }
-                                    }
-                                    
-                                }
-                                .frame(width: Screen.maxWidth * 0.8)
-                            }
-                            Divider()
-                        }
-                        else
-                        { //MARK: 탈퇴 유저
-                            HStack(alignment: .top){
-                                // MARK: -  유저 프로필 이미지
-                                VStack{
-                                    KFImage(URL(string:"https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
-                                        .resizable()
-                                        .frame(width: 35, height: 35)
-                                        .cornerRadius(30)
-                                        .overlay {
-                                            Circle()
-                                                .stroke(lineWidth: 0.5)
-                                        }
-                                        .padding(.horizontal, 7)
-                                    
-                                }
-                                .frame(width: Screen.maxWidth * 0.1)
-                                
-                                VStack(alignment: .leading){
-                                    HStack{
-                                        Text("탈퇴한 유저입니다")
-                                            .foregroundColor(.gray)
-                                            .font(.caption)
-                                            .fontWeight(.bold)
-                                        HStack{
-                                            Text("・")
-                                                .font(.caption2)
-                                                .padding(.trailing, -5)
-                                            // MARK: 댓글 생성 날짜
-                                            Text(commentVm.sortedRecentComment[index].createTime.toDate()?.renderTime() ?? "")
-                                                .font(.caption2)
-                                        }
-                                        
-                                        Spacer()
-                                    }
-                                    .padding(.bottom, -5)
-                                    
-                                    //MARK: - 댓글 내용
-                                    Text("삭제된 댓글입니다.")
-                                        .font(.footnote)
-                                        .padding(.bottom, -1)
-                                    
-                                    HStack{
-                                        
-                                        // MARK: 답글 더보기
-                                        Button {
-
-
-                                        } label: {
+                                            // MARK: 답글 더보기
                                             if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
-                                                Text("답글 더보기 (\(recommentCount))")
-                                            }else{
-                                                Text("답글 더보기 (0)" )
+                                                if recommentCount > 5 {
+                                                    Text("답글 더보기 (\(recommentCount))").onTapGesture {
+                                                        makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
+                                                        readMoreComments = true
+                                                        eachBool[index] = true
+                                                    }
+                                                }
                                             }
                                         }
+                                        .font(.caption2)
+                                        .foregroundColor(.textGray)
+                                        .padding(.top, 1)
+                                        .padding(.bottom, -3)
+                                        VStack{
+                                            if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                                if  readMoreComments && eachBool[index]{
+                                                    MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                                }else if recommentCount <= 5 {
+                                                    MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                                }
+                                            }
+                                            
+                                        }
+                                        
+                                        
                                     }
-                                    .font(.caption2)
-                                    .foregroundColor(.textGray)
-                                    .padding(.top, 1)
-                                    .padding(.bottom, -3)
-                                    
-                                    VStack{
-                                        MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText,commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
-
-                                    }
-                                    
+                                    .frame(width: Screen.maxWidth * 0.8)
                                 }
-                                .frame(width: Screen.maxWidth * 0.8)
-                                //                                .padding(.leading, 20)
+                                Divider()
                             }
-                            Divider()
                         }
+                        .padding(.leading , 7)
+                        .padding(.bottom , 4)
+                    }else{
+                        // MARK: -  댓글이 없을때
+                        if commentLoading{
+                            VStack{
+                                HStack{
+                                    Spacer()
+                                    Image("cameraComment")
+                                        .resizable()
+                                        .frame(width: 100, height: 100)
+                                    Spacer()
+                                }
+                                .padding(20)
+                                Text("첫 번째 댓글을 남겨주세요~!")
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                            }.position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
+                        }else{
+                            VStack{
+                                ProgressView()
+                                    .onAppear{
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                            commentLoading = true
+                                        }
+                                    }
+                            }.position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
+
+                        }
+   
                     }
-                    .padding(7)
                 }
                 
             }
+            
             VStack(alignment: .leading){
                 // MARK: 답글달기 클릭시 활성화 되는 구역
                 if replyComment {
@@ -331,6 +374,10 @@ struct MagazineCommentView: View {
         }
         .onAppear{
             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)    // 해당하는 매거진 댓글 정보 가져오기
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                makeEachBool(count: commentVm.sortedRecentComment.count)
+            }
         }
         .navigationTitle("댓글")
         .navigationBarTitleDisplayMode(.inline)

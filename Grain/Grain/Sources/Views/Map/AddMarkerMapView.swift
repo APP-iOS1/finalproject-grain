@@ -262,7 +262,7 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
         // 처음에 맵이 생성될떄 줌 레벨
         view.mapView.zoomLevel = 12
         view.mapView.minZoomLevel = 10
-        view.mapView.maxZoomLevel = 16
+        view.mapView.maxZoomLevel = 20
         
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼
         view.showCompass = false

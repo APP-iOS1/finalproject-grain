@@ -21,12 +21,16 @@ final class CommunityViewModel: ObservableObject {
     
     @Published var closeState = [CommunityDocument]()   // 혹시 모를 모집완료 | 판매완료 모아둘 배열
     
+    @Published var fetchCommunityCellCommentCount = [String : Int]()
+    
     var fetchCommunitySuccess = PassthroughSubject<[CommunityDocument], Never>()
     var insertCommunitySuccess = PassthroughSubject<(), Never>()
     var updateCommunitySuccess = PassthroughSubject<(), Never>()
     var updateCommunityStateSuccess = PassthroughSubject<(), Never>()
     var deleteCommunitySuccess = PassthroughSubject<(), Never>()
-
+    var fetchCommunityCellCommentCountSuccess = PassthroughSubject<(), Never>()
+    var fetchCommentSuccess = PassthroughSubject<(), Never>()
+    
     //MARK: - 커뮤니티 데이터 가져오기 메소드
     func fetchCommunity() {
         self.isLoading = true
@@ -54,22 +58,22 @@ final class CommunityViewModel: ObservableObject {
                 }
                 
                 // MARK: - 데이터 개수가 20개 넘을 때 풀기 잘못하면 터짐
-//                self.communities.append(contentsOf: data.documents)
-//                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
-//                    self.isLoading = false
-//                }
-//                // MARK: 커뮤니티 최신순으로 정렬
-//                self.sortedRecentCommunityData.append(contentsOf: data.documents.sorted(by: {
-//                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
-//                }))
-//
-//                if !(data.nextPageToken == nil) {
-//                    var nextPageToken : String = ""
-//                    nextPageToken = data.nextPageToken!
-//                    self.fetchCommunity(nextPageToken: nextPageToken)
-//                }else{
-//                    self.fetchCommunitySuccess.send(data.documents)
-//                }
+                //                self.communities.append(contentsOf: data.documents)
+                //                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
+                //                    self.isLoading = false
+                //                }
+                //                // MARK: 커뮤니티 최신순으로 정렬
+                //                self.sortedRecentCommunityData.append(contentsOf: data.documents.sorted(by: {
+                //                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                //                }))
+                //
+                //                if !(data.nextPageToken == nil) {
+                //                    var nextPageToken : String = ""
+                //                    nextPageToken = data.nextPageToken!
+                //                    self.fetchCommunity(nextPageToken: nextPageToken)
+                //                }else{
+                //                    self.fetchCommunitySuccess.send(data.documents)
+                //                }
             }.store(in: &subscription)
     }
     
@@ -128,14 +132,14 @@ final class CommunityViewModel: ObservableObject {
         
         return categoryData
     }
-  
+    
     // 유저가 저장한 커뮤니티 필터링
     func userBookmarkedCommunityFilter(communityData: [CommunityDocument], userBookmarkedCommunityArr: [String]) -> [CommunityDocument] {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
         
         var userBookmarkedCommunityFilterArr: [CommunityDocument] = []
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
-    //        이거 넣었더니 터짐
+        //        이거 넣었더니 터짐
         for arrData in userBookmarkedCommunityArr{
             for magazineIdValue in communityData{
                 if arrData == magazineIdValue.fields.id.stringValue{
@@ -145,5 +149,29 @@ final class CommunityViewModel: ObservableObject {
             }
         }
         return userBookmarkedCommunityFilterArr
+    }
+    
+    func fetchCommunityCellComment() {
+        
+        CommunityService.getCommunity()
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { [self] (data: CommunityResponse) in
+                
+                for i in data.documents{
+                    CommentService.getComment(collectionName: "Community", collectionDocId: i.fields.id.stringValue)
+                        .receive(on: DispatchQueue.main)
+                        .sink { (completion: Subscribers.Completion<Error>) in
+                        } receiveValue: { (data: CommentResponse) in
+                            self.fetchCommunityCellCommentCount.updateValue(data.documents.count, forKey: "\(i.fields.id.stringValue)")
+                            self.fetchCommentSuccess.send()
+                        }.store(in: &subscription)                   
+                }
+                
+                
+                self.fetchCommunityCellCommentCountSuccess.send()
+                
+            }.store(in: &subscription)
+
     }
 }

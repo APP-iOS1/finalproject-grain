@@ -24,7 +24,7 @@ struct MagazineDetailView: View {
     @State private var lifetime: Float = 0
     @State private var imageScale: CGFloat = 1
     @State private var viewID = 0
-
+    
     @Environment(\.dismiss) private var dismiss
     
     let data : MagazineDocument
@@ -207,7 +207,7 @@ struct MagazineDetailView: View {
                                         .padding(.leading)
                                     
                                     NavigationLink {
-                                        MagazineCommentView(userVM: userVM, magazineVM: magazineVM, collectionName: "Magazine", collectionDocId: magazineData.fields.id.stringValue)
+                                        MagazineCommentView(userVM: userVM, magazineVM: magazineVM, magazineData: $magazineData, collectionName: "Magazine", collectionDocId: magazineData.fields.id.stringValue)
                                     } label: {
                                         Image(systemName: "bubble.right")
                                             .font(.system(size: 23))

@@ -32,8 +32,12 @@ struct MagazineCommentView: View {
     @State var deleteDocId : String = ""
     @State var nickName : String = "" // 닉네임 변경을 위해
     @State var editReColletionDocID: String = "" // 리코멘트에서 값을 중간에서 받기 위해
-    @State var eachBool : [Bool] = []
-    @State var commentLoading : Bool = false
+    @State var eachBool : [Bool] = []   // 댓글 각각 [Bool] 배열 -> 판별을 위해
+    @State var commentLoading : Bool = false    //첫 번째 댓글 혹시 모를 로딩
+    @State var reommentUserID : String = "" // 대댓글 유저ID -> 알림 기능을 위해
+    
+    @Binding var magazineData: MagazineDocument?
+    
     
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
@@ -110,6 +114,7 @@ struct MagazineCommentView: View {
                                                 replyComment.toggle()
                                                 replyCommentText = "@" + nickName
                                                 commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
+                                                reommentUserID = commentVm.sortedRecentComment[index].fields.userID.stringValue
                                             } label: {
                                                 Text("답글달기")
                                             }
@@ -367,7 +372,7 @@ struct MagazineCommentView: View {
                                 .stroke(lineWidth: 0.5)
                         }
                         .padding(.leading)
-                    MagazineCommentTextField(commentVm: commentVm, commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData,editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, editRecomment: $editRecomment, commentCollectionDocId: $commentCollectionDocId, currentUser: userVM.currentUsers,collectionName: collectionName, collectionDocId: collectionDocId)
+                    MagazineCommentTextField(commentVm: commentVm, userVM: userVM, commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData,editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, editRecomment: $editRecomment, commentCollectionDocId: $commentCollectionDocId, magazineData: $magazineData, reommentUserID: $reommentUserID, currentUser: userVM.currentUsers,collectionName: collectionName, collectionDocId: collectionDocId)
                     
                 }
             }
@@ -386,6 +391,7 @@ struct MagazineCommentView: View {
 struct MagazineCommentTextField: View {
     
     @ObservedObject var commentVm : CommentViewModel
+    @ObservedObject var userVM : UserViewModel
     
     @Binding var commentText: String
     @Binding var summitComment: Bool
@@ -398,6 +404,8 @@ struct MagazineCommentTextField: View {
     @Binding var editReData : CommentFields
     @Binding var editRecomment : Bool
     @Binding var commentCollectionDocId : String
+    @Binding var magazineData: MagazineDocument?
+    @Binding var reommentUserID : String
     
     var currentUser : CurrentUserFields?
     var collectionName : String
@@ -406,6 +414,7 @@ struct MagazineCommentTextField: View {
     var trimComment: String {
         commentText.trimmingCharacters(in: .whitespaces)
     }
+    let sender = PushNotificationSender(serverKeyString: "")
     
     var body: some View {
         VStack {
@@ -423,7 +432,7 @@ struct MagazineCommentTextField: View {
                 
                 if trimComment.count > 0 {
                     
-                    // MARK: 답글달기 활성화 True이면 대댓글 쓰기
+                    // MARK: 대댓글 업로드
                     if replyComment{
                         Button {
                             commentVm.insertRecomment(collectionName: collectionName
@@ -445,6 +454,18 @@ struct MagazineCommentTextField: View {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                                 commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                             }
+                            
+                            // MARK: 대댓글 유저한테 알림보내기 기능
+                          
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == reommentUserID })
+                            {
+                                for i in user.fields.fcmToken.arrayValue.values {
+                                    sender.sendPushNotification(to: i.stringValue, title: "대댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 대글에 대댓글을 남겼어요 ")
+                                    //                                     , image: magazineData.fields.image.arrayValue.values[0].stringValue
+                                }
+                            }
+                            
+                            
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -453,6 +474,7 @@ struct MagazineCommentTextField: View {
                                 .padding(.trailing)
                         }
                     }
+                    // MARK: 대댓글 수정
                     else if editRecomment{
                         Button {
                             commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: commentText, data: editReData)
@@ -470,6 +492,7 @@ struct MagazineCommentTextField: View {
                                 .padding(.trailing)
                         }
                     }
+                    // MARK: 댓글 수정
                     else if editComment{
                         Button {
                             commentVm.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: editDocID, updateComment: commentText ,data: editData)
@@ -491,7 +514,7 @@ struct MagazineCommentTextField: View {
                         }
                     }
                     
-                    // MARK: 답글달기 활성화 else이면 그냥 댓글 쓰기
+                    // MARK: 댓글 업로드
                     else{
                         Button {
                             // MARK: 댓글 업로드 구현
@@ -510,6 +533,20 @@ struct MagazineCommentTextField: View {
                             self.summitComment.toggle()
                             replyComment = false
                             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)    // 해당하는 매거진 댓글 정보 가져오기
+                            
+                            
+                            // MARK: 매거진 게시글 유저한테 알림보내기 기능
+                            if let magazineData = self.magazineData {
+                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
+                                {
+                                    for i in user.fields.fcmToken.arrayValue.values {
+                                        sender.sendPushNotification(to: i.stringValue, title: "댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 게시글에 댓글을 남겼어요 ")
+                                        //                                     , image: magazineData.fields.image.arrayValue.values[0].stringValue
+                                    }
+                                }
+                            }
+
+                            
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -519,6 +556,7 @@ struct MagazineCommentTextField: View {
                         }
                     }
                 }
+                // MARK: 등록 활성화 전
                 else {
                     Text("등록")
                         .font(.subheadline)
@@ -536,3 +574,6 @@ struct MagazineCommentTextField: View {
         
     }
 }
+
+
+

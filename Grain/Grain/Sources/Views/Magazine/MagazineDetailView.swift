@@ -341,8 +341,14 @@ struct MagazineDetailView: View {
                             magazineVM.updateMagazine(num: Int(ObservingChangeValueLikeNum)! + 1, docID: data.fields.id.stringValue)  //좋아요 갯수 증가
                             ObservingChangeValueLikeNum = String(Int(ObservingChangeValueLikeNum)! + 1) //.task(id: ObservingChangeValueLikeNum) -> await magazineVM.fetchMagazine() 실행
                         }
-                        
-                        sender.sendPushNotification(to: "fUb-OIrmREkKpZ3rFyPAsL:APA91bHyM4xb8c1zTJVmwev4kTdEIwhVont93FgzyAu0Gs0Mp9rNdyog2mZpQzYNcb49EV-j3P6In2VXgmDpcGpkOXCnQmHmf0P-SDL_tarR05GNTdvDy0C3bi4VIoUDQbxcbT6K3pHG", title: "좋아요", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")가 좋아요를 눌렀습니다")
+                        if let magazineData = self.magazineData {
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
+                            {
+                                for i in user.fields.fcmToken.arrayValue.values {
+                                    sender.sendPushNotification(to: i.stringValue, title: "좋아요", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 필름을 좋아합니다 ", image: magazineData.fields.image.arrayValue.values[0].stringValue)
+                                }
+                            }
+                        }
                     }
                 } else {
                     // 좋아요 취소

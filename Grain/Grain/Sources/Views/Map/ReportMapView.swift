@@ -138,7 +138,7 @@ struct ReportUIMapView: UIViewRepresentable,View {
         // 처음에 맵이 생성될떄 줌 레벨
         view.mapView.zoomLevel = 12
         view.mapView.minZoomLevel = 10
-        view.mapView.maxZoomLevel = 16
+        view.mapView.maxZoomLevel = 20
         view.mapView.isRotateGestureEnabled = false
         
         // MARK: 지도가 그려질때 현재 유저 GPS 위치로 카메라 움직임

@@ -273,7 +273,7 @@ struct UIMapView: UIViewRepresentable,View {
         /// 숫자가 작을수록 축소 , 숫자가 클수록 확대
         view.mapView.zoomLevel = 12
         view.mapView.minZoomLevel = 10
-        view.mapView.maxZoomLevel = 16
+        view.mapView.maxZoomLevel = 20
         view.mapView.isRotateGestureEnabled = false // 지도 회전 잠금
         
         // MARK: 네이버 지도 나침판, 현재 유저 위치 GPS 버튼

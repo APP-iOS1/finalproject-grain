@@ -120,6 +120,7 @@ struct MagazineRecommentView: View {
                                                 }
                                         }
                                     }
+                                    
                                 }
                                 .font(.caption2)
                                 .foregroundColor(.textGray)
@@ -134,6 +135,7 @@ struct MagazineRecommentView: View {
                         HStack(alignment: .top){
                             // MARK: -  유저 프로필 이미지
                             VStack{
+                                
                                 KFImage(URL(string:"https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
                                     .resizable()
                                     .frame(width: 25, height: 25)
@@ -145,12 +147,15 @@ struct MagazineRecommentView: View {
                                     .padding(.horizontal, 7)
                             }
                             .frame(width: Screen.maxWidth * 0.1)
+                            
                             VStack(alignment: .leading){
                                 HStack{
+                                    
                                     Text("탈퇴한 유저입니다")
                                         .foregroundColor(.gray)
                                         .font(.caption)
                                         .fontWeight(.bold)
+
                                    
                                     HStack{
                                         Text("・")
@@ -168,8 +173,15 @@ struct MagazineRecommentView: View {
                                     .font(.footnote)
                                     .padding(.bottom, -1)
                                 
+                                // 비율 맞추기 위해
+                                HStack{
+                                    
+                                }
+                                .padding(.top, 1)
+                                .padding(.bottom, -3)
+                                
                             }
-                            .frame(width: Screen.maxWidth * 0.8)
+                            
                             
                         }
                     }
@@ -178,7 +190,6 @@ struct MagazineRecommentView: View {
             
             
         }
-        .padding(.leading , -8)
     }
 }
 

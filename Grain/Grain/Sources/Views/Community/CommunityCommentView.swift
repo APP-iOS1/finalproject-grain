@@ -152,6 +152,9 @@ struct CommunityCommentView: View {
                             replyContent = ""
                             replyComment = false
                             commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                            }
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -165,6 +168,9 @@ struct CommunityCommentView: View {
                             commentVm.updateComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, docID: editDocID, updateComment: replyContent, data: editData)
                             replyContent = ""
                             editComment = false
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                            }
                         } label: {
                             Text("등록")
                                 .font(.subheadline)

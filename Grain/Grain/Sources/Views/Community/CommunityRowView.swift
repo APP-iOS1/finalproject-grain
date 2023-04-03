@@ -11,6 +11,7 @@ import Kingfisher
 
 struct CommunityRowView: View {
     @StateObject var commentVm = CommentViewModel() //StateObject 이걸로 처리해도 되나??
+    @ObservedObject var communityVM: CommunityViewModel
     
     @State var opacity: Double = 0.8
     
@@ -99,9 +100,17 @@ struct CommunityRowView: View {
                             Spacer()
                             Image(systemName: "text.bubble")
                                 .setSkeletonView(opacity: opacity, shouldShow: isLoading)
-                            Text("\(commentVm.comment.count)")
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
-                                    .padding(.leading, -5)
+                            
+                            if true{
+                                if let recommentCount = communityVM.fetchCommunityCellCommentCount[community.fields.id.stringValue]{
+                                    Text("\(recommentCount)")
+                                        .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                        .padding(.leading, -5)
+                                }else{
+                                    Text("0")
+                                }
+                            }
+
                         }
                         .padding(.bottom, 4)
                         .foregroundColor(.secondary)

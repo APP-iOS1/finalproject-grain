@@ -59,7 +59,7 @@ struct PinchZoomContext<Content: View>: View {
                         isZooming = (scale != 0 || offset != .zero)
                         if scale == -1 {
                             // 애니메이션을 자연스럽게 적용하기 위한 부분
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                           g
                                 scale = 0
                             }
                         }

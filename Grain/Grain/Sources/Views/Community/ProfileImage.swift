@@ -14,14 +14,14 @@ struct ProfileImage: View {
     var body: some View {
         KFImage(URL(string: imageName) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
             .resizable()
-            .frame(width: 38, height: 38)
-            .cornerRadius(20)
+            .frame(width: 35, height: 35)
+            .cornerRadius(30)
             .overlay {
                 Circle()
                     .stroke(lineWidth: 0.5)
             }
-            .padding(.horizontal, 6)
-//            .padding(.leading, 9)
+            .padding(.horizontal, 7)
+
     }
     
     

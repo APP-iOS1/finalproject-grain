@@ -89,7 +89,7 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
         // 처음에 맵이 생성될떄 줌 레벨
         view.mapView.zoomLevel = 12
         view.mapView.minZoomLevel = 10
-        view.mapView.maxZoomLevel = 16
+        view.mapView.maxZoomLevel = 20
         view.mapView.isRotateGestureEnabled = false
 //        view.mapView.touchDelegate = context.coordinator
         
@@ -104,7 +104,7 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
             for item in mapData{
-                if item.fields.category.stringValue == "필름스팟"{
+                if item.fields.category.stringValue == "포토스팟"{
                     let marker = NMFMarker(position: NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue))
                     marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
                     marker.width = 25

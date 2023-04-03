@@ -25,7 +25,7 @@ enum MapQuery {
                             "stringValue": "\(docID)"
                         },
                         "category": {
-                            "stringValue": "필름스팟"
+                            "stringValue": "포토스팟"
                         },
                         "magazineId": {
                             "arrayValue": {

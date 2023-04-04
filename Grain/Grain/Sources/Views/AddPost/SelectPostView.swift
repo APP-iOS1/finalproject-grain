@@ -24,6 +24,8 @@ struct SelectPostView: View {
     
     @State var updateNumber : NMGLatLng
 
+    @State var isShowSheet: Bool = true
+    
     var userLatitude : Double
     var userLongitude : Double
     
@@ -61,6 +63,10 @@ struct SelectPostView: View {
                     }
                 }
                 .padding(.vertical)
+                .sheet(isPresented: $isShowSheet) {
+                    AddCameraView(userVM: userVM)
+                        .presentationDetents([.medium, .large])
+                }
                 
                 //MARK: 커뮤니티 작성 네비게이션 링크
                 NavigationLink {

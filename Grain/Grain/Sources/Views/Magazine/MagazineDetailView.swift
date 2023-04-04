@@ -3,7 +3,6 @@ import FirebaseAuth
 import Kingfisher
 
 struct MagazineDetailView: View {
-    let sender = PushNotificationSender(serverKeyString: "")
     @ObservedObject var magazineVM : MagazineViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var mapVM = MapViewModel()
@@ -47,7 +46,7 @@ struct MagazineDetailView: View {
     }
     
     var body: some View {
-        NavigationStack{
+//        NavigationStack{
             ScrollView {
                 VStack(alignment: .leading){
                     if let magazineData = self.magazineData {
@@ -342,6 +341,7 @@ struct MagazineDetailView: View {
                             ObservingChangeValueLikeNum = String(Int(ObservingChangeValueLikeNum)! + 1) //.task(id: ObservingChangeValueLikeNum) -> await magazineVM.fetchMagazine() 실행
                         }
                         if let magazineData = self.magazineData {
+                            let sender = PushNotificationSender(serverKeyString: "")
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
                             {
                                 for i in user.fields.fcmToken.arrayValue.values {
@@ -460,7 +460,7 @@ struct MagazineDetailView: View {
                     }
                 }
             }
-        }
+//        }
         .refreshable {
             magazineVM.fetchMagazine()
         }

@@ -133,6 +133,22 @@ final class CommunityViewModel: ObservableObject {
         return categoryData
     }
     
+    // 유저가 포스팅한 커뮤니티 필터링
+    func userPostsFilter(communityData: [CommunityDocument], userPostedArr: [String]) -> [CommunityDocument] {
+        // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
+        var userPostFilterArr: [CommunityDocument] = []
+        /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
+        for arrData in userPostedArr{
+            for communityIdValue in communityData{
+                if arrData == communityIdValue.fields.id.stringValue{
+                    userPostFilterArr.append(communityIdValue)
+                    continue
+                }
+            }
+        }
+        return userPostFilterArr
+    }
+    
     // 유저가 저장한 커뮤니티 필터링
     func userBookmarkedCommunityFilter(communityData: [CommunityDocument], userBookmarkedCommunityArr: [String]) -> [CommunityDocument] {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각

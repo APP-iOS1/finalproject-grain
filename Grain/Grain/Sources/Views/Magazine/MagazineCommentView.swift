@@ -460,7 +460,7 @@ struct MagazineCommentTextField: View {
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == reommentUserID })
                             {
                                 for i in user.fields.fcmToken.arrayValue.values {
-                                    sender.sendPushNotification(to: i.stringValue, title: "대댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 대글에 대댓글을 남겼어요 ")
+                                    sender.sendPushNotification(to: i.stringValue, title: "대댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 대글에 대댓글을 남겼어요 ", image: "")
                                     //                                     , image: magazineData.fields.image.arrayValue.values[0].stringValue
                                 }
                             }
@@ -540,7 +540,7 @@ struct MagazineCommentTextField: View {
                                 if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
                                 {
                                     for i in user.fields.fcmToken.arrayValue.values {
-                                        sender.sendPushNotification(to: i.stringValue, title: "댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 게시글에 댓글을 남겼어요 ")
+                                        sender.sendPushNotification(to: i.stringValue, title: "댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 게시글에 댓글을 남겼어요 ", image: "")
                                         //                                     , image: magazineData.fields.image.arrayValue.values[0].stringValue
                                     }
                                 }

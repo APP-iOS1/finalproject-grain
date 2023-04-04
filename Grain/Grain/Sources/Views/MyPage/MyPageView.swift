@@ -104,19 +104,6 @@ struct MyPageView: View {
                                 .foregroundColor(.textGray)
                             }
                         }
-                        
-//                        Button {
-//                            let sender = PushNotificationSender(serverKeyString: "")
-////                            sender.sendPushNotification(to: "dZc6a5MgC0_FnHAuAW-w8X:APA91bFpm1tfHIsMOQDndYISQzPj0TgCTGx4ISlA9K5tXUBYUbZUx64ahzGEpPdxd2-EUUhyauYWSDhBBT26Zjuqi-HFnnhQxv2tvbrEPG7-OufPHXS13OHM1oyVt6UWrNaezzaaOzCN", title: "ddd", body: "dfdfd")
-//                            sender.sendPushNotification(to: "cHJQPma-m0b0smkrSSkvpW:APA91bG-8vSU8SkfBgWa_SRwv6Qin-Y2uWN5mwU2_QJf4ckRPCFGESEwEKs-KlendaMhKoDwiNwwILrV83wR0L3sZaymm5f2VFrNx281_PIb05zMGQN3oZMBKNWAEXyxMaIF0YzgIvqZ", title: "누가 댓글달았어", message: "Hello, world!", image: "")
-//                            sender.sendPushNotification(to: "fUb-OIrmREkKpZ3rFyPAsL:APA91bHyM4xb8c1zTJVmwev4kTdEIwhVont93FgzyAu0Gs0Mp9rNdyog2mZpQzYNcb49EV-j3P6In2VXgmDpcGpkOXCnQmHmf0P-SDL_tarR05GNTdvDy0C3bi4VIoUDQbxcbT6K3pHG", title: "누가 댓글달았어", message: "Hello, world!", image: "")
-//                            sender.sendPushNotification(to: "dI64-fa-nUgMrtOP8sVuK7:APA91bGVIGoM6aenTw_5W7M4GyfTh8nGaHSVUhfWQM1tC_RsxDa9g33ovAFlWRgFVPDBgWqAm8DB58gKuBz0wXn1v5w3Toc44tFHYCRgsnWzd2Ss_sn1Eh8lPvR_RhxFZT5EiF6X__jy", title: "누가 댓글달았어", message: "Hello, world!", image: "")
-////                            
-//
-//                        } label: {
-//                            Text("Push")
-//                        }
-                        
                     }
                     .padding(.bottom, 15)
                     

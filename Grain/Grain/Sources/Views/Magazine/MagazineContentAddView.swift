@@ -45,6 +45,20 @@ struct MagazineContentAddView: View {
     var userLatitude: Double
     var userLongitude: Double
     
+    
+    let items1 = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9"]
+       let items2 = ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6", "Option 7", "Option 8", "Option 9"]
+       let items3 = ["Choice 1", "Choice 2", "Choice 3", "Choice 4", "Choice 5", "Choice 6", "Choice 7", "Choice 8", "Choice 9"]
+       
+       @State private var showList1 = false
+       @State private var showList2 = false
+       @State private var showList3 = false
+       @State private var selectedItem1 = "Item 1"
+       @State private var selectedItem2 = "Option 1"
+       @State private var selectedItem3 = "Choice 1"
+    @State private var showPicker = false
+       @State private var selectedColorIndex = 0
+       let colors = ["Red", "Green", "Blue", "Yellow", "Orange", "Purple"]
     var body: some View {
         /// 지도뷰로 이동하기 위해 전체적으로 걸어줌
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
@@ -84,10 +98,10 @@ struct MagazineContentAddView: View {
                                 .onChange(of: selectedItems) { newItem in
                                     Task {
                                         selectedImages = []
-                                     
+                                        
                                         for value in newItem {
                                             if let imageData = try? await value.loadTransferable(type: Data.self),
-                                                let image = UIImage(data: imageData) {
+                                               let image = UIImage(data: imageData) {
                                                 selectedImages.append(image)
                                             }
                                         }
@@ -108,7 +122,7 @@ struct MagazineContentAddView: View {
                                                     Image(uiImage: item)
                                                         .resizable()
                                                         .cornerRadius(15)
-                                                        
+                                                    
                                                     Rectangle()
                                                         .overlay {
                                                             Text("대표 사진")
@@ -134,7 +148,7 @@ struct MagazineContentAddView: View {
                                                     Image(uiImage: item)
                                                         .resizable()
                                                         .cornerRadius(15)
-                                                       
+                                                    
                                                     Image(systemName: "x.circle.fill")
                                                         .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                         .onTapGesture {
@@ -146,10 +160,10 @@ struct MagazineContentAddView: View {
                                                             }
                                                         }
                                                 }
-
+                                                
                                             }
                                     }.frame(width: 100, height: 100)
-                                   
+                                    
                                 }
                             }
                         }
@@ -159,6 +173,48 @@ struct MagazineContentAddView: View {
                     
                     Divider()
                     
+                    HStack {
+                        VStack {
+                            Text("장비선택")
+                                .foregroundColor(Color.black)
+                                .font(.subheadline)
+                                .bold()
+                            Button(action: { self.showPicker.toggle() }) {
+                                HStack {
+                                    Text("바디를 선택해주세요 (필수)")
+                                        .foregroundColor(Color.gray)
+                                        .font(.subheadline)
+                                        .bold()
+                                    Image(systemName: "chevron.down")
+                                        .foregroundColor(Color.gray)
+                                        .font(.subheadline)
+                                        .bold()
+                                    Spacer()
+                                }
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .foregroundColor(.white)
+                            }
+                            
+                            if showPicker {
+                                Picker(selection: $selectedColorIndex, label: Text("")) {
+                                    ForEach(0..<colors.count) { index in
+                                        Text(self.colors[index])
+                                    }
+                                }
+                                .frame(height: 150)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                                .clipped()
+                                .pickerStyle(WheelPickerStyle())
+                            }
+                        }
+                        .padding(.leading)
+                        
+              
+                    }
+           
                     // MARK: 게시물 제목 작성 란
                     TextField("필름의 제목을 입력해주세요.", text: $inputTitle)
                         .font(.body)

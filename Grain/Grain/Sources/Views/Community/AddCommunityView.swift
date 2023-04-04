@@ -142,18 +142,6 @@ struct AddCommunityView: View {
                 .padding(.vertical)
                 Divider()
                 
-//                //MARK: 카테고리 피커 -> 버튼으로 변경
-//                HStack {
-//                    Picker("Tab", selection: $selectedTab){
-//                        ForEach(CommunityTabs.allCases){ tab in
-//                            Text(tab.rawValue)
-//                        }
-//                    }
-//                    .font(.title)
-//                    .colorMultiply(.black)
-//                    Spacer()
-//                }.padding(.vertical, 6)
-                
                 VStack(alignment: .leading) {
                     HStack{
                         Text("카테고리")
@@ -172,7 +160,7 @@ struct AddCommunityView: View {
                                         .bold()
                                         .padding(.horizontal)
                                         .padding(.vertical, 7)
-                                        .foregroundColor(selectedTab == tab ? Color.white : Color.black)
+                                        .foregroundColor(selectedTab == tab ? Color.white : Color.gray)
                                         .background(selectedTab == tab ? Color.black : Color.white)
                                         .cornerRadius(14)
                                         .overlay(RoundedRectangle(cornerRadius: 14)
@@ -202,45 +190,33 @@ struct AddCommunityView: View {
                         .submitLabel(.done)
                 }
                 .padding(.vertical, 8)
-                
-                //MARK: 게시물 제목 작성 란
-//                TextField("제목을 입력해주세요.", text: $inputTitle)
-//                    .font(.body)
-//                    .bold()
-//                    .keyboardType(.default)
-//                    .textInputAutocapitalization(.never)
-//                    .disableAutocorrection(true)
-//                    .padding(.horizontal, 15)
-//                    .onSubmit {
-//                        hideKeyboard()
-//                    }
-//                    .submitLabel(.done)
-//                    .padding(.vertical, 8)
-               
+
                 Divider()
                 
-                // MARK: 게시물 내용 작성 란
-                TextField("내용을 자세하게 입력해주세요 :)", text: $inputContent, axis: .vertical)
-                    .font(.body)
-                    .bold()
-                    .textInputAutocapitalization(.never)
-                    .keyboardType(.default)
-                    .disableAutocorrection(true)
-                    .lineLimit(7)
-                    .padding(.horizontal, 15)
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Spacer()
-                            Button {
-                                hideKeyboard()
-                            } label: {
-                                Text("Done")
-                                    .foregroundColor(.blue)
+                VStack(alignment: .leading) {
+                    // MARK: 게시물 내용 작성 란
+                    TextField("내용을 자세하게 입력해주세요 :)", text: $inputContent, axis: .vertical)
+                        .font(.body)
+                        .bold()
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.default)
+                        .disableAutocorrection(true)
+                        .lineLimit(7)
+                        .padding(.horizontal, 15)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button {
+                                    hideKeyboard()
+                                } label: {
+                                    Text("Done")
+                                        .foregroundColor(.blue)
+                                }
                             }
                         }
-                    }
-                    .frame(height: Screen.maxHeight * 0.4, alignment: .top)
-                    .padding(.vertical, 8)
+                        .frame(height: Screen.maxHeight * 0.4, alignment: .top)
+                        .padding(.vertical, 8)
+                }
                 
                 Spacer()
                 

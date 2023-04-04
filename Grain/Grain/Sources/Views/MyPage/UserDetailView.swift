@@ -10,6 +10,7 @@ import FirebaseAuth
 import Kingfisher
 
 struct UserDetailView: View {
+
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     

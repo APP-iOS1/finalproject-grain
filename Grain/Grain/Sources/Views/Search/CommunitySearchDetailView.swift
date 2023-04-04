@@ -59,7 +59,8 @@ struct CommunitySearchDetailView: View {
                     
                     //MARK: 작성자 정보
                     HStack {
-                        ProfileImage(imageName: "sampleImage")
+                        ProfileImage(imageName: community.fields.profileImage.stringValue)
+                        Text("@@@@@@@12ㄷ1ㅇ1ㄷ1ㄷ1ㄷ12")
                         Text(community.fields.nickName.stringValue)
                             .font(.title3)
                             .bold()

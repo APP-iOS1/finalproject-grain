@@ -31,6 +31,9 @@ struct CommunityCommentView: View {
     @Binding var editReDocID : String
     @Binding var editReData : CommentFields
     @Binding var editReColletionDocID: String
+    @Binding var reommentUserID : String
+    @Binding var communityData: CommunityDocument?
+    
     
     var trimContent: String {
         replyContent.trimmingCharacters(in: .whitespaces)
@@ -137,6 +140,7 @@ struct CommunityCommentView: View {
                 if trimContent.count > 0 {
                     if replyComment{
                         Button {
+                            replyComment = false
                             commentVm.insertRecomment(collectionName: "Community"
                                                       , collectionDocId: community.fields.id.stringValue
                                                       , commentCollectionName: "Comment"
@@ -150,11 +154,19 @@ struct CommunityCommentView: View {
                                                       )
                             )
                             replyContent = ""
-                            replyComment = false
                             commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                                 commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
                             }
+                            
+                            let sender = PushNotificationSender(serverKeyString: "")
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == reommentUserID })
+                            {
+                                for i in user.fields.fcmToken.arrayValue.values {
+                                    sender.sendPushNotification(to: i.stringValue, title: "바로 지금! 회원님의 대댓글이 도착했습니다. 🎉", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 댓글에 대댓글을 남겼어요 💬", image: "")
+                                }
+                            }
+                            
                         } label: {
                             Text("등록")
                                 .font(.subheadline)
@@ -165,9 +177,9 @@ struct CommunityCommentView: View {
                     }
                     else if editComment {
                         Button {
+                            editComment = false
                             commentVm.updateComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, docID: editDocID, updateComment: replyContent, data: editData)
                             replyContent = ""
-                            editComment = false
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                                 commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
                             }
@@ -181,9 +193,9 @@ struct CommunityCommentView: View {
                     }
                     else if editRecomment{
                         Button {
+                            editRecomment = false
                             commentVm.updateRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: replyContent, data: editReData)
                             replyContent = ""
-                            editRecomment = false
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                                 commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
                             }
@@ -198,6 +210,7 @@ struct CommunityCommentView: View {
                     else{
                         Button {
                             // MARK: 댓글 업로드 구현
+                            replyComment = false
                             commentVm.insertComment(
                                 collectionName: "Community",
                                 collectionDocId: community.fields.id.stringValue,
@@ -208,8 +221,19 @@ struct CommunityCommentView: View {
                                                     id: CommentString(stringValue: UUID().uuidString)))
                             
                             replyContent = ""
-                            replyComment = false
                             commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                            
+                            if let communityData = self.communityData {
+                                
+                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == communityData.fields.userID.stringValue })
+                                {
+                                    let sender = PushNotificationSender(serverKeyString: "")
+                                    for i in user.fields.fcmToken.arrayValue.values {
+                                        sender.sendPushNotification(to: i.stringValue, title:  "회원님의 게시글에 새로운 댓글이 달렸습니다! 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(communityData.fields.title.stringValue) 커뮤니티 게시글에 댓글을 남겼어요, 지금 확인하고 댓글 작성자와 함께 대화해 보세요. 💬 ", image: "")
+                                    }
+                                }
+                            }
+                            
                         } label: {
                             Text("등록")
                                 .font(.subheadline)

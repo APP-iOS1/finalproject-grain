@@ -133,6 +133,10 @@
 		A7AF1A0729956CDC007E6D43 /* CommentRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A0629956CDC007E6D43 /* CommentRouter.swift */; };
 		A7AF1A092995DBCD007E6D43 /* CommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A082995DBCD007E6D43 /* CommentService.swift */; };
 		A7AF1A0B2995E78A007E6D43 /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A0A2995E78A007E6D43 /* CommentViewModel.swift */; };
+		A7B67A4A29DBE26500D111FE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7B67A4829DBE26500D111FE /* GoogleService-Info.plist */; };
+		A7B67A4B29DBE26500D111FE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A7B67A4829DBE26500D111FE /* GoogleService-Info.plist */; };
+		A7B67A4C29DBE26500D111FE /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A7B67A4929DBE26500D111FE /* Config.xcconfig */; };
+		A7B67A4D29DBE26500D111FE /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A7B67A4929DBE26500D111FE /* Config.xcconfig */; };
 		A7BAD3CA297833C0009C4ECB /* MagazineDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */; };
 		A7BAD3CE2978394B009C4ECB /* MagazineQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */; };
 		A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D957CE297AA574001D2401 /* CommunityDTO.swift */; };
@@ -321,6 +325,8 @@
 		A7AF1A0629956CDC007E6D43 /* CommentRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRouter.swift; sourceTree = "<group>"; };
 		A7AF1A082995DBCD007E6D43 /* CommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentService.swift; sourceTree = "<group>"; };
 		A7AF1A0A2995E78A007E6D43 /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
+		A7B67A4829DBE26500D111FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A7B67A4929DBE26500D111FE /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A7BAD3C9297833C0009C4ECB /* MagazineDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineDTO.swift; sourceTree = "<group>"; };
 		A7BAD3CD2978394B009C4ECB /* MagazineQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineQuery.swift; sourceTree = "<group>"; };
 		A7D957CE297AA574001D2401 /* CommunityDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityDTO.swift; sourceTree = "<group>"; };

@@ -59,6 +59,7 @@ struct PinchZoomContext<Content: View>: View {
                         isZooming = (scale != 0 || offset != .zero)
                         if scale == -1 {
                             // 애니메이션을 자연스럽게 적용하기 위한 부분
+
                             scale = 0
                         }
                     }
@@ -67,6 +68,7 @@ struct PinchZoomContext<Content: View>: View {
         .tabViewStyle(.page(indexDisplayMode: isZooming ? .never : .automatic))
         
     }
+
     
 }
 

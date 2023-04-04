@@ -130,14 +130,10 @@ struct CommunityRecommentView: View {
                         HStack(alignment: .top){
                             // MARK: -  유저 프로필 이미지
                             VStack{
-                                KFImage(URL(string:"https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
+                                Image("defaultUserImage")
                                     .resizable()
                                     .frame(width: 25, height: 25)
                                     .cornerRadius(15)
-                                    .overlay {
-                                        Circle()
-                                            .stroke(lineWidth: 0.5)
-                                    }
                                     .padding(.horizontal, 7)
                             }
                             .frame(width: Screen.maxWidth * 0.1)

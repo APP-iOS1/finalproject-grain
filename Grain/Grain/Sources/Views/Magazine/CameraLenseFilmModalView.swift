@@ -135,8 +135,8 @@ struct CameraLenseFilmModalView: View {
                     if selectedCamera == "필수" || selectedCamera == "" { //카메라바디목록에서 카메라 바디 선택안했을 때
                         showingAlert = true
                     } else {
-                        //MARK: 글쓰기 완료 함수
                         //MARK: 글쓰기 완료 액션
+                        presented.toggle()
                         // data.field에 데이터 저장
                         var docId = UUID().uuidString
                         
@@ -178,9 +178,6 @@ struct CameraLenseFilmModalView: View {
                         var postMagazineArr : [String]  = userVM.postedMagazineID
                         postMagazineArr.append(docId)
                         userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
-
-//                        magazineVM.fetchMagazine()
-                        presented.toggle()
                     }
                 } label: {
                     Text("완료")

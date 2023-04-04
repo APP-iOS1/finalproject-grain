@@ -39,6 +39,7 @@ struct CommentView: View {
     @Binding var editReData : CommentFields
     @Binding var commentCount : Int // 댓글 갯수 디테일 뷰랑 바인딩 작업
     @Binding var editReColletionDocID: String
+    @Binding var reommentUserID : String
     
     func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬 예) 댓글 3개면 [ false, false, false ]
         eachBool = Array(repeating: false, count: count)
@@ -105,6 +106,7 @@ struct CommentView: View {
                                             replyComment.toggle()
                                             replyCommentText = "@" + nickName
                                             commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
+                                            reommentUserID = commentVm.sortedRecentComment[index].fields.userID.stringValue
                                         } label: {
                                             Text("답글달기")
                                         }
@@ -176,8 +178,11 @@ struct CommentView: View {
                             HStack(alignment: .top){
                                 // MARK: -  유저 프로필 이미지
                                 VStack{
-                                    ProfileImage(imageName: "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/G5KvQmuPEehYVxvO7bHWkpBoY0f2%2FCD8C78A7-C100-42BC-8481-17E7BBC2E962%2F2C7635E2-6C57-493F-83CB-3E4B3D862132?alt=media&token=58695683-ecf8-4109-afe9-c5084580907a")
-                                    
+                                    Image("defaultUserImage")
+                                        .resizable()
+                                        .frame(width: 35, height: 35)
+                                        .cornerRadius(30)
+                                        .padding(.horizontal, 7)
                                 }
                                 .frame(width: Screen.maxWidth * 0.1)
                                 
@@ -249,14 +254,17 @@ struct CommentView: View {
                     VStack{
                         HStack{
                             Spacer()
-                            Image("cameraComment")
+                            Image(systemName: "ellipsis.bubble")
                                 .resizable()
-                                .frame(width: 70, height: 70)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.middlebrightGray)
                             Spacer()
                         }
                         Text("첫 번째 댓글을 남겨주세요~!")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
+                            .font(.footnote)
+                            .foregroundColor(.middlebrightGray)
+                        
                     }
 
                 }

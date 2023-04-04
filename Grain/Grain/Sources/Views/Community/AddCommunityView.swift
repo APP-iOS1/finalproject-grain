@@ -264,6 +264,7 @@ struct AddCommunityView: View {
                     }
                 } else {
                     Button {
+                        
                         let docId = UUID().uuidString
                         let data = CommunityFields(title: CommunityCategory(stringValue: inputTitle), category: CommunityCategory(stringValue: selectedTab.rawValue), content: CommunityCategory(stringValue: inputContent), profileImage: CommunityCategory(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""), introduce: CommunityCategory(stringValue: userVM.currentUsers?.introduce.stringValue ?? ""), state: CommunityCategory(stringValue: ""), nickName: CommunityCategory(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "")])), userID: CommunityCategory(stringValue: userVM.currentUsers?.id.stringValue ?? ""), id: CommunityCategory(stringValue: docId))
                         communityVM.insertCommunity(data: data, images: selectedImages)
@@ -272,7 +273,6 @@ struct AddCommunityView: View {
                         userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunityArr, docID: Auth.auth().currentUser?.uid ?? "")
                         communityVM.fetchCommunity()     //  presented.toggle() 순서 바뀌면 게시글이 바로 적용이 안됨!
                         presented.toggle()
-                        
                     } label: {
                         RoundedRectangle(cornerRadius: 12)
                             .fill(.black)

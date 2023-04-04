@@ -12,6 +12,7 @@ import FirebaseAuth
 struct MagazineCommentView: View {
     
     @StateObject var commentVm = CommentViewModel()
+    
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
@@ -49,6 +50,16 @@ struct MagazineCommentView: View {
        
     }
     
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack() {
             Divider()
@@ -64,7 +75,7 @@ struct MagazineCommentView: View {
                                         NavigationLink {
                                             UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                                         } label: {
-                                            KFImage(URL(string: commentVm.sortedRecentComment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                            KFImage(URL(string: commentVm.sortedRecentComment[index].fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
                                                 .resizable()
                                                 .frame(width: 35, height: 35)
                                                 .cornerRadius(30)
@@ -74,7 +85,7 @@ struct MagazineCommentView: View {
                                                 }
                                                 .padding(.horizontal, 7)
                                         }
-                                        //
+                                        
                                     }
                                     .frame(width: Screen.maxWidth * 0.1)
                                     
@@ -161,7 +172,6 @@ struct MagazineCommentView: View {
                                         .foregroundColor(.textGray)
                                         .padding(.top, 1)
                                         .padding(.bottom, -3)
-                                        // 정훈 작업 중
                                         VStack{
                                             if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
                                                 if  readMoreComments && eachBool[index]{
@@ -182,16 +192,11 @@ struct MagazineCommentView: View {
                                 HStack(alignment: .top){
                                     // MARK: -  유저 프로필 이미지
                                     VStack{
-                                        KFImage(URL(string:"https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
+                                        Image("defaultUserImage")
                                             .resizable()
                                             .frame(width: 35, height: 35)
                                             .cornerRadius(30)
-                                            .overlay {
-                                                Circle()
-                                                    .stroke(lineWidth: 0.5)
-                                            }
                                             .padding(.horizontal, 7)
-                                        
                                     }
                                     .frame(width: Screen.maxWidth * 0.1)
                                     
@@ -261,15 +266,17 @@ struct MagazineCommentView: View {
                             VStack{
                                 HStack{
                                     Spacer()
-                                    Image("cameraComment")
+                                    Image(systemName: "ellipsis.bubble")
                                         .resizable()
-                                        .frame(width: 100, height: 100)
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 60, height: 60)
+                                        .foregroundColor(.middlebrightGray)
                                     Spacer()
                                 }
                                 .padding(20)
                                 Text("첫 번째 댓글을 남겨주세요~!")
                                     .font(.headline)
-                                    .fontWeight(.bold)
+                                    .foregroundColor(.middlebrightGray)
                             }.position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
                         }else{
                             VStack{
@@ -414,7 +421,6 @@ struct MagazineCommentTextField: View {
     var trimComment: String {
         commentText.trimmingCharacters(in: .whitespaces)
     }
-    let sender = PushNotificationSender(serverKeyString: "")
     
     var body: some View {
         VStack {
@@ -435,6 +441,9 @@ struct MagazineCommentTextField: View {
                     // MARK: 대댓글 업로드
                     if replyComment{
                         Button {
+
+                            replyComment = false
+                            
                             commentVm.insertRecomment(collectionName: collectionName
                                                       , collectionDocId: collectionDocId
                                                       , commentCollectionName: "Comment"
@@ -447,24 +456,21 @@ struct MagazineCommentTextField: View {
                                                         id: CommentString(stringValue: UUID().uuidString)
                                                       )
                             )
-                            
                             commentText = ""
                             self.summitComment.toggle()
-                            replyComment = false
+                            
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                                 commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                             }
                             
                             // MARK: 대댓글 유저한테 알림보내기 기능
-                          
+                            let sender = PushNotificationSender(serverKeyString: "")
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == reommentUserID })
                             {
                                 for i in user.fields.fcmToken.arrayValue.values {
-                                    sender.sendPushNotification(to: i.stringValue, title: "대댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 대글에 대댓글을 남겼어요 ")
-                                    //                                     , image: magazineData.fields.image.arrayValue.values[0].stringValue
+                                    sender.sendPushNotification(to: i.stringValue, title: "바로 지금! 회원님의 대댓글이 도착했습니다. 🎉", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 댓글에 대댓글을 남겼어요 💬", image: "")
                                 }
                             }
-                            
                             
                         } label: {
                             Text("등록")
@@ -477,10 +483,13 @@ struct MagazineCommentTextField: View {
                     // MARK: 대댓글 수정
                     else if editRecomment{
                         Button {
+                            editRecomment = false
+                            
                             commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: commentText, data: editReData)
+                            
                             commentText = ""
                             self.summitComment.toggle()
-                            editRecomment = false
+                            
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                                 commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                             }
@@ -495,14 +504,13 @@ struct MagazineCommentTextField: View {
                     // MARK: 댓글 수정
                     else if editComment{
                         Button {
+                            
+                            editComment = false
                             commentVm.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: editDocID, updateComment: commentText ,data: editData)
                             commentText = ""
                             self.summitComment.toggle()
-                            editComment = false
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-
                                 commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-
                             }
                             
                         } label: {
@@ -518,6 +526,9 @@ struct MagazineCommentTextField: View {
                     else{
                         Button {
                             // MARK: 댓글 업로드 구현
+                        
+                            replyComment = false
+                            
                             commentVm.insertComment(
                                 collectionName: collectionName,
                                 collectionDocId: collectionDocId,
@@ -531,21 +542,22 @@ struct MagazineCommentTextField: View {
                             )
                             commentText = ""
                             self.summitComment.toggle()
-                            replyComment = false
-                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)    // 해당하는 매거진 댓글 정보 가져오기
                             
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                            }
                             
                             // MARK: 매거진 게시글 유저한테 알림보내기 기능
                             if let magazineData = self.magazineData {
+                                
                                 if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
                                 {
+                                    let sender = PushNotificationSender(serverKeyString: "")
                                     for i in user.fields.fcmToken.arrayValue.values {
-                                        sender.sendPushNotification(to: i.stringValue, title: "댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 게시글에 댓글을 남겼어요 ")
-                                        //                                     , image: magazineData.fields.image.arrayValue.values[0].stringValue
+                                        sender.sendPushNotification(to: i.stringValue, title:  "회원님의 게시글에 새로운 댓글이 달렸습니다! 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 게시글에 댓글을 남겼어요, 지금 확인하고 댓글 작성자와 함께 대화해 보세요. 💬 ", image: "")
                                     }
                                 }
                             }
-
                             
                         } label: {
                             Text("등록")

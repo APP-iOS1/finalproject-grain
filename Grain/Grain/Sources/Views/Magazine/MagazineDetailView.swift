@@ -3,7 +3,7 @@ import FirebaseAuth
 import Kingfisher
 
 struct MagazineDetailView: View {
-    let sender = PushNotificationSender(serverKeyString: "")
+
     @ObservedObject var magazineVM : MagazineViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var mapVM = MapViewModel()
@@ -61,7 +61,7 @@ struct MagazineDetailView: View {
                                     } label: {
                                         ProfileImage(imageName: user.fields.profileImage.stringValue)
                                     }.padding(.trailing, -4)
-                                    
+
                                     VStack(alignment: .leading){
                                         Text(user.fields.nickName.stringValue)
                                             .bold()
@@ -80,11 +80,11 @@ struct MagazineDetailView: View {
                                         .foregroundColor(.textGray)
                                         .font(.caption)
                                         .padding(.trailing , Screen.maxWidth * 0.03)
-                                    
+
                                 }
                             }
                             .padding(5)
-                            
+
                             // MARK: 이미지
                             ForEach(Array(data.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
                                 Rectangle()
@@ -95,7 +95,7 @@ struct MagazineDetailView: View {
                                             .aspectRatio(contentMode: .fit)
                                     }
                                     .tag(index)
-                                
+
                             }
                             .addPinchZoom()
                             .onTapGesture(count: 2) {
@@ -103,38 +103,38 @@ struct MagazineDetailView: View {
                                 HapticManager.instance.impact(style: .medium)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
                                     withAnimation(.interpolatingSpring(mass: 0.35, stiffness: 100, damping: 4.5, initialVelocity: 25)) {
-                                        
+
                                         self.isHeartAnimationTwo = true
-                                        
+
                                     }
                                     self.heartOpacityTwo = 1
-                                    
+
                                 }
-                                
+
                                 self.isHeartToggle = true
-                                
+
                                 withAnimation(Animation.linear(duration: 0.1)) {
                                     self.imageScale = 0.8
-                                    
+
                                 }
-                                
+
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     withAnimation(Animation.linear(duration: 0.17)) {
                                         self.imageScale = 1
                                         self.lifetime = 1
                                     }
                                 }
-                                
+
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                                     withAnimation {
                                         self.lifetime = 0
-                                        
+
                                     }
                                 }
-                                
+
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                                     self.heartOpacityTwo = 0
-                                    
+
                                 }
                             }
                             .frame(width: Screen.maxWidth , height: Screen.maxWidth)
@@ -170,15 +170,15 @@ struct MagazineDetailView: View {
                                                     .bold()
                                             }
                                         }
-                                    
+
                                 }
                                 .opacity(saveOpacity)
                             }
                             .zIndex(.infinity)
-                            
+
                             VStack(alignment: .leading){
                                 HStack{
-                                    
+
                                     HStack{
                                         Text("장비 정보")
                                             .font(.subheadline)
@@ -194,18 +194,18 @@ struct MagazineDetailView: View {
                                             showDevices.toggle()
                                         }
                                     }
-                                    
+
                                     .padding(.leading, 20)
                                     .padding(.top, -5)
                                     .foregroundColor(.textGray)
-                                    
+
                                     Spacer()
-                                    
+
                                     // 하트버튼이 true -> false : userVM.likedMagazineID.remove(**) -> update
                                     // 하트버튼이 false -> true : userVM.likedMagazineID.append(**)update
                                     HeartButton(lifetime: $lifetime, imageScale: $imageScale, isHeartToggle: $isHeartToggle, isHeartAnimation: $isHeartAnimation, heartOpacity: $heartOpacity)
                                         .padding(.leading)
-                                    
+
                                     NavigationLink {
                                         MagazineCommentView(userVM: userVM, magazineVM: magazineVM, magazineData: $magazineData, collectionName: "Magazine", collectionDocId: magazineData.fields.id.stringValue)
                                     } label: {
@@ -214,9 +214,9 @@ struct MagazineDetailView: View {
                                             .foregroundColor(.black)
                                             .padding(.top, 2)
                                     }
-                                    
+
                                     //MARK: 북마크 버튼
-                                    
+
                                     Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
                                         .font(.system(size: 22))
                                         .foregroundColor(.black)
@@ -228,10 +228,10 @@ struct MagazineDetailView: View {
                                                 self.saveOpacity = 0
                                             }
                                         }
-                                    
+
                                 }
                                 .padding(.top, 5)
-                                
+
                                 if showDevices {
                                     VStack(alignment: .leading){
                                         Text("바디 \(Image(systemName: "poweron")) \(magazineData.fields.cameraInfo.stringValue)")
@@ -244,15 +244,15 @@ struct MagazineDetailView: View {
                                     .padding(.leading, 20)
                                     .transition(.moveAndFade)
                                 }
-                                
+
                             }
-                            
+
                         }//VStack
                         .frame(minHeight: 350)
                         .zIndex(1)
-                        
+
                         VStack{
-                            
+
                             // MARK: 제목
                             Text(magazineData.fields.title.stringValue)
                                 .font(.title2)
@@ -262,7 +262,7 @@ struct MagazineDetailView: View {
                                 .multilineTextAlignment(.leading)
                                 .padding(.top)
                                 .padding(.bottom, 10)
-                            
+
                             HStack {
                                 // MARK: 내용
                                 Text(magazineData.fields.content.stringValue)
@@ -270,7 +270,7 @@ struct MagazineDetailView: View {
                                     .padding(.horizontal)
                                     .foregroundColor(Color.textGray)
                                     .frame(alignment: .leading)
-                                
+
                                 Spacer()
                             }
                         }
@@ -341,9 +341,11 @@ struct MagazineDetailView: View {
                             magazineVM.updateMagazine(num: Int(ObservingChangeValueLikeNum)! + 1, docID: data.fields.id.stringValue)  //좋아요 갯수 증가
                             ObservingChangeValueLikeNum = String(Int(ObservingChangeValueLikeNum)! + 1) //.task(id: ObservingChangeValueLikeNum) -> await magazineVM.fetchMagazine() 실행
                         }
+                        
                         if let magazineData = self.magazineData {
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
                             {
+                                let sender = PushNotificationSender(serverKeyString: "")
                                 for i in user.fields.fcmToken.arrayValue.values {
                                     sender.sendPushNotification(to: i.stringValue, title: "좋아요", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 필름을 좋아합니다 ", image: magazineData.fields.image.arrayValue.values[0].stringValue)
                                 }

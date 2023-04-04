@@ -47,7 +47,7 @@ struct MagazineDetailView: View {
     }
     
     var body: some View {
-        NavigationStack{
+//        NavigationStack{
             ScrollView {
                 VStack(alignment: .leading){
                     if let magazineData = self.magazineData {
@@ -343,6 +343,7 @@ struct MagazineDetailView: View {
                         }
                         
                         if let magazineData = self.magazineData {
+                            let sender = PushNotificationSender(serverKeyString: "")
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
                             {
                                 let sender = PushNotificationSender(serverKeyString: "")
@@ -462,7 +463,7 @@ struct MagazineDetailView: View {
                     }
                 }
             }
-        }
+//        }
         .refreshable {
             magazineVM.fetchMagazine()
         }

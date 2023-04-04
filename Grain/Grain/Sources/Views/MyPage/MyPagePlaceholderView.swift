@@ -20,17 +20,19 @@ struct MyPagePlaceholderView: View {
             Button {
                 presented.toggle()
             } label: {
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke()
+                RoundedRectangle(cornerRadius: 10)
+//                    .stroke()
                     .foregroundColor(.black)
-                    .frame(width: Screen.maxWidth * 0.8, height: 38 )
+                    .frame(width: Screen.maxWidth * 0.8, height: 45 )
                     .overlay{
                         Text("업로드")
-                            .foregroundColor(.black)
+                            .bold()
+                            .foregroundColor(.white)
                          
                             
                     }
             }
+            .padding()
             .padding(.top, 5)
             Spacer()
         }

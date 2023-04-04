@@ -59,20 +59,21 @@ struct PinchZoomContext<Content: View>: View {
                         isZooming = (scale != 0 || offset != .zero)
                         if scale == -1 {
                             // 애니메이션을 자연스럽게 적용하기 위한 부분
-                           
-                                scale = 0
-                            }
+
+                            scale = 0
                         }
                     }
             }
-            .tabViewStyle(.page(indexDisplayMode: isZooming ? .never : .automatic))
-            
         }
+        .tabViewStyle(.page(indexDisplayMode: isZooming ? .never : .automatic))
+        
     }
 
+    
+}
 
 struct ZoomGesture: UIViewRepresentable {
-   
+    
     // Scale을 계산해서 사이즈를 받는 부분
     var size: CGSize
     
@@ -132,7 +133,7 @@ struct ZoomGesture: UIViewRepresentable {
             
             // 최소 scale 은 1
             if (sender.state == .began || sender.state == .changed) && parent.scale > 0 {
-               
+                
                 if let view = sender.view{
                     
                     // 드레그 제스처에 따른 offset 변화값

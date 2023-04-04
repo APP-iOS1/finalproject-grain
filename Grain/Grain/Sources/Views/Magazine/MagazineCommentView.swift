@@ -468,7 +468,9 @@ struct MagazineCommentTextField: View {
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == reommentUserID })
                             {
                                 for i in user.fields.fcmToken.arrayValue.values {
+
                                     sender.sendPushNotification(to: i.stringValue, title: "바로 지금! 회원님의 대댓글이 도착했습니다. 🎉", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 댓글에 대댓글을 남겼어요 💬", image: "")
+
                                 }
                             }
                             
@@ -555,6 +557,7 @@ struct MagazineCommentTextField: View {
                                     let sender = PushNotificationSender(serverKeyString: "")
                                     for i in user.fields.fcmToken.arrayValue.values {
                                         sender.sendPushNotification(to: i.stringValue, title:  "회원님의 게시글에 새로운 댓글이 달렸습니다! 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 게시글에 댓글을 남겼어요, 지금 확인하고 댓글 작성자와 함께 대화해 보세요. 💬 ", image: "")
+
                                     }
                                 }
                             }

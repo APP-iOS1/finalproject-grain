@@ -10,7 +10,6 @@ import FirebaseAuth
 import Kingfisher
 
 struct UserDetailView: View {
-    
 
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
@@ -77,7 +76,6 @@ struct UserDetailView: View {
                                                     userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: userData.fields.id.stringValue)
                                                 }
                                             }
-                                            
                                             let sender = PushNotificationSender(serverKeyString: "")
                                             for i in user.fields.fcmToken.arrayValue.values {
                                                 sender.sendPushNotification(to: i.stringValue, title: "구독", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 \(userData.fields.nickName.stringValue) 을 구독합니다 ", image: "")

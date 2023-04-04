@@ -123,6 +123,28 @@ struct AccountSection: View {
                 .padding(.bottom)
             }
             .padding(.horizontal)
+
+            NavigationLink {
+                MyPgeMyCommunity(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
+            } label: {
+                HStack {
+                    Image(systemName: "text.bubble")
+                        .font(.system(size: 20))
+                        .padding(.trailing, 10)
+                    
+                    Text("나의 커뮤니티 글")
+                        .font(.title3)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .font(.title3)
+                }
+                .foregroundColor(.black)
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
+            .padding(.horizontal)
             
             NavigationLink {
                 BookmarkedMagazine(userVM: userVM, magazineVM: magazineVM)
@@ -416,11 +438,11 @@ struct InfoSection: View {
             } label: {
                 HStack() {
                     Image(systemName: "person")
-                        .font(.system(size: 25))
+                        .font(.system(size: 24))
 //                        .padding(.trailing, 10)
 //                        .font(.system(size:20))
                         .padding(.leading, 4.5)
-                        .padding(.trailing, 12)
+                        .padding(.trailing, 12.5)
 
                     Text("계정 관리")
                         .font(.title3)

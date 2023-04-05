@@ -41,6 +41,9 @@ struct BookmarkedMagazine: View {
                     }
                 }
             }
+            .emptyPlaceholder(bookmarkedMagazineDocument.reversed()) {
+                BookmarkedMagazinePlaceholderView()
+            }
             .task(id: ObservingChangeValueLikeNum){
                  magazineVM.fetchMagazine()
             }

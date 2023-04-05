@@ -18,11 +18,13 @@ struct CommunityRowView: View {
     var tagColor: String {
         switch community.fields.state.stringValue {
         case "모집중", "판매중":
-            return "#4C9E77"
+            return "#1D3F39"
+//            return "#4C9E77"
         case "모집완료", "판매완료":
             return "#A0A0A0"
         case "Tip":
-            return "#F5dF4D"
+            return "#FAC75B"
+//            return "#F5dF4D"
         default:
             return "4C9E77"
         }

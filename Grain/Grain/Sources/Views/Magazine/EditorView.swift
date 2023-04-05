@@ -146,7 +146,7 @@ struct EditorView: View {
                 .frame(maxWidth: Screen.maxWidth * 0.94)
                 .background(Color.black)
                 .padding(.top, 5)
-                .padding(.bottom, 15)
+                .padding(.bottom, 10)
                 .padding(.horizontal, Screen.maxWidth * 0.04)
             
             // MARK: - 공고 모집
@@ -179,6 +179,6 @@ struct EditorView: View {
 
 //struct EditorView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        EditorView()
+//        EditorView(editorVM: EditorViewModel(), userVM: UserViewModel(), magazineVM: MagazineViewModel())
 //    }
 //}

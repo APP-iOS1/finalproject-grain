@@ -15,14 +15,15 @@ struct MyPageOptionView: View {
     @ObservedObject var magazineVM: MagazineViewModel
     
     @ObservedObject var userVM: UserViewModel
-//    var bookmarkedMagazineDocument: [MagazineDocument]
-//    var bookmarkedCommunityDoument: [CommunityDocument]
+
+    @Binding var presented: Bool
+
     
     var body: some View {
         VStack(alignment: .leading){
             ScrollView{
                 //MARK: 계정 섹션
-                AccountSection(commentVm: commentVm, magazineVM: magazineVM, communityVM: communityVM, userVM: userVM)
+                AccountSection(commentVm: commentVm, magazineVM: magazineVM, communityVM: communityVM, userVM: userVM, presented: $presented)
                 
                 //MARK: 지원 섹션
                 SupportSection()
@@ -68,8 +69,7 @@ struct AccountSection: View {
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     
-//    var bookmarkedMagazineDocument: [MagazineDocument]
-//    var bookmarkedCommunityDoument: [CommunityDocument]
+    @Binding var presented: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
@@ -125,7 +125,7 @@ struct AccountSection: View {
             .padding(.horizontal)
 
             NavigationLink {
-                MyPgeMyCommunity(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
+                MyPgeMyCommunity(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, presented: $presented, isLoading: $communityVM.isLoading)
             } label: {
                 HStack {
                     Image(systemName: "text.bubble")

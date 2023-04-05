@@ -107,7 +107,7 @@ struct ContentView: View {
                                         
                                         ToolbarItem(placement: .navigationBarTrailing) {
                                             NavigationLink {
-                                                MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM)
+                                                MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM, presented: $presented)
                                             } label: {
                                                 Image(systemName: "ellipsis")
                                                     .foregroundColor(.black)

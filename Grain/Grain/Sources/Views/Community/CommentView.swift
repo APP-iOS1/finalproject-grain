@@ -186,6 +186,10 @@ struct CommentView: View {
                                         .frame(width: 35, height: 35)
                                         .cornerRadius(30)
                                         .padding(.horizontal, 7)
+                                        .overlay {
+                                            Circle()
+                                                .stroke(lineWidth: 0.5)
+                                        }
                                 }
                                 .frame(width: Screen.maxWidth * 0.1)
                                 

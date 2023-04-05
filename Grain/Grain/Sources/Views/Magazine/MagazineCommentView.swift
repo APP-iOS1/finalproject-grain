@@ -199,6 +199,10 @@ struct MagazineCommentView: View {
                                             .frame(width: 35, height: 35)
                                             .cornerRadius(30)
                                             .padding(.horizontal, 7)
+                                            .overlay {
+                                                Circle()
+                                                    .stroke(lineWidth: 0.5)
+                                            }
                                     }
                                     .frame(width: Screen.maxWidth * 0.1)
                                     
@@ -243,9 +247,6 @@ struct MagazineCommentView: View {
                                                 }
                                             }
                                         }
-                                        
-                                        
-                                        
 
                                         if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
                                             if  readMoreComments && eachBool[index]{

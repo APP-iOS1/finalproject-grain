@@ -22,6 +22,16 @@ struct CommunitySearchDetailView: View {
     
     let community: CommunityDocument
     
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack {
             ScrollView {
@@ -49,7 +59,7 @@ struct CommunitySearchDetailView: View {
                     .padding(.horizontal, 10)
                     
                     TabView {
-                        KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.3)                        
@@ -60,7 +70,6 @@ struct CommunitySearchDetailView: View {
                     //MARK: 작성자 정보
                     HStack {
                         ProfileImage(imageName: community.fields.profileImage.stringValue)
-                        Text("@@@@@@@12ㄷ1ㅇ1ㄷ1ㄷ1ㄷ12")
                         Text(community.fields.nickName.stringValue)
                             .font(.title3)
                             .bold()

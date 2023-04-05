@@ -24,6 +24,16 @@ struct MagazineSearchResultView: View {
         return string.replacingOccurrences(of: " ", with: "")
     }
     
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         ZStack{
             VStack{
@@ -38,7 +48,7 @@ struct MagazineSearchResultView: View {
                             MagazineDetailView(magazineVM: magazineVM, userVM: userViewModel, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                         } label: {
                             HStack{
-                                KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"camera.fill"))
+                                KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                                     .resizable()
                                     .frame(width: 90, height: 90)
                                     .foregroundColor(.white)

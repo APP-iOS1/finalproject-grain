@@ -26,12 +26,22 @@ struct UserDetailView: View {
     let user: UserDocument
     @State var userData: UserDocument?
     
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading){
                 HStack{
                     //MARK: 프로필 이미지
-                    KFImage(URL(string: user.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    KFImage(URL(string: user.fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 85, height: 85)

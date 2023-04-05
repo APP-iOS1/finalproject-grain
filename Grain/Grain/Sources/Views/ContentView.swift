@@ -191,12 +191,12 @@ struct ContentView: View {
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                     userVM.fetchUser()
                 }
-                //        .splashView {
-                //            ZStack{
-                //                SplashScreen()
-                //            }
-                //
-                //        }
+//                .splashView {
+//                    ZStack{
+//                        SplashScreen()
+//                    }
+//
+//                }
             } else {
                 NetworkConnectionView(networkManager: networkManager)
             }

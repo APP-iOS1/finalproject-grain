@@ -111,6 +111,16 @@ struct UserPageUserFeedView: View {
         GridItem(.flexible(), spacing: 1)
     ]
     
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack{
             HStack{
@@ -149,7 +159,7 @@ struct UserPageUserFeedView: View {
                             NavigationLink {
                                 MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {
-                                KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                                     .resizable()
                                 //                                   .aspectRatio(contentMode: .fit)
                                 //                                   .frame(width: 100)

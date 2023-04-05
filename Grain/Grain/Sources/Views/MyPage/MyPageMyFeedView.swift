@@ -25,7 +25,18 @@ struct MyPageMyFeedView: View {
     ]
     
     @Binding var presented: Bool
-
+    
+    
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack{
             HStack{
@@ -61,7 +72,7 @@ struct MyPageMyFeedView: View {
                             NavigationLink {
                                 MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {
-                                KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string: defaultProfileImage()))
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width: Screen.maxWidth / 3 - 1, height: Screen.maxWidth / 3 - 1)

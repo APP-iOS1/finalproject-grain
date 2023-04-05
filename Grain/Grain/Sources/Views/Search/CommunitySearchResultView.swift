@@ -22,6 +22,16 @@ struct CommunitySearchResultView: View {
     
     let community: CommunityViewModel
     
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         ZStack {
             VStack{
@@ -36,7 +46,7 @@ struct CommunitySearchResultView: View {
                             CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: item)
                         } label: {
                             HStack{
-                                KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"camera.fill"))
+                                KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage() ))
                                     .resizable()
                                     .frame(width: 90, height: 90)
                                     .foregroundColor(.white)

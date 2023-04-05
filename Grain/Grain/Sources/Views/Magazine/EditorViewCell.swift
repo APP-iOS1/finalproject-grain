@@ -13,6 +13,16 @@ struct EditorViewCell: View {
     
     let paddingVal = Screen.maxWidth*0.1
     
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["PreparingImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
             VStack{
                 //에디터픽 이미지
@@ -22,7 +32,7 @@ struct EditorViewCell: View {
                         .fill(.gray)
                         .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.5)
                     ForEach(editorVM.editorData, id:\.self){ data in
-                        KFImage(URL(string: data.fields.postImage4.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        KFImage(URL(string: data.fields.postImage4.stringValue) ?? URL(string: errorImage()))
                             .resizable()
                             .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.5)
                             .aspectRatio(contentMode: .fill)

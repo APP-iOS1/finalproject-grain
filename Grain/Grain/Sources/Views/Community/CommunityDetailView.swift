@@ -51,6 +51,16 @@ struct CommunityDetailView: View {
     @SceneStorage("isZooming") var isZooming: Bool = false
     @SceneStorage("index") var selectedIndex: Int = 0
 
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["DetailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -105,7 +115,7 @@ struct CommunityDetailView: View {
                             Rectangle()
                                 .frame(width: Screen.maxWidth, height: Screen.maxWidth)
                                 .overlay {
-                                    KFImage(URL(string: item.stringValue) ?? URL(string: "https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                    KFImage(URL(string: item.stringValue) ?? URL(string:  errorImage()))
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                 }
@@ -147,9 +157,11 @@ struct CommunityDetailView: View {
                         Divider()
                         
                         // MARK: - 커뮤니티 댓글 뷰
+                        
                         CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData ,commentCount : $commentCount, editReColletionDocID: $editReColletionDocID, reommentUserID: $reommentUserID)
                             .padding(.top, 1)
-                        
+                            .padding(.trailing, 20)
+                    
                     }
                 }
                 .onDisappear{

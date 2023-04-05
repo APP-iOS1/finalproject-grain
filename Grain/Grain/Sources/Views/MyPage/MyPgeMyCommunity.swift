@@ -13,6 +13,7 @@ struct MyPgeMyCommunity: View {
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
+    @Binding var presented: Bool
     @Binding var isLoading: Bool
     
     @State private var communityDoument: [CommunityDocument] = []
@@ -27,6 +28,10 @@ struct MyPgeMyCommunity: View {
                         CommunityRowView(communityVM: communityVM, community: data, isLoading: $isLoading)
                     }
                 }
+            }
+            .emptyPlaceholder(communityDoument.reversed()) {
+                    MyCommunityPlaceholderView(presented: $presented)
+           
             }
         }
         .navigationTitle("저장된 커뮤니티 글")

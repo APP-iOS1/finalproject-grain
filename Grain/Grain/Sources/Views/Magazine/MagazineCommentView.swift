@@ -59,7 +59,7 @@ struct MagazineCommentView: View {
         }
         return https
     }
-    
+        
     var body: some View {
         VStack() {
             Divider()
@@ -91,18 +91,7 @@ struct MagazineCommentView: View {
                                     
                                     VStack(alignment: .leading){
                                         HStack{
-                                            
-                                            NavigationLink {
-                                                //유저 프로필 뷰 입장
-                                            } label: {
-                                                // MARK: 유저 닉네임
-                                                Text(nickName)
-                                                    .font(.caption)
-                                                    .fontWeight(.bold)
-                                                    .onAppear{
-                                                        nickName = user.fields.nickName.stringValue
-                                                    }
-                                            }
+                                            MagazineCommentNickNameView(user: user)
                                             HStack{
                                                 Text("・")
                                                     .font(.caption2)
@@ -119,21 +108,31 @@ struct MagazineCommentView: View {
                                         Text(commentVm.sortedRecentComment[index].fields.comment.stringValue)
                                             .font(.footnote)
                                             .padding(.bottom, -1)
+                                            .padding(.top, 3)
                                         // MARK: - 답글달기, 답글 더보기, 수정 , 삭제
                                         HStack{
                                             Button {
                                                 replyComment.toggle()
-                                                replyCommentText = "@" + nickName
+                                                replyCommentText = "@" + commentVm.sortedRecentComment[index].fields.nickName.stringValue
                                                 commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
                                                 reommentUserID = commentVm.sortedRecentComment[index].fields.userID.stringValue
                                             } label: {
                                                 Text("답글달기")
+                                                    .font(.caption2)
+                                                    .foregroundColor(.textGray)
+                                                    .padding(.top, 1)
+                                                    .padding(.bottom, -3)
                                             }
                                             // MARK: 답글 더보기
                                             
                                             if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
                                                 if recommentCount > 5 {
-                                                    Text("답글 더보기 (\(recommentCount))").onTapGesture {
+                                                    Text("답글 더보기 (\(recommentCount))")
+                                                        .font(.caption2)
+                                                        .foregroundColor(.textGray)
+                                                        .padding(.top, 1)
+                                                        .padding(.bottom, -3)
+                                                        .onTapGesture {
                                                         makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
                                                         readMoreComments = true
                                                         eachBool[index] = true
@@ -147,6 +146,10 @@ struct MagazineCommentView: View {
                                                     editData = commentVm.sortedRecentComment[index].fields
                                                 } label: {
                                                     Text("수정")
+                                                        .font(.caption2)
+                                                        .foregroundColor(.textGray)
+                                                        .padding(.top, 1)
+                                                        .padding(.bottom, -3)
                                                 }
                                                 //  MARK: 삭제
                                                 Button{
@@ -154,6 +157,10 @@ struct MagazineCommentView: View {
                                                     deleteCommentAlertBool.toggle()
                                                 } label: {
                                                     Text("삭제")
+                                                        .font(.caption2)
+                                                        .foregroundColor(.textGray)
+                                                        .padding(.top, 1)
+                                                        .padding(.bottom, -3)
                                                         .alert(isPresented: $deleteCommentAlertBool) {
                                                             Alert(title: Text("댓글을 삭제하시겠어요?"),
                                                                   primaryButton:  .cancel(Text("취소")),
@@ -168,17 +175,12 @@ struct MagazineCommentView: View {
                                             }
                                             
                                         }
-                                        .font(.caption2)
-                                        .foregroundColor(.textGray)
-                                        .padding(.top, 1)
-                                        .padding(.bottom, -3)
-                                        VStack{
-                                            if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
-                                                if  readMoreComments && eachBool[index]{
-                                                    MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
-                                                }else if recommentCount <= 5 {
-                                                    MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
-                                                }
+                                       
+                                        if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                            if  readMoreComments && eachBool[index]{
+                                                MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                            }else if recommentCount <= 5 {
+                                                MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
                                             }
                                         }
                                         
@@ -223,33 +225,36 @@ struct MagazineCommentView: View {
                                         Text("삭제된 댓글입니다.")
                                             .font(.footnote)
                                             .padding(.bottom, -1)
+                                            .padding(.top, 3)
                                         
-                                        HStack{
-                                            // MARK: 답글 더보기
-                                            if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
-                                                if recommentCount > 5 {
-                                                    Text("답글 더보기 (\(recommentCount))").onTapGesture {
-                                                        makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
-                                                        readMoreComments = true
-                                                        eachBool[index] = true
-                                                    }
+                                        
+                                        // MARK: 답글 더보기
+                                        if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                            if recommentCount > 5 {
+                                                Text("답글 더보기 (\(recommentCount))")
+                                                    .font(.caption2)
+                                                    .foregroundColor(.textGray)
+                                                    .padding(.top, 1)
+                                                    .padding(.bottom, -3)
+                                                    .onTapGesture {
+                                                    makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
+                                                    readMoreComments = true
+                                                    eachBool[index] = true
                                                 }
                                             }
                                         }
-                                        .font(.caption2)
-                                        .foregroundColor(.textGray)
-                                        .padding(.top, 1)
-                                        .padding(.bottom, -3)
-                                        VStack{
-                                            if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
-                                                if  readMoreComments && eachBool[index]{
-                                                    MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
-                                                }else if recommentCount <= 5 {
-                                                    MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
-                                                }
+                                        
+                                        
+                                        
+
+                                        if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                            if  readMoreComments && eachBool[index]{
+                                                MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                            }else if recommentCount <= 5 {
+                                                MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
                                             }
-                                            
                                         }
+                                        
                                         
                                         
                                     }
@@ -370,7 +375,7 @@ struct MagazineCommentView: View {
                 }
                 // MARK: 댓글 구역
                 HStack{
-                    KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "" ) ??  URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg") )
+                    KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "" ) ??  URL(string: defaultProfileImage()) )
                         .resizable()
                         .frame(width: 35, height: 35)
                         .cornerRadius(30)

@@ -13,14 +13,24 @@ struct MagazineViewCell: View {
     let data : MagazineDocument
     
     @ObservedObject var userVM: UserViewModel
-
+    
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack {
             Rectangle()
                 .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.9)
                 .foregroundColor(.black)
                 .overlay{
-                    KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                         .resizable()
                         .scaledToFill()
                         .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.9 )

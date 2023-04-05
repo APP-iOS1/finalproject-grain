@@ -20,7 +20,15 @@ struct NearbyPostsComponent: View {
     @Binding var clikedMagazineData : MagazineDocument?
     @Binding var showResearchButton : Bool
     
-    
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
     
     var body: some View {
         
@@ -35,7 +43,7 @@ struct NearbyPostsComponent: View {
                                 VStack{
                                     HStack{
                                         Spacer()
-                                        KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                        KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
 //                                            .cornerRadius(15)

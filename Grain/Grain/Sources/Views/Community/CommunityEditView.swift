@@ -35,6 +35,16 @@ struct CommunityEditView: View {
     
     @Binding var editFetch: Bool
     
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["DetailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         ScrollView(showsIndicators: false){
             VStack{
@@ -94,7 +104,7 @@ struct CommunityEditView: View {
                                 Rectangle()
                                     .frame(width: Screen.maxWidth , height: Screen.maxWidth)
                                     .overlay{
-                                        KFImage(URL(string: item.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                        KFImage(URL(string: item.stringValue) ?? URL(string: errorImage()))
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                     }

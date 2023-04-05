@@ -89,34 +89,34 @@ struct SplashScreen: View {
         .animation(.easeIn(duration: 0.5), value: rotation)
         .onAppear {
             rotation = -20
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 withAnimation {
                     self.isAnimation = true
                 }
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 withAnimation {
                     self.isAnimation2 = true
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
                 withAnimation {
                     self.isAnimation3 = true
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
                 withAnimation {
                     self.isAnimation4 = true
                 }
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.6) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) {
                 withAnimation(.easeOut(duration: 0.5)) {
                     self.isActive = true
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.8) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
                 withAnimation {
                     self.isAnimation5 = true
                 }
@@ -126,10 +126,10 @@ struct SplashScreen: View {
     }
     func animateSplash(){
         DispatchQueue.main.asyncAfter(deadline: .now()){
-            withAnimation(Animation.easeOut(duration: 0.45)){
+            withAnimation(Animation.easeOut(duration: 0.225)){
                 animate.toggle()
             }
-            withAnimation(Animation.easeOut(duration: 0.45)){
+            withAnimation(Animation.easeOut(duration: 0.225)){
                 endSplash.toggle()
             }
         }

@@ -43,6 +43,16 @@ struct MainSearchView: View {
         return string.replacingOccurrences(of: " ", with: "")
     }
     
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         NavigationStack{
             VStack{
@@ -300,7 +310,7 @@ struct MainSearchView: View {
                                         } label: {
                                             VStack{
                                                 HStack{
-                                                    KFImage(URL(string: user.fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                                    KFImage(URL(string: user.fields.profileImage.stringValue ) ?? URL(string: defaultProfileImage()))
                                                         .resizable()
                                                         .frame(width: 47, height: 47)
                                                         .cornerRadius(30)

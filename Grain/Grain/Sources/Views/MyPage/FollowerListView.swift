@@ -12,7 +12,18 @@ struct FollowerListView: View {
     @ObservedObject var userVM: UserViewModel
     var user: UserDocument
     @ObservedObject var magagineVM: MagazineViewModel
-
+    
+    
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -21,7 +32,7 @@ struct FollowerListView: View {
                         UserDetailView(userVM: userVM, magazineVM: magagineVM, user: item)
                     } label: {
                         HStack {
-                            KFImage(URL(string: item.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                            KFImage(URL(string: item.fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 40, height: 40)
@@ -51,7 +62,17 @@ struct FollowerListView: View {
 struct CurrentUserFollowerListView: View {
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var magagineVM: MagazineViewModel
-
+    
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -60,7 +81,7 @@ struct CurrentUserFollowerListView: View {
                         UserDetailView(userVM: userVM, magazineVM: magagineVM, user: item)
                     } label: {
                         HStack {
-                            KFImage(URL(string: item.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                            KFImage(URL(string: item.fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 40, height: 40)

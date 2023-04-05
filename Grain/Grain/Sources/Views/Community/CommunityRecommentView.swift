@@ -34,7 +34,6 @@ struct CommunityRecommentView: View {
             ForEach(Array(commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values), id:\.self){ element in
                 ForEach(element , id:\.self){ index in
                     if let user = userVM.users.first(where: { $0.fields.id.stringValue == index.fields.userID.stringValue }){
-                        Divider()
                         HStack(alignment: .top){
                             // MARK: -  유저 프로필 이미지
                             VStack{
@@ -57,17 +56,7 @@ struct CommunityRecommentView: View {
                             VStack(alignment: .leading){
                                 HStack{
 
-                                    NavigationLink {
-                                        //유저 프로필 뷰 입장
-                                    } label: {
-                                        // MARK: 유저 닉네임
-                                        Text(nickName)
-                                            .font(.caption)
-                                            .fontWeight(.bold)
-                                            .onAppear{
-                                                nickName = user.fields.nickName.stringValue
-                                            }
-                                    }
+                                    CommunityCommentNickNameView(user: user)
                                     HStack{
                                         Text("・")
                                             .font(.caption2)
@@ -80,12 +69,13 @@ struct CommunityRecommentView: View {
 
                                 }
                                 .padding(.bottom, -5)
-
+                                
+                                
                                 //MARK: - 댓글 내용
                                 Text(index.fields.comment.stringValue)
                                     .font(.caption)
                                     .padding(.bottom, -1)
-
+                                    .padding(.top, 3)
                                 // MARK: - 자기가 쓴 댓글일시 보여주는 수정/삭제
                                 HStack{
                                     if index.fields.userID.stringValue == Auth.auth().currentUser?.uid{
@@ -96,6 +86,10 @@ struct CommunityRecommentView: View {
                                             editReColletionDocID =  commentCollectionDocId
                                         } label: {
                                             Text("수정")
+                                                .font(.caption2)
+                                                .foregroundColor(.textGray)
+                                                .padding(.top, 1)
+                                                .padding(.bottom, -3)
                                         }
 
                                         Button{
@@ -103,6 +97,10 @@ struct CommunityRecommentView: View {
                                             deleteCommentAlertBool.toggle()
                                         } label: {
                                             Text("삭제")
+                                                .font(.caption2)
+                                                .foregroundColor(.textGray)
+                                                .padding(.top, 1)
+                                                .padding(.bottom, -3)
                                                 .alert(isPresented: $deleteCommentAlertBool) {
                                                     Alert(title: Text("댓글을 삭제하시겠어요?"),
                                                           primaryButton:  .cancel(Text("취소")),
@@ -117,12 +115,9 @@ struct CommunityRecommentView: View {
                                         }
                                     }
                                 }
-                                .font(.caption2)
-                                .foregroundColor(.textGray)
-                                .padding(.top, 1)
-                                .padding(.bottom, -3)
 
                             }
+                            .offset(x : -7)
                         }
                     }
                     else{
@@ -137,6 +132,7 @@ struct CommunityRecommentView: View {
                                     .padding(.horizontal, 7)
                             }
                             .frame(width: Screen.maxWidth * 0.1)
+                            
                             VStack(alignment: .leading){
                                 HStack{
                                     Text("탈퇴한 유저입니다")
@@ -155,25 +151,20 @@ struct CommunityRecommentView: View {
                                     Spacer()
                                 }
                                 .padding(.bottom, -5)
-                                //MARK: - 댓글 내용
                                 Text("삭제된 댓글입니다.")
                                     .font(.footnote)
                                     .padding(.bottom, -1)
-                                // 비율 맞추기 위해
-                                HStack{
-                                    
-                                }
-                                .padding(.top, 1)
-                                .padding(.bottom, -3)
-
+                                    .padding(.top, 3)
                             }
-
+                            .offset(x : -7)
                         }
 
                     }
                 }
             }
         }
+        .padding(.top, 3)
+        .padding(.leading, -10)
     }
 }
 

@@ -71,6 +71,18 @@ struct EditMyPageView: View {
     @State private var selectedImageData: Data? = nil
     @State private var selectedImages: [UIImage] = []
     
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
+    
+    
     var body: some View {
         VStack {
             PhotosPicker(
@@ -78,7 +90,7 @@ struct EditMyPageView: View {
                 matching: .images,
                 photoLibrary: .shared()) {
                     if selectedImages.count == 0{
-                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string: "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
+                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:  defaultProfileImage()))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 100, height: 100)

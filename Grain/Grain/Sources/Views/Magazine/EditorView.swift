@@ -17,6 +17,16 @@ struct EditorView: View {
     let pastedboard = UIPasteboard.general
     @State private var copiedComplete: Bool = false
     
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["PreparingImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         ScrollView {
             VStack{
@@ -76,7 +86,7 @@ struct EditorView: View {
                 // MARK: - 포스트 첫 번째
                 VStack{
                   
-                    KFImage(URL(string: editorVM.editorData[0].fields.postImage1.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    KFImage(URL(string: editorVM.editorData[0].fields.postImage1.stringValue) ?? URL(string: errorImage()))
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                     
@@ -91,7 +101,7 @@ struct EditorView: View {
                 // MARK: - 포스트 두 번째
                 VStack{
                     
-                    KFImage(URL(string: editorVM.editorData[0].fields.postImage2.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    KFImage(URL(string: editorVM.editorData[0].fields.postImage2.stringValue) ?? URL(string: errorImage()))
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                     
@@ -105,7 +115,7 @@ struct EditorView: View {
                 
                 // MARK: - 포스트 세 번째
                 VStack{
-                    KFImage(URL(string: editorVM.editorData[0].fields.postImage3.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    KFImage(URL(string: editorVM.editorData[0].fields.postImage3.stringValue) ?? URL(string: errorImage()))
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                     Text(editorVM.editorData[0].fields.postContent3.stringValue)
@@ -118,7 +128,7 @@ struct EditorView: View {
                 // MARK: - 포스트 네 번째
                 VStack{
 
-                    KFImage(URL(string: editorVM.editorData[0].fields.postImage4.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    KFImage(URL(string: editorVM.editorData[0].fields.postImage4.stringValue) ?? URL(string: errorImage()))
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                     Text(editorVM.editorData[0].fields.postContent4.stringValue)
@@ -130,7 +140,7 @@ struct EditorView: View {
                 
                 // MARK: - 포스트 다섯 번째
                 VStack{
-                    KFImage(URL(string: editorVM.editorData[0].fields.postImage5.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    KFImage(URL(string: editorVM.editorData[0].fields.postImage5.stringValue) ?? URL(string: errorImage()))
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                     Text(editorVM.editorData[0].fields.postContent5.stringValue)

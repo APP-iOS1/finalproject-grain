@@ -73,18 +73,7 @@ struct CommentView: View {
                                 
                                 VStack(alignment: .leading) {
                                     HStack{
-                                        
-                                        NavigationLink {
-                                            //유저 프로필 뷰 입장
-                                        } label: {
-                                            // MARK: 유저 닉네임
-                                            Text(nickName)
-                                                .font(.caption)
-                                                .fontWeight(.bold)
-                                                .onAppear{
-                                                    nickName = user.fields.nickName.stringValue
-                                                }
-                                        }
+                                        CommunityCommentNickNameView(user: user)
                                         HStack{
                                             Text("・")
                                                 .font(.caption2)
@@ -99,21 +88,30 @@ struct CommentView: View {
                                     Text(commentVm.sortedRecentComment[index].fields.comment.stringValue)
                                         .font(.footnote)
                                         .padding(.bottom, -1)
-                                    
+                                        .padding(.top, 3)
                                     //MARK: 댓글 에디트
                                     HStack {
                                         Button {
                                             replyComment.toggle()
-                                            replyCommentText = "@" + nickName
+                                            replyCommentText = "@" + commentVm.sortedRecentComment[index].fields.nickName.stringValue
                                             commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
                                             reommentUserID = commentVm.sortedRecentComment[index].fields.userID.stringValue
                                         } label: {
                                             Text("답글달기")
+                                                .font(.caption2)
+                                                .foregroundColor(.textGray)
+                                                .padding(.top, 1)
+                                                .padding(.bottom, -3)
                                         }
                                         // MARK: 답글 더보기
                                         if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
                                             if recommentCount > 5 {
-                                                Text("답글 더보기 (\(recommentCount))").onTapGesture {
+                                                Text("답글 더보기 (\(recommentCount))")
+                                                    .font(.caption2)
+                                                    .foregroundColor(.textGray)
+                                                    .padding(.top, 1)
+                                                    .padding(.bottom, -3)
+                                                    .onTapGesture {
                                                     makeEachBool(count: commentVm.sortedRecentComment.count)
                                                     readMoreComments = true
                                                     eachBool[index] = true
@@ -129,12 +127,20 @@ struct CommentView: View {
                                                 editData = commentVm.sortedRecentComment[index].fields
                                             } label: {
                                                 Text("수정")
+                                                    .font(.caption2)
+                                                    .foregroundColor(.textGray)
+                                                    .padding(.top, 1)
+                                                    .padding(.bottom, -3)
                                             }
                                             Button{
                                                 deleteDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
                                                 deleteCommentAlertBool.toggle()
                                             } label: {
                                                 Text("삭제")
+                                                    .font(.caption2)
+                                                    .foregroundColor(.textGray)
+                                                    .padding(.top, 1)
+                                                    .padding(.bottom, -3)
                                                     .alert(isPresented: $deleteCommentAlertBool) {
                                                         Alert(title: Text("댓글을 삭제하시겠어요?"),
                                                               primaryButton:  .cancel(Text("취소")),
@@ -150,22 +156,19 @@ struct CommentView: View {
                                             
                                         }
                                     }
-                                    .font(.caption2)
-                                    .foregroundColor(.textGray)
-                                    .padding(.top, 1)
-                                    .padding(.bottom, 5)
+                                   
                                     
-                                    VStack{
-                                        // 리코멘트
-                                        if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
-                                            if  readMoreComments && eachBool[index]{
-                                                CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData , editReColletionDocID: $editReColletionDocID)
-                                            }else if recommentCount <= 5 {
-                                                CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData , editReColletionDocID: $editReColletionDocID)
-                                            }
+                                   
+                                    // 리코멘트
+                                    if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                        if  readMoreComments && eachBool[index]{
+                                            CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData , editReColletionDocID: $editReColletionDocID)
+                                        }else if recommentCount <= 5 {
+                                            CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData , editReColletionDocID: $editReColletionDocID)
                                         }
-                                        
                                     }
+                                        
+                                    
                                     
                                 }
                                 .frame(width: Screen.maxWidth * 0.8)
@@ -209,37 +212,35 @@ struct CommentView: View {
                                     Text("삭제된 댓글입니다.")
                                         .font(.footnote)
                                         .padding(.bottom, -1)
-                                    
-                                    HStack{
-                                        // MARK: 답글 더보기
-                                        if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
-                                            if recommentCount > 5 {
-                                                Text("답글 더보기 (\(recommentCount))").onTapGesture {
-                                                    makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
-                                                    readMoreComments = true
-                                                    eachBool[index] = true
-                                                }
+                                        .padding(.top, 3)
+                                
+                                    // MARK: 답글 더보기
+                                    if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                        if recommentCount > 5 {
+                                            Text("답글 더보기 (\(recommentCount))")
+                                                .font(.caption2)
+                                                .foregroundColor(.textGray)
+                                                .padding(.top, 1)
+                                                .padding(.bottom, -3)
+                                                .onTapGesture {
+                                                makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
+                                                readMoreComments = true
+                                                eachBool[index] = true
                                             }
                                         }
-                                        
                                     }
-                                    .font(.caption2)
-                                    .foregroundColor(.textGray)
-                                    .padding(.top, 1)
-                                    .padding(.bottom, 5)
                                     
-                                    VStack{
-                                        // 리코멘트
-                                        if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
-                                            if  readMoreComments && eachBool[index]{
-                                                CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData , editReColletionDocID: $editReColletionDocID)
-                                                
-                                            }else if recommentCount <= 5 {
-                                                CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData , editReColletionDocID: $editReColletionDocID)
-                                                
-                                            }
+                                    
+                                    
+                                    // 리코멘트
+                                    if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                        if  readMoreComments && eachBool[index]{
+                                            CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData , editReColletionDocID: $editReColletionDocID)
+                                            
+                                        }else if recommentCount <= 5 {
+                                            CommunityRecommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId, replyContent: $replyContent , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData , editReColletionDocID: $editReColletionDocID)
+                                            
                                         }
-                                        
                                     }
                                     
                                 }

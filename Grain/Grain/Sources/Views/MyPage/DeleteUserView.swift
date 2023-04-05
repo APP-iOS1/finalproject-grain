@@ -14,13 +14,23 @@ struct DeleteUserView: View {
     @State private var content: String = ""
     @State private var pushDeleteButton: Bool = false
     
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack {
             
             if let user = userVM.currentUsers{
                 VStack(alignment: .center) {
                     //MARK: 프로필 이미지
-                    KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string: "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
+                    KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:  defaultProfileImage()))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 85, height: 85)

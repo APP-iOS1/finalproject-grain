@@ -29,6 +29,17 @@ struct UserSearchResultView: View {
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
     }
+    
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+
 
     var body: some View {
             ZStack {
@@ -40,7 +51,7 @@ struct UserSearchResultView: View {
                                     UserDetailView(userVM: userVM, magazineVM: magazineVM, user: searchedUser[i])
                                 } label: {
                                     HStack{
-                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width: 47, height: 47)

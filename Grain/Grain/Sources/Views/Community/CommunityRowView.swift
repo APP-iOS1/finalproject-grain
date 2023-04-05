@@ -45,10 +45,21 @@ struct CommunityRowView: View {
     
     @Binding var isLoading: Bool
     
+    
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                     .resizable()
                     .frame(width: Screen.maxWidth*0.27, height: Screen.maxWidth*0.27)
                     .cornerRadius(7)

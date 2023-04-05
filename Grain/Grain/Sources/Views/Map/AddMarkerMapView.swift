@@ -10,6 +10,8 @@ import CoreLocation
 import NMapsMap
 import Combine
 import UIKit
+import FirebaseAuth
+
 
 struct AddMarkerMapView: View {
     
@@ -39,8 +41,6 @@ struct AddMarkerMapView: View {
     @State var searchMap : String = ""
     // geocode 하기 위해
     
-   
-    
     // 위치 검색 결과 값
     @State var searchResponse : [Address] = [Address(roadAddress: "", jibunAddress: "", englishAddress: "", x: "", y: "", distance: 0)]
     
@@ -52,11 +52,17 @@ struct AddMarkerMapView: View {
     @Binding var inputCustomPlace: String
     @Binding var presented : Bool
     
+    @Binding var selectedCamera: String
+    @Binding var selectedLense: String
+    @Binding var selectedFilm: String
+    
     @State var isDragging = false
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     @State private var showingAlert = false
     @State private var isFinishedSpot = false
     @State private var isShowingSearchProgress = false
+    
+    @State private var isUpdateMagazineSuccess: Bool = false
     
     var userLatitude: Double
     var userLongitude: Double
@@ -125,7 +131,7 @@ struct AddMarkerMapView: View {
                     
                     
                     // MARK: - 검색 프로그레스
-                    if isShowingSearchProgress{
+                    if isShowingSearchProgress || isUpdateMagazineSuccess {
                         ProgressView()
                             .onAppear{
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -165,20 +171,78 @@ struct AddMarkerMapView: View {
                 .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.05)
                 
                 if (isFinishedSpot && writeDownCustomPlaceCheck){   // 핀과 커스텀 플레이스가 작성이 되었을때
-                    NavigationLink {
-                        CameraLenseFilmModalView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, writeDownCustomPlaceText: $writeDownCustomPlaceText)
-                            .navigationBarBackButtonHidden(true)
-                    } label:{
+//                    NavigationLink {
+//                        CameraLenseFilmModalView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, writeDownCustomPlaceText: $writeDownCustomPlaceText)
+//                            .navigationBarBackButtonHidden(true)
+//                    } label:{
+//                        RoundedRectangle(cornerRadius: 12)
+//                            .fill(.black)
+//                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+//                            .overlay {
+//                                Text("다음")
+//                                   .font(.headline)
+//                                   .foregroundColor(.white)
+//                        }
+//                    }
+                    
+                    Button {
+                        // 프로그레스뷰 ON
+                        isUpdateMagazineSuccess.toggle()
+                        
+                        // data.field에 데이터 저장
+                        var docId = UUID().uuidString
+                        
+                        var data: MagazineFields = MagazineFields(filmInfo: MagazineString(stringValue: ""),
+                                                                  id: MagazineString(stringValue: docId),
+                                                                  customPlaceName: MagazineString(stringValue: ""),
+                                                                  longitude: MagazineLocation(doubleValue: 0.0),
+                                                                  title: MagazineString(stringValue: " "),
+                                                                  comment: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
+                                                                  lenseInfo: MagazineString(stringValue: ""),
+                                                                  userID: MagazineString(stringValue: ""),
+                                                                  image: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
+                                                                  likedNum: LikedNum(integerValue: "0"),
+                                                                  latitude: MagazineLocation(doubleValue: 0.0),
+                                                                  content: MagazineString(stringValue: ""),
+                                                                  nickName: MagazineString(stringValue: ""),
+                                                                  roadAddress: MagazineString(stringValue: ""),
+                                                                  cameraInfo: MagazineString(stringValue: ""))
+               
+                        data.id.stringValue = docId
+                        data.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
+                        data.customPlaceName.stringValue = writeDownCustomPlaceText
+                        data.title.stringValue = inputTitle
+                        data.content.stringValue = inputContent
+                        data.cameraInfo.stringValue = selectedCamera
+                        data.filmInfo.stringValue = selectedFilm
+                        data.lenseInfo.stringValue = selectedLense
+                        data.likedNum.integerValue = "0"
+                        data.longitude.doubleValue = updateNumber.lng
+                        data.latitude.doubleValue = updateNumber.lat
+                        data.nickName.stringValue = userVM.currentUsers?.nickName.stringValue ?? ""
+                        data.roadAddress.stringValue = updateReverseGeocodeResult1
+                        data.comment.arrayValue = MagazineArrayValue(values: [])
+                        data.image.arrayValue = MagazineArrayValue(values: [])
+                        
+                        // FIXME: 이부분 나중에 여기서 배열 처리 해야함.. !
+                        var postMagazineArr : [String]  = userVM.postedMagazineID
+                        postMagazineArr.append(docId)
+                        userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
+                        
+                        magazineVM.insertMagazine(data: data, images: selectedImages)
+//                        mapVM.insertMap(data: data)
+                    } label: {
                         RoundedRectangle(cornerRadius: 12)
                             .fill(.black)
                             .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
                             .overlay {
-                                Text("다음")
+                                Text("저장")
                                    .font(.headline)
                                    .foregroundColor(.white)
                         }
                     }
-                }else if isFinishedSpot { //핀이 찍혔을 경우
+
+                } else if isFinishedSpot { //핀이 찍혔을 경우
                         RoundedRectangle(cornerRadius: 12)
                             .fill(.black)
                             .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
@@ -220,7 +284,16 @@ struct AddMarkerMapView: View {
                 
             }.onAppear{
                 writeDownCustomPlaceCheck = false
-            }            
+            }
+            .onReceive(magazineVM.insertMagazineSuccess) { data in
+                mapVM.insertMap(data: data)
+            }
+            .onReceive(mapVM.insertMapSuccess) { success in
+                // 프로그레스뷰 OFF
+                isUpdateMagazineSuccess.toggle()
+                // 창닫기
+                presented.toggle()
+            }
         }
     }
 }

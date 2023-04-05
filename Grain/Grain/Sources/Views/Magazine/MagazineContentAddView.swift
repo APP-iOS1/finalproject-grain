@@ -21,7 +21,6 @@ struct MagazineContentAddView: View {
     @State private var inputContent: String = ""
     @State private var inputCustomPlace: String = ""
     @State private var selectedImages: [UIImage] = []
-    @State private var selectedCamera = 0
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
     @State private var showingAlert = false
@@ -44,29 +43,18 @@ struct MagazineContentAddView: View {
     
     var userLatitude: Double
     var userLongitude: Double
+
+    @State var selectedCamera: String = "dd"
+    @State var selectedLense: String = "dd"
+    @State var selectedFilm: String = "dd"
     
     
-    let items1 = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9"]
-       let items2 = ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5", "Option 6", "Option 7", "Option 8", "Option 9"]
-       let items3 = ["Choice 1", "Choice 2", "Choice 3", "Choice 4", "Choice 5", "Choice 6", "Choice 7", "Choice 8", "Choice 9"]
-       
-       @State private var showList1 = false
-       @State private var showList2 = false
-       @State private var showList3 = false
-       @State private var selectedItem1 = "Item 1"
-       @State private var selectedItem2 = "Option 1"
-       @State private var selectedItem3 = "Choice 1"
-    @State private var showPicker = false
-       @State private var selectedColorIndex = 0
-       let colors = ["Red", "Green", "Blue", "Yellow", "Orange", "Purple"]
     var body: some View {
         /// 지도뷰로 이동하기 위해 전체적으로 걸어줌
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
             GeometryReader { geo in
                 VStack {
-                    
                     Divider()
-                    
                     HStack {
                         if selectedImages.count < 5 {
                             PhotosPicker(
@@ -173,48 +161,28 @@ struct MagazineContentAddView: View {
                     
                     Divider()
                     
-                    HStack {
-                        VStack {
-                            Text("장비선택")
-                                .foregroundColor(Color.black)
-                                .font(.subheadline)
-                                .bold()
-                            Button(action: { self.showPicker.toggle() }) {
-                                HStack {
-                                    Text("바디를 선택해주세요 (필수)")
-                                        .foregroundColor(Color.gray)
-                                        .font(.subheadline)
-                                        .bold()
-                                    Image(systemName: "chevron.down")
-                                        .foregroundColor(Color.gray)
-                                        .font(.subheadline)
-                                        .bold()
-                                    Spacer()
-                                }
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .foregroundColor(.white)
-                            }
-                            
-                            if showPicker {
-                                Picker(selection: $selectedColorIndex, label: Text("")) {
-                                    ForEach(0..<colors.count) { index in
-                                        Text(self.colors[index])
-                                    }
-                                }
-                                .frame(height: 150)
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .padding(.horizontal)
-                                .clipped()
-                                .pickerStyle(WheelPickerStyle())
-                            }
-                        }
-                        .padding(.leading)
-                        
-              
-                    }
-           
+//                    
+//                    VStack {
+//                        Picker("바디", selection: $selectedCamera) {
+//                            ForEach(userVM.myCamera, id: \.self) {
+//                                Text($0)
+//                            }
+//                        }.pickerStyle(.navigationLink)
+//                        
+//                        Picker("렌즈", selection: $selectedLense) {
+//                            ForEach(userVM.myLense, id: \.self) {
+//                                Text($0)
+//                            }
+//                        }.pickerStyle(.navigationLink)
+//                        
+//                        
+//                        Picker("필름", selection: $selectedFilm) {
+//                            ForEach(userVM.myFilm, id: \.self) {
+//                                Text($0)
+//                            }
+//                        }.pickerStyle(.navigationLink)
+//                    }
+                    
                     // MARK: 게시물 제목 작성 란
                     TextField("필름의 제목을 입력해주세요.", text: $inputTitle)
                         .font(.body)
@@ -228,11 +196,6 @@ struct MagazineContentAddView: View {
                         }
                         .submitLabel(.done)
                         .padding(.vertical, 6)
-                    
-//                    //MARK: 제목과 게시물 내용 구분선
-//                    Image("line")
-//                        .resizable()
-//                        .frame(width: Screen.maxWidth * 0.95,height: 1)
                     
                     Divider()
                     
@@ -261,6 +224,7 @@ struct MagazineContentAddView: View {
                     
                     
                     Spacer()
+                    
                     //MARK: 다음버튼
                     if selectedImages.count == 0 || inputTitle.count == 0 || inputContent.count == 0 {
                         Button {
@@ -280,8 +244,8 @@ struct MagazineContentAddView: View {
                         }
                     } else {
                         NavigationLink {
-                            AddMarkerMapView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1,inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, userLatitude: userLatitude , userLongitude: userLongitude)
-                                .navigationBarBackButtonHidden(true)
+//                            AddMarkerMapView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1,inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, userLatitude: userLatitude , userLongitude: userLongitude, selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm)
+//                                .navigationBarBackButtonHidden(true)
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(.black)
@@ -323,3 +287,5 @@ struct MagazineContentAddView: View {
 //        }
 //    }
 //}
+
+

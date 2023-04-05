@@ -24,7 +24,7 @@ final class MagazineViewModel: ObservableObject {
     @Published var currentTime: Date = Date()
 
     var fetchMagazineSuccess = PassthroughSubject<[MagazineDocument], Never>()
-    var insertMagazineSuccess = PassthroughSubject<(), Never>()
+    var insertMagazineSuccess = PassthroughSubject<MagazineFields, Never>()
     var updateMagazineSuccess = PassthroughSubject<(), Never>()
     var deleteMagazineSuccess = PassthroughSubject<(), Never>()
     
@@ -83,9 +83,9 @@ final class MagazineViewModel: ObservableObject {
         MagazineService.insertMagazine(data: data, images: images)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-
-            } receiveValue: { (data: MagazineDocument) in
-                self.insertMagazineSuccess.send()
+                
+            } receiveValue: { (receivedData: MagazineDocument) in
+                self.insertMagazineSuccess.send(data)
             }.store(in: &subscription)
     }
     

@@ -35,7 +35,7 @@ final class UserViewModel: ObservableObject {
     // 내가 구독한 사람의 게시글만 담은 배열
     @Published var subscribedMagazines: [String] = []
     
-    // 유저가 저장한 커뮤니티
+    // 유저가 저장한 커뮤니티f
     @Published var userBookmarkedCommunity : [String] = [] //string값만
     @Published var likedCommunityIdArr : [String] = [] // -> DB에서 만들어야됨
     
@@ -52,6 +52,7 @@ final class UserViewModel: ObservableObject {
     var deleteUsersSuccess = PassthroughSubject<(), Never>()
     var getMagazineCommentsSuccess = PassthroughSubject<[[String]], Never>()
     var getMagazineReCommentsSuccess = PassthroughSubject<[[String]], Never>()
+    
     
     
     func fetchUser() {

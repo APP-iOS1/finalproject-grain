@@ -161,27 +161,29 @@ struct MagazineContentAddView: View {
                     
                     Divider()
                     
-//                    
-//                    VStack {
-//                        Picker("바디", selection: $selectedCamera) {
-//                            ForEach(userVM.myCamera, id: \.self) {
-//                                Text($0)
-//                            }
-//                        }.pickerStyle(.navigationLink)
-//                        
-//                        Picker("렌즈", selection: $selectedLense) {
-//                            ForEach(userVM.myLense, id: \.self) {
-//                                Text($0)
-//                            }
-//                        }.pickerStyle(.navigationLink)
-//                        
-//                        
-//                        Picker("필름", selection: $selectedFilm) {
-//                            ForEach(userVM.myFilm, id: \.self) {
-//                                Text($0)
-//                            }
-//                        }.pickerStyle(.navigationLink)
-//                    }
+                    
+                    VStack{
+                        
+                        Picker("바디", selection: $selectedCamera) {
+                            ForEach(userVM.myCamera, id: \.self) {
+                                Text($0)
+                            }
+                        }.pickerStyle(.navigationLink)
+                        
+                        Picker("렌즈", selection: $selectedLense) {
+                            ForEach(userVM.myLens, id: \.self) {
+                                Text($0)
+                            }
+                        }.pickerStyle(.navigationLink)
+                        
+                        Picker("필름", selection: $selectedFilm) {
+                            ForEach(userVM.myFilm, id: \.self) {
+                                Text($0)
+                            }
+                        }.pickerStyle(.navigationLink)
+                        
+                    }
+                    .padding(.horizontal)
                     
                     // MARK: 게시물 제목 작성 란
                     TextField("필름의 제목을 입력해주세요.", text: $inputTitle)
@@ -244,8 +246,9 @@ struct MagazineContentAddView: View {
                         }
                     } else {
                         NavigationLink {
-//                            AddMarkerMapView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1,inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, userLatitude: userLatitude , userLongitude: userLongitude, selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm)
-//                                .navigationBarBackButtonHidden(true)
+                            AddMarkerMapView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1,inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm , userLatitude: userLatitude , userLongitude: userLongitude)
+                                .navigationBarBackButtonHidden(true)
+                            
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(.black)

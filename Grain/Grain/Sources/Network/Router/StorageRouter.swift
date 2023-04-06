@@ -123,10 +123,17 @@ enum StorageRouter {
             task.resume()
             semaphore.wait()    // -> 키포인트
         }
+        
+        var baseUrlString : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FireStorage"] as? String {
+                baseUrlString += url
+            }
+        }
         // MARK: 배열 갯수 만큼 반복 돌림
         // FIXME: 이미지 2개 넣으면 버그가 있음 imageTokenURL이 세개 나옴 ( 1, 1, 2 ) / 1개 이미지 넣으면 쿼리문에서 터짐 ...
         for index in 0..<imagePathArr.count{
-            var makeURL = "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/" + imagePathArr[index] + "?alt=media&token=" +  imageTokenArr[index]
+            var makeURL = baseUrlString + imagePathArr[index] + "?alt=media&token=" +  imageTokenArr[index]
             imageTokenURL.append(makeURL)
         }
         return imageTokenURL

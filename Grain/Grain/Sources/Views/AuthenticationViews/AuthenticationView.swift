@@ -66,75 +66,96 @@ struct AuthenticationView: View {
     var body: some View {
         Group{
             switch authenticationStore.authenticationState {
+                
             case .freshman:
                 VStack(alignment: .center){
+                    
+                    VStack(alignment: .leading){
+                        HStack{
+                            Text("닉네임을")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+                        HStack{
+                            Text("입력해주세요.")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+
+                    }
+                    .padding(.top , 10)
+                    .padding(.bottom , 30)
+                    .padding(.leading, 15)
+//
                     // MARK: - 프로필 사진 설정
-                    PhotosPicker(
-                        selection: $selectedItem,
-                        matching: .images,
-                        photoLibrary: .shared()) {
-                            if selectedImages.count == 0{
-                                KFImage(URL(string: "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d" ?? "") ?? URL(string: "https://firebasestorage.googleapis.com/v0/b/grain-final.appspot.com/o/EditorFolder%2FdefaultImage%2Fdefault-user-icon-8.jpg?alt=media&token=1a514506-df59-484f-affb-b000ad1f348d"))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100)
-                                    .cornerRadius(64)
-                                    .overlay {
-                                        Circle()
-                                            .stroke(lineWidth: 1.2)
-                                            .foregroundColor(.black)
-                                    }
-                                    .overlay {
-                                        Circle()
-                                            .frame(width: 30, height: 30)
-                                            .foregroundColor(.white)
-                                            .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
-                                            .overlay {
-                                                Image(systemName: "camera.circle.fill")
-                                                    .resizable()
-                                                    .frame(width: 26, height: 26)
-                                                    .foregroundColor(.black)
-                                                    .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
-                                            }
-                                    }
-                            } else {
-                                Image(uiImage: selectedImages[selectedImages.count - 1])
-                                    .resizable()
-                                    .frame(width: 100, height: 100)
-                                    .cornerRadius(64)
-                                    .overlay {
-                                        Circle()
-                                            .stroke(lineWidth: 1.2)
-                                            .foregroundColor(.black)
-                                    }
-                                    .overlay {
-                                        Circle()
-                                            .frame(width: 30, height: 30)
-                                            .foregroundColor(.white)
-                                            .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
-                                            .overlay {
-                                                Image(systemName: "camera.circle.fill")
-                                                    .resizable()
-                                                    .frame(width: 26, height: 26)
-                                                    .foregroundColor(.black)
-                                                    .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
-                                            }
-                                    }
-                            }
-                            
-                        }
-                        .padding(.bottom , 30)
-                        .onChange(of: selectedItem) { newItem in
-                            Task {
-                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                    selectedImageData = data
-                                }
-                                // MARK: 선택한 이미지 selectedImages배열에 넣어주기
-                                if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
-                                    selectedImages.append(uiImage)
-                                }
-                            }
-                        }
+//                    PhotosPicker(
+//                        selection: $selectedItem,
+//                        matching: .images,
+//                        photoLibrary: .shared()) {
+//                            if selectedImages.count == 0{
+//                                Image("defaultUserImage")
+//                                    .resizable()
+//                                    .frame(width: 100, height: 100)
+//                                    .cornerRadius(64)
+//                                    .padding(.horizontal, 7)
+//                                    .overlay {
+//                                        Circle()
+//                                            .stroke(lineWidth: 0.5)
+//                                    }
+//                                    .overlay {
+//                                        Circle()
+//                                            .frame(width: 30, height: 30)
+//                                            .foregroundColor(.white)
+//                                            .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+//                                            .overlay {
+//                                                Image(systemName: "camera.circle.fill")
+//                                                    .resizable()
+//                                                    .frame(width: 26, height: 26)
+//                                                    .foregroundColor(.black)
+//                                                    .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+//                                            }
+//                                    }
+//                            } else {
+//                                Image(uiImage: selectedImages[selectedImages.count - 1])
+//                                    .resizable()
+//                                    .frame(width: 100, height: 100)
+//                                    .cornerRadius(64)
+//                                    .overlay {
+//                                        Circle()
+//                                            .stroke(lineWidth: 1.2)
+//                                            .foregroundColor(.black)
+//                                    }
+//                                    .overlay {
+//                                        Circle()
+//                                            .frame(width: 30, height: 30)
+//                                            .foregroundColor(.white)
+//                                            .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+//                                            .overlay {
+//                                                Image(systemName: "camera.circle.fill")
+//                                                    .resizable()
+//                                                    .frame(width: 26, height: 26)
+//                                                    .foregroundColor(.black)
+//                                                    .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
+//                                            }
+//                                    }
+//                            }
+//
+//                        }
+//                        .padding(.bottom , 20)
+//                        .onChange(of: selectedItem) { newItem in
+//                            Task {
+//                                if let data = try? await newItem?.loadTransferable(type: Data.self) {
+//                                    selectedImageData = data
+//                                }
+//                                // MARK: 선택한 이미지 selectedImages배열에 넣어주기
+//                                if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
+//                                    selectedImages.append(uiImage)
+//                                }
+//                            }
+//                        }
+                    
                     // MARK: - 닉네임, 자기소개 설정
                     VStack{
                         HStack {
@@ -142,7 +163,7 @@ struct AuthenticationView: View {
                                 .padding(.horizontal, 3)
                                 .fontWeight(.bold)
                             Spacer()
-                            Text("\(editedNickname.count)/15")
+//                            Text("\(editedNickname.count)/15")
                         }
                         .padding(.horizontal)
                         
@@ -171,8 +192,10 @@ struct AuthenticationView: View {
                             }
                             .underlineTextField()
                             .padding(.bottom, 30)
-                            
-                            if editedNickname == nickName || !editedNickname.isEmpty && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname}{
+                            if editedNickname.isEmpty{
+                                
+                            }
+                            else if editedNickname == nickName || !editedNickname.isEmpty && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname}{
                                 Text("올바른 형식입니다")
                                     .font(.subheadline)
                                     .padding(.horizontal, 20)
@@ -203,7 +226,7 @@ struct AuthenticationView: View {
                                 .padding(.horizontal, 3)
                                 .fontWeight(.bold)
                             Spacer()
-                            Text("\(editedIntroduce.count)/50")
+//                            Text("\(editedIntroduce.count)/50")
                         }
                         .padding(.horizontal)
                         
@@ -233,6 +256,10 @@ struct AuthenticationView: View {
                         .padding(.bottom, 30)
                     }
                     
+                    Text(" \(Image(systemName: "info.circle")) 이 정보는 다른 사용자들과 함께 활동하시는 동안 보여집니다.")
+                        .font(.footnote)
+                        .foregroundColor(.middlebrightGray)
+
                     // MARK: - 결정 버튼
                     Spacer()
                     if (editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname}{
@@ -241,6 +268,7 @@ struct AuthenticationView: View {
                             userVM.insertUser(myFilm: "필름 중 하나를 선택해 주세요", bookmarkedMagazineID: "", email: authenticationStore.email, myCamera: "카메라 중 하나를 선택해 주세요", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: authenticationStore.userUID, following: "", myLens: "렌즈 중 하나를 선택해 주세요", profileImage: selectedImages, name: authenticationStore.userName , follower: "", nickName: editedNickname, introduce: editedIntroduce, fcmToken: "")
                             // 로그인 상태값 바꾸기
                             authenticationStore.authenticationState = .authenticated
+                            authenticationStore.addToken()
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(.black)

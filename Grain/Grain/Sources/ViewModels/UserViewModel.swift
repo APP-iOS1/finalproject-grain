@@ -52,7 +52,8 @@ final class UserViewModel: ObservableObject {
     var deleteUsersSuccess = PassthroughSubject<(), Never>()
     var getMagazineCommentsSuccess = PassthroughSubject<[[String]], Never>()
     var getMagazineReCommentsSuccess = PassthroughSubject<[[String]], Never>()
-    
+    var deleteDataCollectionSuccess = PassthroughSubject<(), Never>()
+
     
     
     func fetchUser() {
@@ -356,6 +357,16 @@ final class UserViewModel: ObservableObject {
             }
         }
         return subscriptionFeedData
+    }
+    
+    // 회원탈퇴 컬렉션 저장
+    func deleteDataCollection (userDocID: String) {
+        UserService.insertDeleteDataCollection(userDocID: userDocID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: UserDocument) in
+                self.deleteDataCollectionSuccess.send()
+            }.store(in: &subscription)
     }
     
 }

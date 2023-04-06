@@ -65,7 +65,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         UNUserNotificationCenter.current().delegate = self
         
         application.registerForRemoteNotifications()
-//        addToken()
         
         return true
     }

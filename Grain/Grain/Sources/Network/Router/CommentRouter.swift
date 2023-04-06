@@ -20,10 +20,14 @@ enum CommentRouter {
     case patch(collectionName: String, collectionDocId: String, docID: String, updateComment: String, data: CommentFields )
     case reCommentPatch(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String, docID: String, updateComment: String, data: CommentFields)
     
-    
     private var baseURL: URL {
-        let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
-        return URL(string: baseUrlString)!
+        var baseUrlString : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FireStore"] as? String {
+                baseUrlString += url
+            }
+        }
+        return URL(string: baseUrlString) ?? URL(string: "")!
     }
     
     private enum HTTPMethod {

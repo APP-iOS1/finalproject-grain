@@ -16,6 +16,7 @@ enum UserRouter {
     case patchString(type: String, string: String, docID: String)
     case patchProfile(profileImage: String, nickName: String, introduce: String, docID: String)
     case delete(docID: String)
+    case posetDeleteUser(userDocID: String)
     
     private var baseURL: URL {
         var baseUrlString : String = "https://"
@@ -34,6 +35,7 @@ enum UserRouter {
         case patchString
         case patchProfile
         case delete
+        case posetDeleteUser
         
         var value: String {
             switch self {
@@ -43,6 +45,7 @@ enum UserRouter {
             case .patchString: return "PATCH"
             case .patchProfile: return "PATCH"
             case .delete: return "DELETE"
+            case .posetDeleteUser: return "POST"
             }
         }
     }
@@ -57,6 +60,8 @@ enum UserRouter {
             return "/User/\(docID)"
         case let .delete(docID: docID):
             return "/User/\(docID)"
+        case let .posetDeleteUser(userDocID):
+            return "/DeleteUser"
         default:
             return "/User"
         }
@@ -101,6 +106,8 @@ enum UserRouter {
             return .delete
         case .patchArr:
             return .patchArr
+        case .posetDeleteUser :
+            return .post
         default:
             return .patchString
         }
@@ -116,6 +123,8 @@ enum UserRouter {
             return UserQuery.updateUserString(type: type, string: string)
         case let .patchProfile(profileImage, nickName, introduce, _):
             return UserQuery.updateUserProfile(profileImage: profileImage, nickName: nickName, introduce: introduce)
+        case let .posetDeleteUser(userDocID) :
+            return UserQuery.insertDeleteDataCollection(userDocID: userDocID)
         default:
             return nil
         }

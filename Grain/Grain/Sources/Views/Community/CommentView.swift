@@ -256,22 +256,19 @@ struct CommentView: View {
                     .padding(.leading , 7)
                     .padding(.bottom , 4)
                 }else{
-                    VStack{
-                        HStack{
-                            Spacer()
-                            Image(systemName: "ellipsis.bubble")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.middlebrightGray)
-                            Spacer()
-                        }
-                        Text("첫 번째 댓글을 남겨주세요~!")
+                    HStack{
+                        Spacer()
+                        Text("첫 번째 댓글을 남겨주세요.!")
                             .font(.footnote)
                             .foregroundColor(.middlebrightGray)
-                        
+                        Image(systemName: "ellipsis.bubble")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 15, height: 15)
+                            .foregroundColor(.middlebrightGray)
+                            .offset(x: -3)
+                        Spacer()
                     }
-
                 }
             }
             

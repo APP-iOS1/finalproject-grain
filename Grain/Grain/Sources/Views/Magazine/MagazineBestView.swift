@@ -14,7 +14,7 @@ struct MagazineBestView: View {
     @ObservedObject var magazineVM: MagazineViewModel
     @ObservedObject var editorVM : EditorViewModel
     
-    @State private var ObservingChangeValueLikeNum: String = ""
+    @State var ObservingChangeValueLikeNum: String = ""
     @State private var isMagazineDegtailViewShown: Bool = false
     @State private var isMagazineEditorViewShown: Bool = false
     @State private var selectIndexNum: Int = 0

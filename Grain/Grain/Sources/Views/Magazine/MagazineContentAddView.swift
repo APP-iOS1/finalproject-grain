@@ -162,7 +162,6 @@ struct MagazineContentAddView: View {
                     
                     Divider()
                     
-
                     HStack {
                         Button {
                             showModal.toggle()
@@ -288,6 +287,7 @@ struct MagazineContentAddView: View {
                         NavigationLink {
                             AddMarkerMapView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1,inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented,selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .navigationBarBackButtonHidden(true)
+
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(.black)

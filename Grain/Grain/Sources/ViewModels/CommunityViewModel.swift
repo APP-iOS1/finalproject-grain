@@ -24,7 +24,7 @@ final class CommunityViewModel: ObservableObject {
     @Published var fetchCommunityCellCommentCount = [String : Int]()
     
     var fetchCommunitySuccess = PassthroughSubject<[CommunityDocument], Never>()
-    var insertCommunitySuccess = PassthroughSubject<(), Never>()
+    var insertCommunitySuccess = PassthroughSubject<CommunityResponse, Never>()
     var updateCommunitySuccess = PassthroughSubject<(), Never>()
     var updateCommunityStateSuccess = PassthroughSubject<(), Never>()
     var deleteCommunitySuccess = PassthroughSubject<(), Never>()
@@ -85,7 +85,7 @@ final class CommunityViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommunityResponse) in
-                self.insertCommunitySuccess.send()
+                self.insertCommunitySuccess.send(data)
             }.store(in: &subscription)
     }
     

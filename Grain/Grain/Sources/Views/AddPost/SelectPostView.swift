@@ -24,7 +24,7 @@ struct SelectPostView: View {
     
     @State var updateNumber : NMGLatLng
 
-    @State var isShowSheet: Bool = true
+    @State var isShowSheet: Bool = false
     
     var userLatitude : Double
     var userLongitude : Double
@@ -33,10 +33,10 @@ struct SelectPostView: View {
         NavigationView {
             VStack {
                 
-                Text("나의 추억을 사람들과 공유해보세요")
-                    .font(.title)
-                    .bold()
-                    .frame(width: Screen.maxWidth * 0.85, alignment: .topLeading)
+//                Text("나만의 필름 감성을 공유해보세요!")
+//                    .font(.title)
+//                    .bold()
+//                    .frame(width: Screen.maxWidth * 0.85, alignment: .topLeading)
                                              
                 //MARK: 매거진 작성 네비게이션 링크
                 NavigationLink {
@@ -46,15 +46,16 @@ struct SelectPostView: View {
                     VStack {
                         Rectangle()
                             .fill(Color(hex: "1d1d1b"))
-                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.2)
+                            .frame(width: Screen.maxWidth * 0.9, height: Screen.maxHeight * 0.3)
+                            .cornerRadius(15)
                             .shadow(radius: 12)
                             .overlay {
                                 VStack {
-                                    Text("나의 필름 공유하기")
+                                    Text("나의 필름 공유하기 🎞️")
                                         .foregroundColor(.white)
                                         .font(.title2)
                                         .bold()
-                                    Text("내가 찍은 필름의 정보와 장소를 공유해보세요")
+                                    Text("나만의 감성을 담은 필름사진과 함께 이야기를 남겨보세요!")
                                         .foregroundColor(.white)
                                         .font(.body)
                                         .padding(.top)
@@ -62,7 +63,7 @@ struct SelectPostView: View {
                             }
                     }
                 }
-                .padding(.vertical)
+                .padding(.vertical, 20)
                 .sheet(isPresented: $isShowSheet) {
                     AddCameraView(userVM: userVM)
                         .presentationDetents([.medium, .large])
@@ -76,15 +77,16 @@ struct SelectPostView: View {
                     VStack {
                         Rectangle()
                             .fill(Color(hex: "1d1d1b"))
-                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.2)
+                            .frame(width: Screen.maxWidth * 0.9, height: Screen.maxHeight * 0.3)
                             .shadow(radius: 12)
+                            .cornerRadius(15)
                             .overlay {
                                 VStack {
-                                    Text("커뮤니티 작성하기")
+                                    Text("커뮤니티 작성하기🗣️")
                                         .foregroundColor(.white)
                                         .font(.title2)
                                         .bold()
-                                    Text("사람들과 이야기를 나눠보세요")
+                                    Text("사진을 사랑하는 사람들의 모임! 카메라 중고거래, 사진작가와 모델 매칭, 필름카메라 정보 등 다양한 주제로 소통해보세요.")
                                         .foregroundColor(.white)
                                         .font(.body)
                                         .padding(.top)
@@ -94,6 +96,12 @@ struct SelectPostView: View {
                 }
                 .padding(.vertical)
                                 
+            }
+//            .background(Color.black)
+            .onAppear {
+                if userVM.myCamera.count <= 1 {
+                    isShowSheet = true
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

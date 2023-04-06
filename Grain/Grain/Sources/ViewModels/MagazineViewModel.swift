@@ -83,7 +83,6 @@ final class MagazineViewModel: ObservableObject {
         MagazineService.insertMagazine(data: data, images: images)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-                
             } receiveValue: { (receivedData: MagazineDocument) in
                 self.insertMagazineSuccess.send(data)
             }.store(in: &subscription)

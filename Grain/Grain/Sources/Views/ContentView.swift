@@ -199,12 +199,12 @@ struct ContentView: View {
                     }
                 
                 }
-                .splashView {
-                    ZStack{
-                        SplashScreen()
-                    }
-
-                }
+//                .splashView {
+//                    ZStack{
+//                        SplashScreen()
+//                    }
+//
+//                }
             } else {
                 NetworkConnectionView(networkManager: networkManager)
             }

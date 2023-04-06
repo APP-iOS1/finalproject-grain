@@ -247,10 +247,6 @@ struct AddMarkerMapView: View {
                         // FIXME: - insertMap 동작안함
                         magazineVM.insertMagazine(data: data, images: selectedImages)
                         mapVM.insertMap(data: data)
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
                     } label: {
                         RoundedRectangle(cornerRadius: 12)
                             .fill(.black)

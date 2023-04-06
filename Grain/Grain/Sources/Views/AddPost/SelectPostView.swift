@@ -81,15 +81,22 @@ struct SelectPostView: View {
                             .shadow(radius: 12)
                             .cornerRadius(15)
                             .overlay {
-                                VStack {
-                                    Text("커뮤니티 작성하기🗣️")
+                                VStack(alignment: .center) {
+                                    Text("커뮤니티 작성하기 💬")
                                         .foregroundColor(.white)
                                         .font(.title2)
                                         .bold()
-                                    Text("사진을 사랑하는 사람들의 모임! 카메라 중고거래, 사진작가와 모델 매칭, 필름카메라 정보 등 다양한 주제로 소통해보세요.")
+                                    Text("사진을 사랑하는 사람들의 모임! 카메라 중고거래,")
                                         .foregroundColor(.white)
                                         .font(.body)
                                         .padding(.top)
+                                    Text("사진작가와 모델 매칭, 필름카메라 정보 등 ")
+                                        .foregroundColor(.white)
+                                        .font(.body)
+                                    Text("다양한 주제로 소통해보세요.")
+                                        .foregroundColor(.white)
+                                        .font(.body)
+                                        
                                 }
                             }
                     }

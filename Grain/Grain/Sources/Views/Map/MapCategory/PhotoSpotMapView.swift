@@ -51,7 +51,12 @@ struct PhotoSpotMapView: View {
             isShowingPhotoSpot = false
         }
         .fullScreenCover(isPresented: $visitButton, content: {
-            MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: clikedMagazineData!, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+            NavigationView {
+                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: clikedMagazineData!, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                    .toolbar {
+                    }
+            }
+            
         })
     }
 }

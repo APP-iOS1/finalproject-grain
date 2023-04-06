@@ -34,13 +34,14 @@ struct MyPgeMyCommunity: View {
            
             }
         }
-        .navigationTitle("저장된 커뮤니티 글")
+        .navigationTitle("나의 커뮤니티 글")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
             communityDoument = communityVM.userPostsFilter(communityData: communityVM.communities, userPostedArr: userVM.postedCommunityID)
         }
         .refreshable {
             communityVM.fetchCommunity()
+            communityDoument = communityVM.userPostsFilter(communityData: communityVM.communities, userPostedArr: userVM.postedCommunityID)
         }
     }
 }

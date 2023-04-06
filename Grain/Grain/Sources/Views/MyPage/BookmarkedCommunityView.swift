@@ -43,7 +43,8 @@ struct BookmarkedCommunityView: View {
             bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
         }
         .refreshable {
-            communityVM.fetchCommunity()
+//            communityVM.fetchCommunity()
+            bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
         }
     }
 }

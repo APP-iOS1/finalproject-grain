@@ -318,6 +318,7 @@ struct MagazineDetailView: View {
                 }))
             }
             .onAppear{
+                print("매거진 데이터: \(data)")
                 self.magazineData = self.data
                 // 희경: 유저 팔로워, 팔로잉 업데이트 후 뒤로가기했다가 다시 들어갔을때 바로 반영안되는 issue
                 // [해결] magazineDetailView의 onAppear 에서 fetchUser를 해주는 방식에서 userVM의 updateCurrentUserArray 메소드의 receivedValue 블록에 fetchUser 해주는 방식으로 변경

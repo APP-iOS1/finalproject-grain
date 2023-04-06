@@ -26,6 +26,11 @@ struct GrainApp: App {
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+    @ObservedObject var magazineVM = MagazineViewModel()
+    @ObservedObject var communityVM = CommunityViewModel()
+    @ObservedObject var userVM = UserViewModel()
+    @ObservedObject var editorVM = EditorViewModel()
+    
     let gcmMessageIDKey = "gcm.message_id"
     var subscription = Set<AnyCancellable>()
     var updateUsersArraySuccess = PassthroughSubject<(), Never>()
@@ -65,6 +70,19 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
     
+//    var window: UIWindow?
+//
+//    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+//        if let windowScene = scene as? UIWindowScene {
+//            let window = UIWindow(windowScene: windowScene)
+//            self.window = window
+//
+//            let contentView = ContentView()
+//            window.rootViewController = UIHostingController(rootView: contentView)
+//            window.makeKeyAndVisible()
+//        }
+//    }
+    
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
@@ -91,6 +109,124 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 }
             }
         }
+        
+//        if let viewName = userInfo["view"] as? String {
+//                var documentData: MagazineDocument?
+//
+//                do{
+//                    if let detailData = userInfo["detailData"] as? String, let jsonData = detailData.data(using: .utf8) {
+//                        documentData = try JSONDecoder().decode(MagazineDocument.self, from: jsonData)
+//                    }
+//                } catch {
+//                    print(error.localizedDescription)
+//                }
+//            guard let documentData = documentData else {
+//                print("Failed to decode MagazineDocument from userInfo")
+//                return
+//            }
+//
+//                switch viewName {
+//                case "like":
+//                    let magazineBestView = MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
+//                    let detailView = MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: documentData, ObservingChangeValueLikeNum: magazineBestView.$ObservingChangeValueLikeNum)
+//                    if let navigationController = self.window?.rootViewController as? UINavigationController {
+//                        navigationController.pushViewController(detailView, animated: true)
+//                    }
+////                case "ListView":
+////                    let listView = ListView()
+////                    if let navigationController = self.window?.rootViewController as? UINavigationController {
+////                        navigationController.pushViewController(listView, animated: true)
+//                default:
+//                   print("Unexpected push notification")
+//                }
+//
+//        }
+        
+//        if let data = userInfo["data"] as? [String: Any], let view = data["view"] as? String, let detailData = data["detailData"] as? String {
+//            var documentData: MagazineDocument!
+//
+//            do{
+//                if let detailData = data["detailData"] as? String, let jsonData = detailData.data(using: .utf8) {
+//                    documentData = try JSONDecoder().decode(MagazineDocument.self, from: jsonData)
+//                }
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//
+//            if view == "like" {
+//                let magazineBestView = MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
+//                let destinationView = MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: documentData , ObservingChangeValueLikeNum: magazineBestView.$ObservingChangeValueLikeNum)
+//                let navigationView = NavigationView {
+//                    NavigationLink(destination: destinationView) {
+//                        magazineBestView
+//                    }
+//                }
+//                guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+//                      let window = windowScene.windows.first else {
+//                          return
+//                }
+//                window.rootViewController = UIHostingController(rootView: navigationView)
+//
+//            }
+//        }
+//        guard let data = userInfo["data"] as? [String: Any],
+//              let view = data["view"] as? String else {
+//            completionHandler(UIBackgroundFetchResult.failed)
+//            return
+//        }
+        
+        // create the appropriate view based on the received data and view
+//        let rootView: AnyView
+//        switch view {
+//        case "like":
+            // extract detailData from the notification payload
+//            guard let detailData = data["detailData"] as? String else {
+//                completionHandler(UIBackgroundFetchResult.failed)
+//                return
+//            }
+            
+//            var documentData: MagazineDocument!
+//
+//            do{
+//                if let detailData = data["detailData"] as? String, let jsonData = detailData.data(using: .utf8) {
+//                    documentData = try JSONDecoder().decode(MagazineDocument.self, from: jsonData)
+//                }
+//            } catch {
+//                print(error.localizedDescription)
+//            }
+//            let magazineBestView = MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
+//            // create the detail view
+//            let detailView = MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: documentData , ObservingChangeValueLikeNum: magazineBestView.$ObservingChangeValueLikeNum)
+//
+//            rootView = AnyView(detailView)
+            
+//        case "DetailB":
+//            // extract detailData from the notification payload
+//            guard let detailData = data["detailData"] as? Int else {
+//                completionHandler(UIBackgroundFetchResult.failed)
+//                return
+//            }
+//            // create the detail view
+//            let detailView = DetailViewB(detailData: detailData)
+//            rootView = AnyView(detailView)
+//        default:
+//            // create the default view
+//            let defaultView = ContentView()
+//            rootView = AnyView(defaultView)
+//        }
+//
+//        // create the navigation view
+//        let navigationView = NavigationView {
+//            rootView
+//        }
+//
+//        // create the window and set the root view controller to the navigation view
+//        let window = UIWindow(frame: UIScreen.main.bounds)
+//        window.rootViewController = UIHostingController(rootView: navigationView)
+//        window.makeKeyAndVisible()
+//        self.window = window
+//
+//        completionHandler(UIBackgroundFetchResult.newData)
         completionHandler(.newData)
     }
     
@@ -262,7 +398,17 @@ class PushNotificationSender {
 //        let paramString: [String : Any] = ["to" : deviceToken,
 //                                           "notification" : ["title" : title, "body" : message],
 //                                           "data" : ["user" : "test_id"]
+        
 //        ]
+//        var jsonData: String?
+//
+//        do {
+//            let data = try JSONEncoder().encode(data)
+//            jsonData = String(data: data, encoding: .utf8)
+//        } catch {
+//            print(error.localizedDescription)
+//        }
+        
         let body: [String: Any] = [
             "notification": [
                 "title": title,
@@ -272,8 +418,8 @@ class PushNotificationSender {
                 "badge": 1
             ],
             "data": [
-                "key_1": "Value_1",
-                "key_2": 2
+                "view": "view",
+                "detailData": "jsonData"
             ],
             "content_available": true,
             "mutable_content": true,
@@ -392,3 +538,18 @@ class PushNotificationSender {
 //    }
 //
 //}
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    var window: UIWindow?
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        if let windowScene = scene as? UIWindowScene {
+            let window = UIWindow(windowScene: windowScene)
+            let rootView = ContentView() // 화면 전환을 원하는 뷰
+            let navigationController = UINavigationController(rootViewController: UIHostingController(rootView: rootView))
+            window.rootViewController = navigationController
+            self.window = window
+            window.makeKeyAndVisible()
+        }
+    }
+}

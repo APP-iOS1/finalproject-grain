@@ -31,13 +31,13 @@ struct EditorView: View {
         ScrollView {
             VStack{
                 //MARK: 장소
-                HStack{
-                    Text(editorVM.editorData[0].fields.region.stringValue)
-                        .font(.subheadline)
-                    Spacer()
-                }
-                .padding(.leading , 15)
-                .padding(.bottom, -10)
+//                HStack{
+//                    Text(editorVM.editorData[0].fields.region.stringValue)
+//                        .font(.subheadline)
+//                    Spacer()
+//                }
+//                .padding(.leading , 15)
+//                .padding(.bottom, -10)
                 //MARK: 제목
                 HStack{
                     Text(editorVM.editorData[0].fields.title.stringValue)

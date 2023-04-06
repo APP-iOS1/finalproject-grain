@@ -80,7 +80,6 @@ enum UserService {
     static func updateCurrentUserArray(type: String, arr: [String], docID: String) -> AnyPublisher<UserDocument, Error>  {
         do {
             let request = try UserRouter.patchArr(type: type, arr: arr, docID: docID).asURLRequest()
-            print(request)
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -125,8 +124,15 @@ enum UserService {
     
     // MARK: - 현재 로그인한 유저 정보 가져오기
     static func getCurrentUser(userID: String) -> AnyPublisher<CurrentUserResponse, Error> {
-
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/User/\(userID)"
+        
+        
+        var baseUrlString : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FireStore"] as? String {
+                baseUrlString += url
+            }
+        }
+        let firestoreURL = baseUrlString + "/User/" + "\(userID)"
         let encodeQueryURL = firestoreURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
 
         var request = URLRequest(url: URL(string: encodeQueryURL)!)
@@ -143,4 +149,20 @@ enum UserService {
             return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
     }
+    
+    static func insertDeleteDataCollection(userDocID: String) -> AnyPublisher<UserDocument, Error> {
+        
+        do {
+            let request = try UserRouter.posetDeleteUser(userDocID: userDocID).asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: UserDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
+    }
+    
 }

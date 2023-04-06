@@ -11,6 +11,7 @@ import FirebaseAuth
 
 struct DeleteUserView: View {
     @ObservedObject var userVM: UserViewModel
+    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
     @State private var content: String = ""
     @State private var pushDeleteButton: Bool = false
     
@@ -85,9 +86,21 @@ struct DeleteUserView: View {
                                             
                                             // 삭제 되는데, 댓글까지 삭제해야댐
                                             // 댓글 대댓글 삭제하려면 모든 게시글 댓글 get해서 그걸로 delete돌려야댐.
+                                            userVM.deleteDataCollection(userDocID: user)
                                             userVM.deleteUser(docID: user)
                                             userVM.deleteUserCommunity(communities: communities)
                                             userVM.deleteUserMagazine(magazines: magazines)
+                                            // 전부 로그아웃
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                if authVM.logInCompanyState == .appleLogIn {
+                                                    authVM.appleLogout()
+                                                } else if authVM.logInCompanyState == .googleLogIn {
+                                                    authVM.googleLogout()
+                                                }else {
+                                                    authVM.appleLogout()
+                                                    authVM.googleLogout()
+                                                }
+                                            }
                                         }), secondaryButton: .cancel())
                                     }
                             Spacer()

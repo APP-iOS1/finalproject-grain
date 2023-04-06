@@ -261,5 +261,17 @@ enum UserQuery {
         
     }
     
+    static func insertDeleteDataCollection(userDocID: String)-> Data? {
+        let query = """
+                    {
+                      "fields": {
+                           "userID": {
+                                "stringValue": "\(userDocID)"
+                    }
+                }
+            }
+            """.data(using: .utf8)
+        return query
+    }
     
 }

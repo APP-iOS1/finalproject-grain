@@ -18,7 +18,7 @@ final class MapViewModel: ObservableObject {
     var deleteMapSuccess = PassthroughSubject<(), Never>()
     var fetchNextPageMapSuccess = PassthroughSubject<(), Never>()       // MARK: 다음 페이지 계속 돌아갈 상태값?
     
-    var insertMapSuccess = PassthroughSubject<(), Never>()
+    var insertMapSuccess = PassthroughSubject<MagazineFields, Never>()
 
     func fetchNextPageMap(nextPageToken: String){
         MapService.getNextPageMap(nextPageToken: nextPageToken)
@@ -39,13 +39,13 @@ final class MapViewModel: ObservableObject {
     
     // MARK: 매거진 게시물 업로드시 맵 데이터도 같이 데이터 넣기
     func insertMap(data: MagazineFields) {
+        print("insertMap 불렷음 --------------")
         MapService.insertMap(data: data)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-            } receiveValue: { (data: MagazineDocument) in
-
-                self.insertMapSuccess.send()
-                
+            } receiveValue: { (receivedData: MapResponse) in
+                print("insertMap 불렷음 --------------")
+                self.insertMapSuccess.send(data)
             }.store(in: &subscription)
     }
     

@@ -63,6 +63,7 @@ struct AddMarkerMapView: View {
     @State private var isShowingSearchProgress = false
     
     @State private var isUpdateMagazineSuccess: Bool = false
+    @State private var isClickedSubmitButton: Bool = false
     
     var userLatitude: Double
     var userLongitude: Double
@@ -131,7 +132,7 @@ struct AddMarkerMapView: View {
                     
                     
                     // MARK: - 검색 프로그레스
-                    if isShowingSearchProgress || isUpdateMagazineSuccess {
+                    if isShowingSearchProgress  {
                         ProgressView()
                             .onAppear{
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -142,7 +143,19 @@ struct AddMarkerMapView: View {
                             .zIndex(1)
                     }
                     
+                    if isUpdateMagazineSuccess {
+                        ProgressView()
+                            .onAppear{
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    isUpdateMagazineSuccess = false
+                                }
+                            }
+                            .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
+                            .zIndex(1)
+                    }
+                    
                 }//ZStack
+                .opacity(isClickedSubmitButton ? 0.5 : 1)
                 
                 HStack {
                     Text("포토 스팟으로 핀을 이동하세요")
@@ -187,7 +200,9 @@ struct AddMarkerMapView: View {
                     
                     Button {
                         // 프로그레스뷰 ON
-                        isUpdateMagazineSuccess.toggle()
+                        isUpdateMagazineSuccess = true
+                        // 완료 버튼 1번 누르면 더이상 누르지 못하게 막기
+                        isClickedSubmitButton = true
                         
                         // data.field에 데이터 저장
                         var docId = UUID().uuidString
@@ -229,18 +244,20 @@ struct AddMarkerMapView: View {
                         postMagazineArr.append(docId)
                         userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
                         
+                        // FIXME: - insertMap 동작안함
                         magazineVM.insertMagazine(data: data, images: selectedImages)
-//                        mapVM.insertMap(data: data)
+                        mapVM.insertMap(data: data)
+
                     } label: {
                         RoundedRectangle(cornerRadius: 12)
                             .fill(.black)
                             .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
                             .overlay {
-                                Text("저장")
+                                Text("완료")
                                    .font(.headline)
                                    .foregroundColor(.white)
                         }
-                    }
+                    }.disabled(isClickedSubmitButton) // magazine update 하는 동안은 button 비활성화
 
                 } else if isFinishedSpot { //핀이 찍혔을 경우
                         RoundedRectangle(cornerRadius: 12)
@@ -264,7 +281,6 @@ struct AddMarkerMapView: View {
                                     Text("게시물에 같이 표시될 예정입니다!")
                                 }
                             }
-                    
                 }else { //핀이 안찍혔을 경우
                     Button {
                         markerAddButtonBool.toggle()
@@ -281,16 +297,12 @@ struct AddMarkerMapView: View {
                     }
                 }
                 
-                
             }.onAppear{
                 writeDownCustomPlaceCheck = false
             }
-            .onReceive(magazineVM.insertMagazineSuccess) { data in
-                mapVM.insertMap(data: data)
-            }
-            .onReceive(mapVM.insertMapSuccess) { success in
+            .onReceive(magazineVM.insertMagazineSuccess) { _ in
                 // 프로그레스뷰 OFF
-                isUpdateMagazineSuccess.toggle()
+                isUpdateMagazineSuccess = false
                 // 창닫기
                 presented.toggle()
             }
@@ -302,7 +314,6 @@ struct AddMarkerMapView: View {
 // FIXME: 네이버 지도
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct AddMarkerUIMapView: UIViewRepresentable,View {
-    
     
     //임시
     @ObservedObject var naverVM : NaverAPIViewModel
@@ -411,8 +422,3 @@ struct AddMarkerUIMapView: UIViewRepresentable,View {
     
 }
 
-//struct AddMarkerMapView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AddMarkerMapView()
-//    }
-//}

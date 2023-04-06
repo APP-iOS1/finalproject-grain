@@ -17,6 +17,7 @@ struct MagazineContentAddView: View {
     @ObservedObject var mapVM : MapViewModel
     @ObservedObject var locationManager : LocationManager
     
+    @State private var showModal: Bool = false
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
     @State private var inputCustomPlace: String = ""
@@ -35,7 +36,7 @@ struct MagazineContentAddView: View {
     
     // 이미지 앨범에서 가져오기
     @State private var selectedItems: [PhotosPickerItem] = []
-    // 유저 데이터
+    @State private var showingSelectBodyAlert: Bool = false
     
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     
@@ -44,9 +45,9 @@ struct MagazineContentAddView: View {
     var userLatitude: Double
     var userLongitude: Double
 
-    @State var selectedCamera: String = "dd"
-    @State var selectedLense: String = "dd"
-    @State var selectedFilm: String = "dd"
+    @State var selectedCamera: String = ""
+    @State var selectedLense: String = ""
+    @State var selectedFilm: String = ""
     
     
     var body: some View {
@@ -161,68 +162,89 @@ struct MagazineContentAddView: View {
                     
                     Divider()
                     
-                    
-                    VStack{
-                        
-                        Picker("바디", selection: $selectedCamera) {
-                            ForEach(userVM.myCamera, id: \.self) {
-                                Text($0)
+                    HStack {
+                        Button {
+                            showModal.toggle()
+                        } label: {
+                            HStack {
+                                Text("장비선택하기")
+                                    .foregroundColor(.black)
+                                    .font(.subheadline)
+                                    .bold()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
                             }
-                        }.pickerStyle(.navigationLink)
+                        }
+                        .padding(.horizontal)
+                        .sheet(isPresented: $showModal) {
+                            ItemListView(userVM: userVM, selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm)
+                                .presentationDetents([.medium, .large])
+                        }
                         
-                        Picker("렌즈", selection: $selectedLense) {
-                            ForEach(userVM.myLens, id: \.self) {
-                                Text($0)
-                            }
-                        }.pickerStyle(.navigationLink)
-                        
-                        Picker("필름", selection: $selectedFilm) {
-                            ForEach(userVM.myFilm, id: \.self) {
-                                Text($0)
-                            }
-                        }.pickerStyle(.navigationLink)
-                        
+                        Spacer()
                     }
-                    .padding(.horizontal)
+                    .padding(.vertical, 6)
+
+                    
+                    Divider()
                     
                     // MARK: 게시물 제목 작성 란
-                    TextField("필름의 제목을 입력해주세요.", text: $inputTitle)
+                    TextField("필름의 제목을 입력해주세요", text: $inputTitle)
                         .font(.body)
                         .bold()
                         .keyboardType(.default)
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
-                        .padding(.horizontal, 15)
+                        .padding(.horizontal)
                         .onSubmit {
                             hideKeyboard()
                         }
                         .submitLabel(.done)
                         .padding(.vertical, 6)
-                    
+                       
                     Divider()
                     
                     // MARK: 게시물 내용 작성 란
-                    TextField("필름에 담긴 이야기와, 설명을 기록해보세요.", text: $inputContent, axis: .vertical)
-                        .font(.body)
-                        .bold()
-                        .textInputAutocapitalization(.never)
-                        .keyboardType(.default)
-                        .disableAutocorrection(true)
-                        .lineLimit(7)
-                        .padding(.horizontal, 15)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button {
-                                    hideKeyboard()
-                                } label: {
-                                    Text("Done")
-                                        .foregroundColor(.blue)
+//                    TextField("필름에 담긴 이야기와, 설명을 기록해보세요.", text: $inputContent, axis: .vertical)
+//                        .font(.body)
+//                        .bold()
+//                        .textInputAutocapitalization(.never)
+//                        .keyboardType(.default)
+//                        .disableAutocorrection(true)
+//                        .lineLimit(7)
+//                        .padding(.horizontal, 15)
+//                        .toolbar {
+//                            ToolbarItemGroup(placement: .keyboard) {
+//                                Spacer()
+//                                Button {
+//                                    hideKeyboard()
+//                                } label: {
+//                                    Text("Done")
+//                                        .foregroundColor(.blue)
+//                                }
+//                            }
+//                        }
+//                        .frame(height: Screen.maxHeight * 0.65, alignment: .top)
+//                        .padding(.vertical, 6)
+                        
+                    TextEditor(text: $inputContent)
+                        .frame(height: 400)
+                        .lineSpacing(4.0)
+                        .padding(.horizontal)
+                        .overlay(
+                            // Placeholder를 Text로 구현하고, text가 비어있을 때만 표시되도록 조건문 추가
+                            Group {
+                                if inputContent.isEmpty {
+                                    Text("필름에 담긴 이야기와, 설명을 기록해보세요 📸")
+                                        .foregroundColor(Color(.placeholderText))
+                                        .font(.body)
+                                        .bold()
                                 }
                             }
-                        }
-                        .frame(height: Screen.maxHeight * 0.4, alignment: .top)
-                        .padding(.vertical, 6)
+                            
+                        )
+                        .font(.body)
+                        .bold()
                     
                     
                     Spacer()
@@ -244,11 +266,28 @@ struct MagazineContentAddView: View {
                         .alert(isPresented: $showingAlert) {
                             Alert(title: Text("알림"), message: Text("제목, 내용, 사진은 필수 입력 항목입니다."), dismissButton: .default(Text("확인")))
                         }
-                    } else {
+                    } else if selectedCamera == "" {
+                        Button {
+                            showingSelectBodyAlert = true
+                        } label: {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.black)
+                                .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                                .overlay {
+                                    Text("다음")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                }
+                        }
+                        .alert(isPresented: $showingSelectBodyAlert) {
+                            Alert(title: Text("알림"), message: Text("카메라 바디 선택은 필수입니다."), dismissButton: .default(Text("확인")))
+                        }
+                    }
+                    else {
                         NavigationLink {
-                            AddMarkerMapView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1,inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm , userLatitude: userLatitude , userLongitude: userLongitude)
+                            AddMarkerMapView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1,inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented,selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .navigationBarBackButtonHidden(true)
-                            
+
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(.black)
@@ -272,23 +311,49 @@ struct MagazineContentAddView: View {
                                 .foregroundColor(.black)
                                 .bold()
                         }
-                        
                     }
                 }
                 .onAppear {
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 }
             }
-        
     }
 }
-//struct MagazineContentAddView_Previews: PreviewProvider {
-//
-//    static var previews: some View {
-//        NavigationStack {
-//            MagazineContentAddView(presented: .constant(false), updateNumber: NMGLatLng(lat: 0, lng: 0))
-//        }
-//    }
-//}
 
 
+
+struct SelectModalView: View {
+    @ObservedObject var userVM: UserViewModel
+    
+    @Binding var selectedCamera: String
+    @Binding var selectedLense: String
+    @Binding var selectedFilm: String
+    
+    var body: some View {
+        Form {
+            Picker("바디", selection: $selectedCamera) {
+                Text("없음")
+                ForEach(userVM.myCamera, id: \.self) {
+                    Text($0) //  2: laica 3" ㅇㄹㄴㅇㄹ 4ㅇㄹㄴㅇㄹ
+                }
+            }
+            .pickerStyle(.inline)
+            
+            Picker("렌즈", selection: $selectedLense) {
+                ForEach(userVM.myLens, id: \.self) {
+                    Text($0)
+                }
+            }
+            .pickerStyle(.inline)
+            
+            Picker("필름", selection: $selectedFilm) {
+                ForEach(userVM.myFilm, id: \.self) {
+                    Text($0)
+                }
+            }
+            .pickerStyle(.inline)
+            
+        }
+    }
+    
+}

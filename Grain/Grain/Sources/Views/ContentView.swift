@@ -20,9 +20,8 @@ struct ContentView: View {
     @StateObject var locationManager = LocationManager()
     @StateObject var commentVm = CommentViewModel()
     
-    @State private var tabSelection: Int = 0
-    @State var selectedIndex: Int = 0
-    @State var selectedAgainIndex: Int = 0
+    @State private var tabViewSelectedIndex: Int = 0
+    @State private var selectedAgainIndex: Int = 0
     @State var magazineViewPresented : Bool = false
     @State private var presented = false
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
@@ -68,7 +67,7 @@ struct ContentView: View {
                         NavigationStack{
                             VStack{
                                 
-                                TabView(selection: $selectedIndex) {
+                                TabView(selection: $tabViewSelectedIndex) {
                                     MagazineMainView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM, scrollToTop: $magazineScrollToTop)
                                         .tag(0)
                                     CommunityView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, scrollToTop: $communityScrollToTop)
@@ -110,27 +109,27 @@ struct ContentView: View {
                                             VStack{
                                                 Image(systemName: icons[number])
                                                     .font(.title3)
-                                                    .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                                    .foregroundColor(tabViewSelectedIndex == number ? .black : Color(UIColor.lightGray))
                                                     .monospacedDigit()
                                                 Text(labels[number])
                                                     .font(.caption2)
-                                                    .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                                    .foregroundColor(tabViewSelectedIndex == number ? .black : Color(UIColor.lightGray))
                                                     .monospacedDigit()
                                                 
                                             }
                                             .frame(width: 65, height: 45)
                                             .onTapGesture {
-                                                if selectedIndex != number{
-                                                    self.selectedIndex = number
+                                                if tabViewSelectedIndex != number{
+                                                    self.tabViewSelectedIndex = number
                                                     
-                                                }else if selectedIndex == number{
-                                                    if selectedIndex == 0 {
+                                                }else if tabViewSelectedIndex == number{
+                                                    if tabViewSelectedIndex == 0 {
                                                         self.magazineScrollToTop.toggle()
                                                         
-                                                    }else if selectedIndex == 1{
+                                                    }else if tabViewSelectedIndex == 1{
                                                         self.communityScrollToTop.toggle()
                                                         
-                                                    }else if selectedIndex == 4{
+                                                    }else if tabViewSelectedIndex == 4{
                                                         self.myPageScrollToTop.toggle()
                                                     }
                                                 }
@@ -142,8 +141,9 @@ struct ContentView: View {
                                 }
                                 
                             }
+                            .animation(nil, value: tabViewSelectedIndex )
                             .toolbar {
-                                if (selectedIndex == 0) || (selectedIndex == 1) {
+                                if (tabViewSelectedIndex == 0) || (tabViewSelectedIndex == 1) {
                                     ToolbarItem(placement: .navigationBarLeading) {
                                         Text("GRAIN")
                                             .font(.title)
@@ -164,7 +164,7 @@ struct ContentView: View {
                                     
                                 }
                                 
-                                if selectedIndex == 4{
+                                if tabViewSelectedIndex == 4{
                                     ToolbarItem(placement: .navigationBarLeading) {
                                         Text("GRAIN")
                                             .font(.title)

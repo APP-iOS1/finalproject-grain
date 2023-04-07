@@ -28,6 +28,25 @@ enum UserRouter {
         return URL(string: baseUrlString) ?? URL(string: "")!
     }
 
+    private var queryItemString: String {
+        var userString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidUser"] as? String {
+                userString = str
+            }
+        }
+        return userString
+    }
+    private var queryItemDeleteString: String {
+        var deleteString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidDeleteUser"] as? String {
+                deleteString = str
+            }
+        }
+        return deleteString
+    }
+    
     private enum HTTPMethod {
         case get
         case post
@@ -53,17 +72,17 @@ enum UserRouter {
     private var endPoint: String {
         switch self {
         case let .patchArr(_,_, docID):
-            return "/User/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .patchString(_,_, docID):
-            return "/User/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .patchProfile(_,_,_, docID):
-            return "/User/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .delete(docID: docID):
-            return "/User/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .posetDeleteUser(userDocID):
-            return "/DeleteUser"
+            return "/" + "\(queryItemDeleteString)"
         default:
-            return "/User"
+            return "/" + "\(queryItemString)"
         }
     }
     

@@ -132,7 +132,15 @@ enum UserService {
                 baseUrlString += url
             }
         }
-        let firestoreURL = baseUrlString + "/User/" + "\(userID)"
+        
+        var userString : String = ""
+        if let infolistString = Bundle.main.infoDictionary {
+            if let str = infolistString["UuidUser"] as? String {
+                userString = str
+            }
+        }
+
+        let firestoreURL = baseUrlString + "/" + "\(userString)" + "/" + "\(userID)"
         let encodeQueryURL = firestoreURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
 
         var request = URLRequest(url: URL(string: encodeQueryURL)!)

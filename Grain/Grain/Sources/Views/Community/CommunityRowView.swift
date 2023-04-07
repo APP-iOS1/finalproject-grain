@@ -147,7 +147,6 @@ struct CommunityRowView: View {
             }
         })
         .onAppear{
-//            commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
         }
     }
 }

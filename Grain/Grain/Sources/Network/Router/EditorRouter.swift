@@ -41,7 +41,15 @@ enum EditorRouter {
     }
 
     func asURLRequest() throws -> URLRequest {
-        let url = baseURL.appendingPathComponent("Editor")
+        
+        var editorString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidEditor"] as? String {
+                editorString = str
+            }
+        }
+        
+        let url = baseURL.appendingPathComponent(editorString)
         
         var component = URLComponents(url: url, resolvingAgainstBaseURL: false)!
         

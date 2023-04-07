@@ -61,6 +61,15 @@ struct CommunityDetailView: View {
         }
         return https
     }
+    func infolistCommunityString() -> String{
+        var communityString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidCommmunity"] as? String {
+                communityString = str
+            }
+        }
+        return communityString
+    }
     
     var body: some View {
         NavigationView {
@@ -159,7 +168,7 @@ struct CommunityDetailView: View {
                         
                         // MARK: - 커뮤니티 댓글 뷰
                         
-                        CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData ,commentCount : $commentCount, editReColletionDocID: $editReColletionDocID, reommentUserID: $reommentUserID)
+                        CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData ,commentCount : $commentCount, editReColletionDocID: $editReColletionDocID, reommentUserID: $reommentUserID)
                             .padding(.top, 1)
                             .padding(.trailing, 20)
                     

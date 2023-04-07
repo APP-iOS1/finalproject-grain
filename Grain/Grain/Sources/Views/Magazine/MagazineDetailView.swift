@@ -54,7 +54,18 @@ struct MagazineDetailView: View {
         }
         return https
     }
-  
+    
+    func infolistMagazineString() -> String{
+        var magazineString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidMagazine"] as? String {
+                magazineString = str
+            }
+        }
+        return magazineString
+    }
+
+
     
     var body: some View {
 //        NavigationStack{
@@ -235,7 +246,7 @@ struct MagazineDetailView: View {
                                         .padding(.leading)
 
                                     NavigationLink {
-                                        MagazineCommentView(userVM: userVM, magazineVM: magazineVM, magazineData: $magazineData, collectionName: "Magazine", collectionDocId: magazineData.fields.id.stringValue)
+                                        MagazineCommentView(userVM: userVM, magazineVM: magazineVM, magazineData: $magazineData, collectionName: infolistMagazineString(), collectionDocId: magazineData.fields.id.stringValue)
                                     } label: {
                                         Image(systemName: "bubble.right")
                                             .font(.system(size: 23))

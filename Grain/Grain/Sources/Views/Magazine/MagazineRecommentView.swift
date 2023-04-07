@@ -41,6 +41,15 @@ struct MagazineRecommentView: View {
         }
         return https
     }
+    func infolistCommentString() -> String{
+        var commentString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidComment"] as? String {
+                commentString = str
+            }
+        }
+        return commentString
+    }
     
     var body: some View {
         
@@ -119,7 +128,7 @@ struct MagazineRecommentView: View {
                                                     Alert(title: Text("댓글을 삭제하시겠어요?"),
                                                           primaryButton:  .cancel(Text("취소")),
                                                           secondaryButton:.destructive(Text("삭제"),action: {
-                                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
                                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                                             commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                                                         }

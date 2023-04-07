@@ -37,6 +37,24 @@
 	<string>$(ThumbnailImageError)</string>
 	<key>PreparingImage</key>
 	<string>$(PreparingImage)</string>
+	<key>UuidCommmunity</key>
+	<string>$(UuidCommmunity)</string>
+	<key>UuidMagazine</key>
+	<string>$(UuidMagazine)</string>
+	<key>UuidComment</key>
+	<string>$(UuidComment)</string>
+	<key>UuidUser</key>
+	<string>$(UuidUser)</string>
+	<key>UuidMap</key>
+	<string>$(UuidMap)</string>
+	<key>UuidMapReport</key>
+	<string>$(UuidMapReport)</string>
+	<key>UuidRecomment</key>
+	<string>$(UuidRecomment)</string>
+	<key>UuidDeleteUser</key>
+	<string>$(UuidDeleteUser)</string>
+	<key>UuidEditor</key>
+	<string>$(UuidEditor)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>

@@ -229,11 +229,16 @@ final class UserViewModel: ObservableObject {
     }
     
     // 메거진컬렉션에 있는 모든 댓글 id 저장
-    //Magazine/1234/Comment/1234 - > delete
     func getMagazineComments(magazines: [String]) {
+        var magazineString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidMagazine"] as? String {
+                magazineString = str
+            }
+        }
         var magazineComments = [[String]]()
         for id in magazines {
-            CommentService.getComment(collectionName: "Magazine", collectionDocId: id)
+            CommentService.getComment(collectionName: magazineString, collectionDocId: id)
                 .receive(on: DispatchQueue.main)
                 .sink { (completion: Subscribers.Completion<Error>) in
                 } receiveValue: { (data: CommentResponse) in
@@ -249,15 +254,26 @@ final class UserViewModel: ObservableObject {
         self.getMagazineCommentsSuccess.send(magazineComments)
     }
     
-    // Magazine/123/Comment/1234/Recomment/12344 -> delete
-    
     // 메거진컬렉션에 있는 모든 대댓글 id 저장
     func getMagazineRecomment(comments: [[String]]) {
+        var magazineString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidMagazine"] as? String {
+                magazineString = str
+            }
+        }
+        var commentString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidComment"] as? String {
+                commentString = str
+            }
+        }
+        
         // [magzineID, commentID]
         var magzineRecomment = [[String]]()
         
         for id in comments {
-            CommentService.getRecomment(collectionName: "Magazine", collectionDocId: id[0], commentCollectionName: "Comment", commentCollectionDocId: id[1])
+            CommentService.getRecomment(collectionName: magazineString, collectionDocId: id[0], commentCollectionName: commentString, commentCollectionDocId: id[1])
                 .receive(on: DispatchQueue.main)
                 .sink { (completion: Subscribers.Completion<Error>) in
                 } receiveValue: { (data: CommentResponse) in

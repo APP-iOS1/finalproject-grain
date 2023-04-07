@@ -55,6 +55,16 @@ struct CommentView: View {
         }
         return https
     }
+    func infolistCommunityString() -> String{
+        var communityString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidCommmunity"] as? String {
+                communityString = str
+            }
+        }
+        return communityString
+    }
+    
     
     var body: some View {
         VStack(alignment: .leading){
@@ -155,7 +165,7 @@ struct CommentView: View {
                                                         Alert(title: Text("댓글을 삭제하시겠어요?"),
                                                               primaryButton:  .cancel(Text("취소")),
                                                               secondaryButton:.destructive(Text("삭제"),action: {
-                                                            commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
+                                                            commentVm.deleteComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, docID: deleteDocId)
                                                             
                                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                                                 commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
@@ -284,7 +294,7 @@ struct CommentView: View {
             
         }
         .onAppear {
-            commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
+            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 commentCount = commentVm.sortedRecentComment.count

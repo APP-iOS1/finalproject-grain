@@ -32,10 +32,6 @@ enum LogInCompanyState: String{
 }
 
 final class AuthenticationStore: ObservableObject {
-    
-
-    @Published var memberState: MemberState = .freshman
-
     @Published var user: User?
     @Published var displayName = ""
     @Published var errorMessage = ""
@@ -45,9 +41,6 @@ final class AuthenticationStore: ObservableObject {
     @Published var userName = ""
     @Published var email = ""
 
-    
-    @AppStorage("isUserLoggedIn") var isUserLoggedIn: AuthenticationState = .unauthenticated
-    
     @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
     @AppStorage("logInCompanyState") var logInCompanyState: LogInCompanyState = .noCompany
     
@@ -285,7 +278,6 @@ final class AuthenticationStore: ObservableObject {
         do {
             try authPath.signOut()
             // MARK: isUserLoggedIn, authenticationState 두개 상태 unauthenticated 바꿔서 isUserLoggedIn( 자동로그인 방지 ), authenticationState( 뷰 보여지는 방식 바꾸기 )
-            self.isUserLoggedIn = .unauthenticated
             self.authenticationState = .unauthenticated
             self.logInCompanyState = .noCompany
         } catch {
@@ -301,7 +293,6 @@ final class AuthenticationStore: ObservableObject {
             try authPath.signOut()
             GIDSignIn.sharedInstance.signOut()
             // MARK: isUserLoggedIn, authenticationState 두개 상태 unauthenticated 바꿔서 isUserLoggedIn( 자동로그인 방지 ), authenticationState( 뷰 보여지는 방식 바꾸기 )
-            self.isUserLoggedIn = .unauthenticated
             self.authenticationState = .unauthenticated
             self.logInCompanyState = .noCompany
             
@@ -312,7 +303,6 @@ final class AuthenticationStore: ObservableObject {
     
     public func authStateAuthenticated(user: CurrentUser) {
         self.authenticationState = .authenticated
-        self.isUserLoggedIn = .authenticated
     }
     // MARK: - 회원탈퇴 확인해봐야함
     func googleDisconnect() {
@@ -342,7 +332,6 @@ final class AuthenticationStore: ObservableObject {
                 for i in data.documents{
                     if i.fields.id.stringValue == docID{
                         self.authenticationState = .authenticated   //authenticationState 상태 변환
-                        self.isUserLoggedIn = .authenticated        //isUserLoggedIn 로그인 인증된 상태
                         break
                     }
                     self.authenticationState = .freshman

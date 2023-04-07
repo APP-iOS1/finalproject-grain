@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-private let defaultTimeout: TimeInterval = 3.3
+private let defaultTimeout: TimeInterval = 1.5
 
 struct SplashView<SplashContent: View>: ViewModifier {
   private let timeout: TimeInterval

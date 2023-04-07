@@ -178,28 +178,7 @@ enum MagazineQuery {
         
         return query
     }
-    
-    static func deleteMagazines(magzineID: [String]) -> Data?
-    {
-        var str : String = ""
-        
-        for i in 0..<magzineID.count {
-            str += """
-                 { "delete": "projects/grain-final/databases/(default)/documents/Magazine/\(magzineID[i])" },
-                """
-        }
-        
-        str.removeLast()
-        
-        let query  =  """
-                         {
-                           "writes": [ \(str) ]
-                         }
-                      """.data(using: .utf8)
-        
-        return query
-    }
-    
+
 }
 
 

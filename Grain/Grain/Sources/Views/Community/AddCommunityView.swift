@@ -278,6 +278,7 @@ struct AddCommunityView: View {
                         .onAppear{
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 isUpdateCommunitySuccess = false
+                                presented.toggle()
                             }
                         }
                         .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
@@ -299,6 +300,12 @@ struct AddCommunityView: View {
             }
             .onAppear {
                 userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            }
+            .onReceive(communityVM.insertCommunitySuccess) { _ in
+                // 프로그레스뷰 OFF
+                isUpdateCommunitySuccess = false
+                // 창닫기
+                presented.toggle()
             }
         }
     }

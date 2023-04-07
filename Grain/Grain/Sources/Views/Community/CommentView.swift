@@ -46,6 +46,16 @@ struct CommentView: View {
        
     }
     
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack(alignment: .leading){
             ScrollView() {
@@ -58,7 +68,7 @@ struct CommentView: View {
                                     NavigationLink {
                                         UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
                                     } label: {
-                                        KFImage(URL(string: commentVm.sortedRecentComment[index].fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                        KFImage(URL(string: commentVm.sortedRecentComment[index].fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
                                             .resizable()
                                             .frame(width: 35, height: 35)
                                             .cornerRadius(30)

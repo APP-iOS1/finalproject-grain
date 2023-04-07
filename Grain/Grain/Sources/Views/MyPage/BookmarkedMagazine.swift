@@ -24,6 +24,16 @@ struct BookmarkedMagazine: View {
         GridItem(.flexible(), spacing: 1)
     ]
     
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["DetailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack{
             ScrollView{
@@ -32,7 +42,7 @@ struct BookmarkedMagazine: View {
                         NavigationLink {
                             MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                         } label: {
-                            KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                            KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                                .resizable()
                                .scaledToFill()
                                .frame(width: Screen.maxWidth / 3 - 1, height: Screen.maxWidth / 3 - 1)

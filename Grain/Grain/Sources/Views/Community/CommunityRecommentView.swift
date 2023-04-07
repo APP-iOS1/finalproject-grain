@@ -29,6 +29,16 @@ struct CommunityRecommentView: View {
     @Binding var editReData : CommentFields
     @Binding var editReColletionDocID: String
     
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack(alignment: .leading){
             ForEach(Array(commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values), id:\.self){ element in
@@ -40,7 +50,7 @@ struct CommunityRecommentView: View {
                                 NavigationLink {
                                     UserDetailView(userVM: userVM , magazineVM: magazineVM, user: user)
                                 } label: {
-                                    KFImage(URL(string: index.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                    KFImage(URL(string: index.fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
                                         .resizable()
                                         .frame(width: 25, height: 25)
                                         .cornerRadius(15)
@@ -130,6 +140,10 @@ struct CommunityRecommentView: View {
                                     .frame(width: 25, height: 25)
                                     .cornerRadius(15)
                                     .padding(.horizontal, 7)
+                                    .overlay {
+                                        Circle()
+                                            .stroke(lineWidth: 0.5)
+                                    }
                             }
                             .frame(width: Screen.maxWidth * 0.1)
                             
@@ -139,6 +153,7 @@ struct CommunityRecommentView: View {
                                         .foregroundColor(.gray)
                                         .font(.caption)
                                         .fontWeight(.bold)
+                                    
 
                                     HStack{
                                         Text("・")

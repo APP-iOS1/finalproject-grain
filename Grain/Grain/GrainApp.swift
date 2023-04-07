@@ -69,19 +69,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
     
-//    var window: UIWindow?
-//
-//    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-//        if let windowScene = scene as? UIWindowScene {
-//            let window = UIWindow(windowScene: windowScene)
-//            self.window = window
-//
-//            let contentView = ContentView()
-//            window.rootViewController = UIHostingController(rootView: contentView)
-//            window.makeKeyAndVisible()
-//        }
-//    }
-    
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
@@ -108,124 +95,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                 }
             }
         }
-        
-//        if let viewName = userInfo["view"] as? String {
-//                var documentData: MagazineDocument?
-//
-//                do{
-//                    if let detailData = userInfo["detailData"] as? String, let jsonData = detailData.data(using: .utf8) {
-//                        documentData = try JSONDecoder().decode(MagazineDocument.self, from: jsonData)
-//                    }
-//                } catch {
-//                    print(error.localizedDescription)
-//                }
-//            guard let documentData = documentData else {
-//                print("Failed to decode MagazineDocument from userInfo")
-//                return
-//            }
-//
-//                switch viewName {
-//                case "like":
-//                    let magazineBestView = MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
-//                    let detailView = MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: documentData, ObservingChangeValueLikeNum: magazineBestView.$ObservingChangeValueLikeNum)
-//                    if let navigationController = self.window?.rootViewController as? UINavigationController {
-//                        navigationController.pushViewController(detailView, animated: true)
-//                    }
-////                case "ListView":
-////                    let listView = ListView()
-////                    if let navigationController = self.window?.rootViewController as? UINavigationController {
-////                        navigationController.pushViewController(listView, animated: true)
-//                default:
-//                   print("Unexpected push notification")
-//                }
-//
-//        }
-        
-//        if let data = userInfo["data"] as? [String: Any], let view = data["view"] as? String, let detailData = data["detailData"] as? String {
-//            var documentData: MagazineDocument!
-//
-//            do{
-//                if let detailData = data["detailData"] as? String, let jsonData = detailData.data(using: .utf8) {
-//                    documentData = try JSONDecoder().decode(MagazineDocument.self, from: jsonData)
-//                }
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//
-//            if view == "like" {
-//                let magazineBestView = MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
-//                let destinationView = MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: documentData , ObservingChangeValueLikeNum: magazineBestView.$ObservingChangeValueLikeNum)
-//                let navigationView = NavigationView {
-//                    NavigationLink(destination: destinationView) {
-//                        magazineBestView
-//                    }
-//                }
-//                guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-//                      let window = windowScene.windows.first else {
-//                          return
-//                }
-//                window.rootViewController = UIHostingController(rootView: navigationView)
-//
-//            }
-//        }
-//        guard let data = userInfo["data"] as? [String: Any],
-//              let view = data["view"] as? String else {
-//            completionHandler(UIBackgroundFetchResult.failed)
-//            return
-//        }
-        
-        // create the appropriate view based on the received data and view
-//        let rootView: AnyView
-//        switch view {
-//        case "like":
-            // extract detailData from the notification payload
-//            guard let detailData = data["detailData"] as? String else {
-//                completionHandler(UIBackgroundFetchResult.failed)
-//                return
-//            }
-            
-//            var documentData: MagazineDocument!
-//
-//            do{
-//                if let detailData = data["detailData"] as? String, let jsonData = detailData.data(using: .utf8) {
-//                    documentData = try JSONDecoder().decode(MagazineDocument.self, from: jsonData)
-//                }
-//            } catch {
-//                print(error.localizedDescription)
-//            }
-//            let magazineBestView = MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
-//            // create the detail view
-//            let detailView = MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: documentData , ObservingChangeValueLikeNum: magazineBestView.$ObservingChangeValueLikeNum)
-//
-//            rootView = AnyView(detailView)
-            
-//        case "DetailB":
-//            // extract detailData from the notification payload
-//            guard let detailData = data["detailData"] as? Int else {
-//                completionHandler(UIBackgroundFetchResult.failed)
-//                return
-//            }
-//            // create the detail view
-//            let detailView = DetailViewB(detailData: detailData)
-//            rootView = AnyView(detailView)
-//        default:
-//            // create the default view
-//            let defaultView = ContentView()
-//            rootView = AnyView(defaultView)
-//        }
-//
-//        // create the navigation view
-//        let navigationView = NavigationView {
-//            rootView
-//        }
-//
-//        // create the window and set the root view controller to the navigation view
-//        let window = UIWindow(frame: UIScreen.main.bounds)
-//        window.rootViewController = UIHostingController(rootView: navigationView)
-//        window.makeKeyAndVisible()
-//        self.window = window
-//
-//        completionHandler(UIBackgroundFetchResult.newData)
         completionHandler(.newData)
     }
     
@@ -289,82 +158,11 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 }
 
 
-//class PushNotificationSender {
-//    func sendPushNotification(to token: String, title: String, body: String) {
-//        let url = URL(string: "https://fcm.googleapis.com/fcm/send")!
-//        var request = URLRequest(url: url)
-//        let body: [String: Any] = [
-//            "to": token,
-//            "notification": [
-//                "title": title,
-//                "body": body
-//            ]
-//        ]
-////        let body: [String: Any] = [
-////            "notification": [
-////                "title": title,
-////                "body": body,
-////                "sound": "default",
-////                "badge": 0
-////            ],
-////            "data": [
-////                "key_1": "Value_1",
-////                "key_2": 2
-////            ],
-////            "content_available": true,
-////            "mutable_content": true,
-////            "priority": "high",
-////            "to": token
-////        ]
-////        let request = NSMutableURLRequest(url: url as URL)
-//        request.httpMethod = "POST"
-//        request.httpBody = try? JSONSerialization.data(withJSONObject:body, options: [.prettyPrinted])
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.setValue("AAAAmgIQJT8:APA91bEYeo_vCw2JzuCiVcAeaZMjlGq_uJV8UtHYykPu-_9yQuiNlwtz6-obJWkIfeCLz6fljjhdhfMmLiCrG8sZ8AjerFunTwxG08af61sJzrFovijmELKPES4eeFmvuG3-kVa-IIip", forHTTPHeaderField: "Authorization")
-//        let task =  URLSession.shared.dataTask(with: request as URLRequest)  { (data, response, error) in
-//            do {
-//                if let jsonData = data {
-//                    if let jsonDataDict  = try JSONSerialization.jsonObject(with: jsonData, options: JSONSerialization.ReadingOptions.allowFragments) as? [String: AnyObject] {
-//                        NSLog("Received data:\n\(jsonDataDict))")
-//                    }
-//                }
-//            } catch let err as NSError {
-//                print(err.debugDescription)
-//            }
-//        }
-//        task.resume()
-////        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-////            if let error = error {
-////                print("Error: \(error.localizedDescription)")
-////                return
-////            }
-////
-////            guard let data = data else {
-////                print("Error: No data returned from server")
-////                return
-////            }
-////
-////            do {
-////                let jsonData = try JSONSerialization.jsonObject(with: data, options: [])
-////                if let jsonDataDict = jsonData as? [String: AnyObject] {
-////                    print("Received data:\n\(jsonDataDict))")
-////                }
-////            } catch let error as NSError {
-////                print("Error parsing data: \(error.localizedDescription)")
-////            }
-////        }
-////        task.resume()
-//    }
-//}
-
-//gpt try 1
 class PushNotificationSender {
     
     var serverKeyString: String
 
 
-//    let serverKey: String
-//
     init(serverKeyString: String) {
         self.serverKeyString = serverKeyString
     }
@@ -382,31 +180,6 @@ class PushNotificationSender {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(serverKeyString)", forHTTPHeaderField: "Authorization")
-
-//        let payload: [String: Any] = [
-//            "message": [
-//                "token": deviceToken,
-//                "notification": [
-//                    "title": "Your app name",
-//                    "body": message,
-//                    "click_action": "FLUTTER_NOTIFICATION_CLICK"
-//                ]
-//            ]
-//        ]
-
-//        let paramString: [String : Any] = ["to" : deviceToken,
-//                                           "notification" : ["title" : title, "body" : message],
-//                                           "data" : ["user" : "test_id"]
-        
-//        ]
-//        var jsonData: String?
-//
-//        do {
-//            let data = try JSONEncoder().encode(data)
-//            jsonData = String(data: data, encoding: .utf8)
-//        } catch {
-//            print(error.localizedDescription)
-//        }
         
         let body: [String: Any] = [
             "notification": [
@@ -444,99 +217,6 @@ class PushNotificationSender {
         }
     }
 }
-
-// gpt try2
-//class PushNotificationSender {
-//    let serverKey: String
-//
-//    init(serverKey: String) {
-//        self.serverKey = serverKey
-//    }
-//
-//    func sendPushNotification(deviceToken: String, message: String) {
-//        let url = URL(string: "https://fcm.googleapis.com/v1/projects/grain-final/databases/messages:send")!
-////        let url = URL(string: "https://fcm.googleapis.com/fcm/send")!
-//        let body: [String: Any] = [
-//            "to": deviceToken,
-//            "notification": [
-//                "title": "Your app name",
-//                "body": message
-//            ]
-//        ]
-//        let bodyData = try! JSONSerialization.data(withJSONObject: body)
-//
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.httpBody = bodyData
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.setValue("key=\(serverKey)", forHTTPHeaderField: "Authorization")
-//
-//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-//            if let error = error {
-//                print("Error sending push notification: \(error.localizedDescription)")
-//                return
-//            }
-//
-//            if let data = data, let dataString = String(data: data, encoding: .utf8) {
-//                print("Push notification response: \(dataString)")
-//            }
-//        }
-//        task.resume()
-//    }
-//
-//    func send(key: String, deviceToken: String) {
-////        let url = URL(string: "https://fcm.googleapis.com/fcm/send")!
-//        let url = URL(string: "https://fcm.googleapis.com/v1/projects/grain-final/databases/messages:send")!
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.addValue("key=\(key)", forHTTPHeaderField: "Authorization")
-//
-//        let message = ["to": deviceToken, "notification": ["title": "Title", "body": "Body"]] as [String : Any]
-//
-//        let jsonData = try! JSONSerialization.data(withJSONObject: message, options: [])
-//        request.httpBody = jsonData
-//
-//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//            if let error = error {
-//                print("Error sending push notification: \(error.localizedDescription)")
-//            } else if let data = data {
-//                let responseString = String(data: data, encoding: .utf8)!
-//                print("Push notification sent: \(responseString)")
-//            }
-//        }
-//        task.resume()
-//    }
-//}
-
-// gpt 3
-//class PushNotificationSender {
-//    func sendNotification(to token: String, title: String, body: String, data: [String: Any]) {
-//        let urlString = "https://fcm.googleapis.com/fcm/send"
-//        guard let url = URL(string: urlString) else { return }
-//        let paramString: [String : Any] = ["to" : token,
-//                                           "notification" : ["title" : title, "body" : body],
-//                                           "data" : data]
-//        let request = NSMutableURLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.httpBody = try? JSONSerialization.data(withJSONObject:paramString, options: [.prettyPrinted])
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.setValue("key=YOUR_SERVER_KEY", forHTTPHeaderField: "Authorization")
-//        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-//            do {
-//                if let jsonData = data {
-//                    if let jsonDataDict = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any] {
-//                        print("Received data: \(jsonDataDict)")
-//                    }
-//                }
-//            } catch let err as NSError {
-//                print(err.debugDescription)
-//            }
-//        }
-//        task.resume()
-//    }
-//
-//}
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?

@@ -18,21 +18,21 @@ struct ItemListView: View {
     var body: some View {
         VStack{
             List {
-                Section("카메라(필수)") {
+                Section("이 필름에 사용된 카메라 바디를 선택해 주세요") {
                     Text("\(userVM.myCamera[0])")
                     ForEach(1..<userVM.myCamera.count) { i in
                         ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "카메라", text: userVM.myCamera[i])
                     }
                 }
                 
-                Section("렌즈(선택)") {
+                Section("이 필름에 사용된 렌즈를 선택해 주세요") {
                     Text("\(userVM.myLens[0])")
                     ForEach(1..<userVM.myLens.count) { i in
                         ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "렌즈", text: userVM.myLens[i])
                     }
-                    ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "렌즈", text: "없음")
+                    ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "렌즈", text: "선택 안함")
                 }
-                Section("필름(선택)") {
+                Section("이 필름에 사용된 필름을 선택해 주세요") {
                     Text("\(userVM.myFilm[0])")
                     ForEach(1..<userVM.myFilm.count) { i in
                         ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "필름", text: userVM.myFilm[i])

@@ -43,6 +43,7 @@ struct CommunityDetailView: View {
     @State var commentCount : Int = 0
     @State var editReColletionDocID: String = ""
     @State var reommentUserID : String = ""
+    @State private var isDeleteAlertShown:Bool = false
     
     @FocusState private var textFieldFocused: Bool
     
@@ -175,6 +176,21 @@ struct CommunityDetailView: View {
                         .animation(.default , value: isZooming)
                 }
             }
+            .alert(isPresented: $isDeleteAlertShown) {
+                Alert(title: Text("게시물을 삭제하시겠어요?"),
+                      message: Text("게시물을 삭제하면 영구히 삭제되고 복원할 수 없습니다."),
+                      primaryButton:  .cancel(Text("취소")),
+                      secondaryButton:.destructive(Text("삭제"),
+                                                   action: {
+                    if let communityData = self.communityData {
+                        communityVM.deleteCommunity(docID: communityData.fields.id.stringValue)
+                        var postCommunitArr : [String]  = userVM.postedCommunityID
+                        postCommunitArr.removeAll { $0 == communityData.fields.id.stringValue }
+                        userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunitArr, docID: Auth.auth().currentUser?.uid ?? "")
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }))
+            }
             .onAppear {
                 self.communityData = self.community
             }
@@ -240,8 +256,7 @@ struct CommunityDetailView: View {
                                 Text("수정")
                             }
                             Button {
-                                communityVM.deleteCommunity(docID: community.fields.id.stringValue)
-                                presentationMode.wrappedValue.dismiss()
+                                self.isDeleteAlertShown.toggle()
                             } label: {
                                 Text("삭제")
                             }

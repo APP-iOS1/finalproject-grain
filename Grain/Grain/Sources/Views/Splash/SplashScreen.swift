@@ -33,11 +33,6 @@ struct SplashScreen: View {
                 .bold()
                 .kerning(7)
                 .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
-//                .offset(y: bounce ? 0 : -3)
-//                .animation(Animation.interpolatingSpring(stiffness: 150, damping: 15).delay(3).repeatForever(autoreverses: false))
-//                .onAppear() {
-//                   self.bounce.toggle()
-//               }
             Text("필름 감성을 담은 SNS 앱")
                 .foregroundColor(.white)
                 .font(.system(size: 12))
@@ -162,9 +157,9 @@ struct SplashScreen: View {
 }
 
 
-struct SplashScremm_Previews: PreviewProvider {
-    static var previews: some View {
-        SplashScreen()
-    }
-}
+//struct SplashScremm_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SplashScreen()
+//    }
+//}
 

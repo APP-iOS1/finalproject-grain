@@ -21,18 +21,23 @@ struct ContentView: View {
     @StateObject var commentVm = CommentViewModel()
     
     @State private var tabSelection: Int = 0
-    @State var selectedIndex = 0
+    @State var selectedIndex: Int = 0
+    @State var selectedAgainIndex: Int = 0
     @State var magazineViewPresented : Bool = false
     @State private var presented = false
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     @State var clikedMagazineData : MagazineDocument?
     @State private var isSearchViewShown: Bool = false
     @State private var magazineScrollToTop: Bool = false
+    @State private var communityScrollToTop: Bool = false
+    @State private var myPageScrollToTop: Bool = false
     
     let icons = ["film", "text.bubble", "plus","map", "person"]
     let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
     
     @State var modalSize = Screen.maxHeight * 0.25
+    
+    @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
     
     @SceneStorage("isZooming") var isZooming: Bool = false
     
@@ -54,132 +59,145 @@ struct ContentView: View {
         Group{
             if networkManager.isConnected {
                 VStack{
-                    switch authenticationStore.authenticationState {
+                    switch authenticationState {
                     case .unauthenticated, .authenticating , .freshman:
                         NavigationStack{
                             AuthenticationView(userVM: userVM)
                         }
                     case.authenticated:
                         NavigationStack{
-                            
-                            
+                            VStack{
+                                
                                 TabView(selection: $selectedIndex) {
                                     MagazineMainView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM, scrollToTop: $magazineScrollToTop)
                                         .tag(0)
-                                    CommunityView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM)
+                                    CommunityView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, scrollToTop: $communityScrollToTop)
                                         .tag(1)
                                     
                                     MapView(mapVM: mapVM, userVM : userVM, magazineVM : magazineVM, locationManager : locationManager, clikedMagazineData: clikedMagazineData, userLatitude: userLatitude, userLongitude: userLongitude)
                                         .edgesIgnoringSafeArea(.top)
                                         .tag(3)
-                                    MyPageView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), presented: $presented)
+                                    MyPageView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), presented: $presented, scrollToTop: $myPageScrollToTop)
                                         .tag(4)
                                     
                                 }
-                                .toolbar {
-                                    if (selectedIndex == 0) || (selectedIndex == 1) {
-                                        ToolbarItem(placement: .navigationBarLeading) {
-                                            Text("GRAIN")
-                                                .font(.title)
-                                                .bold()
-                                                .kerning(7)
+                               
+                                
+                                HStack(alignment: .top, spacing: 10) {
+                                    ForEach(0..<5, id: \.self) { number in
+                                        
+                                        
+                                        if number == 2 {
+                                            
+                                            Circle()
+                                                .frame(width: 40, height: 40)
+                                                .foregroundColor(.black)
+                                                .overlay {
+                                                    Image(systemName: icons[number])
+                                                        .font(.title3)
+                                                        .foregroundColor(.white)
+                                                        .monospacedDigit()
+                                                }
+                                                .padding(.horizontal, 8)
+                                                .onTapGesture {
+                                                    presented.toggle()
+                                                    
+                                                }
+                                            
                                             
                                         }
-                                        
-                                        ToolbarItem(placement: .navigationBarTrailing) {
-                                            Button {
-                                                self.isSearchViewShown = true
-                                            } label: {
-                                                Image(systemName: "magnifyingglass")
-                                                    .foregroundColor(.black)
+                                        else {
+                                            VStack{
+                                                Image(systemName: icons[number])
+                                                    .font(.title3)
+                                                    .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                                    .monospacedDigit()
+                                                Text(labels[number])
+                                                    .font(.caption2)
+                                                    .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                                    .monospacedDigit()
+                                                
                                             }
-                                            
+                                            .frame(width: 65, height: 45)
+                                            .onTapGesture {
+                                                if selectedIndex != number{
+                                                    self.selectedIndex = number
+                                                    
+                                                }else if selectedIndex == number{
+                                                    if selectedIndex == 0 {
+                                                        self.magazineScrollToTop.toggle()
+                                                        
+                                                    }else if selectedIndex == 1{
+                                                        self.communityScrollToTop.toggle()
+                                                        
+                                                    }else if selectedIndex == 4{
+                                                        self.myPageScrollToTop.toggle()
+                                                    }
+                                                }
+                                                
+                                            }
                                         }
                                         
                                     }
+                                }
+                                
+                            }
+                            .toolbar {
+                                if (selectedIndex == 0) || (selectedIndex == 1) {
+                                    ToolbarItem(placement: .navigationBarLeading) {
+                                        Text("GRAIN")
+                                            .font(.title)
+                                            .bold()
+                                            .kerning(7)
+                                        
+                                    }
                                     
-                                    if selectedIndex == 4{
-                                        ToolbarItem(placement: .navigationBarLeading) {
-                                            Text("GRAIN")
-                                                .font(.title)
-                                                .bold()
-                                                .kerning(7)
+                                    ToolbarItem(placement: .navigationBarTrailing) {
+                                        Button {
+                                            self.isSearchViewShown = true
+                                        } label: {
+                                            Image(systemName: "magnifyingglass")
+                                                .foregroundColor(.black)
                                         }
                                         
-                                        ToolbarItem(placement: .navigationBarTrailing) {
-                                            NavigationLink {
-                                                MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM, presented: $presented)
-                                            } label: {
-                                                Image(systemName: "ellipsis")
-                                                    .foregroundColor(.black)
-                                            }
-                                        }
                                     }
                                     
                                 }
-                                                        
-                                    HStack(alignment: .top, spacing: 10) {
-                                        ForEach(0..<5, id: \.self) { number in
-                                            
-                                            
-                                            if number == 2 {
-                                                
-                                                Circle()
-                                                    .frame(width: 40, height: 40)
-                                                    .foregroundColor(.black)
-                                                    .overlay {
-                                                        Image(systemName: icons[number])
-                                                            .font(.title3)
-                                                            .foregroundColor(.white)
-                                                            .monospacedDigit()
-                                                    }
-                                                    .padding(.horizontal, 8)
-                                                    .onTapGesture {
-                                                        presented.toggle()
-                                                        
-                                                    }
-                                                
-                                                
-                                            }
-                                            else {
-                                                VStack{
-                                                    Image(systemName: icons[number])
-                                                        .font(.title3)
-                                                        .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
-                                                        .monospacedDigit()
-                                                    Text(labels[number])
-                                                        .font(.caption2)
-                                                        .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
-                                                        .monospacedDigit()
-                                                    
-                                                }
-                                                .frame(width: 65, height: 45)
-                                                .onTapGesture {
-                                                    self.selectedIndex = number
-                                                    self.magazineScrollToTop.toggle()
-                                                }
-                                            }
-                                            
+                                
+                                if selectedIndex == 4{
+                                    ToolbarItem(placement: .navigationBarLeading) {
+                                        Text("GRAIN")
+                                            .font(.title)
+                                            .bold()
+                                            .kerning(7)
+                                    }
+                                    
+                                    ToolbarItem(placement: .navigationBarTrailing) {
+                                        NavigationLink {
+                                            MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM, presented: $presented)
+                                        } label: {
+                                            Image(systemName: "ellipsis")
+                                                .foregroundColor(.black)
                                         }
                                     }
-                            .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
+                                }
+                                
+                            }
                             .navigationDestination(isPresented: $isSearchViewShown) {
                                 MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM)
                             }
-                            .fullScreenCover(isPresented: $presented) {
-                                VStack {
-                                    SelectPostView(userVM: userVM,
-                                                   communityVM: communityVM,
-                                                   magazineVM: magazineVM,
-                                                   mapVM : mapVM,
-                                                   locationManager : locationManager,
-                                                   presented: $presented,
-                                                   updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
-                                }
-                            }
-                            
                         }
-                        .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
+                        .fullScreenCover(isPresented: $presented) {
+                            VStack {
+                                SelectPostView(userVM: userVM,
+                                               communityVM: communityVM,
+                                               magazineVM: magazineVM,
+                                               mapVM : mapVM,
+                                               locationManager : locationManager,
+                                               presented: $presented,
+                                               updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
+                            }
+                        }
                     }
                 }
                 .tint(.black)

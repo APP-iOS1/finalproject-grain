@@ -24,7 +24,7 @@ struct MagazineFeedView: View {
  
     var body: some View {
         ScrollViewReader { proxyReader in
-            ScrollView{
+            ScrollView(showsIndicators: false){
                 VStack{
                     
                     // magazine fetch 된 시간 알려주는 부분
@@ -78,6 +78,9 @@ struct MagazineFeedView: View {
                     .frame(width: 0, height: 0)
                     ,alignment: .top
                 )
+            }
+            .onAppear{
+                UITableView.appearance().separatorStyle = .none
             }
             .onChange(of: scrollToTop, perform: { newValue in
                 withAnimation(.default) {

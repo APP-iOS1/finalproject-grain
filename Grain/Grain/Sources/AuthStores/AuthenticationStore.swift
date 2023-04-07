@@ -17,14 +17,15 @@ import FirebaseAuth
 import FirebaseMessaging
 
 /// 로그인 상태관리
-enum AuthenticationState : String{
+
+enum AuthenticationState: String {
     case unauthenticated
     case authenticating
     case authenticated
     case freshman
 }
 /// 로그인 회사 상태관리
-enum LogInCompanyState{
+enum LogInCompanyState: String{
     case googleLogIn
     case appleLogIn
     case noCompany
@@ -32,8 +33,9 @@ enum LogInCompanyState{
 
 final class AuthenticationStore: ObservableObject {
     
-    @Published var authenticationState: AuthenticationState = .unauthenticated
-    @Published var logInCompanyState: LogInCompanyState = .noCompany
+
+    @Published var memberState: MemberState = .freshman
+
     @Published var user: User?
     @Published var displayName = ""
     @Published var errorMessage = ""
@@ -46,6 +48,9 @@ final class AuthenticationStore: ObservableObject {
     
     @AppStorage("isUserLoggedIn") var isUserLoggedIn: AuthenticationState = .unauthenticated
     
+    @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
+    @AppStorage("logInCompanyState") var logInCompanyState: LogInCompanyState = .noCompany
+    
     var updateUsersArraySuccess = PassthroughSubject<(), Never>()
     var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()
 
@@ -53,31 +58,6 @@ final class AuthenticationStore: ObservableObject {
     
     let authPath = Auth.auth()
     
-    init() {
-        // 로그인이 인증된 상태만 잡기
-        if isUserLoggedIn == .authenticated{
-            self.isUserLoggedIn = .authenticated
-            self.authenticationState = .authenticated
-        }else{
-            // 나머지 경우 전부 로그인 비 인증 상태
-            self.isUserLoggedIn = .unauthenticated
-        }
-    }
-    
-    // MARK: - authState listener
-    // 아마 안쓸꺼같음
-//    private var authStateHandler: AuthStateDidChangeListenerHandle?
-//    func registerAuthStateHandler() {
-//        if authStateHandler == nil {
-//
-//            authStateHandler = Auth.auth().addStateDidChangeListener { auth, user in
-//
-//                self.user = user
-//                self.authenticationState = user == nil ? .unauthenticated : .authenticated
-//                self.displayName = user?.email ?? ""
-//            }
-//        }
-//    }
     // MARK: - Google Login
     
     /// 구글 로그인

@@ -25,6 +25,7 @@ struct MyPageView: View {
     @State private var angle: Double = 0
     
     @Binding var presented: Bool
+    @Binding var scrollToTop: Bool
 
     func defaultProfileImage() -> String{
         var https : String = "https://"
@@ -169,7 +170,7 @@ struct MyPageView: View {
                     .padding(.horizontal, 10)
                     .padding(.top, 5)
                     .foregroundColor(.brightGray)
-                MyPageMyFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineDocument, presented: $presented)
+                MyPageMyFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineDocument, presented: $presented, scrollToTop: $scrollToTop)
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장

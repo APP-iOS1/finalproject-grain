@@ -16,7 +16,8 @@ struct CommunityView: View {
     @State private var communitySelectedIndex: Int = 0
     @State private var isAddViewShown: Bool = false
     
-    
+    @Binding var scrollToTop: Bool
+
     let colors: [String] = ["", "#807EFC", "#6CD9B7", "E3F084", "FA98E0"]
     let titles: [String] = ["전체", "매칭", "마켓", "클래스", "정보"]
         
@@ -53,15 +54,15 @@ struct CommunityView: View {
                 } // hstack
                 switch(communitySelectedIndex) {
                 case 0:
-                    AllTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
+                    AllTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, scrollToTop: $scrollToTop)
                 case 1:
-                    MatchingTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
+                    MatchingTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, scrollToTop: $scrollToTop)
                 case 2:
-                    ClassTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
+                    ClassTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, scrollToTop: $scrollToTop)
                 case 3:
-                    MarketTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
+                    MarketTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, scrollToTop: $scrollToTop)
                 default:
-                    InfoTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
+                    InfoTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, scrollToTop: $scrollToTop)
                 }
             }
             .onAppear{

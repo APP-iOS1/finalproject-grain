@@ -164,6 +164,9 @@ struct CommunityDetailView: View {
                     
                     }
                 }
+                .refreshable {
+                    communityVM.fetchCommunity()
+                }
                 .onDisappear{
                     selectedIndex = 0
                 }
@@ -306,9 +309,6 @@ struct CommunityDetailView: View {
                     }
                 }
             }
-        }
-        .refreshable {
-            communityVM.fetchCommunity()
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)

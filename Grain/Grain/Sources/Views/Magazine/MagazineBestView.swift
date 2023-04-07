@@ -20,8 +20,8 @@ struct MagazineBestView: View {
     @State private var selectIndexNum: Int = 0
     
     var body: some View {
-        VStack {
-            ScrollView {
+        ScrollView {
+            VStack {
                 
                 EditorViewCell(editorVM: editorVM)
                     .onTapGesture {
@@ -45,7 +45,7 @@ struct MagazineBestView: View {
                         .font(.footnote)
                         .foregroundColor(.middlebrightGray)
                     Spacer()
-                   
+                    
                 }
                 .padding(.horizontal,21)
                 .padding(.top, 7)
@@ -71,6 +71,9 @@ struct MagazineBestView: View {
                 magazineVM.fetchMagazine()
             }
             
+        }
+        .refreshable {
+            magazineVM.fetchMagazine()
         }
         .navigationDestination(isPresented: $isMagazineDegtailViewShown){
             ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data ) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐

@@ -27,6 +27,7 @@ struct ContentView: View {
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     @State var clikedMagazineData : MagazineDocument?
     @State private var isSearchViewShown: Bool = false
+    @State private var magazineScrollToTop: Bool = false
     
     let icons = ["film", "text.bubble", "plus","map", "person"]
     let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
@@ -63,7 +64,7 @@ struct ContentView: View {
                             
                             
                                 TabView(selection: $selectedIndex) {
-                                    MagazineMainView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
+                                    MagazineMainView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM, scrollToTop: $magazineScrollToTop)
                                         .tag(0)
                                     CommunityView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM)
                                         .tag(1)
@@ -155,6 +156,7 @@ struct ContentView: View {
                                                 .frame(width: 65, height: 45)
                                                 .onTapGesture {
                                                     self.selectedIndex = number
+                                                    self.magazineScrollToTop.toggle()
                                                 }
                                             }
                                             

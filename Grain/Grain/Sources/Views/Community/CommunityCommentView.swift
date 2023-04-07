@@ -39,6 +39,16 @@ struct CommunityCommentView: View {
         replyContent.trimmingCharacters(in: .whitespaces)
     }
     
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack{
             
@@ -116,7 +126,7 @@ struct CommunityCommentView: View {
             }
             
             HStack{
-                KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string: defaultProfileImage()))
                     .resizable()
                     .frame(width: 35, height: 35)
                     .cornerRadius(30)

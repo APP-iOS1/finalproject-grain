@@ -144,6 +144,10 @@ struct MagazineRecommentView: View {
                                     .frame(width: 25, height: 25)
                                     .cornerRadius(15)
                                     .padding(.horizontal, 7)
+                                    .overlay {
+                                        Circle()
+                                            .stroke(lineWidth: 0.5)
+                                    }
                             }
                             .frame(width: Screen.maxWidth * 0.1)
                             

@@ -54,6 +54,7 @@ struct MagazineDetailView: View {
         }
         return https
     }
+  
     
     var body: some View {
 //        NavigationStack{
@@ -84,7 +85,11 @@ struct MagazineDetailView: View {
                                         .resizable()
                                         .frame(width: 35, height: 35)
                                         .cornerRadius(30)
-                                        .padding(.horizontal, 7)
+                                        .overlay {
+                                            Circle()
+                                                .stroke(lineWidth: 0.5)
+                                        }
+                                        
                                     
                                     VStack(alignment: .leading){
                                         Text("탈퇴한 유저")
@@ -313,12 +318,14 @@ struct MagazineDetailView: View {
                     if let magazineData = self.magazineData {
                         magazineVM.deleteMagazine(docID: magazineData.fields.id.stringValue)
                         mapVM.deleteMap(docID: magazineData.fields.id.stringValue)
+                        var postMagazineArr : [String]  = userVM.postedMagazineID
+                        postMagazineArr.removeAll { $0 == magazineData.fields.id.stringValue }
+                        userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
                         dismiss()
                     }
                 }))
             }
             .onAppear{
-                print("매거진 데이터: \(data)")
                 self.magazineData = self.data
                 // 희경: 유저 팔로워, 팔로잉 업데이트 후 뒤로가기했다가 다시 들어갔을때 바로 반영안되는 issue
                 // [해결] magazineDetailView의 onAppear 에서 fetchUser를 해주는 방식에서 userVM의 updateCurrentUserArray 메소드의 receivedValue 블록에 fetchUser 해주는 방식으로 변경
@@ -492,10 +499,11 @@ struct MagazineDetailView: View {
             magazineVM.fetchMagazine()
         }
     }
+    
     var sharedView: some View {
         ForEach(Array(data.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
             if index == selectedIndex{
-                KFImage(URL(string: item.stringValue) ?? URL(string: "https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                KFImage(URL(string: item.stringValue) ?? URL(string: errorImage()))
                     .resizable()
                     .frame(width: Screen.maxWidth, height: Screen.maxWidth)
                     .aspectRatio(contentMode: .fit)

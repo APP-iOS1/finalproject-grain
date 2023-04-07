@@ -199,6 +199,10 @@ struct ContentView: View {
 //                            authenticationStore.addToken()
 //                        }
 //                    }
+                    // 로그인을 할때 토큰값 넣기
+                    if authenticationStore.authenticationState == .authenticated{
+                        authenticationStore.addToken()
+                    }
                 
                 }
                 .splashView {

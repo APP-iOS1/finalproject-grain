@@ -57,6 +57,7 @@ final class AuthenticationStore: ObservableObject {
         // 로그인이 인증된 상태만 잡기
         if isUserLoggedIn == .authenticated{
             self.isUserLoggedIn = .authenticated
+            self.authenticationState = .authenticated
         }else{
             // 나머지 경우 전부 로그인 비 인증 상태
             self.isUserLoggedIn = .unauthenticated

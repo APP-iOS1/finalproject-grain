@@ -11,7 +11,7 @@ import FirebaseAuth
 
 struct DeleteUserView: View {
     @ObservedObject var userVM: UserViewModel
-    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
+    @EnvironmentObject var authenticationStore: AuthenticationStore
     @State private var content: String = ""
     @State private var pushDeleteButton: Bool = false
     
@@ -92,13 +92,13 @@ struct DeleteUserView: View {
                                             userVM.deleteUserMagazine(magazines: magazines)
                                             // 전부 로그아웃
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                if authVM.logInCompanyState == .appleLogIn {
-                                                    authVM.appleLogout()
-                                                } else if authVM.logInCompanyState == .googleLogIn {
-                                                    authVM.googleLogout()
+                                                if authenticationStore.logInCompanyState == .appleLogIn {
+                                                    authenticationStore.appleLogout()
+                                                } else if authenticationStore.logInCompanyState == .googleLogIn {
+                                                    authenticationStore.googleLogout()
                                                 }else {
-                                                    authVM.appleLogout()
-                                                    authVM.googleLogout()
+                                                    authenticationStore.appleLogout()
+                                                    authenticationStore.googleLogout()
                                                 }
                                             }
                                         }), secondaryButton: .cancel())

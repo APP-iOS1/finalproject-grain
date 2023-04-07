@@ -14,7 +14,7 @@ struct MyPageView: View {
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
-    @ObservedObject var authenticationStore : AuthenticationStore = AuthenticationStore()
+    @EnvironmentObject var authenticationStore: AuthenticationStore
     
     
     var magazineDocument: [MagazineDocument]
@@ -176,6 +176,12 @@ struct MyPageView: View {
                 // MARK: userID에 UserDefaults이용해서 저장
                 userVM.fetchUser()
                 userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+                
+                // 로그인을 할때 토큰값 넣기 -> 로그아웃 하고 로그인하는 사람이 있어서 어쩔수 없이 마이페이지 쪽에도 토큰 넣는것을 넣어야할듯!
+                if authenticationStore.authenticationState == .authenticated{
+                    authenticationStore.addToken()
+                }
+                
             }
             .onReceive(userVM.fetchUsersSuccess, perform: { newValue in
                 // userVM 의 fetchUser가 수행되어 값이 들어왔을때 currentUser의 팔로워, 팔로잉 리스트를 필터링하는 메소드 실행

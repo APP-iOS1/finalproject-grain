@@ -17,6 +17,7 @@ import FirebaseAuth
 import FirebaseMessaging
 
 /// 로그인 상태관리
+
 enum AuthenticationState: String {
     case unauthenticated
     case authenticating
@@ -30,16 +31,11 @@ enum LogInCompanyState: String{
     case noCompany
 }
 
-enum MemberState{
-    case member   // 이미 가입된 상태
-    case freshman   //아직 가입되지 않은 상태
-//    case defaultState // 디폴트 상태값 주기
-}
-
 final class AuthenticationStore: ObservableObject {
     
- 
+
     @Published var memberState: MemberState = .freshman
+
     @Published var user: User?
     @Published var displayName = ""
     @Published var errorMessage = ""
@@ -48,6 +44,9 @@ final class AuthenticationStore: ObservableObject {
     @Published var userUID = ""
     @Published var userName = ""
     @Published var email = ""
+
+    
+    @AppStorage("isUserLoggedIn") var isUserLoggedIn: AuthenticationState = .unauthenticated
     
     @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
     @AppStorage("logInCompanyState") var logInCompanyState: LogInCompanyState = .noCompany
@@ -105,7 +104,7 @@ final class AuthenticationStore: ObservableObject {
                 email = profile.email
                 findUserDocID(docID: uid ?? "")
                 self.logInCompanyState = .googleLogIn
-            
+
             }
         }
     }
@@ -285,31 +284,35 @@ final class AuthenticationStore: ObservableObject {
     public func appleLogout() {
         do {
             try authPath.signOut()
+            // MARK: isUserLoggedIn, authenticationState 두개 상태 unauthenticated 바꿔서 isUserLoggedIn( 자동로그인 방지 ), authenticationState( 뷰 보여지는 방식 바꾸기 )
+            self.isUserLoggedIn = .unauthenticated
             self.authenticationState = .unauthenticated
             self.logInCompanyState = .noCompany
         } catch {
             print(error.localizedDescription)
         }
+//        isUserLoggedIn = false
     }
     // MARK: - Google LogOut
     
     /// 구글 로그아웃
     public func googleLogout() {
-        
-        
         do {
             try authPath.signOut()
             GIDSignIn.sharedInstance.signOut()
+            // MARK: isUserLoggedIn, authenticationState 두개 상태 unauthenticated 바꿔서 isUserLoggedIn( 자동로그인 방지 ), authenticationState( 뷰 보여지는 방식 바꾸기 )
+            self.isUserLoggedIn = .unauthenticated
             self.authenticationState = .unauthenticated
             self.logInCompanyState = .noCompany
+            
         } catch {
             print(error.localizedDescription)
         }
-        
     }
     
     public func authStateAuthenticated(user: CurrentUser) {
         self.authenticationState = .authenticated
+        self.isUserLoggedIn = .authenticated
     }
     // MARK: - 회원탈퇴 확인해봐야함
     func googleDisconnect() {
@@ -338,11 +341,12 @@ final class AuthenticationStore: ObservableObject {
                 self.checkUsers = data.documents
                 for i in data.documents{
                     if i.fields.id.stringValue == docID{
-                        self.authenticationState = .authenticated
-
+                        self.authenticationState = .authenticated   //authenticationState 상태 변환
+                        self.isUserLoggedIn = .authenticated        //isUserLoggedIn 로그인 인증된 상태
                         break
                     }
                     self.authenticationState = .freshman
+//                    self.isUserLoggedIn = .freshman               <- 필요없어 보임
                 }
                 self.findUserDocIDSuccess.send()
             }.store(in: &subscription)

@@ -192,7 +192,6 @@ struct ContentView: View {
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                     userVM.fetchUser()
                     
-                    print("\(UUID().uuidString)")
                     // 유저 디비 안에 현재 uid값이 있으면 토큰 넣기
                     // 이 조건을 안걸어주면 지금 일어나는 유저 디비에 유저 uid가 없는 사람도 값을 넣어서 유저 디비가 망가짐 - 정훈
 //                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 30) {

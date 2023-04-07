@@ -260,13 +260,15 @@ struct SupportSection: View {
 
 //MARK: - 정보 섹션
 struct InfoSection: View {
-    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
+    @EnvironmentObject var authenticationStore: AuthenticationStore
     @ObservedObject var userVM: UserViewModel
     // Progress 변수
     @State private var isShownProgress: Bool = true
     
     // Alert 변수
     @State private var showAlert: Bool = false
+    
+    @AppStorage("isUserLoggedIn") var isUserLoggedIn: AuthenticationState?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
@@ -415,16 +417,16 @@ struct InfoSection: View {
                       primaryButton: .destructive(
                         Text("네")
                       ){
-                          authVM.removeToken(tokenArray: userVM.currentUsers?.fcmToken.arrayValue.values ?? [])
+                          authenticationStore.removeToken(tokenArray: userVM.currentUsers?.fcmToken.arrayValue.values ?? [])
                           
                           DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                              if authVM.logInCompanyState == .appleLogIn {
-                                  authVM.appleLogout()
-                              } else if authVM.logInCompanyState == .googleLogIn {
-                                  authVM.googleLogout()
+                              if authenticationStore.logInCompanyState == .appleLogIn {
+                                  authenticationStore.appleLogout()
+                              } else if authenticationStore.logInCompanyState == .googleLogIn {
+                                  authenticationStore.googleLogout()
                               }else {
-                                  authVM.appleLogout()
-                                  authVM.googleLogout()
+                                  authenticationStore.appleLogout()
+                                  authenticationStore.googleLogout()
                               }
                           }
                       },

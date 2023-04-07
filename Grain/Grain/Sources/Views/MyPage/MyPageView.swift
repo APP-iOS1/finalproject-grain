@@ -14,7 +14,7 @@ struct MyPageView: View {
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
-    @ObservedObject var authenticationStore : AuthenticationStore = AuthenticationStore()
+    @EnvironmentObject var authenticationStore: AuthenticationStore
     
     
     var magazineDocument: [MagazineDocument]

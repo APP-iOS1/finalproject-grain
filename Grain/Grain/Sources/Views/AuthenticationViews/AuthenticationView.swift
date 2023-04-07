@@ -41,6 +41,9 @@ struct AuthenticationView: View {
     
     @State private var exceptCurrentUser: [UserDocument] = []
     
+    @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
+    @AppStorage("logInCompanyState") var logInCompanyState: LogInCompanyState = .noCompany
+    
     // 닉네임 정규식
     func checkNicknameRule(string: String) -> Bool {
         let nicknameRegex = "^[a-zA-Z0-9]{4,15}$"
@@ -65,7 +68,7 @@ struct AuthenticationView: View {
     
     var body: some View {
         Group{
-            switch authenticationStore.authenticationState {
+            switch authenticationState {
                 
             case .freshman:
                 VStack(alignment: .center){

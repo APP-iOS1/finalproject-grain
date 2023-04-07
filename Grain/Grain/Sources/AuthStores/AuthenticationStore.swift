@@ -17,14 +17,14 @@ import FirebaseAuth
 import FirebaseMessaging
 
 /// 로그인 상태관리
-enum AuthenticationState {
+enum AuthenticationState: String {
     case unauthenticated
     case authenticating
     case authenticated
     case freshman
 }
 /// 로그인 회사 상태관리
-enum LogInCompanyState{
+enum LogInCompanyState: String{
     case googleLogIn
     case appleLogIn
     case noCompany
@@ -38,8 +38,7 @@ enum MemberState{
 
 final class AuthenticationStore: ObservableObject {
     
-    @Published var authenticationState: AuthenticationState = .unauthenticated
-    @Published var logInCompanyState: LogInCompanyState = .noCompany
+ 
     @Published var memberState: MemberState = .freshman
     @Published var user: User?
     @Published var displayName = ""
@@ -50,28 +49,15 @@ final class AuthenticationStore: ObservableObject {
     @Published var userName = ""
     @Published var email = ""
     
+    @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
+    @AppStorage("logInCompanyState") var logInCompanyState: LogInCompanyState = .noCompany
+    
     var updateUsersArraySuccess = PassthroughSubject<(), Never>()
     var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()
 
     fileprivate var currentNonce: String?
     
     let authPath = Auth.auth()
-    
-    init() {
-        registerAuthStateHandler()
-    }
-    
-    // MARK: - authState listener
-    private var authStateHandler: AuthStateDidChangeListenerHandle?
-    func registerAuthStateHandler() {
-        if authStateHandler == nil {
-            authStateHandler = Auth.auth().addStateDidChangeListener { auth, user in
-                self.user = user
-                self.authenticationState = user == nil ? .unauthenticated : .authenticated
-                self.displayName = user?.email ?? ""
-            }
-        }
-    }
     
     // MARK: - Google Login
     

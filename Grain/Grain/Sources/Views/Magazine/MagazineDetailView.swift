@@ -58,7 +58,7 @@ struct MagazineDetailView: View {
     
     var body: some View {
 //        NavigationStack{
-            ScrollView {
+        ScrollView (showsIndicators: false){
                 VStack(alignment: .leading){
                     if let magazineData = self.magazineData {
                         VStack {

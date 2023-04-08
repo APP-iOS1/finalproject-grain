@@ -144,24 +144,29 @@ struct CommentView: View {
                                             }
                                             Button{
                                                 deleteDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
-                                                deleteCommentAlertBool.toggle()
+//                                                deleteCommentAlertBool.toggle()
+                                                commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
+                                                
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                                }
                                             } label: {
                                                 Text("삭제")
                                                     .font(.caption2)
                                                     .foregroundColor(.textGray)
                                                     .padding(.top, 1)
                                                     .padding(.bottom, -3)
-                                                    .alert(isPresented: $deleteCommentAlertBool) {
-                                                        Alert(title: Text("댓글을 삭제하시겠어요?"),
-                                                              primaryButton:  .cancel(Text("취소")),
-                                                              secondaryButton:.destructive(Text("삭제"),action: {
-                                                            commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
-                                                            
-                                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                                                            }
-                                                        }))
-                                                    }
+//                                                    .alert(isPresented: $deleteCommentAlertBool) {
+//                                                        Alert(title: Text("댓글을 삭제하시겠어요?"),
+//                                                              primaryButton:  .cancel(Text("취소")),
+//                                                              secondaryButton:.destructive(Text("삭제"),action: {
+//                                                            commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
+//
+//                                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                                                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+//                                                            }
+//                                                        }))
+//                                                    }
                                             }
                                             
                                         }

@@ -23,23 +23,21 @@ struct SplashScreen: View {
     @State private var bounce = false
     
     var body: some View {
-        
-        
-        
-        ZStack{
-            Text("GRAIN")
+       VStack{
+            Text("나의 필름 저장소")
                 .foregroundColor(.white)
-                .font(.system(size: 50))
-                .bold()
-                .kerning(7)
-                .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
-            Text("필름 감성을 담은 SNS 앱")
-                .foregroundColor(.white)
-                .font(.system(size: 12))
-                .bold()
-                .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
-        }.background(Color.black)
-        
+                .font(.system(size: 14))
+                
+//                .bold()
+           Text("GRAIN")
+               .foregroundColor(.white)
+               .font(.system(size: 50))
+               .bold()
+               .kerning(7)
+               .padding(.bottom, 120)
+        }
+       .frame(width: Screen.maxWidth, height: Screen.maxHeight)
+       .background(Color.black)
 //        ZStack {
 //            if !isActive {
 //                Image("019")
@@ -157,9 +155,9 @@ struct SplashScreen: View {
 }
 
 
-//struct SplashScremm_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SplashScreen()
-//    }
-//}
+struct SplashScremm_Previews: PreviewProvider {
+    static var previews: some View {
+        SplashScreen()
+    }
+}
 

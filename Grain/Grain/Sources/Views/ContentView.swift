@@ -81,15 +81,12 @@ struct ContentView: View {
                                     
                                 }
                                
-                                
-                                HStack(alignment: .top, spacing: 10) {
+                                HStack(alignment: .top, spacing: 11) {
                                     ForEach(0..<5, id: \.self) { number in
                                         
-                                        
                                         if number == 2 {
-                                            
                                             Circle()
-                                                .frame(width: 40, height: 40)
+                                                .frame(width: 38, height: 38)
                                                 .foregroundColor(.black)
                                                 .overlay {
                                                     Image(systemName: icons[number])
@@ -97,13 +94,11 @@ struct ContentView: View {
                                                         .foregroundColor(.white)
                                                         .monospacedDigit()
                                                 }
-                                                .padding(.horizontal, 8)
+                                                .padding(.horizontal, 9)
                                                 .onTapGesture {
                                                     presented.toggle()
                                                     
                                                 }
-                                            
-                                            
                                         }
                                         else {
                                             VStack{
@@ -117,7 +112,7 @@ struct ContentView: View {
                                                     .monospacedDigit()
                                                 
                                             }
-                                            .frame(width: 65, height: 45)
+                                            .frame(width: 65, height: 42)
                                             .onTapGesture {
                                                 if tabViewSelectedIndex != number{
                                                     self.tabViewSelectedIndex = number
@@ -141,7 +136,6 @@ struct ContentView: View {
                                 }
                                 
                             }
-                            .animation(nil, value: tabViewSelectedIndex )
                             .toolbar {
                                 if (tabViewSelectedIndex == 0) || (tabViewSelectedIndex == 1) {
                                     ToolbarItem(placement: .navigationBarLeading) {
@@ -149,7 +143,8 @@ struct ContentView: View {
                                             .font(.title)
                                             .bold()
                                             .kerning(7)
-                                        
+                                            .animation(nil, value: tabViewSelectedIndex )
+
                                     }
                                     
                                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -159,7 +154,8 @@ struct ContentView: View {
                                             Image(systemName: "magnifyingglass")
                                                 .foregroundColor(.black)
                                         }
-                                        
+                                        .animation(nil, value: tabViewSelectedIndex )
+
                                     }
                                     
                                 }
@@ -170,6 +166,8 @@ struct ContentView: View {
                                             .font(.title)
                                             .bold()
                                             .kerning(7)
+                                            .animation(nil, value: tabViewSelectedIndex )
+
                                     }
                                     
                                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -179,6 +177,8 @@ struct ContentView: View {
                                             Image(systemName: "ellipsis")
                                                 .foregroundColor(.black)
                                         }
+                                        .animation(nil, value: tabViewSelectedIndex )
+
                                     }
                                 }
                                 

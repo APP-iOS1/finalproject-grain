@@ -271,6 +271,7 @@ struct MagazineDetailView: View {
                                     .padding(.top, -9)
                                     .padding(.leading, 20)
                                     .transition(.moveAndFade)
+                                    .animation(.default, value: showDevices)
                                 }
 
                             }

@@ -154,6 +154,8 @@ struct MyPageView: View {
                             .font(.subheadline)
                             .padding(.top, -9)
                             .transition(.moveAndFade)
+                            .animation(.default, value: showDevices)
+
                         }
                         
                     }

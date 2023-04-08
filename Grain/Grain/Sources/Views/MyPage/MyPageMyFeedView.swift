@@ -63,10 +63,10 @@ struct MyPageMyFeedView: View {
                 Spacer()
                 
             }
-            .foregroundColor(.black)
             .font(.title3)
-            .padding()
+            .padding(.horizontal)
             .padding(.leading, 12)
+            .padding(.vertical, 3)
             
             if showGridOrList {
                 

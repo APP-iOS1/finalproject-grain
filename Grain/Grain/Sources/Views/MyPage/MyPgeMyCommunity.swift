@@ -25,7 +25,7 @@ struct MyPgeMyCommunity: View {
                     NavigationLink {
                         CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {
-                        CommunityRowView(communityVM: communityVM, community: data, isLoading: $isLoading)
+                        CommunityRowView(communityVM: communityVM, community: data)
                     }
                 }
             }

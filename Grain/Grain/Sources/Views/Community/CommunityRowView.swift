@@ -45,8 +45,6 @@ struct CommunityRowView: View {
     
     var community: CommunityDocument
     
-    @Binding var isLoading: Bool
-    
     
     func errorImage() -> String{
         var https : String = "https://"
@@ -67,7 +65,7 @@ struct CommunityRowView: View {
                     .cornerRadius(7)
                     .aspectRatio(contentMode: .fill)
                     .clipped()
-                    .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                    .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                     .padding(.horizontal, 13)
                 
                 VStack {
@@ -83,7 +81,7 @@ struct CommunityRowView: View {
                                 .foregroundColor(.white)
                                 .bold()
                                 .font(.caption)
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             
                             Text("\(community.fields.state.stringValue)")
                                 .padding(.vertical, 5)
@@ -93,7 +91,7 @@ struct CommunityRowView: View {
                                 .foregroundColor(Color(hex: tagNameColor))
                                 .bold()
                                 .font(.caption)
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                         } // hstack
                         .padding(.top, 0)
                 
@@ -103,21 +101,21 @@ struct CommunityRowView: View {
                             .foregroundColor(.boxGray)
                             .multilineTextAlignment(.leading)
                             .padding(.top, -2)
-                            .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                            .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             .lineLimit(2)
                             .frame(height: 45)
                
                         HStack {
                             Text(community.createdDate?.renderTime() ?? "")
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             Spacer()
                             Image(systemName: "text.bubble")
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             
                             if true{
                                 if let recommentCount = communityVM.fetchCommunityCellCommentCount[community.fields.id.stringValue]{
                                     Text("\(recommentCount)")
-                                        .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                        .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                                         .padding(.leading, -5)
                                 }else{
                                     Text("0")
@@ -140,7 +138,7 @@ struct CommunityRowView: View {
         }
         .padding(.top, 5)
         .onAppear(perform: {
-            if isLoading == true {
+            if communityVM.isLoading == true {
                 withAnimation(.linear(duration: 0.5).repeatForever(autoreverses: true)) {
                     self.opacity = opacity == 0.4 ? 0.8 : 0.4
                 }

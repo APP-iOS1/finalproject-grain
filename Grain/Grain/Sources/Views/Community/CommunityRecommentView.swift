@@ -10,15 +10,13 @@ import Kingfisher
 import FirebaseAuth
 
 struct CommunityRecommentView: View {
-    @ObservedObject var commentVm : CommentViewModel
-    @ObservedObject var userVM : UserViewModel
-    @ObservedObject var magazineVM : MagazineViewModel
+    @ObservedObject var commentVm: CommentViewModel
+    @ObservedObject var userVM: UserViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
 
-    @State var deleteCommentAlertBool : Bool = false
-    @State var deleteDocId : String = ""
-    @State var nickName : String = "" // 닉네임 변경을 위해
+    @State private var deleteDocId: String = ""
+    @State private var nickName: String = "" // 닉네임 변경을 위해
 
-    
     var commentCollectionDocId : String
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Community - 4ADB415C-871A-4FAF-86EA-D279D145CD37
@@ -103,30 +101,15 @@ struct CommunityRecommentView: View {
                                         }
 
                                         Button{
-                                            deleteDocId = index.fields.id.stringValue
-                                            deleteCommentAlertBool.toggle()
-                                            commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
-                                            
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                                            }
+                                            self.deleteDocId = index.fields.id.stringValue
+                                            self.commentVm.isDeleteReCommentAlertshown.toggle()
+
                                         } label: {
                                             Text("삭제")
                                                 .font(.caption2)
                                                 .foregroundColor(.textGray)
                                                 .padding(.top, 1)
                                                 .padding(.bottom, -3)
-//                                                .alert(isPresented: $deleteCommentAlertBool) {
-//                                                    Alert(title: Text("댓글을 삭제하시겠어요?"),
-//                                                          primaryButton:  .cancel(Text("취소")),
-//                                                          secondaryButton:.destructive(Text("삭제"),action: {
-//                                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
-//
-//                                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-//                                                        }
-//                                                    }))
-//                                                }
                                         }
                                     }
                                 }
@@ -185,6 +168,13 @@ struct CommunityRecommentView: View {
         }
         .padding(.top, 3)
         .padding(.leading, -10)
+        .onChange(of: commentVm.isDeleteReComment) { newValue in
+            commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+            }
+        }
     }
 }
 

@@ -193,6 +193,9 @@ struct MyPageView: View {
           
         }
         .refreshable {
+            do {
+                try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+              } catch {}
             userVM.fetchUser()
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }

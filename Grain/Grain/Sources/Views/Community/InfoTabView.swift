@@ -20,42 +20,47 @@ struct InfoTabView: View {
     
     
     var body: some View {
-        ScrollViewReader { proxyReader in
-            ScrollView(showsIndicators: false){
-                VStack {
-                    ForEach(communityVM.returnCategoryCommunity(category: "정보"), id: \.self){ data in
-                        NavigationLink {
-                            CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
-                        } label: {
-                            CommunityRowView(communityVM: communityVM, community: data)
-                        }
-                    }
-                }
-                .id("SCROLL_TO_TOP")
-                .overlay(
-                    GeometryReader { proxy -> Color in
-                        DispatchQueue.main.async {
-                            if startOffset == 0 {
-                                self.startOffset = proxy.frame(in: .global).minY
+        VStack{
+            ScrollViewReader { proxyReader in
+                ScrollView(showsIndicators: false){
+                    VStack {
+                        ForEach(communityVM.returnCategoryCommunity(category: "정보"), id: \.self){ data in
+                            NavigationLink {
+                                CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
+                            } label: {
+                                CommunityRowView(communityVM: communityVM, community: data)
                             }
-                            let offset = proxy.frame(in: .global).minY
-                            self.scrollViewOffset = offset - startOffset
-                            
                         }
-                        return Color.clear
                     }
-                        .frame(width: 0, height: 0)
-                    ,alignment: .top
-                )
-            }
-            .refreshable {
-                communityVM.fetchCommunity()
-            }
-            .onChange(of: scrollToTop, perform: { newValue in
-                withAnimation(.default) {
-                    proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)
+                    .id("SCROLL_TO_TOP")
+                    .overlay(
+                        GeometryReader { proxy -> Color in
+                            DispatchQueue.main.async {
+                                if startOffset == 0 {
+                                    self.startOffset = proxy.frame(in: .global).minY
+                                }
+                                let offset = proxy.frame(in: .global).minY
+                                self.scrollViewOffset = offset - startOffset
+                                
+                            }
+                            return Color.clear
+                        }
+                            .frame(width: 0, height: 0)
+                        ,alignment: .top
+                    )
                 }
-            })
+                .refreshable {
+                    do {
+                        try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+                      } catch {}
+                    communityVM.fetchCommunity()
+                }
+                .onChange(of: scrollToTop, perform: { newValue in
+                    withAnimation(.default) {
+                        proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)
+                    }
+                })
+            }
         }
     }
 }

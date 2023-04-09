@@ -43,7 +43,6 @@ struct MagazineRecommentView: View {
     }
     
     var body: some View {
-        
         VStack(alignment: .leading){
             ForEach(Array(commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values), id:\.self){ element in
                 ForEach(element , id:\.self){ index in

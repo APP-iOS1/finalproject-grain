@@ -25,7 +25,6 @@ struct MagazineMainView: View {
     let feedFilter = ["전체보기", "구독자"]
     
     var body: some View {
-        
         VStack{
             HStack{
                 

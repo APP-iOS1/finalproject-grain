@@ -9,6 +9,10 @@ import SwiftUI
 import FirebaseAuth
 import PhotosUI
 
+private enum FocusableField: Hashable {
+    case write
+}
+
 struct AddCommunityView: View {
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
@@ -35,7 +39,9 @@ struct AddCommunityView: View {
     }
     
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
-        
+    
+    @FocusState private var focus: FocusableField?
+
     var body: some View {
         GeometryReader{ geo in
             ZStack {
@@ -192,6 +198,8 @@ struct AddCommunityView: View {
                                 hideKeyboard()
                             }
                             .submitLabel(.done)
+                            .focused($focus, equals: .write )
+
                     }
                     .padding(.vertical, 8)
                     
@@ -215,6 +223,7 @@ struct AddCommunityView: View {
                         )
                         .font(.body)
                         .bold()
+                        .focused($focus, equals: .write)
                     
                     Spacer()
                     
@@ -296,6 +305,17 @@ struct AddCommunityView: View {
                             .foregroundColor(.black)
                             .bold()
                     }
+                }
+                
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button {
+                        self.focus = nil
+                    } label: {
+                        Text("완료")
+                            .foregroundColor(.blue)
+                    }
+                    
                 }
             }
             .onAppear {

@@ -149,6 +149,9 @@ struct EditCameraView: View {
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
         .refreshable {
+            do {
+                try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+              } catch {}
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
     }

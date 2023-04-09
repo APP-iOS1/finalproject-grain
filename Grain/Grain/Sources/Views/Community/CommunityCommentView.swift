@@ -33,7 +33,8 @@ struct CommunityCommentView: View {
     @Binding var editReColletionDocID: String
     @Binding var reommentUserID : String
     @Binding var communityData: CommunityDocument?
-    
+    @Binding var scrollToBottom: Bool
+
     
     var trimContent: String {
         replyContent.trimmingCharacters(in: .whitespaces)
@@ -220,6 +221,7 @@ struct CommunityCommentView: View {
                     else{
                         Button {
                             // MARK: 댓글 업로드 구현
+                            self.scrollToBottom.toggle()
                             replyComment = false
                             commentVm.insertComment(
                                 collectionName: "Community",

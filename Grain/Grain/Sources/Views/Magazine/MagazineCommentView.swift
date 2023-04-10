@@ -36,7 +36,8 @@ struct MagazineCommentView: View {
     @State var eachBool : [Bool] = []   // 댓글 각각 [Bool] 배열 -> 판별을 위해
     @State var commentLoading : Bool = false    //첫 번째 댓글 혹시 모를 로딩
     @State var reommentUserID : String = "" // 대댓글 유저ID -> 알림 기능을 위해
-    
+    @State private var scrollToBottom: Bool = false
+
     @Binding var magazineData: MagazineDocument?
     
     
@@ -61,7 +62,9 @@ struct MagazineCommentView: View {
     }
         
     var body: some View {
-        VStack() {
+        VStack{
+            ScrollViewReader { proxyReader in
+
             ScrollView{
                 VStack(alignment: .leading){
                     if !(commentVm.sortedRecentComment.count == 0){
@@ -132,10 +135,10 @@ struct MagazineCommentView: View {
                                                         .padding(.top, 1)
                                                         .padding(.bottom, -3)
                                                         .onTapGesture {
-                                                        makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
-                                                        readMoreComments = true
-                                                        eachBool[index] = true
-                                                    }
+                                                            makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
+                                                            readMoreComments = true
+                                                            eachBool[index] = true
+                                                        }
                                                 }
                                             }
                                             if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
@@ -164,9 +167,15 @@ struct MagazineCommentView: View {
                                                             Alert(title: Text("댓글을 삭제하시겠어요?"),
                                                                   primaryButton:  .cancel(Text("취소")),
                                                                   secondaryButton:.destructive(Text("삭제"),action: {
-                                                                commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
-                                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                                                
+                                                                if commentVm.sortedRecentComment.count == 1 {
+                                                                    commentVm.sortedRecentComment.removeFirst()
+                                                                    commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
+                                                                } else {
+                                                                    commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
+                                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                                        commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                                                    }
                                                                 }
                                                             }))
                                                         }
@@ -174,7 +183,7 @@ struct MagazineCommentView: View {
                                             }
                                             
                                         }
-                                       
+                                        
                                         if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
                                             if  readMoreComments && eachBool[index]{
                                                 MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
@@ -240,13 +249,13 @@ struct MagazineCommentView: View {
                                                     .padding(.top, 1)
                                                     .padding(.bottom, -3)
                                                     .onTapGesture {
-                                                    makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
-                                                    readMoreComments = true
-                                                    eachBool[index] = true
-                                                }
+                                                        makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
+                                                        readMoreComments = true
+                                                        eachBool[index] = true
+                                                    }
                                             }
                                         }
-
+                                        
                                         if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
                                             if  readMoreComments && eachBool[index]{
                                                 MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
@@ -282,7 +291,7 @@ struct MagazineCommentView: View {
                                 Text("첫 번째 댓글을 남겨주세요~!")
                                     .font(.headline)
                                     .foregroundColor(.middlebrightGray)
-                            }.position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
+                            }.position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.37)
                         }else{
                             VStack{
                                 ProgressView()
@@ -292,14 +301,19 @@ struct MagazineCommentView: View {
                                         }
                                     }
                             }.position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.3)
-
+                            
                         }
-   
+                        
                     }
                 }
-                
+                .id("SCROLL_TO_BOTTOM")
             }
-            
+            .onChange(of: scrollToBottom, perform: { newValue in
+                withAnimation(.default) {
+                    proxyReader.scrollTo("SCROLL_TO_BOTTOM", anchor: .bottom)
+                }
+            })
+        }
             VStack(alignment: .leading){
                 // MARK: 답글달기 클릭시 활성화 되는 구역
                 if replyComment {
@@ -384,7 +398,7 @@ struct MagazineCommentView: View {
                                 .stroke(lineWidth: 0.5)
                         }
                         .padding(.leading)
-                    MagazineCommentTextField(commentVm: commentVm, userVM: userVM, commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData,editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, editRecomment: $editRecomment, commentCollectionDocId: $commentCollectionDocId, magazineData: $magazineData, reommentUserID: $reommentUserID, currentUser: userVM.currentUsers,collectionName: collectionName, collectionDocId: collectionDocId)
+                    MagazineCommentTextField(commentVm: commentVm, userVM: userVM, commentText: $commentText, summitComment: $summitComment, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData,editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, editRecomment: $editRecomment, commentCollectionDocId: $commentCollectionDocId, magazineData: $magazineData, reommentUserID: $reommentUserID, scrollToBottom: $scrollToBottom, currentUser: userVM.currentUsers,collectionName: collectionName, collectionDocId: collectionDocId)
                     
                 }
             }
@@ -413,11 +427,12 @@ struct MagazineCommentTextField: View {
     @Binding var editData : CommentFields
     @Binding var editReDocID : String
     @Binding var editReColletionDocID: String // commentCollectionDocId 이 값을 받기 위해
-    @Binding var editReData : CommentFields
-    @Binding var editRecomment : Bool
+    @Binding var editReData: CommentFields
+    @Binding var editRecomment: Bool
     @Binding var commentCollectionDocId : String
     @Binding var magazineData: MagazineDocument?
-    @Binding var reommentUserID : String
+    @Binding var reommentUserID: String
+    @Binding var scrollToBottom: Bool
     
     var currentUser : CurrentUserFields?
     var collectionName : String
@@ -482,8 +497,10 @@ struct MagazineCommentTextField: View {
                             let sender = PushNotificationSender(serverKeyString: "")
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == reommentUserID })
                             {
-                                for i in user.fields.fcmToken.arrayValue.values {
-                                    sender.sendPushNotification(to: i.stringValue, title: "바로 지금! 대댓글이 도착했습니다. 🎉", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 댓글에 대댓글을 남겼어요 💬", image: magazineData?.fields.image.arrayValue.values[0].stringValue ?? "")
+                                if user.fields.id.stringValue != userVM.currentUsers?.id.stringValue{
+                                    for i in user.fields.fcmToken.arrayValue.values {
+                                        sender.sendPushNotification(to: i.stringValue, title: "바로 지금! 대댓글이 도착했습니다. 🎉", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 댓글에 대댓글을 남겼어요 💬", image: magazineData?.fields.image.arrayValue.values[0].stringValue ?? "")
+                                    }
                                 }
                             }
                             
@@ -541,7 +558,7 @@ struct MagazineCommentTextField: View {
                     else{
                         Button {
                             // MARK: 댓글 업로드 구현
-                        
+                            self.scrollToBottom.toggle()
                             replyComment = false
                             
                             commentVm.insertComment(
@@ -567,10 +584,12 @@ struct MagazineCommentTextField: View {
                                 
                                 if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
                                 {
-                                    let sender = PushNotificationSender(serverKeyString: "")
-                                    for i in user.fields.fcmToken.arrayValue.values {
-                                        sender.sendPushNotification(to: i.stringValue, title:  "댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 에 댓글을 남겼습니다", image: magazineData.fields.image.arrayValue.values[0].stringValue )
-                                        sender.sendPushNotification(to: i.stringValue, title:  "게시글에 새로운 댓글이 달렸습니다! 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 게시글에 댓글을 남겼어요, 지금 확인하고 댓글 작성자와 함께 대화해 보세요. 💬 ", image: magazineData.fields.image.arrayValue.values[0].stringValue ?? "")
+                                    if user.fields.id.stringValue != userVM.currentUsers?.id.stringValue{
+                                        let sender = PushNotificationSender(serverKeyString: "")
+                                        for i in user.fields.fcmToken.arrayValue.values {
+                                            sender.sendPushNotification(to: i.stringValue, title:  "댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 에 댓글을 남겼습니다", image: magazineData.fields.image.arrayValue.values[0].stringValue )
+                                            //                                        sender.sendPushNotification(to: i.stringValue, title:  "게시글에 새로운 댓글이 달렸습니다! 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 게시글에 댓글을 남겼어요, 지금 확인하고 댓글 작성자와 함께 대화해 보세요. 💬 ", image: magazineData.fields.image.arrayValue.values[0].stringValue ?? "")
+                                        }
                                     }
                                 }
                             }

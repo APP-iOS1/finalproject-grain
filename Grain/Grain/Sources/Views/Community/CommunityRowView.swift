@@ -17,7 +17,7 @@ struct CommunityRowView: View {
     
     var tagColor: String {
         switch community.fields.state.stringValue {
-        case "모집중", "판매중":
+        case "판매중":
             return "#005E5B"
 //            return "#4C9E77"
         case "모집완료", "판매완료":
@@ -25,6 +25,8 @@ struct CommunityRowView: View {
         case "Tip":
             return "#FAC75B"
 //            return "#F5dF4D"
+        case "모집중":
+            return "#1E3F66"
         default:
             return "4C9E77"
         }
@@ -44,8 +46,6 @@ struct CommunityRowView: View {
     }
     
     var community: CommunityDocument
-    
-    @Binding var isLoading: Bool
     
     
     func errorImage() -> String{
@@ -67,7 +67,7 @@ struct CommunityRowView: View {
                     .cornerRadius(7)
                     .aspectRatio(contentMode: .fill)
                     .clipped()
-                    .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                    .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                     .padding(.horizontal, 13)
                 
                 VStack {
@@ -83,7 +83,7 @@ struct CommunityRowView: View {
                                 .foregroundColor(.white)
                                 .bold()
                                 .font(.caption)
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             
                             Text("\(community.fields.state.stringValue)")
                                 .padding(.vertical, 5)
@@ -93,7 +93,7 @@ struct CommunityRowView: View {
                                 .foregroundColor(Color(hex: tagNameColor))
                                 .bold()
                                 .font(.caption)
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                         } // hstack
                         .padding(.top, 0)
                 
@@ -103,21 +103,21 @@ struct CommunityRowView: View {
                             .foregroundColor(.boxGray)
                             .multilineTextAlignment(.leading)
                             .padding(.top, -2)
-                            .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                            .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             .lineLimit(2)
                             .frame(height: 45)
                
                         HStack {
                             Text(community.createdDate?.renderTime() ?? "")
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             Spacer()
                             Image(systemName: "text.bubble")
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             
                             if true{
                                 if let recommentCount = communityVM.fetchCommunityCellCommentCount[community.fields.id.stringValue]{
                                     Text("\(recommentCount)")
-                                        .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                        .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                                         .padding(.leading, -5)
                                 }else{
                                     Text("0")
@@ -140,7 +140,7 @@ struct CommunityRowView: View {
         }
         .padding(.top, 5)
         .onAppear(perform: {
-            if isLoading == true {
+            if communityVM.isLoading == true {
                 withAnimation(.linear(duration: 0.5).repeatForever(autoreverses: true)) {
                     self.opacity = opacity == 0.4 ? 0.8 : 0.4
                 }

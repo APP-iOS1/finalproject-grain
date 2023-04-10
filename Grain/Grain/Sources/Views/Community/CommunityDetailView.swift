@@ -14,7 +14,7 @@ import Kingfisher
 struct CommunityDetailView: View {
     
     @StateObject var commentVm = CommentViewModel()
-
+    
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
@@ -44,14 +44,20 @@ struct CommunityDetailView: View {
     @State var editReColletionDocID: String = ""
     @State var reommentUserID : String = ""
     @State private var isDeleteAlertShown:Bool = false
+    @State private var deleteDocId: String = ""
+    @State private var deleteCommentAlertBool: Bool = false
+    @State private var isCommentDelete: Bool = false
+    @State private var scrollViewOffset: CGFloat = 0
+    @State private var startOffset: CGFloat = 0
+    @State private var scrollToBottom: Bool = false
     
     @FocusState private var textFieldFocused: Bool
     
     @Environment(\.presentationMode) var presentationMode
-
+    
     @SceneStorage("isZooming") var isZooming: Bool = false
     @SceneStorage("index") var selectedIndex: Int = 0
-
+    
     func errorImage() -> String{
         var https : String = "https://"
         if let infolist = Bundle.main.infoDictionary {
@@ -72,109 +78,155 @@ struct CommunityDetailView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack {
+        VStack {
+            ScrollViewReader { proxyReader in
                 ScrollView {
-                    VStack(alignment: .leading){
-                        HStack{
-                            if let community = self.communityData {
-                                Text(community.fields.title.stringValue)
-                                    .font(.title)
-                                    .bold()
-                                    .padding(.horizontal)
-                                .padding(.top, 5)
-                            }
-                            Spacer()
-                        }
-                        .padding(.top, 5)
-                        
-                        Divider()
-                        // MARK: 닉네임 헤더
-                        HStack() {
-                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue}){
-                                NavigationLink {
-                                    UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
-                                } label: {
-                                    ProfileImage(imageName: user.fields.profileImage.stringValue)
-                                        .padding(.leading, 9)
-                                }
-                                
-                                VStack(alignment: .leading) {
-                                    Text(user.fields.nickName.stringValue)
-                                        .font(.callout)
+                    VStack{
+                        VStack(alignment: .leading){
+                            HStack{
+                                if let community = self.communityData {
+                                    Text(community.fields.title.stringValue)
+                                        .font(.title)
                                         .bold()
-                                        .padding(.bottom, -3)
-                                    //MARK: 옵셔널 처리 고민
-                                    Text(community.createTime.toDate()?.renderTime() ?? "")
-                                        .font(.caption2)
-                                        .foregroundColor(.textGray)
-                                }.padding(.leading, -2)
-                            }
-                            Spacer()
-                        }//HS
-                        .padding([.top, .bottom], 2)
-                        
-//                        Divider()
-//                            .frame(maxWidth: Screen.maxWidth * 0.94)
-//                            .background(Color.black)
-//                            .padding(.top, 5)
-//                            .padding(.bottom, 15)
-//                            .padding(.horizontal, Screen.maxWidth * 0.04)
-                        //MARK: 사진
-                        ForEach(Array(community.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
-                            Rectangle()
-                                .frame(width: Screen.maxWidth, height: Screen.maxWidth)
-                                .overlay {
-                                    KFImage(URL(string: item.stringValue) ?? URL(string:  errorImage()))
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
+                                        .padding(.horizontal)
+                                        .padding(.top, 5)
                                 }
-                                .tag(index)
-                        }
-                        .addPinchZoom()
-                        .frame(width: Screen.maxWidth , height: Screen.maxWidth)
-                        .padding(.bottom, 10)
-                        .zIndex(.infinity)
-                        
-                        // MARK: 게시글(디테일뷰) 내용
-                        HStack {
-                            if let community = self.communityData {
-                                Text(community.fields.content.stringValue)
-                                    .lineSpacing(4.0)
-                                    .padding(.vertical, -20)
-                                    .padding()
+                                Spacer()
                             }
-                            Spacer()
-                        }
-                        .padding(.top, 10)
-//                        Divider()
-//                            .frame(maxWidth: Screen.maxWidth * 0.94)
-//                            .background(Color.black)
-//                            .padding(.top, 20)
-//                            .padding(.horizontal, Screen.maxWidth * 0.04)
-                        
-                        HStack {
-                            Image(systemName: "bubble.right")
-                                .padding(.top, 2)
-                            Text("\(commentCount)")
+                            .padding(.top, 5)
+                            .alert(isPresented: $isDeleteAlertShown) {
+                                Alert(title: Text("게시물을 삭제하시겠어요?"),
+                                      message: Text("게시물을 삭제하면 영구히 삭제되고 복원할 수 없습니다."),
+                                      primaryButton:  .cancel(Text("취소")),
+                                      secondaryButton:.destructive(Text("삭제"),
+                                                                   action: {
+                                    if let communityData = self.communityData {
+                                        communityVM.deleteCommunity(docID: communityData.fields.id.stringValue)
+                                        var postCommunitArr : [String]  = userVM.postedCommunityID
+                                        postCommunitArr.removeAll { $0 == communityData.fields.id.stringValue }
+                                        userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunitArr, docID: Auth.auth().currentUser?.uid ?? "")
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            communityVM.fetchCommunity()
+                                                    }
+                                        presentationMode.wrappedValue.dismiss()
+                                    }
+                                }))
+                            }
+                          
+                            Divider()
+                                .alert(isPresented: $deleteCommentAlertBool) {
+                                    Alert(title: Text("댓글을 삭제하시겠어요?"),
+                                          primaryButton:  .cancel(Text("취소")),
+                                          secondaryButton:.destructive(Text("삭제"),action: {
+                                        self.isCommentDelete.toggle()
+                                        self.replyComment = false
+                                        self.editComment = false
+                                        self.editRecomment = false
+                                        
+                                    }))
+                                }
+                             
+                            // MARK: 닉네임 헤더
+                            HStack {
+                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == community.fields.userID.stringValue}){
+                                    NavigationLink {
+                                        UserDetailView(userVM: userVM, magazineVM: magazineVM, user: user)
+                                    } label: {
+                                        ProfileImage(imageName: user.fields.profileImage.stringValue)
+                                            .padding(.leading, 9)
+                                    }
+                                    
+                                    VStack(alignment: .leading) {
+                                        Text(user.fields.nickName.stringValue)
+                                            .font(.callout)
+                                            .bold()
+                                            .padding(.bottom, -3)
+                                        //MARK: 옵셔널 처리 고민
+                                        Text(community.createTime.toDate()?.renderTime() ?? "")
+                                            .font(.caption2)
+                                            .foregroundColor(.textGray)
+                                    }.padding(.leading, -2)
+                                }
+                                Spacer()
+                            }//HS
+                            .padding([.top, .bottom], 2)
+                            .alert(isPresented: $commentVm.isDeleteReCommentAlertshown) {
+                                Alert(title: Text("댓글을 삭제하시겠어요?"),
+                                      primaryButton:  .cancel(Text("취소")),
+                                      secondaryButton:.destructive(Text("삭제"),action: {
+                                    self.commentVm.isDeleteReComment.toggle()
+                                    self.replyComment = false
+                                    self.editComment = false
+                                    self.editRecomment = false
+                                }))
+                            }
+                      
+                            // MARK: 사진
+                            ForEach(Array(community.fields.image.arrayValue.values.enumerated()), id: \.1.self) { (index, item) in
+                                Rectangle()
+                                    .frame(width: Screen.maxWidth, height: Screen.maxWidth)
+                                    .overlay {
+                                        KFImage(URL(string: item.stringValue) ?? URL(string:  errorImage()))
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                    }
+                                    .tag(index)
+                            }
+                            .addPinchZoom()
+                            .frame(width: Screen.maxWidth , height: Screen.maxWidth)
+                            .padding(.bottom, 10)
+                            .zIndex(.infinity)
+                            
+                            // MARK: 게시글(디테일뷰) 내용
+                            HStack {
+                                if let community = self.communityData {
+                                    Text(community.fields.content.stringValue)
+                                        .lineSpacing(4.0)
+                                        .padding(.vertical, -20)
+                                        .padding()
+                                }
+                                Spacer()
+                            }
+                            .padding(.top, 10)
+                            //                        Divider()
+                            //                            .frame(maxWidth: Screen.maxWidth * 0.94)
+                            //                            .background(Color.black)
+                            //                            .padding(.top, 20)
+                            //                            .padding(.horizontal, Screen.maxWidth * 0.04)
+                            
+                            HStack {
+                                Image(systemName: "bubble.right")
+                                    .padding(.top, 2)
+                                Text("\(commentCount)")
                                     .padding(.leading, -3)
+                            }
+                            .padding(.top, 20)
+                            .padding(.leading)
+                            .font(.callout)
+                            .foregroundColor(.gray)
+                            
+                            Divider()
+                            
+                            // MARK: - 커뮤니티 댓글 뷰
+                            
+                            CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData ,commentCount : $commentCount, editReColletionDocID: $editReColletionDocID, reommentUserID: $reommentUserID , isCommentDelete: $isCommentDelete, deleteCommentAlertBool: $deleteCommentAlertBool)
+                                .padding(.top, 1)
+                                .padding(.trailing, 20)
+                            
                         }
-                        .padding(.top, 20)
-                        .padding(.leading)
-                        .font(.callout)
-                        .foregroundColor(.gray)
-                        
-                        Divider()
-                        
-                        // MARK: - 커뮤니티 댓글 뷰
-                        
-                        CommentView(commentVm: commentVm, userVM: userVM, magazineVM: magazineVM, collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment ,editReDocID: $editReDocID , editReData : $editReData ,commentCount : $commentCount, editReColletionDocID: $editReColletionDocID, reommentUserID: $reommentUserID)
-                            .padding(.top, 1)
-                            .padding(.trailing, 20)
-                    
                     }
+                    .id("SCROLL_TO_BOTTOM")
+              
                 }
+                .onChange(of: scrollToBottom, perform: { newValue in
+                    withAnimation(.default) {
+                        proxyReader.scrollTo("SCROLL_TO_BOTTOM", anchor: .bottom)
+                    }
+                })
                 .refreshable {
+                    do {
+                        try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+                      } catch {}
                     communityVM.fetchCommunity()
                 }
                 .onDisappear{
@@ -183,158 +235,143 @@ struct CommunityDetailView: View {
                 .padding(.top, 1)
                 // MARK: 댓글 달기
                 if isZooming == false {
-                    CommunityCommentView(commentVm: commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData, editReColletionDocID: $editReColletionDocID, reommentUserID: $reommentUserID, communityData: $communityData)
+                    CommunityCommentView(commentVm: commentVm, userVM : userVM ,community: community, commentCollectionDocId: $commentCollectionDocId, replyCommentText: $replyCommentText, replyContent: $replyContent, replyComment: $replyComment, editComment: $editComment, editDocID: $editDocID, editData: $editData , editRecomment: $editRecomment, editReDocID: $editReDocID, editReData: $editReData, editReColletionDocID: $editReColletionDocID, reommentUserID: $reommentUserID, communityData: $communityData, scrollToBottom: $scrollToBottom)
                         .transition(.move(edge: .bottom))
                         .animation(.default , value: isZooming)
                 }
             }
-            .alert(isPresented: $isDeleteAlertShown) {
-                Alert(title: Text("게시물을 삭제하시겠어요?"),
-                      message: Text("게시물을 삭제하면 영구히 삭제되고 복원할 수 없습니다."),
-                      primaryButton:  .cancel(Text("취소")),
-                      secondaryButton:.destructive(Text("삭제"),
-                                                   action: {
-                    if let communityData = self.communityData {
-                        communityVM.deleteCommunity(docID: communityData.fields.id.stringValue)
-                        var postCommunitArr : [String]  = userVM.postedCommunityID
-                        postCommunitArr.removeAll { $0 == communityData.fields.id.stringValue }
-                        userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunitArr, docID: Auth.auth().currentUser?.uid ?? "")
-                        presentationMode.wrappedValue.dismiss()
+        }
+        .onAppear {
+            self.communityData = self.community
+        }
+        .task(id: communityVM.communities, {
+            if let communityData = communityVM.communities.first(where: { $0.fields.id.stringValue == self.community.fields.id.stringValue
+            }) {
+                self.communityData = communityData
+            }
+        })
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }, label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text("커뮤니티")
                     }
-                }))
+                })
+                .accentColor(.black)
             }
-            .onAppear {
-                self.communityData = self.community
-            }
-            .task(id: communityVM.communities, {
-                if let communityData = communityVM.communities.first(where: { $0.fields.id.stringValue == self.community.fields.id.stringValue
-                }) {
-                    self.communityData = communityData
-                }
-            })
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        presentationMode.wrappedValue.dismiss()
-                    }, label: {
-                        HStack {
-                            Image(systemName: "chevron.left")
-                            Text("커뮤니티")
-                        }
-                    })
-                    .accentColor(.black)
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
-                    if community.fields.userID.stringValue == Auth.auth().currentUser?.uid{
-                        Menu {
-                            if !(postStatus == ""){
-                                Button{
-                                    communityData?.fields.state.stringValue = postStatus
-                                    communityVM.updateCommunity(data: communityData!, docID: community.fields.id.stringValue)
-                                }label: {
-                                    Text(postStatusString)
-                                }
-                            }
-                            
-                            if !userVM.bookmarkedCommunityID.contains(community.fields.id.stringValue) {
-                                Button {
-                                        userVM.bookmarkedCommunityID.append(community.fields.id.stringValue)
-                                        if let user = userVM.currentUsers {
-                                            let arr = userVM.bookmarkedCommunityID
-                                            let docID = user.id.stringValue
-                                            userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
-                                        }
-                                } label: {
-                                    Text("저장")
-                                }
-                            } else {
-                                Button {
-                                        if let user = userVM.currentUsers {
-                                            let index = userVM.bookmarkedCommunityID.firstIndex(of: community.fields.id.stringValue)
-                                            userVM.bookmarkedCommunityID.remove(at: index!)
-                                            let arr = userVM.bookmarkedCommunityID
-                                            let docID = user.id.stringValue
-                                            userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
-                                        }
-                                } label: {
-                                    Text("저장취소")
-                                }
-                            }
-                            NavigationLink {
-                                CommunityEditView(userVM: userVM, community: $communityData, communityVM: communityVM, editFetch: $editFetch)
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                // MARK: 현재 유저 Uid 값과 magazineDB userId가 같으면 수정 삭제 보여주기
+                if community.fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                    Menu {
+                        if !(postStatus == ""){
+                            Button{
+                                communityData?.fields.state.stringValue = postStatus
+                                communityVM.updateCommunity(data: communityData!, docID: community.fields.id.stringValue)
                             }label: {
-                                Text("수정")
+                                Text(postStatusString)
                             }
+                        }
+                        
+                        if !userVM.bookmarkedCommunityID.contains(community.fields.id.stringValue) {
                             Button {
-                                self.isDeleteAlertShown.toggle()
+                                userVM.bookmarkedCommunityID.append(community.fields.id.stringValue)
+                                if let user = userVM.currentUsers {
+                                    let arr = userVM.bookmarkedCommunityID
+                                    let docID = user.id.stringValue
+                                    userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
+                                }
                             } label: {
-                                Text("삭제")
+                                Text("저장")
                             }
-                            
+                        } else {
+                            Button {
+                                if let user = userVM.currentUsers {
+                                    let index = userVM.bookmarkedCommunityID.firstIndex(of: community.fields.id.stringValue)
+                                    userVM.bookmarkedCommunityID.remove(at: index!)
+                                    let arr = userVM.bookmarkedCommunityID
+                                    let docID = user.id.stringValue
+                                    userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
+                                }
+                            } label: {
+                                Text("저장취소")
+                            }
+                        }
+                        NavigationLink {
+                            CommunityEditView(userVM: userVM, community: $communityData, communityVM: communityVM, editFetch: $editFetch)
+                        }label: {
+                            Text("수정")
+                        }
+                        Button {
+                            self.isDeleteAlertShown.toggle()
                             
                         } label: {
-                            Label("더보기", systemImage: "ellipsis")
-                            
+                            Text("삭제")
                         }
-                        .onAppear{
-                            switch community.fields.state.stringValue{
-                            case "모집중":
-                                postStatusString = "모집완료 (으)로 변경"
-                                postStatus = "모집완료"
-                            case "판매중":
-                                postStatusString = "판매완료 (으)로 변경"
-                                postStatus = "판매완료"
-                            case "모집완료":
-                                postStatusString = "모집중 (으)로 변경"
-                                postStatus = "모집중"
-                            case "판매완료":
-                                postStatusString = "판매중 (으)로 변경"
-                                postStatus = "판매중"
-                            default:
-                                postStatus = ""
-                            }
-                            selectedIndex = 0
-                        }
-                        .accentColor(.black)
-                        .padding(.trailing, Screen.maxWidth * 0.04)
-                    } else {
-                        Menu {
-                            if !userVM.bookmarkedCommunityID.contains(community.fields.id.stringValue) {
-                                Button {
-                                        userVM.bookmarkedCommunityID.append(community.fields.id.stringValue)
-                                        if let user = userVM.currentUsers {
-                                            let arr = userVM.bookmarkedCommunityID
-                                            let docID = user.id.stringValue
-                                            userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
-                                        }
-                                } label: {
-                                    Text("저장")
-                                }
-                            } else {
-                                Button {
-                                        if let user = userVM.currentUsers {
-                                            let index = userVM.bookmarkedCommunityID.firstIndex(of: community.fields.id.stringValue)
-                                            userVM.bookmarkedCommunityID.remove(at: index!)
-                                            let arr = userVM.bookmarkedCommunityID
-                                            let docID = user.id.stringValue
-                                            userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
-                                        }
-                                } label: {
-                                    Text("저장취소")
-                                }
-                            }
-                        } label: {
-                            Label("더보기", systemImage: "ellipsis")
-                        }
-                        .accentColor(.black)
-                        .padding(.trailing, Screen.maxWidth * 0.04)
+                        
+                        
+                    } label: {
+                        Label("더보기", systemImage: "ellipsis")
+                        
                     }
+                    .onAppear{
+                        switch community.fields.state.stringValue{
+                        case "모집중":
+                            postStatusString = "모집완료 (으)로 변경"
+                            postStatus = "모집완료"
+                        case "판매중":
+                            postStatusString = "판매완료 (으)로 변경"
+                            postStatus = "판매완료"
+                        case "모집완료":
+                            postStatusString = "모집중 (으)로 변경"
+                            postStatus = "모집중"
+                        case "판매완료":
+                            postStatusString = "판매중 (으)로 변경"
+                            postStatus = "판매중"
+                        default:
+                            postStatus = ""
+                        }
+                        selectedIndex = 0
+                    }
+                    .accentColor(.black)
+                    .padding(.trailing, Screen.maxWidth * 0.04)
+                } else {
+                    Menu {
+                        if !userVM.bookmarkedCommunityID.contains(community.fields.id.stringValue) {
+                            Button {
+                                userVM.bookmarkedCommunityID.append(community.fields.id.stringValue)
+                                if let user = userVM.currentUsers {
+                                    let arr = userVM.bookmarkedCommunityID
+                                    let docID = user.id.stringValue
+                                    userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
+                                }
+                            } label: {
+                                Text("저장")
+                            }
+                        } else {
+                            Button {
+                                if let user = userVM.currentUsers {
+                                    let index = userVM.bookmarkedCommunityID.firstIndex(of: community.fields.id.stringValue)
+                                    userVM.bookmarkedCommunityID.remove(at: index!)
+                                    let arr = userVM.bookmarkedCommunityID
+                                    let docID = user.id.stringValue
+                                    userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
+                                }
+                            } label: {
+                                Text("저장취소")
+                            }
+                        }
+                    } label: {
+                        Label("더보기", systemImage: "ellipsis")
+                    }
+                    .accentColor(.black)
+                    .padding(.trailing, Screen.maxWidth * 0.04)
                 }
             }
         }
-        .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .onTapGesture {
             self.hideKeyboard()

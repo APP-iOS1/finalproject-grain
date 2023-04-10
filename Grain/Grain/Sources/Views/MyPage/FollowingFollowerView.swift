@@ -38,7 +38,6 @@ struct FollowingFollowerView: View {
                         Rectangle()
                             .fill(Color.black)
                             .frame(width: Screen.maxWidth * 0.4, height: 1)
-                            .transition(.slide)
                             .animation(.easeInOut.speed(1.5), value: selectedIndex)
                     }
                     
@@ -92,7 +91,6 @@ struct CurrentUserFollowingFollowerView: View {
                         Rectangle()
                             .fill(Color.black)
                             .frame(width: Screen.maxWidth * 0.4, height: 2)
-                            .transition(.slide)
                             .animation(.easeInOut.speed(1.5), value: selectedIndex)
                     }
                     

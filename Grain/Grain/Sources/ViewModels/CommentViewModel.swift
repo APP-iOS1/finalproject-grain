@@ -21,6 +21,8 @@ final class CommentViewModel: ObservableObject {
     @Published var sortedRecentRecommentArray = [String : [CommentDocument]]()
     @Published var sortedRecentRecommentCount = [String : Int]()
 
+    @Published var isDeleteReComment: Bool = false
+    @Published var isDeleteReCommentAlertshown: Bool = false
 //    @Published var hksortedRecentRecomment = [[String : CommentDocument]]()  // 희경작업
 //    @Published var hksortedRecentCommentID: [String] = []  // 희경작업
 

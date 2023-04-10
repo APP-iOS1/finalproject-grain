@@ -52,7 +52,6 @@ struct MagazineRecommentView: View {
     }
     
     var body: some View {
-        
         VStack(alignment: .leading){
             ForEach(Array(commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values), id:\.self){ element in
                 ForEach(element , id:\.self){ index in
@@ -71,7 +70,7 @@ struct MagazineRecommentView: View {
                                             Circle()
                                                 .stroke(lineWidth: 0.5)
                                         }
-                                        .padding(.horizontal, 7)
+//                                        .padding(.horizontal, 7)
                                 }
                             }
                             .frame(width: Screen.maxWidth * 0.1)
@@ -128,10 +127,19 @@ struct MagazineRecommentView: View {
                                                     Alert(title: Text("댓글을 삭제하시겠어요?"),
                                                           primaryButton:  .cancel(Text("취소")),
                                                           secondaryButton:.destructive(Text("삭제"),action: {
-                                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
-                                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-                                                        }
+
+                                                            if commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values.count == 1 {
+                                                                var arr = commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }
+                                                                arr.removeValue(forKey: commentCollectionDocId )
+                                                                commentVm.sortedRecentRecommentArray = arr
+                                                                commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                                            }else {
+                                                                commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                                                }
+                                                            }
+
                                                     }))
                                                 }
                                         }
@@ -140,6 +148,7 @@ struct MagazineRecommentView: View {
                                 }
                                 
                             }
+                            .padding(.leading, 1)
                             .offset(x : -7)
                         }
                     }

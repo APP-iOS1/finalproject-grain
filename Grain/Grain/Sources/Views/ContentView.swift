@@ -20,19 +20,23 @@ struct ContentView: View {
     @StateObject var locationManager = LocationManager()
     @StateObject var commentVm = CommentViewModel()
     
-    @State private var tabSelection: Int = 0
-    @State var selectedIndex = 0
+    @State private var tabViewSelectedIndex: Int = 0
+    @State private var selectedAgainIndex: Int = 0
     @State var magazineViewPresented : Bool = false
     @State private var presented = false
     @State var updateNumber : NMGLatLng = NMGLatLng(lat: 0, lng: 0)
     @State var clikedMagazineData : MagazineDocument?
     @State private var isSearchViewShown: Bool = false
     @State private var magazineScrollToTop: Bool = false
+    @State private var communityScrollToTop: Bool = false
+    @State private var myPageScrollToTop: Bool = false
     
     let icons = ["film", "text.bubble", "plus","map", "person"]
     let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
     
     @State var modalSize = Screen.maxHeight * 0.25
+    
+    @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
     
     @SceneStorage("isZooming") var isZooming: Bool = false
     
@@ -54,36 +58,34 @@ struct ContentView: View {
         Group{
             if networkManager.isConnected {
                 VStack{
-                    switch authenticationStore.authenticationState {
+                    switch authenticationState {
                     case .unauthenticated, .authenticating , .freshman:
                         NavigationStack{
                             AuthenticationView(userVM: userVM)
                         }
                     case.authenticated:
                         NavigationStack{
-                            
-                            
-                                TabView(selection: $selectedIndex) {
+                            VStack{
+                                TabView(selection: $tabViewSelectedIndex) {
                                     MagazineMainView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM, scrollToTop: $magazineScrollToTop)
                                         .tag(0)
-                                    CommunityView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM)
+                                    CommunityView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, scrollToTop: $communityScrollToTop)
                                         .tag(1)
                                     
                                     MapView(mapVM: mapVM, userVM : userVM, magazineVM : magazineVM, locationManager : locationManager, clikedMagazineData: clikedMagazineData, userLatitude: userLatitude, userLongitude: userLongitude)
                                         .edgesIgnoringSafeArea(.top)
                                         .tag(3)
-                                    MyPageView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), presented: $presented)
+                                    MyPageView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), presented: $presented, scrollToTop: $myPageScrollToTop)
                                         .tag(4)
                                     
                                 }
                                 .toolbar {
-                                    if (selectedIndex == 0) || (selectedIndex == 1) {
+                                    if (tabViewSelectedIndex == 0) || (tabViewSelectedIndex == 1) {
                                         ToolbarItem(placement: .navigationBarLeading) {
                                             Text("GRAIN")
                                                 .font(.title)
                                                 .bold()
                                                 .kerning(7)
-                                            
                                         }
                                         
                                         ToolbarItem(placement: .navigationBarTrailing) {
@@ -93,17 +95,18 @@ struct ContentView: View {
                                                 Image(systemName: "magnifyingglass")
                                                     .foregroundColor(.black)
                                             }
-                                            
+                                        
                                         }
                                         
                                     }
                                     
-                                    if selectedIndex == 4{
+                                    if tabViewSelectedIndex == 4{
                                         ToolbarItem(placement: .navigationBarLeading) {
                                             Text("GRAIN")
                                                 .font(.title)
                                                 .bold()
                                                 .kerning(7)
+
                                         }
                                         
                                         ToolbarItem(placement: .navigationBarTrailing) {
@@ -117,69 +120,77 @@ struct ContentView: View {
                                     }
                                     
                                 }
-                                                        
-                                    HStack(alignment: .top, spacing: 10) {
-                                        ForEach(0..<5, id: \.self) { number in
-                                            
-                                            
-                                            if number == 2 {
-                                                
-                                                Circle()
-                                                    .frame(width: 40, height: 40)
-                                                    .foregroundColor(.black)
-                                                    .overlay {
-                                                        Image(systemName: icons[number])
-                                                            .font(.title3)
-                                                            .foregroundColor(.white)
-                                                            .monospacedDigit()
-                                                    }
-                                                    .padding(.horizontal, 8)
-                                                    .onTapGesture {
-                                                        presented.toggle()
-                                                        
-                                                    }
-                                                
-                                                
-                                            }
-                                            else {
-                                                VStack{
+
+                                HStack(alignment: .top, spacing: 11) {
+                                    ForEach(0..<5, id: \.self) { number in
+                                        
+                                        if number == 2 {
+                                            Circle()
+                                                .frame(width: 38, height: 38)
+                                                .foregroundColor(.black)
+                                                .overlay {
                                                     Image(systemName: icons[number])
                                                         .font(.title3)
-                                                        .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
+                                                        .foregroundColor(.white)
                                                         .monospacedDigit()
-                                                    Text(labels[number])
-                                                        .font(.caption2)
-                                                        .foregroundColor(selectedIndex == number ? .black : Color(UIColor.lightGray))
-                                                        .monospacedDigit()
+                                                }
+                                                .padding(.horizontal, 9)
+                                                .onTapGesture {
+                                                    presented.toggle()
                                                     
                                                 }
-                                                .frame(width: 65, height: 45)
-                                                .onTapGesture {
-                                                    self.selectedIndex = number
-                                                    self.magazineScrollToTop.toggle()
-                                                }
-                                            }
-                                            
                                         }
+                                        else {
+                                            VStack{
+                                                Image(systemName: icons[number])
+                                                    .font(.title3)
+                                                    .foregroundColor(tabViewSelectedIndex == number ? .black : Color(UIColor.lightGray))
+                                                    .monospacedDigit()
+                                                Text(labels[number])
+                                                    .font(.caption2)
+                                                    .foregroundColor(tabViewSelectedIndex == number ? .black : Color(UIColor.lightGray))
+                                                    .monospacedDigit()
+                                                
+                                            }
+                                            .frame(width: 65, height: 42)
+                                            .onTapGesture {
+                                                if tabViewSelectedIndex != number{
+                                                    self.tabViewSelectedIndex = number
+                                                    
+                                                }else if tabViewSelectedIndex == number{
+                                                    if tabViewSelectedIndex == 0 {
+                                                        self.magazineScrollToTop.toggle()
+                                                        
+                                                    }else if tabViewSelectedIndex == 1{
+                                                        self.communityScrollToTop.toggle()
+                                                        
+                                                    }else if tabViewSelectedIndex == 4{
+                                                        self.myPageScrollToTop.toggle()
+                                                    }
+                                                }
+                                                
+                                            }
+                                        }
+                                        
                                     }
-                            .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
+                                }
+                                
+                            }
                             .navigationDestination(isPresented: $isSearchViewShown) {
                                 MainSearchView(communityViewModel: communityVM, magazineViewModel: magazineVM, userViewModel: userVM)
                             }
-                            .fullScreenCover(isPresented: $presented) {
-                                VStack {
-                                    SelectPostView(userVM: userVM,
-                                                   communityVM: communityVM,
-                                                   magazineVM: magazineVM,
-                                                   mapVM : mapVM,
-                                                   locationManager : locationManager,
-                                                   presented: $presented,
-                                                   updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
-                                }
-                            }
-                            
                         }
-                        .edgesIgnoringSafeArea(.top)    // <- 지도 때문에 넣음
+                        .fullScreenCover(isPresented: $presented) {
+                            VStack {
+                                SelectPostView(userVM: userVM,
+                                               communityVM: communityVM,
+                                               magazineVM: magazineVM,
+                                               mapVM : mapVM,
+                                               locationManager : locationManager,
+                                               presented: $presented,
+                                               updateNumber: updateNumber,userLatitude: userLatitude , userLongitude: userLongitude)
+                            }
+                        }
                     }
                 }
                 .tint(.black)

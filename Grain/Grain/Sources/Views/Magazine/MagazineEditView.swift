@@ -178,6 +178,9 @@ struct MagazineEditView: View {
                                       dismissButton: .destructive(
                                         Text("확인")
                                       ){
+                                          DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                              magazineVM.fetchMagazine()
+                                          }
                                           presentationMode.wrappedValue.dismiss()
                                       })
                             }

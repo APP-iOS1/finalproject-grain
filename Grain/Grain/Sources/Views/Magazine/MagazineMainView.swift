@@ -25,7 +25,6 @@ struct MagazineMainView: View {
     let feedFilter = ["전체보기", "구독자"]
     
     var body: some View {
-        
         VStack{
             HStack{
                 
@@ -44,7 +43,7 @@ struct MagazineMainView: View {
             }
             switch selectedIndex {
             case 0:
-                MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM)
+                MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM, scrollToTop: $scrollToTop)
                 
             default:
                 MagazineFeedView(magazineVM: magazineVM, userVM: userVM, scrollToTop: $scrollToTop, selectedFilter: $selectedFilter)

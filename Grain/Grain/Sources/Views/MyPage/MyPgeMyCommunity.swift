@@ -25,7 +25,7 @@ struct MyPgeMyCommunity: View {
                     NavigationLink {
                         CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {
-                        CommunityRowView(communityVM: communityVM, community: data, isLoading: $isLoading)
+                        CommunityRowView(communityVM: communityVM, community: data)
                     }
                 }
             }
@@ -40,6 +40,9 @@ struct MyPgeMyCommunity: View {
             communityDoument = communityVM.userPostsFilter(communityData: communityVM.communities, userPostedArr: userVM.postedCommunityID)
         }
         .refreshable {
+            do {
+                try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+              } catch {}
             communityVM.fetchCommunity()
             communityDoument = communityVM.userPostsFilter(communityData: communityVM.communities, userPostedArr: userVM.postedCommunityID)
         }

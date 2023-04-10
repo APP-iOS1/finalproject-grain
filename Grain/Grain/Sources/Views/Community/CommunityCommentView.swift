@@ -33,7 +33,8 @@ struct CommunityCommentView: View {
     @Binding var editReColletionDocID: String
     @Binding var reommentUserID : String
     @Binding var communityData: CommunityDocument?
-    
+    @Binding var scrollToBottom: Bool
+
     
     var trimContent: String {
         replyContent.trimmingCharacters(in: .whitespaces)
@@ -191,8 +192,10 @@ struct CommunityCommentView: View {
                             let sender = PushNotificationSender(serverKeyString: "")
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == reommentUserID })
                             {
-                                for i in user.fields.fcmToken.arrayValue.values {
-                                    sender.sendPushNotification(to: i.stringValue, title: "바로 지금! 대댓글이 도착했습니다. 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 댓글에 대댓글을 남겼어요 💬", image: communityData?.fields.image.arrayValue.values[0].stringValue ?? "")
+                                if user.fields.id.stringValue != userVM.currentUsers?.id.stringValue{
+                                    for i in user.fields.fcmToken.arrayValue.values {
+                                        sender.sendPushNotification(to: i.stringValue, title: "바로 지금! 대댓글이 도착했습니다. 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 댓글에 대댓글을 남겼어요 💬", image: communityData?.fields.image.arrayValue.values[0].stringValue ?? "")
+                                    }
                                 }
                             }
                             
@@ -239,6 +242,7 @@ struct CommunityCommentView: View {
                     else{
                         Button {
                             // MARK: 댓글 업로드 구현
+                            self.scrollToBottom.toggle()
                             replyComment = false
                             commentVm.insertComment(
                                 collectionName: infolistCommunityString(),
@@ -256,9 +260,11 @@ struct CommunityCommentView: View {
                                 
                                 if let user = userVM.users.first(where: { $0.fields.id.stringValue == communityData.fields.userID.stringValue })
                                 {
-                                    let sender = PushNotificationSender(serverKeyString: "")
-                                    for i in user.fields.fcmToken.arrayValue.values {
-                                        sender.sendPushNotification(to: i.stringValue, title:  "게시글에 새로운 댓글이 달렸습니다! 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(communityData.fields.title.stringValue) 커뮤니티 게시글에 댓글을 남겼어요, 지금 확인하고 댓글 작성자와 함께 대화해 보세요. 💬 ", image: communityData.fields.image.arrayValue.values[0].stringValue ?? "")
+                                    if user.fields.id.stringValue != userVM.currentUsers?.id.stringValue{
+                                        let sender = PushNotificationSender(serverKeyString: "")
+                                        for i in user.fields.fcmToken.arrayValue.values {
+                                            sender.sendPushNotification(to: i.stringValue, title:  "게시글에 새로운 댓글이 달렸습니다! 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(communityData.fields.title.stringValue) 커뮤니티 게시글에 댓글을 남겼어요, 지금 확인하고 댓글 작성자와 함께 대화해 보세요. 💬 ", image: communityData.fields.image.arrayValue.values[0].stringValue ?? "")
+                                        }
                                     }
                                 }
                             }

@@ -24,98 +24,104 @@ struct MagazineBestView: View {
     @Binding var scrollToTop: Bool
     
     var body: some View {
-        ScrollViewReader { proxyReader in
-            ScrollView(showsIndicators: false) {
-                VStack {
-                    
-                    EditorViewCell(editorVM: editorVM)
-                        .onTapGesture {
-                            isMagazineEditorViewShown.toggle()
+        VStack{
+            ScrollViewReader { proxyReader in
+                ScrollView(showsIndicators: false) {
+                    VStack {
+                        
+                        EditorViewCell(editorVM: editorVM)
+                            .onTapGesture {
+                                isMagazineEditorViewShown.toggle()
+                            }
+                        
+                        HStack{
+                            Text("인기 피드")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .fixedSize()
+                            Spacer()
+                            Image("line")
+                                .resizable()
+                                .frame(width: Screen.maxWidth * 0.66, height: 2)
                         }
-                    
-                    HStack{
-                        Text("인기 피드")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .fixedSize()
-                        Spacer()
-                        Image("line")
-                            .resizable()
-                            .frame(width: Screen.maxWidth * 0.66, height: 2)
-                    }
-                    .padding([.leading, .top])
-                    
-                    HStack{
-                        Text("\(Image(systemName: "info.circle")) 좋아요 수 기준으로 인기 피드를 보여드립니다.")
-                            .font(.footnote)
-                            .foregroundColor(.middlebrightGray)
-                        Spacer()
+                        .padding([.leading, .top])
                         
-                    }
-                    .padding(.horizontal,21)
-                    .padding(.top, 7)
-                    .padding(.bottom, 2)
-                    
-                    ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
-                        
-                        LazyVStack{
-                            Top10View(data: data, userVM: userVM)
-                                .padding(.vertical, 7)
-                                .padding(.horizontal)
+                        HStack{
+                            Text("\(Image(systemName: "info.circle")) 좋아요 수 기준으로 인기 피드를 보여드립니다.")
+                                .font(.footnote)
+                                .foregroundColor(.middlebrightGray)
+                            Spacer()
                             
                         }
-                        .onTapGesture {
-                            selectIndexNum = index
-                            isMagazineDegtailViewShown.toggle()
+                        .padding(.horizontal,21)
+                        .padding(.top, 7)
+                        .padding(.bottom, 2)
+                        
+                        ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
+                            
+                            LazyVStack{
+                                Top10View(data: data, userVM: userVM)
+                                    .padding(.vertical, 7)
+                                    .padding(.horizontal)
+                                
+                            }
+                            .onTapGesture {
+                                selectIndexNum = index
+                                isMagazineDegtailViewShown.toggle()
+                            }
+                            
+                            
                         }
-                        
-                        
+                    }
+                    .id("SCROLL_TO_TOP")
+                    .overlay(
+                        GeometryReader { proxy -> Color in
+                            DispatchQueue.main.async {
+                                if startOffset == 0 {
+                                    self.startOffset = proxy.frame(in: .global).minY
+                                }
+                                let offset = proxy.frame(in: .global).minY
+                                self.scrollViewOffset = offset - startOffset
+                                
+                            }
+                            return Color.clear
+                        }
+                            .frame(width: 0, height: 0)
+                        ,alignment: .top
+                    )
+                    .task(id: ObservingChangeValueLikeNum){
+                        magazineVM.fetchMagazine()
                     }
                 }
-                .id("SCROLL_TO_TOP")
-                .overlay(
-                    GeometryReader { proxy -> Color in
-                        DispatchQueue.main.async {
-                            if startOffset == 0 {
-                                self.startOffset = proxy.frame(in: .global).minY
-                            }
-                            let offset = proxy.frame(in: .global).minY
-                            self.scrollViewOffset = offset - startOffset
-                            
-                        }
-                        return Color.clear
-                    }
-                        .frame(width: 0, height: 0)
-                    ,alignment: .top
-                )
-                .task(id: ObservingChangeValueLikeNum){
+                .refreshable {
+                    do {
+                        try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+                      } catch {}
                     magazineVM.fetchMagazine()
                 }
-            }
-            .refreshable {
-                magazineVM.fetchMagazine()
-            }
-            .onChange(of: scrollToTop, perform: { newValue in
-                withAnimation(.default) {
-                    proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)
-                }
-            })
-            .navigationDestination(isPresented: $isMagazineDegtailViewShown){
-                ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data ) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
-                    if selectIndexNum == index{
-                        
-                        MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                .onChange(of: scrollToTop, perform: { newValue in
+                    withAnimation(.default) {
+                        proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)
+                    }
+                })
+                .navigationDestination(isPresented: $isMagazineDegtailViewShown){
+                    ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data ) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
+                        if selectIndexNum == index{
+                            
+                            MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                        }
                     }
                 }
+                .navigationDestination(isPresented: $isMagazineEditorViewShown){
+                    EditorView(editorVM : editorVM, userVM: userVM, magazineVM: magazineVM)
+                }
+                .onAppear{
+                    editorVM.fetchEditor()
+                    UITableView.appearance().separatorStyle = .none
+                    
+                }
             }
-            .navigationDestination(isPresented: $isMagazineEditorViewShown){
-                EditorView(editorVM : editorVM, userVM: userVM, magazineVM: magazineVM)
-            }
-            .onAppear{
-                editorVM.fetchEditor()
-                UITableView.appearance().separatorStyle = .none
-
-            }
+            Spacer()
         }
     }
 }

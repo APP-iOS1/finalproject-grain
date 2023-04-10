@@ -66,7 +66,6 @@ struct ContentView: View {
                     case.authenticated:
                         NavigationStack{
                             VStack{
-                                
                                 TabView(selection: $tabViewSelectedIndex) {
                                     MagazineMainView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, editorVM: editorVM, scrollToTop: $magazineScrollToTop)
                                         .tag(0)
@@ -80,7 +79,48 @@ struct ContentView: View {
                                         .tag(4)
                                     
                                 }
-                               
+                                .toolbar {
+                                    if (tabViewSelectedIndex == 0) || (tabViewSelectedIndex == 1) {
+                                        ToolbarItem(placement: .navigationBarLeading) {
+                                            Text("GRAIN")
+                                                .font(.title)
+                                                .bold()
+                                                .kerning(7)
+                                        }
+                                        
+                                        ToolbarItem(placement: .navigationBarTrailing) {
+                                            Button {
+                                                self.isSearchViewShown = true
+                                            } label: {
+                                                Image(systemName: "magnifyingglass")
+                                                    .foregroundColor(.black)
+                                            }
+                                        
+                                        }
+                                        
+                                    }
+                                    
+                                    if tabViewSelectedIndex == 4{
+                                        ToolbarItem(placement: .navigationBarLeading) {
+                                            Text("GRAIN")
+                                                .font(.title)
+                                                .bold()
+                                                .kerning(7)
+
+                                        }
+                                        
+                                        ToolbarItem(placement: .navigationBarTrailing) {
+                                            NavigationLink {
+                                                MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM, presented: $presented)
+                                            } label: {
+                                                Image(systemName: "ellipsis")
+                                                    .foregroundColor(.black)
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+
                                 HStack(alignment: .top, spacing: 11) {
                                     ForEach(0..<5, id: \.self) { number in
                                         
@@ -132,53 +172,6 @@ struct ContentView: View {
                                             }
                                         }
                                         
-                                    }
-                                }
-                                
-                            }
-                            .toolbar {
-                                if (tabViewSelectedIndex == 0) || (tabViewSelectedIndex == 1) {
-                                    ToolbarItem(placement: .navigationBarLeading) {
-                                        Text("GRAIN")
-                                            .font(.title)
-                                            .bold()
-                                            .kerning(7)
-                                            .animation(nil, value: tabViewSelectedIndex )
-
-                                    }
-                                    
-                                    ToolbarItem(placement: .navigationBarTrailing) {
-                                        Button {
-                                            self.isSearchViewShown = true
-                                        } label: {
-                                            Image(systemName: "magnifyingglass")
-                                                .foregroundColor(.black)
-                                        }
-                                        .animation(nil, value: tabViewSelectedIndex )
-
-                                    }
-                                    
-                                }
-                                
-                                if tabViewSelectedIndex == 4{
-                                    ToolbarItem(placement: .navigationBarLeading) {
-                                        Text("GRAIN")
-                                            .font(.title)
-                                            .bold()
-                                            .kerning(7)
-                                            .animation(nil, value: tabViewSelectedIndex )
-
-                                    }
-                                    
-                                    ToolbarItem(placement: .navigationBarTrailing) {
-                                        NavigationLink {
-                                            MyPageOptionView(commentVm: commentVm,communityVM: communityVM, magazineVM: magazineVM, userVM: userVM, presented: $presented)
-                                        } label: {
-                                            Image(systemName: "ellipsis")
-                                                .foregroundColor(.black)
-                                        }
-                                        .animation(nil, value: tabViewSelectedIndex )
-
                                     }
                                 }
                                 

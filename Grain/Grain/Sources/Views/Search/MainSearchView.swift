@@ -133,7 +133,6 @@ struct MainSearchView: View {
                                     Rectangle()
                                         .fill(Color.black)
                                         .frame(width: Screen.maxWidth * 0.2, height: 2)
-                                        .transition(.slide)
                                         .animation(.easeInOut.speed(1.5), value: selectedIndex)
                                 }
                                 

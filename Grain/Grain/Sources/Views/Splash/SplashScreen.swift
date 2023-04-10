@@ -24,17 +24,17 @@ struct SplashScreen: View {
     
     var body: some View {
        VStack{
-            Text("나의 필름 저장소")
-                .foregroundColor(.white)
-                .font(.system(size: 14))
-                
-//                .bold()
            Text("GRAIN")
                .foregroundColor(.white)
                .font(.system(size: 50))
                .bold()
                .kerning(7)
-               .padding(.bottom, 120)
+           
+            Text("나의 필름 저장소")
+                .foregroundColor(.white)
+                .font(.system(size: 14))
+                .padding(.bottom, 120)
+                
         }
        .frame(width: Screen.maxWidth, height: Screen.maxHeight)
        .background(Color.black)

@@ -22,7 +22,6 @@ struct CommunityView: View {
     let titles: [String] = ["전체", "매칭", "마켓", "클래스", "정보"]
         
     var body: some View {
-        NavigationStack{
             VStack{
                 HStack {
                     Spacer()
@@ -45,7 +44,6 @@ struct CommunityView: View {
                                 Rectangle()
                                     .fill(Color.black)
                                     .frame(height: 2)
-                                    .transition(.slide)
                                     .animation(.easeInOut.speed(1.5), value: communitySelectedIndex)
                             }
                         })
@@ -68,8 +66,7 @@ struct CommunityView: View {
             .onAppear{
                 communityVM.fetchCommunityCellComment()
             }
-            
-        } // navi stack
+      
     }
 }
 

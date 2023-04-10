@@ -10,6 +10,10 @@ import NMapsMap
 import PhotosUI
 import FirebaseAuth
 
+private enum FocusableField: Hashable {
+    case write
+}
+
 struct MagazineContentAddView: View {
     
     @ObservedObject var magazineVM : MagazineViewModel
@@ -40,15 +44,14 @@ struct MagazineContentAddView: View {
     
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     
-    @FocusState private var focusField: Fields?
-    
+    @FocusState private var focus: FocusableField?
+
     var userLatitude: Double
     var userLongitude: Double
 
     @State var selectedCamera: String = ""
     @State var selectedLense: String = ""
     @State var selectedFilm: String = ""
-    
     
     var body: some View {
         /// 지도뷰로 이동하기 위해 전체적으로 걸어줌
@@ -177,7 +180,7 @@ struct MagazineContentAddView: View {
                         }
                         .padding(.horizontal)
                         .sheet(isPresented: $showModal) {
-                            ItemListView(userVM: userVM, selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm)
+                            ItemListView(userVM: userVM, selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, showModal: $showModal)
                                 .presentationDetents([.medium, .large])
                         }
                         
@@ -201,36 +204,15 @@ struct MagazineContentAddView: View {
                         }
                         .submitLabel(.done)
                         .padding(.vertical, 6)
-                       
+                        .focused($focus, equals: .write )
+
                     Divider()
                     
                     // MARK: 게시물 내용 작성 란
-//                    TextField("필름에 담긴 이야기와, 설명을 기록해보세요.", text: $inputContent, axis: .vertical)
-//                        .font(.body)
-//                        .bold()
-//                        .textInputAutocapitalization(.never)
-//                        .keyboardType(.default)
-//                        .disableAutocorrection(true)
-//                        .lineLimit(7)
-//                        .padding(.horizontal, 15)
-//                        .toolbar {
-//                            ToolbarItemGroup(placement: .keyboard) {
-//                                Spacer()
-//                                Button {
-//                                    hideKeyboard()
-//                                } label: {
-//                                    Text("Done")
-//                                        .foregroundColor(.blue)
-//                                }
-//                            }
-//                        }
-//                        .frame(height: Screen.maxHeight * 0.65, alignment: .top)
-//                        .padding(.vertical, 6)
-                        
                     TextEditor(text: $inputContent)
-                        .frame(height: 400)
+                        .frame(height: Screen.maxHeight * 0.4)
                         .lineSpacing(4.0)
-                        .padding(.horizontal)
+                        .padding(.horizontal, 12)
                         .overlay(
                             // Placeholder를 Text로 구현하고, text가 비어있을 때만 표시되도록 조건문 추가
                             Group {
@@ -245,9 +227,14 @@ struct MagazineContentAddView: View {
                         )
                         .font(.body)
                         .bold()
+                        .focused($focus, equals: .write )
+                        .onTapGesture {
+                                   // TextEditor를 탭하면 키보드를 닫습니다.
+                                   UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+                               }
+                        .padding(.bottom, 20)
                     
-                    
-                    Spacer()
+//                    Spacer()
                     
                     //MARK: 다음버튼
                     if selectedImages.count == 0 || inputTitle.count == 0 || inputContent.count == 0 {
@@ -311,6 +298,17 @@ struct MagazineContentAddView: View {
                                 .foregroundColor(.black)
                                 .bold()
                         }
+                    }
+                    
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button {
+                            self.focus = nil
+                        } label: {
+                            Text("완료")
+                                .foregroundColor(.blue)
+                        }
+                        
                     }
                 }
                 .onAppear {

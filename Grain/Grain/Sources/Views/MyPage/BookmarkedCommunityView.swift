@@ -43,6 +43,9 @@ struct BookmarkedCommunityView: View {
             bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
         }
         .refreshable {
+            do {
+                try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+              } catch {}
 //            communityVM.fetchCommunity()
             bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
         }

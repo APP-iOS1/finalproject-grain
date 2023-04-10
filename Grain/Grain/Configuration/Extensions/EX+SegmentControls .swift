@@ -76,7 +76,6 @@ public struct SegmentControlView: View {
                         .foregroundColor(.black)
                         .frame(width: selectedItemWidth, height: 2)
                         .offset(x: selectedItemHorizontalOffset(), y: 0)
-                        .transition(.slide)
                         .animation(Animation.easeInOut.speed(1.5), value: selection)
                 }
                 .padding(.horizontal, xSpace)

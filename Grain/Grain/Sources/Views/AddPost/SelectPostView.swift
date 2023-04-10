@@ -10,7 +10,6 @@ import NMapsMap
 import PhotosUI
 
 struct SelectPostView: View {
-    
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var magazineVM : MagazineViewModel
@@ -23,7 +22,7 @@ struct SelectPostView: View {
     @Binding var presented : Bool
     
     @State var updateNumber : NMGLatLng
-
+    
     @State var isShowSheet: Bool = false
     
     var userLatitude : Double
@@ -32,12 +31,6 @@ struct SelectPostView: View {
     var body: some View {
         NavigationView {
             VStack {
-                
-//                Text("나만의 필름 감성을 공유해보세요!")
-//                    .font(.title)
-//                    .bold()
-//                    .frame(width: Screen.maxWidth * 0.85, alignment: .topLeading)
-                                             
                 //MARK: 매거진 작성 네비게이션 링크
                 NavigationLink {
                     MagazineContentAddView(magazineVM: magazineVM, userVM: userVM,mapVM: mapVM, locationManager: locationManager, presented: $presented, updateNumber: updateNumber, userLatitude: userLatitude , userLongitude: userLongitude)
@@ -96,15 +89,14 @@ struct SelectPostView: View {
                                     Text("다양한 주제로 소통해보세요.")
                                         .foregroundColor(.white)
                                         .font(.body)
-                                        
+                                    
                                 }
                             }
                     }
                 }
                 .padding(.vertical)
-                                
+                
             }
-//            .background(Color.black)
             .onAppear {
                 if userVM.myCamera.count <= 1 {
                     isShowSheet = true
@@ -128,7 +120,7 @@ struct SelectPostView: View {
             }
             .frame(width: Screen.maxWidth, height: Screen.maxHeight)
             .background(LinearGradient(gradient: Gradient(colors: [.white, Color(UIColor.systemGray3)]), startPoint: .top, endPoint: .bottom))
-
+            
         }
     }
 }

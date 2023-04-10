@@ -148,15 +148,15 @@ struct AddMarkerMapView: View {
                         ProgressView()
                             .onAppear{
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    isClickedSubmitButton = true
                                     isUpdateMagazineSuccess = false
+                                    presented.toggle()
                                 }
                             }
                             .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
                             .zIndex(1)
                     }
-                    
                 }//ZStack
-                .opacity(isClickedSubmitButton ? 0.5 : 1)
                 
                 HStack {
                     Text("포토 스팟으로 핀을 이동하세요")
@@ -185,20 +185,7 @@ struct AddMarkerMapView: View {
                 .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.05)
                 
                 if (isFinishedSpot && writeDownCustomPlaceCheck){   // 핀과 커스텀 플레이스가 작성이 되었을때
-//                    NavigationLink {
-//                        CameraLenseFilmModalView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, inputTitle: $inputTitle, inputContent: $inputContent, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, writeDownCustomPlaceText: $writeDownCustomPlaceText)
-//                            .navigationBarBackButtonHidden(true)
-//                    } label:{
-//                        RoundedRectangle(cornerRadius: 12)
-//                            .fill(.black)
-//                            .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
-//                            .overlay {
-//                                Text("다음")
-//                                   .font(.headline)
-//                                   .foregroundColor(.white)
-//                        }
-//                    }
-                    
+
                     Button {
                         // 프로그레스뷰 ON
                         isUpdateMagazineSuccess = true
@@ -248,6 +235,11 @@ struct AddMarkerMapView: View {
                         // FIXME: - insertMap 동작안함
                         magazineVM.insertMagazine(data: data, images: selectedImages)
                         mapVM.insertMap(data: data)
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            magazineVM.fetchMagazine()
+                        }
+                        
                     } label: {
                         RoundedRectangle(cornerRadius: 12)
                             .fill(.black)
@@ -300,12 +292,7 @@ struct AddMarkerMapView: View {
             }.onAppear{
                 writeDownCustomPlaceCheck = false
             }
-            .onReceive(magazineVM.insertMagazineSuccess) { _ in
-                // 프로그레스뷰 OFF
-                isUpdateMagazineSuccess = false
-                // 창닫기
-                presented.toggle()
-            }
+           
         }
     }
 }

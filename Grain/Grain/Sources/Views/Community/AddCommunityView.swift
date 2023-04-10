@@ -9,6 +9,10 @@ import SwiftUI
 import FirebaseAuth
 import PhotosUI
 
+private enum FocusableField: Hashable {
+    case write
+}
+
 struct AddCommunityView: View {
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
@@ -35,7 +39,9 @@ struct AddCommunityView: View {
     }
     
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
-        
+    
+    @FocusState private var focus: FocusableField?
+
     var body: some View {
         GeometryReader{ geo in
             ZStack {
@@ -192,6 +198,8 @@ struct AddCommunityView: View {
                                 hideKeyboard()
                             }
                             .submitLabel(.done)
+                            .focused($focus, equals: .write )
+
                     }
                     .padding(.vertical, 8)
                     
@@ -199,9 +207,9 @@ struct AddCommunityView: View {
                     
                     
                     TextEditor(text: $inputContent)
-                        .frame(height: 350)
+                        .frame(height: Screen.maxHeight * 0.35)
                         .lineSpacing(4.0)
-                        .padding(.horizontal)
+                        .padding(.horizontal, 12)
                         .overlay(
                             // Placeholder를 Text로 구현하고, text가 비어있을 때만 표시되도록 조건문 추가
                             Group {
@@ -215,8 +223,14 @@ struct AddCommunityView: View {
                         )
                         .font(.body)
                         .bold()
+                        .focused($focus, equals: .write)
+                        .onTapGesture {
+                            // TextEditor를 탭하면 키보드를 닫습니다.
+                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+                        }
+                        .padding(.bottom, 20)
                     
-                    Spacer()
+//                    Spacer()    .padding(.bottom, 20)
                     
                     //MARK: 다음 버튼
                     if inputTitle.count == 0 || inputContent.count == 0 {
@@ -258,7 +272,9 @@ struct AddCommunityView: View {
                             var postCommunityArr : [String]  = userVM.postedCommunityID
                             postCommunityArr.append(docId)
                             userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunityArr, docID: Auth.auth().currentUser?.uid ?? "")
-                            communityVM.fetchCommunity()     //  presented.toggle() 순서 바뀌면 게시글이 바로 적용이 안됨!
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                communityVM.fetchCommunity()
+                            }
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(.black)
@@ -277,6 +293,7 @@ struct AddCommunityView: View {
                     ProgressView()
                         .onAppear{
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                isClickedSubmitButton = true
                                 isUpdateCommunitySuccess = false
                                 presented.toggle()
                             }
@@ -284,7 +301,7 @@ struct AddCommunityView: View {
                         .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
                         .zIndex(1)
                 }
-            }.opacity(isClickedSubmitButton ? 0.5 : 1)
+            }
             .navigationTitle("커뮤니티 작성하기")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -296,6 +313,17 @@ struct AddCommunityView: View {
                             .foregroundColor(.black)
                             .bold()
                     }
+                }
+                
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button {
+                        self.focus = nil
+                    } label: {
+                        Text("완료")
+                            .foregroundColor(.blue)
+                    }
+                    
                 }
             }
             .onAppear {

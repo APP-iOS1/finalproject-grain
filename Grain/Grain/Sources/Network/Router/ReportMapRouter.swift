@@ -20,6 +20,15 @@ enum ReportMapRouter {
         }
         return URL(string: baseUrlString) ?? URL(string: "")!
     }
+    private var queryItemString: String {
+            var reportString : String = ""
+            if let infolist = Bundle.main.infoDictionary {
+                if let str = infolist["UuidMapReport"] as? String {
+                    reportString = str
+                }
+            }
+            return reportString
+        }
     
     private enum HTTPMethod {
        
@@ -36,13 +45,12 @@ enum ReportMapRouter {
     private var endPoint: String {
         switch self {
         default:
-            return "/ReportMap"
+            return "/" + "\(queryItemString)"
         }
     }
     
     private var method: HTTPMethod {
         switch self {
-      
         case .post :
             return .post
         default:

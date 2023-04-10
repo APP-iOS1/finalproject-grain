@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+# platform :ios, '16.0'
 
 target 'Grain' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -7,12 +7,26 @@ target 'Grain' do
 
   # Pods for Grain
   pod 'Firebase/Auth'
-  
+  pod 'Firebase/Messaging'
   pod 'GoogleSignIn', '~> 6.2.4'
   pod 'GoogleSignInSwiftSupport'
   pod 'NMapsMap'
-  pod 'KakaoSDKCommon'
-  pod 'KakaoSDKAuth'
-  pod 'KakaoSDKUser'
   pod 'Kingfisher'
+  pod 'Firebase/Messaging'
+end
+
+target 'GrainNotification' do
+  use_frameworks!
+
+
+end
+
+post_install do |installer|
+    installer.generated_projects.each do |project|
+          project.targets.each do |target|
+              target.build_configurations.each do |config|
+                  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+               end
+          end
+   end
 end

@@ -27,5 +27,3 @@ final class ReportMapViewModel: ObservableObject {
     }
     
 }
-
-

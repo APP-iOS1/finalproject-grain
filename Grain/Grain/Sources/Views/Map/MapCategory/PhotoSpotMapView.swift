@@ -13,14 +13,20 @@ import UIKit
 
 
 struct PhotoSpotMapView: View {
+    @ObservedObject var userVM: UserViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
+    @ObservedObject var locationManager : LocationManager
+    
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     @Binding var searchResponseBool: Bool
     @Binding var searchResponse: [Address]
-    @Binding var isShowingPhotoSpot:  Bool
+    @Binding var ObservingChangeValueLikeNum: String
+    @State var isShowingPhotoSpot :  Bool = false
     @State var nearbyPostsArr : [String] = []
     @State var visitButton : Bool = false
-    @StateObject var magazineVM = MagazineViewModel()
+
     @Binding var magazineData: [MagazineDocument]
+    
     @State var clikedMagazineData : MagazineDocument?
     
     @Binding var showResearchButton : Bool
@@ -30,20 +36,12 @@ struct PhotoSpotMapView: View {
     @Binding var researchCGPoint : CGPoint
     
     var body: some View {
-        // 뒷배경 어둡게
-    
         ZStack{
-//            if isShowingPhotoSpot{
-//                Rectangle()
-//                    .zIndex(1)
-//                    .opacity(0.3)
-//            }
-            PhotoSpotUIMapView(mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot , nearbyPostsArr: $nearbyPostsArr, visitButton: $visitButton, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
-            
+            PhotoSpotUIMapView(locationManager: locationManager, mapData: $mapData, searchResponseBool: $searchResponseBool ,searchResponse: $searchResponse, isShowingPhotoSpot: $isShowingPhotoSpot , nearbyPostsArr: $nearbyPostsArr, visitButton: $visitButton, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint)
             
             if isShowingPhotoSpot{
                 
-                NearbyPostsComponent(visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
+                NearbyPostsComponent(userVM: userVM, magazineVM: magazineVM, visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.magazines, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
                     .zIndex(1)
                     .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.75)
                     .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
@@ -53,9 +51,13 @@ struct PhotoSpotMapView: View {
             isShowingPhotoSpot = false
         }
         .fullScreenCover(isPresented: $visitButton, content: {
-            PhotoSpotDetailView(data: clikedMagazineData!)
+            NavigationView {
+                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: clikedMagazineData!, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                    .toolbar {
+                    }
+            }
+            
         })
-        
     }
 }
 
@@ -63,16 +65,14 @@ struct PhotoSpotMapView: View {
 // FIXME: 네이버 지도
 // 네이버 지도를 띄울 수 있게끔 만들어주는 코드들 <- 연구가 필요!! 이해 완료 후 주석 달아보기
 struct PhotoSpotUIMapView: UIViewRepresentable,View {
-    
-
-    @StateObject var locationManager = LocationManager()
+    @ObservedObject var locationManager : LocationManager
     
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     @Binding var searchResponseBool: Bool
     @Binding var searchResponse: [Address]
     @Binding var isShowingPhotoSpot: Bool
+    
     @Binding var nearbyPostsArr : [String]
-
     @Binding var visitButton : Bool
     
     @Binding var showResearchButton : Bool
@@ -94,7 +94,7 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
         // 처음에 맵이 생성될떄 줌 레벨
         view.mapView.zoomLevel = 12
         view.mapView.minZoomLevel = 10
-        view.mapView.maxZoomLevel = 16
+        view.mapView.maxZoomLevel = 20
         view.mapView.isRotateGestureEnabled = false
 //        view.mapView.touchDelegate = context.coordinator
         
@@ -109,8 +109,8 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
             for item in mapData{
-                if item.fields.category.stringValue == "필름스팟"{
-                    var marker = NMFMarker(position: NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue))
+                if item.fields.category.stringValue == "포토스팟"{
+                    let marker = NMFMarker(position: NMGLatLng(lat: item.fields.latitude.doubleValue, lng: item.fields.longitude.doubleValue))
                     marker.iconImage = NMFOverlayImage(name: "photoSpotMarker")
                     marker.width = 25
                     marker.height = 25
@@ -127,20 +127,25 @@ struct PhotoSpotUIMapView: UIViewRepresentable,View {
                 }
             }
         }
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2){
             for marker in fetchMarkers{
                 marker.mapView = view.mapView
                 
                 marker.touchHandler = { (overlay) in
                     if let marker = overlay as? NMFMarker {
-                        isShowingPhotoSpot.toggle()
-                        showResearchButton.toggle()
+                        isShowingPhotoSpot = true
+                        showResearchButton = false
                         nearbyPostsArr.removeAll()
                         for pickable in view.mapView.pickAll(view.mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng)), withTolerance: 30){
                             if let marker = pickable as? NMFMarker{
                                 if marker.tag == 0 {
+                                    if nearbyPostsArr.contains(marker.userInfo["magazine"] as! String){
+                                        continue
+                                    }
                                     nearbyPostsArr.append(marker.userInfo["magazine"] as! String)
                                 }
+                                
                             }
                         }
                     }

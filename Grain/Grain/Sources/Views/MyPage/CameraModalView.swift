@@ -66,8 +66,6 @@ struct CameraModalView: View {
                 TextField("추가할 카메라를 입력하세요", text: $camera2)
                 TextField("추가할 카메라를 입력하세요", text: $camera3)
             }
-//            .background(.white)
-//            .scrollContentBackground(.hidden)
             .listStyle(.plain)
             .padding()
         

@@ -12,18 +12,15 @@ struct ReportMapResponse: Codable {
     let documents: [ReportMapDocument]
 }
 
-
 struct ReportMapDocument: Codable {
     let fields: ReportMapFields
     let createTime, updateTime: String
 }
 
-
 struct ReportMapFields: Codable {
     let longitude, latitude: ReportMapDoubleValue
     let storeName, category: ReportMapStringValue
 }
-
 
 struct ReportMapStringValue: Codable {
     let stringValue: String

@@ -17,6 +17,16 @@ final class CommentViewModel: ObservableObject {
     @Published var comment = [CommentDocument]()
     @Published var sortedRecentComment = [CommentDocument]()
     @Published var sortedRecentRecomment = [CommentDocument]()  // 대댓글 최신순으로 정렬
+    
+    @Published var sortedRecentRecommentArray = [String : [CommentDocument]]()
+    @Published var sortedRecentRecommentCount = [String : Int]()
+
+    @Published var isDeleteReComment: Bool = false
+    @Published var isDeleteReCommentAlertshown: Bool = false
+//    @Published var hksortedRecentRecomment = [[String : CommentDocument]]()  // 희경작업
+//    @Published var hksortedRecentCommentID: [String] = []  // 희경작업
+
+    
     var fetchCommentSuccess = PassthroughSubject<(), Never>()
     var insertCommentSuccess = PassthroughSubject<(), Never>()
     var updateCommentSuccess = PassthroughSubject<(), Never>()
@@ -31,30 +41,88 @@ final class CommentViewModel: ObservableObject {
     ///  REST API 방식 CRUD
     // MARK: Read
     func fetchComment(collectionName: String, collectionDocId: String) {
+    
+        var commentString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidComment"] as? String {
+                commentString = str
+            }
+        }
         CommentService.getComment(collectionName: collectionName, collectionDocId: collectionDocId)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-                
             } receiveValue: { (data: CommentResponse) in
-                self.comment = data.documents
                 self.sortedRecentComment = data.documents.sorted(by: {
-                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                    return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
                 })
-                
+                for i in self.sortedRecentComment{
+                    CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentString, commentCollectionDocId: i.fields.id.stringValue)
+                        .receive(on: DispatchQueue.main)
+                        .sink { (completion: Subscribers.Completion<Error>) in
+                        } receiveValue: { (data: CommentResponse) in
+                            self.sortedRecentRecomment = data.documents.sorted(by: {
+                                return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+                            })
+
+                            self.sortedRecentRecommentArray.updateValue(self.sortedRecentRecomment, forKey: "\(i.fields.id.stringValue)")
+                            self.sortedRecentRecommentCount.updateValue(self.sortedRecentRecomment.count, forKey: "\(i.fields.id.stringValue)")
+                            self.fetchRecommentSuccess.send()
+
+                        }.store(in: &self.subscription)
+                }
                 self.fetchCommentSuccess.send()
             }.store(in: &subscription)
-    }
+    }    
+    
+    // MARK: 대댓글 Read    // 희경작업
+//    func fetchRecommentTest(collectionName: String, collectionDocId: String, commentCollectionDocId: [String]) {
+//
+//        self.sortedRecentRecomment.removeAll()
+//
+//        for id in commentCollectionDocId {
+//            CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: id)
+//                .receive(on: DispatchQueue.main)
+//                .sink { (completion: Subscribers.Completion<Error>) in
+//                } receiveValue: { (data: CommentResponse) in
+//                    // 대댓글 데이터 정렬
+//                    var recomments = data.documents.sorted(by: {
+//                        return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+//                    })
+//
+//                    // comment id 값과 대댓글데이터를 딕셔너리로 묶어서 sortedRecentRecomment에 append
+//                    // 이경우에 sortedRecentRecomment도 정렬됨.
+//                    for i in recomments {
+//                        self.hksortedRecentRecomment.append([id : i])
+//                    }
+//
+//                }.store(in: &subscription)
+//        }
+//
+//        self.fetchRecommentSuccess.send()
+//    }
+        
+//    func filterRecomment(commentID: String) -> [CommentDocument] {     // 희경작업
+//        var recomments: [CommentDocument] = []
+//        for recomment in self.hksortedRecentRecomment {
+//            for i in recomment {
+//                if commentID == i.key {
+//                    recomments.append(i.value)
+//                }
+//            }
+//        }
+//        return recomments
+//    }
     
     // MARK: Create
     func insertComment(collectionName: String, collectionDocId: String, data: CommentFields) {
         CommentService.insertComment(collectionName: collectionName, collectionDocId: collectionDocId, data: data)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-                
             } receiveValue: { (data: CommentDocument) in
-                self.insertCommentSuccess.send()
                 self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                self.insertCommentSuccess.send()
             }.store(in: &subscription)
+        
     }
     
     // MARK: Update
@@ -63,8 +131,8 @@ final class CommentViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
+                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                 self.updateCommentSuccess.send()
-                
             }.store(in: &subscription)
     }
     
@@ -74,8 +142,8 @@ final class CommentViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
+                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                 self.deleteCommentSuccess.send()
-                
             }.store(in: &subscription)
     }
     
@@ -88,20 +156,24 @@ final class CommentViewModel: ObservableObject {
                 self.insertRecommentSuccess.send()
             }.store(in: &subscription)
     }
-    
-    // MARK: 대댓글 Read
+
+//    // MARK: 대댓글 Read
     func fetchRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String) {
         CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentResponse) in
                 self.sortedRecentRecomment = data.documents.sorted(by: {
-                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                    return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
                 })
                 self.fetchRecommentSuccess.send()
             }.store(in: &subscription)
 
     }
+    
+    
+    /// 매거진 하나당 코맨트 여러개 -> 코멘트 여러개에서 여러개
+    ///
     // MARK: 대댓글 Update
     func updateRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String, docID: String, updateComment: String, data: CommentFields ){
         CommentService.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, docID: docID, updateComment: updateComment, data: data)
@@ -123,65 +195,4 @@ final class CommentViewModel: ObservableObject {
                 
             }.store(in: &subscription)
     }
-    
-    
-    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
-    // MARK: Update -> Firebase Store SDK 사용
-//    func updateUserUsingSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
-//        let db = Firestore.firestore()
-//        let documentRef = db.collection("User").document("\(updateDocument)")
-//        if isArray{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }else{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                         "\(updateKey)" : "\(updateValue)"
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }
-//    }
-    
-    // MARK: Delete -> Firebase Store SDK 사용
-//    func deleteUserUsingSDK(updateDocument: String, deleteKey: String, deleteIndex: String, isArray: Bool) async {
-//        let db = Firestore.firestore()
-//        let documentRef = db.collection("User").document("\(updateDocument)")
-//        if isArray{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(deleteKey)": FieldValue.arrayRemove([
-//                            "\(deleteIndex)"
-//                        ])
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }else{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(deleteKey)" : FieldValue.delete()
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }
-//    }
-    
 }
-
-

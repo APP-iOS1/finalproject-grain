@@ -15,10 +15,10 @@ struct CameraLenseFilmModalView: View {
     var myLense = ["lenseA", "lenseB", "lenseC","lense1", "lense2", "lense3"]
     var myFilm = ["film1", "film2", "film3", "film4"]
     
-    @ObservedObject var magazineVM = MagazineViewModel()
+    @ObservedObject var magazineVM : MagazineViewModel
     
-    @StateObject var userVM = UserViewModel()
-    @StateObject var mapVM = MapViewModel()
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var mapVM : MapViewModel
     
     
     @State private var selectedCamera: String = ""
@@ -66,16 +66,7 @@ struct CameraLenseFilmModalView: View {
                     }
                 }
                 .pickerStyle(.wheel)
-//                List(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self, selection: $selectedCamera) { camera in
-//                    Text(camera.stringValue)
-//                }
-//                .listStyle(.plain)
                 Text("선택된 카메라: \(selectedCamera)")
-//                List(userVM.currentUsers?.myCamera.arrayValue.values ?? [], id: \.self, selection: $selectedCamera) { camera in
-//                    Text(camera.stringValue)
-//                }
-//                .listStyle(.plain)
-//                Spacer()
             }
             
             Divider()
@@ -99,13 +90,7 @@ struct CameraLenseFilmModalView: View {
                         Text($0)
                     }
                 }.pickerStyle(.wheel)
-//                List(userVM.currentUsers?.myLens.arrayValue.values ?? [], id: \.self, selection: $selectedLense) { lense in
-//                    Text(lense.stringValue)
-//                }
-//                .listStyle(.plain)
-//                Spacer()
             }
-            
             
             Divider()
             
@@ -128,15 +113,10 @@ struct CameraLenseFilmModalView: View {
                         Text($0)
                     }
                 }.pickerStyle(.wheel)
-//                List(userVM.currentUsers?.myFilm.arrayValue.values ?? [], id: \.self, selection: $selectedFilm) { film in
-//                    Text(film.stringValue)
-//                }
-//                .listStyle(.plain)
-//                Spacer()
             }
             
         }
-        .navigationTitle("내장비")
+        .navigationTitle("나의 장비 고르기")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
@@ -155,8 +135,8 @@ struct CameraLenseFilmModalView: View {
                     if selectedCamera == "필수" || selectedCamera == "" { //카메라바디목록에서 카메라 바디 선택안했을 때
                         showingAlert = true
                     } else {
-                        //MARK: 글쓰기 완료 함수
                         //MARK: 글쓰기 완료 액션
+                        presented.toggle()
                         // data.field에 데이터 저장
                         var docId = UUID().uuidString
                         
@@ -176,7 +156,6 @@ struct CameraLenseFilmModalView: View {
                                                                   roadAddress: MagazineString(stringValue: ""),
                                                                   cameraInfo: MagazineString(stringValue: ""))
                
-                        
                         data.id.stringValue = docId
                         data.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
                         data.customPlaceName.stringValue = writeDownCustomPlaceText
@@ -199,8 +178,6 @@ struct CameraLenseFilmModalView: View {
                         var postMagazineArr : [String]  = userVM.postedMagazineID
                         postMagazineArr.append(docId)
                         userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
-                        magazineVM.fetchMagazine()
-                        presented.toggle()
                     }
                 } label: {
                     Text("완료")
@@ -214,9 +191,6 @@ struct CameraLenseFilmModalView: View {
         }
         .onAppear {
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            //            selectedCamera = myCamera[0]
-            //            selectedLense = myLense[0]
-            //            selectedFilm = myFilm[0]
         }
 
 

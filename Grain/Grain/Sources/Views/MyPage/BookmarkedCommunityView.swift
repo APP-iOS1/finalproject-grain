@@ -9,28 +9,46 @@ import SwiftUI
 
 
 struct BookmarkedCommunityView: View {
-    @Environment(\.presentationMode) var presentationMode
     
-    var bookmarkedCommunityDoument: [CommunityDocument]
+    @ObservedObject var commentVm =  CommentViewModel() // 임시
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
+    
     @Binding var isLoading: Bool
-
+    
+//    @Environment(\.presentationMode) var presentationMode
+    
+    
+    @State private var bookmarkedCommunityDoument: [CommunityDocument] = []
+    
     var body: some View {
         VStack{
             ScrollView{
-                ForEach(bookmarkedCommunityDoument, id: \.self) { data in
+                ForEach(bookmarkedCommunityDoument.reversed(), id: \.self) { data in
                     NavigationLink {
-                        CommunityDetailView(community: data)
+                        CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                     } label: {
-                        CommunityRowView(community: data, isLoading: $isLoading)
-                        //여기에 isLoading들어가야해서
-
+                        CommunityRowView(communityVM: communityVM, community: data)
                     }
                 }
+            }
+            .emptyPlaceholder(bookmarkedCommunityDoument.reversed()) {
+                BookmarkedCommunityPlaceholderView()
             }
         }
         .navigationTitle("저장된 커뮤니티 글")
         .navigationBarTitleDisplayMode(.inline)
-        
+        .onAppear{
+            bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
+        }
+        .refreshable {
+            do {
+                try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+              } catch {}
+//            communityVM.fetchCommunity()
+            bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
+        }
     }
 }
 

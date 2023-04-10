@@ -9,58 +9,33 @@ import SwiftUI
 import MessageUI
 
 struct MyPageOptionView: View {
-//    let optionMenu = ["프로필 편집", "카메라 정보", "저장됨", "로그아웃"]
-//    @Environment(\.presentationMode) var presentationMode
-//    @StateObject var authVM = AuthenticationStore()
-    var userVM: UserViewModel
-    var bookmarkedMagazineDocument: [MagazineDocument]
-    var bookmarkedCommunityDoument: [CommunityDocument]
-    @StateObject var communityVM: CommunityViewModel = CommunityViewModel()
+    
+    @ObservedObject var commentVm: CommentViewModel
+    @ObservedObject var communityVM: CommunityViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
+    
+    @ObservedObject var userVM: UserViewModel
+
+    @Binding var presented: Bool
+
     
     var body: some View {
         VStack(alignment: .leading){
-            
-            //MARK: 상단바
-//            HStack{
-//                Button(action: {
-//                    presentationMode.wrappedValue.dismiss()
-//                }, label: {
-//                    HStack {
-//                        Image(systemName: "chevron.left")
-//                        Text("마이페이지")
-//                    }
-//                    .padding(.horizontal)
-//                })
-//
-//                Spacer()
-//
-//                Text("설정")
-//                    .font(.title3)
-//                    .bold()
-//                    .padding(.trailing, 125)
-//
-//                Spacer()
-//            }
-//            .accentColor(.black)
-            
             ScrollView{
                 //MARK: 계정 섹션
-                //이거넣음
-                AccountSection(communityVM: communityVM, userVM: userVM, bookmarkedMagazineDocument: bookmarkedMagazineDocument, bookmarkedCommunityDoument: bookmarkedCommunityDoument)
+                AccountSection(commentVm: commentVm, magazineVM: magazineVM, communityVM: communityVM, userVM: userVM, presented: $presented)
                 
                 //MARK: 지원 섹션
                 SupportSection()
                 
                 //MARK: 정보 섹션
-                InfoSection()
+                InfoSection(userVM: userVM)
                     .padding(.bottom)
             }
             Spacer()
         }
         .navigationTitle("설정")
         .navigationBarTitleDisplayMode(.inline)
-//        .navigationBarHidden(true)
-//        .navigationBarBackButtonHidden(true)
         .onAppear {
             // 커뮤니티 데이터 fetch
             communityVM.fetchCommunity()
@@ -81,7 +56,7 @@ extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate 
         super.viewDidLoad()
         interactivePopGestureRecognizer?.delegate = self
     }
-
+    
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return viewControllers.count > 1
     }
@@ -89,13 +64,13 @@ extension UINavigationController: ObservableObject, UIGestureRecognizerDelegate 
 
 //MARK: - 계정 섹션
 struct AccountSection: View {
-    //이거 넣고
-    @StateObject var communityVM: CommunityViewModel
-    var userVM: UserViewModel
-//    var community: [CommunityDocument]
-    var bookmarkedMagazineDocument: [MagazineDocument]
-    var bookmarkedCommunityDoument: [CommunityDocument]
-
+    @ObservedObject var commentVm: CommentViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
+    
+    @Binding var presented: Bool
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
             Text("계정")
@@ -109,7 +84,7 @@ struct AccountSection: View {
                 EditMyPageView(userVM: userVM)
             } label: {
                 HStack() {
-                    Image(systemName: "person")
+                    Image(systemName: "pencil")
                         .font(.system(size: 25))
                         .padding(.trailing, 10)
                     
@@ -128,7 +103,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                EditCameraView()
+                EditCameraView(userVM: userVM)
             } label: {
                 HStack {
                     Image(systemName: "camera")
@@ -148,9 +123,31 @@ struct AccountSection: View {
                 .padding(.bottom)
             }
             .padding(.horizontal)
+
+            NavigationLink {
+                MyPgeMyCommunity(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, presented: $presented, isLoading: $communityVM.isLoading)
+            } label: {
+                HStack {
+                    Image(systemName: "text.bubble")
+                        .font(.system(size: 20))
+                        .padding(.trailing, 10)
+                    
+                    Text("나의 커뮤니티 글")
+                        .font(.title3)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .font(.title3)
+                }
+                .foregroundColor(.black)
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
+            .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedMagazine(bookmarkedMagazineDocument: bookmarkedMagazineDocument)
+                BookmarkedMagazine(userVM: userVM, magazineVM: magazineVM)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")
@@ -173,7 +170,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedCommunityView(bookmarkedCommunityDoument: bookmarkedCommunityDoument, isLoading: $communityVM.isLoading)
+                BookmarkedCommunityView(commentVm : commentVm, communityVM : communityVM, userVM : userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")
@@ -201,7 +198,7 @@ struct AccountSection: View {
 //MARK: - 지원 섹션
 struct SupportSection: View {
     @State private var isShowingMailView = false
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
             Text("지원")
@@ -210,9 +207,6 @@ struct SupportSection: View {
                 .padding()
                 .padding(.leading, 5)
             
-//            Button {
-//                Text("고객센터")
-//                EmailController.shared.sendEmail(subject: "Hello", body: "Hello From ishtiz.com", to: "recipient@example.com")
             NavigationLink {
                 UserServiceView()
             } label: {
@@ -221,11 +215,6 @@ struct SupportSection: View {
                         .font(.system(size: 19))
                         .padding(.leading, 3)
                         .padding(.trailing, 11)
-                    
-                    //                            .resizable()
-                    //                            .frame(width: 20, height: 20)
-                    //                            .aspectRatio(contentMode: .fit)
-                    //                            .padding(.trailing)
                     Text("고객센터")
                         .font(.title3)
                     
@@ -239,7 +228,7 @@ struct SupportSection: View {
                 .padding(.bottom)
             }
             .padding(.horizontal)
-          
+            
             
             NavigationLink {
                 UserFeedbackView()
@@ -267,26 +256,19 @@ struct SupportSection: View {
         }
     }
     
-    func createEmailUrl(to: String, subject: String, body: String) -> String {
-        let subjectEncoded = subject.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let bodyEncoded = body.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-            
-        let defaultUrl = "mailto:\(to)?subject=\(subjectEncoded)&body=\(bodyEncoded)"
-            
-        return defaultUrl
-    }
 }
 
 //MARK: - 정보 섹션
 struct InfoSection: View {
-    @ObservedObject var authVM: AuthenticationStore = AuthenticationStore()
-    @ObservedObject var kakoAuthVM: KakaoAuthenticationStore = KakaoAuthenticationStore()
-   
+    @EnvironmentObject var authenticationStore: AuthenticationStore
+    @ObservedObject var userVM: UserViewModel
     // Progress 변수
     @State private var isShownProgress: Bool = true
-
+    
     // Alert 변수
     @State private var showAlert: Bool = false
+    
+    @AppStorage("isUserLoggedIn") var isUserLoggedIn: AuthenticationState?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10){
@@ -353,7 +335,7 @@ struct InfoSection: View {
                 .onDisappear{
                     isShownProgress = true
                 }
-
+                
             } label: {
                 HStack {
                     Image(systemName: "shield")
@@ -375,7 +357,7 @@ struct InfoSection: View {
             
             NavigationLink {
                 ZStack{
-                MyWebView(urlToLoad: "https://statuesque-cast-fac.notion.site/Third-Party-Notices-141126a372d64957b9d7a81b02f2f3c1")
+                    MyWebView(urlToLoad: "https://statuesque-cast-fac.notion.site/Third-Party-Notices-141126a372d64957b9d7a81b02f2f3c1")
                         .navigationTitle(Text("오픈소스 라이선스"))
                         .navigationBarTitleDisplayMode(.inline)
                     if isShownProgress == true {
@@ -410,19 +392,7 @@ struct InfoSection: View {
             .padding(.horizontal)
             
             Button {
-//                if authVM.logInCompanyState == .appleLogIn {
-//                    authVM.appleLogout()
-//                } else if authVM.logInCompanyState == .googleLogIn {
-//                    authVM.googleLogout()
-//                } else if authVM.logInCompanyState == .kakaoLogIn {
-//                    kakoAuthVM.kakaoLogOut()
-//                } else {
-//                    authVM.appleLogout()
-//                    authVM.googleLogout()
-//                    kakoAuthVM.kakaoLogOut()
-//                }
                 showAlert.toggle()
-                
             } label: {
                 HStack {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
@@ -447,22 +417,49 @@ struct InfoSection: View {
                       primaryButton: .destructive(
                         Text("네")
                       ){
-                          if authVM.logInCompanyState == .appleLogIn {
-                              authVM.appleLogout()
-                          } else if authVM.logInCompanyState == .googleLogIn {
-                              authVM.googleLogout()
-                          } else if authVM.logInCompanyState == .kakaoLogIn {
-                              kakoAuthVM.kakaoLogOut()
-                          } else {
-                              authVM.appleLogout()
-                              authVM.googleLogout()
-                              kakoAuthVM.kakaoLogOut()
+                          authenticationStore.removeToken(tokenArray: userVM.currentUsers?.fcmToken.arrayValue.values ?? [])
+                          
+                          DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                              if authenticationStore.logInCompanyState == .appleLogIn {
+                                  authenticationStore.appleLogout()
+                              } else if authenticationStore.logInCompanyState == .googleLogIn {
+                                  authenticationStore.googleLogout()
+                              }else {
+                                  authenticationStore.appleLogout()
+                                  authenticationStore.googleLogout()
+                              }
                           }
                       },
                       secondaryButton: .default(
                         Text("아니오")
                       ))
             }
+            
+            NavigationLink {
+               AccountDetailView(userVM: userVM)
+            } label: {
+                HStack() {
+                    Image(systemName: "person")
+                        .font(.system(size: 24))
+//                        .padding(.trailing, 10)
+//                        .font(.system(size:20))
+                        .padding(.leading, 4.5)
+                        .padding(.trailing, 12.5)
+
+                    Text("계정 관리")
+                        .font(.title3)
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .font(.title3)
+                }
+                .foregroundColor(.black)
+                .padding(.horizontal)
+                .padding(.vertical)
+            }
+            .padding(.horizontal)
+            
         }
     }
 }
@@ -506,88 +503,6 @@ struct MyWebView: UIViewRepresentable {
  */
 
 
-// Mail Send
-class EmailController: NSObject, MFMailComposeViewControllerDelegate {
-    public static let shared = EmailController()
-    private override init() { }
-    
-    func sendEmail(subject:String, body:String, to:String){
-        // Check if the device is able to send emails
-        if !MFMailComposeViewController.canSendMail() {
-           print("This device cannot send emails.")
-           return
-        }
-        // Create the email composer
-        let mailComposer = MFMailComposeViewController()
-        mailComposer.mailComposeDelegate = self
-        mailComposer.setToRecipients([to])
-        mailComposer.setSubject(subject)
-        mailComposer.setMessageBody(body, isHTML: false)
-        EmailController.getRootViewController()?.present(mailComposer, animated: true, completion: nil)
-    }
-    
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        EmailController.getRootViewController()?.dismiss(animated: true, completion: nil)
-    }
-    
-    static func getRootViewController() -> UIViewController? {
-        // In SwiftUI 2.0
-        UIApplication.shared.windows.first?.rootViewController
-    }
-}
-
-
-// mail test (from GPT)
-struct MailView: UIViewControllerRepresentable {
-    @Binding var isShowing: Bool
-    
-    func makeUIViewController(context: Context) -> MFMailComposeViewController {
-        let mailComposeViewController = MFMailComposeViewController()
-        mailComposeViewController.setToRecipients(["example@example.com"])
-        mailComposeViewController.setSubject("Subject")
-        mailComposeViewController.setMessageBody("Message body", isHTML: false)
-        mailComposeViewController.mailComposeDelegate = context.coordinator
-        return mailComposeViewController
-    }
-    
-    func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {
-        // No update necessary
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(isShowing: $isShowing)
-    }
-    
-    class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
-        @Binding var isShowing: Bool
-        
-        init(isShowing: Binding<Bool>) {
-            _isShowing = isShowing
-        }
-        
-        func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-            defer {
-                isShowing = false
-            }
-            
-            switch result {
-            case .cancelled:
-                print("Mail cancelled")
-            case .saved:
-                print("Mail saved")
-            case .sent:
-                print("Mail sent")
-            case .failed:
-                print("Mail failed: \(String(describing: error))")
-            @unknown default:
-                fatalError()
-            }
-            
-            controller.dismiss(animated: true, completion: nil)
-        }
-    }
-}
-
 // OpenURL
 struct SupportEmail {
     let toAddress: String
@@ -625,171 +540,46 @@ struct UserServiceView: View{
     @State private var copiedComplete: Bool = false
     
     // 메일 형식
-    private var email = SupportEmail(toAddress: "pkkyung26@gmail.com", subject: "GRAIN 문의사항", messageHeader: "아래에 내용을 입력해주세요. (사용하시는 기기와 iOS버전, 앱의 버전을 입력해주시면 더욱 신속한 처리가 가능합니다. \n 단말기 명: \n iOS 버전: \n GRAIN 버전: ")
-    
-    var body: some View {
-            VStack(alignment: .leading){
-                Image(systemName: "message")
-                    .font(.title)
-                    .padding(.bottom, 1)
-                
-                Text("문의사항이 있으신가요?")
-                    .font(.title2)
-                    .bold()
-                    .padding(.bottom)
-                
-                VStack(alignment: .leading){
-                    HStack(spacing: 0){
-                        Text("문의사항은 ")
-                        Text(verbatim: "pkkyung26@gmail.com")
-                            .foregroundColor(.vivaMagenta)
-                            .onTapGesture {
-                                pastedboard.string = "pkkyung26@gmail.com"
-                                self.copiedComplete = true
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    self.copiedComplete = false
-                                }
-                            }
-                        Text(" 으로")
-                    }
-                    Text("메일을 보내주세요.")
-                }
-                .font(.headline)
-                .bold()
-                .padding(.bottom)
-                
-                
-                Text("""
-(화면이나 기능에 이상이 있을 시, 사용 중이신 기기와 iOS 버전, 앱의 버전을 함께 알려주시면 보다 빠르게 처리가 가능합니다.)
-""")
-                .padding(.bottom, 30)
-                .foregroundColor(.textGray)
-                
-                HStack{
-                    Spacer()
-                    
-                    VStack{
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 180, height: 50)
-                            .overlay{
-                                Button{
-                                    email.send(openURL: openURL)
-                                    
-                                } label: {
-                                    Text("메일 앱에서 작성하기")
-                                        .foregroundColor(.white)
-                                }
-                            }
-                            .padding(.top)
-                        
-                        RoundedRectangle(cornerRadius: 10)
-                            .frame(width: 180, height: 50)
-                            .overlay{
-                                Button{
-                                    pastedboard.string = "pkkyung26@gmail.com"
-                                    self.copiedComplete = true
-                                    
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                                        self.copiedComplete = false
-                                    }
-                                    
-                                } label: {
-                                    Text("메일 주소 복사하기")
-                                        .foregroundColor(.white)
-                                }
-                            }
-                            .padding(.top)
-                        
-                    }
-                    Spacer()
-                }
-                
-                Spacer()
-                
-                if copiedComplete {
-                    HStack{
-                        Spacer()
-                        Text("복사되었습니다")
-                            .font(.callout)
-                            .foregroundColor(.middlebrightGray)
-                            .padding(.bottom)
-                        Spacer()
-                    }
-                }
-            }
-            .padding()
-            .padding(.top, 50)
-            .navigationTitle(Text("고객센터"))
-            .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-//struct UserServiceView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NavigationStack{
-//            UserServiceView()
-//        }
-//    }
-//}
-
-
-//피드백 View
-struct UserFeedbackView: View{
-    // 다른 앱을 열기 위함
-
-    @Environment(\.openURL) var openURL
-    
-    // text를 클립 보드에 복사하기 위한 변수
-    let pastedboard = UIPasteboard.general
-    @State private var copiedComplete: Bool = false
-    
-    // 메일 형식
-    private var email = SupportEmail(toAddress: "pkkyung26@gmail.com", subject: "GRAIN 피드백 메일", messageHeader: "GRAIN에서 좋았던 점이나 불편했던 점, 바라는 점을 보내주세요.")
+    private var email = SupportEmail(toAddress: "filmgrain.official@gmail.com", subject: "GRAIN 문의사항", messageHeader: "아래에 내용을 입력해주세요. (사용하시는 기기와 iOS버전, 앱의 버전을 입력해주시면 더욱 신속한 처리가 가능합니다. \n 단말기 명: \n iOS 버전: \n GRAIN 버전: ")
     
     var body: some View {
         VStack(alignment: .leading){
-            Image(systemName: "envelope")
+            Image(systemName: "message")
                 .font(.title)
-                .padding(.bottom, 5)
+                .padding(.bottom, 1)
             
-                Text("GRAIN에서의 경험이 만족스러우신가요?")
+            Text("문의사항이 있으신가요?")
                 .font(.title2)
                 .bold()
                 .padding(.bottom)
             
             VStack(alignment: .leading){
-                Text("GRAIN에 전달해주실 피드백을")
-                
                 HStack(spacing: 0){
-                    Text(verbatim:"pkkyung@gmail.com")
+                    Text("문의사항은 ")
+                    Text(verbatim: "filmgrain.official@gmail.com")
                         .foregroundColor(.vivaMagenta)
                         .onTapGesture {
-                            pastedboard.string = "pkkyung26@gmail.com"
+                            pastedboard.string = "filmgrain.official@gmail.com"
                             self.copiedComplete = true
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                 self.copiedComplete = false
                             }
                         }
-                    
-                    Text("으로 보내주세요")
+                    Text(" 으로")
                 }
+                Text("메일을 보내주세요.")
             }
             .font(.headline)
             .bold()
             .padding(.bottom)
             
-            VStack{
-                Text("GRAIN")
-                    .bold() +
-                Text("""
-에서 좋았던 점이나 불편했던 점, 바라는 점을 보내주세요.
-여러분의 소중한 피드백을 기다립니다!
+            
+            Text("""
+(화면이나 기능에 이상이 있을 시, 사용 중이신 기기와 iOS 버전, 앱의 버전을 함께 알려주시면 보다 빠르게 처리가 가능합니다.)
 """)
-            }
-                .foregroundColor(.boxGray)
-                .padding(.bottom)
+            .padding(.bottom, 30)
+            .foregroundColor(.textGray)
             
             HStack{
                 Spacer()
@@ -812,7 +602,132 @@ struct UserFeedbackView: View{
                         .frame(width: 180, height: 50)
                         .overlay{
                             Button{
-                                pastedboard.string = "pkkyung26@gmail.com"
+                                pastedboard.string = "filmgrain.official@gmail.com"
+                                self.copiedComplete = true
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                                    self.copiedComplete = false
+                                }
+                                
+                            } label: {
+                                Text("메일 주소 복사하기")
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        .padding(.top)
+                    
+                }
+                Spacer()
+            }
+            
+            Spacer()
+            
+            if copiedComplete {
+                HStack{
+                    Spacer()
+                    Text("복사되었습니다")
+                        .font(.callout)
+                        .foregroundColor(.middlebrightGray)
+                        .padding(.bottom)
+                    Spacer()
+                }
+            }
+        }
+        .padding()
+        .padding(.top, 50)
+        .navigationTitle(Text("고객센터"))
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+//struct UserServiceView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack{
+//            UserServiceView()
+//        }
+//    }
+//}
+
+
+//피드백 View
+struct UserFeedbackView: View{
+    // 다른 앱을 열기 위함
+    
+    @Environment(\.openURL) var openURL
+    
+    // text를 클립 보드에 복사하기 위한 변수
+    let pastedboard = UIPasteboard.general
+    @State private var copiedComplete: Bool = false
+    
+    // 메일 형식
+    private var email = SupportEmail(toAddress: "filmgrain.official@gmail.com", subject: "GRAIN 피드백 메일", messageHeader: "GRAIN에서 좋았던 점이나 불편했던 점, 바라는 점을 보내주세요.")
+    
+    var body: some View {
+        VStack(alignment: .leading){
+            Image(systemName: "envelope")
+                .font(.title)
+                .padding(.bottom, 5)
+            
+            Text("GRAIN에서의 경험이 만족스러우신가요?")
+                .font(.title2)
+                .bold()
+                .padding(.bottom)
+            
+            VStack(alignment: .leading){
+                Text("GRAIN에 전달해주실 피드백을")
+                
+                HStack(spacing: 0){
+                    Text(verbatim:"filmgrain.official@gmail.com")
+                        .foregroundColor(.vivaMagenta)
+                        .onTapGesture {
+                            pastedboard.string = "filmgrain.official@gmail.com"
+                            self.copiedComplete = true
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self.copiedComplete = false
+                            }
+                        }
+                    
+                    Text("으로 보내주세요")
+                }
+            }
+            .font(.headline)
+            .bold()
+            .padding(.bottom)
+            
+            VStack{
+                Text("GRAIN")
+                    .bold() +
+                Text("""
+에서 좋았던 점이나 불편했던 점, 바라는 점을 보내주세요.
+여러분의 소중한 피드백을 기다립니다!
+""")
+            }
+            .foregroundColor(.boxGray)
+            .padding(.bottom)
+            
+            HStack{
+                Spacer()
+                
+                VStack{
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(width: 180, height: 50)
+                        .overlay{
+                            Button{
+                                email.send(openURL: openURL)
+                                
+                            } label: {
+                                Text("메일 앱에서 작성하기")
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        .padding(.top)
+                    
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(width: 180, height: 50)
+                        .overlay{
+                            Button{
+                                pastedboard.string = "filmgrain.official@gmail.com"
                                 self.copiedComplete = true
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
@@ -844,7 +759,7 @@ struct UserFeedbackView: View{
                     Spacer()
                 }
             }
-
+            
         }
         .padding()
         .padding(.top, 50)

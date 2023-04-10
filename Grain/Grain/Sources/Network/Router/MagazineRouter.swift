@@ -25,6 +25,16 @@ enum MagazineRouter {
         return URL(string: baseUrlString) ?? URL(string: "")!
     }
     
+    private var queryItemString: String {
+            var magazineString : String = ""
+            if let infolist = Bundle.main.infoDictionary {
+                if let str = infolist["UuidMagazine"] as? String {
+                    magazineString = str
+                }
+            }
+            return magazineString
+        }
+    
     private enum HTTPMethod {
         case get
         case post
@@ -46,13 +56,13 @@ enum MagazineRouter {
     private var endPoint: String {
         switch self {
         case let .patch(_, docID):
-            return "/Magazine/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .patchLikedNum(_, docID):
-            return "/Magazine/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .delete(docID):
-            return "/Magazine/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         default:
-            return "/Magazine"
+            return "/" + "\(queryItemString)"
         }
     }
     
@@ -115,9 +125,6 @@ enum MagazineRouter {
         if let data = data {
             request.httpBody = data
         }
-        
-        // FIXME: Encoding 하는 방식으로 data 넘겨주기
-        //        request.httpBody = try JSONEncoding.default.encode(request, with: parameters).httpBody
         return request
     }
 

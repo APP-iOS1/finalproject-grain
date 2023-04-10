@@ -10,7 +10,19 @@ import SwiftUI
 import Kingfisher
 
 struct MagazineViewCell: View {
-    var data : MagazineDocument
+    let data : MagazineDocument
+    
+    @ObservedObject var userVM: UserViewModel
+    
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
     
     var body: some View {
         VStack {
@@ -18,7 +30,7 @@ struct MagazineViewCell: View {
                 .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.9)
                 .foregroundColor(.black)
                 .overlay{
-                    KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                         .resizable()
                         .scaledToFill()
                         .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.9 )
@@ -32,8 +44,8 @@ struct MagazineViewCell: View {
                 .font(.title2)
                 .frame(alignment: .leading)
                 .multilineTextAlignment(.leading)
-                .padding(.top,5)
-                .padding(.bottom, 3)
+                .padding(.top, 0)
+                .padding(.bottom, -2)
                 .frame(width: Screen.maxWidth * 0.9, alignment: .leading)
             
             Divider()
@@ -47,28 +59,33 @@ struct MagazineViewCell: View {
                    
                 
                 Divider()
-                Text(data.fields.nickName.stringValue)
-                    .font(.subheadline)
-                    .bold()
+                
+                if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue })
+                {
+                    Text(user.fields.nickName.stringValue)
+                        .font(.subheadline)
+                        .bold()
+                }
+
                 Spacer()
                 Text(data.createTime.toDate()?.renderTime() ?? "")
                     .font(.caption)
                     .foregroundColor(.middleDarkGray)
             }
             .padding(.horizontal,5)
-           
+            .padding(.top, -2)
             
             
             Spacer()
         }
         .padding()
-        .padding(.bottom, 20)
+        .padding(.bottom, 13)
         
     }
 }
 
 struct MagazineViewCell_Previews: PreviewProvider {
     static var previews: some View {
-        MagazineViewCell(data: MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: 0), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), likedNum: LikedNum(integerValue: ""), latitude: MagazineLocation(doubleValue: 0), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: "")), name: "", createTime: "", updateTime: ""))
+        MagazineViewCell(data: MagazineDocument(fields: MagazineFields(filmInfo: MagazineString(stringValue: ""), id: MagazineString(stringValue: ""), customPlaceName: MagazineString(stringValue: ""), longitude: MagazineLocation(doubleValue: 0), title: MagazineString(stringValue: ""), comment: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), lenseInfo: MagazineString(stringValue: ""), userID: MagazineString(stringValue: ""), image: MagazineComment(arrayValue: MagazineArrayValue(values: [MagazineString(stringValue: "")])), likedNum: LikedNum(integerValue: ""), latitude: MagazineLocation(doubleValue: 0), content: MagazineString(stringValue: ""), nickName: MagazineString(stringValue: ""), roadAddress: MagazineString(stringValue: ""), cameraInfo: MagazineString(stringValue: "")), name: "", createTime: "", updateTime: ""), userVM: UserViewModel())
     }
 }

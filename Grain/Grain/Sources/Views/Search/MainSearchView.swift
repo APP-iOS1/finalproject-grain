@@ -19,12 +19,12 @@ enum SearchState: Hashable {
 }
 
 struct MainSearchView: View {
-    @ObservedObject var communtyViewModel: CommunityViewModel = CommunityViewModel()
-    @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
-    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+    @ObservedObject var communityViewModel: CommunityViewModel
+    @ObservedObject var magazineViewModel: MagazineViewModel
+    @ObservedObject var userViewModel: UserViewModel
+
     
     @State private var searchWord: String = ""
-    @State private var searchList: [String] =  ["카메라", "명소", "출사"]
     @State private var isMagazineSearchResultShown: Bool = false
     @State private var isCommunitySearchResultShown: Bool = false
     @State private var isUserSearchResultShown: Bool = false
@@ -33,17 +33,9 @@ struct MainSearchView: View {
     @State private var searchStatus: SearchState = .magazine
     @State private var selectedIndex: Int = 0
     @State private var progress: Double = 0.5
+    @State var ObservingChangeValueLikeNum : String = ""
+    
     @FocusState private var focus: FocusableField?
-   
-    var searchedUser: [UserDocument] {
-        let arr = userViewModel.users.filter {
-            ignoreSpaces(in: $0.fields.nickName.stringValue)
-                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-            ignoreSpaces(in: $0.fields.name.stringValue)
-                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
-        }
-        return Array(arr)
-    }
     
     private let searchTitles: [String] = ["매거진", "커뮤니티", "계정"]
     
@@ -51,14 +43,16 @@ struct MainSearchView: View {
         return string.replacingOccurrences(of: " ", with: "")
     }
     
-    init(){
-//        if searchWord.isEmpty{
-//            isShownProgress = true
-//        }
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
     }
     
-    @State var updateNum : String = ""
-
     var body: some View {
         NavigationStack{
             VStack{
@@ -82,20 +76,8 @@ struct MainSearchView: View {
                                     }else {
                                         self.isUserSearchResultShown.toggle()
                                     }
-                                    
-                                    if let user = userViewModel.currentUsers {
-                                        if userViewModel.recentSearch.contains(where: { $0 == self.searchWord }) {
-                                            // 이미 검색한 검색어이면 배열에서 먼저 이미 있는 값 삭제
-                                            if let index = userViewModel.recentSearch.firstIndex(of: self.searchWord) {
-                                                userViewModel.recentSearch.remove(at: index)
-                                            }
-                                        }
 
-                                        // 배열의 첫번째 인덱스에 넣어준다.
-                                        // 1 index 에 넣는 이유는 0번째 인덱스가 "" 로 초기화 되어있기 때문.
-                                        userViewModel.recentSearch.insert(self.searchWord, at: 1)
-                                        userViewModel.updateCurrentUserArray(type: "recentSearch", arr: userViewModel.recentSearch, docID: user.id.stringValue)
-                                    }
+                                    updateRecentSearch()
                                 }
                             }
                             .onChange(of: searchWord) { value in
@@ -150,9 +132,8 @@ struct MainSearchView: View {
                                     Spacer()
                                     Rectangle()
                                         .fill(Color.black)
-                                        .frame(width: Screen.maxWidth * 0.2, height: 1)
-                                        .transition(.slide)
-                                        .animation(.easeInOut, value: selectedIndex)
+                                        .frame(width: Screen.maxWidth * 0.2, height: 2)
+                                        .animation(.easeInOut.speed(1.5), value: selectedIndex)
                                 }
                                 
                             })
@@ -169,7 +150,7 @@ struct MainSearchView: View {
                 }
                 
                 if searchWord.isEmpty {
-                    MainRecentSearchView(searchList: $searchList, userVM: userViewModel)
+                    MainRecentSearchView(userVM: userViewModel, selectedIndex: $selectedIndex, searchWord: $searchWord, isMagazineSearchResultShown: $isMagazineSearchResultShown, isCommunitySearchResultShown: $isCommunitySearchResultShown, isUserSearchResultShown: $isUserSearchResultShown)
                     
                 } else if !searchWord.isEmpty {
                     ZStack {
@@ -180,7 +161,6 @@ struct MainSearchView: View {
                                     HStack{
                                         Text(Image(systemName: "magnifyingglass"))
                                             .padding(.leading)
-                                        
                                         Text("\(searchWord)")
                                     }
                                     .padding(.top)
@@ -193,7 +173,7 @@ struct MainSearchView: View {
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                                     }.prefix(3),id: \.self) { item in
                                         NavigationLink {
-                                            MagazineDetailView(magazineVM: magazineViewModel, userVM: userViewModel, currentUsers: userViewModel.currentUsers, data: item, updateNum: $updateNum)
+                                            MagazineDetailView(magazineVM: magazineViewModel, userVM: userViewModel, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                                         } label: {
                                             VStack(alignment: .leading){
                                                 Text(item.fields.title.stringValue)
@@ -212,13 +192,14 @@ struct MainSearchView: View {
                                             }
                                             .padding(.horizontal)
                                         }.onTapGesture {
-                                        
+                                            
                                         }
                                         
                                     }
                                     
                                     Button {
                                         self.isMagazineSearchResultShown.toggle()
+                                        updateRecentSearch()
                                     } label: {
                                         Text("결과 모두 보기")
                                             .foregroundColor(.blue)
@@ -226,6 +207,9 @@ struct MainSearchView: View {
                                             .padding(.vertical, 9)
                                     }
                                     
+                                }
+                                .task(id: ObservingChangeValueLikeNum){
+                                    magazineViewModel.fetchMagazine()
                                 }
                                 .emptyPlaceholder(magazineViewModel.magazines.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)
@@ -251,15 +235,14 @@ struct MainSearchView: View {
                                     .padding(.top)
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 3)
-                                    ForEach(communtyViewModel.communities.filter {
+                                    ForEach(communityViewModel.communities.filter {
                                         ignoreSpaces(in: $0.fields.title.stringValue)
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                         ignoreSpaces(in: $0.fields.content.stringValue)
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                                     }.prefix(3),id: \.self) { item in
                                         NavigationLink {
-                                            CommunitySearchDetailView(community: item)
-                                            
+                                            CommunityDetailView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, community: item)
                                         } label: {
                                             VStack(alignment: .leading){
                                                 Text(item.fields.title.stringValue)
@@ -282,6 +265,7 @@ struct MainSearchView: View {
                                     
                                     Button {
                                         self.isCommunitySearchResultShown.toggle()
+                                        updateRecentSearch()
                                     } label: {
                                         Text("결과 모두 보기")
                                             .foregroundColor(.blue)
@@ -289,7 +273,7 @@ struct MainSearchView: View {
                                             .padding(.vertical, 9)
                                     }
                                 }
-                                .emptyPlaceholder(communtyViewModel.communities.filter {
+                                .emptyPlaceholder(communityViewModel.communities.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                     ignoreSpaces(in: $0.fields.content.stringValue)
@@ -314,89 +298,50 @@ struct MainSearchView: View {
                                     .padding(.top)
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 7)
-//                                    userViewModel.users.prefix()
                                     
-                                    if searchedUser.count >= 4 {
-                                        ForEach(0..<4) { i in
-                                            NavigationLink {
-    //                                            UserSearchDetailView(user: item)
-                                                UserDetailView(user: searchedUser[i], userVM: userViewModel)
-                                            } label: {
-                                                VStack{
-                                                    HStack{
-                                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                                            .resizable()
-                                                            .frame(width: 47, height: 47)
-                                                            .cornerRadius(30)
-                                                            .overlay {
-                                                                Circle()
-                                                                    .stroke(lineWidth: 0.5)
-                                                            }
-                                                            .padding(.trailing, -10)
-                                                        VStack(alignment: .leading){
-                                                            Text(searchedUser[i].fields.nickName.stringValue)
-                                                                .font(.body)
-                                                                .bold()
-                                                                .padding(.bottom, 1)
-                                                                .lineLimit(1)
-                                                            Text(searchedUser[i].fields.name.stringValue)
-                                                                .font(.caption)
-                                                                .foregroundColor(.textGray)
-                                                                .frame(alignment: .leading)
+                                    ForEach(userViewModel.users.filter {
+                                        ignoreSpaces(in: $0.fields.nickName.stringValue)
+                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+                                        ignoreSpaces(in: $0.fields.name.stringValue)
+                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))}.prefix(3), id: \.self) { user in
+                                        NavigationLink {
+                                            UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: user)
+                                        } label: {
+                                            VStack{
+                                                HStack{
+                                                    KFImage(URL(string: user.fields.profileImage.stringValue ) ?? URL(string: defaultProfileImage()))
+                                                        .resizable()
+                                                        .frame(width: 47, height: 47)
+                                                        .cornerRadius(30)
+                                                        .overlay {
+                                                            Circle()
+                                                                .stroke(lineWidth: 0.5)
                                                         }
-                                                        .padding(.leading)
-                                                        Spacer()
+                                                        .padding(.trailing, -10)
+                                                    VStack(alignment: .leading){
+                                                        Text(user.fields.nickName.stringValue)
+                                                            .font(.body)
+                                                            .bold()
+                                                            .padding(.bottom, 1)
+                                                            .lineLimit(1)
+                                                        Text(user.fields.name.stringValue)
+                                                            .font(.caption)
+                                                            .foregroundColor(.textGray)
+                                                            .frame(alignment: .leading)
                                                     }
-                                                    Divider()
-                                                        .padding(.bottom, 5)
+                                                    .padding(.leading)
+                                                    Spacer()
                                                 }
-                                                .padding(.horizontal)
-                                                .padding(.top, 5)
+                                                Divider()
+                                                    .padding(.bottom, 5)
                                             }
+                                            .padding(.horizontal)
+                                            .padding(.top, 5)
                                         }
                                     }
-                                    else if searchedUser.count > 0 && searchedUser.count < 4  {
-                                        ForEach(0..<searchedUser.count) { i in
-                                            NavigationLink {
-    //                                            UserSearchDetailView(user: item)
-                                                UserDetailView(user: searchedUser[i], userVM: userViewModel)
-                                            } label: {
-                                                VStack{
-                                                    HStack{
-                                                        KFImage(URL(string: searchedUser[i].fields.profileImage.stringValue ) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                                                            .resizable()
-                                                            .frame(width: 47, height: 47)
-                                                            .cornerRadius(30)
-                                                            .overlay {
-                                                                Circle()
-                                                                    .stroke(lineWidth: 0.5)
-                                                            }
-                                                            .padding(.trailing, -10)
-                                                        VStack(alignment: .leading){
-                                                            Text(searchedUser[i].fields.nickName.stringValue)
-                                                                .font(.body)
-                                                                .bold()
-                                                                .padding(.bottom, 1)
-                                                                .lineLimit(1)
-                                                            Text(searchedUser[i].fields.name.stringValue)
-                                                                .font(.caption)
-                                                                .foregroundColor(.textGray)
-                                                                .frame(alignment: .leading)
-                                                        }
-                                                        .padding(.leading)
-                                                        Spacer()
-                                                    }
-                                                    Divider()
-                                                        .padding(.bottom, 5)
-                                                }
-                                                .padding(.horizontal)
-                                                .padding(.top, 5)
-                                            }
-                                        }
-                                    }
-                                 
                                     Button {
-                                        self.isCommunitySearchResultShown.toggle()
+                                        updateRecentSearch()
+                                        self.isUserSearchResultShown.toggle()
                                     } label: {
                                         Text("결과 모두 보기")
                                             .foregroundColor(.blue)
@@ -415,13 +360,11 @@ struct MainSearchView: View {
                                         MainSearchPlaceHolder(searchWord: $searchWord)
                                         Spacer()
                                     }
-                                    
                                 }
                                 
                             default:
                                 Text("다시 시도해주세요")
                             }
-                            
                         }
                         
                         if isShownProgress == true {
@@ -454,24 +397,35 @@ struct MainSearchView: View {
             }
         }
         .navigationDestination(isPresented: $isMagazineSearchResultShown){
-            MagazineSearchResultView(searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
+            MagazineSearchResultView(magazineVM: magazineViewModel, searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
         }
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
-            CommunitySearchResultView(searchWord: $searchWord, community: communtyViewModel)
+            CommunitySearchResultView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord, community: communityViewModel)
         }
-        
         .navigationDestination(isPresented: $isUserSearchResultShown){
-            UserSearchResultView(searchWord: $searchWord, user: userViewModel)
+            UserSearchResultView( userVM: userViewModel , magazineVM: magazineViewModel, searchWord: $searchWord)
         }
         .onAppear{
             if searchWord.isEmpty{
-                        isShownProgress = true
-                    }
+                isShownProgress = true
+            }
             self.focus = .search
-            userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            communtyViewModel.fetchCommunity()
-            magazineViewModel.fetchMagazine()
-            userViewModel.fetchUser()
+        }
+    }
+    
+    
+    func updateRecentSearch() {
+        if let user = userViewModel.currentUsers {
+            if userViewModel.recentSearch.contains(where: { $0 == self.searchWord }) {
+                // 이미 검색한 검색어이면 배열에서 먼저 이미 있는 값 삭제
+                if let index = userViewModel.recentSearch.firstIndex(of: self.searchWord) {
+                    userViewModel.recentSearch.remove(at: index)
+                }
+            }
+            // 배열의 첫번째 인덱스에 넣어준다.
+            // 1 index 에 넣는 이유는 0번째 인덱스가 "" 로 초기화 되어있기 때문.
+            userViewModel.recentSearch.insert(self.searchWord, at: 1)
+            userViewModel.updateCurrentUserArray(type: "recentSearch", arr: userViewModel.recentSearch, docID: user.id.stringValue)
         }
     }
 }

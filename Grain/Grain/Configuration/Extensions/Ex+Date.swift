@@ -37,12 +37,9 @@ extension Date {
         dateFormatter.dateFormat = format
         return dateFormatter.date(from: string)
     }
+    func getFormattedTime(from date: Date) -> String {
+         let formatter = DateFormatter()
+         formatter.dateFormat = "yyyy.MM.dd hh:mm:ss"
+         return formatter.string(from: date)
+     }
 }
-
-//let dateString = "2023-02-08"
-//
-//if let date = Date.fromString(string: dateString) {
-//    print("Successfully converted to date: \(date)")
-//} else {
-//    print("Failed to convert to date")
-//}

@@ -178,5 +178,7 @@ enum MagazineQuery {
         
         return query
     }
-    
+
 }
+
+

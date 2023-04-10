@@ -9,70 +9,26 @@ import SwiftUI
 import Kingfisher
 import FirebaseAuth
 
-//struct UserSearchDetailView: View {
-//    var images: [Image] = [Image("1"), Image("2"), Image("3"), Image("test"), Image("sampleImage"), Image("testImage")]
-//    let columns = [
-//        GridItem(.adaptive(minimum: 100))
-//    ]
-//    // MARK: docID -> 파이어스토어 User -> 문서ID 값 유저마다 고유의 값으로 들어가야 될듯
-//
-//    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
-//
-//    let user: UserDocument
-//
-//    var body: some View {
-//        NavigationStack {
-//            VStack {
-//
-//                //MARK: 프로필 이미지
-//                Image("2")
-//                    .resizable()
-//                    .frame(width: 100, height: 100)
-//                    .cornerRadius(64)
-//                    .overlay {
-//                        Circle()
-//                            .stroke(lineWidth: 1.5)
-//                    }
-//                Text(user.fields.nickName.stringValue)
-//                    .font(.title2)
-//                    .bold()
-//                Text(user.fields.name.stringValue)
-//                    .foregroundColor(.textGray)
-//                Text("자기소개글")
-//                    .padding(.top, 3)
-//                UserSearchFeedView(userD: user)
-//
-//            }
-//            .onAppear{
-//                // MARK: userID에 UserDefaults이용해서 저장
-////                userViewModel.fetchUser()
-//            }
-//        }
-//    }
-//}
 
-//struct UserSearchDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UserSearchDetailView()
-//    }
-//}
 struct UserSearchDetailView: View {
-    
-    // MARK: docID -> 파이어스토어 User -> 문서ID 값 유저마다 고유의 값으로 들어가야 될듯
-    
-    @StateObject var userVM = UserViewModel()
-    @StateObject var magazineVM = MagazineViewModel()
 
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
+    
     let user: UserDocument
-
-    
-//    var magazineDocument: [MagazineDocument]
-//    var boomarkedMagazineDocument: [MagazineDocument]
-//    var bookmarkedCommunityDoument: [CommunityDocument]
     
     @State private var showDevices: Bool = false
     @State private var angle: Double = 0
-    //    @State var transitionView: Bool = false
+    
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
     
     var body: some View {
         NavigationStack {
@@ -80,7 +36,7 @@ struct UserSearchDetailView: View {
                 VStack(alignment: .leading){
                     HStack{
                         //MARK: 프로필 이미지
-                        KFImage(URL(string: user.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        KFImage(URL(string: user.fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 85, height: 85)
@@ -108,9 +64,9 @@ struct UserSearchDetailView: View {
                                         .frame(width: 50, height: 20)
                                         .overlay{
                                             Text("+ 구독")
-                                            .font(.caption)
-                                            .bold()
-                                            .foregroundColor(.white)
+                                                .font(.caption)
+                                                .bold()
+                                                .foregroundColor(.white)
                                             
                                         }
                                 }
@@ -133,19 +89,17 @@ struct UserSearchDetailView: View {
                                     Text("\(user.fields.follower.arrayValue.values.count - 1)")
                                         .padding(.leading, -5)
                                         .bold()
-
+                                    
                                     Text("|")
-
+                                    
                                     Text("구독중")
                                     Text("\(user.fields.following.arrayValue.values.count - 1)")
                                         .padding(.leading, -5)
                                         .bold()
                                 }
                                 .padding(.leading, 9)
-//                                .padding(.bottom)
                                 .font(.footnote)
                                 .foregroundColor(.textGray)
-//                                .font(.subheadline)
                             }
                         }
                         
@@ -164,7 +118,6 @@ struct UserSearchDetailView: View {
                     VStack{
                         Button{
                             showDevices.toggle()
-                            //                                transitionView.toggle()
                         } label: {
                             VStack(alignment: .leading){
                                 HStack{
@@ -208,7 +161,7 @@ struct UserSearchDetailView: View {
                     .padding(.horizontal, 10)
                     .padding(.top, 5)
                     .foregroundColor(.brightGray)
-                UserPageUserFeedView(magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))                //                    .padding(.top, -80)
+                UserPageUserFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장

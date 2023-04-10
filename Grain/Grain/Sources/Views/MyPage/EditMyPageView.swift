@@ -18,14 +18,16 @@ private enum FocusableField: Hashable {
 }
 
 struct EditMyPageView: View {
+    @State private var editedNickname = ""
+    @State private var editedIntroduce = ""
     
     var userVM: UserViewModel
+    //본인 이외의 사용자들의 정보 필터링한 값을 담는 변수
+    @State private var exceptCurrentUser: [UserDocument] = []
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentationMode) var presentationMode
     
-    @State private var editedNickname = ""
-    @State private var editedIntroduce = ""
     
     // 수정전 nickName
     var nickName: String {
@@ -61,7 +63,6 @@ struct EditMyPageView: View {
         let nicknameRegex = "^[a-zA-Z0-9]{4,15}$"
         return  NSPredicate(format: "SELF MATCHES %@", nicknameRegex).evaluate(with: string)
     }
-//    let regex = "^[a-zA-Z0-9]{4,15}$"
     
     @FocusState private var focus: FocusableField?
     
@@ -70,42 +71,26 @@ struct EditMyPageView: View {
     @State private var selectedImageData: Data? = nil
     @State private var selectedImages: [UIImage] = []
     
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
+    
+    
     var body: some View {
         VStack {
-//            //MARK: 프로필 이미지 변경 버튼
-//            Button {
-//                //이미지 선택 동작
-//            } label: {
-//                Image("2")
-//                    .resizable()
-//                    .frame(width: 100, height: 100)
-//                    .cornerRadius(64)
-//                    .overlay {
-//                        Circle()
-//                            .stroke(lineWidth: 1.5)
-//                            .foregroundColor(.black)
-//                    }
-//                    .overlay {
-//                        Circle()
-//                            .frame(width: 30, height: 30)
-//                            .foregroundColor(.white)
-//                            .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
-//                            .overlay {
-//                                Image(systemName: "camera.circle.fill")
-//                                    .resizable()
-//                                    .frame(width: 26, height: 26)
-//                                    .foregroundColor(.black)
-//                                    .offset(x: Screen.maxWidth * 0.1, y: Screen.maxHeight * 0.04)
-//                            }
-//                    }
-//            }
-            
             PhotosPicker(
                 selection: $selectedItem,
                 matching: .images,
                 photoLibrary: .shared()) {
                     if selectedImages.count == 0{
-                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:  defaultProfileImage()))
                             .resizable()
                             .scaledToFill()
                             .frame(width: 100, height: 100)
@@ -129,7 +114,6 @@ struct EditMyPageView: View {
                                     }
                             }
                     } else {
-//                        KFImage(URL(string: userVM.currentUsers?.profileImage.stringValue ?? "") ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
                         Image(uiImage: selectedImages[selectedImages.count - 1])
                             .resizable()
                             .frame(width: 100, height: 100)
@@ -164,8 +148,6 @@ struct EditMyPageView: View {
                         if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
                             selectedImages.append(uiImage)
                         }
-                        
-                        print("selectedImages?:\(selectedImages)")
                     }
                 }
             
@@ -204,17 +186,8 @@ struct EditMyPageView: View {
                     }
                     .underlineTextField()
                     .padding(.bottom, 30)
-                    
-//                    if editedNickname.range(of: regex, options: .regularExpression) == nil {
-//                        Text("맞아요")
-//                            .padding(.leading)
-//                            .padding(.bottom)
-//                    } else {
-//                        Text("틀려요")
-//                            .padding(.leading)
-//                            .padding(.bottom)
-//                    }
-                    if !editedNickname.isEmpty && checkNicknameRule(string: editedNickname) {
+                
+                    if editedNickname == nickName || !editedNickname.isEmpty && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname}{
                         Text("올바른 형식입니다")
                             .font(.subheadline)
                             .padding(.horizontal, 20)
@@ -222,6 +195,13 @@ struct EditMyPageView: View {
                             .padding(.bottom)
                             .foregroundColor(.black)
                         
+                    } else if !editedNickname.isEmpty && exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname} {
+                        Text("중복된 닉네임입니다")
+                            .font(.subheadline)
+                            .padding(.horizontal, 20)
+                            .padding(.top, -20)
+                            .padding(.bottom)
+                            .foregroundColor(.red)
                     } else {
                         Text("영문, 숫자를 포함하여 4~15 글자로 작성해주세요")
                             .font(.subheadline)
@@ -266,22 +246,13 @@ struct EditMyPageView: View {
                 .underlineTextField()
                 .padding(.bottom, 30)
             }
-            
             Spacer()
-            
-            Button {
-                print("nickName: \(nickName), editintro: \(editedIntroduce)")
-            } label: {
-                Text("testtest")
-            }
-
-
         }
         .navigationTitle("프로필 편집")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar{
             ToolbarItem(placement: .navigationBarTrailing) {
-                if (editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) {
+                if (editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname} {
                     Button {
                         if var currentUser = userVM.currentUsers {
                             let docID = currentUser.id.stringValue
@@ -292,8 +263,6 @@ struct EditMyPageView: View {
                                 selectedImages.removeSubrange(0 ..< selectedImages.count - 1)
                             }
                             userVM.updateCurrentUserProfile(profileImage: selectedImages.count > 0 ? selectedImages : [], nickName: editedNickname.count > 0 ? editedNickname : nickName, introduce: editedIntroduce.count > 0 ? editedIntroduce : "", docID: docID)
-
-                            print("selectedImages:\(selectedImages)")
     
                             dismiss()
                         }
@@ -311,7 +280,10 @@ struct EditMyPageView: View {
             focus = .nickName
             editedNickname = userVM.currentUsers?.nickName.stringValue ?? ""
             editedIntroduce = userVM.currentUsers?.introduce.stringValue ?? ""
-            print("selectedImages:\(selectedImages)")
+            exceptCurrentUser = userVM.users.filter{$0.fields.id.stringValue != userVM.currentUsers?.id.stringValue}
+        }
+        .onDisappear{
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
     }
     
@@ -328,7 +300,6 @@ struct EditMyPageView: View {
 }
 
 struct EditMyPageView_Previews: PreviewProvider {
-//    @StateObject var userVM: UserViewModel = UserViewModel()
     static var previews: some View {
         NavigationStack{
             EditMyPageView(userVM: UserViewModel())
@@ -346,3 +317,5 @@ extension View {
             .padding(.horizontal,10)
     }
 }
+
+

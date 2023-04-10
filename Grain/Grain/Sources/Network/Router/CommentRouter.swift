@@ -20,12 +20,35 @@ enum CommentRouter {
     case patch(collectionName: String, collectionDocId: String, docID: String, updateComment: String, data: CommentFields )
     case reCommentPatch(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String, docID: String, updateComment: String, data: CommentFields)
     
-    
     private var baseURL: URL {
-        let baseUrlString = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents"
-        return URL(string: baseUrlString)!
+        var baseUrlString : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FireStore"] as? String {
+                baseUrlString += url
+            }
+        }
+        return URL(string: baseUrlString) ?? URL(string: "")!
     }
     
+    private var queryItemCommentString: String {
+        var commentString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidComment"] as? String {
+                commentString = str
+            }
+        }
+        return commentString
+    }
+    private var queryItemRecommentString: String {
+        var recommentString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidRecomment"] as? String {
+                recommentString = str
+            }
+        }
+        return recommentString
+    }
+
     private enum HTTPMethod {
         case get
         case post
@@ -45,23 +68,23 @@ enum CommentRouter {
     private var endPoint: String {
         switch self {
         case let .get(collectionName, collectionDocId):
-            return "/\(collectionName)/\(collectionDocId)/Comment"
+            return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)"
         case let .reCommentGet(collectionName, collectionDocId, _,commentCollectionDocId):
-            return "/\(collectionName)/\(collectionDocId)/Comment/\(commentCollectionDocId)/Recomment"
+            return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)" + "/" + "\(commentCollectionDocId)/" + "\(queryItemRecommentString)"
         case let .post(collectionName, collectionDocId, _, _):
-            return "/\(collectionName)/\(collectionDocId)/Comment"
+            return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)"
         case let .reCommentPost(collectionName, collectionDocId, _, commentCollectionDocId, _, _):
-            return "/\(collectionName)/\(collectionDocId)/Comment/\(commentCollectionDocId)/Recomment"
+            return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)" + "/" + "\(commentCollectionDocId)" + "/" + "\(queryItemRecommentString)"
         case let .patch(collectionName, collectionDocId, docID, _, _):
-            return "/\(collectionName)/\(collectionDocId)/Comment/\(docID)"
+            return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)" + "/" + "\(docID)"
         case let .reCommentPatch(collectionName, collectionDocId, _, commentCollectionDocId, docID, _, _):
-            return "/\(collectionName)/\(collectionDocId)/Comment/\(commentCollectionDocId)/Recomment/\(docID)"
+            return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)" + "/" + "\(commentCollectionDocId)" + "/" + "\(queryItemRecommentString)" + "/" + "\(docID)"
         case let .delete(collectionName, collectionDocId, docID):
-            return "/\(collectionName)/\(collectionDocId)/Comment/\(docID)"
+            return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)" + "/" + "\(docID)"
         case let .reCommentDelete(collectionName, collectionDocId, _, commentCollectionDocId, docID):
-            return "/\(collectionName)/\(collectionDocId)/Comment/\(commentCollectionDocId)/Recomment/\(docID)"
+            return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)" + "/" + "\(commentCollectionDocId)" + "/" + "\(queryItemRecommentString)" + "/" + "\(docID)"
         default:
-            return "/Comment"       //default값 몰루?
+            return "/" + "\(queryItemCommentString)"
         }
     }
     var parameters: URLQueryItem? {

@@ -12,7 +12,7 @@ enum MapRouter {
     case get
     case getNext(nextPageToken: String)
     case post(magazineData: MagazineFields, docID: String)
-    case delete
+    case delete(docID: String)
     case put
     
     private var baseURL: URL {
@@ -23,6 +23,15 @@ enum MapRouter {
             }
         }
         return URL(string: baseUrlString) ?? URL(string: "")!
+    }
+    private var queryItemString: String {
+        var mapString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidMap"] as? String {
+                mapString = str
+            }
+        }
+        return mapString
     }
     
     private enum HTTPMethod {
@@ -44,8 +53,10 @@ enum MapRouter {
     
     private var endPoint: String {
         switch self {
+        case let .delete(docID):
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         default:
-            return "/MapData"
+            return "/" + "\(queryItemString)"
         }
     }
     
@@ -82,8 +93,8 @@ enum MapRouter {
     private var data: Data? {
         switch self {
         case let .post(magazineData, docID):
-            guard let magazinequery = MapQuery.insertMapQuery(data: magazineData, docID: docID) else { return nil }
-            print( String(decoding: magazinequery, as: UTF8.self))
+//            guard let magazinequery = MapQuery.insertMapQuery(data: magazineData, docID: docID) else { return nil }
+//            print( String(decoding: magazinequery, as: UTF8.self))
             return MapQuery.insertMapQuery(data: magazineData, docID: docID)
         default:
             return nil

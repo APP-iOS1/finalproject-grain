@@ -13,7 +13,6 @@ enum Category: Int, CaseIterable, Identifiable {
 }
 
 struct CommunityAddView: View {
-//    @State var category: Int = 0
     @State var Image: [String] = []
     @State var title: String = ""
     @State var content: String = ""

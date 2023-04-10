@@ -6,59 +6,69 @@
 //
 
 import SwiftUI
-//import FirebaseFirestore  /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
+
 import Kingfisher
-/*
- id:String
- category: Int
- userId: String
- image: [String]
- title: string
- 
- location: String
- content: string
- createdAt: TimeStamp
- */
 
 struct CommunityRowView: View {
+    @StateObject var commentVm = CommentViewModel() //StateObject 이걸로 처리해도 되나??
+    @ObservedObject var communityVM: CommunityViewModel
     
-    @StateObject var commentVm: CommentViewModel = CommentViewModel()
+    @State var opacity: Double = 0.8
+    
     var tagColor: String {
         switch community.fields.state.stringValue {
-        case "모집중", "판매중", "Tip":
-            return "#F8BC24"
+        case "판매중":
+            return "#005E5B"
+//            return "#4C9E77"
         case "모집완료", "판매완료":
             return "#A0A0A0"
+        case "Tip":
+            return "#FAC75B"
+//            return "#F5dF4D"
+        case "모집중":
+            return "#1E3F66"
         default:
-            return "F8BC24"
+            return "4C9E77"
         }
     }
     
     var tagNameColor: String {
         switch community.fields.state.stringValue {
-        case "모집중", "판매중", "Tip":
-            return "#616161"
+        case "모집중", "판매중":
+            return "#FFFFFF"
         case "모집완료", "판매완료":
             return "#FFFFFF"
+        case "Tip":
+            return "000000"
         default:
-            return "616161"
+            return "#FFFFFF"
         }
     }
-    var community: CommunityDocument
-    @State var opacity: Double = 0.8
     
-    @Binding var isLoading: Bool
+    var community: CommunityDocument
+    
+    
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                     .resizable()
-                    .scaledToFill()
                     .frame(width: Screen.maxWidth*0.27, height: Screen.maxWidth*0.27)
+                    .cornerRadius(7)
+                    .aspectRatio(contentMode: .fill)
                     .clipped()
-                    .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                    .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                     .padding(.horizontal, 13)
-                    //.padding(.top, 5)
                 
                 VStack {
                     VStack(alignment: .leading){
@@ -68,14 +78,14 @@ struct CommunityRowView: View {
                             Text("\(community.fields.category.stringValue)")
                                 .padding(.vertical, 5)
                                 .padding(.horizontal, 8)
-                                .background(Color(hex: "F58800"))
+                                .background(Color.black)
                                 .cornerRadius(20)
                                 .foregroundColor(.white)
                                 .bold()
                                 .font(.caption)
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             
-                            Text(community.fields.state.stringValue)
+                            Text("\(community.fields.state.stringValue)")
                                 .padding(.vertical, 5)
                                 .padding(.horizontal, 8)
                                 .background(Color(hex: tagColor))
@@ -83,76 +93,63 @@ struct CommunityRowView: View {
                                 .foregroundColor(Color(hex: tagNameColor))
                                 .bold()
                                 .font(.caption)
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                         } // hstack
-                        .padding(.top, 4)
-                       // .padding(.vertical, 3)
-                        
-                       // Spacer()
-                        
+                        .padding(.top, 0)
+                
                         //MARK: 게시글 제목
                         Text("\(community.fields.title.stringValue)")
-                            .font(.callout)
-                            .foregroundColor(.black)
+                            .font(.subheadline)
+                            .foregroundColor(.boxGray)
                             .multilineTextAlignment(.leading)
                             .padding(.top, -2)
-                            .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                            .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             .lineLimit(2)
                             .frame(height: 45)
-                            
-                            
-    //                        .padding(.bottom, 3)
-                        
-                        // Spacer()
-                        
+               
                         HStack {
-                            // String.toDate(community.createTime)
                             Text(community.createdDate?.renderTime() ?? "")
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             Spacer()
                             Image(systemName: "text.bubble")
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
-                            Text("\(commentVm.comment.count)")
-                                .setSkeletonView(opacity: opacity, shouldShow: isLoading)
-                                    .padding(.leading, -5)
+                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
+                            
+                            if true{
+                                if let recommentCount = communityVM.fetchCommunityCellCommentCount[community.fields.id.stringValue]{
+                                    Text("\(recommentCount)")
+                                        .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
+                                        .padding(.leading, -5)
+                                }else{
+                                    Text("0")
+                                }
+                            }
+
                         }
                         .padding(.bottom, 4)
                         .foregroundColor(.secondary)
                         .font(.caption)
-                        //.padding(.trailing, 10)
                     }
                     .frame(height: 100)
                     .padding(.trailing, 13)
                     .padding(.leading, -3)
-                }//vstack
+                }//VStack
             }
             Divider()
                 .padding(.top, 5)
             
         }
         .padding(.top, 5)
-        .onAppear{
-            commentVm.fetchComment(collectionName: "Community",
-                                   collectionDocId: community.fields.id.stringValue)
-        }
         .onAppear(perform: {
-            if isLoading == true {
+            if communityVM.isLoading == true {
                 withAnimation(.linear(duration: 0.5).repeatForever(autoreverses: true)) {
                     self.opacity = opacity == 0.4 ? 0.8 : 0.4
                 }
             }
         })
-        .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.17)
+        .onAppear{
+        }
     }
 }
-
-//extension CommunityRowView {
-//    fileprivate var loadingView : some View {
-//        Color.black.opacity(0.8).edgesIgnoringSafeArea(.all)
-//            .overlay(ProgressView().tint(.white))
-//    }
-//}
-
 
 //struct CommunityRowView_Previews: PreviewProvider {
 //    static var previews: some View {

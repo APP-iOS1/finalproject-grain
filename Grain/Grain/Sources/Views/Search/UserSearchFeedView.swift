@@ -12,7 +12,7 @@ import FirebaseAuth
 struct UserSearchFeedView: View {
     @ObservedObject var magazineViewModel: MagazineViewModel = MagazineViewModel()
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
-
+    
     var images: [Image] = [Image("1"), Image("2"), Image("3"), Image("test"), Image("sampleImage"), Image("testImage")]
     
     // 나의 피드를 그리드로 보여줄지 리스트로 보여줄지 선택하는 변수
@@ -25,7 +25,6 @@ struct UserSearchFeedView: View {
     ]
     
     let userD: UserDocument
-    @State var updateNum : String = ""
     var body: some View {
         VStack{
             HStack{
@@ -71,14 +70,14 @@ struct UserSearchFeedView: View {
                         }, id: \.self){ data in
                             NavigationLink {
                                 // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
-//                                MagazineDetailView(data: data)
+                                //                                MagazineDetailView(data: data)
                             } label: {
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
-                                MagazineViewCell(data: data)
+                                MagazineViewCell(data: data, userVM: userViewModel)
                             }
-
+                            
                         }
-                    
+                        
                     }
                 }.onAppear{
                     // MARK: fetch 데이터 시작
@@ -98,21 +97,29 @@ struct UserSearchFeedView: View {
 //}
 
 struct UserPageUserFeedView: View {
-    @StateObject var userVM = UserViewModel()
-    @StateObject var magazineVM = MagazineViewModel()
+    
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
     // 나의 피드를 그리드로 보여줄지 리스트로 보여줄지 선택하는 변수
     @State private var showGridOrList: Bool = true
-    @State var updateNum : String = ""
+    @State var ObservingChangeValueLikeNum : String = ""
     var magazineDocument: [MagazineDocument]
     
     let columns = [
-        //        GridItem(.adaptive(minimum: 100), spacing: 1)
         GridItem(.flexible(), spacing: 1),
         GridItem(.flexible(), spacing: 1),
         GridItem(.flexible(), spacing: 1)
     ]
     
-    //    @State private var selectedIndex: Int?
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
     
     var body: some View {
         VStack{
@@ -148,11 +155,11 @@ struct UserPageUserFeedView: View {
             if showGridOrList {
                 ScrollView{
                     LazyVGrid(columns: columns, spacing: 1) {
-                        ForEach(magazineDocument, id: \.self) { data in
+                        ForEach(magazineDocument.reversed(), id: \.self) { data in
                             NavigationLink {
-                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: userVM.currentUsers, data: data, updateNum: $updateNum)
+                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {
-                                KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                                KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                                     .resizable()
                                 //                                   .aspectRatio(contentMode: .fit)
                                 //                                   .frame(width: 100)
@@ -163,47 +170,29 @@ struct UserPageUserFeedView: View {
                         }
                     }
                 }
-                //                ScrollView{
-                //                    LazyVGrid(columns: columns, spacing: 1) {
-                //                        ForEach(magazineDocument, id: \.self) { data in
-                //                            NavigationLink {
-                //                                MagazineDetailView(userVM: userVM, currentUsers: userVM.currentUsers, data: data)
-                ////                                TestScrollView(magazineDocument: magazineDocument, userVM: userVM, selectedIndex: selectedIndex)
-                //                            } label: {
-                //                                Button{
-                //                                    selectedIndex = magazineDocument.firstIndex(of: data)
-                //                                } label: {
-                //                                    KFImage(URL(string: data.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
-                //                                       .resizable()
-                //    //                                   .aspectRatio(contentMode: .fit)
-                //    //                                   .frame(width: 100)
-                //                                       .scaledToFill()
-                //                                       .frame(width: Screen.maxWidth / 3 - 1, height: Screen.maxWidth / 3 - 1)
-                //                                       .clipped()
-                //                                }
-                //
-                //                            }
-                //
-                //                        }
-                //                    }
-                //                }
+                .task(id: ObservingChangeValueLikeNum){
+                     magazineVM.fetchMagazine()
+                }
             } else {
                 ScrollView{
                     LazyVStack{
                         ForEach(magazineDocument, id: \.self) { data in
                             NavigationLink {
                                 // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
-                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: userVM.currentUsers, data: data, updateNum: $updateNum)
+                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                             } label: {
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
-                                MagazineViewCell(data: data)
+                                MagazineViewCell(data: data, userVM: userVM)
                             }
                         }
                     }
                 }
+                .task(id: ObservingChangeValueLikeNum){
+                    magazineVM.fetchMagazine()
+                }
+                
                 
             }
-            
         }.onAppear{
             userVM.fetchUser()
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")

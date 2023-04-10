@@ -9,43 +9,40 @@ import SwiftUI
 import Kingfisher
 
 struct BookmarkedMagazine: View {
-    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM: MagazineViewModel
     
-    var bookmarkedMagazineDocument: [MagazineDocument]
-    @StateObject var userVM = UserViewModel()
-    @StateObject var magazineVM = MagazineViewModel()
-    // 테스트 이미지 배열
-    var images: [Image] = [Image("1"), Image("2"), Image("3"), Image("test"), Image("sampleImage"), Image("testImage")]
+    @State var ObservingChangeValueLikeNum : String = ""
     
+//    @Environment(\.presentationMode) var presentationMode
+    
+    @State private var bookmarkedMagazineDocument: [MagazineDocument] = []
+ 
     let columns = [
         GridItem(.flexible(), spacing: 1),
         GridItem(.flexible(), spacing: 1),
         GridItem(.flexible(), spacing: 1)
     ]
-    @State var updateNum : String = ""
+    
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["DetailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack{
             ScrollView{
-//                LazyVGrid(columns: columns, spacing: 1) {
-//                    ForEach(0..<images.count, id: \.self) { idx in
-//                        NavigationLink {
-//                            //이미지에 해당하는 게시글로 이동
-//                        } label: {
-//                            images[idx]
-//                                .resizable()
-//                                .scaledToFill()
-//                                .frame(width: (Screen.maxWidth / 3 - 1), height: (Screen.maxWidth / 3 - 1))
-//                                .clipped()
-//                        }
-//
-//                    }
-//                }
                 LazyVGrid(columns: columns, spacing: 1) {
-                    ForEach(bookmarkedMagazineDocument, id: \.self) { item in
+                    ForEach(bookmarkedMagazineDocument.reversed(), id: \.self) { item in
                         NavigationLink {
-                            MagazineDetailView(magazineVM: magazineVM, userVM: userVM, currentUsers: userVM.currentUsers, data: item, updateNum: $updateNum)
+                            MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: item, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                         } label: {
-                            KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                            KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                                .resizable()
                                .scaledToFill()
                                .frame(width: Screen.maxWidth / 3 - 1, height: Screen.maxWidth / 3 - 1)
@@ -54,14 +51,24 @@ struct BookmarkedMagazine: View {
                     }
                 }
             }
+            .emptyPlaceholder(bookmarkedMagazineDocument.reversed()) {
+                BookmarkedMagazinePlaceholderView()
+            }
+            .task(id: ObservingChangeValueLikeNum){
+                 magazineVM.fetchMagazine()
+            }
         }
         .navigationTitle("저장된 매거진")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear{
+            bookmarkedMagazineDocument = magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID)
+        }
+        .refreshable {
+            do {
+                try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+              } catch {}
+            bookmarkedMagazineDocument = magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID)
+        }
     }
 }
 
-struct BookmarkedMagazine_Previews: PreviewProvider {
-    static var previews: some View {
-        BookmarkedMagazine(bookmarkedMagazineDocument: [])
-    }
-}

@@ -12,24 +12,26 @@ import NMapsMap
 
 
 struct ReportMapView: View {
+    @StateObject var reportMapVM = ReportMapViewModel()
+    @ObservedObject var locationManager : LocationManager
+    
     @Environment(\.dismiss) private var dismiss
-    @State var clickedReportButtonBool : Bool = false   // updateUIView에서 경도 위도를 알 수 있게끔 해주는 Bool 값
     
     @Binding var updateNumber : NMGLatLng   // mapView에서 바인딩 받아야됨 아직 이유를 모르겠음
     
+    @State var clickedReportButtonBool : Bool = false   // updateUIView에서 경도 위도를 알 수 있게끔 해주는 Bool 값
     @State var showingAlert : Bool = false
     @State var finalReportBool : Bool = false   // 최종 제보하기 버튼
-    
     @State var writeDownCategory : String = ""  // 카테고리 적는 텍스트필드
     @State var writeDownStoreName : String = "" // 가게이름 적는 텍스트필드
     
-    @StateObject var reportMapVM = ReportMapViewModel()
+    
     var userLatitude: Double
     var userLongitude: Double
     
     var body: some View {
         ZStack{
-            ReportUIMapView(clickedReportButtonBool: $clickedReportButtonBool, updateNumber: $updateNumber,  userLatitude: userLatitude , userLongitude: userLongitude) //지도 호출
+            ReportUIMapView(locationManager: locationManager, clickedReportButtonBool: $clickedReportButtonBool, updateNumber: $updateNumber,  userLatitude: userLatitude , userLongitude: userLongitude) //지도 호출
             
             // MARK: Mapview로 돌아가는 버튼
             Button {
@@ -61,10 +63,6 @@ struct ReportMapView: View {
             
             if (finalReportBool){   // 최종 제보하기 버튼 조건문
                 Button {
-                    print(updateNumber.lat)
-                    print(updateNumber.lng)
-                    
-                   
                     reportMapVM.insertReportMap(data: ReportMapFields(longitude: ReportMapDoubleValue(doubleValue: updateNumber.lng), latitude: ReportMapDoubleValue(doubleValue: updateNumber.lat), storeName: ReportMapStringValue(stringValue: writeDownStoreName), category: ReportMapStringValue(stringValue: writeDownCategory)))
                     // post 
                     writeDownCategory = ""
@@ -104,7 +102,7 @@ struct ReportMapView: View {
                             })
                             Button("취소", role: .cancel, action: {})
                         } message: {
-                            //                            Text("제보 감사드립니다!")
+//                            Text("제보 감사드립니다!")
                         }
                     }
                     .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.85)
@@ -120,7 +118,7 @@ struct ReportMapView: View {
 struct ReportUIMapView: UIViewRepresentable,View {
 
     
-    @StateObject var locationManager = LocationManager()
+    @ObservedObject var locationManager : LocationManager
     @Binding var clickedReportButtonBool : Bool
     
     
@@ -140,7 +138,7 @@ struct ReportUIMapView: UIViewRepresentable,View {
         // 처음에 맵이 생성될떄 줌 레벨
         view.mapView.zoomLevel = 12
         view.mapView.minZoomLevel = 10
-        view.mapView.maxZoomLevel = 16
+        view.mapView.maxZoomLevel = 20
         view.mapView.isRotateGestureEnabled = false
         
         // MARK: 지도가 그려질때 현재 유저 GPS 위치로 카메라 움직임

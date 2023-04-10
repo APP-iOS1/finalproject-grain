@@ -10,7 +10,18 @@ import Kingfisher
 
 struct Top10View: View {
     let data : MagazineDocument
-
+    var userVM: UserViewModel
+    
+    func errorImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["ThumbnailImageError"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
+    
     var body: some View {
         VStack{
             Rectangle()
@@ -24,7 +35,7 @@ struct Top10View: View {
                        Rectangle()
                             .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.6 )
                             .overlay{
-                                KFImage.url(url ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg")!)
+                                KFImage.url(url ?? URL(string: errorImage()))
                                     .resizable()
                                       .scaledToFill()
                                       .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.6 )
@@ -53,13 +64,14 @@ struct Top10View: View {
                             Divider()
                                 .overlay(Color.white)
                                 .frame(width: 1.5, height: 16)
-                            
-                            Text(data.fields.nickName.stringValue)
-                                .font(.subheadline)
-                                .bold()
-                                .foregroundColor(.white)
-                                .frame( alignment:.leading)
-                               
+                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == data.fields.userID.stringValue })
+                            {
+                                Text(user.fields.nickName.stringValue)
+                                    .font(.subheadline)
+                                    .bold()
+                                    .foregroundColor(.white)
+                                    .frame( alignment:.leading)
+                            }
                             Spacer()
                             Image(systemName: "heart.fill")
                                 .font(.subheadline)

@@ -92,5 +92,4 @@ enum CommunityService {
             return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
         }
     }
-    
 }

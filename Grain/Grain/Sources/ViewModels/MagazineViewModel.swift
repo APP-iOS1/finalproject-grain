@@ -7,9 +7,7 @@
 
 import Foundation
 import Combine
-//import FirebaseFirestore  /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
 import UIKit
-
 
 final class MagazineViewModel: ObservableObject {
     
@@ -23,13 +21,16 @@ final class MagazineViewModel: ObservableObject {
     
     @Published var isMagazineLoading = false
 
+    @Published var currentTime: Date = Date()
+
     var fetchMagazineSuccess = PassthroughSubject<[MagazineDocument], Never>()
-    var insertMagazineSuccess = PassthroughSubject<(), Never>()
+    var insertMagazineSuccess = PassthroughSubject<MagazineFields, Never>()
     var updateMagazineSuccess = PassthroughSubject<(), Never>()
     var deleteMagazineSuccess = PassthroughSubject<(), Never>()
     
     // MARK: 메거진 데이터 가져오기 메소드
     func fetchMagazine() {
+        self.currentTime = Date()
         self.isMagazineLoading = true
         MagazineService.getMagazine()
             .receive(on: DispatchQueue.main)
@@ -41,18 +42,36 @@ final class MagazineViewModel: ObservableObject {
                     self.isMagazineLoading = false
                 }
                 // MARK: 매거진 데이터 최신순 정렬 메서드 호출
-//                self.sortByRecentMagazine(magazines: data.documents)
                 self.sortedRecentMagazineData = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
                 })
                 
-                
                 self.sortedTopLikedMagazineData = data.documents.sorted(by: {
-                    // MARK: String -> Int로 바꾸기 
+                    // MARK: String -> Int로 바꾸기
                     return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
                 })
                 
-                self.fetchMagazineSuccess.send(data.documents)
+                // MARK: - 데이터 개수가 20개 넘을 때 풀기 잘못하면 터짐
+//                self.magazines .append(contentsOf: data.documents)
+//                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
+//                    self.isMagazineLoading = false
+//                }
+//                // MARK: 매거진 데이터 최신순 정렬 메서드 호출
+//                self.sortedRecentMagazineData.append(contentsOf: data.documents.sorted(by: {
+//                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+//                }))
+//                self.sortedTopLikedMagazineData.append(contentsOf: data.documents.sorted(by: {
+//                    // MARK: String -> Int로 바꾸기
+//                    return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
+//                }))
+//                if !(data.nextPageToken == nil) {
+//                    var nextPageToken : String = ""
+//                    nextPageToken = data.nextPageToken!
+//                    self.fetchMagazine(nextPageToken: nextPageToken)
+//                }else{
+//                    self.fetchMagazineSuccess.send(data.documents)
+//                }
+                
             }.store(in: &subscription)
         
     }
@@ -64,9 +83,8 @@ final class MagazineViewModel: ObservableObject {
         MagazineService.insertMagazine(data: data, images: images)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-
-            } receiveValue: { (data: MagazineDocument) in
-                self.insertMagazineSuccess.send()
+            } receiveValue: { (receivedData: MagazineDocument) in
+                self.insertMagazineSuccess.send(data)
             }.store(in: &subscription)
     }
     
@@ -78,6 +96,7 @@ final class MagazineViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: MagazineDocument) in
+                self.fetchMagazine()
                 self.updateMagazineSuccess.send()
             }.store(in: &subscription)
     }
@@ -89,12 +108,10 @@ final class MagazineViewModel: ObservableObject {
         MagazineService.updateMagazineLikedNum(num: num, docID: docID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
-                
             } receiveValue: { (data: MagazineDocument) in
+                
                 self.updateMagazineSuccess.send()
             }.store(in: &subscription)
-//        print("updateMagazine 메서드 실행")
-//        fetchMagazine()
     }
     
     
@@ -113,70 +130,6 @@ final class MagazineViewModel: ObservableObject {
         let magazines = magazines.filter { $0.fields.userID.stringValue == userID }
         return magazines
     }
-    
-    
-    // MARK: - 최신순으로 정렬하기 아마 그럴꺼임
-//    func sortByRecentMagazine(magazines: [MagazineDocument]){
-//        print("sortByRecentMagazine start")
-//        var sortedArray : [MagazineDocument] = []
-//
-//        self.sortedRecentMagazineData = magazines.sorted(by: {
-//            return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
-//        })
-//
-//
-//    }
-//    func sortByRecentMagazine(magazines: [MagazineDocument]) -> [MagazineDocument]{
-//        var sortedRecentMagazineData: [MagazineDocument] = []
-//        print("magazines: \(magazines)")
-//        for _ in magazines{
-//            var sortData = self.magazines.sorted{ $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()}
-//            sortedRecentMagazineData = sortData
-//            print("recentmagazin1: \(sortedRecentMagazineData)")
-//
-//        }
-//        print("recentmagazin: \(sortedRecentMagazineData)")
-//        return sortedRecentMagazineData
-//    }
-    
-    // MARK: - 좋아요순으로 정렬하기
-//    func sortByLikedMagazine(){
-//        for _ in self.magazines{
-//            var sortData = self.magazines.sorted{ $0.fields.likedNum.integerValue > $1.fields.likedNum.integerValue}
-//            sortedTopLikedMagazineData = sortData
-//        }
-//    }
-    
-    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
-    // MARK: update -> Firebase Store SDK 사용
-//    func updateMagazineSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
-//        let db = Firestore.firestore()
-//
-//        let documentRef = db.collection("Magazine").document("\(updateDocument)")
-//
-//        if isArray{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }else{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(updateKey)" : "\(updateValue)"
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }
-//
-//    }
     
     func nearbyPostsFilter(magazineData: [MagazineDocument],nearbyPostsArr: [String]) -> [MagazineDocument] {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
@@ -199,7 +152,6 @@ final class MagazineViewModel: ObservableObject {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
         var userPostFilterArr: [MagazineDocument] = []
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
-//        이거 넣었더니 터짐
         for arrData in userPostedArr{
             for magazineIdValue in magazineData{
                 if arrData == magazineIdValue.fields.id.stringValue{
@@ -215,8 +167,6 @@ final class MagazineViewModel: ObservableObject {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
         var otherUserPostFilterArr: [MagazineDocument] = []
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
-//        이거 넣었더니 터짐
-       
         for arrData in userPostedArr{
             for magazineIdValue in magazineData{
                 if arrData.stringValue == magazineIdValue.fields.id.stringValue{
@@ -234,7 +184,6 @@ final class MagazineViewModel: ObservableObject {
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
         var userBookmarkedPostFilterArr: [MagazineDocument] = []
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!
-//        이거 넣었더니 터짐
         for arrData in userBookmarkedPostedArr{
            
             for magazineIdValue in magazineData{
@@ -248,5 +197,3 @@ final class MagazineViewModel: ObservableObject {
     }
     
 }
-
-

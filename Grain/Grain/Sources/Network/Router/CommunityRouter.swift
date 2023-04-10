@@ -26,6 +26,18 @@ enum CommunityRouter {
         }
         return URL(string: baseUrlString) ?? URL(string: "")!
     }
+    
+    private var queryItemString: String {
+        var communityString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidCommmunity"] as? String {
+                communityString = str
+            }
+        }
+        return communityString
+    }
+    
+    
     private enum HTTPMethod {
         case get
         case post
@@ -44,16 +56,18 @@ enum CommunityRouter {
         }
     }
     
+    
+    
     private var endPoint: String {
         switch self {
         case let .patch(_, docID):
-            return "/Community/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .patchState(_, docID):
-            return "/Community/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .delete(docID):
-            return "/Community/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         default:
-            return "/Community"
+            return "/" + "\(queryItemString)"
         }
     }
     

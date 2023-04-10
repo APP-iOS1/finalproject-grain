@@ -10,12 +10,22 @@ import NMapsMap
 import PhotosUI
 import FirebaseAuth
 
+private enum FocusableField: Hashable {
+    case write
+}
+
 struct MagazineContentAddView: View {
+    
+    @ObservedObject var magazineVM : MagazineViewModel
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var mapVM : MapViewModel
+    @ObservedObject var locationManager : LocationManager
+    
+    @State private var showModal: Bool = false
     @State private var inputTitle: String = ""
     @State private var inputContent: String = ""
     @State private var inputCustomPlace: String = ""
     @State private var selectedImages: [UIImage] = []
-    @State private var selectedCamera = 0
     @State private var isShowingModal = false
     @State private var textFieldFocused: Bool = true
     @State private var showingAlert = false
@@ -23,89 +33,88 @@ struct MagazineContentAddView: View {
     // 모달 내리기
     @Binding var presented : Bool
     // insert
-    @ObservedObject var magazineVM = MagazineViewModel()
-    @ObservedObject var storageVM = StorageViewModel()
     
     // 지도에서 좌표 값 가져오기
     @State var updateNumber : NMGLatLng
     @State var updateReverseGeocodeResult1 : String = ""
     
     // 이미지 앨범에서 가져오기
-    @State private var selectedItem: PhotosPickerItem? = nil
-    @State private var selectedImageData: Data? = nil
     @State private var selectedItems: [PhotosPickerItem] = []
-    // 유저 데이터
+    @State private var showingSelectBodyAlert: Bool = false
     
-    @StateObject var userVM = UserViewModel()
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
-    var myCamera = ["camera1", "camera2", "camera3", "camera4"]
-    @FocusState private var focusField: Fields?
     
+    @FocusState private var focus: FocusableField?
+
     var userLatitude: Double
     var userLongitude: Double
+
+    @State var selectedCamera: String = ""
+    @State var selectedLense: String = ""
+    @State var selectedFilm: String = ""
     
     var body: some View {
         /// 지도뷰로 이동하기 위해 전체적으로 걸어줌
         ///NavigationStack으로 걸어주면 앱이 폭팔하길래 NavigationView 변경
-        NavigationView{
             GeometryReader { geo in
                 VStack {
+                    Divider()
                     HStack {
-                        PhotosPicker(
-                            selection: $selectedItem,
-                            matching: .images,
-                            photoLibrary: .shared()) {
-                                Rectangle()
-                                    .fill(.white)
-                                    .border(.gray)
-                                    .frame(width: 100, height: 100)
-                                    .overlay {
-                                        VStack {
-                                            Spacer()
-                                            Image(systemName: "camera.fill")
-                                                .font(.title3)
-                                                .foregroundColor(.black)
-                                            Spacer()
-                                            Text("\(pickImageCount)/5")
-                                                .font(.headline)
-                                                .foregroundColor(.black)
-                                            Spacer()
+                        if selectedImages.count < 5 {
+                            PhotosPicker(
+                                selection: $selectedItems, maxSelectionCount: 5,selectionBehavior: .ordered ,
+                                matching: .images) {
+                                    Rectangle()
+                                        .fill(Color.white)
+                                        .frame(width: 100, height: 100)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.middlebrightGray, lineWidth: 1)
+                                        )
+                                        .overlay {
+                                            VStack {
+                                                Spacer()
+                                                Image(systemName: "camera.fill")
+                                                    .font(.title3)
+                                                    .foregroundColor(.black)
+                                                Text("\(selectedItems.count)/5")
+                                                    .font(.footnote)
+                                                    .foregroundColor(.gray)
+                                                    .padding(.top, 5)
+                                                    .monospacedDigit()
+                                                Spacer()
+                                            }
+                                        }
+                                        .padding(.leading)
+                                }
+                                .onChange(of: selectedItems) { newItem in
+                                    Task {
+                                        selectedImages = []
+                                        
+                                        for value in newItem {
+                                            if let imageData = try? await value.loadTransferable(type: Data.self),
+                                               let image = UIImage(data: imageData) {
+                                                selectedImages.append(image)
+                                            }
                                         }
                                     }
-                                    .padding(.leading)
-                            }
-                            .onChange(of: selectedItem) { newItem in
-                                Task {
-                                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                                        selectedImageData = data
-                                    }
-                                    // MARK: 선택한 이미지 selectedImages배열에 넣어주기
-                                    /// 이미지 선택 버튼 우측으로 이미지 정렬
-                                    if let selectedImageData, let uiImage = UIImage(data: selectedImageData) {
-                                        selectedImages.append(uiImage)
-                                        pickImageCount = selectedImages.count
-                                    }
                                 }
-                            }
-                        
+                        }
                         // MARK: 선택한 이미지를 보여주는 부분
                         ScrollView(.horizontal) {
-                            
-                           
                             HStack {
                                 // MARK: 이미지 선택 버튼 우측으로 이미지 정렬
-                                ForEach(selectedImages.indices, id: \.self) { index in
+                                ForEach(Array(selectedImages.enumerated()), id: \.1.self) { (index, item) in
                                     GeometryReader { geometry in
-                                        
                                         Rectangle()
                                             .fill(.white)
                                             .frame(width: 100, height: 100)
                                             .overlay {
                                                 if index == 0 {
-                                                    Image(uiImage: selectedImages[index])
+                                                    Image(uiImage: item)
                                                         .resizable()
                                                         .cornerRadius(15)
-                                                        
+                                                    
                                                     Rectangle()
                                                         .overlay {
                                                             Text("대표 사진")
@@ -119,81 +128,114 @@ struct MagazineContentAddView: View {
                                                     Image(systemName: "x.circle.fill")
                                                         .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                         .onTapGesture {
-                                                            selectedImages.remove(at: index)
-                                                            pickImageCount = selectedImages.count
+                                                            if selectedItems.count == selectedImages.count{
+                                                                selectedItems.remove(at: index)
+                                                                selectedImages.remove(at: index)
+                                                            }else{
+                                                                print("삭제 실패")
+                                                            }
                                                         }
                                                 }
                                                 else{
-                                                    Image(uiImage: selectedImages[index])
+                                                    Image(uiImage: item)
                                                         .resizable()
                                                         .cornerRadius(15)
-                                                        .onAppear{
-                                                            print("Upper right coordinates: (\(geometry.size.width), 0)")
-                                                        }
+                                                    
                                                     Image(systemName: "x.circle.fill")
                                                         .position(CGPoint(x: geometry.size.width-2, y: 8))
                                                         .onTapGesture {
-                                                            selectedImages.remove(at: index)
-                                                            pickImageCount = selectedImages.count
+                                                            if selectedItems.count == selectedImages.count{
+                                                                selectedItems.remove(at: index)
+                                                                selectedImages.remove(at: index)
+                                                            }else{
+                                                                print("삭제 실패")
+                                                            }
                                                         }
                                                 }
-
+                                                
                                             }
                                     }.frame(width: 100, height: 100)
-                                   
+                                    
                                 }
                             }
                         }
                         .padding(.horizontal)
                     }
-                    .padding(.top)
+                    .padding(.vertical)
                     
-                    //MARK: 제목과 게시물 내용 구분선
-                    Image("line")
-                        .resizable()
-                        .frame(width: Screen.maxWidth * 0.95,height: 1)
-                        .padding(.top)
+                    Divider()
+                    
+                    HStack {
+                        Button {
+                            showModal.toggle()
+                        } label: {
+                            HStack {
+                                Text("장비선택하기")
+                                    .foregroundColor(.black)
+                                    .font(.subheadline)
+                                    .bold()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                            }
+                        }
+                        .padding(.horizontal)
+                        .sheet(isPresented: $showModal) {
+                            ItemListView(userVM: userVM, selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, showModal: $showModal)
+                                .presentationDetents([.medium, .large])
+                        }
+                        
+                        Spacer()
+                    }
+                    .padding(.vertical, 6)
+
+                    
+                    Divider()
                     
                     // MARK: 게시물 제목 작성 란
-                    TextField("제목을 입력해주세요", text: $inputTitle)
-                        .font(.title3)
+                    TextField("필름의 제목을 입력해주세요", text: $inputTitle)
+                        .font(.body)
+                        .bold()
                         .keyboardType(.default)
                         .textInputAutocapitalization(.never)
                         .disableAutocorrection(true)
-                        .padding(.horizontal, 15)
+                        .padding(.horizontal)
                         .onSubmit {
                             hideKeyboard()
                         }
                         .submitLabel(.done)
-                    
-                    //MARK: 제목과 게시물 내용 구분선
-                    Image("line")
-                        .resizable()
-                        .frame(width: Screen.maxWidth * 0.95,height: 1)
+                        .padding(.vertical, 6)
+                        .focused($focus, equals: .write )
+
+                    Divider()
                     
                     // MARK: 게시물 내용 작성 란
-                    TextField("소중한 추억을 기록해주세요", text: $inputContent, axis: .vertical)
-                        .font(.title3)
-                        .textInputAutocapitalization(.never)
-                        .keyboardType(.default)
-                        .disableAutocorrection(true)
-                        .lineLimit(7)
-                        .padding(.horizontal, 15)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button {
-                                    hideKeyboard()
-                                } label: {
-                                    Text("Done")
-                                        .foregroundColor(.blue)
+                    TextEditor(text: $inputContent)
+                        .frame(height: Screen.maxHeight * 0.4)
+                        .lineSpacing(4.0)
+                        .padding(.horizontal, 12)
+                        .overlay(
+                            // Placeholder를 Text로 구현하고, text가 비어있을 때만 표시되도록 조건문 추가
+                            Group {
+                                if inputContent.isEmpty {
+                                    Text("필름에 담긴 이야기와, 설명을 기록해보세요 📸")
+                                        .foregroundColor(Color(.placeholderText))
+                                        .font(.body)
+                                        .bold()
                                 }
                             }
-                        }
-                        .frame(height: Screen.maxHeight * 0.4, alignment: .top)
+                            
+                        )
+                        .font(.body)
+                        .bold()
+                        .focused($focus, equals: .write )
+                        .onTapGesture {
+                                   // TextEditor를 탭하면 키보드를 닫습니다.
+                                   UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+                               }
+                        .padding(.bottom, 20)
                     
+//                    Spacer()
                     
-                    Spacer()
                     //MARK: 다음버튼
                     if selectedImages.count == 0 || inputTitle.count == 0 || inputContent.count == 0 {
                         Button {
@@ -211,10 +253,28 @@ struct MagazineContentAddView: View {
                         .alert(isPresented: $showingAlert) {
                             Alert(title: Text("알림"), message: Text("제목, 내용, 사진은 필수 입력 항목입니다."), dismissButton: .default(Text("확인")))
                         }
-                    } else {
+                    } else if selectedCamera == "" {
+                        Button {
+                            showingSelectBodyAlert = true
+                        } label: {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.black)
+                                .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                                .overlay {
+                                    Text("다음")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                }
+                        }
+                        .alert(isPresented: $showingSelectBodyAlert) {
+                            Alert(title: Text("알림"), message: Text("카메라 바디 선택은 필수입니다."), dismissButton: .default(Text("확인")))
+                        }
+                    }
+                    else {
                         NavigationLink {
-                            AddMarkerMapView(updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1, inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented, userLatitude: userLatitude , userLongitude: userLongitude)
+                            AddMarkerMapView(magazineVM: magazineVM, userVM: userVM, mapVM: mapVM, locationManager: locationManager, updateNumber: $updateNumber, updateReverseGeocodeResult1: $updateReverseGeocodeResult1,inputTitle: $inputTitle, inputContent: $inputContent, selectedImages: $selectedImages, inputCustomPlace: $inputCustomPlace, presented: $presented,selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .navigationBarBackButtonHidden(true)
+
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(.black)
@@ -227,8 +287,7 @@ struct MagazineContentAddView: View {
                         }
                     }
                 } //vstack
-                
-                .navigationTitle("매거진")
+                .navigationTitle("나의 필름 공유하기")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
@@ -239,22 +298,60 @@ struct MagazineContentAddView: View {
                                 .foregroundColor(.black)
                                 .bold()
                         }
+                    }
+                    
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button {
+                            self.focus = nil
+                        } label: {
+                            Text("완료")
+                                .foregroundColor(.blue)
+                        }
                         
                     }
                 }
                 .onAppear {
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 }
-                //.ignoresSafeArea(.keyboard)
             }
-        }
     }
 }
-//struct MagazineContentAddView_Previews: PreviewProvider {
-//
-//    static var previews: some View {
-//        NavigationStack {
-//            MagazineContentAddView(presented: .constant(false), updateNumber: NMGLatLng(lat: 0, lng: 0))
-//        }
-//    }
-//}
+
+
+
+struct SelectModalView: View {
+    @ObservedObject var userVM: UserViewModel
+    
+    @Binding var selectedCamera: String
+    @Binding var selectedLense: String
+    @Binding var selectedFilm: String
+    
+    var body: some View {
+        Form {
+            Picker("바디", selection: $selectedCamera) {
+                Text("없음")
+                ForEach(userVM.myCamera, id: \.self) {
+                    Text($0) //  2: laica 3" ㅇㄹㄴㅇㄹ 4ㅇㄹㄴㅇㄹ
+                }
+            }
+            .pickerStyle(.inline)
+            
+            Picker("렌즈", selection: $selectedLense) {
+                ForEach(userVM.myLens, id: \.self) {
+                    Text($0)
+                }
+            }
+            .pickerStyle(.inline)
+            
+            Picker("필름", selection: $selectedFilm) {
+                ForEach(userVM.myFilm, id: \.self) {
+                    Text($0)
+                }
+            }
+            .pickerStyle(.inline)
+            
+        }
+    }
+    
+}

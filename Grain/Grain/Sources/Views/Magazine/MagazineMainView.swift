@@ -10,89 +10,49 @@ import SwiftUI
 import FirebaseAuth
 
 struct MagazineMainView: View {
-    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
-    @ObservedObject var magazineVM: MagazineViewModel = MagazineViewModel()
+    
+    @ObservedObject var communityVM : CommunityViewModel
+    @ObservedObject var userVM : UserViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
+    @ObservedObject var editorVM : EditorViewModel
     
     @State private var selectedIndex: Int = 0
-    @State private var isSearchViewShown: Bool = false
-   
+    @State private var selectedFilter = 0
+    
+    @Binding var scrollToTop: Bool
+    
     let titles: [String] = ["인기", "실시간"]
+    let feedFilter = ["전체보기", "구독자"]
     
     var body: some View {
-        NavigationStack {
-            VStack{
-                HStack {
-                    SegmentedPicker(
-                        titles,
-                        selectedIndex: Binding(
-                            get: { selectedIndex },
-                            set: { selectedIndex = $0 ?? 0 }),
-                        content: { item, isSelected in
-                            Text(item)
-                                .foregroundColor(isSelected ? Color.black : Color.gray )
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
-                                .font(.title3)
-                                .bold()
-                        },
-                        selection: {
-                            VStack(spacing: 0) {
-                                Spacer()
-                                Rectangle()
-                                    .fill(Color.black)
-                                    .frame(height: 2)
-                                    .transition(.slide)
-                                    .animation(.easeInOut, value: selectedIndex)
-                            }
-                        })
-                    Spacer()
-                }//HS
-                .padding(.leading)
-                switch selectedIndex {
-                case 0:
-                    VStack{
-                        MagazineBestView(userVM: userViewModel, currentUsers: userViewModel.currentUsers, magazineVM: magazineVM)
-                    }
-                default:
-                    MagazineFeedView(magazineVM: magazineVM, currentUsers: userViewModel.currentUsers, userVM: userViewModel)
-                }
-            }
-            .navigationDestination(isPresented: $isSearchViewShown) {
-                MainSearchView()
-            }
-            .refreshable {
-                magazineVM.fetchMagazine()
-            }
-        }
-        .onAppear {
-            self.isSearchViewShown = false
-            userViewModel.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            userViewModel.fetchUser()
-            magazineVM.fetchMagazine()
-        }
-        .onReceive(userViewModel.fetchUsersSuccess, perform: { newValue in
-            userViewModel.filterCurrentUsersFollow()
-        })
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Text("GRAIN")
-                    .font(.title)
-                    .bold()
-                    .kerning(7)
+        VStack{
+            HStack{
                 
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    self.isSearchViewShown = true
-                } label: {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.black)
+                SegmentControlView(items: titles, selection: $selectedIndex, defaultXSpace: 10)
+                    .padding(.leading, 9)
+                
+                if selectedIndex == 1 {
+                    
+                    Picker(selection: $selectedFilter, label: Text("전체보기").fontWeight(.bold)) {
+                        ForEach(0 ..< feedFilter.count , id: \.self) {
+                            Text(self.feedFilter[$0])
+                        }
+                    }
+                    
                 }
-
+            }
+            switch selectedIndex {
+            case 0:
+                MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM, scrollToTop: $scrollToTop)
+                
+            default:
+                MagazineFeedView(magazineVM: magazineVM, userVM: userVM, scrollToTop: $scrollToTop, selectedFilter: $selectedFilter)
             }
         }
+        .onReceive(userVM.fetchUsersSuccess, perform: { newValue in
+            userVM.filterCurrentUsersFollow()
+        })
+        
     }
 }
 

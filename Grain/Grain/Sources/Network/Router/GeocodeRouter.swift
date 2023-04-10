@@ -47,6 +47,3 @@ enum GeocodeRouter {
     }
     
 }
-
-
-//Multiple commands produce '/Users/soomanhong/Library/Developer/Xcode/DerivedData/Grain-bwdvmorzjluwpxexkrjbwfzhfzun/Build/Intermediates.noindex/Grain.build/Debug-iphonesimulator/Grain.build/Objects-normal/arm64/GeocodeRouter.stringsdata'

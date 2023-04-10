@@ -16,7 +16,6 @@ import UIKit
 
 enum UserService {
     
-    // MARK: - 스토리지 이미지 가져오기
     static func getUser() -> AnyPublisher<UserResponse, Error> {
         do {
             let request = try UserRouter.get.asURLRequest()
@@ -31,14 +30,16 @@ enum UserService {
         }
     }
     
-    // MARK: - 맵 데이터 넣기
-    static func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String, introduce: String ) -> AnyPublisher<UserDocument, Error> {
-       
+    // MARK: - 유저 데이터 넣기
+    static func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String, profileImage: [UIImage],name: String,follower: String,nickName: String, introduce: String , fcmToken : String) -> AnyPublisher<UserDocument, Error> {
         
-        let requestRouter = UserRouter.post(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName, introduce: introduce)
-        
+        var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "param", fileName: "file", image: profileImage)
+        var profileImageURL: String = ""
+        if imageUrlArr.count > 0 {
+            profileImageURL = imageUrlArr[0]
+        }
         do {
-            let request = try requestRouter.asURLRequest()
+            let request = try UserRouter.post(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImageURL,name: name,follower: follower,nickName: nickName, introduce: introduce , fcmToken: fcmToken).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -123,8 +124,23 @@ enum UserService {
     
     // MARK: - 현재 로그인한 유저 정보 가져오기
     static func getCurrentUser(userID: String) -> AnyPublisher<CurrentUserResponse, Error> {
+        
+        
+        var baseUrlString : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FireStore"] as? String {
+                baseUrlString += url
+            }
+        }
+        
+        var userString : String = ""
+        if let infolistString = Bundle.main.infoDictionary {
+            if let str = infolistString["UuidUser"] as? String {
+                userString = str
+            }
+        }
 
-        let firestoreURL = "https://firestore.googleapis.com/v1/projects/grain-final/databases/(default)/documents/User/\(userID)"
+        let firestoreURL = baseUrlString + "/" + "\(userString)" + "/" + "\(userID)"
         let encodeQueryURL = firestoreURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
 
         var request = URLRequest(url: URL(string: encodeQueryURL)!)
@@ -142,27 +158,19 @@ enum UserService {
         }
     }
     
-    // 데이터 삭제
-//    func deleteCode(){
-//        let firestoreRef = "https://firestore.googleapis.com/v1/projects/{PROJECT_ID}/databases/(default)/documents/{DOCUMENT_PATH}"
-//        // MARK: 콜렉션 / uuid 값
-//        let documentPath = "User/gTQvo3MwawdxVMU0IfYv"
-//
-//
-//        let url = URL(string: firestoreRef.replacingOccurrences(of: "{PROJECT_ID}", with: "grain-final")
-//                        .replacingOccurrences(of: "{DOCUMENT_PATH}", with: documentPath))!
-//
-//        var urlRequest = URLRequest(url: url)
-//        urlRequest.httpMethod = "DELETE"
-//
-//        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-//            if let error = error {
-//                print("Error deleting document: \(error)")
-//                return
-//            }
-//            print("Document deleted successfully")
-//        }.resume()
-//
-//    }
-
+    static func insertDeleteDataCollection(userDocID: String) -> AnyPublisher<UserDocument, Error> {
+        
+        do {
+            let request = try UserRouter.posetDeleteUser(userDocID: userDocID).asURLRequest()
+            return URLSession
+                .shared
+                .dataTaskPublisher(for: request)
+                .map{ $0.data }
+                .decode(type: UserDocument.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+        } catch {
+            return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+        }
+    }
+    
 }

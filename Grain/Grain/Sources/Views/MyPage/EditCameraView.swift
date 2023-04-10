@@ -7,30 +7,10 @@
 
 import SwiftUI
 import FirebaseAuth
-/*
- @Environment(\.editMode) private var editMode
-
- ...
-
- .onChange(of: editMode!.wrappedValue, perform: { value in
-   if value.isEditing {
-      // Entering edit mode (e.g. 'Edit' tapped)
-   } else {
-      // Leaving edit mode (e.g. 'Done' tapped)
-   }
- */
-
-// 텍스트 필드 포커스를 위한 열거형
-//private enum FocusableField: Hashable {
-//    case body
-//    case lens
-//    case film
-//}
 
 struct EditCameraView: View {
 
-//    var userVM: UserViewModel
-    @StateObject var userVM: UserViewModel = UserViewModel()
+    @ObservedObject var userVM : UserViewModel
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.presentationMode) var presentationMode
@@ -38,21 +18,16 @@ struct EditCameraView: View {
     // editMode
     @Environment(\.editMode) private var editMode
     
-    // 사용자 장비가 담긴 배열
-    @State private var  myBodies: [String] = ["코닥", "캐논", "니콘"]
-//    @State private var myBodies: [CurrentUserStringValue] = []
-    @State private var myLenses: [String] = ["렌즈1", "렌즈2", "렌즈3"]
-    @State private var myFilms: [String] = ["코닥", "캐논", "니콘"]
-    
     // 장비 추가 버튼 출현 변수
     @State private var showAddBody = false
     @State private var showAddLens = false
     @State private var showAddFilm = false
-    
     // 각 장비 별 추가 변수
     @State private var newBodyItem = ""
     @State private var newLensItem = ""
     @State private var newFilmItem = ""
+    // Alert 변수
+    @State private var showAlert: Bool = false
     
     // 장비 추가 변수의 공백 제거한 변수
     var trimNewBodyItem: String {
@@ -64,17 +39,10 @@ struct EditCameraView: View {
     var trimNewFilmItem: String {
         newFilmItem.trimmingCharacters(in: .whitespaces)
     }
-    
-    // Alert 변수
-    @State private var showAlert: Bool = false
-
-    //
-//    @FocusState var focus: FocusableField
-
+  
     //MARK: - body
     var body: some View {
         NavigationStack{
-//            ZStack(alignment: .bottomTrailing){
                 VStack {
                     
                     // MARK: 상단 바
@@ -123,14 +91,13 @@ struct EditCameraView: View {
                     
                     List{
                         // MARK: 카메라 바디 섹션
-                        BodyList(userVM: userVM, myBodies: $myBodies, showAddBody: $showAddBody, newItem: $newBodyItem)
+                        BodyList(userVM: userVM, showAddBody: $showAddBody, newItem: $newBodyItem)
                         
                         // MARK: 카메라 렌즈 섹션
-                        LensList(userVM: userVM, myLenses: $myLenses, showAddLens: $showAddLens, newItem: $newLensItem)
+                        LensList(userVM: userVM, showAddLens: $showAddLens, newItem: $newLensItem)
 
-                        
                         // MARK: 카메라 필름 섹션
-                        FilmList(userVM: userVM, myFilms: $myFilms, showAddFilm: $showAddFilm, newItem: $newFilmItem)
+                        FilmList(userVM: userVM, showAddFilm: $showAddFilm, newItem: $newFilmItem)
                     }
                     .listStyle(.sidebar)
                     .scrollContentBackground(.hidden)
@@ -141,8 +108,6 @@ struct EditCameraView: View {
                         .foregroundColor(.textGray)
                     
                 }
-//                .navigationTitle("나의 장비 정보")
-//                .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarHidden(true)
                 .toolbar {
@@ -179,24 +144,27 @@ struct EditCameraView: View {
                         EditButton()
                     }
                 }
-
-
-
         }
         .onAppear{
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+        }
+        .refreshable {
+            do {
+                try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+              } catch {}
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
     }
 
 }
 
-struct EditCameraView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack{
-            EditCameraView()
-        }
-    }
-}
+//struct EditCameraView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack{
+//            EditCameraView()
+//        }
+//    }
+//}
 
 
 // MARK: - 카메라 바디 섹션 선언부
@@ -206,7 +174,6 @@ struct BodyList: View {
 
     @Environment(\.editMode) private var editMode
 
-    @Binding var  myBodies: [String]
     @Binding var showAddBody: Bool
     @Binding var newItem: String
         
@@ -315,12 +282,10 @@ struct BodyList: View {
 
 // MARK: - 카메라 렌즈 섹션 선언부
 struct LensList: View {
-    @AppStorage("docID") private var docID : String?
     var userVM: UserViewModel
     
     @Environment(\.editMode) private var editMode
 
-    @Binding var  myLenses: [String]
     @Binding var showAddLens: Bool
     @Binding var newItem: String
     
@@ -359,7 +324,7 @@ struct LensList: View {
                                             userVM.updateCurrentUserArray(type: "myLens", arr: arr, docID: docID)
                                         }
                                         newItem = ""
-                                        userVM.fetchCurrentUser(userID: docID ?? "")
+                                    userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                                 }
                             }
                         
@@ -372,7 +337,7 @@ struct LensList: View {
                                         userVM.updateCurrentUserArray(type: "myLens", arr: arr, docID: docID)
                                     }
                                     newItem = ""
-                                    userVM.fetchCurrentUser(userID: docID ?? "")
+                                    userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                             }
                         } label: {
                             Image(systemName: "plus.circle")
@@ -410,7 +375,6 @@ struct LensList: View {
     func removeLensList(at offsets: IndexSet) {
         if let user = userVM.currentUsers {
             userVM.myLens.remove(atOffsets: offsets)
-//            print("likedMagazineIDARR: \(userVM.likedMagazineID)")
             let docID = user.id.stringValue
             userVM.updateCurrentUserArray(type: "myLens", arr: userVM.myLens, docID: docID)
         }
@@ -420,7 +384,6 @@ struct LensList: View {
     func moveLensList(from source: IndexSet, to destination: Int) {
         if let user = userVM.currentUsers {
             userVM.myLens.move(fromOffsets: source, toOffset: destination)
-//            print("likedMagazineIDARR: \(userVM.likedMagazineID)")
             let docID = user.id.stringValue
             userVM.updateCurrentUserArray(type: "myLens", arr: userVM.myLens, docID: docID)
         }
@@ -429,11 +392,10 @@ struct LensList: View {
 
 // MARK: - 카메라 필름 섹션 선언부
 struct FilmList: View {
-    @AppStorage("docID") private var docID : String?
     var userVM: UserViewModel
 
     @Environment(\.editMode) private var editMode
-    @Binding var  myFilms: [String]
+    
     @Binding var showAddFilm: Bool
     @Binding var newItem: String
     
@@ -470,7 +432,7 @@ struct FilmList: View {
                                         userVM.updateCurrentUserArray(type: "myFilm", arr: arr, docID: docID)
                                     }
                                     newItem = ""
-                                    userVM.fetchCurrentUser(userID: docID ?? "")
+                                    userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                                 }
                             }
                         
@@ -483,7 +445,7 @@ struct FilmList: View {
                                     userVM.updateCurrentUserArray(type: "myFilm", arr: arr, docID: docID)
                                 }
                                 newItem = ""
-                                userVM.fetchCurrentUser(userID: docID ?? "")
+                                userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                             }
                         } label: {
                             Image(systemName: "plus.circle")

@@ -12,15 +12,15 @@ struct SearchPlaceHolderView: View {
     
     var body: some View {
         VStack {
-            Image(systemName: "camera.badge.ellipsis")
-                .font(.system(size: 90))
+            Image(systemName: "rectangle.and.text.magnifyingglass")
+                .font(.system(size: 70))
                 .foregroundColor(.brightGray)
-                .padding(.bottom)
-            Text("이런... 필름이 비어있어요!")
-                .font(.title)
-                .fontWeight(.heavy)
-                .foregroundColor(.black)
-                .padding(5)
+//                .padding(.bottom)
+//            Text("이런... 필름이 비어있어요!")
+//                .font(.title)
+//                .fontWeight(.heavy)
+//                .foregroundColor(.black)
+//                .padding(5)
             HStack{
                 Text("' \(searchWord)")
                     .foregroundColor(.middleDarkRed)

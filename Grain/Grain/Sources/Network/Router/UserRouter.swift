@@ -11,11 +11,12 @@ import Foundation
 enum UserRouter {
 
     case get
-    case post(myFilm: String, bookmarkedMagazineID: String,email: String, myCamera: String, postedCommunityID: String, postedMagazineID: String, likedMagazineId: String, lastSearched: String, bookmarkedCommunityID: String, recentSearch: String, id: String, following: String, myLens : String, profileImage: String, name: String, follower: String, nickName: String, introduce: String)
+    case post(myFilm: String, bookmarkedMagazineID: String,email: String, myCamera: String, postedCommunityID: String, postedMagazineID: String, likedMagazineId: String, lastSearched: String, bookmarkedCommunityID: String, recentSearch: String, id: String, following: String, myLens : String, profileImage: String, name: String, follower: String, nickName: String, introduce: String, fcmToken : String)
     case patchArr(type: String, arr: [String],  docID: String)
     case patchString(type: String, string: String, docID: String)
     case patchProfile(profileImage: String, nickName: String, introduce: String, docID: String)
     case delete(docID: String)
+    case posetDeleteUser(userDocID: String)
     
     private var baseURL: URL {
         var baseUrlString : String = "https://"
@@ -27,6 +28,25 @@ enum UserRouter {
         return URL(string: baseUrlString) ?? URL(string: "")!
     }
 
+    private var queryItemString: String {
+        var userString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidUser"] as? String {
+                userString = str
+            }
+        }
+        return userString
+    }
+    private var queryItemDeleteString: String {
+        var deleteString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidDeleteUser"] as? String {
+                deleteString = str
+            }
+        }
+        return deleteString
+    }
+    
     private enum HTTPMethod {
         case get
         case post
@@ -34,6 +54,7 @@ enum UserRouter {
         case patchString
         case patchProfile
         case delete
+        case posetDeleteUser
         
         var value: String {
             switch self {
@@ -43,6 +64,7 @@ enum UserRouter {
             case .patchString: return "PATCH"
             case .patchProfile: return "PATCH"
             case .delete: return "DELETE"
+            case .posetDeleteUser: return "POST"
             }
         }
     }
@@ -50,21 +72,23 @@ enum UserRouter {
     private var endPoint: String {
         switch self {
         case let .patchArr(_,_, docID):
-            return "/User/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .patchString(_,_, docID):
-            return "/User/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .patchProfile(_,_,_, docID):
-            return "/User/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .delete(docID: docID):
-            return "/User/\(docID)"
+            return "/" + "\(queryItemString)" + "/" + "\(docID)"
+        case let .posetDeleteUser(userDocID):
+            return "/" + "\(queryItemDeleteString)"
         default:
-            return "/User"
+            return "/" + "\(queryItemString)"
         }
     }
     
     var parameters: [URLQueryItem]? {
         switch self {
-        case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID, postedMagazineID, likedMagazineId, lastSearched, bookmarkedCommunityID, recentSearch, id, following, myLens , profileImage, name, follower, nickName, introduce):
+        case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID, postedMagazineID, likedMagazineId, lastSearched, bookmarkedCommunityID, recentSearch, id, following, myLens , profileImage, name, follower, nickName, introduce , fcmToken):
             var params: [URLQueryItem] = [URLQueryItem(name: "documentId", value: id)]
             return params
             
@@ -101,6 +125,8 @@ enum UserRouter {
             return .delete
         case .patchArr:
             return .patchArr
+        case .posetDeleteUser :
+            return .post
         default:
             return .patchString
         }
@@ -108,14 +134,16 @@ enum UserRouter {
     
     private var data: Data? {
         switch self {
-        case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId,lastSearched,bookmarkedCommunityID, recentSearch, id, following,myLens,profileImage,name,follower,nickName, introduce):
-            return UserQuery.insertUserQuery(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID, postedMagazineID: postedMagazineID, likedMagazineId: likedMagazineId, lastSearched: lastSearched, bookmarkedCommunityID: bookmarkedCommunityID, recentSearch: recentSearch, id: id, following: following, myLens: myLens, profileImage: profileImage, name: name, follower: follower, nickName: nickName, introduce: introduce)
+        case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId,lastSearched,bookmarkedCommunityID, recentSearch, id, following,myLens,profileImage,name,follower,nickName, introduce, fcmToken):
+            return UserQuery.insertUserQuery(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID, postedMagazineID: postedMagazineID, likedMagazineId: likedMagazineId, lastSearched: lastSearched, bookmarkedCommunityID: bookmarkedCommunityID, recentSearch: recentSearch, id: id, following: following, myLens: myLens, profileImage: profileImage, name: name, follower: follower, nickName: nickName, introduce: introduce, fcmToken: fcmToken)
         case let .patchArr(type, arr, _):
             return UserQuery.updateUserArray(type: type, arr: arr)
         case let .patchString(type, string, _):
             return UserQuery.updateUserString(type: type, string: string)
         case let .patchProfile(profileImage, nickName, introduce, _):
             return UserQuery.updateUserProfile(profileImage: profileImage, nickName: nickName, introduce: introduce)
+        case let .posetDeleteUser(userDocID) :
+            return UserQuery.insertDeleteDataCollection(userDocID: userDocID)
         default:
             return nil
         }

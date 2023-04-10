@@ -11,28 +11,37 @@ import Kingfisher
 
 struct UserDetailView: View {
 
-    let user: UserDocument
     @ObservedObject var userVM: UserViewModel
-    
-    @StateObject var magazineVM = MagazineViewModel()
+    @ObservedObject var magazineVM : MagazineViewModel
     
     @State private var showDevices: Bool = false
     @State private var angle: Double = 0
-    
     // 유저가 올린 메거진 데이터
     @State var magazines = [MagazineDocument]()
-
-    // isFollow 초기값 넣어줘야함. 팔로우한 유저인지 먼저 체크 (체크하는 메소드 필요)
+    // isFollow 초기값 넣어줘야함. 팔로우한 유저인지 먼저 체크
     @State private var isFollowingUser: Bool = false
     // 내 프로필인지 체크 (구독버튼을 보여줄지 판단하기 위해)
     @State private var isMyProfile: Bool = false
+    
+    let user: UserDocument
+    @State var userData: UserDocument?
+    
+    func defaultProfileImage() -> String{
+        var https : String = "https://"
+        if let infolist = Bundle.main.infoDictionary {
+            if let url = infolist["FailProfileImage"] as? String {
+                https += url
+            }
+        }
+        return https
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
             VStack(alignment: .leading){
                 HStack{
                     //MARK: 프로필 이미지
-                    KFImage(URL(string: user.fields.profileImage.stringValue) ?? URL(string:"https://cdn.travie.com/news/photo/202108/21951_11971_5847.jpg"))
+                    KFImage(URL(string: user.fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
                         .resizable()
                         .scaledToFill()
                         .frame(width: 85, height: 85)
@@ -53,72 +62,78 @@ struct UserDetailView: View {
                             
                             Spacer()
                             
-                            if !isMyProfile {
-                                Button {
-                                    print("========버튼 눌림====================================")
-                                    // userData update
-                                    isFollowingUser.toggle()
-                                    /// 희경:  userViewModel 에 메소드로 따로 빼주는게 보기 좋을듯.
-                                    if isFollowingUser {
-                                        // "구독중" 상태이고, 내 팔로잉 리스트에 없는 경우 => 구독
-                                        if !userVM.following.contains(user.fields.id.stringValue) {
-                                            if let currentUser = userVM.currentUsers {
-                                                
-                                                var currentUserFollowing: [String] = userVM.following
-                                                var magazineUserFollower: [String] = userVM.parsingFollowerDataToStringArr(data: user)
-                                                
-                                                /// 내 팔로잉리스트에 이사람 id 넣어주고
-                                                currentUserFollowing.append(user.fields.id.stringValue)
-                                                /// 이사람 팔로워리스트에 내 id 넣어줌.
-                                                magazineUserFollower.append(currentUser.id.stringValue)
-                                                
-                                                userVM.updateCurrentUserArray(type: "following", arr: currentUserFollowing, docID: currentUser.id.stringValue)
-                                                
-                                                userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: user.fields.id.stringValue)
+                            if let userData = self.userData {
+                                if !isMyProfile {
+                                    Button {
+                                        // userData update
+                                        isFollowingUser.toggle()
+                                        /// 희경:  userViewModel 에 메소드로 따로 빼주는게 보기 좋을듯.
+                                        if isFollowingUser {
+                                            // "구독중" 상태이고, 내 팔로잉 리스트에 없는 경우 => 구독
+                                            if !userVM.following.contains(userData.fields.id.stringValue) {
+                                                if let currentUser = userVM.currentUsers {
+                                                    
+                                                    var currentUserFollowing: [String] = userVM.following
+                                                    var magazineUserFollower: [String] = userVM.parsingFollowerDataToStringArr(data: userData)
+                                                    
+                                                    /// 내 팔로잉리스트에 이사람 id 넣어주고
+                                                    currentUserFollowing.append(userData.fields.id.stringValue)
+                                                    /// 이사람 팔로워리스트에 내 id 넣어줌.
+                                                    magazineUserFollower.append(currentUser.id.stringValue)
+                                                    
+                                                    userVM.updateCurrentUserArray(type: "following", arr: currentUserFollowing, docID: currentUser.id.stringValue)
+                                                    
+                                                    userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: userData.fields.id.stringValue)
+                                                }
+                                            }
+//                                            let sender = PushNotificationSender(serverKeyString: "")
+//                                            for i in user.fields.fcmToken.arrayValue.values {
+//                                                sender.sendPushNotification(to: i.stringValue, title: "구독", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 \(userData.fields.nickName.stringValue) 을 구독합니다 ", image: "")
+//                                            }
+                                            
+                                            
+                                        } else {
+                                            // "구독" 상태이고, 내 팔로잉 리스트에 있는경우 => 구독취소
+                                            if userVM.following.contains(userData.fields.id.stringValue) {
+                                                if let currentUser = userVM.currentUsers {
+                                                    var currentUserFollowing: [String] = userVM.following
+                                                    var magazineUserFollower: [String] =  userVM.parsingFollowerDataToStringArr(data: userData)
+                                                    
+                                                    /// 내 팔로잉리스트에 이사람 id 삭제
+                                                    currentUserFollowing.removeAll {$0 ==  userData.fields.id.stringValue}
+                                                    /// 이사람 팔로워리스트에 내 id 삭제
+                                                    magazineUserFollower.removeAll {$0 == currentUser.id.stringValue}
+                                                    
+                                                    userVM.updateCurrentUserArray(type: "following", arr: currentUserFollowing, docID: currentUser.id.stringValue)
+                                                    
+                                                    userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: userData.fields.id.stringValue)
+                                                }
                                             }
                                         }
-                                    } else {
-                                        // "구독" 상태이고, 내 팔로잉 리스트에 있는경우 => 구독취소
-                                        
-                                        if userVM.following.contains(user.fields.id.stringValue) {
-                                            if let currentUser = userVM.currentUsers {
-                                                var currentUserFollowing: [String] = userVM.following
-                                                var magazineUserFollower: [String] =  userVM.parsingFollowerDataToStringArr(data: user)
-                                                
-                                                /// 내 팔로잉리스트에 이사람 id 삭제
-                                                currentUserFollowing.removeAll {$0 ==  user.fields.id.stringValue}
-                                                /// 이사람 팔로워리스트에 내 id 삭제
-                                                magazineUserFollower.removeAll {$0 == currentUser.id.stringValue}
-                                                
-                                                userVM.updateCurrentUserArray(type: "following", arr: currentUserFollowing, docID: currentUser.id.stringValue)
-                                                
-                                                userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: user.fields.id.stringValue)
-                                            }
+                                    } label: {
+                                        if isFollowingUser {
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .frame(width: 50, height: 20)
+                                                .overlay{
+                                                    Text("구독중")
+                                                        .font(.caption)
+                                                        .bold()
+                                                        .foregroundColor(.white)
+                                                    
+                                                }
+                                        } else {
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .frame(width: 50, height: 20)
+                                                .overlay{
+                                                    Text("+ 구독")
+                                                        .font(.caption)
+                                                        .bold()
+                                                        .foregroundColor(.white)
+                                                    
+                                                }
                                         }
-                                    }
-                                } label: {
-                                    if isFollowingUser {
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .frame(width: 50, height: 20)
-                                            .overlay{
-                                                Text("구독중")
-                                                    .font(.caption)
-                                                    .bold()
-                                                    .foregroundColor(.white)
-                                                
-                                            }
-                                    } else {
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .frame(width: 50, height: 20)
-                                            .overlay{
-                                                Text("+ 구독")
-                                                    .font(.caption)
-                                                    .bold()
-                                                    .foregroundColor(.white)
-                                                
-                                            }
-                                    }
-                                }.padding(.trailing, 20)
+                                    }.padding(.trailing, 20)
+                                }
                             }
                         }//hstack
                         VStack(alignment: .leading){
@@ -133,40 +148,34 @@ struct UserDetailView: View {
                             .foregroundColor(.textGray)
                             .font(.footnote)
                             
-                            HStack{
-                                NavigationLink {
-                                    FollowerListView(userVM: userVM, user: user)
-                                } label: {
-                                    Text("구독자")
+                            if let userData = self.userData {
+                                HStack{
+                                    NavigationLink {
+                                        FollowingFollowerView(userVM: userVM, userData: userData, magazineVM: magazineVM, selectedIndex: 0)
+                                    } label: {
+                                        Text("구독자")
+                                    }
+                                    
+                                    Text("\(userData.fields.follower.arrayValue.values.count == 1 ? 0 : userData.fields.follower.arrayValue.values.count-1)")
+                                        .padding(.leading, -5)
+                                        .bold()
+                                    
+                                    Text("|")
+                                    
+                                    NavigationLink {
+                                        FollowingFollowerView(userVM: userVM, userData: userData, magazineVM: magazineVM, selectedIndex: 1)
+                                    } label: {
+                                        Text("구독중")
+                                    }
+                                    
+                                    Text("\(userData.fields.following.arrayValue.values.count == 1 ? 0 : userData.fields.following.arrayValue.values.count-1)")
+                                        .padding(.leading, -5)
+                                        .bold()
                                 }
-                                
-                                Text("\(user.fields.follower.arrayValue.values.count == 1 ? 0 : user.fields.follower.arrayValue.values.count-1)")
-                                    .padding(.leading, -5)
-                                    .bold()
-                                
-//
-//                                if let user = userVM.users.first(where: { $0.fields.id.stringValue == user.fields.id.stringValue})
-//                                {
-//                                    Text("\(user.fields.follower.arrayValue.values.count == 1 ? 0 : user.fields.follower.arrayValue.values.count-1)")
-//                                        .padding(.leading, -5)
-//                                        .bold()
-//                                }
-                                
-                                Text("|")
-                                
-                                NavigationLink {
-                                    FollowingListView(userVM: userVM, user: user)
-                                } label: {
-                                    Text("구독중")
-                                }
-                                
-                                Text("\(user.fields.following.arrayValue.values.count == 1 ? 0 : user.fields.following.arrayValue.values.count-1)")
-                                    .padding(.leading, -5)
-                                    .bold()
+                                .padding(.leading, 9)
+                                .font(.footnote)
+                                .foregroundColor(.textGray)
                             }
-                            .padding(.leading, 9)
-                            .font(.footnote)
-                            .foregroundColor(.textGray)
                         }
                     } // vstack
                     
@@ -228,38 +237,51 @@ struct UserDetailView: View {
                 .padding(.horizontal, 10)
                 .padding(.top, 5)
                 .foregroundColor(.brightGray)
-            UserPageUserFeedView(magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))
+            if let userData = self.userData {
+                UserPageUserFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userData.fields.postedMagazineID.arrayValue.values))
+            }
         }
         .onAppear{
-            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            magazineVM.fetchMagazine()
+            self.userData = user
             
+        }
+        .task(id: userVM.users) {
+            if let user = userVM.users.first(where: {
+                $0.fields.id.stringValue == user.fields.id.stringValue
+            }) {
+                self.userData = user
+            }
         }
         .onReceive(magazineVM.fetchMagazineSuccess, perform: { newValue in
             self.magazines = magazineVM.filterUserMagazine(userID: user.fields.id.stringValue)
         })
-        .onReceive(userVM.updateUsersArraySuccess, perform: { _ in
-            print("onReceive updateUsersArray")
-            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-        })
         .onReceive(userVM.fetchCurrentUsersSuccess, perform: { _ in
-            // 나의 following 리스트에 있는 사람인지 확인
-            if userVM.following.contains(user.fields.id.stringValue) {
-                isFollowingUser = true // 구독중
-            } else {
-                isFollowingUser = false // 구독
-            }
-            
-            // 내 프로필인지 확인
-            if let currentUser = userVM.currentUsers {
-                if currentUser.id.stringValue == user.fields.id.stringValue {
-                    isMyProfile = true
+            if let userData = self.userData {
+                // 나의 following 리스트에 있는 사람인지 확인
+                if userVM.following.contains(userData.fields.id.stringValue) {
+                    isFollowingUser = true // 구독중
                 } else {
-                    isMyProfile = false
-                    
+                    isFollowingUser = false // 구독
+                }
+                
+                // 내 프로필인지 확인
+                if let currentUser = userVM.currentUsers {
+                    if currentUser.id.stringValue == userData.fields.id.stringValue {
+                        isMyProfile = true
+                    } else {
+                        isMyProfile = false
+                        
+                    }
                 }
             }
         })
+        .onDisappear{
+            if isFollowingUser == true {
+                let sender = PushNotificationSender(serverKeyString: "")
+                for i in user.fields.fcmToken.arrayValue.values {
+                    sender.sendPushNotification(to: i.stringValue, title: "구독", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 \(userData?.fields.nickName.stringValue ?? "")님을 구독합니다 ", image: "")
+                }
+            }
+        }
     }
 }
-

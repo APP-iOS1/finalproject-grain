@@ -9,11 +9,9 @@
 import Foundation
 import Combine
 import UIKit
-//import FirebaseFirestore  /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
-
+import FirebaseAuth
 
 final class UserViewModel: ObservableObject {
-    
     var subscription = Set<AnyCancellable>()
     
     @Published var users = [UserDocument]()
@@ -37,7 +35,7 @@ final class UserViewModel: ObservableObject {
     // 내가 구독한 사람의 게시글만 담은 배열
     @Published var subscribedMagazines: [String] = []
     
-    // 유저가 저장한 커뮤니티
+    // 유저가 저장한 커뮤니티f
     @Published var userBookmarkedCommunity : [String] = [] //string값만
     @Published var likedCommunityIdArr : [String] = [] // -> DB에서 만들어야됨
     
@@ -52,6 +50,10 @@ final class UserViewModel: ObservableObject {
     var updateUsersStringSuccess = PassthroughSubject<(), Never>()
     var updateUsersProfileSuccess = PassthroughSubject<(), Never>()
     var deleteUsersSuccess = PassthroughSubject<(), Never>()
+    var getMagazineCommentsSuccess = PassthroughSubject<[[String]], Never>()
+    var getMagazineReCommentsSuccess = PassthroughSubject<[[String]], Never>()
+    var deleteDataCollectionSuccess = PassthroughSubject<(), Never>()
+
     
     
     func fetchUser() {
@@ -116,7 +118,7 @@ final class UserViewModel: ObservableObject {
         return following
     }
     
-   
+    
     //MARK: - 구독한 사람들의 메거진만 필터링해서 리턴해주는 메서드(홈뷰 구독탭에서 가져다 쓰시면 됩니다. ^^ 갖다쓰기만해 ~ )
     /// 홈뷰에서 fetch 한 모든 게시물 데이터 MagazineVM.magazines 넘겨서 호출해주면 됩니다.
     /// 그러면 알아서 구독한 사람들의 게시물만 던져줍니다.
@@ -152,7 +154,7 @@ final class UserViewModel: ObservableObject {
     }
     
     // MARK: - 유저 프로필 업데이트 메소드 (nickName, introduce, profileImage 업데이트할때 ProfileEditView에서 사용)
-    /// ex) profileImage :프로필 UIImage를 UIImage 타입 그대로 배열에 넣어서 넘겨줍니다, 또 nickName, introduce, docID는 그대로 String 타입으로 넘겨주면 자동으로 update 될겁니다.
+    /// ex) profileImage :프로필 UIImage를 UIImage 타입 그대로 배열에 넣어서 넘겨줍니다, 또 nickName, introduce, docID는 그대로 String 타입으로 넘겨주면 자동으로 update 될겁니다.
     func updateCurrentUserProfile(profileImage: [UIImage], nickName: String, introduce: String, docID: String) {
         UserService.updateCurrentUserProfile(profileImage: profileImage, nickName: nickName, introduce: introduce, docID: docID)
             .receive(on: DispatchQueue.main)
@@ -170,6 +172,7 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
+                self.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 self.fetchUser()
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)
@@ -195,64 +198,97 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
+//                self.deleteUserMagazine(magazines: self.postedMagazineID)
+//                self.deleteUserCommunity(communities: self.postedCommunityID)
                 self.deleteUsersSuccess.send()
             }.store(in: &subscription)
     }
     
-    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
-//    func updateUserUsingSDK(updateDocument: String, updateKey: String, updateValue: String, isArray: Bool) async {
-//        let db = Firestore.firestore()
-//        let documentRef = db.collection("User").document("\(updateDocument)")
-//        if isArray{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(updateKey)": FieldValue.arrayUnion(["\(updateValue)"])
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }else{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(updateKey)" : "\(updateValue)"
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }
-//    }
-    /// PodFile - Firebase SDK 제거 -> 필요시 사용하기  ( 2022.02.22 / 정훈 )
-//    func deleteUserUsingSDK(updateDocument: String, deleteKey: String, deleteIndex: String, isArray: Bool) async {
-//        let db = Firestore.firestore()
-//        let documentRef = db.collection("User").document("\(updateDocument)")
-//        if isArray{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(deleteKey)": FieldValue.arrayRemove([
-//                            "\(deleteIndex)"
-//                        ])
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }else{
-//            do{
-//                try? await documentRef.updateData(
-//                    [
-//                        "\(deleteKey)" : FieldValue.delete()
-//                    ]
-//                )
-//            }catch let error {
-//                print("Error updating document: \(error)")
-//            }
-//        }
-//    }
+    //     MARK: - 유저정보 삭제 메소드 (유저 탈퇴시 유저가 작성한 메거진 게시글 모두 삭제)
+    func deleteUserMagazine(magazines: [String]) {
+        for i in magazines {
+            MagazineService.deleteMagazine(docID: i)
+                .receive(on: DispatchQueue.main)
+                .sink { (completion: Subscribers.Completion<Error>) in
+                } receiveValue: { (data: MagazineDocument) in
+                    
+                }.store(in: &subscription)
+        }
+    }
+    
+    //     MARK: - 유저정보 삭제 메소드 (유저 탈퇴시 유저가 작성한 커뮤니티 게시글 모두 삭제)
+    func deleteUserCommunity(communities: [String]) {
+        for i in communities {
+            CommunityService.deleteCommunity(docID: i)
+                .receive(on: DispatchQueue.main)
+                .sink { (completion: Subscribers.Completion<Error>) in
+                } receiveValue: { (data: CommunityResponse) in
+                    
+                }.store(in: &subscription)
+        }
+    }
+    
+    // 메거진컬렉션에 있는 모든 댓글 id 저장
+    func getMagazineComments(magazines: [String]) {
+        var magazineString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidMagazine"] as? String {
+                magazineString = str
+            }
+        }
+        var magazineComments = [[String]]()
+        for id in magazines {
+            CommentService.getComment(collectionName: magazineString, collectionDocId: id)
+                .receive(on: DispatchQueue.main)
+                .sink { (completion: Subscribers.Completion<Error>) in
+                } receiveValue: { (data: CommentResponse) in
+                    // 메거진 하나당 달린 댓글들 id를 배열에 저장
+                    var arr: [String]
+                    for i in data.documents {
+                        // [magzineID, commentID]
+//                        arr.append([id, i.fields.id.stringValue])
+                    }
+                }.store(in: &subscription)
+        }
+        
+        self.getMagazineCommentsSuccess.send(magazineComments)
+    }
+    
+    // 메거진컬렉션에 있는 모든 대댓글 id 저장
+    func getMagazineRecomment(comments: [[String]]) {
+        var magazineString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidMagazine"] as? String {
+                magazineString = str
+            }
+        }
+        var commentString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidComment"] as? String {
+                commentString = str
+            }
+        }
+        
+        // [magzineID, commentID]
+        var magzineRecomment = [[String]]()
+        
+        for id in comments {
+            CommentService.getRecomment(collectionName: magazineString, collectionDocId: id[0], commentCollectionName: commentString, commentCollectionDocId: id[1])
+                .receive(on: DispatchQueue.main)
+                .sink { (completion: Subscribers.Completion<Error>) in
+                } receiveValue: { (data: CommentResponse) in
+                    // 메거진 하나당 달린 댓글들 id를 배열에 저장
+                    for i in data.documents {
+                        // [magzineID, commentID, recommentID]
+                        magzineRecomment.append([id[0], id[1], i.fields.id.stringValue])
+                    }
+                }.store(in: &subscription)
+        }
+        
+        self.getMagazineReCommentsSuccess.send(magzineRecomment)
+    }
+    
+    
     
     func removeAll() {
         self.likedMagazineID.removeAll()
@@ -316,5 +352,37 @@ final class UserViewModel: ObservableObject {
         return follower
     }
     
+    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: [UIImage],name: String,follower: String,nickName: String, introduce: String, fcmToken: String) {
+        UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName, introduce: introduce, fcmToken: fcmToken)
+        
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: UserDocument) in
+                self.insertUsersSuccess.send()
+            }.store(in: &subscription)
+    }
+    
+    // 매거진 피드뷰 구독자 필터링
+    func subscriptionFeed(magazineData : [MagazineDocument]) -> [MagazineDocument]{
+        var subscriptionFeedData : [MagazineDocument] = []
+        for i in self.followerList{
+            for j in magazineData{
+                if i.fields.id.stringValue == j.fields.userID.stringValue{  // i.fields.id.stringValue  팔로워 id 뽑기,j.fields.userID.stringValue 매거진 안에 userID 뽑아서 둘이 같으면 데이터 넣기
+                    subscriptionFeedData.append(j)
+                }
+            }
+        }
+        return subscriptionFeedData
+    }
+    
+    // 회원탈퇴 컬렉션 저장
+    func deleteDataCollection (userDocID: String) {
+        UserService.insertDeleteDataCollection(userDocID: userDocID)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: UserDocument) in
+                self.deleteDataCollectionSuccess.send()
+            }.store(in: &subscription)
+    }
+    
 }
-

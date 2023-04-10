@@ -61,7 +61,7 @@ struct MagazineRecommentView: View {
                                             Circle()
                                                 .stroke(lineWidth: 0.5)
                                         }
-                                        .padding(.horizontal, 7)
+//                                        .padding(.horizontal, 7)
                                 }
                             }
                             .frame(width: Screen.maxWidth * 0.1)
@@ -137,6 +137,7 @@ struct MagazineRecommentView: View {
                                 }
                                 
                             }
+                            .padding(.leading, 1)
                             .offset(x : -7)
                         }
                     }

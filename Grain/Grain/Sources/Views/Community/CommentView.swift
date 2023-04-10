@@ -67,6 +67,15 @@ struct CommentView: View {
         }
         return communityString
     }
+    func infolistCommunityString() -> String{
+        var communityString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidCommmunity"] as? String {
+                communityString = str
+            }
+        }
+        return communityString
+    }
     
     
     var body: some View {
@@ -292,9 +301,9 @@ struct CommentView: View {
         .onChange(of: isCommentDelete) { newValue in
             if commentVm.sortedRecentComment.count == 1 {
                 commentVm.sortedRecentComment.removeFirst()
-                commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
+                commentVm.deleteComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, docID: deleteDocId)
             }else {
-                commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
+                commentVm.deleteComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, docID: deleteDocId)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
                 }

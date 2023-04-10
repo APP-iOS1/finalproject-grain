@@ -441,6 +441,16 @@ struct MagazineCommentTextField: View {
     var trimComment: String {
         commentText.trimmingCharacters(in: .whitespaces)
     }
+    func infolistCommentString() -> String{
+        var commentString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidComment"] as? String {
+                commentString = str
+            }
+        }
+        return commentString
+    }
+
     
     var body: some View {
         VStack {
@@ -466,7 +476,7 @@ struct MagazineCommentTextField: View {
                             
                             commentVm.insertRecomment(collectionName: collectionName
                                                       , collectionDocId: collectionDocId
-                                                      , commentCollectionName: "Comment"
+                                                      , commentCollectionName: infolistCommentString()
                                                       , commentCollectionDocId: commentCollectionDocId
                                                       , data: CommentFields(
                                                         comment: CommentString(stringValue: commentText),
@@ -507,7 +517,7 @@ struct MagazineCommentTextField: View {
                         Button {
                             editRecomment = false
                             
-                            commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: commentText, data: editReData)
+                            commentVm.updateRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: commentText, data: editReData)
                             
                             commentText = ""
                             self.summitComment.toggle()

@@ -120,6 +120,8 @@
 		A71D6E3729DD3C830032A766 /* CommunityCommentNickNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71D6E3629DD3C830032A766 /* CommunityCommentNickNameView.swift */; };
 		A7332EFC298BE726001AE5B0 /* CurrentUserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */; };
 		A739C63D2982EAFE0093D71C /* AddMarkerMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */; };
+		A73C6D5829E1445F008E2FC5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A73C6D5629E1445F008E2FC5 /* GoogleService-Info.plist */; };
+		A73C6D5929E1445F008E2FC5 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A73C6D5729E1445F008E2FC5 /* Config.xcconfig */; };
 		A73CD4A929B5DB2800CAC067 /* ReportMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73CD4A829B5DB2800CAC067 /* ReportMapView.swift */; };
 		A75BB990297EA25C004FE6FA /* WebkitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB98F297EA25C004FE6FA /* WebkitView.swift */; };
 		A75BB99529815361004FE6FA /* PhotoSpotMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75BB99429815361004FE6FA /* PhotoSpotMapView.swift */; };
@@ -311,6 +313,8 @@
 		A71D6E3629DD3C830032A766 /* CommunityCommentNickNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityCommentNickNameView.swift; sourceTree = "<group>"; };
 		A7332EFB298BE726001AE5B0 /* CurrentUserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserDTO.swift; sourceTree = "<group>"; };
 		A739C63C2982EAFE0093D71C /* AddMarkerMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMarkerMapView.swift; sourceTree = "<group>"; };
+		A73C6D5629E1445F008E2FC5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A73C6D5729E1445F008E2FC5 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		A73CD4A829B5DB2800CAC067 /* ReportMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapView.swift; sourceTree = "<group>"; };
 		A75BB98F297EA25C004FE6FA /* WebkitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebkitView.swift; sourceTree = "<group>"; };
 		A75BB99429815361004FE6FA /* PhotoSpotMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSpotMapView.swift; sourceTree = "<group>"; };
@@ -888,6 +892,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				99DEE60429C2E70A00BE5BC6 /* Localizable.strings in Resources */,
+
 				8B979A1529E2B87900726106 /* Config.xcconfig in Resources */,
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
@@ -1148,6 +1153,7 @@
 /* Begin XCBuildConfiguration section */
 		8B4249E829DAB96400C53790 /* Debug */ = {
 			isa = XCBuildConfiguration;
+
 			baseConfigurationReference = 8B979A1429E2B87900726106 /* Config.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -1174,6 +1180,7 @@
 		};
 		8B4249E929DAB96400C53790 /* Release */ = {
 			isa = XCBuildConfiguration;
+
 			baseConfigurationReference = 8B979A1429E2B87900726106 /* Config.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -1314,6 +1321,7 @@
 		};
 		9958AF7E297778D900A51DA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+
 			baseConfigurationReference = 8B979A1429E2B87900726106 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -1357,6 +1365,7 @@
 		};
 		9958AF7F297778D900A51DA9 /* Release */ = {
 			isa = XCBuildConfiguration;
+
 			baseConfigurationReference = 8B979A1429E2B87900726106 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;

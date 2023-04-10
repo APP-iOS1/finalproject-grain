@@ -41,6 +41,13 @@ final class CommentViewModel: ObservableObject {
     ///  REST API 방식 CRUD
     // MARK: Read
     func fetchComment(collectionName: String, collectionDocId: String) {
+    
+        var commentString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidComment"] as? String {
+                commentString = str
+            }
+        }
         CommentService.getComment(collectionName: collectionName, collectionDocId: collectionDocId)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
@@ -49,7 +56,7 @@ final class CommentViewModel: ObservableObject {
                     return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
                 })
                 for i in self.sortedRecentComment{
-                    CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: i.fields.id.stringValue)
+                    CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentString, commentCollectionDocId: i.fields.id.stringValue)
                         .receive(on: DispatchQueue.main)
                         .sink { (completion: Subscribers.Completion<Error>) in
                         } receiveValue: { (data: CommentResponse) in

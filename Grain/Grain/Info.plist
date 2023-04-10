@@ -6,6 +6,7 @@
 	<array>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	</array>
+
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -13,7 +14,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.661459576127-dkpp87eg0krvc8s76c3le8sagaeborip</string>
+				<string>com.googleusercontent.apps.527970035612-jdpc9l2vab4rr71kdmr03h1komnnmb7m</string>
 			</array>
 		</dict>
 		<dict>
@@ -41,6 +42,7 @@
 	<string>$(FireStorageBaseURL)</string>
 	<key>FireStore</key>
 	<string>$(FireStoreBaseURL)</string>
+
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
@@ -83,6 +85,25 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
+	<key>UuidComment</key>
+	<string>$(UuidComment)</string>
+	<key>UuidCommmunity</key>
+	<string>$(UuidCommmunity)</string>
+	<key>UuidDeleteUser</key>
+	<string>$(UuidDeleteUser)</string>
+	<key>UuidEditor</key>
+	<string>$(UuidEditor)</string>
+	<key>UuidMagazine</key>
+	<string>$(UuidMagazine)</string>
+	<key>UuidMap</key>
+	<string>$(UuidMap)</string>
+	<key>UuidMapReport</key>
+	<string>$(UuidMapReport)</string>
+	<key>UuidRecomment</key>
+	<string>$(UuidRecomment)</string>
+	<key>UuidUser</key>
+	<string>$(UuidUser)</string>
+
 	<key>serverkey</key>
 	<string>$(SERVERKEY)</string>
 </dict>

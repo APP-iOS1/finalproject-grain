@@ -37,6 +37,18 @@ struct CommunityRecommentView: View {
         return https
     }
     
+    
+    func infolistCommentString() -> String{
+        var commentString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidComment"] as? String {
+                commentString = str
+            }
+        }
+        return commentString
+    }
+
+    
     var body: some View {
         VStack(alignment: .leading){
             ForEach(Array(commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values), id:\.self){ element in

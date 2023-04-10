@@ -58,6 +58,16 @@ struct CommentView: View {
         }
         return https
     }
+    func infolistCommunityString() -> String{
+        var communityString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidCommmunity"] as? String {
+                communityString = str
+            }
+        }
+        return communityString
+    }
+    
     
     var body: some View {
         VStack(alignment: .leading){
@@ -155,7 +165,6 @@ struct CommentView: View {
                                                     .foregroundColor(.textGray)
                                                     .padding(.top, 1)
                                                     .padding(.bottom, -3)
-                                                  
                                             }
                                         }
                                     }
@@ -273,7 +282,8 @@ struct CommentView: View {
             
         }
         .onAppear {
-            commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
+            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId)
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 commentCount = commentVm.sortedRecentComment.count
                 makeEachBool(count: commentVm.sortedRecentComment.count)

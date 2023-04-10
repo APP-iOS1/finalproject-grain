@@ -50,6 +50,25 @@ struct CommunityCommentView: View {
         return https
     }
     
+    func infolistCommunityString() -> String{
+        var communityString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidCommmunity"] as? String {
+                communityString = str
+            }
+        }
+        return communityString
+    }
+    func infolistCommentString() -> String{
+        var communityString : String = ""
+        if let infolist = Bundle.main.infoDictionary {
+            if let str = infolist["UuidComment"] as? String {
+                communityString = str
+            }
+        }
+        return communityString
+    }
+    
     var body: some View {
         VStack{
             
@@ -152,9 +171,9 @@ struct CommunityCommentView: View {
                     if replyComment{
                         Button {
                             replyComment = false
-                            commentVm.insertRecomment(collectionName: "Community"
+                            commentVm.insertRecomment(collectionName: infolistCommunityString()
                                                       , collectionDocId: community.fields.id.stringValue
-                                                      , commentCollectionName: "Comment"
+                                                      , commentCollectionName: infolistCommentString()
                                                       , commentCollectionDocId: commentCollectionDocId
                                                       , data: CommentFields(
                                                         comment: CommentString(stringValue: replyContent),
@@ -165,9 +184,9 @@ struct CommunityCommentView: View {
                                                       )
                             )
                             replyContent = ""
-                            commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue)
                             }
                             
                             let sender = PushNotificationSender(serverKeyString: "")
@@ -191,10 +210,10 @@ struct CommunityCommentView: View {
                     else if editComment {
                         Button {
                             editComment = false
-                            commentVm.updateComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, docID: editDocID, updateComment: replyContent, data: editData)
+                            commentVm.updateComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, docID: editDocID, updateComment: replyContent, data: editData)
                             replyContent = ""
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue)
                             }
                         } label: {
                             Text("등록")
@@ -207,10 +226,10 @@ struct CommunityCommentView: View {
                     else if editRecomment{
                         Button {
                             editRecomment = false
-                            commentVm.updateRecomment(collectionName: "Community", collectionDocId: community.fields.id.stringValue, commentCollectionName: "Comment", commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: replyContent, data: editReData)
+                            commentVm.updateRecomment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, commentCollectionName: infolistCommunityString(), commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: replyContent, data: editReData)
                             replyContent = ""
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue)
                             }
                         } label: {
                             Text("등록")
@@ -226,7 +245,7 @@ struct CommunityCommentView: View {
                             self.scrollToBottom.toggle()
                             replyComment = false
                             commentVm.insertComment(
-                                collectionName: "Community",
+                                collectionName: infolistCommunityString(),
                                 collectionDocId: community.fields.id.stringValue,
                                 data: CommentFields(comment: CommentString(stringValue: replyContent),
                                                     profileImage: CommentString(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""),
@@ -235,7 +254,7 @@ struct CommunityCommentView: View {
                                                     id: CommentString(stringValue: UUID().uuidString)))
                             
                             replyContent = ""
-                            commentVm.fetchComment(collectionName: "Community", collectionDocId: community.fields.id.stringValue)
+                            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue)
                             
                             if let communityData = self.communityData {
                                 

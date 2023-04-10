@@ -180,7 +180,7 @@ struct MagazineContentAddView: View {
                         }
                         .padding(.horizontal)
                         .sheet(isPresented: $showModal) {
-                            ItemListView(userVM: userVM, selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm)
+                            ItemListView(userVM: userVM, selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, showModal: $showModal)
                                 .presentationDetents([.medium, .large])
                         }
                         
@@ -210,9 +210,9 @@ struct MagazineContentAddView: View {
                     
                     // MARK: 게시물 내용 작성 란
                     TextEditor(text: $inputContent)
-                        .frame(height: 400)
+                        .frame(height: Screen.maxHeight * 0.4)
                         .lineSpacing(4.0)
-                        .padding(.horizontal)
+                        .padding(.horizontal, 12)
                         .overlay(
                             // Placeholder를 Text로 구현하고, text가 비어있을 때만 표시되도록 조건문 추가
                             Group {
@@ -228,8 +228,13 @@ struct MagazineContentAddView: View {
                         .font(.body)
                         .bold()
                         .focused($focus, equals: .write )
+                        .onTapGesture {
+                                   // TextEditor를 탭하면 키보드를 닫습니다.
+                                   UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+                               }
+                        .padding(.bottom, 20)
                     
-                    Spacer()
+//                    Spacer()
                     
                     //MARK: 다음버튼
                     if selectedImages.count == 0 || inputTitle.count == 0 || inputContent.count == 0 {

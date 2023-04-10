@@ -274,19 +274,22 @@ struct CommentView: View {
         }
         .onAppear {
             commentVm.fetchComment(collectionName: "Community", collectionDocId: collectionDocId)
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 commentCount = commentVm.sortedRecentComment.count
                 makeEachBool(count: commentVm.sortedRecentComment.count)
             }
-            
         }
         .onChange(of: isCommentDelete) { newValue in
-            commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+            if commentVm.sortedRecentComment.count == 1 {
+                commentVm.sortedRecentComment.removeFirst()
+                commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
+            }else {
+                commentVm.deleteComment(collectionName: "Community", collectionDocId: collectionDocId, docID: deleteDocId)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                }
             }
+            
         }
         .onChange(of: commentVm.sortedRecentComment) { newValue in
             commentCount = newValue.count

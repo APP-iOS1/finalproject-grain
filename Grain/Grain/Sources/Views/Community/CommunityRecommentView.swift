@@ -113,7 +113,20 @@ struct CommunityRecommentView: View {
                                         }
                                     }
                                 }
-
+                                .onChange(of: commentVm.isDeleteReComment) { newValue in
+                                    if commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values.count == 1 {
+                                        var arr = commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }
+                                        arr.removeValue(forKey: commentCollectionDocId )
+                                        commentVm.sortedRecentRecommentArray = arr
+                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                    } else {
+                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                        
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                        }
+                                    }
+                                }
                             }
                             .offset(x : -7)
                         }
@@ -168,13 +181,18 @@ struct CommunityRecommentView: View {
         }
         .padding(.top, 3)
         .padding(.leading, -10)
-        .onChange(of: commentVm.isDeleteReComment) { newValue in
-            commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
-            }
-        }
+//        .onChange(of: commentVm.isDeleteReComment) { newValue in
+//            if commentVm.sortedRecentRecomment.count == 1 {
+//                commentVm.sortedRecentRecomment.removeFirst()
+//                commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+//            }else {
+//                commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+//
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+//                }
+//            }
+//        }
     }
 }
 

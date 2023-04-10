@@ -167,9 +167,15 @@ struct MagazineCommentView: View {
                                                             Alert(title: Text("댓글을 삭제하시겠어요?"),
                                                                   primaryButton:  .cancel(Text("취소")),
                                                                   secondaryButton:.destructive(Text("삭제"),action: {
-                                                                commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
-                                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                                                
+                                                                if commentVm.sortedRecentComment.count == 1 {
+                                                                    commentVm.sortedRecentComment.removeFirst()
+                                                                    commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
+                                                                } else {
+                                                                    commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
+                                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                                        commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                                                    }
                                                                 }
                                                             }))
                                                         }

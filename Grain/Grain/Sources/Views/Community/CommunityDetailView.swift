@@ -96,6 +96,9 @@ struct CommunityDetailView: View {
                                         var postCommunitArr : [String]  = userVM.postedCommunityID
                                         postCommunitArr.removeAll { $0 == communityData.fields.id.stringValue }
                                         userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunitArr, docID: Auth.auth().currentUser?.uid ?? "")
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            communityVM.fetchCommunity()
+                                                    }
                                         presentationMode.wrappedValue.dismiss()
                                     }
                                 }))
@@ -110,6 +113,7 @@ struct CommunityDetailView: View {
                                         self.replyComment = false
                                         self.editComment = false
                                         self.editRecomment = false
+                                        
                                     }))
                                 }
                              
@@ -294,6 +298,7 @@ struct CommunityDetailView: View {
                         }
                         Button {
                             self.isDeleteAlertShown.toggle()
+                            
                         } label: {
                             Text("삭제")
                         }

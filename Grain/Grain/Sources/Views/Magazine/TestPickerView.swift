@@ -14,33 +14,47 @@ struct ItemListView: View {
     @Binding var selectedCamera: String
     @Binding var selectedLense: String
     @Binding var selectedFilm: String
+    @Binding var showModal: Bool
     
     var body: some View {
-        VStack{
-            List {
-                Section("이 필름에 사용된 카메라 바디를 선택해 주세요") {
-                    Text("\(userVM.myCamera[0])")
-                    ForEach(1..<userVM.myCamera.count) { i in
-                        ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "카메라", text: userVM.myCamera[i])
+        NavigationView {
+            VStack{
+                List {
+                    Section("이 필름에 사용된 카메라 바디를 선택해 주세요") {
+                        Text("\(userVM.myCamera[0])")
+                        ForEach(1..<userVM.myCamera.count) { i in
+                            ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "카메라", text: userVM.myCamera[i])
+                        }
                     }
-                }
+                    
+                    Section("이 필름에 사용된 렌즈를 선택해 주세요") {
+                        Text("\(userVM.myLens[0])")
+                        ForEach(1..<userVM.myLens.count) { i in
+                            ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "렌즈", text: userVM.myLens[i])
+                        }
+                        ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "렌즈", text: "선택 안함")
+                    }
+                    Section("이 필름에 사용된 필름을 선택해 주세요") {
+                        Text("\(userVM.myFilm[0])")
+                        ForEach(1..<userVM.myFilm.count) { i in
+                            ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "필름", text: userVM.myFilm[i])
+                        }
+                        ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "필름", text: "없음")
+                    }
+                }.listStyle(.insetGrouped)
                 
-                Section("이 필름에 사용된 렌즈를 선택해 주세요") {
-                    Text("\(userVM.myLens[0])")
-                    ForEach(1..<userVM.myLens.count) { i in
-                        ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "렌즈", text: userVM.myLens[i])
-                    }
-                    ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "렌즈", text: "선택 안함")
+            } .toolbar {
+                ToolbarItem {
+                    Button {
+                        showModal.toggle()
+                    } label: {
+                        Text("완료")
+                            .foregroundColor(.black)
+                            .font(.body)
+//                            .bold()
+                    }.padding(.horizontal, 8)
                 }
-                Section("이 필름에 사용된 필름을 선택해 주세요") {
-                    Text("\(userVM.myFilm[0])")
-                    ForEach(1..<userVM.myFilm.count) { i in
-                        ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "필름", text: userVM.myFilm[i])
-                    }
-                    ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "필름", text: "없음")
-                }
-            }.listStyle(.insetGrouped)
-            
+            }
         }
     }
 }

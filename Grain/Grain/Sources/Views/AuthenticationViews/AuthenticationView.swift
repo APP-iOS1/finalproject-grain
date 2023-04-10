@@ -247,8 +247,9 @@ struct AuthenticationView: View {
                         Text("환영해요!")
                             .font(.title)
                             .fontWeight(.semibold)
-
-                        Text("로그인해서 Grain과의 여정을 시작하세요.")
+                            .padding(.bottom, -5)
+                        Text("여러분의 특별한 순간을 함께 공유해보세요!")
+                            .fontWeight(.semibold)
                     }
                     .padding(.bottom)
                     // MARK: - 애플 로그인

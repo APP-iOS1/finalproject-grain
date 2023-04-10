@@ -67,15 +67,7 @@ struct CommentView: View {
         }
         return communityString
     }
-    func infolistCommunityString() -> String{
-        var communityString : String = ""
-        if let infolist = Bundle.main.infoDictionary {
-            if let str = infolist["UuidCommmunity"] as? String {
-                communityString = str
-            }
-        }
-        return communityString
-    }
+    
     
     
     var body: some View {

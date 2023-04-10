@@ -285,7 +285,12 @@ struct CommunityDetailView: View {
                                     userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
                                 }
                             } label: {
-                                Text("저장")
+                                HStack{
+                                    Text("저장")
+                                    Spacer()
+                                    Image(systemName: "bookmark.fill")
+                                }
+                                
                             }
                         } else {
                             Button {
@@ -297,19 +302,27 @@ struct CommunityDetailView: View {
                                     userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
                                 }
                             } label: {
-                                Text("저장취소")
+                                HStack{
+                                    Text("저장취소")
+                                    Spacer()
+                                    Image(systemName: "bookmark.slash.fill" )
+                                }
                             }
                         }
                         NavigationLink {
                             CommunityEditView(userVM: userVM, community: $communityData, communityVM: communityVM, editFetch: $editFetch)
                         }label: {
                             Text("수정")
+                            Spacer()
+                            Image(systemName: "square.and.pencil")
                         }
                         Button {
                             self.isDeleteAlertShown.toggle()
                             
                         } label: {
                             Text("삭제")
+                            Spacer()
+                            Image(systemName: "trash")
                         }
                         
                         
@@ -337,7 +350,7 @@ struct CommunityDetailView: View {
                         selectedIndex = 0
                     }
                     .accentColor(.black)
-                    .padding(.trailing, Screen.maxWidth * 0.04)
+//                    .padding(.trailing, Screen.maxWidth * 0.04)
                 } else {
                     Menu {
                         if !userVM.bookmarkedCommunityID.contains(community.fields.id.stringValue) {
@@ -349,7 +362,11 @@ struct CommunityDetailView: View {
                                     userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
                                 }
                             } label: {
-                                Text("저장")
+                                HStack{
+                                    Text("저장")
+                                    Spacer()
+                                    Image(systemName: "bookmark.fill")
+                                }
                             }
                         } else {
                             Button {
@@ -361,14 +378,18 @@ struct CommunityDetailView: View {
                                     userVM.updateCurrentUserArray(type: "bookmarkedCommunityID", arr: arr, docID: docID)
                                 }
                             } label: {
-                                Text("저장취소")
+                                HStack{
+                                    Text("저장취소")
+                                    Spacer()
+                                    Image(systemName: "bookmark.slash.fill" )
+                                }
                             }
                         }
                     } label: {
                         Label("더보기", systemImage: "ellipsis")
                     }
                     .accentColor(.black)
-                    .padding(.trailing, Screen.maxWidth * 0.04)
+//                    .padding(.trailing, Screen.maxWidth * 0.04)
                 }
             }
         }

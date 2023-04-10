@@ -188,9 +188,11 @@ struct AddMarkerMapView: View {
 
                     Button {
                         // 프로그레스뷰 ON
+                        isClickedSubmitButton = true
+                        
                         isUpdateMagazineSuccess = true
                         // 완료 버튼 1번 누르면 더이상 누르지 못하게 막기
-                        isClickedSubmitButton = true
+                        
                         
                         // data.field에 데이터 저장
                         var docId = UUID().uuidString

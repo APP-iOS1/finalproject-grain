@@ -30,7 +30,7 @@ struct SplashScreen: View {
                .bold()
                .kerning(7)
            
-            Text("나의 필름 저장소")
+            Text("나만의 필름 저장소")
                 .foregroundColor(.white)
                 .font(.system(size: 14))
                 .padding(.bottom, 120)

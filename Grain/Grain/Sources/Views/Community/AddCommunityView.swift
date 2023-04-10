@@ -253,9 +253,12 @@ struct AddCommunityView: View {
                     } else {
                         Button {
                             // 프로그레스뷰 ON
+                            
+                            isClickedSubmitButton = true
+                            
                             isUpdateCommunitySuccess = true
                             // 완료 버튼 1번 누르면 더이상 누르지 못하게 막기
-                            isClickedSubmitButton = true
+                            
                             
                             let docId = UUID().uuidString
                             let data = CommunityFields(title: CommunityCategory(stringValue: inputTitle), category: CommunityCategory(stringValue: selectedTab.rawValue), content: CommunityCategory(stringValue: inputContent), profileImage: CommunityCategory(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""), introduce: CommunityCategory(stringValue: userVM.currentUsers?.introduce.stringValue ?? ""), state: CommunityCategory(stringValue: ""), nickName: CommunityCategory(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "")])), userID: CommunityCategory(stringValue: userVM.currentUsers?.id.stringValue ?? ""), id: CommunityCategory(stringValue: docId))
@@ -272,6 +275,7 @@ struct AddCommunityView: View {
                             var postCommunityArr : [String]  = userVM.postedCommunityID
                             postCommunityArr.append(docId)
                             userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunityArr, docID: Auth.auth().currentUser?.uid ?? "")
+                            
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                 communityVM.fetchCommunity()
                             }

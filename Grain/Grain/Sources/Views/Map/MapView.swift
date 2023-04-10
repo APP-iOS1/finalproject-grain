@@ -225,7 +225,6 @@ struct MapView: View {
             })
             .sheet(isPresented: $isShowingWebView) {    // webkit 모달뷰
                 WebkitView(bindingWebURL: $bindingWebURL).presentationDetents( [.medium, .large])
-                    .background(Color.black.opacity(0.5))   // <- 적용이 안된듯
             }
             .fullScreenCover(isPresented: $reportButton) {
                 ReportMapView(locationManager: locationManager, updateNumber: $updateNumber, userLatitude: userLatitude , userLongitude: userLongitude) // 제보하러 가기 모달 뷰

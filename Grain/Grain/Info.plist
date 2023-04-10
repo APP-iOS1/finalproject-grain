@@ -2,8 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIUserInterfaceStyle</key>
-	<string>Light</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	</array>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -20,23 +22,27 @@
 			<key>CFBundleURLSchemes</key>
 			<array/>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>GrainApp</string>
+			</array>
+		</dict>
 	</array>
+	<key>DefaultProfileImage</key>
+	<string>$(DefaultProfileImage)</string>
+	<key>DetailImageError</key>
+	<string>$(DetailImageError)</string>
+	<key>FailProfileImage</key>
+	<string>$(FailProfileImage)</string>
 	<key>FireStorage</key>
 	<string>$(FireStorageBaseURL)</string>
 	<key>FireStore</key>
 	<string>$(FireStoreBaseURL)</string>
-	<key>serverkey</key>
-	<string>$(SERVERKEY)</string>
-	<key>DefaultProfileImage</key>
-	<string>$(DefaultProfileImage)</string>
-	<key>FailProfileImage</key>
-	<string>$(FailProfileImage)</string>
-	<key>DetailImageError</key>
-	<string>$(DetailImageError)</string>
-	<key>ThumbnailImageError</key>
-	<string>$(ThumbnailImageError)</string>
-	<key>PreparingImage</key>
-	<string>$(PreparingImage)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>kakaokompassauth</string>
@@ -56,6 +62,10 @@
 	<string>$(NAVER_CLIENT_SECRET_CONFIG)</string>
 	<key>PROTOCOL</key>
 	<string>${PROTOCOL}</string>
+	<key>PreparingImage</key>
+	<string>$(PreparingImage)</string>
+	<key>ThumbnailImageError</key>
+	<string>$(ThumbnailImageError)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Sacramento-Regular.otf</string>
@@ -73,11 +83,7 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>BGTaskSchedulerPermittedIdentifiers</key>
-	<array>
-		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	</array>
+	<key>serverkey</key>
+	<string>$(SERVERKEY)</string>
 </dict>
 </plist>

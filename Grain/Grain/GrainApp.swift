@@ -17,9 +17,18 @@ import FirebaseAuth
 struct GrainApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @EnvironmentObject var authenticationStore: AuthenticationStore
+    @StateObject var appData: AppDataModel = AppDataModel()
     var body: some Scene {
         WindowGroup {
             ContentView().environmentObject(AuthenticationStore())
+                .environmentObject(appData)
+                .onOpenURL { url in
+                    if appData.checkkDeepLink(url: url){
+                        print("From Deep Link")
+                    } else {
+                        print("Fall Back Deep Link")
+                    }
+                }
             
         }
     }
@@ -66,6 +75,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         application.registerForRemoteNotifications()
         
+        
         return true
     }
     
@@ -80,6 +90,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         completionHandler(UIBackgroundFetchResult.newData)
         
+        let currentBadgeCount = UIApplication.shared.applicationIconBadgeNumber
+        UIApplication.shared.applicationIconBadgeNumber = currentBadgeCount + 1
+        
         Messaging.messaging().appDidReceiveMessage(userInfo)
         
         if let aps = userInfo["aps"] as? [String: Any], let alert = aps["alert"] as? [String: Any], let title = alert["title"] as? String, let body = alert["body"] as? String {
@@ -88,16 +101,57 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             content.body = body
             content.sound = .default
             content.userInfo = userInfo
+            print("content: \(content)")
             let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
             UNUserNotificationCenter.current().add(request) { error in
                 if let error = error {
                     print("Error displaying remote notification: \(error.localizedDescription)")
+                } else {
+                    print("잘 등러옴")
                 }
             }
         }
+        
+        if let data = userInfo["data"] as? [String: Any], let view = data["view"] as? String {
+            var documentData: MagazineDocument!
+            print("data: \(data)")
+            do{
+                if let detailData = data["detailData"] as? String, let jsonData = detailData.data(using: .utf8) {
+                    documentData = try JSONDecoder().decode(MagazineDocument.self, from: jsonData)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+            if view == "like" {
+                let magazineBestView = MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM, scrollToTop: .constant(false))
+                let destinationView = MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: documentData , ObservingChangeValueLikeNum: magazineBestView.$ObservingChangeValueLikeNum)
+                let navigationView = NavigationView {
+                    NavigationLink(destination: destinationView) {
+                        magazineBestView
+                    }
+                }
+                guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                      let window = windowScene.windows.first else {
+                    return
+                }
+                window.rootViewController = UIHostingController(rootView: navigationView)
+                print("화면 이동")
+                
+            }
+        }
+        
+        completionHandler(UIBackgroundFetchResult.newData)
         completionHandler(.newData)
     }
     
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        UIApplication.shared.applicationIconBadgeNumber = 0
+    }
+    
+    func sceneWillEnterForeground(_ scene: UIScene) {
+            UIApplication.shared.applicationIconBadgeNumber = 0
+    }
 }
 
 extension AppDelegate: MessagingDelegate {
@@ -216,19 +270,72 @@ class PushNotificationSender {
             print("Error creating JSON payload: \(error.localizedDescription)")
         }
     }
+    
+//    func sendPushNotificationLike(to deviceToken: String, title: String, message: String, image: String, view: String, data: MagazineDocument) {
+//
+//        if let infolist = Bundle.main.infoDictionary {
+//            if let serverkeystr = infolist["serverkey"] as? String {
+//                serverKeyString = serverkeystr
+//            }
+//        }
+//        
+//        let url = URL(string: "https://fcm.googleapis.com/fcm/send")!
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.setValue("Bearer \(serverKeyString)", forHTTPHeaderField: "Authorization")
+//        
+//        let body: [String: Any] = [
+//            "notification": [
+//                "title": title,
+//                "body": message,
+//                "image": image,
+//                "sound": "default",
+//                "badge": 1
+//            ],
+//            "data": [
+//                "view": view,
+//                "detailData": data
+//            ],
+//            "content_available": true,
+//            "mutable_content": true,
+//            "priority": "high",
+//            "to": deviceToken
+//        ]
+//
+//        do {
+//            let data = try JSONSerialization.data(withJSONObject: body, options: [])
+//            request.httpBody = data
+//            let session = URLSession.shared
+//            let task = session.dataTask(with: request) { (data, response, error) in
+//                if let error = error {
+//                    print("Error sending push notification: \(error.localizedDescription)")
+//                }
+//                if let data = data, let responseString = String(data: data, encoding: .utf8) {
+//                    print("Push notification sent successfully: \(responseString)")
+//                }
+//            }
+//            task.resume()
+//        } catch {
+//            print("Error creating JSON payload: \(error.localizedDescription)")
+//        }
+//    }
 }
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        if let windowScene = scene as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
-            let rootView = ContentView() // 화면 전환을 원하는 뷰
-            let navigationController = UINavigationController(rootViewController: UIHostingController(rootView: rootView))
-            window.rootViewController = navigationController
-            self.window = window
-            window.makeKeyAndVisible()
-        }
+//    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+//        if let windowScene = scene as? UIWindowScene {
+//            let window = UIWindow(windowScene: windowScene)
+//            let rootView = ContentView() // 화면 전환을 원하는 뷰
+//            let navigationController = UINavigationController(rootViewController: UIHostingController(rootView: rootView))
+//            window.rootViewController = navigationController
+//            self.window = window
+//            window.makeKeyAndVisible()
+//        }
+//    }
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
 }

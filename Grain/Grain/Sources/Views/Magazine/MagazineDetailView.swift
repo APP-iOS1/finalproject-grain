@@ -378,9 +378,11 @@ struct MagazineDetailView: View {
                             let sender = PushNotificationSender(serverKeyString: "")
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
                             {
-                                let sender = PushNotificationSender(serverKeyString: "")
-                                for i in user.fields.fcmToken.arrayValue.values {
-                                    sender.sendPushNotification(to: i.stringValue, title: "좋아요", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 필름을 좋아합니다 ", image: magazineData.fields.image.arrayValue.values[0].stringValue)
+                                if user.fields.id.stringValue != userVM.currentUsers?.id.stringValue {
+                                    let sender = PushNotificationSender(serverKeyString: "")
+                                    for i in user.fields.fcmToken.arrayValue.values {
+                                        sender.sendPushNotification(to: i.stringValue, title: "좋아요", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 필름을 좋아합니다 ", image: magazineData.fields.image.arrayValue.values[0].stringValue)
+                                    }
                                 }
                             }
                         }

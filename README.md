@@ -81,7 +81,8 @@ Grain.xcworkspace 파일을 열어서 실행해주시면 됩니다 😁
 - 저장한 메거진글, 매칭글, 거래글, 클래스 를 확인 할 수 있습니다.
 - 설정에 들어가서 로그아웃, 본인의 카메라 정보를 등록과 편집 할 수 있습니다.
 ## 사용자 시나리오
-<img src="https://user-images.githubusercontent.com/114155215/213328229-b23f15d1-f79a-4e4d-b786-d3e1853a7d32.png" width="60%">
+<img width="1838" alt="UserScenarioImage" src="https://user-images.githubusercontent.com/73868968/230912884-0e56764e-0cf6-47a3-8eff-db4f3afa9d48.png">
+
 
 ## 참여자
 <div align="center">

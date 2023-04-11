@@ -52,15 +52,15 @@ struct CommunityView: View {
                 } // hstack
                 switch(communitySelectedIndex) {
                 case 0:
-                    AllTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, scrollToTop: $scrollToTop)
+                    AllTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, scrollToTop: $scrollToTop)
                 case 1:
-                    MatchingTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, scrollToTop: $scrollToTop)
+                    MatchingTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, scrollToTop: $scrollToTop)
                 case 2:
-                    ClassTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, scrollToTop: $scrollToTop)
+                    ClassTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM,  scrollToTop: $scrollToTop)
                 case 3:
-                    MarketTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, scrollToTop: $scrollToTop)
+                    MarketTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, scrollToTop: $scrollToTop)
                 default:
-                    InfoTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading, scrollToTop: $scrollToTop)
+                    InfoTabView(communityVM : communityVM, userVM: userVM, magazineVM: magazineVM, scrollToTop: $scrollToTop)
                 }
             }
             .onAppear{

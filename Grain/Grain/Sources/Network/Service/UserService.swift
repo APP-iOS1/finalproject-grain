@@ -173,4 +173,18 @@ enum UserService {
         }
     }
     
+    static func declarationService(id: String, category: String) -> AnyPublisher<UserDocument, Error> {
+
+            do {
+                let request = try UserRouter.postDeclaration(id: id, category: category).asURLRequest()
+                return URLSession
+                    .shared
+                    .dataTaskPublisher(for: request)
+                    .map{ $0.data }
+                    .decode(type: UserDocument.self, decoder: JSONDecoder())
+                    .eraseToAnyPublisher()
+            } catch {
+                return Fail(error: HTTPError.requestError).eraseToAnyPublisher()
+            }
+        }
 }

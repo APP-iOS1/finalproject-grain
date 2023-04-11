@@ -53,7 +53,7 @@ final class UserViewModel: ObservableObject {
     var getMagazineCommentsSuccess = PassthroughSubject<[[String]], Never>()
     var getMagazineReCommentsSuccess = PassthroughSubject<[[String]], Never>()
     var deleteDataCollectionSuccess = PassthroughSubject<(), Never>()
-
+    var declarationSuccess = PassthroughSubject<(), Never>()
     
     
     func fetchUser() {
@@ -385,4 +385,12 @@ final class UserViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
+    func declaration(id: String, category: String) {
+            UserService.declarationService(id: id, category: category)
+                .receive(on: DispatchQueue.main)
+                .sink { (completion: Subscribers.Completion<Error>) in
+                } receiveValue: { (data: UserDocument) in
+                    self.declarationSuccess.send()
+                }.store(in: &subscription)
+        }
 }

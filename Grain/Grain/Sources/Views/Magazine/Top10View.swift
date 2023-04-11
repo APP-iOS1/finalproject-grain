@@ -23,7 +23,6 @@ struct Top10View: View {
     }
     
     var body: some View {
-        VStack{
             Rectangle()
                 .foregroundColor(.black)
                 .frame(width: Screen.maxWidth * 0.9, height: Screen.maxHeight * 0.465)
@@ -32,19 +31,17 @@ struct Top10View: View {
                         let url = URL(string: data.fields.image.arrayValue.values[0].stringValue)
                         //MARK: KingFisher를 사용하여 이미지 캐싱 처리
                         //url이 없을때 보여줄 이미지(placeholder) 정해서 지금 스트링값에 주소 넣어주면 될것같습니다
-                       Rectangle()
-                            .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.6 )
-                            .overlay{
+                      
                                 KFImage.url(url ?? URL(string: errorImage()))
                                     .resizable()
                                       .scaledToFill()
                                       .frame(width: Screen.maxWidth * 0.9, height: Screen.maxWidth * 0.6 )
-                                      .clipShape(Rectangle())
+                                      .clipped()
                                       .overlay{
                                           LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0), Color.black.opacity(0), Color.black.opacity(0),  Color.black.opacity(0.3), Color.black.opacity(1)]), startPoint: .top, endPoint: .bottom)
                                       }
                                  
-                            }
+                           
                         Text(data.fields.title.stringValue)
                             .fontWeight(.bold)
                             .foregroundColor(Color.white)
@@ -98,8 +95,7 @@ struct Top10View: View {
                     },
                     alignment: .top
                 )
-        }
-        .padding(.bottom)
+       
     }
 }
 

@@ -218,6 +218,12 @@ struct CommunityDetailView: View {
                     .id("SCROLL_TO_BOTTOM")
               
                 }
+                .refreshable {
+                    do {
+                        try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+                      } catch {}
+                    magazineVM.fetchMagazine()
+                }
                 .onChange(of: scrollToBottom, perform: { newValue in
                     withAnimation(.default) {
                         proxyReader.scrollTo("SCROLL_TO_BOTTOM", anchor: .bottom)
@@ -379,6 +385,17 @@ struct CommunityDetailView: View {
                                 }
                             }
                         }
+                        if community.fields.userID.stringValue != Auth.auth().currentUser?.uid{
+                            Button {
+                                userVM.declaration(id: community.fields.id.stringValue
+                                                   , category: "Community")
+                            } label: {
+                                Text("신고하기")
+                                Spacer()
+                                Image(systemName: "exclamationmark.bubble")
+                            }
+                        }
+
                     } label: {
                         Label("더보기", systemImage: "ellipsis")
                     }

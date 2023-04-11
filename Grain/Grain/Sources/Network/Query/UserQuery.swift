@@ -274,4 +274,23 @@ enum UserQuery {
         return query
     }
     
+    static func insertDeclaration(id: String, category: String)-> Data? {
+        print(id)
+        print(category)
+            let query = """
+                        {
+                          "fields": {
+                               "ID": {
+                                    "stringValue": "\(id)"
+
+                                },
+                               "category": {
+                                    "stringValue": "\(category)"
+
+                                }
+                    }
+                }
+                """.data(using: .utf8)
+            return query
+        }
 }

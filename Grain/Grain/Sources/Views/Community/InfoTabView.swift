@@ -15,7 +15,6 @@ struct InfoTabView: View {
     @State private var scrollViewOffset: CGFloat = 0
     @State private var startOffset: CGFloat = 0
     
-    @Binding var isLoading: Bool
     @Binding var scrollToTop: Bool
     
     

@@ -14,9 +14,7 @@ struct BookmarkedCommunityView: View {
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
-    
-    @Binding var isLoading: Bool
-    
+        
 //    @Environment(\.presentationMode) var presentationMode
     
     

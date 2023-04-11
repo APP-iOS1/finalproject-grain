@@ -12,9 +12,7 @@ import Kingfisher
 struct CommunityRowView: View {
     @StateObject var commentVm = CommentViewModel() //StateObject 이걸로 처리해도 되나??
     @ObservedObject var communityVM: CommunityViewModel
-    
-    @State var opacity: Double = 0.8
-    
+        
     var tagColor: String {
         switch community.fields.state.stringValue {
         case "판매중":
@@ -63,11 +61,10 @@ struct CommunityRowView: View {
             HStack{
                 KFImage(URL(string: community.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage()))
                     .resizable()
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: Screen.maxWidth*0.27, height: Screen.maxWidth*0.27)
                     .cornerRadius(7)
-                    .aspectRatio(contentMode: .fill)
                     .clipped()
-                    .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                     .padding(.horizontal, 13)
                 
                 VStack {
@@ -83,7 +80,6 @@ struct CommunityRowView: View {
                                 .foregroundColor(.white)
                                 .bold()
                                 .font(.caption)
-                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             
                             Text("\(community.fields.state.stringValue)")
                                 .padding(.vertical, 5)
@@ -93,7 +89,6 @@ struct CommunityRowView: View {
                                 .foregroundColor(Color(hex: tagNameColor))
                                 .bold()
                                 .font(.caption)
-                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                         } // hstack
                         .padding(.top, 0)
                 
@@ -103,21 +98,17 @@ struct CommunityRowView: View {
                             .foregroundColor(.boxGray)
                             .multilineTextAlignment(.leading)
                             .padding(.top, -2)
-                            .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             .lineLimit(2)
                             .frame(height: 45)
                
                         HStack {
                             Text(community.createdDate?.renderTime() ?? "")
-                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             Spacer()
                             Image(systemName: "text.bubble")
-                                .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                             
                             if true{
                                 if let recommentCount = communityVM.fetchCommunityCellCommentCount[community.fields.id.stringValue]{
                                     Text("\(recommentCount)")
-                                        .setSkeletonView(opacity: opacity, shouldShow: communityVM.isLoading)
                                         .padding(.leading, -5)
                                 }else{
                                     Text("0")
@@ -139,15 +130,6 @@ struct CommunityRowView: View {
             
         }
         .padding(.top, 5)
-        .onAppear(perform: {
-            if communityVM.isLoading == true {
-                withAnimation(.linear(duration: 0.5).repeatForever(autoreverses: true)) {
-                    self.opacity = opacity == 0.4 ? 0.8 : 0.4
-                }
-            }
-        })
-        .onAppear{
-        }
     }
 }
 

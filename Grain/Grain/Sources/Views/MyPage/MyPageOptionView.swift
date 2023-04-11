@@ -125,7 +125,7 @@ struct AccountSection: View {
             .padding(.horizontal)
 
             NavigationLink {
-                MyPgeMyCommunity(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, presented: $presented, isLoading: $communityVM.isLoading)
+                MyPgeMyCommunity(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, presented: $presented)
             } label: {
                 HStack {
                     Image(systemName: "text.bubble")
@@ -170,7 +170,7 @@ struct AccountSection: View {
             .padding(.horizontal)
             
             NavigationLink {
-                BookmarkedCommunityView(commentVm : commentVm, communityVM : communityVM, userVM : userVM, magazineVM: magazineVM, isLoading: $communityVM.isLoading)
+                BookmarkedCommunityView(commentVm : commentVm, communityVM : communityVM, userVM : userVM, magazineVM: magazineVM)
             } label: {
                 HStack {
                     Image(systemName: "bookmark")

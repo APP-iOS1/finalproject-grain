@@ -14,7 +14,6 @@ struct MyPgeMyCommunity: View {
     @ObservedObject var magazineVM : MagazineViewModel
     
     @Binding var presented: Bool
-    @Binding var isLoading: Bool
     
     @State private var communityDoument: [CommunityDocument] = []
     

@@ -52,7 +52,6 @@ struct ContentView: View {
     @ObservedObject var networkManager = NetworkManager()
     init(){
         UITabBar.appearance().isHidden = true
-        
     }
     var body: some View {
         Group{
@@ -78,6 +77,9 @@ struct ContentView: View {
                                     MyPageView(commentVm: commentVm, communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.userPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userVM.postedMagazineID), presented: $presented, scrollToTop: $myPageScrollToTop)
                                         .tag(4)
                                     
+                                }
+                                .onAppear{
+                                    UIApplication.shared.applicationIconBadgeNumber = 0
                                 }
                                 .toolbar {
                                     if (tabViewSelectedIndex == 0) || (tabViewSelectedIndex == 1) {
@@ -207,7 +209,7 @@ struct ContentView: View {
                     if authenticationState == .authenticated{
                         authenticationStore.addToken()
                     }
-                
+
                 }
                 .splashView {
                     ZStack{

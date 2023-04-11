@@ -318,6 +318,12 @@ struct MagazineDetailView: View {
             }
             
         }//스크롤뷰
+        .refreshable {
+            do {
+                try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
+              } catch {}
+            magazineVM.fetchMagazine()
+        }
         .alert(isPresented: $isDeleteAlertShown) {
             Alert(title: Text("게시물을 삭제하시겠어요?"),
                   message: Text("게시물을 삭제하면 영구히 삭제되고 복원할 수 없습니다."),
@@ -497,7 +503,16 @@ struct MagazineDetailView: View {
                         }
                         
                     }
-                    
+                    if data.fields.userID.stringValue != Auth.auth().currentUser?.uid{
+                        Button {
+                            userVM.declaration(id: data.fields.id.stringValue
+                                               , category: "Magazine")
+                        } label: {
+                            Text("신고하기")
+                            Spacer()
+                            Image(systemName: "exclamationmark.bubble")
+                        }
+                    }
                 } label: {
                     Label("더보기", systemImage: "ellipsis")
                     

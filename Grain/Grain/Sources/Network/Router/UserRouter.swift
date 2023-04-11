@@ -17,6 +17,7 @@ enum UserRouter {
     case patchProfile(profileImage: String, nickName: String, introduce: String, docID: String)
     case delete(docID: String)
     case posetDeleteUser(userDocID: String)
+    case postDeclaration(id: String, category: String)
     
     private var baseURL: URL {
         var baseUrlString : String = "https://"
@@ -55,6 +56,7 @@ enum UserRouter {
         case patchProfile
         case delete
         case posetDeleteUser
+        case postDeclaration
         
         var value: String {
             switch self {
@@ -65,6 +67,7 @@ enum UserRouter {
             case .patchProfile: return "PATCH"
             case .delete: return "DELETE"
             case .posetDeleteUser: return "POST"
+            case .postDeclaration: return "POST"
             }
         }
     }
@@ -81,6 +84,8 @@ enum UserRouter {
             return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .posetDeleteUser(userDocID):
             return "/" + "\(queryItemDeleteString)"
+        case let .postDeclaration(_, _):
+            return "/Declaration"
         default:
             return "/" + "\(queryItemString)"
         }
@@ -91,7 +96,6 @@ enum UserRouter {
         case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID, postedMagazineID, likedMagazineId, lastSearched, bookmarkedCommunityID, recentSearch, id, following, myLens , profileImage, name, follower, nickName, introduce , fcmToken):
             var params: [URLQueryItem] = [URLQueryItem(name: "documentId", value: id)]
             return params
-            
         case let .patchArr(type, _, _):
             let params: [URLQueryItem] = [URLQueryItem(name: "updateMask.fieldPaths", value: type)]
             return params
@@ -127,6 +131,8 @@ enum UserRouter {
             return .patchArr
         case .posetDeleteUser :
             return .post
+        case .postDeclaration:
+            return .post
         default:
             return .patchString
         }
@@ -144,6 +150,8 @@ enum UserRouter {
             return UserQuery.updateUserProfile(profileImage: profileImage, nickName: nickName, introduce: introduce)
         case let .posetDeleteUser(userDocID) :
             return UserQuery.insertDeleteDataCollection(userDocID: userDocID)
+        case let .postDeclaration(id, category):
+            return UserQuery.insertDeclaration(id: id, category: category)
         default:
             return nil
         }

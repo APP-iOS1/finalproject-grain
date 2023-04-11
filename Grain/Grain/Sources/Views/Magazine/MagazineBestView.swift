@@ -15,7 +15,6 @@ struct MagazineBestView: View {
     @ObservedObject var editorVM : EditorViewModel
     
     @State var ObservingChangeValueLikeNum: String = ""
-    @State private var isMagazineDegtailViewShown: Bool = false
     @State private var isMagazineEditorViewShown: Bool = false
     @State private var selectIndexNum: Int = 0
     @State private var scrollViewOffset: CGFloat = 0
@@ -58,18 +57,18 @@ struct MagazineBestView: View {
                         .padding(.bottom, 2)
                         
                         ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
-                            
-                            LazyVStack{
-                                Top10View(data: data, userVM: userVM)
-                                    .padding(.vertical, 7)
-                                    .padding(.horizontal)
-                                
+                            NavigationLink {
+                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+
+                            } label: {
+                                LazyVStack{
+                                    Top10View(data: data, userVM: userVM)
+                                        .padding(.vertical, 7)
+                                        .padding(.horizontal)
+                                        .padding(.bottom)
+
+                                }
                             }
-                            .onTapGesture {
-                                selectIndexNum = index
-                                isMagazineDegtailViewShown.toggle()
-                            }
-                            
                             
                         }
                     }
@@ -104,14 +103,6 @@ struct MagazineBestView: View {
                         proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)
                     }
                 })
-                .navigationDestination(isPresented: $isMagazineDegtailViewShown){
-                    ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data ) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
-                        if selectIndexNum == index{
-                            
-                            MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
-                        }
-                    }
-                }
                 .navigationDestination(isPresented: $isMagazineEditorViewShown){
                     EditorView(editorVM : editorVM, userVM: userVM, magazineVM: magazineVM)
                 }

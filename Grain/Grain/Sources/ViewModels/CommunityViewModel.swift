@@ -17,7 +17,6 @@ final class CommunityViewModel: ObservableObject {
     
     @Published var communities = [CommunityDocument]()
     @Published var sortedRecentCommunityData = [CommunityDocument]()    // 커뮤니티 게시물 최신순으로
-    @Published var isLoading = false
     
     @Published var closeState = [CommunityDocument]()   // 혹시 모를 모집완료 | 판매완료 모아둘 배열
     
@@ -33,15 +32,11 @@ final class CommunityViewModel: ObservableObject {
     
     //MARK: - 커뮤니티 데이터 가져오기 메소드
     func fetchCommunity() {
-        self.isLoading = true
         CommunityService.getCommunity()
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { [self] (data: CommunityResponse) in
                 self.communities = data.documents
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
-                    self.isLoading = false
-                }
                 // MARK: 커뮤니티 최신순으로 정렬
                 self.sortedRecentCommunityData = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()

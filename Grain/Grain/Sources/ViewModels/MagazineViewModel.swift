@@ -19,8 +19,6 @@ final class MagazineViewModel: ObservableObject {
     @Published var sortedRecentMagazineData = [MagazineDocument]()    // 매거진 게시물 최신순으로
     @Published var sortedTopLikedMagazineData = [MagazineDocument]()    // 매거진 게시물 좋아오 높은순
     
-    @Published var isMagazineLoading = false
-
     @Published var currentTime: Date = Date()
 
     var fetchMagazineSuccess = PassthroughSubject<[MagazineDocument], Never>()
@@ -31,16 +29,13 @@ final class MagazineViewModel: ObservableObject {
     // MARK: 메거진 데이터 가져오기 메소드
     func fetchMagazine() {
         self.currentTime = Date()
-        self.isMagazineLoading = true
         MagazineService.getMagazine()
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
                 
             } receiveValue: { (data: MagazineResponse) in
                 self.magazines = data.documents
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
-                    self.isMagazineLoading = false
-                }
+               
                 // MARK: 매거진 데이터 최신순 정렬 메서드 호출
                 self.sortedRecentMagazineData = data.documents.sorted(by: {
                     return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()

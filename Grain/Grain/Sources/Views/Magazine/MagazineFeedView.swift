@@ -15,7 +15,6 @@ struct MagazineFeedView: View {
     @State var ObservingChangeValueLikeNum : String = ""
     @State private var isMagazineRealtimeViewShown: Bool = false
     @State private var isMagazineSubscribeViewShown: Bool = false
-    @State private var selectIndexNum: Int = 0
     @State private var scrollViewOffset: CGFloat = 0
     @State private var startOffset: CGFloat = 0
     
@@ -44,20 +43,25 @@ struct MagazineFeedView: View {
                         if selectedFilter == 0{
                             ForEach(Array(magazineVM.sortedRecentMagazineData.enumerated()), id: \.1.self){ (index, data) in
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
-                                LazyVStack{
-                                    MagazineViewCell(data: data, userVM: userVM)
-                                }
-                                .onTapGesture {
-                                    selectIndexNum = index
-                                    isMagazineRealtimeViewShown.toggle()
+                                NavigationLink {
+                                    MagazineDetailView(magazineVM: magazineVM, userVM: userVM,  data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+
+                                } label: {
+                                    LazyVStack{
+                                        MagazineViewCell(data: data, userVM: userVM)
+                                    }
                                 }
                             }
                         }else{
                             // MARK: 구독자
                             ForEach(Array(userVM.subscriptionFeed(magazineData: magazineVM.sortedRecentMagazineData).enumerated()), id: \.1.self){ (index, data) in
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
-                                LazyVStack{
-                                    MagazineViewCell(data: data, userVM: userVM)
+                                NavigationLink {
+                                    MagazineDetailView(magazineVM: magazineVM, userVM: userVM,  data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                                } label: {
+                                    LazyVStack{
+                                        MagazineViewCell(data: data, userVM: userVM)
+                                    }
                                 }
                             }
                         }
@@ -98,20 +102,6 @@ struct MagazineFeedView: View {
                     magazineVM.fetchMagazine()
                 }
             }
-            .navigationDestination(isPresented: $isMagazineRealtimeViewShown){
-                ForEach(Array(magazineVM.sortedRecentMagazineData.enumerated()), id: \.1.self){ (index, data) in
-                    if selectIndexNum == index{
-                        MagazineDetailView(magazineVM: magazineVM, userVM: userVM,  data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
-                    }
-                }
-            }
-            .navigationDestination(isPresented: $isMagazineSubscribeViewShown){
-                ForEach(Array(userVM.subscriptionFeed(magazineData: magazineVM.sortedRecentMagazineData).enumerated()), id: \.1.self){ (index, data) in
-                    if selectIndexNum == index{
-                        MagazineDetailView(magazineVM: magazineVM, userVM: userVM,  data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
-                    }
-                }
-            }
             Spacer()
         }
         
@@ -123,3 +113,4 @@ struct MagazineFeedView: View {
 //        MagazineFeedView()
 //    }
 //}
+

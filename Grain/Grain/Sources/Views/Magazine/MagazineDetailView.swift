@@ -386,9 +386,7 @@ struct MagazineDetailView: View {
                     }
                     
                     if let magazineData = self.magazineData {
-                        let sender = PushNotificationSender(serverKeyString: "")
-                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
-                        {
+                       
                             let sender = PushNotificationSender(serverKeyString: "")
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
                             {
@@ -399,7 +397,7 @@ struct MagazineDetailView: View {
                                     }
                                 }
                             }
-                        }
+                        
                     }
                 }
             } else {

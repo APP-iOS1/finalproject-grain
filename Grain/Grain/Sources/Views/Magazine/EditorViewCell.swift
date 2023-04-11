@@ -42,18 +42,18 @@ struct EditorViewCell: View {
                         VStack(alignment: .leading) {
                             Text(data.fields.thumbnailTitle1.stringValue)
                                 .foregroundColor(.white)
-                                .font(.title2)
+                                .font(.title)
                                 .fontWeight(.medium)
                             Text(data.fields.thumbnailTitle2.stringValue)
                                 .foregroundColor(.white)
-                                .font(.title2)
+                                .font(.title)
                                 .fontWeight(.medium)
                             Text(data.fields.thumbnailTitle3.stringValue)
                                 .foregroundColor(.white)
-                                .font(.title2)
+                                .font(.title)
                                 .fontWeight(.medium)
                         }
-                        .padding(.leading, 150)
+                        .padding(.leading, 130)
                         .padding(.top, 210)
 //                        .offset(x: 80 ,y: 60)
                     }

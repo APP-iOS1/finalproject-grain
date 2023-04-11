@@ -32,7 +32,7 @@ struct ItemListView: View {
                         ForEach(1..<userVM.myLens.count) { i in
                             ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "렌즈", text: userVM.myLens[i])
                         }
-                        ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "렌즈", text: "선택 안함")
+                        ListCell(selectedCamera: $selectedCamera, selectedLense: $selectedLense, selectedFilm: $selectedFilm, type: "렌즈", text: "없음")
                     }
                     Section("이 필름에 사용된 필름을 선택해 주세요") {
                         Text("\(userVM.myFilm[0])")

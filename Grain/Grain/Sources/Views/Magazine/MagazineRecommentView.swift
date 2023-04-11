@@ -62,7 +62,7 @@ struct MagazineRecommentView: View {
                                 NavigationLink {
                                     UserDetailView(userVM: userVM , magazineVM: magazineVM, user: user)
                                 } label: {
-                                    KFImage(URL(string: index.fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
+                                    KFImage(URL(string: user.fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
                                         .resizable()
                                         .frame(width: 25, height: 25)
                                         .cornerRadius(15)

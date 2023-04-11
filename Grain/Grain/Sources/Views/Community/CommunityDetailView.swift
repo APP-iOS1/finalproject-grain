@@ -86,7 +86,7 @@ struct CommunityDetailView: View {
                             HStack{
                                 if let community = self.communityData {
                                     Text(community.fields.title.stringValue)
-                                        .font(.title)
+                                        .font(.title2)
                                         .bold()
                                         .padding(.horizontal)
                                         .padding(.top, 5)

@@ -74,7 +74,7 @@ struct UserSearchDetailView: View {
                             }
                             VStack(alignment: .leading){
                                 HStack{
-                                    Text("매거진")
+                                    Text("피드")
                                     Text("\(user.fields.postedMagazineID.arrayValue.values.count - 1)")
                                         .padding(.leading, -5)
                                         .bold()

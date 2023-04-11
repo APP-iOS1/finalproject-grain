@@ -66,7 +66,7 @@ struct MyPageView: View {
                             }
                             VStack(alignment: .leading){
                                 HStack{
-                                    Text("매거진")
+                                    Text("피드")
                                     Text("\(userVM.postedMagazineID.count - 1)")
                                         .padding(.leading, -5)
                                         .bold()

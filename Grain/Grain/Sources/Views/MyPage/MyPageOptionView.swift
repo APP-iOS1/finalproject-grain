@@ -155,7 +155,7 @@ struct AccountSection: View {
                         .padding(.leading, 2.8)
                         .padding(.trailing, 13)
                     
-                    Text("저장된 매거진")
+                    Text("저장된 피드")
                         .font(.title3)
                     
                     Spacer()

@@ -404,7 +404,7 @@ struct MagazineCommentView: View {
             }
         }
         .onAppear{
-            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)    // 해당하는 매거진 댓글 정보 가져오기
+            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)    // 해당하는 피드 댓글 정보 가져오기
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                 makeEachBool(count: commentVm.sortedRecentComment.count)
@@ -587,8 +587,8 @@ struct MagazineCommentTextField: View {
                                     if user.fields.id.stringValue != userVM.currentUsers?.id.stringValue{
                                         let sender = PushNotificationSender(serverKeyString: "")
                                         for i in user.fields.fcmToken.arrayValue.values {
-                                            sender.sendPushNotification(to: i.stringValue, title:  "댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 에 댓글을 남겼습니다", image: magazineData.fields.image.arrayValue.values[0].stringValue )
-                                            //                                        sender.sendPushNotification(to: i.stringValue, title:  "게시글에 새로운 댓글이 달렸습니다! 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 매거진 게시글에 댓글을 남겼어요, 지금 확인하고 댓글 작성자와 함께 대화해 보세요. 💬 ", image: magazineData.fields.image.arrayValue.values[0].stringValue ?? "")
+                                            sender.sendPushNotification(to: i.stringValue, title:  "댓글", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 피드에 댓글을 남겼습니다", image: magazineData.fields.image.arrayValue.values[0].stringValue )
+                                            //                                        sender.sendPushNotification(to: i.stringValue, title:  "게시글에 새로운 댓글이 달렸습니다! 📨", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 \(magazineData.fields.title.stringValue) 피드 게시글에 댓글을 남겼어요, 지금 확인하고 댓글 작성자와 함께 대화해 보세요. 💬 ", image: magazineData.fields.image.arrayValue.values[0].stringValue ?? "")
                                         }
                                     }
                                 }

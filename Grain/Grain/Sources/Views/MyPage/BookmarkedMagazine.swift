@@ -58,7 +58,7 @@ struct BookmarkedMagazine: View {
                  magazineVM.fetchMagazine()
             }
         }
-        .navigationTitle("저장된 매거진")
+        .navigationTitle("저장된 피드")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
             bookmarkedMagazineDocument = magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID)

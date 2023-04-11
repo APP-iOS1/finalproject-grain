@@ -138,7 +138,7 @@ struct UserDetailView: View {
                         }//hstack
                         VStack(alignment: .leading){
                             HStack{
-                                Text("매거진")
+                                Text("피드")
                                 Text("\(magazines.count)")
                                     .padding(.leading, -5)
                                     .bold()

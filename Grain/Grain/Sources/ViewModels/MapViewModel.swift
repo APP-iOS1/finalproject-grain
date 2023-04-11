@@ -39,12 +39,10 @@ final class MapViewModel: ObservableObject {
     
     // MARK: 매거진 게시물 업로드시 맵 데이터도 같이 데이터 넣기
     func insertMap(data: MagazineFields) {
-        print("insertMap 불렷음 --------------")
         MapService.insertMap(data: data)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (receivedData: MapResponse) in
-                print("insertMap 불렷음 --------------")
                 self.insertMapSuccess.send(data)
             }.store(in: &subscription)
     }

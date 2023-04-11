@@ -223,12 +223,6 @@ struct CommunityDetailView: View {
                         proxyReader.scrollTo("SCROLL_TO_BOTTOM", anchor: .bottom)
                     }
                 })
-                .refreshable {
-                    do {
-                        try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
-                      } catch {}
-                    communityVM.fetchCommunity()
-                }
                 .onDisappear{
                     selectedIndex = 0
                 }

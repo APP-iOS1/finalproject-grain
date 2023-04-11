@@ -365,7 +365,7 @@ final class UserViewModel: ObservableObject {
     // 매거진 피드뷰 구독자 필터링
     func subscriptionFeed(magazineData : [MagazineDocument]) -> [MagazineDocument]{
         var subscriptionFeedData : [MagazineDocument] = []
-        for i in self.followerList{
+        for i in self.followingList{
             for j in magazineData{
                 if i.fields.id.stringValue == j.fields.userID.stringValue{  // i.fields.id.stringValue  팔로워 id 뽑기,j.fields.userID.stringValue 매거진 안에 userID 뽑아서 둘이 같으면 데이터 넣기
                     subscriptionFeedData.append(j)

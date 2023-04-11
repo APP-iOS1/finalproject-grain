@@ -510,12 +510,6 @@ struct MagazineDetailView: View {
                 }
             }
         }
-        .refreshable {
-            do {
-                try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
-            } catch {}
-            magazineVM.fetchMagazine()
-        }
     }
     
     var sharedView: some View {

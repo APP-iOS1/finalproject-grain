@@ -32,7 +32,7 @@ struct ContentView: View {
     @State private var myPageScrollToTop: Bool = false
     
     let icons = ["film", "text.bubble", "plus","map", "person"]
-    let labels = ["매거진", "커뮤니티", "", "지도", "마이"]
+    let labels = ["피드", "커뮤니티", "", "지도", "마이"]
     
     @State var modalSize = Screen.maxHeight * 0.25
     

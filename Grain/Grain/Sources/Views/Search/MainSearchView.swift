@@ -37,7 +37,7 @@ struct MainSearchView: View {
     
     @FocusState private var focus: FocusableField?
     
-    private let searchTitles: [String] = ["매거진", "커뮤니티", "계정"]
+    private let searchTitles: [String] = ["피드", "커뮤니티", "계정"]
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")

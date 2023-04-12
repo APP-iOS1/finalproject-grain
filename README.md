@@ -1,6 +1,6 @@
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/73868968/220879677-ae0611d5-8e1d-4be5-a4e5-f38ee027e65c.png" >
+<img width="1838" alt="스크린샷 2023-04-12 오후 3 52 02" src="https://user-images.githubusercontent.com/73868968/231423605-b0e9583e-b514-4817-8038-be1225b07b4c.png">
 </p>
 
 <br>

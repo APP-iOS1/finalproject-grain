@@ -55,7 +55,7 @@ struct EditorView: View {
                     .frame(maxWidth: Screen.maxWidth * 0.94)
                     .background(Color.black)
 //                    .padding(.top, 5)
-                    .padding(.bottom, 15)
+                    .padding(.bottom, 20)
                     .padding(.horizontal, Screen.maxWidth * 0.04)
                 
                 HStack {

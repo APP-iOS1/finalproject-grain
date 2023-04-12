@@ -32,7 +32,7 @@ struct EditorViewCell: View {
                         .fill(.gray)
                         .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.5)
                     ForEach(editorVM.editorData, id:\.self){ data in
-                        KFImage(URL(string: data.fields.postImage4.stringValue) ?? URL(string: errorImage()))
+                        KFImage(URL(string: data.fields.postImage1.stringValue) ?? URL(string: errorImage()))
                             .resizable()
                             .frame(width: Screen.maxWidth, height: Screen.maxHeight * 0.5)
                             .aspectRatio(contentMode: .fill)

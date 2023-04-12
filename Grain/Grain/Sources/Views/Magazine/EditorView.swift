@@ -41,15 +41,22 @@ struct EditorView: View {
                 //MARK: 제목
                 HStack{
                     Text(editorVM.editorData[0].fields.title.stringValue)
-                        .font(.title2)
-                        .bold()
+                        .font(.title)
+//                        .fontWeight(.semibold)
                         .padding(.horizontal)
                         .frame(width: Screen.maxWidth , alignment: .leading)
                         .multilineTextAlignment(.leading)
                         .padding(.top)
-                        .padding(.bottom, 6)
+//                        .padding(.bottom, 6)
                     Spacer()
                 }
+                
+                Divider()
+                    .frame(maxWidth: Screen.maxWidth * 0.94)
+                    .background(Color.black)
+//                    .padding(.top, 5)
+                    .padding(.bottom, 15)
+                    .padding(.horizontal, Screen.maxWidth * 0.04)
                 
                 HStack {
                     if let user = userVM.users.first(where: { $0.fields.id.stringValue == editorVM.editorData[0].fields.userID.stringValue})
@@ -74,13 +81,13 @@ struct EditorView: View {
                 .padding(5)
 
             }
-            Divider()
-                .frame(maxWidth: Screen.maxWidth * 0.94)
-                .background(Color.black)
-                .padding(.top, 5)
-                .padding(.bottom, 15)
-                .padding(.horizontal, Screen.maxWidth * 0.04)
-            
+//            Divider()
+//                .frame(maxWidth: Screen.maxWidth * 0.94)
+//                .background(Color.black)
+//                .padding(.top, 5)
+//                .padding(.bottom, 15)
+//                .padding(.horizontal, Screen.maxWidth * 0.04)
+//
             VStack{
                 
                 // MARK: - 포스트 첫 번째
@@ -96,6 +103,8 @@ struct EditorView: View {
                         .padding()
                         .foregroundColor(Color.textGray)
                         .frame(width: Screen.maxWidth , alignment: .leading)
+                        .textSelection(.enabled)
+                        .lineLimit(nil)
                 }
                 
                 // MARK: - 포스트 두 번째
@@ -110,6 +119,7 @@ struct EditorView: View {
                         .padding()
                         .foregroundColor(Color.textGray)
                         .frame(width: Screen.maxWidth , alignment: .leading)
+                        .textSelection(.enabled)
                        
                 }
                 
@@ -123,6 +133,7 @@ struct EditorView: View {
                         .padding()
                         .foregroundColor(Color.textGray)
                         .frame(width: Screen.maxWidth , alignment: .leading)
+                        .textSelection(.enabled)
                 }
 
                 // MARK: - 포스트 네 번째
@@ -136,6 +147,8 @@ struct EditorView: View {
                         .padding()
                         .foregroundColor(Color.textGray)
                         .frame(width: Screen.maxWidth , alignment: .leading)
+                        .textSelection(.enabled)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 
                 // MARK: - 포스트 다섯 번째
@@ -144,10 +157,12 @@ struct EditorView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                     Text(editorVM.editorData[0].fields.postContent5.stringValue)
+                        .textSelection(.enabled)
                         .lineSpacing(4.0)
                         .padding()
                         .foregroundColor(Color.textGray)
-                        .frame(width: Screen.maxWidth , alignment: .leading)
+                        .frame(width: Screen.maxWidth, alignment: .topLeading)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
 
             }

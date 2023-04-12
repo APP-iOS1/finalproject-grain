@@ -251,60 +251,66 @@ struct AddCommunityView: View {
                             
                         }
                     } else {
-                        Button {
-                            // 프로그레스뷰 ON
-                            
-                            isClickedSubmitButton = true
-                            
-                            isUpdateCommunitySuccess = true
-                            // 완료 버튼 1번 누르면 더이상 누르지 못하게 막기
-                            
-                            
-                            let docId = UUID().uuidString
-                            let data = CommunityFields(title: CommunityCategory(stringValue: inputTitle), category: CommunityCategory(stringValue: selectedTab.rawValue), content: CommunityCategory(stringValue: inputContent), profileImage: CommunityCategory(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""), introduce: CommunityCategory(stringValue: userVM.currentUsers?.introduce.stringValue ?? ""), state: CommunityCategory(stringValue: ""), nickName: CommunityCategory(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "")])), userID: CommunityCategory(stringValue: userVM.currentUsers?.id.stringValue ?? ""), id: CommunityCategory(stringValue: docId))
-                            
-                            if selectedImages.count == 0 {
-                                // 이미지를 선택을 안했을 경우 default 이미지가 들어가게 함.
-                                if let image = UIImage(named: "defaultCommunityImage") {
-                                    selectedImages.append(image)
-                                }
+                        
+                        if isClickedSubmitButton {
+                            Button {
+                                
+                            } label: {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(.black)
+                                    .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                                    .overlay {
+                                        Text("작성 완료")
+                                            .font(.headline)
+                                            .foregroundColor(.white)
+                                    }
+                            }.onAppear {
+                                
                             }
-                            
-                            communityVM.insertCommunity(data: data, images: selectedImages)
-                            
-                            var postCommunityArr : [String]  = userVM.postedCommunityID
-                            postCommunityArr.append(docId)
-                            userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunityArr, docID: Auth.auth().currentUser?.uid ?? "")
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                communityVM.fetchCommunity()
-                            }
-                        } label: {
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(.black)
-                                .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
-                                .overlay {
-                                    Text("작성 완료")
-                                        .font(.headline)
-                                        .foregroundColor(.white)
-                                }
+
                         }
-                        .disabled(isClickedSubmitButton)
+                        else {
+                            Button {
+                                // 프로그레스뷰 ON
+                                isClickedSubmitButton = true
+                                isUpdateCommunitySuccess = true
+                                // 완료 버튼 1번 누르면 더이상 누르지 못하게 막기
+                                
+                                
+                                let docId = UUID().uuidString
+                                let data = CommunityFields(title: CommunityCategory(stringValue: inputTitle), category: CommunityCategory(stringValue: selectedTab.rawValue), content: CommunityCategory(stringValue: inputContent), profileImage: CommunityCategory(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""), introduce: CommunityCategory(stringValue: userVM.currentUsers?.introduce.stringValue ?? ""), state: CommunityCategory(stringValue: ""), nickName: CommunityCategory(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "")])), userID: CommunityCategory(stringValue: userVM.currentUsers?.id.stringValue ?? ""), id: CommunityCategory(stringValue: docId))
+                                
+                                if selectedImages.count == 0 {
+                                    // 이미지를 선택을 안했을 경우 default 이미지가 들어가게 함.
+                                    if let image = UIImage(named: "defaultCommunityImage") {
+                                        selectedImages.append(image)
+                                    }
+                                }
+                                
+                                communityVM.insertCommunity(data: data, images: selectedImages)
+                                
+                                var postCommunityArr : [String]  = userVM.postedCommunityID
+                                postCommunityArr.append(docId)
+                                userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunityArr, docID: Auth.auth().currentUser?.uid ?? "")
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    communityVM.fetchCommunity()
+                                }
+                            } label: {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(.black)
+                                    .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                                    .overlay {
+                                        Text("작성 완료")
+                                            .font(.headline)
+                                            .foregroundColor(.white)
+                                    }
+                            }
+//                            .disabled(isClickedSubmitButton)
+                        }
                     }
                 }
                 
-                if isUpdateCommunitySuccess {
-                    ProgressView()
-                        .onAppear{
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                isClickedSubmitButton = true
-                                isUpdateCommunitySuccess = false
-                                presented.toggle()
-                            }
-                        }
-                        .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.25)
-                        .zIndex(1)
-                }
             }
             .navigationTitle("커뮤니티 작성하기")
             .navigationBarTitleDisplayMode(.inline)
@@ -332,12 +338,6 @@ struct AddCommunityView: View {
             }
             .onAppear {
                 userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-            }
-            .onReceive(communityVM.insertCommunitySuccess) { _ in
-                // 프로그레스뷰 OFF
-                isUpdateCommunitySuccess = false
-                // 창닫기
-                presented.toggle()
             }
         }
     }

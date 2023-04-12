@@ -271,30 +271,37 @@ struct AddCommunityView: View {
                         }
                         else {
                             Button {
-                                // 프로그레스뷰 ON
-                                isClickedSubmitButton = true
-                                isUpdateCommunitySuccess = true
-                                // 완료 버튼 1번 누르면 더이상 누르지 못하게 막기
-                                
-                                
-                                let docId = UUID().uuidString
-                                let data = CommunityFields(title: CommunityCategory(stringValue: inputTitle), category: CommunityCategory(stringValue: selectedTab.rawValue), content: CommunityCategory(stringValue: inputContent), profileImage: CommunityCategory(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""), introduce: CommunityCategory(stringValue: userVM.currentUsers?.introduce.stringValue ?? ""), state: CommunityCategory(stringValue: ""), nickName: CommunityCategory(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "")])), userID: CommunityCategory(stringValue: userVM.currentUsers?.id.stringValue ?? ""), id: CommunityCategory(stringValue: docId))
-                                
-                                if selectedImages.count == 0 {
-                                    // 이미지를 선택을 안했을 경우 default 이미지가 들어가게 함.
-                                    if let image = UIImage(named: "defaultCommunityImage") {
-                                        selectedImages.append(image)
+                              
+                                Task{
+                                    isClickedSubmitButton = true
+                                    isUpdateCommunitySuccess = true
+
+                                    // 완료 버튼 1번 누르면 더이상 누르지 못하게 막기
+                                    
+                                    if isClickedSubmitButton{
+                                        
+                                        let docId = UUID().uuidString
+                                        let data = CommunityFields(title: CommunityCategory(stringValue: inputTitle), category: CommunityCategory(stringValue: selectedTab.rawValue), content: CommunityCategory(stringValue: inputContent), profileImage: CommunityCategory(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""), introduce: CommunityCategory(stringValue: userVM.currentUsers?.introduce.stringValue ?? ""), state: CommunityCategory(stringValue: ""), nickName: CommunityCategory(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""), image: CommunityImage(arrayValue: CommunityArrayValue(values: [CommunityCategory(stringValue: "")])), userID: CommunityCategory(stringValue: userVM.currentUsers?.id.stringValue ?? ""), id: CommunityCategory(stringValue: docId))
+                                        
+                                        if selectedImages.count == 0 {
+                                            // 이미지를 선택을 안했을 경우 default 이미지가 들어가게 함.
+                                            if let image = UIImage(named: "defaultCommunityImage") {
+                                                selectedImages.append(image)
+                                            }
+                                        }
+                                        
+                                        communityVM.insertCommunity(data: data, images: selectedImages)
+                                        
+                                        var postCommunityArr : [String]  = userVM.postedCommunityID
+                                        postCommunityArr.append(docId)
+                                        userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunityArr, docID: Auth.auth().currentUser?.uid ?? "")
+                                        
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                            communityVM.fetchCommunity()
+                                        }
+                                        self.presented = false
                                     }
-                                }
-                                
-                                communityVM.insertCommunity(data: data, images: selectedImages)
-                                
-                                var postCommunityArr : [String]  = userVM.postedCommunityID
-                                postCommunityArr.append(docId)
-                                userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunityArr, docID: Auth.auth().currentUser?.uid ?? "")
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    communityVM.fetchCommunity()
+
                                 }
                             } label: {
                                 RoundedRectangle(cornerRadius: 12)
@@ -310,7 +317,6 @@ struct AddCommunityView: View {
                         }
                     }
                 }
-                
             }
             .navigationTitle("커뮤니티 작성하기")
             .navigationBarTitleDisplayMode(.inline)

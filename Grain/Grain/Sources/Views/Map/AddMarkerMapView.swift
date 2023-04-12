@@ -191,58 +191,60 @@ struct AddMarkerMapView: View {
                     }
                     else {
                         Button {
-                            // 프로그레스뷰 ON
-                            isClickedSubmitButton = true
-                            
-                            isUpdateMagazineSuccess = true
-                            // 완료 버튼 1번 누르면 더이상 누르지 못하게 막기
-                            
-                            // data.field에 데이터 저장
-                            var docId = UUID().uuidString
-                            
-                            var data: MagazineFields = MagazineFields(filmInfo: MagazineString(stringValue: ""),
-                                                                      id: MagazineString(stringValue: docId),
-                                                                      customPlaceName: MagazineString(stringValue: ""),
-                                                                      longitude: MagazineLocation(doubleValue: 0.0),
-                                                                      title: MagazineString(stringValue: " "),
-                                                                      comment: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
-                                                                      lenseInfo: MagazineString(stringValue: ""),
-                                                                      userID: MagazineString(stringValue: ""),
-                                                                      image: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
-                                                                      likedNum: LikedNum(integerValue: "0"),
-                                                                      latitude: MagazineLocation(doubleValue: 0.0),
-                                                                      content: MagazineString(stringValue: ""),
-                                                                      nickName: MagazineString(stringValue: ""),
-                                                                      roadAddress: MagazineString(stringValue: ""),
-                                                                      cameraInfo: MagazineString(stringValue: ""))
-                            
-                            data.id.stringValue = docId
-                            data.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
-                            data.customPlaceName.stringValue = writeDownCustomPlaceText
-                            data.title.stringValue = inputTitle
-                            data.content.stringValue = inputContent
-                            data.cameraInfo.stringValue = selectedCamera
-                            data.filmInfo.stringValue = selectedFilm
-                            data.lenseInfo.stringValue = selectedLense
-                            data.likedNum.integerValue = "0"
-                            data.longitude.doubleValue = updateNumber.lng
-                            data.latitude.doubleValue = updateNumber.lat
-                            data.nickName.stringValue = userVM.currentUsers?.nickName.stringValue ?? ""
-                            data.roadAddress.stringValue = updateReverseGeocodeResult1
-                            data.comment.arrayValue = MagazineArrayValue(values: [])
-                            data.image.arrayValue = MagazineArrayValue(values: [])
-                            
-                            // FIXME: 이부분 나중에 여기서 배열 처리 해야함.. !
-                            var postMagazineArr : [String]  = userVM.postedMagazineID
-                            postMagazineArr.append(docId)
-                            userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
-                            
-                            // FIXME: - insertMap 동작안함
-                            magazineVM.insertMagazine(data: data, images: selectedImages)
-                            mapVM.insertMap(data: data)
-                            
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                magazineVM.fetchMagazine()
+                            Task{
+                                // 프로그레스뷰 ON
+                                isClickedSubmitButton = true
+                                
+                                isUpdateMagazineSuccess = true
+                                // 완료 버튼 1번 누르면 더이상 누르지 못하게 막기
+                                
+                                // data.field에 데이터 저장
+                                var docId = UUID().uuidString
+                                
+                                var data: MagazineFields = MagazineFields(filmInfo: MagazineString(stringValue: ""),
+                                                                          id: MagazineString(stringValue: docId),
+                                                                          customPlaceName: MagazineString(stringValue: ""),
+                                                                          longitude: MagazineLocation(doubleValue: 0.0),
+                                                                          title: MagazineString(stringValue: " "),
+                                                                          comment: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
+                                                                          lenseInfo: MagazineString(stringValue: ""),
+                                                                          userID: MagazineString(stringValue: ""),
+                                                                          image: MagazineComment(arrayValue: MagazineArrayValue(values: [])),
+                                                                          likedNum: LikedNum(integerValue: "0"),
+                                                                          latitude: MagazineLocation(doubleValue: 0.0),
+                                                                          content: MagazineString(stringValue: ""),
+                                                                          nickName: MagazineString(stringValue: ""),
+                                                                          roadAddress: MagazineString(stringValue: ""),
+                                                                          cameraInfo: MagazineString(stringValue: ""))
+                                
+                                data.id.stringValue = docId
+                                data.userID.stringValue = userVM.currentUsers?.id.stringValue ?? ""
+                                data.customPlaceName.stringValue = writeDownCustomPlaceText
+                                data.title.stringValue = inputTitle
+                                data.content.stringValue = inputContent
+                                data.cameraInfo.stringValue = selectedCamera
+                                data.filmInfo.stringValue = selectedFilm
+                                data.lenseInfo.stringValue = selectedLense
+                                data.likedNum.integerValue = "0"
+                                data.longitude.doubleValue = updateNumber.lng
+                                data.latitude.doubleValue = updateNumber.lat
+                                data.nickName.stringValue = userVM.currentUsers?.nickName.stringValue ?? ""
+                                data.roadAddress.stringValue = updateReverseGeocodeResult1
+                                data.comment.arrayValue = MagazineArrayValue(values: [])
+                                data.image.arrayValue = MagazineArrayValue(values: [])
+                                
+                                // FIXME: 이부분 나중에 여기서 배열 처리 해야함.. !
+                                var postMagazineArr : [String]  = userVM.postedMagazineID
+                                postMagazineArr.append(docId)
+                                userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
+                                
+                                // FIXME: - insertMap 동작안함
+                                magazineVM.insertMagazine(data: data, images: selectedImages)
+                                mapVM.insertMap(data: data)
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    magazineVM.fetchMagazine()
+                                }
                             }
                             
                         } label: {

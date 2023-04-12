@@ -75,7 +75,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         application.registerForRemoteNotifications()
         
-        
+        UIApplication.shared.applicationIconBadgeNumber = 0
+
         return true
     }
     
@@ -141,6 +142,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
         }
         
+        UIApplication.shared.applicationIconBadgeNumber += 1
+
         completionHandler(UIBackgroundFetchResult.newData)
         completionHandler(.newData)
     }
@@ -181,6 +184,8 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         
         print("willPresent: userInfo: ", userInfo)
         
+        UIApplication.shared.applicationIconBadgeNumber += 1
+
         // Change this to your preferred presentation option
         completionHandler([[.banner, .badge, .sound]])
     }
@@ -207,6 +212,38 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         print("didReceive: userInfo: ", userInfo)
         
         completionHandler()
+        
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        
+        if let data = userInfo["data"] as? [String: Any], let view = data["view"] as? String {
+            var documentData: MagazineDocument!
+            print("data: \(data)")
+            do{
+                if let detailData = data["detailData"] as? String, let jsonData = detailData.data(using: .utf8) {
+                    documentData = try JSONDecoder().decode(MagazineDocument.self, from: jsonData)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+            
+            if view == "like" {
+                let magazineBestView = MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM, scrollToTop: .constant(false))
+                let destinationView = MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: documentData , ObservingChangeValueLikeNum: magazineBestView.$ObservingChangeValueLikeNum)
+                let navigationView = NavigationView {
+                    NavigationLink(destination: destinationView) {
+                        magazineBestView
+                    }
+                }
+                guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                      let window = windowScene.windows.first else {
+                    return
+                }
+                window.rootViewController = UIHostingController(rootView: navigationView)
+                print("화면 이동")
+                
+            }
+        }
+
     }
     
 }
@@ -271,58 +308,72 @@ class PushNotificationSender {
         }
     }
     
-//    func sendPushNotificationLike(to deviceToken: String, title: String, message: String, image: String, view: String, data: MagazineDocument) {
-//
-//        if let infolist = Bundle.main.infoDictionary {
-//            if let serverkeystr = infolist["serverkey"] as? String {
-//                serverKeyString = serverkeystr
-//            }
-//        }
-//        
-//        let url = URL(string: "https://fcm.googleapis.com/fcm/send")!
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.setValue("Bearer \(serverKeyString)", forHTTPHeaderField: "Authorization")
-//        
-//        let body: [String: Any] = [
-//            "notification": [
-//                "title": title,
-//                "body": message,
-//                "image": image,
-//                "sound": "default",
-//                "badge": 1
-//            ],
-//            "data": [
-//                "view": view,
-//                "detailData": data
-//            ],
-//            "content_available": true,
-//            "mutable_content": true,
-//            "priority": "high",
-//            "to": deviceToken
-//        ]
-//
-//        do {
-//            let data = try JSONSerialization.data(withJSONObject: body, options: [])
-//            request.httpBody = data
-//            let session = URLSession.shared
-//            let task = session.dataTask(with: request) { (data, response, error) in
-//                if let error = error {
-//                    print("Error sending push notification: \(error.localizedDescription)")
-//                }
-//                if let data = data, let responseString = String(data: data, encoding: .utf8) {
-//                    print("Push notification sent successfully: \(responseString)")
-//                }
-//            }
-//            task.resume()
-//        } catch {
-//            print("Error creating JSON payload: \(error.localizedDescription)")
-//        }
-//    }
+    func sendPushNotificationLike(to deviceToken: String, title: String, message: String, image: String, view: String, data: MagazineDocument) {
+
+        if let infolist = Bundle.main.infoDictionary {
+            if let serverkeystr = infolist["serverkey"] as? String {
+                serverKeyString = serverkeystr
+            }
+        }
+        
+        var jsonDetailData: String?
+        
+        do {
+            let data = try JSONEncoder().encode(data)
+            jsonDetailData = String(data: data, encoding: .utf8)
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        let url = URL(string: "https://fcm.googleapis.com/fcm/send")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(serverKeyString)", forHTTPHeaderField: "Authorization")
+        
+        let body: [String: Any] = [
+            "notification": [
+                "title": title,
+                "body": message,
+                "image": image,
+                "sound": "default",
+                "badge": 1
+            ],
+            "data": [
+                "view": view,
+                "detailData": jsonDetailData
+            ],
+            "content_available": true,
+            "mutable_content": true,
+            "priority": "high",
+            "to": deviceToken
+        ]
+
+        do {
+            let data = try JSONSerialization.data(withJSONObject: body, options: [])
+            request.httpBody = data
+            let session = URLSession.shared
+            let task = session.dataTask(with: request) { (data, response, error) in
+                if let error = error {
+                    print("Error sending push notification: \(error.localizedDescription)")
+                }
+                if let data = data, let responseString = String(data: data, encoding: .utf8) {
+                    print("Push notification sent successfully: \(responseString)")
+                }
+            }
+            task.resume()
+        } catch {
+            print("Error creating JSON payload: \(error.localizedDescription)")
+        }
+    }
 }
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    @ObservedObject var magazineVM = MagazineViewModel()
+    @ObservedObject var communityVM = CommunityViewModel()
+    @ObservedObject var userVM = UserViewModel()
+    @ObservedObject var editorVM = EditorViewModel()
+    
     var window: UIWindow?
 
 //    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -335,6 +386,51 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //            window.makeKeyAndVisible()
 //        }
 //    }
+    
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        // 푸시 알림에 의해 앱이 실행되는 경우 userInfo 값을 가져옵니다.
+        guard let userActivity = connectionOptions.userActivities.first,
+              let userInfo = userActivity.userInfo else {
+            return
+        }
+        
+        // 가져온 userInfo 값을 통해 화면 전환을 수행합니다.
+        if let data = userInfo["data"] as? [String: Any], let view = data["view"] as? String {
+            let window = UIWindow(frame: UIScreen.main.bounds)
+
+            switch view {
+            case "like":
+                if let detailData = data["detailData"] as? String, let jsonData = detailData.data(using: .utf8) {
+                    var documentData: MagazineDocument!
+                    do{
+                        documentData = try JSONDecoder().decode(MagazineDocument.self, from: jsonData)}
+                    catch {
+                        print(error.localizedDescription)
+                    }
+                    
+//                    let contentView = ContentView()
+//                    contentView.selectedItem = id
+//                    // 전환할 뷰를 지정합니다.
+//                    let detailView = DetailView()
+//                    detailView.itemId = id
+//                    // 뷰 전환을 수행합니다.
+//                    let window = UIWindow(frame: UIScreen.main.bounds)
+//                    window.rootViewController = UIHostingController(rootView: detailView)
+                    
+                    let magazineBestView = MagazineBestView(userVM: userVM, magazineVM: magazineVM, editorVM: editorVM, scrollToTop: .constant(false))
+                    let destinationView = MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: documentData , ObservingChangeValueLikeNum: magazineBestView.$ObservingChangeValueLikeNum)
+                    window.rootViewController = UIHostingController(rootView: destinationView)
+                    
+                }
+            default:
+                break
+            }
+            window.makeKeyAndVisible()
+            self.window = window
+        }
+
+    }
+    
     func sceneDidBecomeActive(_ scene: UIScene) {
         UIApplication.shared.applicationIconBadgeNumber = 0
     }

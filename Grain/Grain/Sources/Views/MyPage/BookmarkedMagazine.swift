@@ -61,13 +61,13 @@ struct BookmarkedMagazine: View {
         .navigationTitle("저장된 피드")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
-            bookmarkedMagazineDocument = magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID)
+            bookmarkedMagazineDocument = magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.sortedRecentMagazineData, userBookmarkedPostedArr: userVM.bookmarkedMagazineID)
         }
         .refreshable {
             do {
                 try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
               } catch {}
-            bookmarkedMagazineDocument = magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.magazines, userBookmarkedPostedArr: userVM.bookmarkedMagazineID)
+            bookmarkedMagazineDocument = magazineVM.userBookmarkedPostsFilter(magazineData: magazineVM.sortedRecentMagazineData, userBookmarkedPostedArr: userVM.bookmarkedMagazineID)
         }
     }
 }

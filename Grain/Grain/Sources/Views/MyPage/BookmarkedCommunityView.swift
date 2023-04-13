@@ -38,14 +38,14 @@ struct BookmarkedCommunityView: View {
         .navigationTitle("저장된 커뮤니티 글")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
-            bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
+            bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.sortedRecentCommunityData, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
         }
         .refreshable {
             do {
                 try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
               } catch {}
 //            communityVM.fetchCommunity()
-            bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.communities, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
+            bookmarkedCommunityDoument = communityVM.userBookmarkedCommunityFilter(communityData: communityVM.sortedRecentCommunityData, userBookmarkedCommunityArr: userVM.bookmarkedCommunityID)
         }
     }
 }

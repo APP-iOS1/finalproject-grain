@@ -36,14 +36,14 @@ struct MyPgeMyCommunity: View {
         .navigationTitle("나의 커뮤니티 글")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
-            communityDoument = communityVM.userPostsFilter(communityData: communityVM.communities, userPostedArr: userVM.postedCommunityID)
+            communityDoument = communityVM.userPostsFilter(communityData: communityVM.sortedRecentCommunityData, userPostedArr: userVM.postedCommunityID)
         }
         .refreshable {
             do {
                 try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
               } catch {}
             communityVM.fetchCommunity(nextPageToken: "")
-            communityDoument = communityVM.userPostsFilter(communityData: communityVM.communities, userPostedArr: userVM.postedCommunityID)
+            communityDoument = communityVM.userPostsFilter(communityData: communityVM.sortedRecentCommunityData, userPostedArr: userVM.postedCommunityID)
         }
     }
 }

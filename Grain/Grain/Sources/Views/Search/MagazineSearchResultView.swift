@@ -38,7 +38,7 @@ struct MagazineSearchResultView: View {
         ZStack{
             VStack{
                 List{
-                    ForEach(magazine.magazines.filter {
+                    ForEach(magazine.sortedRecentMagazineData.filter {
                         ignoreSpaces(in: $0.fields.title.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                         ignoreSpaces(in: $0.fields.content.stringValue)
@@ -70,7 +70,7 @@ struct MagazineSearchResultView: View {
                         }
                     }
                 }
-                .emptyPlaceholder(magazine.magazines.filter {
+                .emptyPlaceholder(magazine.sortedRecentMagazineData.filter {
                     ignoreSpaces(in: $0.fields.title.stringValue)
                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))

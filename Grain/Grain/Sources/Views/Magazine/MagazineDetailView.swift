@@ -376,7 +376,7 @@ struct MagazineDetailView: View {
                 }
             }
         }
-        .task(id: magazineVM.magazines) {
+        .task(id: magazineVM.sortedRecentMagazineData) {
             if let data = magazineVM.sortedTopLikedMagazineData.first(where: {
                 $0.fields.id.stringValue == data.fields.id.stringValue
             }) {
@@ -401,7 +401,6 @@ struct MagazineDetailView: View {
                     
                     if let magazineData = self.magazineData {
                        
-                            let sender = PushNotificationSender(serverKeyString: "")
                             if let user = userVM.users.first(where: { $0.fields.id.stringValue == magazineData.fields.userID.stringValue })
                             {
                                 if user.fields.id.stringValue != userVM.currentUsers?.id.stringValue {

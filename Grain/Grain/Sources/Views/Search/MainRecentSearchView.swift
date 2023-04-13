@@ -34,6 +34,7 @@ struct MainRecentSearchView: View {
                 }
             }
             .padding(.bottom, 0)
+            ScrollView(showsIndicators: false){
             if userVM.recentSearch.count > 1 {
                 ForEach(1..<userVM.recentSearch.count, id: \.self) { index in
                     HStack {
@@ -82,6 +83,7 @@ struct MainRecentSearchView: View {
                     .padding()
                 }// ForEach
             }
+        }
         }
         .onReceive(userVM.updateUsersArraySuccess, perform: { _ in
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")

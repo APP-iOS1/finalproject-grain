@@ -238,7 +238,7 @@ struct UserDetailView: View {
                 .padding(.top, 5)
                 .foregroundColor(.brightGray)
             if let userData = self.userData {
-                UserPageUserFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: userData.fields.postedMagazineID.arrayValue.values))
+                UserPageUserFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.sortedRecentMagazineData, userPostedArr: userData.fields.postedMagazineID.arrayValue.values))
             }
         }
         .onAppear{

@@ -161,7 +161,7 @@ struct UserSearchDetailView: View {
                     .padding(.horizontal, 10)
                     .padding(.top, 5)
                     .foregroundColor(.brightGray)
-                UserPageUserFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.magazines, userPostedArr: user.fields.postedMagazineID.arrayValue.values))
+                UserPageUserFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineVM.otherUserPostsFilter(magazineData: magazineVM.sortedRecentMagazineData, userPostedArr: user.fields.postedMagazineID.arrayValue.values))
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장

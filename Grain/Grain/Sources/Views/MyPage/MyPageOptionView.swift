@@ -558,6 +558,8 @@ struct UserServiceView: View{
                     Text("문의사항은 ")
                     Text(verbatim: "filmgrain.official@gmail.com")
                         .foregroundColor(.vivaMagenta)
+                        .lineLimit(1)
+                        .fixedSize()
                         .onTapGesture {
                             pastedboard.string = "filmgrain.official@gmail.com"
                             self.copiedComplete = true

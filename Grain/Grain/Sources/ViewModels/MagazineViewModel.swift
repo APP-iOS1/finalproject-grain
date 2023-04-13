@@ -117,7 +117,7 @@ final class MagazineViewModel: ObservableObject {
     }
     
     func filterUserMagazine(userID: String) -> [MagazineDocument] {
-        let magazines = magazines.filter { $0.fields.userID.stringValue == userID }
+        let magazines = self.sortedRecentMagazineData.filter { $0.fields.userID.stringValue == userID }
         return magazines
     }
     

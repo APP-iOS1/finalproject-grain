@@ -166,7 +166,7 @@ struct MainSearchView: View {
                                     .padding(.top)
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 3)
-                                    ForEach(magazineViewModel.magazines.filter {
+                                    ForEach(magazineViewModel.sortedRecentMagazineData.filter {
                                         ignoreSpaces(in: $0.fields.title.stringValue)
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                         ignoreSpaces(in: $0.fields.content.stringValue)
@@ -211,7 +211,7 @@ struct MainSearchView: View {
                                 .onChange(of: ObservingChangeValueLikeNum, perform: { newValue in
                                     magazineViewModel.fetchMagazine(nextPageToken: "")
                                 })
-                                .emptyPlaceholder(magazineViewModel.magazines.filter {
+                                .emptyPlaceholder(magazineViewModel.sortedRecentMagazineData.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
@@ -235,7 +235,7 @@ struct MainSearchView: View {
                                     .padding(.top)
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 3)
-                                    ForEach(communityViewModel.communities.filter {
+                                    ForEach(communityViewModel.sortedRecentCommunityData.filter {
                                         ignoreSpaces(in: $0.fields.title.stringValue)
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                         ignoreSpaces(in: $0.fields.content.stringValue)
@@ -273,7 +273,7 @@ struct MainSearchView: View {
                                             .padding(.vertical, 9)
                                     }
                                 }
-                                .emptyPlaceholder(communityViewModel.communities.filter {
+                                .emptyPlaceholder(communityViewModel.sortedRecentCommunityData.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                                     ignoreSpaces(in: $0.fields.content.stringValue)

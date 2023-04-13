@@ -36,7 +36,7 @@ struct CommunitySearchResultView: View {
         ZStack {
             VStack{
                 List{
-                    ForEach(community.communities.filter {
+                    ForEach(community.sortedRecentCommunityData.filter {
                         ignoreSpaces(in: $0.fields.title.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                         ignoreSpaces(in: $0.fields.content.stringValue)
@@ -67,7 +67,7 @@ struct CommunitySearchResultView: View {
                         }
                     }
                 }
-                .emptyPlaceholder(community.communities.filter {
+                .emptyPlaceholder(community.sortedRecentCommunityData.filter {
                     ignoreSpaces(in: $0.fields.title.stringValue)
                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))

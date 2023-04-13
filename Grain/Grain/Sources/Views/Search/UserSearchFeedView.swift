@@ -65,7 +65,7 @@ struct UserSearchFeedView: View {
             } else {
                 ScrollView{
                     LazyVStack{
-                        ForEach(magazineViewModel.magazines.filter{
+                        ForEach(magazineViewModel.sortedRecentMagazineData.filter{
                             $0.fields.userID.stringValue == userD.fields.id.stringValue
                         }, id: \.self){ data in
                             NavigationLink {

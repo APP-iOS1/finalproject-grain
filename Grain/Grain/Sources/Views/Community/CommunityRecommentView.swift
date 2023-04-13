@@ -129,12 +129,12 @@ struct CommunityRecommentView: View {
                                         var arr = commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }
                                         arr.removeValue(forKey: commentCollectionDocId )
                                         commentVm.sortedRecentRecommentArray = arr
-                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
                                     } else {
-                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
                                         
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
                                         }
                                     }
                                 }

@@ -184,9 +184,9 @@ struct CommunityCommentView: View {
                                                       )
                             )
                             replyContent = ""
-                            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue)
+                            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "")
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue)
+                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "")
                             }
                             
                             let sender = PushNotificationSender(serverKeyString: "")
@@ -213,7 +213,7 @@ struct CommunityCommentView: View {
                             commentVm.updateComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, docID: editDocID, updateComment: replyContent, data: editData)
                             replyContent = ""
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue)
+                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "")
                             }
                         } label: {
                             Text("등록")
@@ -229,7 +229,7 @@ struct CommunityCommentView: View {
                             commentVm.updateRecomment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, commentCollectionName: infolistCommunityString(), commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: replyContent, data: editReData)
                             replyContent = ""
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue)
+                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "")
                             }
                         } label: {
                             Text("등록")
@@ -254,7 +254,7 @@ struct CommunityCommentView: View {
                                                     id: CommentString(stringValue: UUID().uuidString)))
                             
                             replyContent = ""
-                            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue)
+                            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "")
                             
                             if let communityData = self.communityData {
                                 

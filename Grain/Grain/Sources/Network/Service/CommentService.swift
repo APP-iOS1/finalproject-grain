@@ -13,10 +13,10 @@ import UIKit
 enum CommentService {
     
     // MARK: - 댓글 데이터 가져오기
-    static func getComment(collectionName: String, collectionDocId: String) -> AnyPublisher<CommentResponse, Error> {
+    static func getComment(collectionName: String, collectionDocId: String , nextPageToken: String) -> AnyPublisher<CommentResponse, Error> {
         
         do {
-            let request = try CommentRouter.get(collectionName: collectionName, collectionDocId: collectionDocId).asURLRequest()
+            let request = try CommentRouter.get(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: nextPageToken).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -110,10 +110,10 @@ enum CommentService {
     }
     
     // MARK: 대댓글 데이터 가져오기
-    static func getRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String) -> AnyPublisher<CommentResponse, Error> {
+    static func getRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String , nextPageToken: String) -> AnyPublisher<CommentResponse, Error> {
         
         do {
-            let request = try CommentRouter.reCommentGet(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId).asURLRequest()
+            let request = try CommentRouter.reCommentGet(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, nextPageToken: nextPageToken).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

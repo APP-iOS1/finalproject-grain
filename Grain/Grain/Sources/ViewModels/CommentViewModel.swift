@@ -18,6 +18,11 @@ final class CommentViewModel: ObservableObject {
     @Published var sortedRecentComment = [CommentDocument]()
     @Published var sortedRecentRecomment = [CommentDocument]()  // 대댓글 최신순으로 정렬
     
+    
+    @Published var commentTemp = [CommentDocument]()  // 대댓글 최신순으로 정렬
+    @Published var recommentTemp = [CommentDocument]()  // 대댓글 최신순으로 정렬
+    
+    
     @Published var sortedRecentRecommentArray = [String : [CommentDocument]]()
     @Published var sortedRecentRecommentCount = [String : Int]()
 
@@ -40,7 +45,7 @@ final class CommentViewModel: ObservableObject {
 
     ///  REST API 방식 CRUD
     // MARK: Read
-    func fetchComment(collectionName: String, collectionDocId: String) {
+    func fetchComment(collectionName: String, collectionDocId: String, nextPageToken: String) {
     
         var commentString : String = ""
         if let infolist = Bundle.main.infoDictionary {
@@ -48,38 +53,64 @@ final class CommentViewModel: ObservableObject {
                 commentString = str
             }
         }
-        CommentService.getComment(collectionName: collectionName, collectionDocId: collectionDocId)
+        
+        CommentService.getComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentResponse) in
-                self.sortedRecentComment = data.documents.sorted(by: {
-                    return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
-                })
-                for i in self.sortedRecentComment{
-                    CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentString, commentCollectionDocId: i.fields.id.stringValue)
-                        .receive(on: DispatchQueue.main)
-                        .sink { (completion: Subscribers.Completion<Error>) in
-                        } receiveValue: { (data: CommentResponse) in
-                            self.sortedRecentRecomment = data.documents.sorted(by: {
-                                return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
-                            })
-
-                            self.sortedRecentRecommentArray.updateValue(self.sortedRecentRecomment, forKey: "\(i.fields.id.stringValue)")
-                            self.sortedRecentRecommentCount.updateValue(self.sortedRecentRecomment.count, forKey: "\(i.fields.id.stringValue)")
-                            self.fetchRecommentSuccess.send()
-
-                        }.store(in: &self.subscription)
+                self.commentTemp.append(contentsOf: data.documents)
+                
+                if !(data.nextPageToken == nil) {
+                    var nextPageToken : String = ""
+                    nextPageToken = data.nextPageToken!
+                    self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: nextPageToken)
+                }else{
+                    self.sortedRecentComment = self.commentTemp.sorted(by: {
+                        return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+                    })
+                    for i in self.sortedRecentComment{
+                        self.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentString, commentCollectionDocId: i.fields.id.stringValue , nextPageToken: "")
+                    }
+                    self.commentTemp.removeAll()
+                    self.fetchCommentSuccess.send()
                 }
-                self.fetchCommentSuccess.send()
+                
             }.store(in: &subscription)
     }
+    
+    func fetchRecomment(collectionName: String , collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String , nextPageToken: String){
+        
+        CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, nextPageToken: nextPageToken)
+            .receive(on: DispatchQueue.main)
+            .sink { (completion: Subscribers.Completion<Error>) in
+            } receiveValue: { (data: CommentResponse) in
+                
+                self.recommentTemp.append(contentsOf: data.documents)
+                
+                if !(data.nextPageToken == nil) {
+                    var nextPageToken : String = ""
+                    nextPageToken = data.nextPageToken!
+                    self.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, nextPageToken: nextPageToken)
+                }else{
+                    self.sortedRecentRecomment = self.recommentTemp.sorted(by: {
+                        return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+                    })
+                    self.sortedRecentRecommentArray.updateValue(self.sortedRecentRecomment, forKey: "\(commentCollectionDocId)")
+                    self.sortedRecentRecommentCount.updateValue(self.sortedRecentRecomment.count, forKey: "\(commentCollectionDocId)")
+                    self.recommentTemp.removeAll()
+                    self.fetchRecommentSuccess.send()
+                }
+            }.store(in: &self.subscription)
+    }
+    
+    
     // MARK: Create
     func insertComment(collectionName: String, collectionDocId: String, data: CommentFields) {
         CommentService.insertComment(collectionName: collectionName, collectionDocId: collectionDocId, data: data)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
-                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
                 self.insertCommentSuccess.send()
             }.store(in: &subscription)
         
@@ -91,7 +122,7 @@ final class CommentViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
-                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
                 self.updateCommentSuccess.send()
             }.store(in: &subscription)
     }
@@ -102,7 +133,7 @@ final class CommentViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
-                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
                 self.deleteCommentSuccess.send()
             }.store(in: &subscription)
     }
@@ -118,18 +149,18 @@ final class CommentViewModel: ObservableObject {
     }
 
 //    // MARK: 대댓글 Read
-    func fetchRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String) {
-        CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId)
-            .receive(on: DispatchQueue.main)
-            .sink { (completion: Subscribers.Completion<Error>) in
-            } receiveValue: { (data: CommentResponse) in
-                self.sortedRecentRecomment = data.documents.sorted(by: {
-                    return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
-                })
-                self.fetchRecommentSuccess.send()
-            }.store(in: &subscription)
-
-    }
+//    func fetchRecomment(collectionName: String, collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String) {
+//        CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId)
+//            .receive(on: DispatchQueue.main)
+//            .sink { (completion: Subscribers.Completion<Error>) in
+//            } receiveValue: { (data: CommentResponse) in
+//                self.sortedRecentRecomment = data.documents.sorted(by: {
+//                    return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
+//                })
+//                self.fetchRecommentSuccess.send()
+//            }.store(in: &subscription)
+//
+//    }
     
     
     /// 매거진 하나당 코맨트 여러개 -> 코멘트 여러개에서 여러개

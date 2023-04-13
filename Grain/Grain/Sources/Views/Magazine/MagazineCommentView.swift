@@ -135,7 +135,7 @@ struct MagazineCommentView: View {
                                                         .padding(.top, 1)
                                                         .padding(.bottom, -3)
                                                         .onTapGesture {
-                                                            makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
+                                                            makeEachBool(count: commentVm.sortedRecentComment.count)
                                                             readMoreComments = true
                                                             eachBool[index] = true
                                                         }
@@ -174,7 +174,7 @@ struct MagazineCommentView: View {
                                                                 } else {
                                                                     commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
                                                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                                        commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                                                        commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
                                                                     }
                                                                 }
                                                             }))
@@ -249,7 +249,7 @@ struct MagazineCommentView: View {
                                                     .padding(.top, 1)
                                                     .padding(.bottom, -3)
                                                     .onTapGesture {
-                                                        makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
+                                                        makeEachBool(count: commentVm.sortedRecentComment.count)
                                                         readMoreComments = true
                                                         eachBool[index] = true
                                                     }
@@ -404,7 +404,7 @@ struct MagazineCommentView: View {
             }
         }
         .onAppear{
-            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)    // 해당하는 피드 댓글 정보 가져오기
+            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")    // 해당하는 피드 댓글 정보 가져오기
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                 makeEachBool(count: commentVm.sortedRecentComment.count)
@@ -490,7 +490,7 @@ struct MagazineCommentTextField: View {
                             self.summitComment.toggle()
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
                             }
                             
                             // MARK: 대댓글 유저한테 알림보내기 기능
@@ -523,7 +523,7 @@ struct MagazineCommentTextField: View {
                             self.summitComment.toggle()
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
                             }
                         } label: {
                             Text("등록")
@@ -542,7 +542,7 @@ struct MagazineCommentTextField: View {
                             commentText = ""
                             self.summitComment.toggle()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
                             }
                             
                         } label: {
@@ -576,7 +576,7 @@ struct MagazineCommentTextField: View {
                             self.summitComment.toggle()
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
                             }
                             
                             // MARK: 매거진 게시글 유저한테 알림보내기 기능

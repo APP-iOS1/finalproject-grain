@@ -248,7 +248,7 @@ final class UserViewModel: ObservableObject {
         }
         var magazineComments = [[String]]()
         for id in magazines {
-            CommentService.getComment(collectionName: magazineString, collectionDocId: id)
+            CommentService.getComment(collectionName: magazineString, collectionDocId: id, nextPageToken: "")
                 .receive(on: DispatchQueue.main)
                 .sink { (completion: Subscribers.Completion<Error>) in
                 } receiveValue: { (data: CommentResponse) in
@@ -283,7 +283,7 @@ final class UserViewModel: ObservableObject {
         var magzineRecomment = [[String]]()
         
         for id in comments {
-            CommentService.getRecomment(collectionName: magazineString, collectionDocId: id[0], commentCollectionName: commentString, commentCollectionDocId: id[1])
+            CommentService.getRecomment(collectionName: magazineString, collectionDocId: id[0], commentCollectionName: commentString, commentCollectionDocId: id[1], nextPageToken: "")
                 .receive(on: DispatchQueue.main)
                 .sink { (completion: Subscribers.Completion<Error>) in
                 } receiveValue: { (data: CommentResponse) in

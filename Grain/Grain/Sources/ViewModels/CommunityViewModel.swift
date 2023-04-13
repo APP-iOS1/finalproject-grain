@@ -174,7 +174,7 @@ final class CommunityViewModel: ObservableObject {
             } receiveValue: { [self] (data: CommunityResponse) in
                 
                 for i in data.documents{
-                    CommentService.getComment(collectionName: communityString, collectionDocId: i.fields.id.stringValue)
+                    CommentService.getComment(collectionName: communityString, collectionDocId: i.fields.id.stringValue, nextPageToken: "")
                         .receive(on: DispatchQueue.main)
                         .sink { (completion: Subscribers.Completion<Error>) in
                         } receiveValue: { (data: CommentResponse) in

@@ -21,51 +21,53 @@ final class MagazineViewModel: ObservableObject {
     
     @Published var currentTime: Date = Date()
 
+    @Published var isFetchBool : Bool = false
+    
     var fetchMagazineSuccess = PassthroughSubject<[MagazineDocument], Never>()
     var insertMagazineSuccess = PassthroughSubject<MagazineFields, Never>()
     var updateMagazineSuccess = PassthroughSubject<(), Never>()
     var deleteMagazineSuccess = PassthroughSubject<(), Never>()
     
     // MARK: 메거진 데이터 가져오기 메소드
-    func fetchMagazine() {
+    func fetchMagazine(nextPageToken: String) {
+        
+        
+        if isFetchBool {
+            self.magazines.removeAll()
+            self.sortedRecentMagazineData.removeAll()
+            self.sortedTopLikedMagazineData.removeAll()
+            self.isFetchBool = false
+        }
+        
         self.currentTime = Date()
-        MagazineService.getMagazine()
+        
+        MagazineService.getMagazine(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
                 
             } receiveValue: { (data: MagazineResponse) in
-                self.magazines = data.documents
-               
-                // MARK: 매거진 데이터 최신순 정렬 메서드 호출
-                self.sortedRecentMagazineData = data.documents.sorted(by: {
-                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
-                })
+                               
                 
-                self.sortedTopLikedMagazineData = data.documents.sorted(by: {
-                    // MARK: String -> Int로 바꾸기
-                    return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
-                })
+                self.magazines.append(contentsOf: data.documents)
                 
-                // MARK: - 데이터 개수가 20개 넘을 때 풀기 잘못하면 터짐
-//                self.magazines .append(contentsOf: data.documents)
-//                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
-//                    self.isMagazineLoading = false
-//                }
-//                // MARK: 매거진 데이터 최신순 정렬 메서드 호출
-//                self.sortedRecentMagazineData.append(contentsOf: data.documents.sorted(by: {
-//                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
-//                }))
-//                self.sortedTopLikedMagazineData.append(contentsOf: data.documents.sorted(by: {
-//                    // MARK: String -> Int로 바꾸기
-//                    return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
-//                }))
-//                if !(data.nextPageToken == nil) {
-//                    var nextPageToken : String = ""
-//                    nextPageToken = data.nextPageToken!
-//                    self.fetchMagazine(nextPageToken: nextPageToken)
-//                }else{
-//                    self.fetchMagazineSuccess.send(data.documents)
-//                }
+                if !(data.nextPageToken == nil) {
+                    var nextPageToken : String = ""
+                    nextPageToken = data.nextPageToken!
+                    self.fetchMagazine(nextPageToken: nextPageToken)
+                    
+                }else{
+                    // MARK: 매거진 데이터 최신순 정렬 메서드 호출
+                    self.sortedRecentMagazineData = self.magazines.sorted(by: {
+                        return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                    })
+                    
+                    self.sortedTopLikedMagazineData = self.magazines.sorted(by: {
+                        // MARK: String -> Int로 바꾸기
+                        return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
+                    })
+                    self.isFetchBool = true
+                    self.fetchMagazineSuccess.send(data.documents)
+                }
                 
             }.store(in: &subscription)
         
@@ -91,7 +93,7 @@ final class MagazineViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: MagazineDocument) in
-                self.fetchMagazine()
+                self.fetchMagazine(nextPageToken: "")
                 self.updateMagazineSuccess.send()
             }.store(in: &subscription)
     }

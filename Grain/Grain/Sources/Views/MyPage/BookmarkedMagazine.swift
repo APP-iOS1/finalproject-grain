@@ -55,7 +55,7 @@ struct BookmarkedMagazine: View {
                 BookmarkedMagazinePlaceholderView()
             }
             .task(id: ObservingChangeValueLikeNum){
-                 magazineVM.fetchMagazine()
+                 magazineVM.fetchMagazine(nextPageToken: "")
             }
         }
         .navigationTitle("저장된 피드")

@@ -43,6 +43,8 @@ final class UserViewModel: ObservableObject {
     @Published var followerList = [UserDocument]()
     @Published var followingList = [UserDocument]()
     
+    @Published var isFetchBool : Bool = false
+    
     var fetchUsersSuccess = PassthroughSubject<[UserDocument], Never>()
     var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
@@ -56,13 +58,25 @@ final class UserViewModel: ObservableObject {
     var declarationSuccess = PassthroughSubject<(), Never>()
     
     
-    func fetchUser() {
-        UserService.getUser()
+    func fetchUser(nextPageToken: String) {
+        
+        if isFetchBool {
+            self.users.removeAll()
+        }
+        
+        UserService.getUser(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
-                self.users = data.documents
-                self.fetchUsersSuccess.send(data.documents)
+                self.users.append(contentsOf: data.documents)
+                if !(data.nextPageToken == nil) {
+                    var nextPageToken : String = ""
+                    nextPageToken = data.nextPageToken!
+                    self.fetchUser(nextPageToken: nextPageToken)
+                }else{
+                    self.isFetchBool = true
+                    self.fetchUsersSuccess.send(data.documents)
+                }
             }.store(in: &subscription)
     }
     
@@ -173,7 +187,7 @@ final class UserViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
                 self.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-                self.fetchUser()
+                self.fetchUser(nextPageToken: "")
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)
     }

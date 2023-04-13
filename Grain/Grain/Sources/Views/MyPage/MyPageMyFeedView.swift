@@ -109,7 +109,7 @@ struct MyPageMyFeedView: View {
                         )
                     }
                     .task(id: ObservingChangeValueLikeNum){
-                        magazineVM.fetchMagazine()
+//                        magazineVM.fetchMagazine(nextPageToken: "")
                     }
                     .onChange(of: scrollToTop, perform: { newValue in
                         withAnimation(.default) {
@@ -155,7 +155,7 @@ struct MyPageMyFeedView: View {
                         )
                     }
                     .task(id: ObservingChangeValueLikeNum){
-                        magazineVM.fetchMagazine()
+//                        magazineVM.fetchMagazine(nextPageToken: "")
                     }
                     .onChange(of: scrollToTop, perform: { newValue in
                         withAnimation(.default) {

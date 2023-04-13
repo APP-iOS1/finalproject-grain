@@ -39,6 +39,7 @@ struct EditoFields: Codable,Hashable {
     var postImage3 : EditorStringValue
     var postImage4 : EditorStringValue
     var postImage5 : EditorStringValue
+    
     var thumbnailTitle1 : EditorStringValue
     var thumbnailTitle2 : EditorStringValue
     var thumbnailTitle3 : EditorStringValue

@@ -10,7 +10,7 @@ import Foundation
 // 커뮤니티 라우터
 enum CommunityRouter {
     
-    case get
+    case get(nextPageToken: String)
     case post(communityData: CommunityFields, images: [String], docID: String)
     case delete(docID : String)
     case patch(putData: CommunityDocument, docID: String)
@@ -73,6 +73,9 @@ enum CommunityRouter {
     
     var parameters: URLQueryItem? {
         switch self {
+        case let .get(nextPageToken):
+            let params: URLQueryItem = URLQueryItem(name: "pageToken", value: nextPageToken)
+            return params
         case let .post(_ , _ , docID):
             let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
             return params

@@ -81,8 +81,8 @@ struct UserSearchFeedView: View {
                     }
                 }.onAppear{
                     // MARK: fetch 데이터 시작
-                    magazineViewModel.fetchMagazine()
-                    userViewModel.fetchUser()
+                    magazineViewModel.fetchMagazine(nextPageToken: "")
+                    userViewModel.fetchUser(nextPageToken: "")
                 }
             }
             
@@ -171,7 +171,7 @@ struct UserPageUserFeedView: View {
                     }
                 }
                 .task(id: ObservingChangeValueLikeNum){
-                     magazineVM.fetchMagazine()
+                     magazineVM.fetchMagazine(nextPageToken: "")
                 }
             } else {
                 ScrollView{
@@ -188,13 +188,13 @@ struct UserPageUserFeedView: View {
                     }
                 }
                 .task(id: ObservingChangeValueLikeNum){
-                    magazineVM.fetchMagazine()
+                    magazineVM.fetchMagazine(nextPageToken: "")
                 }
                 
                 
             }
         }.onAppear{
-            userVM.fetchUser()
+            userVM.fetchUser(nextPageToken: "")
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
     }

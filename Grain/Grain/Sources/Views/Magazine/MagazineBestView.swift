@@ -56,20 +56,24 @@ struct MagazineBestView: View {
                         .padding(.top, 7)
                         .padding(.bottom, 2)
                         
-                        ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
-                            NavigationLink {
-                                MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
-
-                            } label: {
-                                LazyVStack{
-                                    Top10View(data: data, userVM: userVM)
-                                        .padding(.vertical, 7)
-                                        .padding(.horizontal)
-                                        .padding(.bottom)
-
+                        if !magazineVM.sortedTopLikedMagazineData.isEmpty{
+                            ForEach(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated()), id: \.1.self ){ (index, data) in  // 좋아요 순으로 최대 10개까지만 뷰에 보여짐
+                                NavigationLink {
+                                    MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
+                                    
+                                } label: {
+                                    LazyVStack{
+                                        Top10View(data: data, userVM: userVM)
+                                            .padding(.vertical, 7)
+                                            .padding(.horizontal)
+                                            .padding(.bottom)
+                                        
+                                    }
                                 }
+                                
                             }
-                            
+                        }else{
+//                            ProgressView()
                         }
                     }
                     .id("SCROLL_TO_TOP")
@@ -89,14 +93,14 @@ struct MagazineBestView: View {
                         ,alignment: .top
                     )
                     .task(id: ObservingChangeValueLikeNum){
-                        magazineVM.fetchMagazine()
+                        magazineVM.fetchMagazine(nextPageToken: "")
                     }
                 }
                 .refreshable {
                     do {
                         try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
                       } catch {}
-                    magazineVM.fetchMagazine()
+                    magazineVM.fetchMagazine(nextPageToken: "")
                 }
                 .onChange(of: scrollToTop, perform: { newValue in
                     withAnimation(.default) {

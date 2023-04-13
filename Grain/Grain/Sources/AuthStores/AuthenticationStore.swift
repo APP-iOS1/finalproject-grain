@@ -95,7 +95,7 @@ final class AuthenticationStore: ObservableObject {
                 userUID = uid ?? ""
                 userName = profile.name
                 email = profile.email
-                findUserDocID(docID: uid ?? "")
+                findUserDocID(docID: uid ?? "", nextPageToken: "")
                 self.logInCompanyState = .googleLogIn
 
             }
@@ -240,7 +240,7 @@ final class AuthenticationStore: ObservableObject {
                 userUID = user.uid
                 userName = user.displayName ?? ""
                 email = user.email ?? ""
-                findUserDocID(docID: user.uid)
+                findUserDocID(docID: user.uid, nextPageToken: "")
             }
             catch {
                 print("Unable to update the user's displayname: \(error.localizedDescription)")
@@ -323,21 +323,28 @@ final class AuthenticationStore: ObservableObject {
     var findUserDocIDSuccess = PassthroughSubject<(), Never>()
     
     // 전체 유저데이터 조회 후 비교
-    func findUserDocID(docID: String){
-        UserService.getUser()
+    func findUserDocID(docID: String , nextPageToken: String){
+        UserService.getUser(nextPageToken: "")
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
                 self.checkUsers = data.documents
-                for i in data.documents{
-                    if i.fields.id.stringValue == docID{
-                        self.authenticationState = .authenticated   //authenticationState 상태 변환
-                        break
+    
+                if !(data.nextPageToken == nil) {
+                    var nextPageToken : String = ""
+                    nextPageToken = data.nextPageToken!
+                    self.findUserDocID(docID:docID, nextPageToken: nextPageToken)
+                }else{
+                    for i in data.documents{
+                        if i.fields.id.stringValue == docID{
+                            self.authenticationState = .authenticated   //authenticationState 상태 변환
+                            break
+                        }
+                        self.authenticationState = .freshman
                     }
-                    self.authenticationState = .freshman
-//                    self.isUserLoggedIn = .freshman               <- 필요없어 보임
+                    self.findUserDocIDSuccess.send()
                 }
-                self.findUserDocIDSuccess.send()
+
             }.store(in: &subscription)
     }
     

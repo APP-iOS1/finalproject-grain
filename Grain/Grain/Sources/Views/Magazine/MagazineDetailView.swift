@@ -322,7 +322,7 @@ struct MagazineDetailView: View {
             do {
                 try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
               } catch {}
-            magazineVM.fetchMagazine()
+            magazineVM.fetchMagazine(nextPageToken: "")
         }
         .alert(isPresented: $isDeleteAlertShown) {
             Alert(title: Text("게시물을 삭제하시겠어요?"),
@@ -337,7 +337,7 @@ struct MagazineDetailView: View {
                     postMagazineArr.removeAll { $0 == magazineData.fields.id.stringValue }
                     userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        magazineVM.fetchMagazine()
+                        magazineVM.fetchMagazine(nextPageToken: "")
                     }
                     dismiss()
                 }

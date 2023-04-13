@@ -209,7 +209,7 @@ struct MainSearchView: View {
                                     
                                 }
                                 .task(id: ObservingChangeValueLikeNum){
-                                    magazineViewModel.fetchMagazine()
+                                    magazineViewModel.fetchMagazine(nextPageToken: "")
                                 }
                                 .emptyPlaceholder(magazineViewModel.magazines.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)

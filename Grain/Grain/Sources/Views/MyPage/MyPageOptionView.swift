@@ -38,7 +38,7 @@ struct MyPageOptionView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             // 커뮤니티 데이터 fetch
-            communityVM.fetchCommunity()
+            communityVM.fetchCommunity(nextPageToken: "")
         }
     }
 }

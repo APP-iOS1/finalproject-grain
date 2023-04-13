@@ -42,7 +42,7 @@ struct MyPgeMyCommunity: View {
             do {
                 try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
               } catch {}
-            communityVM.fetchCommunity()
+            communityVM.fetchCommunity(nextPageToken: "")
             communityDoument = communityVM.userPostsFilter(communityData: communityVM.communities, userPostedArr: userVM.postedCommunityID)
         }
     }

@@ -93,13 +93,13 @@ struct MagazineFeedView: View {
                     }
                 })
                 .task(id: ObservingChangeValueLikeNum){
-                    magazineVM.fetchMagazine()
+                    magazineVM.fetchMagazine(nextPageToken: "")
                 }
                 .refreshable {
                     do {
                         try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
                       } catch {}
-                    magazineVM.fetchMagazine()
+                    magazineVM.fetchMagazine(nextPageToken: "")
                 }
             }
             Spacer()

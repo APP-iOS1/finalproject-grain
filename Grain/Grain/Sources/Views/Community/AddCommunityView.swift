@@ -297,7 +297,7 @@ struct AddCommunityView: View {
                                         userVM.updateCurrentUserArray(type: "postedCommunityID", arr: postCommunityArr, docID: Auth.auth().currentUser?.uid ?? "")
                                         
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                            communityVM.fetchCommunity()
+                                            communityVM.fetchCommunity(nextPageToken: "")
                                         }
                                         self.presented = false
                                     }

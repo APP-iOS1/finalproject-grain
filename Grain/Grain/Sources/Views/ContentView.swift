@@ -42,10 +42,10 @@ struct ContentView: View {
     
     
     var userLatitude: Double {
-        return locationManager.lastLocation?.coordinate.latitude ?? 37.5701759
+        return locationManager.lastLocation?.coordinate.latitude ?? 0.0
     }
     var userLongitude: Double {
-        return locationManager.lastLocation?.coordinate.longitude ?? 126.9835183
+        return locationManager.lastLocation?.coordinate.longitude ?? 0.0
     }
     
     // 네트워크 감지
@@ -200,10 +200,10 @@ struct ContentView: View {
                     /// 처음부터 마커 데이터를 가지고 있으면 DispatchQueue를 안해도 되지 않을까?
                     self.isSearchViewShown = false
                     editorVM.fetchEditor()
-                    magazineVM.fetchMagazine()
-                    communityVM.fetchCommunity()
+//                    magazineVM.fetchMagazine(nextPageToken: "")
+                    communityVM.fetchCommunity(nextPageToken: "")
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-                    userVM.fetchUser()
+                    userVM.fetchUser(nextPageToken: "")
                     
                     // 로그인을 할때 토큰값 넣기
                     if authenticationState == .authenticated{

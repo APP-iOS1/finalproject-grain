@@ -13,7 +13,7 @@ struct MyPageView: View {
     @ObservedObject var commentVm: CommentViewModel
     @ObservedObject var communityVM : CommunityViewModel
     @ObservedObject var userVM : UserViewModel
-    @ObservedObject var magazineVM: MagazineViewModel
+    @ObservedObject var magazineVM : MagazineViewModel
     @EnvironmentObject var authenticationStore: AuthenticationStore
     
     
@@ -176,7 +176,7 @@ struct MyPageView: View {
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장
-                userVM.fetchUser()
+                userVM.fetchUser(nextPageToken: "")
                 userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 
                 // 로그인을 할때 토큰값 넣기 -> 로그아웃 하고 로그인하는 사람이 있어서 어쩔수 없이 마이페이지 쪽에도 토큰 넣는것을 넣어야할듯!
@@ -196,7 +196,7 @@ struct MyPageView: View {
             do {
                 try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
               } catch {}
-            userVM.fetchUser()
+            userVM.fetchUser(nextPageToken: "")
             userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
         }
     }

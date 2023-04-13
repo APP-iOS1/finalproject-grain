@@ -16,9 +16,9 @@ import UIKit
 
 enum UserService {
     
-    static func getUser() -> AnyPublisher<UserResponse, Error> {
+    static func getUser(nextPageToken: String) -> AnyPublisher<UserResponse, Error> {
         do {
-            let request = try UserRouter.get.asURLRequest()
+            let request = try UserRouter.get(nextPageToken: nextPageToken).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)
@@ -146,7 +146,7 @@ enum UserService {
         var request = URLRequest(url: URL(string: encodeQueryURL)!)
         
         do {
-            request = try UserRouter.get.asURLRequestCurrent(request: request)
+            request = try UserRouter.get(nextPageToken: "").asURLRequestCurrent(request: request)
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

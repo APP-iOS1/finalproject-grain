@@ -15,6 +15,7 @@ final class UserViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
     
     @Published var users = [UserDocument]()
+    @Published var userTemp = [UserDocument]()
     // 현재 유저 데이터 값
     @Published var currentUsers : CurrentUserFields?
     @Published var user: CurrentUserFields?
@@ -43,7 +44,6 @@ final class UserViewModel: ObservableObject {
     @Published var followerList = [UserDocument]()
     @Published var followingList = [UserDocument]()
     
-    @Published var isFetchBool : Bool = false
     
     var fetchUsersSuccess = PassthroughSubject<[UserDocument], Never>()
     var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()
@@ -59,22 +59,18 @@ final class UserViewModel: ObservableObject {
     
     
     func fetchUser(nextPageToken: String) {
-        
-        if isFetchBool {
-            self.users.removeAll()
-        }
-        
         UserService.getUser(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
-                self.users.append(contentsOf: data.documents)
+                self.userTemp.append(contentsOf: data.documents)
                 if !(data.nextPageToken == nil) {
                     var nextPageToken : String = ""
                     nextPageToken = data.nextPageToken!
                     self.fetchUser(nextPageToken: nextPageToken)
                 }else{
-                    self.isFetchBool = true
+                    self.users = self.userTemp
+                    self.userTemp.removeAll()
                     self.fetchUsersSuccess.send(data.documents)
                 }
             }.store(in: &subscription)

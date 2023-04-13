@@ -85,9 +85,9 @@ struct MagazineSearchResultView: View {
                 .listStyle(.plain)
                 Spacer()
             }
-            .task(id: ObservingChangeValueLikeNum){
+            .onChange(of: ObservingChangeValueLikeNum, perform: { newValue in
                 magazineVM.fetchMagazine(nextPageToken: "")
-            }
+            })
             if isShownProgress == true {
                 SearchProgress()
                     .onAppear{

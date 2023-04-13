@@ -24,8 +24,6 @@ final class MagazineViewModel: ObservableObject {
     
     @Published var currentTime: Date = Date()
 
-    @Published var isFetchBool : Bool = false
-    
     var fetchMagazineSuccess = PassthroughSubject<[MagazineDocument], Never>()
     var insertMagazineSuccess = PassthroughSubject<MagazineFields, Never>()
     var updateMagazineSuccess = PassthroughSubject<(), Never>()
@@ -33,13 +31,6 @@ final class MagazineViewModel: ObservableObject {
     
     // MARK: 메거진 데이터 가져오기 메소드
     func fetchMagazine(nextPageToken: String) {
-        
-//        if isFetchBool {
-//            self.magazines.removeAll()
-//            self.sortedRecentMagazineData.removeAll()
-//            self.sortedTopLikedMagazineData.removeAll()
-//            self.isFetchBool = false
-//        }
         
         self.currentTime = Date()
         
@@ -67,7 +58,6 @@ final class MagazineViewModel: ObservableObject {
                     })
                     
                     self.magazines.removeAll()
-//                    self.isFetchBool = true
                     
                     self.fetchMagazineSuccess.send(data.documents)
                 }
@@ -149,6 +139,7 @@ final class MagazineViewModel: ObservableObject {
     
     // 유저가 포스팅한 매거진 필터링
     func userPostsFilter(magazineData: [MagazineDocument], userPostedArr: [String]) -> [MagazineDocument] {
+        print("dada")
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
         var userPostFilterArr: [MagazineDocument] = []
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!

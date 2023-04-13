@@ -22,7 +22,6 @@ final class CommunityViewModel: ObservableObject {
     
     @Published var fetchCommunityCellCommentCount = [String : Int]()
     
-    @Published var isFetchBool : Bool = false
     
     var fetchCommunitySuccess = PassthroughSubject<[CommunityDocument], Never>()
     var insertCommunitySuccess = PassthroughSubject<CommunityResponse, Never>()
@@ -35,11 +34,7 @@ final class CommunityViewModel: ObservableObject {
     //MARK: - 커뮤니티 데이터 가져오기 메소드
     func fetchCommunity(nextPageToken : String) {
         
-        if isFetchBool {
-            self.sortedRecentCommunityData.removeAll()
-            self.isFetchBool = false
-        }
-        
+
         CommunityService.getCommunity(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
@@ -47,15 +42,16 @@ final class CommunityViewModel: ObservableObject {
 //                self.communities = data.documents
                 // MARK: 커뮤니티 최신순으로 정렬
                 // MARK: - 데이터 개수가 20개 넘을 때 풀기 잘못하면 터짐
-                self.sortedRecentCommunityData.append(contentsOf: data.documents)
-
+                
+                self.communities.append(contentsOf: data.documents)
+                
                 if !(data.nextPageToken == nil) {
                     var nextPageToken : String = ""
                     nextPageToken = data.nextPageToken!
                     self.fetchCommunity(nextPageToken: nextPageToken)
                     
                 }else{
-                    self.sortedRecentCommunityData = self.sortedRecentCommunityData.sorted(by: {
+                    self.sortedRecentCommunityData = communities.sorted(by: {
                         return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
                     })                    
                     // MARK: 커뮤니티 모집완료 | 판매완료 게시글 sortedRecentCommunityData에서 배열 뒤로 배치
@@ -67,7 +63,8 @@ final class CommunityViewModel: ObservableObject {
                         }
                     }
                     
-                    self.isFetchBool = true
+                    self.communities.removeAll()
+                    
                     self.fetchCommunitySuccess.send(data.documents)
                 }
                 

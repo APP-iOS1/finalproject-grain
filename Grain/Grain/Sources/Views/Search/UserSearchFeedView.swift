@@ -170,9 +170,9 @@ struct UserPageUserFeedView: View {
                         }
                     }
                 }
-                .task(id: ObservingChangeValueLikeNum){
-                     magazineVM.fetchMagazine(nextPageToken: "")
-                }
+                .onChange(of: ObservingChangeValueLikeNum, perform: { newValue in
+                    magazineVM.fetchMagazine(nextPageToken: "")
+                })
             } else {
                 ScrollView{
                     LazyVStack{
@@ -187,9 +187,9 @@ struct UserPageUserFeedView: View {
                         }
                     }
                 }
-                .task(id: ObservingChangeValueLikeNum){
+                .onChange(of: ObservingChangeValueLikeNum, perform: { newValue in
                     magazineVM.fetchMagazine(nextPageToken: "")
-                }
+                })
                 
                 
             }

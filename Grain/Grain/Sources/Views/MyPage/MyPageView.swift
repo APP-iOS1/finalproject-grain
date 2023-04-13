@@ -17,7 +17,7 @@ struct MyPageView: View {
     @EnvironmentObject var authenticationStore: AuthenticationStore
     
     
-    var magazineDocument: [MagazineDocument]
+//    var magazineDocument: [MagazineDocument]
     //    var boomarkedMagazineDocument: [MagazineDocument]
     //    var bookmarkedCommunityDoument: [CommunityDocument]
     
@@ -172,7 +172,7 @@ struct MyPageView: View {
                     .padding(.horizontal, 10)
                     .padding(.top, 5)
                     .foregroundColor(.brightGray)
-                MyPageMyFeedView(userVM: userVM, magazineVM: magazineVM, magazineDocument: magazineDocument, presented: $presented, scrollToTop: $scrollToTop)
+                MyPageMyFeedView(userVM: userVM, magazineVM: magazineVM, presented: $presented, scrollToTop: $scrollToTop)
             }
             .onAppear{
                 // MARK: userID에 UserDefaults이용해서 저장

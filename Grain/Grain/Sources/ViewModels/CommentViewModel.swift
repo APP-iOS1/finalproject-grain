@@ -72,47 +72,7 @@ final class CommentViewModel: ObservableObject {
                 }
                 self.fetchCommentSuccess.send()
             }.store(in: &subscription)
-    }    
-    
-    // MARK: 대댓글 Read    // 희경작업
-//    func fetchRecommentTest(collectionName: String, collectionDocId: String, commentCollectionDocId: [String]) {
-//
-//        self.sortedRecentRecomment.removeAll()
-//
-//        for id in commentCollectionDocId {
-//            CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: "Comment", commentCollectionDocId: id)
-//                .receive(on: DispatchQueue.main)
-//                .sink { (completion: Subscribers.Completion<Error>) in
-//                } receiveValue: { (data: CommentResponse) in
-//                    // 대댓글 데이터 정렬
-//                    var recomments = data.documents.sorted(by: {
-//                        return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
-//                    })
-//
-//                    // comment id 값과 대댓글데이터를 딕셔너리로 묶어서 sortedRecentRecomment에 append
-//                    // 이경우에 sortedRecentRecomment도 정렬됨.
-//                    for i in recomments {
-//                        self.hksortedRecentRecomment.append([id : i])
-//                    }
-//
-//                }.store(in: &subscription)
-//        }
-//
-//        self.fetchRecommentSuccess.send()
-//    }
-        
-//    func filterRecomment(commentID: String) -> [CommentDocument] {     // 희경작업
-//        var recomments: [CommentDocument] = []
-//        for recomment in self.hksortedRecentRecomment {
-//            for i in recomment {
-//                if commentID == i.key {
-//                    recomments.append(i.value)
-//                }
-//            }
-//        }
-//        return recomments
-//    }
-    
+    }
     // MARK: Create
     func insertComment(collectionName: String, collectionDocId: String, data: CommentFields) {
         CommentService.insertComment(collectionName: collectionName, collectionDocId: collectionDocId, data: data)

@@ -92,9 +92,9 @@ struct MagazineFeedView: View {
                         proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)
                     }
                 })
-                .task(id: ObservingChangeValueLikeNum){
+                .onChange(of: ObservingChangeValueLikeNum, perform: { newValue in
                     magazineVM.fetchMagazine(nextPageToken: "")
-                }
+                })
                 .refreshable {
                     do {
                         try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)

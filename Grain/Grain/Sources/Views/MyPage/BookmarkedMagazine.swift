@@ -54,9 +54,9 @@ struct BookmarkedMagazine: View {
             .emptyPlaceholder(bookmarkedMagazineDocument.reversed()) {
                 BookmarkedMagazinePlaceholderView()
             }
-            .task(id: ObservingChangeValueLikeNum){
-                 magazineVM.fetchMagazine(nextPageToken: "")
-            }
+            .onChange(of: ObservingChangeValueLikeNum, perform: { newValue in
+                magazineVM.fetchMagazine(nextPageToken: "")
+            })
         }
         .navigationTitle("저장된 피드")
         .navigationBarTitleDisplayMode(.inline)

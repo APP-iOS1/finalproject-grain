@@ -79,17 +79,10 @@ struct SelectPostView: View {
                                         .foregroundColor(.white)
                                         .font(.title2)
                                         .bold()
-                                    Text("사진을 사랑하는 사람들의 모임! 카메라 중고거래,")
+                                    Text("매칭, 마켓, 클래스, 정보글 등 다양한 주제로 소통해보세요")
                                         .foregroundColor(.white)
                                         .font(.body)
                                         .padding(.top)
-                                    Text("사진작가와 모델 매칭, 필름카메라 정보 등 ")
-                                        .foregroundColor(.white)
-                                        .font(.body)
-                                    Text("다양한 주제로 소통해보세요.")
-                                        .foregroundColor(.white)
-                                        .font(.body)
-                                    
                                 }
                             }
                     }

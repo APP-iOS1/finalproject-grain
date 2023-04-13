@@ -9,7 +9,7 @@ import Foundation
 
 enum MagazineRouter {
 
-    case get
+    case get(nextPageToken: String)
     case post(magazineData: MagazineFields, images: [String], docID: String)
     case delete(docID : String)
     case patch(putData: MagazineDocument, docID: String)
@@ -68,6 +68,9 @@ enum MagazineRouter {
     
     var parameters: URLQueryItem? {
         switch self {
+        case let .get(nextPageToken):
+            let params: URLQueryItem = URLQueryItem(name: "pageToken", value: nextPageToken)
+            return params
         case let .post(_ , _ , docID):
             let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
             return params

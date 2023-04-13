@@ -10,7 +10,7 @@ import Foundation
 
 enum UserRouter {
 
-    case get
+    case get(nextPageToken: String)
     case post(myFilm: String, bookmarkedMagazineID: String,email: String, myCamera: String, postedCommunityID: String, postedMagazineID: String, likedMagazineId: String, lastSearched: String, bookmarkedCommunityID: String, recentSearch: String, id: String, following: String, myLens : String, profileImage: String, name: String, follower: String, nickName: String, introduce: String, fcmToken : String)
     case patchArr(type: String, arr: [String],  docID: String)
     case patchString(type: String, string: String, docID: String)
@@ -93,6 +93,9 @@ enum UserRouter {
     
     var parameters: [URLQueryItem]? {
         switch self {
+        case let .get(nextPageToken):
+            let params: [URLQueryItem] = [URLQueryItem(name: "pageToken", value: nextPageToken)]
+            return params
         case let .post(myFilm, bookmarkedMagazineID, email, myCamera, postedCommunityID, postedMagazineID, likedMagazineId, lastSearched, bookmarkedCommunityID, recentSearch, id, following, myLens , profileImage, name, follower, nickName, introduce , fcmToken):
             var params: [URLQueryItem] = [URLQueryItem(name: "documentId", value: id)]
             return params

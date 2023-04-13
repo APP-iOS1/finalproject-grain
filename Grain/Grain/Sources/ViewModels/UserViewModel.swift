@@ -15,6 +15,7 @@ final class UserViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
     
     @Published var users = [UserDocument]()
+    @Published var userTemp = [UserDocument]()
     // 현재 유저 데이터 값
     @Published var currentUsers : CurrentUserFields?
     @Published var user: CurrentUserFields?
@@ -43,6 +44,7 @@ final class UserViewModel: ObservableObject {
     @Published var followerList = [UserDocument]()
     @Published var followingList = [UserDocument]()
     
+    
     var fetchUsersSuccess = PassthroughSubject<[UserDocument], Never>()
     var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()
     var insertUsersSuccess = PassthroughSubject<(), Never>()
@@ -56,13 +58,21 @@ final class UserViewModel: ObservableObject {
     var declarationSuccess = PassthroughSubject<(), Never>()
     
     
-    func fetchUser() {
-        UserService.getUser()
+    func fetchUser(nextPageToken: String) {
+        UserService.getUser(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
-                self.users = data.documents
-                self.fetchUsersSuccess.send(data.documents)
+                self.userTemp.append(contentsOf: data.documents)
+                if !(data.nextPageToken == nil) {
+                    var nextPageToken : String = ""
+                    nextPageToken = data.nextPageToken!
+                    self.fetchUser(nextPageToken: nextPageToken)
+                }else{
+                    self.users = self.userTemp
+                    self.userTemp.removeAll()
+                    self.fetchUsersSuccess.send(data.documents)
+                }
             }.store(in: &subscription)
     }
     
@@ -173,7 +183,7 @@ final class UserViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
                 self.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
-                self.fetchUser()
+                self.fetchUser(nextPageToken: "")
                 self.updateUsersArraySuccess.send()
             }.store(in: &subscription)
     }
@@ -238,7 +248,7 @@ final class UserViewModel: ObservableObject {
         }
         var magazineComments = [[String]]()
         for id in magazines {
-            CommentService.getComment(collectionName: magazineString, collectionDocId: id)
+            CommentService.getComment(collectionName: magazineString, collectionDocId: id, nextPageToken: "")
                 .receive(on: DispatchQueue.main)
                 .sink { (completion: Subscribers.Completion<Error>) in
                 } receiveValue: { (data: CommentResponse) in
@@ -273,7 +283,7 @@ final class UserViewModel: ObservableObject {
         var magzineRecomment = [[String]]()
         
         for id in comments {
-            CommentService.getRecomment(collectionName: magazineString, collectionDocId: id[0], commentCollectionName: commentString, commentCollectionDocId: id[1])
+            CommentService.getRecomment(collectionName: magazineString, collectionDocId: id[0], commentCollectionName: commentString, commentCollectionDocId: id[1], nextPageToken: "")
                 .receive(on: DispatchQueue.main)
                 .sink { (completion: Subscribers.Completion<Error>) in
                 } receiveValue: { (data: CommentResponse) in

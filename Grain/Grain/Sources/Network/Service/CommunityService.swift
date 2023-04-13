@@ -12,10 +12,10 @@ import UIKit
 enum CommunityService {
     
     // MARK: - 커뮤니티 데이터 가져오기
-    static func getCommunity() -> AnyPublisher<CommunityResponse, Error> {
+    static func getCommunity(nextPageToken: String) -> AnyPublisher<CommunityResponse, Error> {
         
         do {
-            let request = try CommunityRouter.get.asURLRequest()
+            let request = try CommunityRouter.get(nextPageToken: nextPageToken).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

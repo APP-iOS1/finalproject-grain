@@ -7,7 +7,8 @@
 
 import SwiftUI
 import Kingfisher
-
+import FirebaseAuth
+ 
 struct MyPageMyFeedView: View {
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
@@ -17,8 +18,6 @@ struct MyPageMyFeedView: View {
     @State private var selectedIndex: Int?
     @State private var scrollViewOffset: CGFloat = 0
     @State private var startOffset: CGFloat = 0
-    
-    var magazineDocument: [MagazineDocument]
     
     let columns = [
         GridItem(.flexible(), spacing: 1),
@@ -74,7 +73,8 @@ struct MyPageMyFeedView: View {
                     ScrollView(showsIndicators: false){
                         VStack {
                             LazyVGrid(columns: columns, spacing: 1) {
-                                ForEach(magazineDocument.reversed(), id: \.self) { data in
+                                
+                                ForEach(magazineVM.sortedTopLikedMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed(), id: \.self) { data in
                                     NavigationLink {
                                         MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                                     } label: {
@@ -86,7 +86,7 @@ struct MyPageMyFeedView: View {
                                     }
                                 }
                             }
-                            .emptyPlaceholder(magazineDocument.reversed()) {
+                            .emptyPlaceholder(magazineVM.sortedTopLikedMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed()) {
                                 MyPagePlaceholderView(presented: $presented)
                                 
                             }
@@ -108,9 +108,9 @@ struct MyPageMyFeedView: View {
                             ,alignment: .top
                         )
                     }
-                    .task(id: ObservingChangeValueLikeNum){
-                        magazineVM.fetchMagazine()
-                    }
+                    .onChange(of: ObservingChangeValueLikeNum, perform: { newValue in
+                        magazineVM.fetchMagazine(nextPageToken: "")
+                    })
                     .onChange(of: scrollToTop, perform: { newValue in
                         withAnimation(.default) {
                             proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)
@@ -122,7 +122,7 @@ struct MyPageMyFeedView: View {
                     ScrollView(showsIndicators: false){
                         VStack {
                             LazyVStack{
-                                ForEach(magazineDocument.reversed(), id: \.self) { data in
+                                ForEach(magazineVM.sortedTopLikedMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed(), id: \.self) { data in
                                     NavigationLink {
                                         // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
                                         MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
@@ -132,7 +132,7 @@ struct MyPageMyFeedView: View {
                                     }
                                 }
                             }
-                            .emptyPlaceholder(magazineDocument.reversed()) {
+                            .emptyPlaceholder(magazineVM.sortedTopLikedMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed()) {
                                 MyPagePlaceholderView(presented: $presented)
                                 
                             }
@@ -154,9 +154,9 @@ struct MyPageMyFeedView: View {
                             ,alignment: .top
                         )
                     }
-                    .task(id: ObservingChangeValueLikeNum){
-                        magazineVM.fetchMagazine()
-                    }
+                    .onChange(of: ObservingChangeValueLikeNum, perform: { newValue in
+                        magazineVM.fetchMagazine(nextPageToken: "")
+                    })
                     .onChange(of: scrollToTop, perform: { newValue in
                         withAnimation(.default) {
                             proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)
@@ -165,6 +165,9 @@ struct MyPageMyFeedView: View {
                 }
             }
             
+        }
+        .onAppear{
+            magazineVM.fetchMagazine(nextPageToken: "")
         }
     }
 }

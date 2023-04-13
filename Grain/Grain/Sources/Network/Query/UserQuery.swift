@@ -275,8 +275,6 @@ enum UserQuery {
     }
     
     static func insertDeclaration(id: String, category: String)-> Data? {
-        print(id)
-        print(category)
             let query = """
                         {
                           "fields": {

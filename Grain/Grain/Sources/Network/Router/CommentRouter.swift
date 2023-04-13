@@ -11,8 +11,8 @@ enum CommentRouter {
     /// docID:  우리가 만들어줄 UUID
     /// collectionName: 콜렉션 이름 ex) Magazine , Community
     /// collectionDocId: 콜렉션 하위 문서ID  ex) Magazine - 1BA19CE5-119C-4898-9EC2-0BB920EAC64D
-    case get(collectionName: String, collectionDocId: String)
-    case reCommentGet(collectionName: String, collectionDocId: String, commentCollectionName: String,commentCollectionDocId: String)
+    case get(collectionName: String, collectionDocId: String, nextPageToken: String)
+    case reCommentGet(collectionName: String, collectionDocId: String, commentCollectionName: String,commentCollectionDocId: String, nextPageToken: String)
     case post(collectionName: String, collectionDocId: String, docID: String, commentData: CommentFields )
     case reCommentPost(collectionName: String, collectionDocId: String, commentCollectionName: String,commentCollectionDocId: String, docID: String, commentData: CommentFields)
     case delete(collectionName: String, collectionDocId: String, docID: String)
@@ -67,9 +67,9 @@ enum CommentRouter {
     
     private var endPoint: String {
         switch self {
-        case let .get(collectionName, collectionDocId):
+        case let .get(collectionName, collectionDocId,_):
             return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)"
-        case let .reCommentGet(collectionName, collectionDocId, _,commentCollectionDocId):
+        case let .reCommentGet(collectionName, collectionDocId, _,commentCollectionDocId, _):
             return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)" + "/" + "\(commentCollectionDocId)/" + "\(queryItemRecommentString)"
         case let .post(collectionName, collectionDocId, _, _):
             return "/\(collectionName)/\(collectionDocId)/" + "\(queryItemCommentString)"
@@ -89,6 +89,12 @@ enum CommentRouter {
     }
     var parameters: URLQueryItem? {
         switch self {
+        case let .get(_, _, nextPageToken):
+            let params: URLQueryItem = URLQueryItem(name: "pageToken", value: nextPageToken)
+            return params
+        case let .reCommentGet(_, _, _,_, nextPageToken):
+            let params: URLQueryItem = URLQueryItem(name: "pageToken", value: nextPageToken)
+            return params
         case let .post(_ , _ , docID, _):
             let params: URLQueryItem = URLQueryItem(name: "documentId", value: docID)
             return params

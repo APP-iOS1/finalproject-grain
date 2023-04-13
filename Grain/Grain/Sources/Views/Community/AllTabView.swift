@@ -56,7 +56,7 @@ struct AllTabView: View {
                     do {
                         try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
                       } catch {}
-                    communityVM.fetchCommunity()
+                    communityVM.fetchCommunity(nextPageToken: "")
                 }
             }
         }

@@ -349,7 +349,7 @@ struct MagazineDetailView: View {
             do {
                 try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
               } catch {}
-            magazineVM.fetchMagazine()
+            magazineVM.fetchMagazine(nextPageToken: "")
         }
         .onAppear{
             self.magazineData = self.data
@@ -374,7 +374,6 @@ struct MagazineDetailView: View {
                 }else{
                     isBookMarked = false
                 }
-                ObservingChangeValueLikeNum = magazineData.fields.likedNum.integerValue
             }
         }
         .task(id: magazineVM.magazines) {
@@ -395,8 +394,9 @@ struct MagazineDetailView: View {
                         let docID =  user.id.stringValue
                         userVM.updateCurrentUserArray(type: "likedMagazineId", arr: arr, docID: docID)
                         
-                        magazineVM.updateMagazine(num: Int(ObservingChangeValueLikeNum)! + 1, docID: data.fields.id.stringValue)  //좋아요 갯수 증가
-                        ObservingChangeValueLikeNum = String(Int(ObservingChangeValueLikeNum)! + 1) //.task(id: ObservingChangeValueLikeNum) -> await magazineVM.fetchMagazine() 실행
+                        ObservingChangeValueLikeNum = magazineData?.fields.likedNum.integerValue ?? ""
+                        magazineVM.updateMagazine(num: Int(ObservingChangeValueLikeNum)! + 1, docID: data.fields.id.stringValue)                    
+                        ObservingChangeValueLikeNum = String(Int(ObservingChangeValueLikeNum)! + 1)
                     }
                     
                     if let magazineData = self.magazineData {
@@ -425,9 +425,10 @@ struct MagazineDetailView: View {
                         //                            let arr = userVM.likedMagazineID.filter {$0 != data.fields.id.stringValue}
                         let docID = user.id.stringValue
                         userVM.updateCurrentUserArray(type: "likedMagazineId", arr: userVM.likedMagazineID, docID: docID)
-                        
-                        magazineVM.updateMagazine(num:  Int(ObservingChangeValueLikeNum)! - 1 , docID: data.fields.id.stringValue)    //좋아요 갯수 감소
-                        ObservingChangeValueLikeNum = String(Int(ObservingChangeValueLikeNum)! - 1)  //.task(id: ObservingChangeValueLikeNum) -> await magazineVM.fetchMagazine() 실행
+                      
+                        ObservingChangeValueLikeNum = magazineData?.fields.likedNum.integerValue ?? ""
+                        magazineVM.updateMagazine(num:  Int(ObservingChangeValueLikeNum)! - 1 , docID: data.fields.id.stringValue)    
+                        ObservingChangeValueLikeNum = String(Int(ObservingChangeValueLikeNum)! - 1)
                     }
                 }
             }

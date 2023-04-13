@@ -232,7 +232,7 @@ struct MapView: View {
         }
         .onAppear{
             mapVM.fetchNextPageMap(nextPageToken: "")
-            magazineVM.fetchMagazine()
+            magazineVM.fetchMagazine(nextPageToken: "")
         }
        
     }

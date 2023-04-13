@@ -16,8 +16,11 @@ final class MagazineViewModel: ObservableObject {
     @Published var magazines = [MagazineDocument]()
     @Published var updateMagazineData : MagazineDocument?
     
-    @Published var sortedRecentMagazineData = [MagazineDocument]()    // 매거진 게시물 최신순으로
+    @Published var sortedRecentMagazineData = [MagazineDocument]()     // 매거진 게시물 최신순으로
     @Published var sortedTopLikedMagazineData = [MagazineDocument]()    // 매거진 게시물 좋아오 높은순
+    
+    @Published var recentTemp = [MagazineDocument]()
+    @Published var likedTemp = [MagazineDocument]()
     
     @Published var currentTime: Date = Date()
 
@@ -27,45 +30,37 @@ final class MagazineViewModel: ObservableObject {
     var deleteMagazineSuccess = PassthroughSubject<(), Never>()
     
     // MARK: 메거진 데이터 가져오기 메소드
-    func fetchMagazine() {
+    func fetchMagazine(nextPageToken: String) {
+        
         self.currentTime = Date()
-        MagazineService.getMagazine()
+        
+        MagazineService.getMagazine(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
                 
             } receiveValue: { (data: MagazineResponse) in
-                self.magazines = data.documents
-               
-                // MARK: 매거진 데이터 최신순 정렬 메서드 호출
-                self.sortedRecentMagazineData = data.documents.sorted(by: {
-                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
-                })
                 
-                self.sortedTopLikedMagazineData = data.documents.sorted(by: {
-                    // MARK: String -> Int로 바꾸기
-                    return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
-                })
+                self.magazines.append(contentsOf: data.documents)
                 
-                // MARK: - 데이터 개수가 20개 넘을 때 풀기 잘못하면 터짐
-//                self.magazines .append(contentsOf: data.documents)
-//                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
-//                    self.isMagazineLoading = false
-//                }
-//                // MARK: 매거진 데이터 최신순 정렬 메서드 호출
-//                self.sortedRecentMagazineData.append(contentsOf: data.documents.sorted(by: {
-//                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
-//                }))
-//                self.sortedTopLikedMagazineData.append(contentsOf: data.documents.sorted(by: {
-//                    // MARK: String -> Int로 바꾸기
-//                    return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
-//                }))
-//                if !(data.nextPageToken == nil) {
-//                    var nextPageToken : String = ""
-//                    nextPageToken = data.nextPageToken!
-//                    self.fetchMagazine(nextPageToken: nextPageToken)
-//                }else{
-//                    self.fetchMagazineSuccess.send(data.documents)
-//                }
+                if !(data.nextPageToken == nil) {
+                    var nextPageToken : String = ""
+                    nextPageToken = data.nextPageToken!
+                    self.fetchMagazine(nextPageToken: nextPageToken)
+                } else {
+                    // MARK: 매거진 데이터 최신순 정렬 메서드 호출
+                    self.sortedRecentMagazineData = self.magazines.sorted(by: {
+                        return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                    })
+                    
+                    self.sortedTopLikedMagazineData = self.magazines.sorted(by: {
+                        // MARK: String -> Int로 바꾸기
+                        return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
+                    })
+                    
+                    self.magazines.removeAll()
+                    
+                    self.fetchMagazineSuccess.send(data.documents)
+                }
                 
             }.store(in: &subscription)
         
@@ -91,7 +86,7 @@ final class MagazineViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: MagazineDocument) in
-                self.fetchMagazine()
+                self.fetchMagazine(nextPageToken: "")
                 self.updateMagazineSuccess.send()
             }.store(in: &subscription)
     }
@@ -144,6 +139,7 @@ final class MagazineViewModel: ObservableObject {
     
     // 유저가 포스팅한 매거진 필터링
     func userPostsFilter(magazineData: [MagazineDocument], userPostedArr: [String]) -> [MagazineDocument] {
+        print("dada")
         // 데이터를 담아서 반환해줌! -> nearbyPostArr을 ForEach를 돌려서 뷰를 그려줄 생각
         var userPostFilterArr: [MagazineDocument] = []
         /// 배열 값부터 for in문 반복한 이유로는 magazines보다 무조건 데이터가 적을 것이고 찾는 데이터가 magazines 앞쪽에 있다면 좋은 효율을 낼수 있을거 같아 이렇게 배치!

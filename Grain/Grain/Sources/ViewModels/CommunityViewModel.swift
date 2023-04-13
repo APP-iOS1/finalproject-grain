@@ -22,6 +22,7 @@ final class CommunityViewModel: ObservableObject {
     
     @Published var fetchCommunityCellCommentCount = [String : Int]()
     
+    
     var fetchCommunitySuccess = PassthroughSubject<[CommunityDocument], Never>()
     var insertCommunitySuccess = PassthroughSubject<CommunityResponse, Never>()
     var updateCommunitySuccess = PassthroughSubject<(), Never>()
@@ -31,44 +32,42 @@ final class CommunityViewModel: ObservableObject {
     var fetchCommentSuccess = PassthroughSubject<(), Never>()
     
     //MARK: - 커뮤니티 데이터 가져오기 메소드
-    func fetchCommunity() {
-        CommunityService.getCommunity()
+    func fetchCommunity(nextPageToken : String) {
+        
+
+        CommunityService.getCommunity(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { [self] (data: CommunityResponse) in
-                self.communities = data.documents
+//                self.communities = data.documents
                 // MARK: 커뮤니티 최신순으로 정렬
-                self.sortedRecentCommunityData = data.documents.sorted(by: {
-                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
-                })
-                self.fetchCommunitySuccess.send(data.documents)
+                // MARK: - 데이터 개수가 20개 넘을 때 풀기 잘못하면 터짐
                 
-                // MARK: 커뮤니티 모집완료 | 판매완료 게시글 sortedRecentCommunityData에서 배열 뒤로 배치
-                for i in self.sortedRecentCommunityData.indices{
-                    if self.sortedRecentCommunityData[i].fields.state.stringValue == "모집완료" || self.sortedRecentCommunityData[i].fields.state.stringValue == "판매완료"{
-                        self.sortedRecentCommunityData.append(self.sortedRecentCommunityData[i])
-                        self.closeState.append(self.sortedRecentCommunityData[i])  // 혹시 모를 배열 값 선언부에 설명 씀
-                        self.sortedRecentCommunityData.remove(at: i)
+                self.communities.append(contentsOf: data.documents)
+                
+                if !(data.nextPageToken == nil) {
+                    var nextPageToken : String = ""
+                    nextPageToken = data.nextPageToken!
+                    self.fetchCommunity(nextPageToken: nextPageToken)
+                    
+                }else{
+                    self.sortedRecentCommunityData = communities.sorted(by: {
+                        return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
+                    })                    
+                    // MARK: 커뮤니티 모집완료 | 판매완료 게시글 sortedRecentCommunityData에서 배열 뒤로 배치
+                    for i in self.sortedRecentCommunityData.indices{
+                        if self.sortedRecentCommunityData[i].fields.state.stringValue == "모집완료" || self.sortedRecentCommunityData[i].fields.state.stringValue == "판매완료"{
+                            self.sortedRecentCommunityData.append(self.sortedRecentCommunityData[i])
+                            self.closeState.append(self.sortedRecentCommunityData[i])  // 혹시 모를 배열 값 선언부에 설명 씀
+                            self.sortedRecentCommunityData.remove(at: i)
+                        }
                     }
+                    
+                    self.communities.removeAll()
+                    
+                    self.fetchCommunitySuccess.send(data.documents)
                 }
                 
-                // MARK: - 데이터 개수가 20개 넘을 때 풀기 잘못하면 터짐
-                //                self.communities.append(contentsOf: data.documents)
-                //                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) { // 스켈레톤 View를 위해
-                //                    self.isLoading = false
-                //                }
-                //                // MARK: 커뮤니티 최신순으로 정렬
-                //                self.sortedRecentCommunityData.append(contentsOf: data.documents.sorted(by: {
-                //                    return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
-                //                }))
-                //
-                //                if !(data.nextPageToken == nil) {
-                //                    var nextPageToken : String = ""
-                //                    nextPageToken = data.nextPageToken!
-                //                    self.fetchCommunity(nextPageToken: nextPageToken)
-                //                }else{
-                //                    self.fetchCommunitySuccess.send(data.documents)
-                //                }
             }.store(in: &subscription)
     }
     
@@ -92,7 +91,7 @@ final class CommunityViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommunityResponse) in
-                self.fetchCommunity()
+                self.fetchCommunity(nextPageToken: "")
                 self.updateCommunitySuccess.send()
             }.store(in: &subscription)
     }
@@ -169,13 +168,13 @@ final class CommunityViewModel: ObservableObject {
                 communityString = str
             }
         }
-        CommunityService.getCommunity()
+        CommunityService.getCommunity(nextPageToken: "")
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { [self] (data: CommunityResponse) in
                 
                 for i in data.documents{
-                    CommentService.getComment(collectionName: communityString, collectionDocId: i.fields.id.stringValue)
+                    CommentService.getComment(collectionName: communityString, collectionDocId: i.fields.id.stringValue, nextPageToken: "")
                         .receive(on: DispatchQueue.main)
                         .sink { (completion: Subscribers.Completion<Error>) in
                         } receiveValue: { (data: CommentResponse) in

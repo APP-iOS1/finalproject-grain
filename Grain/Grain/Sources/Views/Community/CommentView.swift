@@ -236,7 +236,7 @@ struct CommentView: View {
                                                 .padding(.top, 1)
                                                 .padding(.bottom, -3)
                                                 .onTapGesture {
-                                                makeEachBool(count: commentVm.sortedRecentRecommentCount.count)
+                                                makeEachBool(count: commentVm.sortedRecentComment.count)
                                                 readMoreComments = true
                                                 eachBool[index] = true
                                             }
@@ -283,7 +283,7 @@ struct CommentView: View {
             
         }
         .onAppear {
-            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId)
+            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, nextPageToken: "")
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 commentCount = commentVm.sortedRecentComment.count
@@ -297,7 +297,7 @@ struct CommentView: View {
             }else {
                 commentVm.deleteComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, docID: deleteDocId)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId)
+                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
                 }
             }
             

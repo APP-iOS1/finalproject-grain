@@ -14,10 +14,10 @@ import UIKit
 enum MagazineService {
     
     // MARK: - 매거진 데이터 가져오기
-    static func getMagazine() -> AnyPublisher<MagazineResponse, Error> {
+    static func getMagazine(nextPageToken: String) -> AnyPublisher<MagazineResponse, Error> {
         
         do {
-            let request = try MagazineRouter.get.asURLRequest()
+            let request = try MagazineRouter.get(nextPageToken: nextPageToken).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

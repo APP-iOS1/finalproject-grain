@@ -208,9 +208,9 @@ struct MainSearchView: View {
                                     }
                                     
                                 }
-                                .task(id: ObservingChangeValueLikeNum){
-                                    magazineViewModel.fetchMagazine()
-                                }
+                                .onChange(of: ObservingChangeValueLikeNum, perform: { newValue in
+                                    magazineViewModel.fetchMagazine(nextPageToken: "")
+                                })
                                 .emptyPlaceholder(magazineViewModel.magazines.filter {
                                     ignoreSpaces(in: $0.fields.title.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)

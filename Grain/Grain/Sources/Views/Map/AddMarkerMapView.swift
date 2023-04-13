@@ -243,7 +243,7 @@ struct AddMarkerMapView: View {
                                 mapVM.insertMap(data: data)
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    magazineVM.fetchMagazine()
+                                    magazineVM.fetchMagazine(nextPageToken: "")
                                 }
                             }
                             

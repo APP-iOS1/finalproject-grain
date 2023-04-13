@@ -28,6 +28,9 @@ struct MarketTabView: View {
                                 CommunityRowView(communityVM: communityVM, community: data)
                             }
                         }
+                        .emptyPlaceholder(communityVM.returnCategoryCommunity(category: "클래스")) {
+                           CommunityPlaceHolderView()
+                        }
                     }// VStack
                     .id("SCROLL_TO_TOP")
                     .overlay(

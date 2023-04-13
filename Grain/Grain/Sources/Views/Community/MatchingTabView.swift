@@ -30,6 +30,9 @@ struct MatchingTabView: View {
                                 CommunityRowView(communityVM: communityVM, community: data)
                             }
                         }
+                        .emptyPlaceholder(communityVM.returnCategoryCommunity(category: "매칭")) {
+                           CommunityPlaceHolderView()
+                        }
                     }// vstack
                     .id("SCROLL_TO_TOP")
                     .overlay(

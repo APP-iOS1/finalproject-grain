@@ -63,6 +63,7 @@
 		991536DE29D4A00E007B5B07 /* EX+Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DD29D4A00E007B5B07 /* EX+Haptic.swift */; };
 		991536E029D4BF0D007B5B07 /* EX+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DF29D4BF0D007B5B07 /* EX+Transition.swift */; };
 		991536E429D55E53007B5B07 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536E329D55E53007B5B07 /* AccountDetailView.swift */; };
+		9920DDF729E89D6E0014671D /* CommunityPlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DDF629E89D6E0014671D /* CommunityPlaceHolderView.swift */; };
 		99233D462977F2C700A875B1 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D452977F2C700A875B1 /* MapView.swift */; };
 		99233D482977F2F900A875B1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D472977F2F900A875B1 /* LocationManager.swift */; };
 		99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D492977F31B00A875B1 /* MapCategoryCellView.swift */; };
@@ -249,6 +250,7 @@
 		991536DD29D4A00E007B5B07 /* EX+Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Haptic.swift"; sourceTree = "<group>"; };
 		991536DF29D4BF0D007B5B07 /* EX+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Transition.swift"; sourceTree = "<group>"; };
 		991536E329D55E53007B5B07 /* AccountDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountDetailView.swift; sourceTree = "<group>"; };
+		9920DDF629E89D6E0014671D /* CommunityPlaceHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityPlaceHolderView.swift; sourceTree = "<group>"; };
 		99233D452977F2C700A875B1 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		99233D472977F2F900A875B1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		99233D492977F31B00A875B1 /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 				8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */,
 				A71D6E3629DD3C830032A766 /* CommunityCommentNickNameView.swift */,
 				0C0A21C8299BE91A0018F2D1 /* CommunityCommentView.swift */,
+				9920DDF629E89D6E0014671D /* CommunityPlaceHolderView.swift */,
 				06FD6AB62977AF2C00B4A859 /* CommunityDetailView.swift */,
 				0C0A21C629995B240018F2D1 /* CommunityEditView.swift */,
 				A71CAE6329C1904100752A67 /* CommunityRecommentView.swift */,
@@ -998,6 +1001,7 @@
 				A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */,
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,
 				A7E3DDE3298D3D5F004DA1F6 /* NearbyPostsComponent.swift in Sources */,
+				9920DDF729E89D6E0014671D /* CommunityPlaceHolderView.swift in Sources */,
 				8B979A1829E32B9700726106 /* AppDataModel.swift in Sources */,
 				8B10F42E2990C3F100582D27 /* BookmarkedMagazine.swift in Sources */,
 				0CE63C9E29B21138009D8A2D /* BlinkingAnimatinoModifier.swift in Sources */,

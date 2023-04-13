@@ -30,6 +30,9 @@ struct InfoTabView: View {
                                 CommunityRowView(communityVM: communityVM, community: data)
                             }
                         }
+                        .emptyPlaceholder(communityVM.returnCategoryCommunity(category: "정보")) {
+                           CommunityPlaceHolderView()
+                        }
                     }
                     .id("SCROLL_TO_TOP")
                     .overlay(

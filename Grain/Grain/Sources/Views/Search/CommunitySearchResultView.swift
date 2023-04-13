@@ -48,9 +48,10 @@ struct CommunitySearchResultView: View {
                             HStack{
                                 KFImage(URL(string: item.fields.image.arrayValue.values[0].stringValue) ?? URL(string: errorImage() ))
                                     .resizable()
+                                    .aspectRatio(contentMode: .fill)
                                     .frame(width: 90, height: 90)
                                     .foregroundColor(.white)
-                                    .aspectRatio(contentMode: .fit)
+                                    .clipped()
                                     .padding(.leading, -5)
                                     .padding(.trailing, 5)
                                  

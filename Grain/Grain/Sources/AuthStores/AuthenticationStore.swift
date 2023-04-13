@@ -35,12 +35,12 @@ final class AuthenticationStore: ObservableObject {
     @Published var user: User?
     @Published var displayName = ""
     @Published var errorMessage = ""
-    @Published var checkUsers = [UserDocument]()
     
     @Published var userUID = ""
     @Published var userName = ""
     @Published var email = ""
-    
+    @Published var users = [UserDocument]()
+    @Published var userTemp = [UserDocument]()
     @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
     @AppStorage("logInCompanyState") var logInCompanyState: LogInCompanyState = .noCompany
     
@@ -96,7 +96,7 @@ final class AuthenticationStore: ObservableObject {
                 userUID = uid ?? ""
                 userName = profile.name
                 email = profile.email
-                findUserDocID(docID: uid ?? "", nextPageToken: "")
+                findUserDocID(docID: userUID, nextPageToken: "")
                 self.logInCompanyState = .googleLogIn
                 
             }
@@ -244,7 +244,7 @@ final class AuthenticationStore: ObservableObject {
                     self.userUID = user.uid
                     self.userName = user.displayName ?? ""
                     self.email = user.email ?? ""
-                    self.findUserDocID(docID: user.uid, nextPageToken: "")
+                    self.findUserDocID(docID: self.userUID, nextPageToken: "")
                 }
             }
             catch {
@@ -333,24 +333,25 @@ final class AuthenticationStore: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
-                self.checkUsers = data.documents
-    
+                self.userTemp.append(contentsOf: data.documents)
+                
                 if !(data.nextPageToken == nil) {
                     var nextPageToken : String = ""
                     nextPageToken = data.nextPageToken!
                     self.findUserDocID(docID:docID, nextPageToken: nextPageToken)
                 }else{
-                    
-                    for i in data.documents{
+                    self.users = self.userTemp
+
+                    for i in self.users{
                         if i.fields.id.stringValue == docID{
                             self.authenticationState = .authenticated   //authenticationState 상태 변환
                             break
                         }
                         self.authenticationState = .freshman
                     }
+                    self.userTemp.removeAll()
 
                     self.findUserDocIDSuccess.send()
-                    self.authenticationState = .freshman
 
                 }
 

@@ -74,7 +74,7 @@ struct MyPageMyFeedView: View {
                         VStack {
                             LazyVGrid(columns: columns, spacing: 1) {
                                 
-                                ForEach(magazineVM.sortedTopLikedMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed(), id: \.self) { data in
+                                ForEach(magazineVM.sortedRecentMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed(), id: \.self) { data in
                                     NavigationLink {
                                         MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
                                     } label: {
@@ -86,7 +86,7 @@ struct MyPageMyFeedView: View {
                                     }
                                 }
                             }
-                            .emptyPlaceholder(magazineVM.sortedTopLikedMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed()) {
+                            .emptyPlaceholder(magazineVM.sortedRecentMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed()) {
                                 MyPagePlaceholderView(presented: $presented)
                                 
                             }
@@ -122,7 +122,7 @@ struct MyPageMyFeedView: View {
                     ScrollView(showsIndicators: false){
                         VStack {
                             LazyVStack{
-                                ForEach(magazineVM.sortedTopLikedMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed(), id: \.self) { data in
+                                ForEach(magazineVM.sortedRecentMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed(), id: \.self) { data in
                                     NavigationLink {
                                         // MARK: 피드 뷰 디테일로 넘어가기 index -> fetch해온 데이터
                                         MagazineDetailView(magazineVM: magazineVM, userVM: userVM, data: data, ObservingChangeValueLikeNum: $ObservingChangeValueLikeNum)
@@ -132,7 +132,7 @@ struct MyPageMyFeedView: View {
                                     }
                                 }
                             }
-                            .emptyPlaceholder(magazineVM.sortedTopLikedMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed()) {
+                            .emptyPlaceholder(magazineVM.sortedRecentMagazineData.filter{ $0.fields.userID.stringValue == Auth.auth().currentUser?.uid }.reversed()) {
                                 MyPagePlaceholderView(presented: $presented)
                                 
                             }

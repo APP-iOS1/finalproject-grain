@@ -40,13 +40,13 @@ final class AuthenticationStore: ObservableObject {
     @Published var userUID = ""
     @Published var userName = ""
     @Published var email = ""
-
+    
     @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
     @AppStorage("logInCompanyState") var logInCompanyState: LogInCompanyState = .noCompany
     
     var updateUsersArraySuccess = PassthroughSubject<(), Never>()
     var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()
-
+    
     fileprivate var currentNonce: String?
     
     let authPath = Auth.auth()
@@ -64,12 +64,13 @@ final class AuthenticationStore: ObservableObject {
             guard let clientID = FirebaseApp.app()?.options.clientID else { return }
             
             let configuration = GIDConfiguration(clientID: clientID)
-            
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
-            guard let rootViewController = windowScene.windows.first?.rootViewController else { return }
-            
-            GIDSignIn.sharedInstance.signIn(with: configuration, presenting: rootViewController) { [unowned self] user, error in
-                authenticateUser(for: user, with: error)
+            DispatchQueue.main.async {
+                guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+                guard let rootViewController = windowScene.windows.first?.rootViewController else { return }
+                
+                GIDSignIn.sharedInstance.signIn(with: configuration, presenting: rootViewController) { [unowned self] user, error in
+                    authenticateUser(for: user, with: error)
+                }
             }
         }
     }
@@ -91,13 +92,13 @@ final class AuthenticationStore: ObservableObject {
                 dump("\(#function) - DEBUG \(error.localizedDescription)")
             } else {
                 guard let profile = user?.profile else { return }
-            
+                
                 userUID = uid ?? ""
                 userName = profile.name
                 email = profile.email
                 findUserDocID(docID: uid ?? "")
                 self.logInCompanyState = .googleLogIn
-
+                
             }
         }
     }
@@ -111,7 +112,7 @@ final class AuthenticationStore: ObservableObject {
             }
             if let token = token {
                 var arr : [String] = []
-
+                
                 UserService.getCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                     .receive(on: DispatchQueue.main)
                     .sink { (completion: Subscribers.Completion<Error>) in
@@ -123,9 +124,9 @@ final class AuthenticationStore: ObservableObject {
                             arr.append(i.stringValue)
                         }
                     }.store(in: &self.subscription)
-
+                
                 arr.append(token)
-
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     // type : fcmToken arr : 토큰값 넣기 docID: 현재 유저 아이디
                     UserService.updateCurrentUserArray(type: "fcmToken", arr: arr, docID: Auth.auth().currentUser?.uid ?? "")
@@ -149,7 +150,7 @@ final class AuthenticationStore: ObservableObject {
             if let token = token {
                 var arr : [CurrentUserStringValue] = tokenArray
                 var arrToString: [String] = []
-
+                
                 
                 if !(arr.count == 0) {
                     for i in 0..<arr.count{
@@ -167,7 +168,7 @@ final class AuthenticationStore: ObservableObject {
                         .receive(on: DispatchQueue.main)
                         .sink { (completion: Subscribers.Completion<Error>) in
                         } receiveValue: { (data: UserDocument) in
-                    
+                            
                             self.updateUsersArraySuccess.send()
                         }.store(in: &self.subscription)
                 }else{
@@ -215,7 +216,9 @@ final class AuthenticationStore: ObservableObject {
                         let result = try await Auth.auth().signIn(with: credential)
                         // diplayName update 시점
                         await updateDisplayName(for: result.user, with: appleIDCredential)
-                        self.logInCompanyState = .appleLogIn
+                        DispatchQueue.main.async {
+                            self.logInCompanyState = .appleLogIn
+                        }
                     }
                     catch{
                         print("Error authenticating: \(error.localizedDescription)")
@@ -235,12 +238,13 @@ final class AuthenticationStore: ObservableObject {
             changeRequest.displayName = appleIDCredential.displayName()
             do {
                 try await changeRequest.commitChanges()
-                self.displayName = Auth.auth().currentUser?.displayName ?? ""
-                
-                userUID = user.uid
-                userName = user.displayName ?? ""
-                email = user.email ?? ""
-                findUserDocID(docID: user.uid)
+                DispatchQueue.main.async {
+                    self.displayName = Auth.auth().currentUser?.displayName ?? ""
+                    self.userUID = user.uid
+                    self.userName = user.displayName ?? ""
+                    self.email = user.email ?? ""
+                    self.findUserDocID(docID: user.uid)
+                }
             }
             catch {
                 print("Unable to update the user's displayname: \(error.localizedDescription)")
@@ -283,7 +287,7 @@ final class AuthenticationStore: ObservableObject {
         } catch {
             print(error.localizedDescription)
         }
-//        isUserLoggedIn = false
+        //        isUserLoggedIn = false
     }
     // MARK: - Google LogOut
     
@@ -335,7 +339,7 @@ final class AuthenticationStore: ObservableObject {
                         break
                     }
                     self.authenticationState = .freshman
-//                    self.isUserLoggedIn = .freshman               <- 필요없어 보임
+                    //                    self.isUserLoggedIn = .freshman               <- 필요없어 보임
                 }
                 self.findUserDocIDSuccess.send()
             }.store(in: &subscription)

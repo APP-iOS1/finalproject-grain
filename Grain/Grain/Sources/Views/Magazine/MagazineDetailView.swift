@@ -264,7 +264,7 @@ struct MagazineDetailView: View {
                                             postMagazineArr.removeAll { $0 == magazineData.fields.id.stringValue }
                                             userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                magazineVM.fetchMagazine()
+                                                magazineVM.fetchMagazine(nextPageToken: "")
                                             }
                                             dismiss()
                                         }

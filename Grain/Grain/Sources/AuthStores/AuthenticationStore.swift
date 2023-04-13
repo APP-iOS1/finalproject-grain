@@ -244,7 +244,7 @@ final class AuthenticationStore: ObservableObject {
                     self.userUID = user.uid
                     self.userName = user.displayName ?? ""
                     self.email = user.email ?? ""
-                    self.findUserDocID(docID: user.uid)
+                    self.findUserDocID(docID: user.uid, nextPageToken: "")
                 }
             }
             catch {
@@ -340,6 +340,7 @@ final class AuthenticationStore: ObservableObject {
                     nextPageToken = data.nextPageToken!
                     self.findUserDocID(docID:docID, nextPageToken: nextPageToken)
                 }else{
+                    
                     for i in data.documents{
                         if i.fields.id.stringValue == docID{
                             self.authenticationState = .authenticated   //authenticationState 상태 변환

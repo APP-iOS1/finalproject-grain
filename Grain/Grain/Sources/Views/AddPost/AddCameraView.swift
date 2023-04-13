@@ -20,7 +20,11 @@ struct AddCameraView: View {
                 
                 VStack{
                     Text("장비 등록 화면으로 이동하여")
-                    Text("촬영하신 카메라, 렌즈, 필름을 등록해주세요!")
+                    Text("촬영하신 바디, 렌즈, 필름을 등록해주세요!")
+                    
+                    Text("(바디는 필수로 등록해주세요)")
+                        .foregroundColor(.vivaMagenta)
+                        .padding(.top)
                 }
                 .font(.headline)
                 .padding()

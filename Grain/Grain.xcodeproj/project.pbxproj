@@ -56,8 +56,10 @@
 		8BCF31DE2977D0CB00EB6188 /* CommunityAddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */; };
 		8BCF31E0297A28CE00EB6188 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */; };
 		8BCF31E2297A500900EB6188 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCF31E1297A500900EB6188 /* CommentView.swift */; };
-		9902339529E59D3A00B7F639 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9902339329E59D3900B7F639 /* GoogleService-Info.plist */; };
-		9902339629E59D3A00B7F639 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9902339429E59D3A00B7F639 /* Config.xcconfig */; };
+		990233A729E8664300B7F639 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 990233A529E8664300B7F639 /* GoogleService-Info.plist */; };
+		990233A829E8664300B7F639 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 990233A529E8664300B7F639 /* GoogleService-Info.plist */; };
+		990233A929E8664300B7F639 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 990233A629E8664300B7F639 /* Config.xcconfig */; };
+		990233AA29E8664300B7F639 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 990233A629E8664300B7F639 /* Config.xcconfig */; };
 		991536DE29D4A00E007B5B07 /* EX+Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DD29D4A00E007B5B07 /* EX+Haptic.swift */; };
 		991536E029D4BF0D007B5B07 /* EX+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DF29D4BF0D007B5B07 /* EX+Transition.swift */; };
 		991536E429D55E53007B5B07 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536E329D55E53007B5B07 /* AccountDetailView.swift */; };
@@ -242,8 +244,8 @@
 		8BCF31DF297A28CE00EB6188 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		8BCF31E1297A500900EB6188 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		94059B40F629705B0A2BF7F5 /* Pods-GrainNotification.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GrainNotification.release.xcconfig"; path = "Target Support Files/Pods-GrainNotification/Pods-GrainNotification.release.xcconfig"; sourceTree = "<group>"; };
-		9902339329E59D3900B7F639 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		9902339429E59D3A00B7F639 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		990233A529E8664300B7F639 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		990233A629E8664300B7F639 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		991536DD29D4A00E007B5B07 /* EX+Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Haptic.swift"; sourceTree = "<group>"; };
 		991536DF29D4BF0D007B5B07 /* EX+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Transition.swift"; sourceTree = "<group>"; };
 		991536E329D55E53007B5B07 /* AccountDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountDetailView.swift; sourceTree = "<group>"; };
@@ -555,8 +557,8 @@
 				9958AF72297778D800A51DA9 /* GrainApp.swift */,
 				8B979A1729E32B9700726106 /* AppDataModel.swift */,
 				9958AFB82977D56000A51DA9 /* Info.plist */,
-				9902339429E59D3A00B7F639 /* Config.xcconfig */,
-				9902339329E59D3900B7F639 /* GoogleService-Info.plist */,
+				990233A629E8664300B7F639 /* Config.xcconfig */,
+				990233A529E8664300B7F639 /* GoogleService-Info.plist */,
 				99DEE60629C2E70A00BE5BC6 /* Localizable.strings */,
 				9958AF812977793700A51DA9 /* Configuration */,
 				9958AF80297778FD00A51DA9 /* Sources */,
@@ -871,6 +873,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				990233AA29E8664300B7F639 /* Config.xcconfig in Resources */,
+				990233A829E8664300B7F639 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -879,8 +883,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				99DEE60429C2E70A00BE5BC6 /* Localizable.strings in Resources */,
-				9902339629E59D3A00B7F639 /* Config.xcconfig in Resources */,
-				9902339529E59D3A00B7F639 /* GoogleService-Info.plist in Resources */,
+				990233A929E8664300B7F639 /* Config.xcconfig in Resources */,
+				990233A729E8664300B7F639 /* GoogleService-Info.plist in Resources */,
 				9958AF7A297778D900A51DA9 /* Preview Assets.xcassets in Resources */,
 				9958AF77297778D900A51DA9 /* Assets.xcassets in Resources */,
 			);
@@ -1137,7 +1141,7 @@
 /* Begin XCBuildConfiguration section */
 		8B4249E829DAB96400C53790 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9902339429E59D3A00B7F639 /* Config.xcconfig */;
+			baseConfigurationReference = 990233A629E8664300B7F639 /* Config.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1163,7 +1167,7 @@
 		};
 		8B4249E929DAB96400C53790 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9902339429E59D3A00B7F639 /* Config.xcconfig */;
+			baseConfigurationReference = 990233A629E8664300B7F639 /* Config.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1303,7 +1307,7 @@
 		};
 		9958AF7E297778D900A51DA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9902339429E59D3A00B7F639 /* Config.xcconfig */;
+			baseConfigurationReference = 990233A629E8664300B7F639 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1346,7 +1350,7 @@
 		};
 		9958AF7F297778D900A51DA9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9902339429E59D3A00B7F639 /* Config.xcconfig */;
+			baseConfigurationReference = 990233A629E8664300B7F639 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

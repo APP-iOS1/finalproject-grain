@@ -24,6 +24,7 @@ struct MagazineDetailView: View {
     @State private var lifetime: Float = 0
     @State private var imageScale: CGFloat = 1
     @State private var viewID = 0
+    @State private var isReportAlertShown: Bool = false
     
     @Environment(\.dismiss) private var dismiss
     
@@ -250,7 +251,25 @@ struct MagazineDetailView: View {
                                         .foregroundColor(.black)
                                         .padding(.top, 2)
                                 }
-                                
+                                .alert(isPresented: $isDeleteAlertShown) {
+                                    Alert(title: Text("게시물을 삭제하시겠어요?"),
+                                          message: Text("게시물을 삭제하면 영구히 삭제되고 복원할 수 없습니다."),
+                                          primaryButton:  .cancel(Text("취소")),
+                                          secondaryButton:.destructive(Text("삭제"),
+                                                                       action: {
+                                        if let magazineData = self.magazineData {
+                                            magazineVM.deleteMagazine(docID: magazineData.fields.id.stringValue)
+                                            mapVM.deleteMap(docID: magazineData.fields.id.stringValue)
+                                            var postMagazineArr : [String]  = userVM.postedMagazineID
+                                            postMagazineArr.removeAll { $0 == magazineData.fields.id.stringValue }
+                                            userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                magazineVM.fetchMagazine()
+                                            }
+                                            dismiss()
+                                        }
+                                    }))
+                                }
                                 //MARK: 북마크 버튼
                                 
                                 Image(systemName: isBookMarked ? "bookmark.fill" : "bookmark")
@@ -264,7 +283,15 @@ struct MagazineDetailView: View {
                                             self.saveOpacity = 0
                                         }
                                     }
-                                
+                                    .alert(isPresented: $isReportAlertShown) {
+                                        Alert(title: Text("이 게시물을 신고하시겠습니까?"),
+                                              primaryButton:  .cancel(Text("취소")),
+                                              secondaryButton:.destructive(Text("신고하기"),action: {
+                                            userVM.declaration(id: data.fields.id.stringValue
+                                                               , category: "Magazine")
+                                            
+                                        }))
+                                    }
                             }
                             .padding(.top, 5)
                             
@@ -324,25 +351,6 @@ struct MagazineDetailView: View {
               } catch {}
             magazineVM.fetchMagazine(nextPageToken: "")
         }
-        .alert(isPresented: $isDeleteAlertShown) {
-            Alert(title: Text("게시물을 삭제하시겠어요?"),
-                  message: Text("게시물을 삭제하면 영구히 삭제되고 복원할 수 없습니다."),
-                  primaryButton:  .cancel(Text("취소")),
-                  secondaryButton:.destructive(Text("삭제"),
-                                               action: {
-                if let magazineData = self.magazineData {
-                    magazineVM.deleteMagazine(docID: magazineData.fields.id.stringValue)
-                    mapVM.deleteMap(docID: magazineData.fields.id.stringValue)
-                    var postMagazineArr : [String]  = userVM.postedMagazineID
-                    postMagazineArr.removeAll { $0 == magazineData.fields.id.stringValue }
-                    userVM.updateCurrentUserArray(type: "postedMagazineID", arr: postMagazineArr, docID: Auth.auth().currentUser?.uid ?? "")
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        magazineVM.fetchMagazine(nextPageToken: "")
-                    }
-                    dismiss()
-                }
-            }))
-        }
         .onAppear{
             self.magazineData = self.data
             // 희경: 유저 팔로워, 팔로잉 업데이트 후 뒤로가기했다가 다시 들어갔을때 바로 반영안되는 issue
@@ -399,7 +407,7 @@ struct MagazineDetailView: View {
                                 if user.fields.id.stringValue != userVM.currentUsers?.id.stringValue {
                                     let sender = PushNotificationSender(serverKeyString: "")
                                     for i in user.fields.fcmToken.arrayValue.values {
-                                        sender.sendPushNotification(to: i.stringValue, title: "좋아요", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 필름을 좋아합니다 ", image: magazineData.fields.image.arrayValue.values[0].stringValue)
+                                        sender.sendPushNotification(to: i.stringValue, title: "좋아요", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 회원님의 필름을 좋아합니다.", image: magazineData.fields.image.arrayValue.values[0].stringValue)
                                     }
                                 }
                             }
@@ -506,8 +514,7 @@ struct MagazineDetailView: View {
                     }
                     if data.fields.userID.stringValue != Auth.auth().currentUser?.uid{
                         Button {
-                            userVM.declaration(id: data.fields.id.stringValue
-                                               , category: "Magazine")
+                            self.isReportAlertShown.toggle()
                         } label: {
                             Text("신고하기")
                             Spacer()

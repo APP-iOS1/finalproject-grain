@@ -50,6 +50,7 @@ struct CommunityDetailView: View {
     @State private var scrollViewOffset: CGFloat = 0
     @State private var startOffset: CGFloat = 0
     @State private var scrollToBottom: Bool = false
+    @State private var isReportAlertShown: Bool = false
     
     @FocusState private var textFieldFocused: Bool
     
@@ -188,11 +189,16 @@ struct CommunityDetailView: View {
                                 Spacer()
                             }
                             .padding(.top, 10)
-                            //                        Divider()
-                            //                            .frame(maxWidth: Screen.maxWidth * 0.94)
-                            //                            .background(Color.black)
-                            //                            .padding(.top, 20)
-                            //                            .padding(.horizontal, Screen.maxWidth * 0.04)
+                            Divider()
+                                .alert(isPresented: $isReportAlertShown) {
+                                    Alert(title: Text("이 게시물을 신고하시겠습니까?"),
+                                          primaryButton:  .cancel(Text("취소")),
+                                          secondaryButton:.destructive(Text("신고하기"),action: {
+                                        userVM.declaration(id: community.fields.id.stringValue
+                                                           , category: "Community")
+                                        
+                                    }))
+                                }
                             
                             HStack {
                                 Image(systemName: "bubble.right")
@@ -387,8 +393,7 @@ struct CommunityDetailView: View {
                         }
                         if community.fields.userID.stringValue != Auth.auth().currentUser?.uid{
                             Button {
-                                userVM.declaration(id: community.fields.id.stringValue
-                                                   , category: "Community")
+                                self.isReportAlertShown.toggle()
                             } label: {
                                 Text("신고하기")
                                 Spacer()

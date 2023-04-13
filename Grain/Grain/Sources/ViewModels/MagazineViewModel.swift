@@ -16,8 +16,11 @@ final class MagazineViewModel: ObservableObject {
     @Published var magazines = [MagazineDocument]()
     @Published var updateMagazineData : MagazineDocument?
     
-    @Published var sortedRecentMagazineData = [MagazineDocument]()    // 매거진 게시물 최신순으로
+    @Published var sortedRecentMagazineData = [MagazineDocument]()     // 매거진 게시물 최신순으로
     @Published var sortedTopLikedMagazineData = [MagazineDocument]()    // 매거진 게시물 좋아오 높은순
+    
+    @Published var recentTemp = [MagazineDocument]()
+    @Published var likedTemp = [MagazineDocument]()
     
     @Published var currentTime: Date = Date()
 
@@ -31,13 +34,12 @@ final class MagazineViewModel: ObservableObject {
     // MARK: 메거진 데이터 가져오기 메소드
     func fetchMagazine(nextPageToken: String) {
         
-        
-        if isFetchBool {
-            self.magazines.removeAll()
-            self.sortedRecentMagazineData.removeAll()
-            self.sortedTopLikedMagazineData.removeAll()
-            self.isFetchBool = false
-        }
+//        if isFetchBool {
+//            self.magazines.removeAll()
+//            self.sortedRecentMagazineData.removeAll()
+//            self.sortedTopLikedMagazineData.removeAll()
+//            self.isFetchBool = false
+//        }
         
         self.currentTime = Date()
         
@@ -46,7 +48,6 @@ final class MagazineViewModel: ObservableObject {
             .sink { (completion: Subscribers.Completion<Error>) in
                 
             } receiveValue: { (data: MagazineResponse) in
-                               
                 
                 self.magazines.append(contentsOf: data.documents)
                 
@@ -54,8 +55,7 @@ final class MagazineViewModel: ObservableObject {
                     var nextPageToken : String = ""
                     nextPageToken = data.nextPageToken!
                     self.fetchMagazine(nextPageToken: nextPageToken)
-                    
-                }else{
+                } else {
                     // MARK: 매거진 데이터 최신순 정렬 메서드 호출
                     self.sortedRecentMagazineData = self.magazines.sorted(by: {
                         return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
@@ -65,7 +65,10 @@ final class MagazineViewModel: ObservableObject {
                         // MARK: String -> Int로 바꾸기
                         return  Int($0.fields.likedNum.integerValue)! > Int($1.fields.likedNum.integerValue)!
                     })
-                    self.isFetchBool = true
+                    
+                    self.magazines.removeAll()
+//                    self.isFetchBool = true
+                    
                     self.fetchMagazineSuccess.send(data.documents)
                 }
                 

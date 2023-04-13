@@ -188,7 +188,7 @@ struct BodyList: View {
             
             // 유저의 바디 정보가 담긴 배열로 부터 리스트 생성
             ForEach(userVM.myCamera, id: \.self) { camera in
-                if camera != "필수" { //계정 등록 시 장비정보에 기본으로 들어가는 "필수" 안보여주기위함
+                if camera != "카메라 바디는 필수 선택입니다 :)" { //계정 등록 시 장비정보에 기본으로 들어가는 "필수" 안보여주기위함
                     Text(camera)
                 }
             }
@@ -300,7 +300,7 @@ struct LensList: View {
             
             // 유저의 렌즈 정보가 담긴 배열로 부터 리스트 생성
             ForEach(userVM.myLens , id: \.self) { lens in
-                if lens != "선택" {
+                if lens != "렌즈는 선택사항입니다." {
                     Text(lens)
                 }
             }
@@ -408,7 +408,7 @@ struct FilmList: View {
     var body: some View {
         Section(header: Text("필름").font(.subheadline).bold()){
             ForEach(userVM.myFilm, id: \.self) { film in
-                if film != "선택" {
+                if film != "필름은 선택사항입니다." {
                     Text(film)
                 }
             }

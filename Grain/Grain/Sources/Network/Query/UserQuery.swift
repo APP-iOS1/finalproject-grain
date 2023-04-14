@@ -274,7 +274,7 @@ enum UserQuery {
         return query
     }
     
-    static func insertDeclaration(id: String, category: String)-> Data? {
+    static func insertDeclaration(id: String, category: String, reason: String, reasonDetail: String)-> Data? {
             let query = """
                         {
                           "fields": {
@@ -284,6 +284,14 @@ enum UserQuery {
                                 },
                                "category": {
                                     "stringValue": "\(category)"
+
+                                },
+                               "reason": {
+                                    "stringValue": "\(reason)"
+
+                                },
+                               "reasonDetail": {
+                                    "stringValue": "\(reasonDetail)"
 
                                 }
                     }

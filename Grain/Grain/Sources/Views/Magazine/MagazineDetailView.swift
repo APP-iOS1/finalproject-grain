@@ -283,6 +283,7 @@ struct MagazineDetailView: View {
                                             self.saveOpacity = 0
                                         }
                                     }
+
                                     .sheet(isPresented: $isReportAlertShown) {
                                         ReportMainView()
                                     }

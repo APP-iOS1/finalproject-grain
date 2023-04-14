@@ -6,7 +6,6 @@
 	<array>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	</array>
-
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -42,7 +41,6 @@
 	<string>$(FireStorageBaseURL)</string>
 	<key>FireStore</key>
 	<string>$(FireStoreBaseURL)</string>
-
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
@@ -103,7 +101,6 @@
 	<string>$(UuidRecomment)</string>
 	<key>UuidUser</key>
 	<string>$(UuidUser)</string>
-
 	<key>serverkey</key>
 	<string>$(SERVERKEY)</string>
 </dict>

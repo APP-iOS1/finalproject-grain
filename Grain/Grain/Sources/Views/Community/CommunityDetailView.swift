@@ -190,6 +190,7 @@ struct CommunityDetailView: View {
                             }
                             .padding(.top, 10)
                             Divider()
+
                                 .sheet(isPresented: $isReportAlertShown) {
                                     ReportMainView()
                                 }

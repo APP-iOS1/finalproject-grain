@@ -17,7 +17,7 @@ enum UserRouter {
     case patchProfile(profileImage: String, nickName: String, introduce: String, docID: String)
     case delete(docID: String)
     case posetDeleteUser(userDocID: String)
-    case postDeclaration(id: String, category: String)
+    case postDeclaration(id: String, category: String , reason: String , reasonDetail: String)
     
     private var baseURL: URL {
         var baseUrlString : String = "https://"
@@ -84,7 +84,7 @@ enum UserRouter {
             return "/" + "\(queryItemString)" + "/" + "\(docID)"
         case let .posetDeleteUser(userDocID):
             return "/" + "\(queryItemDeleteString)"
-        case let .postDeclaration(_, _):
+        case let .postDeclaration(_, _, _, _):
             return "/Declaration"
         default:
             return "/" + "\(queryItemString)"
@@ -153,8 +153,8 @@ enum UserRouter {
             return UserQuery.updateUserProfile(profileImage: profileImage, nickName: nickName, introduce: introduce)
         case let .posetDeleteUser(userDocID) :
             return UserQuery.insertDeleteDataCollection(userDocID: userDocID)
-        case let .postDeclaration(id, category):
-            return UserQuery.insertDeclaration(id: id, category: category)
+        case let .postDeclaration(id, category, reason, reasonDetail):
+            return UserQuery.insertDeclaration(id: id, category: category, reason: reason, reasonDetail: reasonDetail)
         default:
             return nil
         }

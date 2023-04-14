@@ -204,12 +204,6 @@ struct ContentView: View {
                     communityVM.fetchCommunity(nextPageToken: "")
                     userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                     userVM.fetchUser(nextPageToken: "")
-                    
-                    // 로그인을 할때 토큰값 넣기
-                    if authenticationState == .authenticated{
-                        authenticationStore.addToken()
-                    }
-
                 }
                 .splashView {
                     ZStack{

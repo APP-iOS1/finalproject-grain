@@ -132,6 +132,8 @@
 		A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */; };
 		A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */; };
 		A77E1DD4298AAF1F0019AD87 /* ReverseGeocodeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */; };
+		A79379C129E9717E007F3748 /* PersonalInformationProcessingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79379C029E9717E007F3748 /* PersonalInformationProcessingView.swift */; };
+		A79379C329E971EB007F3748 /* TermsofUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79379C229E971EB007F3748 /* TermsofUseView.swift */; };
 		A7A1AA3A29B092F200B2D70B /* MagazineRecommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A1AA3929B092F200B2D70B /* MagazineRecommentView.swift */; };
 		A7A32D6829866E75005CE0CA /* GeocodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */; };
 		A7AF1A03299566EF007E6D43 /* CommentDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AF1A02299566EF007E6D43 /* CommentDTO.swift */; };
@@ -325,6 +327,8 @@
 		A77E1DCF298AAADA0019AD87 /* ReverseGeocodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeService.swift; sourceTree = "<group>"; };
 		A77E1DD1298AAD580019AD87 /* ReverseGeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeDTO.swift; sourceTree = "<group>"; };
 		A77E1DD3298AAF1F0019AD87 /* ReverseGeocodeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReverseGeocodeRouter.swift; sourceTree = "<group>"; };
+		A79379C029E9717E007F3748 /* PersonalInformationProcessingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalInformationProcessingView.swift; sourceTree = "<group>"; };
+		A79379C229E971EB007F3748 /* TermsofUseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsofUseView.swift; sourceTree = "<group>"; };
 		A7A1AA3929B092F200B2D70B /* MagazineRecommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagazineRecommentView.swift; sourceTree = "<group>"; };
 		A7A32D6729866E75005CE0CA /* GeocodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocodeDTO.swift; sourceTree = "<group>"; };
 		A7AF1A02299566EF007E6D43 /* CommentDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDTO.swift; sourceTree = "<group>"; };
@@ -690,6 +694,8 @@
 			isa = PBXGroup;
 			children = (
 				9958AFB42977B0C500A51DA9 /* AuthenticationView.swift */,
+				A79379C029E9717E007F3748 /* PersonalInformationProcessingView.swift */,
+				A79379C229E971EB007F3748 /* TermsofUseView.swift */,
 			);
 			path = AuthenticationViews;
 			sourceTree = "<group>";
@@ -1098,6 +1104,8 @@
 				069F2D3929DE86DE00FE8AAB /* ItemListView.swift in Sources */,
 				0C535C2D2977B68600E20BD9 /* EditorViewCell.swift in Sources */,
 				9962CDCF297924CC00E834C3 /* MarketTabView.swift in Sources */,
+				A79379C329E971EB007F3748 /* TermsofUseView.swift in Sources */,
+				A79379C129E9717E007F3748 /* PersonalInformationProcessingView.swift in Sources */,
 				065A24F429D2BD9300A78ACF /* DeleteUserView.swift in Sources */,
 				A7D957D4297AAF74001D2401 /* CommunityRouter.swift in Sources */,
 				A7D9F30E29896D8500B39218 /* UserService.swift in Sources */,
@@ -1347,9 +1355,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Grain/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "사용자의 위치를 받습니다";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "사용자의 위치를 받습니다";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "사용자의 위치를 받습니다";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "지도에서 내 위치를 확인하여 주변의 포토스팟, 현상소, 수리점의 최적의 정보를 제공받기 위해 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "지도에서 내 위치를 확인하여 주변의 포토스팟, 현상소, 수리점의 최적의 정보를 제공받기 위해 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "지도에서 내 위치를 확인하여 주변의 포토스팟, 현상소, 수리점의 최적의 정보를 제공받기 위해 권한이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "게시글에 사진 첨부를 위한 앨범 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
@@ -1390,9 +1399,10 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Grain/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "사용자의 위치를 받습니다";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "사용자의 위치를 받습니다";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "사용자의 위치를 받습니다";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "지도에서 내 위치를 확인하여 주변의 포토스팟, 현상소, 수리점의 최적의 정보를 제공받기 위해 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "지도에서 내 위치를 확인하여 주변의 포토스팟, 현상소, 수리점의 최적의 정보를 제공받기 위해 권한이 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "지도에서 내 위치를 확인하여 주변의 포토스팟, 현상소, 수리점의 최적의 정보를 제공받기 위해 권한이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "게시글에 사진 첨부를 위한 앨범 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;

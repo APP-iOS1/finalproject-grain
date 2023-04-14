@@ -173,10 +173,10 @@ enum UserService {
         }
     }
     
-    static func declarationService(id: String, category: String) -> AnyPublisher<UserDocument, Error> {
+    static func declarationService(id: String, category: String, reason: String, reasonDetail: String) -> AnyPublisher<UserDocument, Error> {
 
             do {
-                let request = try UserRouter.postDeclaration(id: id, category: category).asURLRequest()
+                let request = try UserRouter.postDeclaration(id: id, category: category, reason: reason, reasonDetail: reasonDetail).asURLRequest()
                 return URLSession
                     .shared
                     .dataTaskPublisher(for: request)

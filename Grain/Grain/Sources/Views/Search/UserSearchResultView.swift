@@ -20,7 +20,7 @@ struct UserSearchResultView: View {
         let arr = userVM.users.filter {
             ignoreSpaces(in: $0.fields.nickName.stringValue)
                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-            ignoreSpaces(in: $0.fields.name.stringValue)
+            ignoreSpaces(in: $0.fields.introduce.stringValue)
                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
         }
         return Array(arr)
@@ -65,10 +65,11 @@ struct UserSearchResultView: View {
                                             Text(searchedUser[i].fields.nickName.stringValue)
                                                 .bold()
                                                 .padding(.bottom, 5)
-                                            Text(searchedUser[i].fields.name.stringValue)
-                                                .font(.caption)
+                                            Text(searchedUser[i].fields.introduce.stringValue)
+                                                .font(.caption2)
                                                 .foregroundColor(.textGray)
                                                 .frame(alignment: .leading)
+                                                .lineLimit(1)
                                         }
                                         .padding(.leading)
                                         Spacer()
@@ -80,7 +81,7 @@ struct UserSearchResultView: View {
                     .emptyPlaceholder(userVM.users.filter {
                         ignoreSpaces(in: $0.fields.nickName.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-                        ignoreSpaces(in: $0.fields.name.stringValue)
+                        ignoreSpaces(in: $0.fields.introduce.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                     }) {
                         VStack{

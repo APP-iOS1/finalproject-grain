@@ -63,6 +63,10 @@
 		991536DE29D4A00E007B5B07 /* EX+Haptic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DD29D4A00E007B5B07 /* EX+Haptic.swift */; };
 		991536E029D4BF0D007B5B07 /* EX+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536DF29D4BF0D007B5B07 /* EX+Transition.swift */; };
 		991536E429D55E53007B5B07 /* AccountDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991536E329D55E53007B5B07 /* AccountDetailView.swift */; };
+		9920DDF729E89D6E0014671D /* CommunityPlaceHolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DDF629E89D6E0014671D /* CommunityPlaceHolderView.swift */; };
+		9920DDFB29E95FD60014671D /* ReportMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DDFA29E95FD60014671D /* ReportMainView.swift */; };
+		9920DDFD29E967720014671D /* ReportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DDFC29E967720014671D /* ReportDetailView.swift */; };
+		9920DDFF29E975F10014671D /* ReportCompleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9920DDFE29E975F10014671D /* ReportCompleteView.swift */; };
 		99233D462977F2C700A875B1 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D452977F2C700A875B1 /* MapView.swift */; };
 		99233D482977F2F900A875B1 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D472977F2F900A875B1 /* LocationManager.swift */; };
 		99233D4A2977F31B00A875B1 /* MapCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99233D492977F31B00A875B1 /* MapCategoryCellView.swift */; };
@@ -251,6 +255,10 @@
 		991536DD29D4A00E007B5B07 /* EX+Haptic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Haptic.swift"; sourceTree = "<group>"; };
 		991536DF29D4BF0D007B5B07 /* EX+Transition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EX+Transition.swift"; sourceTree = "<group>"; };
 		991536E329D55E53007B5B07 /* AccountDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountDetailView.swift; sourceTree = "<group>"; };
+		9920DDF629E89D6E0014671D /* CommunityPlaceHolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityPlaceHolderView.swift; sourceTree = "<group>"; };
+		9920DDFA29E95FD60014671D /* ReportMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMainView.swift; sourceTree = "<group>"; };
+		9920DDFC29E967720014671D /* ReportDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailView.swift; sourceTree = "<group>"; };
+		9920DDFE29E975F10014671D /* ReportCompleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCompleteView.swift; sourceTree = "<group>"; };
 		99233D452977F2C700A875B1 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		99233D472977F2F900A875B1 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		99233D492977F31B00A875B1 /* MapCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCategoryCellView.swift; sourceTree = "<group>"; };
@@ -466,6 +474,16 @@
 			path = GrainNotification;
 			sourceTree = "<group>";
 		};
+		9920DDF929E95FBE0014671D /* Report */ = {
+			isa = PBXGroup;
+			children = (
+				9920DDFA29E95FD60014671D /* ReportMainView.swift */,
+				9920DDFC29E967720014671D /* ReportDetailView.swift */,
+				9920DDFE29E975F10014671D /* ReportCompleteView.swift */,
+			);
+			path = Report;
+			sourceTree = "<group>";
+		};
 		99233D432977F25300A875B1 /* Community */ = {
 			isa = PBXGroup;
 			children = (
@@ -477,6 +495,7 @@
 				8BCF31DD2977D0CB00EB6188 /* CommunityAddView.swift */,
 				A71D6E3629DD3C830032A766 /* CommunityCommentNickNameView.swift */,
 				0C0A21C8299BE91A0018F2D1 /* CommunityCommentView.swift */,
+				9920DDF629E89D6E0014671D /* CommunityPlaceHolderView.swift */,
 				06FD6AB62977AF2C00B4A859 /* CommunityDetailView.swift */,
 				0C0A21C629995B240018F2D1 /* CommunityEditView.swift */,
 				A71CAE6329C1904100752A67 /* CommunityRecommentView.swift */,
@@ -666,6 +685,7 @@
 				99237D1029C8430100F1FA9E /* NetworkViews */,
 				9936E2AF298D4CFF006F3333 /* Search */,
 				0C5204A22989F5A5002623FB /* Splash */,
+				9920DDF929E95FBE0014671D /* Report */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1004,6 +1024,7 @@
 				A77E1DD2298AAD580019AD87 /* ReverseGeocodeDTO.swift in Sources */,
 				9958AFAC297780F100A51DA9 /* Ex+String.swift in Sources */,
 				A7E3DDE3298D3D5F004DA1F6 /* NearbyPostsComponent.swift in Sources */,
+				9920DDF729E89D6E0014671D /* CommunityPlaceHolderView.swift in Sources */,
 				8B979A1829E32B9700726106 /* AppDataModel.swift in Sources */,
 				8B10F42E2990C3F100582D27 /* BookmarkedMagazine.swift in Sources */,
 				0CE63C9E29B21138009D8A2D /* BlinkingAnimatinoModifier.swift in Sources */,
@@ -1048,6 +1069,7 @@
 				8B88CA6E29C2F2350064425C /* NetworkManager.swift in Sources */,
 				A7D9F306298964AE00B39218 /* MapRouter.swift in Sources */,
 				9958AF9929777E4D00A51DA9 /* AuthenticationStore.swift in Sources */,
+				9920DDFD29E967720014671D /* ReportDetailView.swift in Sources */,
 				A7D9F31029897A8D00B39218 /* NaverAPIEnum.swift in Sources */,
 				06FD6AB72977AF2C00B4A859 /* CommunityDetailView.swift in Sources */,
 				A7D9F3022989638900B39218 /* MapQuery.swift in Sources */,
@@ -1105,6 +1127,7 @@
 				A75BB99529815361004FE6FA /* PhotoSpotMapView.swift in Sources */,
 				A7FCA45B29C9675200F94249 /* EditorViewModel.swift in Sources */,
 				9936E2B729915CB8006F3333 /* SearchPlaceHolderView.swift in Sources */,
+				9920DDFB29E95FD60014671D /* ReportMainView.swift in Sources */,
 				A71CAE6429C1904100752A67 /* CommunityRecommentView.swift in Sources */,
 				9962CDD3297A1FA500E834C3 /* MagazineMainView.swift in Sources */,
 				9967FCC729D2D21E00F15844 /* EX+SegmentControls .swift in Sources */,
@@ -1112,6 +1135,7 @@
 				8B88CA7C29C462720064425C /* GeocodeRouter.swift in Sources */,
 				A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */,
 				A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */,
+				9920DDFF29E975F10014671D /* ReportCompleteView.swift in Sources */,
 				A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */,
 				A7A1AA3A29B092F200B2D70B /* MagazineRecommentView.swift in Sources */,
 				A75BB990297EA25C004FE6FA /* WebkitView.swift in Sources */,

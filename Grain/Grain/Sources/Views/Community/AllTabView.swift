@@ -29,6 +29,9 @@ struct AllTabView: View {
                                 CommunityRowView(communityVM: communityVM, community: data)
                             }
                         }
+                        .emptyPlaceholder(communityVM.sortedRecentCommunityData) {
+                           CommunityPlaceHolderView()
+                        }
                     }// VStack
                     .id("SCROLL_TO_TOP")
                     .overlay(

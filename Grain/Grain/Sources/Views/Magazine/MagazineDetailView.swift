@@ -283,14 +283,9 @@ struct MagazineDetailView: View {
                                             self.saveOpacity = 0
                                         }
                                     }
-                                    .alert(isPresented: $isReportAlertShown) {
-                                        Alert(title: Text("이 게시물을 신고하시겠습니까?"),
-                                              primaryButton:  .cancel(Text("취소")),
-                                              secondaryButton:.destructive(Text("신고하기"),action: {
-                                            userVM.declaration(id: data.fields.id.stringValue
-                                                               , category: "Magazine",reason: "", reasonDetail: "")
-                                            
-                                        }))
+
+                                    .sheet(isPresented: $isReportAlertShown) {
+                                        ReportMainView()
                                     }
                             }
                             .padding(.top, 5)
@@ -515,9 +510,11 @@ struct MagazineDetailView: View {
                         Button {
                             self.isReportAlertShown.toggle()
                         } label: {
-                            Text("신고하기")
+                            Text("신고")
+                                .foregroundColor(.red)
                             Spacer()
                             Image(systemName: "exclamationmark.bubble")
+                                .foregroundColor(.red)
                         }
                     }
                 } label: {

@@ -302,7 +302,7 @@ struct MainSearchView: View {
                                     ForEach(userViewModel.users.filter {
                                         ignoreSpaces(in: $0.fields.nickName.stringValue)
                                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-                                        ignoreSpaces(in: $0.fields.name.stringValue)
+                                        ignoreSpaces(in: $0.fields.introduce.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))}.prefix(3), id: \.self) { user in
                                         NavigationLink {
                                             UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: user)
@@ -324,10 +324,16 @@ struct MainSearchView: View {
                                                             .bold()
                                                             .padding(.bottom, 1)
                                                             .lineLimit(1)
-                                                        Text(user.fields.name.stringValue)
-                                                            .font(.caption)
+                                                        Text(user.fields.introduce.stringValue)
+                                                            .font(.caption2)
                                                             .foregroundColor(.textGray)
                                                             .frame(alignment: .leading)
+                                                            .lineLimit(1)
+                                                        if user.fields.introduce.stringValue.isEmpty{
+                                                            Text(" ")
+                                                                .font(.caption2)
+                                                        }
+                                                        
                                                     }
                                                     .padding(.leading)
                                                     Spacer()
@@ -352,7 +358,7 @@ struct MainSearchView: View {
                                 .emptyPlaceholder(userViewModel.users.filter {
                                     ignoreSpaces(in: $0.fields.nickName.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-                                    ignoreSpaces(in: $0.fields.name.stringValue)
+                                    ignoreSpaces(in: $0.fields.introduce.stringValue)
                                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
                                 }) {
                                     VStack{
@@ -400,7 +406,7 @@ struct MainSearchView: View {
             MagazineSearchResultView(magazineVM: magazineViewModel, searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
         }
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
-            CommunitySearchResultView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord, community: communityViewModel)
+            CommunitySearchResultView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord)
         }
         .navigationDestination(isPresented: $isUserSearchResultShown){
             UserSearchResultView( userVM: userViewModel , magazineVM: magazineViewModel, searchWord: $searchWord)

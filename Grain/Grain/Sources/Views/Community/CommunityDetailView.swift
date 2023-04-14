@@ -190,14 +190,9 @@ struct CommunityDetailView: View {
                             }
                             .padding(.top, 10)
                             Divider()
-                                .alert(isPresented: $isReportAlertShown) {
-                                    Alert(title: Text("이 게시물을 신고하시겠습니까?"),
-                                          primaryButton:  .cancel(Text("취소")),
-                                          secondaryButton:.destructive(Text("신고하기"),action: {
-                                        userVM.declaration(id: community.fields.id.stringValue
-                                                           , category: "Community",reason: "", reasonDetail: "")
-                                        
-                                    }))
+
+                                .sheet(isPresented: $isReportAlertShown) {
+                                    ReportMainView()
                                 }
                             
                             HStack {
@@ -392,20 +387,16 @@ struct CommunityDetailView: View {
                             }
                         }
                         if community.fields.userID.stringValue != Auth.auth().currentUser?.uid{
-                            Button {
-                                self.isReportAlertShown.toggle()
-                            } label: {
-                                Text("신고하기")
-                                Spacer()
-                                Image(systemName: "exclamationmark.bubble")
-                            }
+                            Button(role: .destructive, action: { self.isReportAlertShown.toggle()}) {
+                                   Label("신고", systemImage: "exclamationmark.bubble")
+                               }
+
                         }
 
                     } label: {
                         Label("더보기", systemImage: "ellipsis")
                     }
                     .accentColor(.black)
-//                    .padding(.trailing, Screen.maxWidth * 0.04)
                 }
             }
         }

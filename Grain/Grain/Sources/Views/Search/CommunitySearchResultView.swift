@@ -20,7 +20,6 @@ struct CommunitySearchResultView: View {
         return string.replacingOccurrences(of: " ", with: "")
     }
     
-    let community: CommunityViewModel
     
     func errorImage() -> String{
         var https : String = "https://"
@@ -31,12 +30,48 @@ struct CommunitySearchResultView: View {
         }
         return https
     }
+    func tagColorFunction(stateColor: String) -> String{
+        
+        var tagColor: String {
+            switch stateColor {
+            case "판매중":
+                return "#005E5B"
+                //            return "#4C9E77"
+            case "모집완료", "판매완료":
+                return "#A0A0A0"
+            case "Tip":
+                return "#FAC75B"
+                //            return "#F5dF4D"
+            case "모집중":
+                return "#1E3F66"
+            default:
+                return "4C9E77"
+            }
+        }
+        return tagColor
+    }
+    func tagNameColorFunction(stateNameColor: String) -> String{
+        
+        var tagNameColor: String {
+            switch stateNameColor {
+            case "모집중", "판매중":
+                return "#FFFFFF"
+            case "모집완료", "판매완료":
+                return "#FFFFFF"
+            case "Tip":
+                return "000000"
+            default:
+                return "#FFFFFF"
+            }
+        }
+        return tagNameColor
+    }
     
     var body: some View {
         ZStack {
             VStack{
                 List{
-                    ForEach(community.sortedRecentCommunityData.filter {
+                    ForEach(communityVM.sortedRecentCommunityData.filter {
                         ignoreSpaces(in: $0.fields.title.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                         ignoreSpaces(in: $0.fields.content.stringValue)
@@ -51,11 +86,32 @@ struct CommunitySearchResultView: View {
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 90, height: 90)
                                     .foregroundColor(.white)
+                                    .cornerRadius(7)
                                     .clipped()
                                     .padding(.leading, -5)
                                     .padding(.trailing, 5)
                                  
                                 VStack(alignment: .leading){
+                                    HStack {
+                                        
+                                        Text("\(item.fields.category.stringValue)")
+                                            .padding(.vertical, 4)
+                                            .padding(.horizontal, 7)
+                                            .background(Color.black)
+                                            .cornerRadius(20)
+                                            .foregroundColor(.white)
+                                            .bold()
+                                            .font(.caption2)
+                                        
+                                        Text("\(item.fields.state.stringValue)")
+                                            .padding(.vertical, 4)
+                                            .padding(.horizontal, 7)
+                                            .background(Color(hex: tagColorFunction(stateColor: item.fields.state.stringValue)))
+                                            .cornerRadius(20)
+                                            .foregroundColor(Color(hex: tagNameColorFunction(stateNameColor: item.fields.state.stringValue)))
+                                            .bold()
+                                            .font(.caption2)
+                                    } // hstack
                                     Text(item.fields.title.stringValue)
                                         .bold()
                                         .padding(.bottom, 5)
@@ -63,12 +119,13 @@ struct CommunitySearchResultView: View {
                                         .lineLimit(2)
                                         .foregroundColor(.textGray)
                                         .font(.caption)
+                                        .padding(.leading, 1)
                                 }
                             }
                         }
                     }
                 }
-                .emptyPlaceholder(community.sortedRecentCommunityData.filter {
+                .emptyPlaceholder(communityVM.sortedRecentCommunityData.filter {
                     ignoreSpaces(in: $0.fields.title.stringValue)
                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))

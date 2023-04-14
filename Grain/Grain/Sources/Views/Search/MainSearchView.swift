@@ -406,7 +406,7 @@ struct MainSearchView: View {
             MagazineSearchResultView(magazineVM: magazineViewModel, searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
         }
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
-            CommunitySearchResultView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord, community: communityViewModel)
+            CommunitySearchResultView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord)
         }
         .navigationDestination(isPresented: $isUserSearchResultShown){
             UserSearchResultView( userVM: userViewModel , magazineVM: magazineViewModel, searchWord: $searchWord)

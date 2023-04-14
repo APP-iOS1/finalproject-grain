@@ -8,6 +8,13 @@
 import SwiftUI
 
 struct ReportMainView: View {
+    @ObservedObject var userVM : UserViewModel
+    
+    let reportID: String
+    let reportCategory: String
+    
+    @Binding var isReportAlertShown: Bool
+
     private let reportReason = ["스팸", "나체 이미지 또는 성적 행위와 같은 음란물", "사기 또는 거짓","혐오 발언 또는 상징", "거짓 정보", "따돌림 또는 괴롭힘", "폭력 또는 위험한 단체", "지식재산권 침해", "불법 또는 규제 상품 판매", "자살 또는 자해", "섭식 장애", "기타 문제"]
     var body: some View {
         NavigationStack{
@@ -22,7 +29,7 @@ struct ReportMainView: View {
                 
                     List(reportReason, id:\.self){ item in
                         NavigationLink {
-                            ReportDetailView(reportReason: item)
+                            ReportDetailView(userVM: userVM, reportID: reportID, reportCategory: reportCategory, reportReason: item, isReportAlertShown: $isReportAlertShown)
                         } label: {
                             Text("\(item)")
                                 .padding(.vertical, 10)
@@ -36,11 +43,11 @@ struct ReportMainView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-struct ReportMainView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack{
-            ReportMainView()
-        }
-    }
-}
+//
+//struct ReportMainView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack{
+//            ReportMainView()
+//        }
+//    }
+//}

@@ -283,9 +283,9 @@ struct MagazineDetailView: View {
                                             self.saveOpacity = 0
                                         }
                                     }
-
                                     .sheet(isPresented: $isReportAlertShown) {
-                                        ReportMainView()
+                                        ReportMainView(userVM: userVM, reportID: data.fields.id.stringValue, reportCategory: "Magazine", isReportAlertShown: $isReportAlertShown)
+                                            .presentationDetents([.medium, .large])
                                     }
                             }
                             .padding(.top, 5)
@@ -507,15 +507,9 @@ struct MagazineDetailView: View {
                         
                     }
                     if data.fields.userID.stringValue != Auth.auth().currentUser?.uid{
-                        Button {
-                            self.isReportAlertShown.toggle()
-                        } label: {
-                            Text("신고")
-                                .foregroundColor(.red)
-                            Spacer()
-                            Image(systemName: "exclamationmark.bubble")
-                                .foregroundColor(.red)
-                        }
+                        Button(role: .destructive, action: { self.isReportAlertShown.toggle()}) {
+                               Label("신고", systemImage: "exclamationmark.bubble")
+                           }
                     }
                 } label: {
                     Label("더보기", systemImage: "ellipsis")

@@ -7,40 +7,64 @@
 
 import SwiftUI
 
+private enum FocusableField: Hashable {
+    case search
+}
+
 struct ReportDetailView: View {
+    @ObservedObject var userVM : UserViewModel
+    
     @State private var detailReportReason: String = ""
     @State private var isDone: Bool = false
-    
+
+    let reportID: String
+    let reportCategory: String
     let reportReason: String
+
+    @Binding var isReportAlertShown: Bool
     
+    @FocusState private var focus: FocusableField?
+
     var body: some View {
         VStack{
             Text("이 게시물을 '**\(reportReason)**' 의 사유로 신고하시겠습니까?")
                 .padding()
                 .multilineTextAlignment(.center)
-                .font(.subheadline)
             
-            Text("\(Image(systemName: "info.circle")) 이 게시물을 신고하는 상세한 이유를 작성해주시면 빠른 처리가 가능합니다.")
+            Text("\(Image(systemName: "info.circle")) 이 게시물을 신고하는 상세한 이유를 작성해 주시면 빠른 처리가 가능합니다.")
                 .padding(.top, 10)
                 .foregroundColor(.middlebrightGray)
                 .font(.caption)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 10)
+                .padding(.horizontal, 11)
             
-            Form{
-                TextEditor(text: $detailReportReason)
-                    .frame(height: Screen.maxHeight * 0.4)
-                    .padding(.horizontal)
-                
+            ScrollView {
+                VStack {
+                    TextField("상세한 문제 내용을 작성해 주세요...", text: $detailReportReason, axis: .vertical)
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                        .focused($focus, equals: .search)
+                        .font(.subheadline)
+                        .padding()
+                    Spacer()
+                }
             }
-            
-            Spacer()
+            .onTapGesture {
+                if focus == .search{
+                    focus = nil
+                }else if focus == nil{
+                    focus = .search
+                }
+            }
+      
             Button {
-                
+                userVM.declaration(id: reportID, category: reportCategory, reason: reportReason, reasonDetail: detailReportReason)
+                self.isDone.toggle()
             } label: {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(.black)
-                    .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)                    .overlay(
+                    .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
+                    .overlay(
                         Text("신고 제출")
                             .font(.headline)
                             .foregroundColor(.white)
@@ -52,16 +76,16 @@ struct ReportDetailView: View {
         .navigationTitle("신고")
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $isDone) {
-            ReportCompleteView()
+            ReportCompleteView(isReportAlertShown: $isReportAlertShown)
         }
     }
 }
 
-struct ReportDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack{
-            
-            ReportDetailView(reportReason: "dd")
-        }
-    }
-}
+//struct ReportDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack{
+//            
+//            ReportDetailView(reportReason: "dd")
+//        }
+//    }
+//}

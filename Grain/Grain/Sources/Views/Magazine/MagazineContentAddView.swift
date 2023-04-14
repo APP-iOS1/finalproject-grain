@@ -163,6 +163,16 @@ struct MagazineContentAddView: View {
                     }
                     .padding(.vertical)
                     
+                    HStack{
+                        Text("\(Image(systemName: "info.circle")) 그레인 운영 정책을 위반하는 경우에는 삭제 처리 될 수 있습니다.")
+                            .foregroundColor(.middlebrightGray)
+                            .font(.caption2)
+                            .multilineTextAlignment(.center)
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 5)
+                    
                     Divider()
                     
                     HStack {
@@ -187,7 +197,6 @@ struct MagazineContentAddView: View {
                         Spacer()
                     }
                     .padding(.vertical, 6)
-
                     
                     Divider()
                     

@@ -38,8 +38,10 @@ struct AuthenticationView: View {
     
     @State private var nickName = ""
     @State private var introduce = ""
-    
     @State private var exceptCurrentUser: [UserDocument] = []
+    @State private var isShowSheet : Bool = false
+    @State var checkUseButton : Bool = false
+    @State var checkPersonalButton : Bool = false
     
     @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
     @AppStorage("logInCompanyState") var logInCompanyState: LogInCompanyState = .noCompany
@@ -128,7 +130,7 @@ struct AuthenticationView: View {
                             .underlineTextField()
                             .padding(.bottom, 30)
                             if editedNickname.isEmpty{
-                                
+                                Text("")
                             }
                             else if editedNickname == nickName || !editedNickname.isEmpty && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname}{
                                 Text("올바른 형식입니다")
@@ -191,22 +193,81 @@ struct AuthenticationView: View {
                         .padding(.bottom, 30)
                     }
                     
+                
                     Text(" \(Image(systemName: "info.circle")) 이 정보는 다른 사용자들과 함께 활동하시는 동안 보여집니다.")
                         .font(.footnote)
                         .foregroundColor(.middlebrightGray)
-
+                        .padding(.bottom, 20)
+                
+                
+                    VStack(alignment: .leading){
+                        // MARK: 이용약관
+                        HStack{
+                            Button {
+                                checkUseButton.toggle()
+                            } label: {
+                                if checkUseButton {
+                                    Image(systemName: "checkmark.seal.fill").foregroundStyle(.black)
+                                    
+                                }else{
+                                    Image(systemName: "checkmark.seal").foregroundColor(.gray)
+                                }
+                            }.font(.subheadline)
+                            Text("GRAIN 이용약관 동의")
+                                .font(.subheadline)
+                            Text("(필수)")
+                                .font(.footnote)
+                                .fontWeight(.bold)
+                            Spacer()
+                            NavigationLink {
+                                TermsofUseView()
+                            } label: {
+                                Text("보러가기 >")
+                                    .font(.footnote)
+                                    .foregroundColor(.middlebrightGray)
+                            }
+                        }
+                        .padding(.bottom, 5)
+                        // MARK: 개인정보 방치
+                        HStack{
+                            Button {
+                                checkPersonalButton.toggle()
+                            } label: {
+                                if checkPersonalButton {
+                                    Image(systemName: "checkmark.seal.fill").foregroundStyle(.black)
+                                }else{
+                                    Image(systemName: "checkmark.seal").foregroundColor(.gray)
+                                }
+                            }.font(.subheadline)
+                            Text("개인정보 처리방침 동의")
+                                .font(.subheadline)
+                            Text("(필수)")
+                                .font(.footnote)
+                                .fontWeight(.bold)
+                            Spacer()
+                            NavigationLink {
+                                PersonalInformationProcessingView()
+                            } label: {
+                                Text("보러가기 >")
+                                    .font(.footnote)
+                                    .foregroundColor(.middlebrightGray)
+                            }
+                            
+                        }
+                    }
+                    
                     // MARK: - 결정 버튼
                     Spacer()
-                    if (editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname}{
+
                         Button {
                             // 유저 DB에 데이터 넣기
                             userVM.insertUser(myFilm: "필름은 선택사항입니다.", bookmarkedMagazineID: "", email: authenticationStore.email, myCamera: "카메라 바디는 필수 선택입니다 :)", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: authenticationStore.userUID, following: "", myLens: "렌즈는 선택사항입니다.", profileImage: selectedImages, name: authenticationStore.userName , follower: "", nickName: editedNickname, introduce: editedIntroduce, fcmToken: "")
                             // 로그인 상태값 바꾸기
-                            authenticationStore.authenticationState = .authenticated
-                            authenticationStore.addToken()
+                            authenticationState = .authenticated
+//                            authenticationStore.addToken()
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(.black)
+                                .fill((editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname } && checkUseButton &&  checkPersonalButton ? .black : .gray)
                                 .frame(width: Screen.maxWidth * 0.85, height: Screen.maxHeight * 0.07)
                                 .overlay {
                                     Text("회원가입하기")
@@ -214,8 +275,11 @@ struct AuthenticationView: View {
                                         .foregroundColor(.white)
                                 }
                         }
-                    }
-                    
+                        .disabled( (editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname } && checkUseButton &&  checkPersonalButton ? false : true )
+                }
+                .sheet(isPresented: $isShowSheet) {
+                    TermsofUseView()
+                        .presentationDetents([.medium])
                 }
                 .onAppear{
                     exceptCurrentUser = userVM.users.filter{$0.fields.id.stringValue != userVM.currentUsers?.id.stringValue}

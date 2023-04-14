@@ -288,7 +288,7 @@ struct MagazineDetailView: View {
                                               primaryButton:  .cancel(Text("취소")),
                                               secondaryButton:.destructive(Text("신고하기"),action: {
                                             userVM.declaration(id: data.fields.id.stringValue
-                                                               , category: "Magazine")
+                                                               , category: "Magazine",reason: "", reasonDetail: "")
                                             
                                         }))
                                     }

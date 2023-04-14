@@ -10,6 +10,8 @@ import SwiftUI
 import FirebaseAuth
 
 struct MagazineBestView: View {
+    @EnvironmentObject var authenticationStore: AuthenticationStore
+    
     @ObservedObject var  userVM: UserViewModel
     @ObservedObject var magazineVM: MagazineViewModel
     @ObservedObject var editorVM : EditorViewModel
@@ -21,6 +23,8 @@ struct MagazineBestView: View {
     @State private var startOffset: CGFloat = 0
     
     @Binding var scrollToTop: Bool
+    
+    @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
     
     var body: some View {
         VStack{
@@ -112,6 +116,10 @@ struct MagazineBestView: View {
                     editorVM.fetchEditor()
                     UITableView.appearance().separatorStyle = .none
                     
+                    if authenticationState == .authenticated{
+                        authenticationStore.addToken()
+                    }
+
                 }
             }
             Spacer()

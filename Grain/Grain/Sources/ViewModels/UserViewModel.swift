@@ -395,8 +395,8 @@ final class UserViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-    func declaration(id: String, category: String) {
-            UserService.declarationService(id: id, category: category)
+    func declaration(id: String, category: String, reason: String, reasonDetail: String) {
+        UserService.declarationService(id: id, category: category , reason: reason, reasonDetail: reasonDetail)
                 .receive(on: DispatchQueue.main)
                 .sink { (completion: Subscribers.Completion<Error>) in
                 } receiveValue: { (data: UserDocument) in

@@ -195,7 +195,7 @@ struct CommunityDetailView: View {
                                           primaryButton:  .cancel(Text("취소")),
                                           secondaryButton:.destructive(Text("신고하기"),action: {
                                         userVM.declaration(id: community.fields.id.stringValue
-                                                           , category: "Community")
+                                                           , category: "Community",reason: "", reasonDetail: "")
                                         
                                     }))
                                 }

@@ -73,7 +73,7 @@ struct UserDetailView: View {
                                             if !userVM.following.contains(userData.fields.id.stringValue) {
                                                 if let currentUser = userVM.currentUsers {
                                                     
-                                                    var currentUserFollowing: [String] = userVM.following
+                                                    var currentUserFollowing: [String] = userVM.following //
                                                     var magazineUserFollower: [String] = userVM.parsingFollowerDataToStringArr(data: userData)
                                                     
                                                     /// 내 팔로잉리스트에 이사람 id 넣어주고
@@ -84,6 +84,13 @@ struct UserDetailView: View {
                                                     userVM.updateCurrentUserArray(type: "following", arr: currentUserFollowing, docID: currentUser.id.stringValue)
                                                     
                                                     userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: userData.fields.id.stringValue)
+                                                    
+//                                                    var myBlockingList: [String] = userVM.blockingList
+//                                                    var userBlockedList: [String] = userVM.parsingBlockedDataToStringArr(data: userData)\
+//
+//                                                    myBlockedList.append
+//
+//                                                    userVm.updateCurrentUserArray(type: "blocking", arr: myBlockedList, docID: "1234")
                                                 }
                                             }
 //                                            let sender = PushNotificationSender(serverKeyString: "")

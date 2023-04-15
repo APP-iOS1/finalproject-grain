@@ -24,9 +24,10 @@ struct CurrentUserFields: Codable {
     var postedCommunityID: CurrentUserUpperArrayValue
     var email, id: CurrentUserStringValue
     var recentSearch, likedMagazineID, postedMagazineID: CurrentUserUpperArrayValue
+    var blocking, blocked: CurrentUserUpperArrayValue
 
     enum CodingKeys: String, CodingKey {
-        case bookmarkedCommunityID, lastSearched, follower, following, myFilm, name, myLens, nickName, bookmarkedMagazineID, myCamera, introduce, profileImage, postedCommunityID, email, id, recentSearch, fcmToken
+        case bookmarkedCommunityID, lastSearched, follower, following, myFilm, name, myLens, nickName, bookmarkedMagazineID, myCamera, introduce, profileImage, postedCommunityID, email, id, recentSearch, fcmToken, blocking, blocked
         case likedMagazineID = "likedMagazineId"
         case postedMagazineID
     }

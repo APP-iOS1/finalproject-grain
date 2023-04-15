@@ -33,6 +33,10 @@ final class UserViewModel: ObservableObject {
     @Published var following : [String] = []
     @Published var recentSearch: [String] = []
     
+    @Published var blockingList = [String]() // 내가 차단한 사람들 리스트
+    @Published var blockedList = [String]() // 내가 차단당한 리스트
+    
+    
     // 내가 구독한 사람의 게시글만 담은 배열
     @Published var subscribedMagazines: [String] = []
     
@@ -43,6 +47,10 @@ final class UserViewModel: ObservableObject {
     // 유저의 팔로워, 팔로잉 리스트
     @Published var followerList = [UserDocument]()
     @Published var followingList = [UserDocument]()
+    
+    
+   
+    
     
     
     var fetchUsersSuccess = PassthroughSubject<[UserDocument], Never>()
@@ -351,6 +359,12 @@ final class UserViewModel: ObservableObject {
         for i in currentUserData.recentSearch.arrayValue.values {
             self.recentSearch.append(i.stringValue)
         }
+        for i in currentUserData.blocking.arrayValue.values {
+            self.blockingList.append(i.stringValue)
+        }
+        for i in currentUserData.blocked.arrayValue.values {
+            self.blockedList.append(i.stringValue)
+        }
     }
     
     func parsingFollowerDataToStringArr(data: UserDocument) -> [String] {
@@ -362,8 +376,17 @@ final class UserViewModel: ObservableObject {
         return follower
     }
     
-    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: [UIImage],name: String,follower: String,nickName: String, introduce: String, fcmToken: String) {
-        UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName, introduce: introduce, fcmToken: fcmToken)
+    func parsingBlockedDataToStringArr(data: UserDocument) -> [String] {
+        var blocked = [String]()
+        for i in data.fields.blocked.arrayValue.values {
+            blocked.append(i.stringValue)
+        }
+        
+        return blocked
+    }
+    
+    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: [UIImage],name: String,follower: String,nickName: String, introduce: String, fcmToken: String, blocking: [String], blocked: [String]) {
+        UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName, introduce: introduce, fcmToken: fcmToken, blocking: blocking, blocked: blocked)
         
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in

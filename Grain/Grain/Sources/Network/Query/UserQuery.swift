@@ -10,7 +10,7 @@ import Foundation
 enum UserQuery {
     
     // MARK: 최초로 로그인시 사용
-    static func insertUserQuery(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String, introduce: String, fcmToken: String ) -> Data? {
+    static func insertUserQuery(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: String,name: String,follower: String,nickName: String, introduce: String, fcmToken: String, blocking: [String], blocked: [String]) -> Data? {
         
         return
         """
@@ -148,6 +148,24 @@ enum UserQuery {
                                         "values": [
                                             {
                                                 "stringValue": "\(following)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "blocking": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(blocking)"
+                                            }
+                                        ]
+                                    }
+                                },
+                                "blocked": {
+                                    "arrayValue": {
+                                        "values": [
+                                            {
+                                                "stringValue": "\(blocked)"
                                             }
                                         ]
                                     }

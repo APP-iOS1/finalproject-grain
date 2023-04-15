@@ -31,7 +31,7 @@ enum UserService {
     }
     
     // MARK: - 유저 데이터 넣기
-    static func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String, profileImage: [UIImage],name: String,follower: String,nickName: String, introduce: String , fcmToken : String) -> AnyPublisher<UserDocument, Error> {
+    static func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String, profileImage: [UIImage],name: String,follower: String,nickName: String, introduce: String , fcmToken : String, blocking: [String], blocked: [String]) -> AnyPublisher<UserDocument, Error> {
         
         var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "param", fileName: "file", image: profileImage)
         var profileImageURL: String = ""
@@ -39,7 +39,7 @@ enum UserService {
             profileImageURL = imageUrlArr[0]
         }
         do {
-            let request = try UserRouter.post(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImageURL,name: name,follower: follower,nickName: nickName, introduce: introduce , fcmToken: fcmToken).asURLRequest()
+            let request = try UserRouter.post(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImageURL,name: name,follower: follower,nickName: nickName, introduce: introduce , fcmToken: fcmToken, blocking: blocking, blocked: blocked).asURLRequest()
             return URLSession
                 .shared
                 .dataTaskPublisher(for: request)

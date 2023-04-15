@@ -30,10 +30,11 @@ struct UserFields: Codable,Hashable {
     var email: UserStringValue
     var postedMagazineID, myCamera, bookmarkedMagazineID, fcmToken: UserArrayKey
     var name: UserStringValue
+    var blocking, blocked: UserArrayKey
 
     enum CodingKeys: String, CodingKey {
         case likedMagazineID = "likedMagazineId"
-        case id, myLens, myFilm, postedCommunityID, nickName, introduce, following, profileImage, recentSearch, bookmarkedCommunityID, follower, lastSearched, email, postedMagazineID, myCamera, bookmarkedMagazineID, name, fcmToken
+        case id, myLens, myFilm, postedCommunityID, nickName, introduce, following, profileImage, recentSearch, bookmarkedCommunityID, follower, lastSearched, email, postedMagazineID, myCamera, bookmarkedMagazineID, name, fcmToken, blocking, blocked
     }
 }
 

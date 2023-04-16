@@ -75,6 +75,9 @@ struct MagazineBestView: View {
                             }
                             
                         }
+                        .emptyPlaceholder(Array(magazineVM.sortedTopLikedMagazineData.prefix(10).enumerated())) {
+                            MagazinePlaceHolderView()
+                        }
                         
                     }
                     .id("SCROLL_TO_TOP")

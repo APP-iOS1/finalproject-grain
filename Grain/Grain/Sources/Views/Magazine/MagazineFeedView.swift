@@ -52,6 +52,9 @@ struct MagazineFeedView: View {
                                     }
                                 }
                             }
+                            .emptyPlaceholder(Array(magazineVM.sortedRecentMagazineData.enumerated())) {
+                                MagazinePlaceHolderView()
+                            }
                         }else{
                             // MARK: 구독자
                             ForEach(Array(userVM.subscriptionFeed(magazineData: magazineVM.sortedRecentMagazineData).enumerated()), id: \.1.self){ (index, data) in
@@ -63,6 +66,9 @@ struct MagazineFeedView: View {
                                         MagazineViewCell(data: data, userVM: userVM)
                                     }
                                 }
+                            }
+                            .emptyPlaceholder(Array(userVM.subscriptionFeed(magazineData: magazineVM.sortedRecentMagazineData).enumerated())) {
+                                MagazinePlaceHolderView()
                             }
                         }
                         

@@ -134,7 +134,7 @@ struct CommunityRecommentView: View {
                                         commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
                                         
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
+                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "",blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                                         }
                                     }
                                 }

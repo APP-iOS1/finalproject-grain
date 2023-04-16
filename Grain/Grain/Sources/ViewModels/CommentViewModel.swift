@@ -43,7 +43,7 @@ final class CommentViewModel: ObservableObject {
 
     ///  REST API 방식 CRUD
     // MARK: Read
-    func fetchComment(collectionName: String, collectionDocId: String, nextPageToken: String) {
+    func fetchComment(collectionName: String, collectionDocId: String, nextPageToken: String , blockingUsers: [String], blockedUsers: [String]) {
     
         var commentString : String = ""
         if let infolist = Bundle.main.infoDictionary {
@@ -61,13 +61,22 @@ final class CommentViewModel: ObservableObject {
                 if !(data.nextPageToken == nil) {
                     var nextPageToken : String = ""
                     nextPageToken = data.nextPageToken!
-                    self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: nextPageToken)
+                    self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: nextPageToken, blockingUsers: blockingUsers, blockedUsers: blockedUsers )
                 }else{
                     self.sortedRecentComment = self.commentTemp.sorted(by: {
                         return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
                     })
+                    
+                    let blockArr = (blockingUsers + blockedUsers)
+                    if !(blockArr.isEmpty){
+                        for id in blockArr {
+                            self.sortedRecentComment.removeAll { $0.fields.userID.stringValue == id}
+                        }
+                    }
+                    
+                    
                     for i in self.sortedRecentComment{
-                        self.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentString, commentCollectionDocId: i.fields.id.stringValue , nextPageToken: "")
+                        self.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentString, commentCollectionDocId: i.fields.id.stringValue , nextPageToken: "", blockingUsers: blockingUsers, blockedUsers: blockedUsers)
                     }
                     self.commentTemp.removeAll()
                     self.fetchCommentSuccess.send()
@@ -76,7 +85,7 @@ final class CommentViewModel: ObservableObject {
             }.store(in: &subscription)
     }
     
-    func fetchRecomment(collectionName: String , collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String , nextPageToken: String){
+    func fetchRecomment(collectionName: String , collectionDocId: String, commentCollectionName: String, commentCollectionDocId: String , nextPageToken: String , blockingUsers: [String], blockedUsers: [String]){
         
         CommentService.getRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
@@ -88,11 +97,20 @@ final class CommentViewModel: ObservableObject {
                 if !(data.nextPageToken == nil) {
                     var nextPageToken : String = ""
                     nextPageToken = data.nextPageToken!
-                    self.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, nextPageToken: nextPageToken)
+                    self.fetchRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: commentCollectionName, commentCollectionDocId: commentCollectionDocId, nextPageToken: nextPageToken, blockingUsers: blockingUsers, blockedUsers: blockedUsers)
                 }else{
                     self.sortedRecentRecomment = self.recommentTemp.sorted(by: {
                         return $0.createTime.toDate() ?? Date() < $1.createTime.toDate() ?? Date()
                     })
+                    
+                    let blockArr = (blockingUsers + blockedUsers)
+                    
+                    if !(blockArr.isEmpty){
+                        for id in blockArr {
+                            self.sortedRecentRecomment.removeAll { $0.fields.userID.stringValue == id}
+                        }
+                    }
+
                     self.sortedRecentRecommentArray.updateValue(self.sortedRecentRecomment, forKey: "\(commentCollectionDocId)")
                     self.sortedRecentRecommentCount.updateValue(self.sortedRecentRecomment.count, forKey: "\(commentCollectionDocId)")
                     self.recommentTemp.removeAll()
@@ -102,35 +120,35 @@ final class CommentViewModel: ObservableObject {
     }
     
     // MARK: Create
-    func insertComment(collectionName: String, collectionDocId: String, data: CommentFields) {
+    func insertComment(collectionName: String, collectionDocId: String, data: CommentFields, blockingUsers: [String], blockedUsers: [String]) {
         CommentService.insertComment(collectionName: collectionName, collectionDocId: collectionDocId, data: data)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
-                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
+                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "" , blockingUsers: blockingUsers, blockedUsers: blockedUsers)
                 self.insertCommentSuccess.send()
             }.store(in: &subscription)
         
     }
     
     // MARK: Update
-    func updateComment(collectionName: String, collectionDocId: String, docID: String, updateComment: String, data: CommentFields ){
+    func updateComment(collectionName: String, collectionDocId: String, docID: String, updateComment: String, data: CommentFields , blockingUsers: [String], blockedUsers: [String] ){
         CommentService.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: docID, updateComment: updateComment, data: data)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
-                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
+                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "" , blockingUsers: blockingUsers, blockedUsers: blockedUsers)
                 self.updateCommentSuccess.send()
             }.store(in: &subscription)
     }
     
     // MARK: Delete
-    func deleteComment(collectionName: String, collectionDocId: String, docID: String) {
+    func deleteComment(collectionName: String, collectionDocId: String, docID: String , blockingUsers: [String], blockedUsers: [String]) {
         CommentService.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: docID)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: CommentDocument) in
-                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
+                self.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "" , blockingUsers: blockingUsers, blockedUsers: blockedUsers)
                 self.deleteCommentSuccess.send()
             }.store(in: &subscription)
     }
@@ -183,4 +201,40 @@ final class CommentViewModel: ObservableObject {
                 
             }.store(in: &subscription)
     }
+    
+
+    func filteringBlockUserComment(blockingUsers: [String], blockedUsers: [String]) {
+        if blockingUsers.count > 0 {
+            for id in blockingUsers {
+                self.sortedRecentComment.removeAll { $0.fields.userID.stringValue == id }
+            }
+        }
+        
+        if blockedUsers.count > 0 {
+            for id in blockedUsers {
+                self.sortedRecentComment.removeAll { $0.fields.userID.stringValue == id}
+            }
+        }
+        
+    }
+    
+    
+//    func filteringBlockUserRecomment( blockingUsers: [String], blockedUsers: [String]) {
+//        var arr = [String: [CommentDocument]]()
+//
+//        if !blockingUsers.isEmpty {
+//            arr = self.sortedRecentRecommentArray.filter { key, value in
+//                !value.contains(where: { blockingUsers.contains($0.fields.userID.stringValue) })
+//            }
+//        }
+//
+//        if !blockedUsers.isEmpty {
+//            arr = arr.filter { key, value in
+//                !value.contains(where: { blockedUsers.contains($0.fields.userID.stringValue) })
+//            }
+//        }
+//
+//        self.sortedRecentRecommentArray = arr
+//
+//    }
 }

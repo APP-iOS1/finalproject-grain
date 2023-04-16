@@ -170,11 +170,11 @@ struct MagazineCommentView: View {
                                                                 
                                                                 if commentVm.sortedRecentComment.count == 1 {
                                                                     commentVm.sortedRecentComment.removeFirst()
-                                                                    commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
+                                                                    commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId, blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                                                                 } else {
-                                                                    commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId)
+                                                                    commentVm.deleteComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: deleteDocId, blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                                                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                                        commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
+                                                                        commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                                                                     }
                                                                 }
                                                             }))
@@ -272,6 +272,7 @@ struct MagazineCommentView: View {
                                 Divider()
                             }
                         }
+                        
                         .padding(.leading , 7)
                         .padding(.bottom , 4)
                     }else{
@@ -313,6 +314,7 @@ struct MagazineCommentView: View {
                     proxyReader.scrollTo("SCROLL_TO_BOTTOM", anchor: .bottom)
                 }
             })
+            
         }
             VStack(alignment: .leading){
                 // MARK: 답글달기 클릭시 활성화 되는 구역
@@ -404,7 +406,7 @@ struct MagazineCommentView: View {
             }
         }
         .onAppear{
-            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")    // 해당하는 피드 댓글 정보 가져오기
+            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)    // 해당하는 피드 댓글 정보 가져오기
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                 makeEachBool(count: commentVm.sortedRecentComment.count)
@@ -490,7 +492,7 @@ struct MagazineCommentTextField: View {
                             self.summitComment.toggle()
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             }
                             
                             // MARK: 대댓글 유저한테 알림보내기 기능
@@ -523,7 +525,7 @@ struct MagazineCommentTextField: View {
                             self.summitComment.toggle()
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             }
                         } label: {
                             Text("등록")
@@ -538,11 +540,11 @@ struct MagazineCommentTextField: View {
                         Button {
                             
                             editComment = false
-                            commentVm.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: editDocID, updateComment: commentText ,data: editData)
+                            commentVm.updateComment(collectionName: collectionName, collectionDocId: collectionDocId, docID: editDocID, updateComment: commentText ,data: editData, blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             commentText = ""
                             self.summitComment.toggle()
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             }
                             
                         } label: {
@@ -571,12 +573,13 @@ struct MagazineCommentTextField: View {
                                     userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""),
                                     id: CommentString(stringValue: UUID().uuidString)
                                 )
+                                ,blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList
                             )
                             commentText = ""
                             self.summitComment.toggle()
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
+                                commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             }
                             
                             // MARK: 매거진 게시글 유저한테 알림보내기 기능

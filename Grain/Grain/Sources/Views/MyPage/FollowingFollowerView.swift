@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct FollowingFollowerView: View {
     @ObservedObject var userVM : UserViewModel
@@ -57,6 +58,11 @@ struct FollowingFollowerView: View {
 //                    self.isShownPickerProgress = false
 //                }
 //            }
+        }
+        .onAppear{
+            userVM.fetchUser(nextPageToken: "")
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            print("Ddd")
         }
     }
 }
@@ -110,6 +116,11 @@ struct CurrentUserFollowingFollowerView: View {
 //                    self.isShownPickerProgress = false
 //                }
 //            }
+        }
+        .onAppear{
+            userVM.fetchUser(nextPageToken: "")
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+            print("Ddd")
         }
     }
 }

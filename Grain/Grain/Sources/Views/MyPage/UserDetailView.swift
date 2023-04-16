@@ -10,7 +10,6 @@ import FirebaseAuth
 import Kingfisher
 
 struct UserDetailView: View {
-    
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
@@ -28,7 +27,8 @@ struct UserDetailView: View {
     @State private var isUserReportAlertShown: Bool = false
     @State private var isUserBlockAlertShown: Bool = false
     
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.presentationMode) var presentationMode
+
     func defaultProfileImage() -> String{
         var https : String = "https://"
         if let infolist = Bundle.main.infoDictionary {
@@ -149,7 +149,7 @@ struct UserDetailView: View {
                             if let userData = self.userData {
                                 HStack{
                                     NavigationLink {
-                                        FollowingFollowerView(userVM: userVM, userData: userData, magazineVM: magazineVM, selectedIndex: 0)
+                                        FollowingFollowerView(userVM: userVM, userData: user, magazineVM: magazineVM, selectedIndex: 0)
                                     } label: {
                                         Text("구독자")
                                     }
@@ -161,7 +161,7 @@ struct UserDetailView: View {
                                     Text("|")
                                     
                                     NavigationLink {
-                                        FollowingFollowerView(userVM: userVM, userData: userData, magazineVM: magazineVM, selectedIndex: 1)
+                                        FollowingFollowerView(userVM: userVM, userData: user, magazineVM: magazineVM, selectedIndex: 1)
                                     } label: {
                                         Text("구독중")
                                     }
@@ -183,7 +183,7 @@ struct UserDetailView: View {
                 // MARK: - 유저 차단 alert
                 .alert(isPresented: $isUserBlockAlertShown) {
                     Alert(title: Text("\(user.fields.nickName.stringValue)님을 차단하시겠습니까?"),
-                          message: Text("상대방은 Grain에서 회원님에게 메시지를 보내거나 회원님의 프로필, 게시물을 찾을 수 없습니다. 상대방에게는 회원님이 차단했다는 정보를 알리지 않습니다."),
+                          message: Text("상대방은 Grain에서 회원님의 프로필, 게시물을 찾을 수 없습니다. 상대방에게는 회원님이 차단했다는 정보를 알리지 않습니다."),
                           primaryButton:  .cancel(Text("취소")),
                           secondaryButton:.destructive(Text("차단"),
                                                        action: {
@@ -200,6 +200,7 @@ struct UserDetailView: View {
                                     userVM.updateCurrentUserArray(type: "blocking", arr: myBlockingList, docID: currentUser.id.stringValue)
                                     userVM.updateCurrentUserArray(type: "blocked", arr: userBlockedList, docID: userData.fields.id.stringValue)
                                 }
+                                
                                 if userVM.following.contains(userData.fields.id.stringValue) {
                                     if let currentUser = userVM.currentUsers {
                                         var currentUserFollowing: [String] = userVM.following
@@ -215,10 +216,26 @@ struct UserDetailView: View {
                                         userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: userData.fields.id.stringValue)
                                     }
                                 }
+                                
+                                if userVM.follower.contains(userData.fields.id.stringValue) {
+                                    if let currentUser = userVM.currentUsers {
+                                        var currentUserFollower: [String] = userVM.follower
+                                        var magazineUserFollowing: [String] =  userVM.parsingFollowingDataToStringArr(data: userData)
+                                        
+                                        /// 내 팔로워리스트에 이사람 id 삭제
+                                        currentUserFollower.removeAll {$0 ==  userData.fields.id.stringValue}
+                                        /// 이사람 팔로잉리스트에 내 id 삭제
+                                        magazineUserFollowing.removeAll {$0 == currentUser.id.stringValue}
+                                        
+                                        userVM.updateCurrentUserArray(type: "follower", arr: currentUserFollower, docID: currentUser.id.stringValue)
+                                        
+                                        userVM.updateCurrentUserArray(type: "following", arr: magazineUserFollowing, docID: userData.fields.id.stringValue)
+                                    }
+                                }
                             }
 
                         }
-                        dismiss()
+                        presentationMode.wrappedValue.dismiss()
                     }))
                 }
                 VStack(alignment: .leading){

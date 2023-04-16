@@ -26,7 +26,7 @@ struct MagazineDetailView: View {
     @State private var viewID = 0
     @State private var isReportAlertShown: Bool = false
     
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.presentationMode) var presentationMode
     
     let data : MagazineDocument
     @State var magazineData: MagazineDocument?
@@ -266,7 +266,7 @@ struct MagazineDetailView: View {
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                                 magazineVM.fetchMagazine(nextPageToken: "")
                                             }
-                                            dismiss()
+                                            presentationMode.wrappedValue.dismiss()
                                         }
                                     }))
                                 }
@@ -370,7 +370,18 @@ struct MagazineDetailView: View {
                     isBookMarked = false
                 }
             }
+          
         }
+        .onChange(of: userVM.blockingList, perform: { item in
+            if item.count > 0{
+                for id in item{
+                    print()
+                    if data.fields.userID.stringValue == id{
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+        })
         .task(id: magazineVM.sortedRecentMagazineData) {
             if let data = magazineVM.sortedTopLikedMagazineData.first(where: {
                 $0.fields.id.stringValue == data.fields.id.stringValue
@@ -454,7 +465,7 @@ struct MagazineDetailView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    dismiss()
+                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     HStack {
                         Image(systemName: "chevron.left")

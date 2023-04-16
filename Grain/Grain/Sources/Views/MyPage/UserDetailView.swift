@@ -10,7 +10,7 @@ import FirebaseAuth
 import Kingfisher
 
 struct UserDetailView: View {
-
+    
     @ObservedObject var userVM: UserViewModel
     @ObservedObject var magazineVM : MagazineViewModel
     
@@ -25,6 +25,8 @@ struct UserDetailView: View {
     
     let user: UserDocument
     @State var userData: UserDocument?
+    @State private var isUserReportAlertShown: Bool = false
+    @State private var isUserBlockAlertShown: Bool = false
     
     func defaultProfileImage() -> String{
         var https : String = "https://"
@@ -85,20 +87,12 @@ struct UserDetailView: View {
                                                     
                                                     userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: userData.fields.id.stringValue)
                                                     
-//                                                    var myBlockingList: [String] = userVM.blockingList
-//                                                    var userBlockedList: [String] = userVM.parsingBlockedDataToStringArr(data: userData)\
-//
-//                                                    myBlockedList.append
-//
-//                                                    userVm.updateCurrentUserArray(type: "blocking", arr: myBlockedList, docID: "1234")
                                                 }
                                             }
-//                                            let sender = PushNotificationSender(serverKeyString: "")
-//                                            for i in user.fields.fcmToken.arrayValue.values {
-//                                                sender.sendPushNotification(to: i.stringValue, title: "구독", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 \(userData.fields.nickName.stringValue) 을 구독합니다 ", image: "")
-//                                            }
-                                            
-                                            
+                                            let sender = PushNotificationSender(serverKeyString: "")
+                                            for i in user.fields.fcmToken.arrayValue.values {
+                                                sender.sendPushNotification(to: i.stringValue, title: "구독", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 \(userData.fields.nickName.stringValue) 을 구독합니다 ", image: "")
+                                            }
                                         } else {
                                             // "구독" 상태이고, 내 팔로잉 리스트에 있는경우 => 구독취소
                                             if userVM.following.contains(userData.fields.id.stringValue) {
@@ -189,7 +183,46 @@ struct UserDetailView: View {
                     
                 }
                 .padding(.bottom, 15)
-                
+                // MARK: - 유저 차단 alert
+                .alert(isPresented: $isUserBlockAlertShown) {
+                    Alert(title: Text("\(user.fields.nickName.stringValue)님을 차단하시겠습니까?"),
+                          message: Text("상대방은 Grain에서 회원님에게 메세지를 보내거나 회원님의 프로필, 게시물을 찾을 수 없습니다. 상대방에게는 회원님이 차단했다는 정보를 알리지 않습니다."),
+                          primaryButton:  .cancel(Text("취소")),
+                          secondaryButton:.destructive(Text("차단"),
+                                                       action: {
+                        if let userData = self.userData {
+                            if !userVM.blockingList.contains(userData.fields.id.stringValue) {
+                                if let currentUser = userVM.currentUsers {
+                               
+                                    var myBlockingList: [String] = userVM.blockingList
+                                    var userBlockedList: [String] = userVM.parsingBlockedDataToStringArr(data: userData)
+                                    
+                                    myBlockingList.append(userData.fields.id.stringValue)
+                                    userBlockedList.append(currentUser.id.stringValue)
+                                    
+                                    userVM.updateCurrentUserArray(type: "blocking", arr: myBlockingList, docID: currentUser.id.stringValue)
+                                    userVM.updateCurrentUserArray(type: "blocked", arr: userBlockedList, docID: userData.fields.id.stringValue)
+                                }
+                                if userVM.following.contains(userData.fields.id.stringValue) {
+                                    if let currentUser = userVM.currentUsers {
+                                        var currentUserFollowing: [String] = userVM.following
+                                        var magazineUserFollower: [String] =  userVM.parsingFollowerDataToStringArr(data: userData)
+                                        
+                                        /// 내 팔로잉리스트에 이사람 id 삭제
+                                        currentUserFollowing.removeAll {$0 ==  userData.fields.id.stringValue}
+                                        /// 이사람 팔로워리스트에 내 id 삭제
+                                        magazineUserFollower.removeAll {$0 == currentUser.id.stringValue}
+                                        
+                                        userVM.updateCurrentUserArray(type: "following", arr: currentUserFollowing, docID: currentUser.id.stringValue)
+                                        
+                                        userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: userData.fields.id.stringValue)
+                                    }
+                                }
+                            }
+
+                        }
+                    }))
+                }
                 VStack(alignment: .leading){
                     Text(user.fields.introduce.stringValue)
                         .font(.subheadline)
@@ -287,6 +320,25 @@ struct UserDetailView: View {
                 let sender = PushNotificationSender(serverKeyString: "")
                 for i in user.fields.fcmToken.arrayValue.values {
                     sender.sendPushNotification(to: i.stringValue, title: "구독", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 \(userData?.fields.nickName.stringValue ?? "")님을 구독합니다 ", image: "")
+                }
+            }
+        }
+        .toolbar{
+            if user.fields.id.stringValue != Auth.auth().currentUser?.uid{
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        Button(role: .destructive, action: { self.isUserReportAlertShown.toggle()}) {
+                            Label("신고", systemImage: "exclamationmark.bubble")
+                        }
+                        Button(role: .destructive, action: { self.isUserBlockAlertShown.toggle()}) {
+                            Label("차단", systemImage: "person.fill.xmark")
+                        }
+                        
+                    } label: {
+                        Label("더보기", systemImage: "ellipsis")
+                        
+                    }
+                    
                 }
             }
         }

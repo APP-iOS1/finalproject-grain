@@ -18,7 +18,6 @@ struct MyPageOptionView: View {
 
     @Binding var presented: Bool
 
-    
     var body: some View {
         VStack(alignment: .leading){
             ScrollView{
@@ -179,6 +178,29 @@ struct AccountSection: View {
                         .padding(.trailing, 13)
                     
                     Text("저장된 커뮤니티 글")
+                        .font(.title3)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .font(.title3)
+                }
+                .foregroundColor(.black)
+                .padding(.horizontal)
+                .padding(.bottom)
+            }
+            .padding(.horizontal)
+            
+            NavigationLink {
+                BlockUserView(userVM: userVM)
+            } label: {
+                HStack {
+                    Image(systemName: "person.fill.xmark")
+                        .font(.system(size: 22))
+                        .padding(.leading, 2.8)
+                        .padding(.trailing, 5)
+                    
+                    Text("차단유저 관리")
                         .font(.title3)
                     
                     Spacer()

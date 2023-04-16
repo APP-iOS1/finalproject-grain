@@ -90,6 +90,7 @@
 		9958AFB2297781F400A51DA9 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB1297781F400A51DA9 /* Constants.swift */; };
 		9958AFB52977B0C500A51DA9 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB42977B0C500A51DA9 /* AuthenticationView.swift */; };
 		9958AFB72977BB5500A51DA9 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9958AFB62977BB5500A51DA9 /* CurrentUser.swift */; };
+		995A61CE29EAA6B50042D253 /* BlockUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995A61CD29EAA6B50042D253 /* BlockUserView.swift */; };
 		9962CDC92979246500E834C3 /* AllTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDC82979246500E834C3 /* AllTabView.swift */; };
 		9962CDCB297924A000E834C3 /* MatchingTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDCA297924A000E834C3 /* MatchingTabView.swift */; };
 		9962CDCD297924BF00E834C3 /* ClassTabView .swift in Sources */ = {isa = PBXBuildFile; fileRef = 9962CDCC297924BF00E834C3 /* ClassTabView .swift */; };
@@ -283,6 +284,7 @@
 		9958AFB42977B0C500A51DA9 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		9958AFB62977BB5500A51DA9 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 		9958AFB82977D56000A51DA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		995A61CD29EAA6B50042D253 /* BlockUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserView.swift; sourceTree = "<group>"; };
 		995EBDCE29966F18002C1686 /* Grain.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Grain.entitlements; sourceTree = "<group>"; };
 		9962CDC82979246500E834C3 /* AllTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTabView.swift; sourceTree = "<group>"; };
 		9962CDCA297924A000E834C3 /* MatchingTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchingTabView.swift; sourceTree = "<group>"; };
@@ -452,6 +454,7 @@
 				065A24F329D2BD9300A78ACF /* DeleteUserView.swift */,
 				99F342DD29D8C05B006DCA0A /* MyPagePlaceholderView.swift */,
 				8B20564329DBFF1D00C9EDBA /* MyPgeMyCommunity.swift */,
+				995A61CD29EAA6B50042D253 /* BlockUserView.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -1135,6 +1138,7 @@
 				8B88CA7C29C462720064425C /* GeocodeRouter.swift in Sources */,
 				A7D957CF297AA574001D2401 /* CommunityDTO.swift in Sources */,
 				A77E1DD0298AAADA0019AD87 /* ReverseGeocodeService.swift in Sources */,
+				995A61CE29EAA6B50042D253 /* BlockUserView.swift in Sources */,
 				9920DDFF29E975F10014671D /* ReportCompleteView.swift in Sources */,
 				A7D9F30C29896C9700B39218 /* UserRouter.swift in Sources */,
 				A7A1AA3A29B092F200B2D70B /* MagazineRecommentView.swift in Sources */,

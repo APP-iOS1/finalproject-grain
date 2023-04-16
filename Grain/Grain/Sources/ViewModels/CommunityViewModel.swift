@@ -33,16 +33,11 @@ final class CommunityViewModel: ObservableObject {
     
     //MARK: - 커뮤니티 데이터 가져오기 메소드
     func fetchCommunity(nextPageToken : String) {
-        
-
         CommunityService.getCommunity(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { [self] (data: CommunityResponse) in
-//                self.communities = data.documents
                 // MARK: 커뮤니티 최신순으로 정렬
-                // MARK: - 데이터 개수가 20개 넘을 때 풀기 잘못하면 터짐
-                
                 self.communities.append(contentsOf: data.documents)
                 
                 if !(data.nextPageToken == nil) {
@@ -53,12 +48,12 @@ final class CommunityViewModel: ObservableObject {
                 }else{
                     self.sortedRecentCommunityData = communities.sorted(by: {
                         return $0.createTime.toDate() ?? Date() > $1.createTime.toDate() ?? Date()
-                    })                    
+                    })
                     // MARK: 커뮤니티 모집완료 | 판매완료 게시글 sortedRecentCommunityData에서 배열 뒤로 배치
                     for i in self.sortedRecentCommunityData.indices{
                         if self.sortedRecentCommunityData[i].fields.state.stringValue == "모집완료" || self.sortedRecentCommunityData[i].fields.state.stringValue == "판매완료"{
                             self.sortedRecentCommunityData.append(self.sortedRecentCommunityData[i])
-                            self.closeState.append(self.sortedRecentCommunityData[i])  // 혹시 모를 배열 값 선언부에 설명 씀
+                            self.closeState.append(self.sortedRecentCommunityData[i])
                             self.sortedRecentCommunityData.remove(at: i)
                         }
                     }
@@ -69,6 +64,18 @@ final class CommunityViewModel: ObservableObject {
                 }
                 
             }.store(in: &subscription)
+    }
+    
+    // 차단한 User, 차단당한 User의 커뮤니티 게시물 데이터들을 필터링 해주는 메소드
+    func filteringBlockUserCommunity(blockingUsers: [String], blockedUsers: [String]) {
+        for id in blockingUsers {
+            self.sortedRecentCommunityData.removeAll { $0.fields.userID.stringValue == id }
+        }
+        
+        for id in blockedUsers {
+            self.sortedRecentCommunityData.removeAll { $0.fields.userID.stringValue == id}
+        }
+        
     }
     
     //MARK: - 커뮤니티 데이터 올리기 메소드(CommunityAddView에서 사용)
@@ -120,10 +127,23 @@ final class CommunityViewModel: ObservableObject {
     }
     
     // 카테고리별 데이터를 filtering 해서 리턴하는 함수
-    func returnCategoryCommunity(category: String) -> [CommunityDocument] {
+    func returnCategoryCommunity(category: String, blockingUsers: [String], blockedUsers: [String]) -> [CommunityDocument] {
         var categoryData: [CommunityDocument] = []
         categoryData = sortedRecentCommunityData.filter { $0.fields.category.stringValue == "\(category)"}
         
+        if blockingUsers.count > 0 {
+            // 차단한 유저 필터링
+            for id in blockingUsers {
+                categoryData.removeAll { $0.fields.userID.stringValue == id }
+            }
+        }
+        
+        if blockedUsers.count > 0 {
+            // 차단된 유저 필터링
+            for id in blockedUsers {
+                categoryData.removeAll { $0.fields.userID.stringValue == id}
+            }
+        }
         return categoryData
     }
     

@@ -23,14 +23,14 @@ struct InfoTabView: View {
             ScrollViewReader { proxyReader in
                 ScrollView(showsIndicators: false){
                     VStack {
-                        ForEach(communityVM.returnCategoryCommunity(category: "정보"), id: \.self){ data in
+                        ForEach(communityVM.returnCategoryCommunity(category: "정보", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList), id: \.self){ data in
                             NavigationLink {
                                 CommunityDetailView(communityVM: communityVM, userVM: userVM, magazineVM: magazineVM, community: data)
                             } label: {
                                 CommunityRowView(communityVM: communityVM, community: data)
                             }
                         }
-                        .emptyPlaceholder(communityVM.returnCategoryCommunity(category: "정보")) {
+                        .emptyPlaceholder(communityVM.returnCategoryCommunity(category: "정보", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)) {
                            CommunityPlaceHolderView()
                         }
                     }

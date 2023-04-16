@@ -18,10 +18,8 @@ final class CommentViewModel: ObservableObject {
     @Published var sortedRecentComment = [CommentDocument]()
     @Published var sortedRecentRecomment = [CommentDocument]()  // 대댓글 최신순으로 정렬
     
-    
     @Published var commentTemp = [CommentDocument]()  // 대댓글 최신순으로 정렬
     @Published var recommentTemp = [CommentDocument]()  // 대댓글 최신순으로 정렬
-    
     
     @Published var sortedRecentRecommentArray = [String : [CommentDocument]]()
     @Published var sortedRecentRecommentCount = [String : Int]()
@@ -102,7 +100,6 @@ final class CommentViewModel: ObservableObject {
                 }
             }.store(in: &self.subscription)
     }
-    
     
     // MARK: Create
     func insertComment(collectionName: String, collectionDocId: String, data: CommentFields) {

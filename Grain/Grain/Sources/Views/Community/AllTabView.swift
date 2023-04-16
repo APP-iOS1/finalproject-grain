@@ -55,6 +55,17 @@ struct AllTabView: View {
                         proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)
                     }
                 })
+                .onAppear {
+                    // 차단 유저 필터링
+                    if userVM.blockingList.count > 0 || userVM.blockedList.count > 0 {
+                        communityVM.filteringBlockUserCommunity(blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
+                    }
+                }
+                .onReceive(communityVM.fetchCommunitySuccess, perform: { _ in
+                    if userVM.blockingList.count > 0 || userVM.blockedList.count > 0 {
+                        communityVM.filteringBlockUserCommunity(blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
+                    }
+                })
                 .refreshable {
                     do {
                         try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)

@@ -104,6 +104,9 @@ struct MagazineBestView: View {
                       } catch {}
                     magazineVM.fetchMagazine(nextPageToken: "")
                 }
+                .onReceive(magazineVM.fetchMagazineSuccess, perform: { _ in
+                    magazineVM.filteringBlockUserCommunity(blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
+                })
                 .onChange(of: scrollToTop, perform: { newValue in
                     withAnimation(.default) {
                         proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)

@@ -95,12 +95,16 @@ struct MagazineFeedView: View {
                 .onChange(of: ObservingChangeValueLikeNum, perform: { newValue in
                     magazineVM.fetchMagazine(nextPageToken: "")
                 })
+                .onReceive(magazineVM.fetchMagazineSuccess, perform: { _ in
+                    magazineVM.filteringBlockUserCommunity(blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
+                })
                 .refreshable {
                     do {
                         try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
                       } catch {}
                     magazineVM.fetchMagazine(nextPageToken: "")
                 }
+               
             }
             Spacer()
         }

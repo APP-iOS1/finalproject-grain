@@ -66,6 +66,24 @@ final class MagazineViewModel: ObservableObject {
         
     }
     
+    // 차단한 User, 차단당한 User의 커뮤니티 게시물 데이터들을 필터링 해주는 메소드
+    func filteringBlockUserCommunity(blockingUsers: [String], blockedUsers: [String]) {
+        if blockingUsers.count > 0 {
+            for id in blockingUsers {
+                self.sortedRecentMagazineData.removeAll { $0.fields.userID.stringValue == id }
+                self.sortedTopLikedMagazineData.removeAll { $0.fields.userID.stringValue == id }
+            }
+        }
+        
+        if blockedUsers.count > 0 {
+            for id in blockedUsers {
+                self.sortedRecentMagazineData.removeAll { $0.fields.userID.stringValue == id}
+                self.sortedTopLikedMagazineData.removeAll { $0.fields.userID.stringValue == id}
+            }
+        }
+        
+    }
+    
     // MARK: 메거진 데이터 업로드 메소드 (MagazineAddView에서 사용)
     /// 해당 메거진 게시물 Data를 MagazineFields 구조체 형식으로 넣어주고, 게시글의 이미지배열은 따로 UIImage배열로 넣어줍니다.
     /// 이렇게 호출해주면 새로운 메거진 게시물이 업로드 됩니다.

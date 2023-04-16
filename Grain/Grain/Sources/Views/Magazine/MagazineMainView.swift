@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 import FirebaseAuth
 
 struct MagazineMainView: View {
@@ -49,6 +48,12 @@ struct MagazineMainView: View {
                 MagazineFeedView(magazineVM: magazineVM, userVM: userVM, scrollToTop: $scrollToTop, selectedFilter: $selectedFilter)
             }
         }
+        .onAppear {
+            userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
+        }
+        .onReceive(userVM.fetchCurrentUsersSuccess, perform: {  _ in
+            magazineVM.filteringBlockUserCommunity(blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
+        })
         .onReceive(userVM.fetchUsersSuccess, perform: { newValue in
             userVM.filterCurrentUsersFollow()
         })

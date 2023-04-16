@@ -68,12 +68,16 @@ final class CommunityViewModel: ObservableObject {
     
     // 차단한 User, 차단당한 User의 커뮤니티 게시물 데이터들을 필터링 해주는 메소드
     func filteringBlockUserCommunity(blockingUsers: [String], blockedUsers: [String]) {
-        for id in blockingUsers {
-            self.sortedRecentCommunityData.removeAll { $0.fields.userID.stringValue == id }
+        if blockingUsers.count > 0 {
+            for id in blockingUsers {
+                self.sortedRecentCommunityData.removeAll { $0.fields.userID.stringValue == id }
+            }
         }
         
-        for id in blockedUsers {
-            self.sortedRecentCommunityData.removeAll { $0.fields.userID.stringValue == id}
+        if blockedUsers.count > 0 {
+            for id in blockedUsers {
+                self.sortedRecentCommunityData.removeAll { $0.fields.userID.stringValue == id}
+            }
         }
         
     }

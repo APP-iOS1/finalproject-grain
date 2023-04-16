@@ -40,7 +40,7 @@ struct MagazineFeedView: View {
                         .padding(.bottom, -8)
                         
                         // MARK: 전체보기
-                        if selectedFilter == 0{
+                        if selectedFilter == 0 {
                             ForEach(Array(magazineVM.sortedRecentMagazineData.enumerated()), id: \.1.self){ (index, data) in
                                 // MARK: fetch해온 데이터 cell뷰로 보여주기
                                 NavigationLink {

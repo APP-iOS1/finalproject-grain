@@ -420,6 +420,20 @@ final class UserViewModel: ObservableObject {
                 }
             }
         }
+        
+        if self.blockingList.count > 0 {
+            // 차단한 유저 필터링
+            for id in self.blockingList {
+                subscriptionFeedData.removeAll { $0.fields.userID.stringValue == id }
+            }
+        }
+        
+        if self.blockedList.count > 0 {
+            // 차단된 유저 필터링
+            for id in self.blockedList {
+                subscriptionFeedData.removeAll { $0.fields.userID.stringValue == id}
+            }
+        }
         return subscriptionFeedData
     }
     

@@ -150,6 +150,7 @@ final class UserViewModel: ObservableObject {
         return blocking
     }
     
+    
     //MARK: - 구독한 사람들의 메거진만 필터링해서 리턴해주는 메서드(홈뷰 구독탭에서 가져다 쓰시면 됩니다. ^^ 갖다쓰기만해 ~ )
     /// 홈뷰에서 fetch 한 모든 게시물 데이터 MagazineVM.magazines 넘겨서 호출해주면 됩니다.
     /// 그러면 알아서 구독한 사람들의 게시물만 던져줍니다.
@@ -435,6 +436,23 @@ final class UserViewModel: ObservableObject {
             }
         }
         return subscriptionFeedData
+    }
+    
+    // 차단 유저 처리 메소드
+    func filterBlockUsers() {
+        if self.blockingList.count > 0 {
+            // 차단한 유저 필터링
+            for id in self.blockingList {
+                self.users.removeAll { $0.fields.id.stringValue == id }
+            }
+        }
+        
+        if self.blockedList.count > 0 {
+            // 차단된 유저 필터링
+            for id in self.blockedList {
+                self.users.removeAll { $0.fields.id.stringValue == id}
+            }
+        }
     }
     
     // 회원탈퇴 컬렉션 저장

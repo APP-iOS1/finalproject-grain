@@ -398,7 +398,6 @@ struct MainSearchView: View {
                         Text("취소")
                             .foregroundColor(.blue)
                     }
-                    
                 }
             }
         }
@@ -416,6 +415,10 @@ struct MainSearchView: View {
                 isShownProgress = true
             }
             self.focus = .search
+            
+            userViewModel.filterBlockUsers()
+            magazineViewModel.filteringBlockUserCommunity(blockingUsers: userViewModel.blockingList, blockedUsers: userViewModel.blockedList)
+            communityViewModel.filteringBlockUserCommunity(blockingUsers: userViewModel.blockingList, blockedUsers: userViewModel.blockedList)
         }
     }
     

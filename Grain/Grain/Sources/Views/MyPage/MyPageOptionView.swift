@@ -200,7 +200,7 @@ struct AccountSection: View {
                         .padding(.leading, 2.8)
                         .padding(.trailing, 5)
                     
-                    Text("차단유저 관리")
+                    Text("차단 계정 관리")
                         .font(.title3)
                     
                     Spacer()

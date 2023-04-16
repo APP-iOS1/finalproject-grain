@@ -49,7 +49,8 @@ final class UserViewModel: ObservableObject {
     @Published var followingList = [UserDocument]()
     
     
-   
+    @Published var blockingListDoc = [UserDocument]() // 내가 차단한 사람들 리스트
+
     
     
     
@@ -106,6 +107,12 @@ final class UserViewModel: ObservableObject {
             following.contains($0.fields.id.stringValue)
         }
         
+    }
+    
+    func filterCurrentUsersBlock() {
+        self.blockingListDoc = users.filter {
+            blockingList.contains($0.fields.id.stringValue)
+        }
     }
     
     func filterUserFollow(user: UserDocument) -> [UserDocument] {

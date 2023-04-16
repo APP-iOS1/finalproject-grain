@@ -80,6 +80,7 @@ struct CurrentUserFollowerListView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 ForEach(userVM.followerList, id: \.self) { item in
+                    
                     NavigationLink {
                         UserDetailView(userVM: userVM, magazineVM: magagineVM, user: item)
                     } label: {

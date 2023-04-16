@@ -25,27 +25,27 @@ struct BlockUserView: View {
         ScrollView {
             VStack(alignment: .leading) {
 //TODO: - 차단한 유저만 보여주는 뷰인데 지금 모든 유저 보여주고 있음 이거 차단한 유저 리스트 보여지게 하고 차단 풀면 바로 사라지게 해야함(버튼의 기능은 다 작동함, UserViewModel에 filterUserBlocking(user: UserDocument)는 만들어 놨는데 userDocument를 어떤식으로 전달받아햐하는지 헷갈려서 못함)
-                ForEach(userVM.users, id: \.self) { item in
-                    HStack {
-                        KFImage(URL(string: item.fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40, height: 40)
-                            .cornerRadius(64)
-                            .overlay {
-                                Circle()
-                                    .stroke(lineWidth: 0.1)
-                            }
-                            .padding([.trailing, .leading], 10)
-                        
-                        Text(item.fields.nickName.stringValue)
-                            .font(.callout)
-                            .bold()
-                            .padding(.leading, 5)
-                            .padding(.bottom, 1)
-                        
-                        Spacer()
-                        Button {
+                ForEach(userVM.blockingListDoc, id: \.self) { item in
+                        HStack {
+                            KFImage(URL(string: item.fields.profileImage.stringValue) ?? URL(string: defaultProfileImage()))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40)
+                                .cornerRadius(64)
+                                .overlay {
+                                    Circle()
+                                        .stroke(lineWidth: 0.1)
+                                }
+                                .padding([.trailing, .leading], 10)
+                            
+                            Text(item.fields.nickName.stringValue)
+                                .font(.callout)
+                                .bold()
+                                .padding(.leading, 5)
+                                .padding(.bottom, 1)
+                            
+                            Spacer()
+                            Button {
                                 
                                 if let currentUser = userVM.currentUsers {
                                     var currentUserBlockingList: [String] = userVM.blockingList
@@ -60,28 +60,47 @@ struct BlockUserView: View {
                                     
                                     userVM.updateCurrentUserArray(type: "blocked", arr: UserBlockedList, docID: item.fields.id.stringValue)
                                 }
+                                
+                                
+                            } label: {
+                                HStack{
+//                                    Text("차단해제")
+//                                        .padding(.vertical, 6)
+//                                        .padding(.horizontal, 8)
+//                                        .foregroundColor(.black)
+//                                        .bold()
+//                                        .font(.caption)
+//                                        .overlay(
+//                                            RoundedRectangle(cornerRadius: 7)
+//                                                .stroke(Color.black, lineWidth: 1)
+//                                        )
+//                                    
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .frame(width: 60, height: 27)
+                                        .overlay{
+                                            Text("차단해제")
+                                                .padding(.vertical, 6)
+                                                .padding(.horizontal, 8)
+                                                .foregroundColor(.white)
+                                                .bold()
+                                                .font(.caption)
+                                        }
+                                }
+                            }
+                            .padding()
                             
-                            
-                        } label: {
-                            Text("차단해제")
-                                .padding(.vertical, 6)
-                                .padding(.horizontal, 8)
-                                .foregroundColor(.black)
-                                .bold()
-                                .font(.caption)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 7)
-                                        .stroke(Color.black, lineWidth: 1)
-                                )
+                        }//hstack
+                        .padding(.vertical, 2)
+                        .onAppear{
+                            print("item:\(item.fields.id)")
                         }
-                        .padding()
-                        
-                    }//hstack
-                    .padding(.vertical, 2)
                 } // foreach
             } // vstack
         } //scrollview
         .padding([.leading, .top], 10)
+        .emptyPlaceholder(userVM.blockingListDoc) {
+            BlockingPlaceholderView()
+        }
     }
 }
 

@@ -189,6 +189,7 @@ struct MyPageView: View {
                 // userVM 의 fetchUser가 수행되어 값이 들어왔을때 currentUser의 팔로워, 팔로잉 리스트를 필터링하는 메소드 실행
                 /// 희경: onReceive 메소드 사용 이유: fetchUser 메소드와 fetchCurrentUser메소드를 동시에 실행시키면 fetchUser가 완료되기 전에 fetchCurrentUser가 실행되어 filterCurrentUsersFollow가 제대로 수행되지 않음.
                 userVM.filterCurrentUsersFollow()
+                userVM.filterCurrentUsersBlock()
             })
           
         }

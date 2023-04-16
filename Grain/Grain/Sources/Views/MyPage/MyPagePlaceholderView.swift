@@ -105,7 +105,7 @@ struct BookmarkedMagazinePlaceholderView: View {
                 .font(.title)
                 .padding(.bottom)
             
-            Text("다시 보고싶은 사진을 저장해보세요")
+            Text("다시 보고싶은 필름을 저장해보세요")
                 .foregroundColor(.middleDarkGray)
                 .font(.callout)
             
@@ -113,6 +113,101 @@ struct BookmarkedMagazinePlaceholderView: View {
             Spacer()
         }
         .frame(height: 250)
+
+    }
+}
+
+struct BlockingPlaceholderView: View {
+    var body: some View {
+        VStack{
+            Spacer()
+            Image(systemName: "person.fill.xmark")
+                .foregroundColor(.middleDarkGray)
+                .font(.title)
+                .padding(.bottom)
+            
+            Text("차단한 유저가 없습니다.")
+                .foregroundColor(.middleDarkGray)
+                .font(.callout)
+            
+
+            Spacer()
+        }
+        .frame(height: 250)
+
+    }
+}
+
+struct CurrentUserFollowerPlaceholderView: View {
+    let userNickName: String
+    
+    var body: some View {
+        VStack{
+            Spacer()
+            
+            Text("\(userNickName)님을 구독하는 유저가 없습니다.")
+                .foregroundColor(.middleDarkGray)
+                .font(.callout)
+            
+
+            Spacer()
+        }
+        .frame(height: 550)
+
+    }
+}
+
+struct CurrentUserFollowingPlaceholderView: View {
+    var body: some View {
+        VStack{
+            Spacer()
+            
+            Text("구독 중인 유저가 없습니다.")
+                .foregroundColor(.middleDarkGray)
+                .font(.callout)
+            
+
+            Spacer()
+        }
+        .frame(height: 550)
+
+    }
+}
+
+struct FollowerPlaceholderView: View {
+    let userNickName: String
+    
+    var body: some View {
+        VStack{
+            Spacer()
+            
+            Text("\(userNickName)님을 구독하는 유저가 없습니다.")
+                .foregroundColor(.middleDarkGray)
+                .font(.callout)
+            
+
+            Spacer()
+        }
+        .frame(height: 550)
+
+    }
+}
+
+struct FollowingPlaceholderView: View {
+    let userNickName: String
+
+    var body: some View {
+        VStack{
+            Spacer()
+            
+            Text("\(userNickName)님이 구독 중인 유저가 없습니다.")
+                .foregroundColor(.middleDarkGray)
+                .font(.callout)
+            
+
+            Spacer()
+        }
+        .frame(height: 550)
 
     }
 }

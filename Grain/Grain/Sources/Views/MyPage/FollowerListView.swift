@@ -54,6 +54,9 @@ struct FollowerListView: View {
                     }
                 } // foreach
             } // vstack
+            .emptyPlaceholder(userVM.filterUserFollow(user: user)) {
+                FollowerPlaceholderView(userNickName: user.fields.nickName.stringValue)
+            }
         } //scrollview
         .padding([.leading, .top], 10)
     }
@@ -103,6 +106,9 @@ struct CurrentUserFollowerListView: View {
                     }
                 } // foreach
             } // vstack
+            .emptyPlaceholder(userVM.followerList) {
+                CurrentUserFollowerPlaceholderView(userNickName: userVM.currentUsers?.nickName.stringValue ?? "")
+            }
         } //scrollview
         .padding([.leading, .top], 10)
     }

@@ -57,6 +57,11 @@ struct InfoTabView: View {
                       } catch {}
                     communityVM.fetchCommunity(nextPageToken: "")
                 }
+                .onReceive(communityVM.fetchCommunitySuccess, perform: { _ in
+                    if userVM.blockingList.count > 0 || userVM.blockedList.count > 0 {
+                        communityVM.filteringBlockUserCommunity(blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
+                    }
+                })
                 .onChange(of: scrollToTop, perform: { newValue in
                     withAnimation(.default) {
                         proxyReader.scrollTo("SCROLL_TO_TOP", anchor: .top)

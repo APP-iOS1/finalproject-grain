@@ -18,9 +18,9 @@ final class MapViewModel: ObservableObject {
     var deleteMapSuccess = PassthroughSubject<(), Never>()
     var fetchNextPageMapSuccess = PassthroughSubject<(), Never>()       // MARK: 다음 페이지 계속 돌아갈 상태값?
     
-    var insertMapSuccess = PassthroughSubject<MagazineFields, Never>()
+    var insertMapSuccess = PassthroughSubject<(), Never>()
 
-    func fetchNextPageMap(nextPageToken: String){
+    func fetchNextPageMap(nextPageToken: String, blockingUsers: [String], blockedUsers: [String]){
         MapService.getNextPageMap(nextPageToken: nextPageToken)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
@@ -29,8 +29,16 @@ final class MapViewModel: ObservableObject {
                 if !(data.nextPageToken == nil) {
                     var nextPageToken : String = ""
                     nextPageToken = data.nextPageToken!
-                    self.fetchNextPageMap(nextPageToken: nextPageToken)
+                    self.fetchNextPageMap(nextPageToken: nextPageToken, blockingUsers: blockingUsers, blockedUsers: blockedUsers)
                 }else{
+                    
+                    let blockArr = (blockingUsers + blockedUsers)
+                    if !(blockArr.isEmpty){
+                        for id in blockArr {
+                            self.mapData.removeAll { $0.fields.id.stringValue == id}
+                        }
+                    }
+                    
                     self.fetchNextPageMapSuccess.send()     // 토큰이 없다면
                 }
             }.store(in: &subscription)
@@ -38,12 +46,12 @@ final class MapViewModel: ObservableObject {
     }
     
     // MARK: 매거진 게시물 업로드시 맵 데이터도 같이 데이터 넣기
-    func insertMap(data: MagazineFields) {
+    func insertMap(data: MapFields) {
         MapService.insertMap(data: data)
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (receivedData: MapResponse) in
-                self.insertMapSuccess.send(data)
+                self.insertMapSuccess.send()
             }.store(in: &subscription)
     }
     

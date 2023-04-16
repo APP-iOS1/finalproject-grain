@@ -11,7 +11,7 @@ enum MapRouter {
     
     case get
     case getNext(nextPageToken: String)
-    case post(magazineData: MagazineFields, docID: String)
+    case post(magazineData: MapFields, docID: String)
     case delete(docID: String)
     case put
     

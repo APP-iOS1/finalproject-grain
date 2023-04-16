@@ -283,7 +283,7 @@ struct CommentView: View {
             
         }
         .onAppear {
-            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, nextPageToken: "")
+            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, nextPageToken: "" , blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 commentCount = commentVm.sortedRecentComment.count
@@ -293,11 +293,11 @@ struct CommentView: View {
         .onChange(of: isCommentDelete) { newValue in
             if commentVm.sortedRecentComment.count == 1 {
                 commentVm.sortedRecentComment.removeFirst()
-                commentVm.deleteComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, docID: deleteDocId)
+                commentVm.deleteComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, docID: deleteDocId, blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
             }else {
-                commentVm.deleteComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, docID: deleteDocId)
+                commentVm.deleteComment(collectionName: infolistCommunityString(), collectionDocId: collectionDocId, docID: deleteDocId, blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "")
+                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                 }
             }
             

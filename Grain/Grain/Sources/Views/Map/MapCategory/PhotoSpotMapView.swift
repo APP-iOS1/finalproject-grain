@@ -41,7 +41,7 @@ struct PhotoSpotMapView: View {
             
             if isShowingPhotoSpot{
                 
-                NearbyPostsComponent(userVM: userVM, magazineVM: magazineVM, visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.sortedRecentMagazineData, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
+                NearbyPostsComponent(userVM: userVM, magazineVM: magazineVM, visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpot, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.sortedRecentMagazineData, nearbyPostsArr: nearbyPostsArr , blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
                     .zIndex(1)
                     .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.75)
                     .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 30)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30

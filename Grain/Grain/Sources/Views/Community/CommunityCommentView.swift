@@ -184,9 +184,9 @@ struct CommunityCommentView: View {
                                                       )
                             )
                             replyContent = ""
-                            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "")
+                            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "")
+                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             }
                             
                             let sender = PushNotificationSender(serverKeyString: "")
@@ -210,10 +210,10 @@ struct CommunityCommentView: View {
                     else if editComment {
                         Button {
                             editComment = false
-                            commentVm.updateComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, docID: editDocID, updateComment: replyContent, data: editData)
+                            commentVm.updateComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, docID: editDocID, updateComment: replyContent, data: editData, blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             replyContent = ""
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "")
+                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             }
                         } label: {
                             Text("등록")
@@ -229,7 +229,7 @@ struct CommunityCommentView: View {
                             commentVm.updateRecomment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, commentCollectionName: infolistCommunityString(), commentCollectionDocId: editReColletionDocID, docID: editReDocID, updateComment: replyContent, data: editReData)
                             replyContent = ""
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "")
+                                commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             }
                         } label: {
                             Text("등록")
@@ -251,10 +251,10 @@ struct CommunityCommentView: View {
                                                     profileImage: CommentString(stringValue: userVM.currentUsers?.profileImage.stringValue ?? ""),
                                                     nickName: CommentString(stringValue: userVM.currentUsers?.nickName.stringValue ?? ""),
                                                     userID: CommentString(stringValue: Auth.auth().currentUser?.uid ?? ""),
-                                                    id: CommentString(stringValue: UUID().uuidString)))
+                                                    id: CommentString(stringValue: UUID().uuidString)),blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             
                             replyContent = ""
-                            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "")
+                            commentVm.fetchComment(collectionName: infolistCommunityString(), collectionDocId: community.fields.id.stringValue, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
                             
                             if let communityData = self.communityData {
                                 

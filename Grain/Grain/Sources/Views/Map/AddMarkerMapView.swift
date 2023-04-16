@@ -240,7 +240,9 @@ struct AddMarkerMapView: View {
                                 
                                 // FIXME: - insertMap 동작안함
                                 magazineVM.insertMagazine(data: data, images: selectedImages)
-                                mapVM.insertMap(data: data)
+                                
+                                var mapData : MapFields = MapFields(magazineID: MagazineID(arrayValue: MapArrayValue(values: [MapID(stringValue: docId)])), id: MapID(stringValue: userVM.currentUsers?.id.stringValue ?? ""), longitude: MapLocation(doubleValue: updateNumber.lng), url: MapID(stringValue: ""), latitude: MapLocation(doubleValue: updateNumber.lat), category: MapID(stringValue: ""))
+                                mapVM.insertMap(data: mapData)
                                 
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     magazineVM.fetchMagazine(nextPageToken: "")

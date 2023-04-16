@@ -13,11 +13,11 @@ struct MapResponse: Codable {
 }
 
 struct MapDocument: Codable,Hashable {
-    let fields: Fields
+    let fields: MapFields
     let createTime, updateTime: String
 }
 
-struct Fields: Codable,Hashable {
+struct MapFields: Codable,Hashable {
     let magazineID: MagazineID
     let id: MapID
     let longitude: MapLocation

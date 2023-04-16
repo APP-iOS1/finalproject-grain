@@ -118,7 +118,7 @@ struct MapView: View {
                         
                     case "전체":
                         NavigationStack{
-                            UIMapView(locationManager: locationManager, mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpotMapVIew: $isShowingPhotoSpotMapVIew, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
+                            UIMapView(locationManager: locationManager, userVM: userVM, mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpotMapVIew: $isShowingPhotoSpotMapVIew, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .zIndex(0)
                         }
                     case "포토스팟":
@@ -142,7 +142,7 @@ struct MapView: View {
                         
                     default:
                         NavigationStack{
-                            UIMapView(locationManager: locationManager, mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpotMapVIew: $isShowingPhotoSpotMapVIew, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
+                            UIMapView(locationManager: locationManager, userVM: userVM, mapData: $mapVM.mapData, nearbyPostsArr: $nearbyPostsArr, isShowingPhotoSpotMapVIew: $isShowingPhotoSpotMapVIew, isShowingWebView: $isShowingWebView,bindingWebURL:$bindingWebURL, markerAddButtonBool: $markerAddButtonBool,changeMap: $changeMap, searchResponseBool: $searchResponseBool, searchResponse: $searchResponse, researchButtonBool: $researchButtonBool, researchCGPoint: $researchCGPoint, showResearchButton: $showResearchButton, userLatitude: userLatitude , userLongitude: userLongitude)
                                 .zIndex(0)
                             
                         }
@@ -169,7 +169,7 @@ struct MapView: View {
                                 .onTapGesture {
                                     researchCGPoint = CGPoint(x: Screen.maxWidth * 0.5, y: Screen.maxHeight * 0.44)
                                     researchButtonBool.toggle()
-                                    mapVM.fetchNextPageMap(nextPageToken: "")
+                                    mapVM.fetchNextPageMap(nextPageToken: "", blockingUsers: userVM.blockingList , blockedUsers: userVM.blockedList)
                                     isShowingProgress = true
                                 }
                                 
@@ -208,7 +208,7 @@ struct MapView: View {
                     /// 그럼 메서드에서 for in 두번 돌려 필요한 값만 전달
                     /// 이 과정에서 DB 연관 없다고 생각 듬! -> 확인  필요
                     
-                    NearbyPostsComponent(userVM: userVM, magazineVM: magazineVM, visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpotMapVIew, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.sortedRecentMagazineData, nearbyPostsArr: nearbyPostsArr), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
+                    NearbyPostsComponent(userVM: userVM, magazineVM: magazineVM, visitButton: $visitButton, isShowingPhotoSpot: $isShowingPhotoSpotMapVIew, nearbyMagazineData: magazineVM.nearbyPostsFilter(magazineData: magazineVM.sortedRecentMagazineData, nearbyPostsArr: nearbyPostsArr, blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList), clikedMagazineData: $clikedMagazineData, showResearchButton: $showResearchButton)
                         .zIndex(1)
                         .position(x: Screen.maxWidth * 0.5 , y: Screen.maxHeight * 0.75)
                         .padding(.leading, nearbyPostsArr.count > 1 ? 0 : 25)   // 포스트 갯수가 1개 이상이면 패딩값 0 아니면 30
@@ -231,7 +231,7 @@ struct MapView: View {
             }
         }
         .onAppear{
-            mapVM.fetchNextPageMap(nextPageToken: "")
+            mapVM.fetchNextPageMap(nextPageToken: "", blockingUsers: userVM.blockingList , blockedUsers: userVM.blockedList)
             magazineVM.fetchMagazine(nextPageToken: "")
         }
        
@@ -245,6 +245,7 @@ struct UIMapView: UIViewRepresentable,View {
     //임시
     @ObservedObject var viewModel = MapSceneViewModel()
     @ObservedObject var locationManager : LocationManager
+    @ObservedObject var userVM: UserViewModel
     
     @Binding var mapData: [MapDocument] // 맵 데이터 전달 받기
     

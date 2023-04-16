@@ -43,10 +43,10 @@ enum MapService {
     }
     
     // MARK: - 맵 데이터 넣기
-    static func insertMap(data: MagazineFields) -> AnyPublisher<MapResponse, Error> {
+    static func insertMap(data: MapFields) -> AnyPublisher<MapResponse, Error> {
         
         // 문서 생성 Uid
-        let requestRouter = MapRouter.post(magazineData: data, docID: data.id.stringValue)
+        let requestRouter = MapRouter.post(magazineData: data, docID: data.magazineID.arrayValue.values[0].stringValue)
         
         do {
             let request = try requestRouter.asURLRequest()

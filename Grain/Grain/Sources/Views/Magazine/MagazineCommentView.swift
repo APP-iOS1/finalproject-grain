@@ -60,7 +60,19 @@ struct MagazineCommentView: View {
         }
         return https
     }
+    
+    var newUser: [UserDocument] {
+        var arr = userVM.users
         
+        for i in userVM.blockingList{
+            arr.removeAll{$0.fields.id.stringValue == i}
+        }
+
+        for i in userVM.blockedList{
+            arr.removeAll{$0.fields.id.stringValue == i}
+        }
+        return Array(arr)
+    }
     var body: some View {
         VStack{
             ScrollViewReader { proxyReader in
@@ -69,7 +81,7 @@ struct MagazineCommentView: View {
                 VStack(alignment: .leading){
                     if !(commentVm.sortedRecentComment.count == 0){
                         ForEach(commentVm.sortedRecentComment.indices, id:\.self){ index in
-                            if let user = userVM.users.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
+                            if let user = newUser.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
                             {
                                 HStack(alignment: .top){
                                     // MARK: -  유저 프로필 이미지
@@ -216,7 +228,7 @@ struct MagazineCommentView: View {
                                     
                                     VStack(alignment: .leading){
                                         HStack{
-                                            Text("탈퇴한 유저입니다")
+                                            Text("사용자 없음")
                                                 .foregroundColor(.gray)
                                                 .font(.caption)
                                                 .fontWeight(.bold)
@@ -234,7 +246,7 @@ struct MagazineCommentView: View {
                                         .padding(.bottom, -5)
                                         
                                         //MARK: - 댓글 내용
-                                        Text("삭제된 댓글입니다.")
+                                        Text("내용 없음")
                                             .font(.footnote)
                                             .padding(.bottom, -1)
                                             .padding(.top, 3)

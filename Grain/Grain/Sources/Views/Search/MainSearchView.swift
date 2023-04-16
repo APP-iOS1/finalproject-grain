@@ -53,6 +53,22 @@ struct MainSearchView: View {
         return https
     }
     
+    var searchedUser: [UserDocument] {
+        var arr = userViewModel.users.filter {
+            ignoreSpaces(in: $0.fields.nickName.stringValue)
+                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
+            ignoreSpaces(in: $0.fields.introduce.stringValue)
+                .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+        }
+        for i in userViewModel.blockingList{
+            arr.removeAll{$0.fields.id.stringValue == i}
+        }
+
+        for i in userViewModel.blockedList{
+            arr.removeAll{$0.fields.id.stringValue == i}
+        }
+        return Array(arr)
+    }
     var body: some View {
         NavigationStack{
             VStack{
@@ -299,11 +315,7 @@ struct MainSearchView: View {
                                     .frame(width: Screen.maxWidth, alignment: .leading)
                                     .padding(.bottom, 7)
                                     
-                                    ForEach(userViewModel.users.filter {
-                                        ignoreSpaces(in: $0.fields.nickName.stringValue)
-                                            .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
-                                        ignoreSpaces(in: $0.fields.introduce.stringValue)
-                                        .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))}.prefix(3), id: \.self) { user in
+                                    ForEach(searchedUser.prefix(3), id: \.self) { user in
                                         NavigationLink {
                                             UserDetailView(userVM: userViewModel, magazineVM: magazineViewModel, user: user)
                                         } label: {
@@ -385,7 +397,6 @@ struct MainSearchView: View {
                 }
                 Spacer()
             }
-            
             .navigationTitle("검색")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -402,7 +413,7 @@ struct MainSearchView: View {
             }
         }
         .navigationDestination(isPresented: $isMagazineSearchResultShown){
-            MagazineSearchResultView(magazineVM: magazineViewModel, searchWord: $searchWord, magazine: magazineViewModel, userViewModel: userViewModel)
+            MagazineSearchResultView(magazineVM: magazineViewModel, searchWord: $searchWord, userViewModel: userViewModel)
         }
         .navigationDestination(isPresented: $isCommunitySearchResultShown){
             CommunitySearchResultView(communityVM: communityViewModel, userVM: userViewModel, magazineVM: magazineViewModel, searchWord: $searchWord)

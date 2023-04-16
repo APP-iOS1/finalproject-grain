@@ -48,11 +48,8 @@ final class UserViewModel: ObservableObject {
     @Published var followerList = [UserDocument]()
     @Published var followingList = [UserDocument]()
     
-    
     @Published var blockingListDoc = [UserDocument]() // 내가 차단한 사람들 리스트
-
-    
-    
+    @Published var isUserBlock: Bool = false // 내가 차단한 사람들 리스트
     
     var fetchUsersSuccess = PassthroughSubject<[UserDocument], Never>()
     var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()

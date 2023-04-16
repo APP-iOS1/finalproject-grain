@@ -151,6 +151,10 @@ struct CommunitySearchResultView: View {
         }
         .navigationTitle("\(searchWord)")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear{
+            communityVM.filteringBlockUserCommunity(blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
+
+        }
     }
 }
 

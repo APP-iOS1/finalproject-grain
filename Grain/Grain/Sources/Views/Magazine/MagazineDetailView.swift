@@ -101,7 +101,7 @@ struct MagazineDetailView: View {
                                 
                                 
                                 VStack(alignment: .leading){
-                                    Text("탈퇴한 유저")
+                                    Text("사용자 없음")
                                         .bold()
                                         .padding(.bottom, -4)
                                         .foregroundColor(.gray)

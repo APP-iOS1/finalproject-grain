@@ -68,13 +68,24 @@ struct CommentView: View {
         return communityString
     }
     
-    
+    var newUser: [UserDocument] {
+        var arr = userVM.users
+        
+        for i in userVM.blockingList{
+            arr.removeAll{$0.fields.id.stringValue == i}
+        }
+
+        for i in userVM.blockedList{
+            arr.removeAll{$0.fields.id.stringValue == i}
+        }
+        return Array(arr)
+    }
     
     var body: some View {
         VStack(alignment: .leading){
                 if !(commentVm.sortedRecentComment.count == 0) {
                     ForEach(Array(commentVm.sortedRecentComment.enumerated()), id:\.1.self){ (index, item) in
-                        if let user = userVM.users.first(where: { $0.fields.id.stringValue == item.fields.userID.stringValue})
+                        if let user = newUser.first(where: { $0.fields.id.stringValue == item.fields.userID.stringValue})
                         {
                             
                             HStack(alignment: .top) {
@@ -204,7 +215,7 @@ struct CommentView: View {
                                 
                                 VStack(alignment: .leading){
                                     HStack{
-                                        Text("탈퇴한 유저입니다")
+                                        Text("사용자 없음")
                                             .foregroundColor(.gray)
                                             .font(.caption)
                                             .fontWeight(.bold)
@@ -222,7 +233,7 @@ struct CommentView: View {
                                     .padding(.bottom, -5)
                                     
                                     //MARK: - 댓글 내용
-                                    Text("삭제된 댓글입니다.")
+                                    Text("내용 없음")
                                         .font(.footnote)
                                         .padding(.bottom, -1)
                                         .padding(.top, 3)

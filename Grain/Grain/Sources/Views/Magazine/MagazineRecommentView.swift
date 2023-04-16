@@ -51,11 +51,24 @@ struct MagazineRecommentView: View {
         return commentString
     }
     
+    var newUser: [UserDocument] {
+        var arr = userVM.users
+        
+        for i in userVM.blockingList{
+            arr.removeAll{$0.fields.id.stringValue == i}
+        }
+
+        for i in userVM.blockedList{
+            arr.removeAll{$0.fields.id.stringValue == i}
+        }
+        return Array(arr)
+    }
+    
     var body: some View {
         VStack(alignment: .leading){
             ForEach(Array(commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values), id:\.self){ element in
                 ForEach(element , id:\.self){ index in
-                    if let user = userVM.users.first(where: { $0.fields.id.stringValue == index.fields.userID.stringValue }){
+                    if let user = newUser.first(where: { $0.fields.id.stringValue == index.fields.userID.stringValue }){
                         HStack(alignment: .top){
                             // MARK: -  유저 프로필 이미지
                             VStack{
@@ -172,7 +185,7 @@ struct MagazineRecommentView: View {
                             VStack(alignment: .leading){
                                 HStack{
                                     
-                                    Text("탈퇴한 유저입니다")
+                                    Text("사용자 없음")
                                         .foregroundColor(.gray)
                                         .font(.caption)
                                         .fontWeight(.bold)
@@ -190,7 +203,7 @@ struct MagazineRecommentView: View {
                                 }
                                 .padding(.bottom, -5)
                                 //MARK: - 댓글 내용
-                                Text("삭제된 댓글입니다.")
+                                Text("내용 없음")
                                     .font(.footnote)
                                     .padding(.bottom, -1)
                             }

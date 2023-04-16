@@ -17,11 +17,18 @@ struct UserSearchResultView: View {
     @Binding var searchWord: String
     
     var searchedUser: [UserDocument] {
-        let arr = userVM.users.filter {
+        var arr = userVM.users.filter {
             ignoreSpaces(in: $0.fields.nickName.stringValue)
                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
             ignoreSpaces(in: $0.fields.introduce.stringValue)
                 .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
+        }
+        for i in userVM.blockingList{
+            arr.removeAll{$0.fields.id.stringValue == i}
+        }
+
+        for i in userVM.blockedList{
+            arr.removeAll{$0.fields.id.stringValue == i}
         }
         return Array(arr)
     }
@@ -104,6 +111,10 @@ struct UserSearchResultView: View {
             }
             .navigationTitle("\(searchWord)")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear{
+                userVM.filterBlockUsers()
+
+            }
     }
 }
 

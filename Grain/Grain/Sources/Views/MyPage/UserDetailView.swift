@@ -232,10 +232,13 @@ struct UserDetailView: View {
                                         userVM.updateCurrentUserArray(type: "following", arr: magazineUserFollowing, docID: userData.fields.id.stringValue)
                                     }
                                 }
+                                userVM.isUserBlock.toggle()
+                                
                             }
 
                         }
                         presentationMode.wrappedValue.dismiss()
+
                     }))
                 }
                 VStack(alignment: .leading){

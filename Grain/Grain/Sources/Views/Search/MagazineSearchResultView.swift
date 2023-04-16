@@ -17,8 +17,7 @@ struct MagazineSearchResultView: View {
     
     @Binding var searchWord: String
     
-    let magazine: MagazineViewModel
-    let userViewModel: UserViewModel
+    @ObservedObject var userViewModel: UserViewModel
     
     private func ignoreSpaces(in string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "")
@@ -38,7 +37,7 @@ struct MagazineSearchResultView: View {
         ZStack{
             VStack{
                 List{
-                    ForEach(magazine.sortedRecentMagazineData.filter {
+                    ForEach(magazineVM.sortedRecentMagazineData.filter {
                         ignoreSpaces(in: $0.fields.title.stringValue)
                             .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) ||
                         ignoreSpaces(in: $0.fields.content.stringValue)
@@ -70,7 +69,7 @@ struct MagazineSearchResultView: View {
                         }
                     }
                 }
-                .emptyPlaceholder(magazine.sortedRecentMagazineData.filter {
+                .emptyPlaceholder(magazineVM.sortedRecentMagazineData.filter {
                     ignoreSpaces(in: $0.fields.title.stringValue)
                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord)) || ignoreSpaces(in: $0.fields.content.stringValue)
                         .localizedCaseInsensitiveContains(ignoreSpaces(in: self.searchWord))
@@ -99,6 +98,9 @@ struct MagazineSearchResultView: View {
         }
         .navigationTitle("\(searchWord)")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear{
+            magazineVM.filteringBlockUserCommunity(blockingUsers: userViewModel.blockingList, blockedUsers: userViewModel.blockedList)
+        }
     }
 }
 

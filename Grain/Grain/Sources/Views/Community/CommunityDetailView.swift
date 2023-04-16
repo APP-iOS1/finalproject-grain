@@ -246,6 +246,7 @@ struct CommunityDetailView: View {
         }
         .onAppear {
             self.communityData = self.community
+
         }
         .task(id: communityVM.sortedRecentCommunityData, {
             if let communityData = communityVM.sortedRecentCommunityData.first(where: { $0.fields.id.stringValue == self.community.fields.id.stringValue

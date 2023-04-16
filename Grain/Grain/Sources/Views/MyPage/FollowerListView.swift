@@ -13,7 +13,6 @@ struct FollowerListView: View {
     var user: UserDocument
     @ObservedObject var magagineVM: MagazineViewModel
     
-    
     func defaultProfileImage() -> String{
         var https : String = "https://"
         if let infolist = Bundle.main.infoDictionary {

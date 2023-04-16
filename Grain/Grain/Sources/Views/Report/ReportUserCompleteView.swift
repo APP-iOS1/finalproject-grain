@@ -67,7 +67,6 @@ struct ReportUserCompleteView: View {
 
             }
         }
-
     }
 }
 

@@ -399,6 +399,15 @@ final class UserViewModel: ObservableObject {
         return follower
     }
     
+    func parsingFollowingDataToStringArr(data: UserDocument) -> [String] {
+        var following = [String]()
+        for i in data.fields.following.arrayValue.values {
+            following.append(i.stringValue)
+        }
+        
+        return following
+    }
+    
     func parsingBlockedDataToStringArr(data: UserDocument) -> [String] {
         var blocked = [String]()
         for i in data.fields.blocked.arrayValue.values {

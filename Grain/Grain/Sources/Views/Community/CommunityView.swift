@@ -65,6 +65,7 @@ struct CommunityView: View {
             }
             .onAppear{
                 communityVM.fetchCommunityCellComment()
+                communityVM.fetchCommunity(nextPageToken: "")
             }
       
     }

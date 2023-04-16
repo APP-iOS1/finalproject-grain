@@ -225,7 +225,7 @@ struct CommunityDetailView: View {
                     do {
                         try await Task.sleep(nanoseconds: UInt64(1.6) * 1_000_000_000)
                       } catch {}
-                    magazineVM.fetchMagazine(nextPageToken: "")
+                    communityVM.fetchCommunity(nextPageToken: "")
                 }
                 .onChange(of: scrollToBottom, perform: { newValue in
                     withAnimation(.default) {
@@ -408,6 +408,16 @@ struct CommunityDetailView: View {
             isHiddenComment = true
             commentText = ""
         }
+        .onChange(of: userVM.blockingList, perform: { item in
+            if item.count > 0{
+                for id in item{
+                    print()
+                    if community.fields.userID.stringValue == id{
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
+        })
     }
 }
 

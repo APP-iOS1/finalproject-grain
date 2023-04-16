@@ -1,8 +1,8 @@
 //
-//  ReportDetailView.swift
+//  ReportUserDetailView.swift
 //  Grain
 //
-//  Created by 조형구 on 2023/04/14.
+//  Created by 조형구 on 2023/04/16.
 //
 
 import SwiftUI
@@ -11,7 +11,7 @@ private enum FocusableField: Hashable {
     case search
 }
 
-struct ReportDetailView: View {
+struct ReportUserDetailView: View {
     @ObservedObject var userVM : UserViewModel
     
     @State private var detailReportReason: String = ""
@@ -20,18 +20,20 @@ struct ReportDetailView: View {
     let reportID: String
     let reportCategory: String
     let reportReason: String
+    let reportNickname: String
 
     @Binding var isReportAlertShown: Bool
+    @Binding var isUserBlockAlertShown: Bool
     
     @FocusState private var focus: FocusableField?
 
     var body: some View {
         VStack{
-            Text("이 게시물을 '**\(reportReason)**' 의 사유로 신고하시겠습니까?")
+            Text("**\(reportNickname)** 님을 '**\(reportReason)**' 의 사유로 신고하시겠습니까?")
                 .padding()
                 .multilineTextAlignment(.center)
             
-            Text("\(Image(systemName: "info.circle")) 이 게시물을 신고하는 상세한 이유를 작성해 주시면 빠른 처리가 가능합니다.")
+            Text("\(Image(systemName: "info.circle")) 이 유저를 신고하는 상세한 이유를 작성해 주시면 빠른 처리가 가능합니다.")
                 .padding(.top, 10)
                 .foregroundColor(.middlebrightGray)
                 .font(.caption)
@@ -76,16 +78,13 @@ struct ReportDetailView: View {
         .navigationTitle("신고")
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(isPresented: $isDone) {
-            ReportCompleteView(isReportAlertShown: $isReportAlertShown)
+            ReportUserCompleteView(userVM: userVM, isReportAlertShown: $isReportAlertShown, isUserBlockAlertShown: $isUserBlockAlertShown, reportNickname: reportNickname)
         }
     }
 }
 
-//struct ReportDetailView_Previews: PreviewProvider {
+//struct ReportUserDetailView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        NavigationStack{
-//            
-//            ReportDetailView(reportReason: "dd")
-//        }
+//        ReportUserDetailView()
 //    }
 //}

@@ -28,6 +28,7 @@ struct UserDetailView: View {
     @State private var isUserReportAlertShown: Bool = false
     @State private var isUserBlockAlertShown: Bool = false
     
+    @Environment(\.dismiss) var dismiss
     func defaultProfileImage() -> String{
         var https : String = "https://"
         if let infolist = Bundle.main.infoDictionary {
@@ -186,7 +187,7 @@ struct UserDetailView: View {
                 // MARK: - 유저 차단 alert
                 .alert(isPresented: $isUserBlockAlertShown) {
                     Alert(title: Text("\(user.fields.nickName.stringValue)님을 차단하시겠습니까?"),
-                          message: Text("상대방은 Grain에서 회원님에게 메세지를 보내거나 회원님의 프로필, 게시물을 찾을 수 없습니다. 상대방에게는 회원님이 차단했다는 정보를 알리지 않습니다."),
+                          message: Text("상대방은 Grain에서 회원님에게 메시지를 보내거나 회원님의 프로필, 게시물을 찾을 수 없습니다. 상대방에게는 회원님이 차단했다는 정보를 알리지 않습니다."),
                           primaryButton:  .cancel(Text("취소")),
                           secondaryButton:.destructive(Text("차단"),
                                                        action: {
@@ -221,6 +222,7 @@ struct UserDetailView: View {
                             }
 
                         }
+                        dismiss()
                     }))
                 }
                 VStack(alignment: .leading){
@@ -229,7 +231,11 @@ struct UserDetailView: View {
                         .lineLimit(3)
                 }
                 .padding(.horizontal, 5)
-                
+                //MARK: - 유저 신고
+                .sheet(isPresented: $isUserReportAlertShown) {
+                    ReportUserMainView(userVM: userVM, reportID: user.fields.id.stringValue, reportCategory: "User", reportNickname: user.fields.nickName.stringValue, isReportAlertShown: $isUserReportAlertShown, isUserBlockAlertShown: $isUserBlockAlertShown)
+                        .presentationDetents([.medium, .large])
+                }
                 
                 VStack{
                     Button{

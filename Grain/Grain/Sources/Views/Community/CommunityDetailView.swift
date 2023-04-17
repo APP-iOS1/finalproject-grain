@@ -412,7 +412,6 @@ struct CommunityDetailView: View {
         .onChange(of: userVM.blockingList, perform: { item in
             if item.count > 0{
                 for id in item{
-                    print()
                     if community.fields.userID.stringValue == id{
                         presentationMode.wrappedValue.dismiss()
                     }

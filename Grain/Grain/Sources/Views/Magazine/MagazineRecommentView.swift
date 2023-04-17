@@ -64,9 +64,21 @@ struct MagazineRecommentView: View {
         return Array(arr)
     }
     
+    var newComment: [CommentDocument] {
+        var arr = commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values.flatMap { $0 }
+        
+        for i in userVM.blockingList{
+            arr.removeAll{$0.fields.userID.stringValue == i}
+        }
+        
+        for i in userVM.blockedList{
+            arr.removeAll{$0.fields.userID.stringValue == i}
+        }
+        return Array(arr)
+    }
     var body: some View {
         VStack(alignment: .leading){
-            ForEach(Array(commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values), id:\.self){ element in
+            ForEach(Array(arrayLiteral: newComment), id:\.self){ element in
                 ForEach(element , id:\.self){ index in
                     if let user = newUser.first(where: { $0.fields.id.stringValue == index.fields.userID.stringValue }){
                         HStack(alignment: .top){

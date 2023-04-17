@@ -81,10 +81,22 @@ struct CommentView: View {
         return Array(arr)
     }
     
+    var newComment: [CommentDocument] {
+        var arr = commentVm.sortedRecentComment
+        
+        for i in userVM.blockingList{
+            arr.removeAll{$0.fields.userID.stringValue == i}
+        }
+
+        for i in userVM.blockedList{
+            arr.removeAll{$0.fields.userID.stringValue == i}
+        }
+        return Array(arr)
+    }
     var body: some View {
         VStack(alignment: .leading){
-                if !(commentVm.sortedRecentComment.count == 0) {
-                    ForEach(Array(commentVm.sortedRecentComment.enumerated()), id:\.1.self){ (index, item) in
+                if !(newComment.count == 0) {
+                    ForEach(Array(newComment.enumerated()), id:\.1.self){ (index, item) in
                         if let user = newUser.first(where: { $0.fields.id.stringValue == item.fields.userID.stringValue})
                         {
                             

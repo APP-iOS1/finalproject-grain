@@ -73,15 +73,29 @@ struct MagazineCommentView: View {
         }
         return Array(arr)
     }
+    
+    var newComment: [CommentDocument] {
+        var arr = commentVm.sortedRecentComment
+        
+        for i in userVM.blockingList{
+            arr.removeAll{$0.fields.userID.stringValue == i}
+        }
+
+        for i in userVM.blockedList{
+            arr.removeAll{$0.fields.userID.stringValue == i}
+        }
+        return Array(arr)
+    }
+
     var body: some View {
         VStack{
             ScrollViewReader { proxyReader in
 
             ScrollView{
                 VStack(alignment: .leading){
-                    if !(commentVm.sortedRecentComment.count == 0){
-                        ForEach(commentVm.sortedRecentComment.indices, id:\.self){ index in
-                            if let user = newUser.first(where: { $0.fields.id.stringValue == commentVm.sortedRecentComment[index].fields.userID.stringValue})
+                    if !(newComment.count == 0){
+                        ForEach(Array(newComment.enumerated()), id:\.1.self){ (index, item) in
+                            if let user = newUser.first(where: { $0.fields.id.stringValue == item.fields.userID.stringValue})
                             {
                                 HStack(alignment: .top){
                                     // MARK: -  유저 프로필 이미지
@@ -111,7 +125,7 @@ struct MagazineCommentView: View {
                                                     .font(.caption2)
                                                     .padding(.trailing, -5)
                                                 // MARK: 댓글 생성 날짜
-                                                Text(commentVm.sortedRecentComment[index].createTime.toDate()?.renderTime() ?? "")
+                                                Text(item.createTime.toDate()?.renderTime() ?? "")
                                                     .font(.caption2)
                                             }
                                             Spacer()
@@ -119,7 +133,7 @@ struct MagazineCommentView: View {
                                         .padding(.bottom, -5)
                                         
                                         //MARK: - 댓글 내용
-                                        Text(commentVm.sortedRecentComment[index].fields.comment.stringValue)
+                                        Text(item.fields.comment.stringValue)
                                             .font(.footnote)
                                             .padding(.bottom, -1)
                                             .padding(.top, 3)
@@ -139,7 +153,7 @@ struct MagazineCommentView: View {
                                             }
                                             // MARK: 답글 더보기
                                             
-                                            if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                            if let recommentCount = commentVm.sortedRecentRecommentCount[item.fields.id.stringValue]{
                                                 if recommentCount > 5 {
                                                     Text("답글 더보기 (\(recommentCount))")
                                                         .font(.caption2)
@@ -153,7 +167,7 @@ struct MagazineCommentView: View {
                                                         }
                                                 }
                                             }
-                                            if commentVm.sortedRecentComment[index].fields.userID.stringValue == Auth.auth().currentUser?.uid{
+                                            if item.fields.userID.stringValue == Auth.auth().currentUser?.uid{
                                                 Button {
                                                     editComment.toggle()
                                                     editDocID = commentVm.sortedRecentComment[index].fields.id.stringValue
@@ -196,11 +210,11 @@ struct MagazineCommentView: View {
                                             
                                         }
                                         
-                                        if let recommentCount = commentVm.sortedRecentRecommentCount[commentVm.sortedRecentComment[index].fields.id.stringValue]{
+                                        if let recommentCount = commentVm.sortedRecentRecommentCount[item.fields.id.stringValue]{
                                             if  readMoreComments && eachBool[index]{
-                                                MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                                MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: item.fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
                                             }else if recommentCount <= 5 {
-                                                MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: commentVm.sortedRecentComment[index].fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
+                                                MagazineRecommentView(userVM: userVM, commentVm: commentVm, magazineVM: magazineVM, editRecomment: $editRecomment, editReDocID: $editReDocID, editReColletionDocID: $editReColletionDocID, editReData: $editReData, commentText: $commentText, commentCollectionDocId: item.fields.id.stringValue, collectionName: collectionName, collectionDocId: collectionDocId)
                                             }
                                         }
                                         

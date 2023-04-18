@@ -11,7 +11,7 @@ import Foundation
 enum UserRouter {
 
     case get(nextPageToken: String)
-    case post(myFilm: String, bookmarkedMagazineID: String,email: String, myCamera: String, postedCommunityID: String, postedMagazineID: String, likedMagazineId: String, lastSearched: String, bookmarkedCommunityID: String, recentSearch: String, id: String, following: String, myLens : String, profileImage: String, name: String, follower: String, nickName: String, introduce: String, fcmToken : String, blocking: [String], blocked: [String])
+    case post(myFilm: String, bookmarkedMagazineID: String,email: String, myCamera: String, postedCommunityID: String, postedMagazineID: String, likedMagazineId: String, lastSearched: String, bookmarkedCommunityID: String, recentSearch: String, id: String, following: String, myLens : String, profileImage: String, name: String, follower: String, nickName: String, introduce: String, fcmToken : String, blocking: String, blocked: String)
     case patchArr(type: String, arr: [String],  docID: String)
     case patchString(type: String, string: String, docID: String)
     case patchProfile(profileImage: String, nickName: String, introduce: String, docID: String)

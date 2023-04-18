@@ -261,7 +261,7 @@ struct AuthenticationView: View {
 
                         Button {
                             // 유저 DB에 데이터 넣기
-                            userVM.insertUser(myFilm: "필름은 선택사항입니다.", bookmarkedMagazineID: "", email: authenticationStore.email, myCamera: "카메라 바디는 필수 선택입니다 :)", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: authenticationStore.userUID, following: "", myLens: "렌즈는 선택사항입니다.", profileImage: selectedImages, name: authenticationStore.userName , follower: "", nickName: editedNickname, introduce: editedIntroduce, fcmToken: "", blocking: [""], blocked: [""])
+                            userVM.insertUser(myFilm: "필름은 선택사항입니다.", bookmarkedMagazineID: "", email: authenticationStore.email, myCamera: "카메라 바디는 필수 선택입니다 :)", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: authenticationStore.userUID, following: "", myLens: "렌즈는 선택사항입니다.", profileImage: selectedImages, name: authenticationStore.userName , follower: "", nickName: editedNickname, introduce: editedIntroduce, fcmToken: "", blocking: "", blocked: "")
                             // 로그인 상태값 바꾸기
                             authenticationState = .authenticated
 //                            authenticationStore.addToken()

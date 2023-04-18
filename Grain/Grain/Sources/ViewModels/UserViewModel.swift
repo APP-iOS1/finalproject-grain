@@ -414,7 +414,7 @@ final class UserViewModel: ObservableObject {
         return blocked
     }
     
-    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: [UIImage],name: String,follower: String,nickName: String, introduce: String, fcmToken: String, blocking: [String], blocked: [String]) {
+    func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String,profileImage: [UIImage],name: String,follower: String,nickName: String, introduce: String, fcmToken: String, blocking: String, blocked: String) {
         UserService.insertUser(myFilm: myFilm,bookmarkedMagazineID: bookmarkedMagazineID,email: email,myCamera: myCamera,postedCommunityID: postedCommunityID,postedMagazineID: postedMagazineID,likedMagazineId: likedMagazineId,lastSearched: lastSearched,bookmarkedCommunityID: bookmarkedCommunityID,recentSearch: recentSearch,id: id,following: following,myLens :myLens,profileImage: profileImage,name: name,follower: follower,nickName: nickName, introduce: introduce, fcmToken: fcmToken, blocking: blocking, blocked: blocked)
         
             .receive(on: DispatchQueue.main)

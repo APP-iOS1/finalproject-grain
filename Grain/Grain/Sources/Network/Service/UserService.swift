@@ -31,7 +31,7 @@ enum UserService {
     }
     
     // MARK: - 유저 데이터 넣기
-    static func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String, profileImage: [UIImage],name: String,follower: String,nickName: String, introduce: String , fcmToken : String, blocking: [String], blocked: [String]) -> AnyPublisher<UserDocument, Error> {
+    static func insertUser(myFilm: String,bookmarkedMagazineID: String,email: String,myCamera: String,postedCommunityID: String,postedMagazineID: String,likedMagazineId: String,lastSearched: String,bookmarkedCommunityID: String,recentSearch: String,id: String,following: String,myLens : String, profileImage: [UIImage],name: String,follower: String,nickName: String, introduce: String , fcmToken : String, blocking: String, blocked: String) -> AnyPublisher<UserDocument, Error> {
         
         var imageUrlArr: [String] = StorageRouter.returnImageRequests(paramName: "param", fileName: "file", image: profileImage)
         var profileImageURL: String = ""

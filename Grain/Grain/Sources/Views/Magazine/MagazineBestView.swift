@@ -122,10 +122,13 @@ struct MagazineBestView: View {
                     editorVM.fetchEditor()
                     UITableView.appearance().separatorStyle = .none
                     
-                    if authenticationState == .authenticated{
-                        authenticationStore.addToken()
+                    
+                    if authenticationStore.tokenBool == false {
+                        if userVM.users.contains(where: { $0.fields.id.stringValue == Auth.auth().currentUser?.uid ?? ""}){
+                            authenticationStore.addToken()
+                        }
                     }
-
+                    
                 }
             }
             Spacer()

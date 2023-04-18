@@ -261,10 +261,8 @@ struct AuthenticationView: View {
 
                         Button {
                             // 유저 DB에 데이터 넣기
-                            userVM.insertUser(myFilm: "필름은 선택사항입니다.", bookmarkedMagazineID: "", email: authenticationStore.email, myCamera: "카메라 바디는 필수 선택입니다 :)", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: authenticationStore.userUID, following: "", myLens: "렌즈는 선택사항입니다.", profileImage: selectedImages, name: authenticationStore.userName , follower: "", nickName: editedNickname, introduce: editedIntroduce, fcmToken: "", blocking: "", blocked: "")
-                            // 로그인 상태값 바꾸기
-                            authenticationState = .authenticated
-//                            authenticationStore.addToken()
+                            userVM.insertUser(myFilm: "필름은 선택사항입니다.", bookmarkedMagazineID: "", email: authenticationStore.email, myCamera: "카메라 바디는 필수 선택입니다 :)", postedCommunityID: "", postedMagazineID: "", likedMagazineId: "", lastSearched: "", bookmarkedCommunityID: "", recentSearch: "", id: Auth.auth().currentUser?.uid ?? "" , following: "", myLens: "렌즈는 선택사항입니다.", profileImage: selectedImages, name: authenticationStore.userName , follower: "", nickName: editedNickname, introduce: editedIntroduce, fcmToken: "", blocking: "", blocked: "")
+
                         } label: {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill((editedNickname.count > 0 || editedIntroduce.count > 0) && checkNicknameRule(string: editedNickname) && !exceptCurrentUser.contains{$0.fields.nickName.stringValue == editedNickname } && checkUseButton &&  checkPersonalButton ? .black : .gray)

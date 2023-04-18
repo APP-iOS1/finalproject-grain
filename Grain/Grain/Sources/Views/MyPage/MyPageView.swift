@@ -179,10 +179,13 @@ struct MyPageView: View {
                 userVM.fetchUser(nextPageToken: "")
                 userVM.fetchCurrentUser(userID: Auth.auth().currentUser?.uid ?? "")
                 
-                // 로그인을 할때 토큰값 넣기 -> 로그아웃 하고 로그인하는 사람이 있어서 어쩔수 없이 마이페이지 쪽에도 토큰 넣는것을 넣어야할듯!
-                if authenticationStore.authenticationState == .authenticated{
-                    authenticationStore.addToken()
+                if authenticationStore.tokenBool == false {
+                    if userVM.users.contains(where: { $0.fields.id.stringValue == Auth.auth().currentUser?.uid ?? ""}){
+                        authenticationStore.addToken()
+                    }
                 }
+               
+
                 
             }
             .onReceive(userVM.fetchUsersSuccess, perform: { newValue in

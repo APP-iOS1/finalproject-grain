@@ -10,9 +10,12 @@ import Foundation
 import Combine
 import UIKit
 import FirebaseAuth
+import SwiftUI
 
 final class UserViewModel: ObservableObject {
     var subscription = Set<AnyCancellable>()
+    
+    @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
     
     @Published var users = [UserDocument]()
     @Published var userTemp = [UserDocument]()
@@ -50,6 +53,7 @@ final class UserViewModel: ObservableObject {
     
     @Published var blockingListDoc = [UserDocument]() // 내가 차단한 사람들 리스트
     @Published var isUserBlock: Bool = false // 내가 차단한 사람들 리스트
+    
     
     var fetchUsersSuccess = PassthroughSubject<[UserDocument], Never>()
     var fetchCurrentUsersSuccess = PassthroughSubject<CurrentUserFields, Never>()
@@ -420,6 +424,8 @@ final class UserViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserDocument) in
+                print(data.fields.id.stringValue)
+                self.authenticationState = .authenticated
                 self.insertUsersSuccess.send()
             }.store(in: &subscription)
     }

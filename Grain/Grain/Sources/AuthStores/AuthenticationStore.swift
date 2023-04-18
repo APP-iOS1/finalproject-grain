@@ -41,6 +41,8 @@ final class AuthenticationStore: ObservableObject {
     @Published var email = ""
     @Published var users = [UserDocument]()
     @Published var userTemp = [UserDocument]()
+    @Published var tokenBool : Bool = false
+    
     @AppStorage("authenticationState") var authenticationState: AuthenticationState = .unauthenticated
     @AppStorage("logInCompanyState") var logInCompanyState: LogInCompanyState = .noCompany
     
@@ -50,6 +52,7 @@ final class AuthenticationStore: ObservableObject {
     fileprivate var currentNonce: String?
     
     let authPath = Auth.auth()
+    
     
     // MARK: - Google Login
     
@@ -133,6 +136,7 @@ final class AuthenticationStore: ObservableObject {
                         .receive(on: DispatchQueue.main)
                         .sink { (completion: Subscribers.Completion<Error>) in
                         } receiveValue: { (data: UserDocument) in
+                            self.tokenBool = true
                             self.updateUsersArraySuccess.send()
                         }.store(in: &self.subscription)
                 }
@@ -326,6 +330,7 @@ final class AuthenticationStore: ObservableObject {
     // MARK: - 유저 데이터 만들기
     var subscription = Set<AnyCancellable>()
     var findUserDocIDSuccess = PassthroughSubject<(), Never>()
+    var findTokenSuccess = PassthroughSubject<(), Never>()
     
     // 전체 유저데이터 조회 후 비교
     func findUserDocID(docID: String , nextPageToken: String){

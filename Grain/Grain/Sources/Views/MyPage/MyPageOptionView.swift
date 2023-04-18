@@ -439,6 +439,8 @@ struct InfoSection: View {
                       primaryButton: .destructive(
                         Text("네")
                       ){
+                          authenticationStore.tokenBool = false
+                          
                           authenticationStore.removeToken(tokenArray: userVM.currentUsers?.fcmToken.arrayValue.values ?? [])
                           
                           DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

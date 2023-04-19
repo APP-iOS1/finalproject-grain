@@ -88,6 +88,11 @@ struct UserDetailView: View {
                                                     
                                                     userVM.updateCurrentUserArray(type: "follower", arr: magazineUserFollower, docID: userData.fields.id.stringValue)
                                                     
+                                                    let sender = PushNotificationSender(serverKeyString: "")
+                                                    for i in user.fields.fcmToken.arrayValue.values {
+                                                        sender.sendPushNotification(to: i.stringValue, title: "구독", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 \(userData.fields.nickName.stringValue )님을 구독합니다 ", image: "")
+                                                    }
+                                                    
                                                 }
                                             }
                                         } else {
@@ -337,14 +342,6 @@ struct UserDetailView: View {
                 }
             }
         })
-        .onDisappear{
-            if isFollowingUser == true {
-                let sender = PushNotificationSender(serverKeyString: "")
-                for i in user.fields.fcmToken.arrayValue.values {
-                    sender.sendPushNotification(to: i.stringValue, title: "구독", message: "\(userVM.currentUsers?.nickName.stringValue ?? "")님이 \(userData?.fields.nickName.stringValue ?? "")님을 구독합니다 ", image: "")
-                }
-            }
-        }
         .toolbar{
             if user.fields.id.stringValue != Auth.auth().currentUser?.uid{
                 ToolbarItem(placement: .navigationBarTrailing) {

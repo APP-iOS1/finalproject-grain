@@ -236,6 +236,8 @@ final class AuthenticationStore: ObservableObject {
     func updateDisplayName(for user: User, with appleIDCredential: ASAuthorizationAppleIDCredential, force: Bool = false) async {
         if let currentDisplayName = Auth.auth().currentUser?.displayName, !currentDisplayName.isEmpty {
             // current user is non-empty, don't overwrite it
+            self.findUserDocID(docID: user.uid, nextPageToken: "")
+
         }
         else {
             let changeRequest = user.createProfileChangeRequest()

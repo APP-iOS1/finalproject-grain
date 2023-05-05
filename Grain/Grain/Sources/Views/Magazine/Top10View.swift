@@ -10,7 +10,7 @@ import Kingfisher
 
 struct Top10View: View {
     let data : MagazineDocument
-    var userVM: UserViewModel
+    @ObservedObject var userVM: UserViewModel
     
     func errorImage() -> String{
         var https : String = "https://"

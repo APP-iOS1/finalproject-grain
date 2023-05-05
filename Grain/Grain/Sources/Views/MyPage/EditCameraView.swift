@@ -170,7 +170,7 @@ struct EditCameraView: View {
 // MARK: - 카메라 바디 섹션 선언부
 struct BodyList: View {
     @AppStorage("docID") private var docID : String?
-    var userVM: UserViewModel
+    @ObservedObject var userVM: UserViewModel
 
     @Environment(\.editMode) private var editMode
 
@@ -282,7 +282,7 @@ struct BodyList: View {
 
 // MARK: - 카메라 렌즈 섹션 선언부
 struct LensList: View {
-    var userVM: UserViewModel
+    @ObservedObject var userVM: UserViewModel
     
     @Environment(\.editMode) private var editMode
 
@@ -392,7 +392,7 @@ struct LensList: View {
 
 // MARK: - 카메라 필름 섹션 선언부
 struct FilmList: View {
-    var userVM: UserViewModel
+    @ObservedObject var userVM: UserViewModel
 
     @Environment(\.editMode) private var editMode
     

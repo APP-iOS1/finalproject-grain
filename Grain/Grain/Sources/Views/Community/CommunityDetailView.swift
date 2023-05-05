@@ -189,9 +189,7 @@ struct CommunityDetailView: View {
                                 Spacer()
                             }
                             .padding(.top, 10)
-                            
-                            Divider()
-                                .sheet(isPresented: $isReportAlertShown) {
+                            .sheet(isPresented: $isReportAlertShown) {
                                     ReportMainView(userVM: userVM,reportID: community.fields.id.stringValue, reportCategory: "Community", isReportAlertShown: $isReportAlertShown)
                                         .presentationDetents([.medium, .large])
 

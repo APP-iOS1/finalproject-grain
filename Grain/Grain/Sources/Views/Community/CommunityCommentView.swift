@@ -23,7 +23,6 @@ struct CommunityCommentView: View {
     @Binding var replyCommentText: String
     @Binding var replyContent: String
     @Binding var replyComment : Bool  // 답글 표시 Bool값
-    
     @Binding var editComment : Bool
     @Binding var editDocID : String
     @Binding var editData : CommentFields
@@ -35,7 +34,6 @@ struct CommunityCommentView: View {
     @Binding var communityData: CommunityDocument?
     @Binding var scrollToBottom: Bool
 
-    
     var trimContent: String {
         replyContent.trimmingCharacters(in: .whitespaces)
     }

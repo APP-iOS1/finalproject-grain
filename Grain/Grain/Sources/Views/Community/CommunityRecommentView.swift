@@ -148,7 +148,7 @@ struct CommunityRecommentView: View {
                                     }
                                 }
                                 .onChange(of: commentVm.isDeleteReComment) { newValue in
-                                    if commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values.count == 1 {
+                                    if newComment.count == 1 {
                                         var arr = commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }
                                         arr.removeValue(forKey: commentCollectionDocId )
                                         commentVm.sortedRecentRecommentArray = arr

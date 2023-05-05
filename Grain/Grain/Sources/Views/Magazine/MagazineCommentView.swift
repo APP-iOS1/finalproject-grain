@@ -10,7 +10,6 @@ import Kingfisher
 import FirebaseAuth
 
 struct MagazineCommentView: View {
-    
     @StateObject var commentVm = CommentViewModel()
     
     @ObservedObject var userVM : UserViewModel
@@ -40,12 +39,9 @@ struct MagazineCommentView: View {
 
     @Binding var magazineData: MagazineDocument?
     
-    
     var collectionName : String     // 경로 받아오기 최초 컬렉션 받아오기 ex) Magazine
     var collectionDocId : String    // 경로 받아오기 최초 컬렌션 하위 문서ID 받아오기 ex) Magazine - 4ADB415C-871A-4FAF-86EA-D279D145CD37
     
-    
-        
     func makeEachBool(count: Int){  // 댓글 갯수만큼 bool 배열을 만듬 예) 댓글 3개면 [ false, false, false ]
         eachBool = Array(repeating: false, count: count)
        
@@ -141,9 +137,9 @@ struct MagazineCommentView: View {
                                         HStack{
                                             Button {
                                                 replyComment.toggle()
-                                                replyCommentText = "@" + commentVm.sortedRecentComment[index].fields.nickName.stringValue
-                                                commentCollectionDocId = commentVm.sortedRecentComment[index].fields.id.stringValue
-                                                reommentUserID = commentVm.sortedRecentComment[index].fields.userID.stringValue
+                                                replyCommentText = "@" + item.fields.nickName.stringValue
+                                                commentCollectionDocId = item.fields.id.stringValue
+                                                reommentUserID = item.fields.userID.stringValue
                                             } label: {
                                                 Text("답글달기")
                                                     .font(.caption2)
@@ -340,7 +336,6 @@ struct MagazineCommentView: View {
                     proxyReader.scrollTo("SCROLL_TO_BOTTOM", anchor: .bottom)
                 }
             })
-            
         }
             VStack(alignment: .leading){
                 // MARK: 답글달기 클릭시 활성화 되는 구역

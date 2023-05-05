@@ -11,7 +11,6 @@ import FirebaseAuth
 
 
 struct MagazineRecommentView: View {
-    
     @ObservedObject var userVM : UserViewModel
     @ObservedObject var commentVm : CommentViewModel
     //    @StateObject var commentVm = CommentViewModel()
@@ -20,6 +19,7 @@ struct MagazineRecommentView: View {
     @State var deleteCommentAlertBool : Bool = false
     @State var deleteDocId : String = ""
     @State var nickName : String = "" // 닉네임 변경을 위해
+    @State var isDelete: Bool = false
     
     @Binding var editRecomment : Bool
     @Binding var editReDocID : String
@@ -140,33 +140,34 @@ struct MagazineRecommentView: View {
                                         }
                                         
                                         Button{
-                                            deleteDocId = index.fields.id.stringValue
-                                            deleteCommentAlertBool.toggle()
+                                            self.deleteDocId = index.fields.id.stringValue
+                                            self.deleteCommentAlertBool.toggle()
                                         } label: {
                                             Text("삭제")
                                                 .font(.caption2)
                                                 .foregroundColor(.textGray)
                                                 .padding(.top, 1)
                                                 .padding(.bottom, -3)
-                                                .alert(isPresented: $deleteCommentAlertBool) {
-                                                    Alert(title: Text("댓글을 삭제하시겠어요?"),
-                                                          primaryButton:  .cancel(Text("취소")),
-                                                          secondaryButton:.destructive(Text("삭제"),action: {
-
-                                                            if commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }.values.count == 1 {
-                                                                var arr = commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }
-                                                                arr.removeValue(forKey: commentCollectionDocId )
-                                                                commentVm.sortedRecentRecommentArray = arr
-                                                                commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
-                                                            }else {
-                                                                commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
-                                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                                    commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
-                                                                }
-                                                            }
-
-                                                    }))
-                                                }
+                                               
+                                        }
+                                        .alert(isPresented: $deleteCommentAlertBool) {
+                                            Alert(title: Text("댓글을 삭제하시겠어요?"),
+                                                  primaryButton:  .cancel(Text("취소")),
+                                                  secondaryButton:.destructive(Text("삭제"),action: {
+                                                    if newComment.count == 1 {
+                                                        var arr = commentVm.sortedRecentRecommentArray.filter { $0.key == commentCollectionDocId }
+                                                        arr.removeValue(forKey: commentCollectionDocId )
+                                                        commentVm.sortedRecentRecommentArray = arr
+                                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                                    }else {
+                                                        commentVm.deleteRecomment(collectionName: collectionName, collectionDocId: collectionDocId, commentCollectionName: infolistCommentString(), commentCollectionDocId: commentCollectionDocId, docID: deleteDocId)
+                                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                            commentVm.fetchComment(collectionName: collectionName, collectionDocId: collectionDocId, nextPageToken: "", blockingUsers: userVM.blockingList, blockedUsers: userVM.blockedList)
+                                                            print("ddddㅇㅇㅇㅇㅇㅇㅇ")
+                                                        }
+                                                    }
+                                                self.isDelete.toggle()
+                                            }))
                                         }
                                     }
                                     

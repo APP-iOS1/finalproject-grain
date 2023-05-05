@@ -21,7 +21,7 @@ struct EditMyPageView: View {
     @State private var editedNickname = ""
     @State private var editedIntroduce = ""
     
-    var userVM: UserViewModel
+    @ObservedObject var userVM: UserViewModel
     //본인 이외의 사용자들의 정보 필터링한 값을 담는 변수
     @State private var exceptCurrentUser: [UserDocument] = []
     

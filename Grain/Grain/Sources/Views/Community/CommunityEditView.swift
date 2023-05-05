@@ -31,7 +31,7 @@ struct CommunityEditView: View {
     
     @Environment(\.presentationMode) var presentationMode
     
-    let communityVM: CommunityViewModel
+    @ObservedObject var communityVM: CommunityViewModel
     
     @Binding var editFetch: Bool
     

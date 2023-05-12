@@ -336,7 +336,7 @@ final class AuthenticationStore: ObservableObject {
     
     // 전체 유저데이터 조회 후 비교
     func findUserDocID(docID: String , nextPageToken: String){
-        UserService.getUser(nextPageToken: "")
+        UserService.getUser(nextPageToken: nextPageToken)       /// 2023.05.12 에러 수정 -> 이유 실수로 nextPageToken을 "" 비어있는 값을 넣어 메서드가 무한으로 돌아 로그인 문제에 지장 생김
             .receive(on: DispatchQueue.main)
             .sink { (completion: Subscribers.Completion<Error>) in
             } receiveValue: { (data: UserResponse) in
